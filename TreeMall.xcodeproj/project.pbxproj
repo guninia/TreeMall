@@ -1,0 +1,719 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		685939AC1E1F49DF00351FFB /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 685939AB1E1F49DF00351FFB /* main.m */; };
+		685939AF1E1F49DF00351FFB /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 685939AE1E1F49DF00351FFB /* AppDelegate.m */; };
+		685939B21E1F49DF00351FFB /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 685939B11E1F49DF00351FFB /* ViewController.m */; };
+		685939B51E1F49DF00351FFB /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 685939B31E1F49DF00351FFB /* Main.storyboard */; };
+		685939B81E1F49DF00351FFB /* TreeMall.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 685939B61E1F49DF00351FFB /* TreeMall.xcdatamodeld */; };
+		685939BA1E1F49DF00351FFB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 685939B91E1F49DF00351FFB /* Assets.xcassets */; };
+		685939BD1E1F49DF00351FFB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 685939BB1E1F49DF00351FFB /* LaunchScreen.storyboard */; };
+		685939C81E1F49DF00351FFB /* TreeMallTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 685939C71E1F49DF00351FFB /* TreeMallTests.m */; };
+		685939D31E1F49DF00351FFB /* TreeMallUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 685939D21E1F49DF00351FFB /* TreeMallUITests.m */; };
+		685939E51E1F4E1700351FFB /* SHAPIAdapter.m in Sources */ = {isa = PBXBuildFile; fileRef = 685939E41E1F4E1700351FFB /* SHAPIAdapter.m */; };
+		685939E91E1F518700351FFB /* CryptoTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 685939E81E1F518700351FFB /* CryptoTool.m */; };
+		685939ED1E1F775900351FFB /* CryptoModule.m in Sources */ = {isa = PBXBuildFile; fileRef = 685939EC1E1F775900351FFB /* CryptoModule.m */; };
+		6890650E1E23334400E5CB26 /* EntranceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6890650C1E23334400E5CB26 /* EntranceViewController.m */; };
+		6890650F1E23334400E5CB26 /* EntranceViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6890650D1E23334400E5CB26 /* EntranceViewController.xib */; };
+		689065141E23368100E5CB26 /* ShoppingMallViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 689065121E23368100E5CB26 /* ShoppingMallViewController.m */; };
+		689065151E23368100E5CB26 /* ShoppingMallViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 689065131E23368100E5CB26 /* ShoppingMallViewController.xib */; };
+		6890651A1E2337F900E5CB26 /* CartViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 689065181E2337F900E5CB26 /* CartViewController.m */; };
+		6890651B1E2337F900E5CB26 /* CartViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 689065191E2337F900E5CB26 /* CartViewController.xib */; };
+		689065201E23387200E5CB26 /* NotificationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6890651E1E23387200E5CB26 /* NotificationViewController.m */; };
+		689065211E23387200E5CB26 /* NotificationViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6890651F1E23387200E5CB26 /* NotificationViewController.xib */; };
+		689065261E2338C400E5CB26 /* MemberViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 689065241E2338C400E5CB26 /* MemberViewController.m */; };
+		689065271E2338C400E5CB26 /* MemberViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 689065251E2338C400E5CB26 /* MemberViewController.xib */; };
+		6890652C1E23470E00E5CB26 /* FavoriteViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6890652A1E23470E00E5CB26 /* FavoriteViewController.m */; };
+		6890652D1E23470E00E5CB26 /* FavoriteViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6890652B1E23470E00E5CB26 /* FavoriteViewController.xib */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		685939C41E1F49DF00351FFB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6859399F1E1F49DF00351FFB /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 685939A61E1F49DF00351FFB;
+			remoteInfo = TreeMall;
+		};
+		685939CF1E1F49DF00351FFB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6859399F1E1F49DF00351FFB /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 685939A61E1F49DF00351FFB;
+			remoteInfo = TreeMall;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		685939A71E1F49DF00351FFB /* TreeMall.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TreeMall.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		685939AB1E1F49DF00351FFB /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		685939AD1E1F49DF00351FFB /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		685939AE1E1F49DF00351FFB /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		685939B01E1F49DF00351FFB /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		685939B11E1F49DF00351FFB /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		685939B41E1F49DF00351FFB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		685939B71E1F49DF00351FFB /* TreeMall.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TreeMall.xcdatamodel; sourceTree = "<group>"; };
+		685939B91E1F49DF00351FFB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		685939BC1E1F49DF00351FFB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		685939BE1E1F49DF00351FFB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		685939C31E1F49DF00351FFB /* TreeMallTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TreeMallTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		685939C71E1F49DF00351FFB /* TreeMallTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TreeMallTests.m; sourceTree = "<group>"; };
+		685939C91E1F49DF00351FFB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		685939CE1E1F49DF00351FFB /* TreeMallUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TreeMallUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		685939D21E1F49DF00351FFB /* TreeMallUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TreeMallUITests.m; sourceTree = "<group>"; };
+		685939D41E1F49DF00351FFB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		685939E31E1F4E1700351FFB /* SHAPIAdapter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SHAPIAdapter.h; path = Utilities/API/SHAPIAdapter.h; sourceTree = "<group>"; };
+		685939E41E1F4E1700351FFB /* SHAPIAdapter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SHAPIAdapter.m; path = Utilities/API/SHAPIAdapter.m; sourceTree = "<group>"; };
+		685939E71E1F518700351FFB /* CryptoTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CryptoTool.h; path = Utilities/Crypto/CryptoTool.h; sourceTree = "<group>"; };
+		685939E81E1F518700351FFB /* CryptoTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CryptoTool.m; path = Utilities/Crypto/CryptoTool.m; sourceTree = "<group>"; };
+		685939EA1E1F724D00351FFB /* SHCryptoModuleTemplate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = SHCryptoModuleTemplate.h; path = Utilities/Crypto/SHCryptoModuleTemplate.h; sourceTree = "<group>"; };
+		685939EB1E1F775900351FFB /* CryptoModule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CryptoModule.h; path = Utilities/Crypto/CryptoModule.h; sourceTree = "<group>"; };
+		685939EC1E1F775900351FFB /* CryptoModule.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CryptoModule.m; path = Utilities/Crypto/CryptoModule.m; sourceTree = "<group>"; };
+		685939EE1E1F978A00351FFB /* APIDefinition.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = APIDefinition.h; path = Utilities/API/APIDefinition.h; sourceTree = "<group>"; };
+		6890650B1E23334400E5CB26 /* EntranceViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EntranceViewController.h; path = ViewControllers/Entrance/EntranceViewController.h; sourceTree = "<group>"; };
+		6890650C1E23334400E5CB26 /* EntranceViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EntranceViewController.m; path = ViewControllers/Entrance/EntranceViewController.m; sourceTree = "<group>"; };
+		6890650D1E23334400E5CB26 /* EntranceViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = EntranceViewController.xib; path = ViewControllers/Entrance/EntranceViewController.xib; sourceTree = "<group>"; };
+		689065111E23368100E5CB26 /* ShoppingMallViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ShoppingMallViewController.h; path = ViewControllers/ShoppingMall/ShoppingMallViewController.h; sourceTree = "<group>"; };
+		689065121E23368100E5CB26 /* ShoppingMallViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ShoppingMallViewController.m; path = ViewControllers/ShoppingMall/ShoppingMallViewController.m; sourceTree = "<group>"; };
+		689065131E23368100E5CB26 /* ShoppingMallViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = ShoppingMallViewController.xib; path = ViewControllers/ShoppingMall/ShoppingMallViewController.xib; sourceTree = "<group>"; };
+		689065171E2337F900E5CB26 /* CartViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CartViewController.h; path = ViewControllers/Cart/CartViewController.h; sourceTree = "<group>"; };
+		689065181E2337F900E5CB26 /* CartViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CartViewController.m; path = ViewControllers/Cart/CartViewController.m; sourceTree = "<group>"; };
+		689065191E2337F900E5CB26 /* CartViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = CartViewController.xib; path = ViewControllers/Cart/CartViewController.xib; sourceTree = "<group>"; };
+		6890651D1E23387200E5CB26 /* NotificationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NotificationViewController.h; path = ViewControllers/Notification/NotificationViewController.h; sourceTree = "<group>"; };
+		6890651E1E23387200E5CB26 /* NotificationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NotificationViewController.m; path = ViewControllers/Notification/NotificationViewController.m; sourceTree = "<group>"; };
+		6890651F1E23387200E5CB26 /* NotificationViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = NotificationViewController.xib; path = ViewControllers/Notification/NotificationViewController.xib; sourceTree = "<group>"; };
+		689065231E2338C400E5CB26 /* MemberViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MemberViewController.h; path = ViewControllers/Member/MemberViewController.h; sourceTree = "<group>"; };
+		689065241E2338C400E5CB26 /* MemberViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MemberViewController.m; path = ViewControllers/Member/MemberViewController.m; sourceTree = "<group>"; };
+		689065251E2338C400E5CB26 /* MemberViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = MemberViewController.xib; path = ViewControllers/Member/MemberViewController.xib; sourceTree = "<group>"; };
+		689065291E23470E00E5CB26 /* FavoriteViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FavoriteViewController.h; path = ViewControllers/Favorite/FavoriteViewController.h; sourceTree = "<group>"; };
+		6890652A1E23470E00E5CB26 /* FavoriteViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FavoriteViewController.m; path = ViewControllers/Favorite/FavoriteViewController.m; sourceTree = "<group>"; };
+		6890652B1E23470E00E5CB26 /* FavoriteViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = FavoriteViewController.xib; path = ViewControllers/Favorite/FavoriteViewController.xib; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		685939A41E1F49DF00351FFB /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		685939C01E1F49DF00351FFB /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		685939CB1E1F49DF00351FFB /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		6859399E1E1F49DF00351FFB = {
+			isa = PBXGroup;
+			children = (
+				685939A91E1F49DF00351FFB /* TreeMall */,
+				685939C61E1F49DF00351FFB /* TreeMallTests */,
+				685939D11E1F49DF00351FFB /* TreeMallUITests */,
+				685939A81E1F49DF00351FFB /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		685939A81E1F49DF00351FFB /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				685939A71E1F49DF00351FFB /* TreeMall.app */,
+				685939C31E1F49DF00351FFB /* TreeMallTests.xctest */,
+				685939CE1E1F49DF00351FFB /* TreeMallUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		685939A91E1F49DF00351FFB /* TreeMall */ = {
+			isa = PBXGroup;
+			children = (
+				689065041E23321E00E5CB26 /* ViewControllers */,
+				685939E01E1F4AD200351FFB /* Utilities */,
+				685939AD1E1F49DF00351FFB /* AppDelegate.h */,
+				685939AE1E1F49DF00351FFB /* AppDelegate.m */,
+				685939B01E1F49DF00351FFB /* ViewController.h */,
+				685939B11E1F49DF00351FFB /* ViewController.m */,
+				685939B31E1F49DF00351FFB /* Main.storyboard */,
+				685939B91E1F49DF00351FFB /* Assets.xcassets */,
+				685939BB1E1F49DF00351FFB /* LaunchScreen.storyboard */,
+				685939BE1E1F49DF00351FFB /* Info.plist */,
+				685939B61E1F49DF00351FFB /* TreeMall.xcdatamodeld */,
+				685939AA1E1F49DF00351FFB /* Supporting Files */,
+			);
+			path = TreeMall;
+			sourceTree = "<group>";
+		};
+		685939AA1E1F49DF00351FFB /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				685939AB1E1F49DF00351FFB /* main.m */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		685939C61E1F49DF00351FFB /* TreeMallTests */ = {
+			isa = PBXGroup;
+			children = (
+				685939C71E1F49DF00351FFB /* TreeMallTests.m */,
+				685939C91E1F49DF00351FFB /* Info.plist */,
+			);
+			path = TreeMallTests;
+			sourceTree = "<group>";
+		};
+		685939D11E1F49DF00351FFB /* TreeMallUITests */ = {
+			isa = PBXGroup;
+			children = (
+				685939D21E1F49DF00351FFB /* TreeMallUITests.m */,
+				685939D41E1F49DF00351FFB /* Info.plist */,
+			);
+			path = TreeMallUITests;
+			sourceTree = "<group>";
+		};
+		685939E01E1F4AD200351FFB /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				685939E61E1F514F00351FFB /* Crypto */,
+				685939E11E1F4AEA00351FFB /* API */,
+			);
+			name = Utilities;
+			sourceTree = "<group>";
+		};
+		685939E11E1F4AEA00351FFB /* API */ = {
+			isa = PBXGroup;
+			children = (
+				685939E31E1F4E1700351FFB /* SHAPIAdapter.h */,
+				685939E41E1F4E1700351FFB /* SHAPIAdapter.m */,
+				685939EB1E1F775900351FFB /* CryptoModule.h */,
+				685939EC1E1F775900351FFB /* CryptoModule.m */,
+				685939EE1E1F978A00351FFB /* APIDefinition.h */,
+			);
+			name = API;
+			sourceTree = "<group>";
+		};
+		685939E61E1F514F00351FFB /* Crypto */ = {
+			isa = PBXGroup;
+			children = (
+				685939E71E1F518700351FFB /* CryptoTool.h */,
+				685939E81E1F518700351FFB /* CryptoTool.m */,
+				685939EA1E1F724D00351FFB /* SHCryptoModuleTemplate.h */,
+			);
+			name = Crypto;
+			sourceTree = "<group>";
+		};
+		689065041E23321E00E5CB26 /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				689065281E2346EB00E5CB26 /* Favorite */,
+				689065221E2338AB00E5CB26 /* Member */,
+				6890651C1E23385400E5CB26 /* Notification */,
+				689065161E2337D900E5CB26 /* Cart */,
+				689065101E23365200E5CB26 /* ShoppingMall */,
+				6890650A1E23330A00E5CB26 /* Entrance */,
+			);
+			name = ViewControllers;
+			sourceTree = "<group>";
+		};
+		6890650A1E23330A00E5CB26 /* Entrance */ = {
+			isa = PBXGroup;
+			children = (
+				6890650B1E23334400E5CB26 /* EntranceViewController.h */,
+				6890650C1E23334400E5CB26 /* EntranceViewController.m */,
+				6890650D1E23334400E5CB26 /* EntranceViewController.xib */,
+			);
+			name = Entrance;
+			sourceTree = "<group>";
+		};
+		689065101E23365200E5CB26 /* ShoppingMall */ = {
+			isa = PBXGroup;
+			children = (
+				689065111E23368100E5CB26 /* ShoppingMallViewController.h */,
+				689065121E23368100E5CB26 /* ShoppingMallViewController.m */,
+				689065131E23368100E5CB26 /* ShoppingMallViewController.xib */,
+			);
+			name = ShoppingMall;
+			sourceTree = "<group>";
+		};
+		689065161E2337D900E5CB26 /* Cart */ = {
+			isa = PBXGroup;
+			children = (
+				689065171E2337F900E5CB26 /* CartViewController.h */,
+				689065181E2337F900E5CB26 /* CartViewController.m */,
+				689065191E2337F900E5CB26 /* CartViewController.xib */,
+			);
+			name = Cart;
+			sourceTree = "<group>";
+		};
+		6890651C1E23385400E5CB26 /* Notification */ = {
+			isa = PBXGroup;
+			children = (
+				6890651D1E23387200E5CB26 /* NotificationViewController.h */,
+				6890651E1E23387200E5CB26 /* NotificationViewController.m */,
+				6890651F1E23387200E5CB26 /* NotificationViewController.xib */,
+			);
+			name = Notification;
+			sourceTree = "<group>";
+		};
+		689065221E2338AB00E5CB26 /* Member */ = {
+			isa = PBXGroup;
+			children = (
+				689065231E2338C400E5CB26 /* MemberViewController.h */,
+				689065241E2338C400E5CB26 /* MemberViewController.m */,
+				689065251E2338C400E5CB26 /* MemberViewController.xib */,
+			);
+			name = Member;
+			sourceTree = "<group>";
+		};
+		689065281E2346EB00E5CB26 /* Favorite */ = {
+			isa = PBXGroup;
+			children = (
+				689065291E23470E00E5CB26 /* FavoriteViewController.h */,
+				6890652A1E23470E00E5CB26 /* FavoriteViewController.m */,
+				6890652B1E23470E00E5CB26 /* FavoriteViewController.xib */,
+			);
+			name = Favorite;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		685939A61E1F49DF00351FFB /* TreeMall */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 685939D71E1F49DF00351FFB /* Build configuration list for PBXNativeTarget "TreeMall" */;
+			buildPhases = (
+				685939A31E1F49DF00351FFB /* Sources */,
+				685939A41E1F49DF00351FFB /* Frameworks */,
+				685939A51E1F49DF00351FFB /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = TreeMall;
+			productName = TreeMall;
+			productReference = 685939A71E1F49DF00351FFB /* TreeMall.app */;
+			productType = "com.apple.product-type.application";
+		};
+		685939C21E1F49DF00351FFB /* TreeMallTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 685939DA1E1F49DF00351FFB /* Build configuration list for PBXNativeTarget "TreeMallTests" */;
+			buildPhases = (
+				685939BF1E1F49DF00351FFB /* Sources */,
+				685939C01E1F49DF00351FFB /* Frameworks */,
+				685939C11E1F49DF00351FFB /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				685939C51E1F49DF00351FFB /* PBXTargetDependency */,
+			);
+			name = TreeMallTests;
+			productName = TreeMallTests;
+			productReference = 685939C31E1F49DF00351FFB /* TreeMallTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		685939CD1E1F49DF00351FFB /* TreeMallUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 685939DD1E1F49DF00351FFB /* Build configuration list for PBXNativeTarget "TreeMallUITests" */;
+			buildPhases = (
+				685939CA1E1F49DF00351FFB /* Sources */,
+				685939CB1E1F49DF00351FFB /* Frameworks */,
+				685939CC1E1F49DF00351FFB /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				685939D01E1F49DF00351FFB /* PBXTargetDependency */,
+			);
+			name = TreeMallUITests;
+			productName = TreeMallUITests;
+			productReference = 685939CE1E1F49DF00351FFB /* TreeMallUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		6859399F1E1F49DF00351FFB /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0820;
+				ORGANIZATIONNAME = Symphox;
+				TargetAttributes = {
+					685939A61E1F49DF00351FFB = {
+						CreatedOnToolsVersion = 8.2.1;
+						DevelopmentTeam = XFNW4TD8ZL;
+						ProvisioningStyle = Automatic;
+					};
+					685939C21E1F49DF00351FFB = {
+						CreatedOnToolsVersion = 8.2.1;
+						DevelopmentTeam = XFNW4TD8ZL;
+						ProvisioningStyle = Automatic;
+						TestTargetID = 685939A61E1F49DF00351FFB;
+					};
+					685939CD1E1F49DF00351FFB = {
+						CreatedOnToolsVersion = 8.2.1;
+						DevelopmentTeam = XFNW4TD8ZL;
+						ProvisioningStyle = Automatic;
+						TestTargetID = 685939A61E1F49DF00351FFB;
+					};
+				};
+			};
+			buildConfigurationList = 685939A21E1F49DF00351FFB /* Build configuration list for PBXProject "TreeMall" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 6859399E1E1F49DF00351FFB;
+			productRefGroup = 685939A81E1F49DF00351FFB /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				685939A61E1F49DF00351FFB /* TreeMall */,
+				685939C21E1F49DF00351FFB /* TreeMallTests */,
+				685939CD1E1F49DF00351FFB /* TreeMallUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		685939A51E1F49DF00351FFB /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				689065271E2338C400E5CB26 /* MemberViewController.xib in Resources */,
+				689065151E23368100E5CB26 /* ShoppingMallViewController.xib in Resources */,
+				685939BD1E1F49DF00351FFB /* LaunchScreen.storyboard in Resources */,
+				685939BA1E1F49DF00351FFB /* Assets.xcassets in Resources */,
+				6890650F1E23334400E5CB26 /* EntranceViewController.xib in Resources */,
+				6890651B1E2337F900E5CB26 /* CartViewController.xib in Resources */,
+				685939B51E1F49DF00351FFB /* Main.storyboard in Resources */,
+				689065211E23387200E5CB26 /* NotificationViewController.xib in Resources */,
+				6890652D1E23470E00E5CB26 /* FavoriteViewController.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		685939C11E1F49DF00351FFB /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		685939CC1E1F49DF00351FFB /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		685939A31E1F49DF00351FFB /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				685939E91E1F518700351FFB /* CryptoTool.m in Sources */,
+				685939B21E1F49DF00351FFB /* ViewController.m in Sources */,
+				6890650E1E23334400E5CB26 /* EntranceViewController.m in Sources */,
+				685939E51E1F4E1700351FFB /* SHAPIAdapter.m in Sources */,
+				689065261E2338C400E5CB26 /* MemberViewController.m in Sources */,
+				685939AF1E1F49DF00351FFB /* AppDelegate.m in Sources */,
+				689065141E23368100E5CB26 /* ShoppingMallViewController.m in Sources */,
+				689065201E23387200E5CB26 /* NotificationViewController.m in Sources */,
+				6890651A1E2337F900E5CB26 /* CartViewController.m in Sources */,
+				685939AC1E1F49DF00351FFB /* main.m in Sources */,
+				685939ED1E1F775900351FFB /* CryptoModule.m in Sources */,
+				685939B81E1F49DF00351FFB /* TreeMall.xcdatamodeld in Sources */,
+				6890652C1E23470E00E5CB26 /* FavoriteViewController.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		685939BF1E1F49DF00351FFB /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				685939C81E1F49DF00351FFB /* TreeMallTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		685939CA1E1F49DF00351FFB /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				685939D31E1F49DF00351FFB /* TreeMallUITests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		685939C51E1F49DF00351FFB /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 685939A61E1F49DF00351FFB /* TreeMall */;
+			targetProxy = 685939C41E1F49DF00351FFB /* PBXContainerItemProxy */;
+		};
+		685939D01E1F49DF00351FFB /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 685939A61E1F49DF00351FFB /* TreeMall */;
+			targetProxy = 685939CF1E1F49DF00351FFB /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		685939B31E1F49DF00351FFB /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				685939B41E1F49DF00351FFB /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		685939BB1E1F49DF00351FFB /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				685939BC1E1F49DF00351FFB /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		685939D51E1F49DF00351FFB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		685939D61E1F49DF00351FFB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		685939D81E1F49DF00351FFB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = XFNW4TD8ZL;
+				INFOPLIST_FILE = TreeMall/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.Symphox.TreeMall;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		685939D91E1F49DF00351FFB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = XFNW4TD8ZL;
+				INFOPLIST_FILE = TreeMall/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.Symphox.TreeMall;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		685939DB1E1F49DF00351FFB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				DEVELOPMENT_TEAM = XFNW4TD8ZL;
+				INFOPLIST_FILE = TreeMallTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.Symphox.TreeMallTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TreeMall.app/TreeMall";
+			};
+			name = Debug;
+		};
+		685939DC1E1F49DF00351FFB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				DEVELOPMENT_TEAM = XFNW4TD8ZL;
+				INFOPLIST_FILE = TreeMallTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.Symphox.TreeMallTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TreeMall.app/TreeMall";
+			};
+			name = Release;
+		};
+		685939DE1E1F49DF00351FFB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DEVELOPMENT_TEAM = XFNW4TD8ZL;
+				INFOPLIST_FILE = TreeMallUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.Symphox.TreeMallUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_TARGET_NAME = TreeMall;
+			};
+			name = Debug;
+		};
+		685939DF1E1F49DF00351FFB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DEVELOPMENT_TEAM = XFNW4TD8ZL;
+				INFOPLIST_FILE = TreeMallUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.Symphox.TreeMallUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_TARGET_NAME = TreeMall;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		685939A21E1F49DF00351FFB /* Build configuration list for PBXProject "TreeMall" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				685939D51E1F49DF00351FFB /* Debug */,
+				685939D61E1F49DF00351FFB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		685939D71E1F49DF00351FFB /* Build configuration list for PBXNativeTarget "TreeMall" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				685939D81E1F49DF00351FFB /* Debug */,
+				685939D91E1F49DF00351FFB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		685939DA1E1F49DF00351FFB /* Build configuration list for PBXNativeTarget "TreeMallTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				685939DB1E1F49DF00351FFB /* Debug */,
+				685939DC1E1F49DF00351FFB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		685939DD1E1F49DF00351FFB /* Build configuration list for PBXNativeTarget "TreeMallUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				685939DE1E1F49DF00351FFB /* Debug */,
+				685939DF1E1F49DF00351FFB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		685939B61E1F49DF00351FFB /* TreeMall.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				685939B71E1F49DF00351FFB /* TreeMall.xcdatamodel */,
+			);
+			currentVersion = 685939B71E1F49DF00351FFB /* TreeMall.xcdatamodel */;
+			path = TreeMall.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
+	};
+	rootObject = 6859399F1E1F49DF00351FFB /* Project object */;
+}
