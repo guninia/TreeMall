@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
-@interface EntranceViewController : UIViewController
+@interface EntranceViewController : UIViewController <UITableViewDataSource, UITableViewDelegate>
+
+@property (nonatomic ,strong) IBOutlet UITableView *tableViewEntrance;
 
 @end

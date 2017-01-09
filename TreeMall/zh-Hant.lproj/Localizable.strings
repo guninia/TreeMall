@@ -1,0 +1,18 @@
+/* 
+  Localizable.strings
+  TreeMall
+
+  Created by 黃思敬 on 2017/1/9.
+  Copyright © 2017年 Symphox. All rights reserved.
+*/
+
+"Homepage"="首頁";
+"ProductOverview"="商品總覽";
+"ShoppingCart"="購物車";
+"MyFavorite"="我的最愛";
+"Member"="會員";
+"Account"="帳號";
+"Password"="密碼";
+"Login"="登入";
+"FacebookAccountLogin"="Facebook 帳號登入";
+"Google+AccountLogin"="Google+ 帳號登入";

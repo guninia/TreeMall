@@ -31,6 +31,13 @@
 		689065271E2338C400E5CB26 /* MemberViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 689065251E2338C400E5CB26 /* MemberViewController.xib */; };
 		6890652C1E23470E00E5CB26 /* FavoriteViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6890652A1E23470E00E5CB26 /* FavoriteViewController.m */; };
 		6890652D1E23470E00E5CB26 /* FavoriteViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6890652B1E23470E00E5CB26 /* FavoriteViewController.xib */; };
+		68CA36A61E2362FF00A70BCC /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 68CA36A81E2362FF00A70BCC /* Localizable.strings */; };
+		68CA36AF1E23679800A70BCC /* LocalizedString.m in Sources */ = {isa = PBXBuildFile; fileRef = 68CA36AE1E23679800A70BCC /* LocalizedString.m */; };
+		68CA36B21E23709400A70BCC /* EntranceTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 68CA36B11E23709400A70BCC /* EntranceTableViewCell.m */; };
+		68CA36B51E23712700A70BCC /* EntranceFunctionSectionHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 68CA36B41E23712700A70BCC /* EntranceFunctionSectionHeader.m */; };
+		68CA36B81E23722F00A70BCC /* EntranceMemberPromoteHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 68CA36B71E23722F00A70BCC /* EntranceMemberPromoteHeader.m */; };
+		68CA36BD1E23880400A70BCC /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68CA36BB1E23880400A70BCC /* LoginViewController.m */; };
+		68CA36BE1E23880400A70BCC /* LoginViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 68CA36BC1E23880400A70BCC /* LoginViewController.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -94,6 +101,21 @@
 		689065291E23470E00E5CB26 /* FavoriteViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FavoriteViewController.h; path = ViewControllers/Favorite/FavoriteViewController.h; sourceTree = "<group>"; };
 		6890652A1E23470E00E5CB26 /* FavoriteViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FavoriteViewController.m; path = ViewControllers/Favorite/FavoriteViewController.m; sourceTree = "<group>"; };
 		6890652B1E23470E00E5CB26 /* FavoriteViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = FavoriteViewController.xib; path = ViewControllers/Favorite/FavoriteViewController.xib; sourceTree = "<group>"; };
+		68CA36A21E2362B600A70BCC /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/Main.strings"; sourceTree = "<group>"; };
+		68CA36A31E2362B600A70BCC /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
+		68CA36A91E23630500A70BCC /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = Base.lproj/Localizable.strings; sourceTree = "<group>"; };
+		68CA36AA1E23634A00A70BCC /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		68CA36AD1E23679800A70BCC /* LocalizedString.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LocalizedString.h; path = Utilities/LocalizedStrings/LocalizedString.h; sourceTree = "<group>"; };
+		68CA36AE1E23679800A70BCC /* LocalizedString.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LocalizedString.m; path = Utilities/LocalizedStrings/LocalizedString.m; sourceTree = "<group>"; };
+		68CA36B01E23709400A70BCC /* EntranceTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EntranceTableViewCell.h; path = ViewControllers/Entrance/EntranceTableViewCell.h; sourceTree = "<group>"; };
+		68CA36B11E23709400A70BCC /* EntranceTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EntranceTableViewCell.m; path = ViewControllers/Entrance/EntranceTableViewCell.m; sourceTree = "<group>"; };
+		68CA36B31E23712700A70BCC /* EntranceFunctionSectionHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EntranceFunctionSectionHeader.h; path = ViewControllers/Entrance/EntranceFunctionSectionHeader.h; sourceTree = "<group>"; };
+		68CA36B41E23712700A70BCC /* EntranceFunctionSectionHeader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EntranceFunctionSectionHeader.m; path = ViewControllers/Entrance/EntranceFunctionSectionHeader.m; sourceTree = "<group>"; };
+		68CA36B61E23722F00A70BCC /* EntranceMemberPromoteHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EntranceMemberPromoteHeader.h; path = ViewControllers/Entrance/EntranceMemberPromoteHeader.h; sourceTree = "<group>"; };
+		68CA36B71E23722F00A70BCC /* EntranceMemberPromoteHeader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EntranceMemberPromoteHeader.m; path = ViewControllers/Entrance/EntranceMemberPromoteHeader.m; sourceTree = "<group>"; };
+		68CA36BA1E23880400A70BCC /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LoginViewController.h; path = ViewControllers/Login/LoginViewController.h; sourceTree = "<group>"; };
+		68CA36BB1E23880400A70BCC /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LoginViewController.m; path = ViewControllers/Login/LoginViewController.m; sourceTree = "<group>"; };
+		68CA36BC1E23880400A70BCC /* LoginViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = LoginViewController.xib; path = ViewControllers/Login/LoginViewController.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -164,6 +186,7 @@
 			isa = PBXGroup;
 			children = (
 				685939AB1E1F49DF00351FFB /* main.m */,
+				68CA36A81E2362FF00A70BCC /* Localizable.strings */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -189,6 +212,7 @@
 		685939E01E1F4AD200351FFB /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				68CA36AC1E23675200A70BCC /* LocalizedStrings */,
 				685939E61E1F514F00351FFB /* Crypto */,
 				685939E11E1F4AEA00351FFB /* API */,
 			);
@@ -220,6 +244,7 @@
 		689065041E23321E00E5CB26 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				68CA36B91E2387DD00A70BCC /* Login */,
 				689065281E2346EB00E5CB26 /* Favorite */,
 				689065221E2338AB00E5CB26 /* Member */,
 				6890651C1E23385400E5CB26 /* Notification */,
@@ -236,6 +261,12 @@
 				6890650B1E23334400E5CB26 /* EntranceViewController.h */,
 				6890650C1E23334400E5CB26 /* EntranceViewController.m */,
 				6890650D1E23334400E5CB26 /* EntranceViewController.xib */,
+				68CA36B61E23722F00A70BCC /* EntranceMemberPromoteHeader.h */,
+				68CA36B71E23722F00A70BCC /* EntranceMemberPromoteHeader.m */,
+				68CA36B31E23712700A70BCC /* EntranceFunctionSectionHeader.h */,
+				68CA36B41E23712700A70BCC /* EntranceFunctionSectionHeader.m */,
+				68CA36B01E23709400A70BCC /* EntranceTableViewCell.h */,
+				68CA36B11E23709400A70BCC /* EntranceTableViewCell.m */,
 			);
 			name = Entrance;
 			sourceTree = "<group>";
@@ -288,6 +319,25 @@
 				6890652B1E23470E00E5CB26 /* FavoriteViewController.xib */,
 			);
 			name = Favorite;
+			sourceTree = "<group>";
+		};
+		68CA36AC1E23675200A70BCC /* LocalizedStrings */ = {
+			isa = PBXGroup;
+			children = (
+				68CA36AD1E23679800A70BCC /* LocalizedString.h */,
+				68CA36AE1E23679800A70BCC /* LocalizedString.m */,
+			);
+			name = LocalizedStrings;
+			sourceTree = "<group>";
+		};
+		68CA36B91E2387DD00A70BCC /* Login */ = {
+			isa = PBXGroup;
+			children = (
+				68CA36BA1E23880400A70BCC /* LoginViewController.h */,
+				68CA36BB1E23880400A70BCC /* LoginViewController.m */,
+				68CA36BC1E23880400A70BCC /* LoginViewController.xib */,
+			);
+			name = Login;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -401,9 +451,11 @@
 			files = (
 				689065271E2338C400E5CB26 /* MemberViewController.xib in Resources */,
 				689065151E23368100E5CB26 /* ShoppingMallViewController.xib in Resources */,
+				68CA36BE1E23880400A70BCC /* LoginViewController.xib in Resources */,
 				685939BD1E1F49DF00351FFB /* LaunchScreen.storyboard in Resources */,
 				685939BA1E1F49DF00351FFB /* Assets.xcassets in Resources */,
 				6890650F1E23334400E5CB26 /* EntranceViewController.xib in Resources */,
+				68CA36A61E2362FF00A70BCC /* Localizable.strings in Resources */,
 				6890651B1E2337F900E5CB26 /* CartViewController.xib in Resources */,
 				685939B51E1F49DF00351FFB /* Main.storyboard in Resources */,
 				689065211E23387200E5CB26 /* NotificationViewController.xib in Resources */,
@@ -439,11 +491,16 @@
 				689065261E2338C400E5CB26 /* MemberViewController.m in Sources */,
 				685939AF1E1F49DF00351FFB /* AppDelegate.m in Sources */,
 				689065141E23368100E5CB26 /* ShoppingMallViewController.m in Sources */,
+				68CA36B81E23722F00A70BCC /* EntranceMemberPromoteHeader.m in Sources */,
 				689065201E23387200E5CB26 /* NotificationViewController.m in Sources */,
 				6890651A1E2337F900E5CB26 /* CartViewController.m in Sources */,
+				68CA36B21E23709400A70BCC /* EntranceTableViewCell.m in Sources */,
 				685939AC1E1F49DF00351FFB /* main.m in Sources */,
 				685939ED1E1F775900351FFB /* CryptoModule.m in Sources */,
 				685939B81E1F49DF00351FFB /* TreeMall.xcdatamodeld in Sources */,
+				68CA36BD1E23880400A70BCC /* LoginViewController.m in Sources */,
+				68CA36AF1E23679800A70BCC /* LocalizedString.m in Sources */,
+				68CA36B51E23712700A70BCC /* EntranceFunctionSectionHeader.m in Sources */,
 				6890652C1E23470E00E5CB26 /* FavoriteViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -484,6 +541,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				685939B41E1F49DF00351FFB /* Base */,
+				68CA36A21E2362B600A70BCC /* zh-Hant */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";
@@ -492,8 +550,18 @@
 			isa = PBXVariantGroup;
 			children = (
 				685939BC1E1F49DF00351FFB /* Base */,
+				68CA36A31E2362B600A70BCC /* zh-Hant */,
 			);
 			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+		68CA36A81E2362FF00A70BCC /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				68CA36A91E23630500A70BCC /* Base */,
+				68CA36AA1E23634A00A70BCC /* zh-Hant */,
+			);
+			name = Localizable.strings;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -503,6 +571,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
@@ -550,6 +619,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
@@ -593,6 +663,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = XFNW4TD8ZL;
 				INFOPLIST_FILE = TreeMall/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.Symphox.TreeMall;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -605,6 +676,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = XFNW4TD8ZL;
 				INFOPLIST_FILE = TreeMall/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.Symphox.TreeMall;
 				PRODUCT_NAME = "$(TARGET_NAME)";
