@@ -7,18 +7,21 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "TextHorizontalSeparator.h"
 
-@interface LoginViewController : UIViewController
+@interface LoginViewController : UIViewController <UITextFieldDelegate>
 
 @property (nonatomic, strong) UIImageView *imageViewLogo;
 @property (nonatomic, strong) UITextField *textFieldAccount;
 @property (nonatomic, strong) UITextField *textFieldPassword;
 @property (nonatomic, strong) UIButton *buttonLogin;
+@property (nonatomic, strong) TextHorizontalSeparator *separatorHorizon;
 @property (nonatomic, strong) UIButton *buttonFacebookLogin;
 @property (nonatomic, strong) UIButton *buttonGooglePlusLogin;
 @property (nonatomic, strong) UIButton *checkButtonAgreement;
 @property (nonatomic, strong) UIButton *buttonAgreementContent;
 @property (nonatomic, strong) UIButton *buttonJoinMember;
+@property (nonatomic, strong) UIView *separatorVertical;
 @property (nonatomic, strong) UIButton *buttonForgetpassword;
 
 @end

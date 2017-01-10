@@ -31,6 +31,8 @@
 		689065271E2338C400E5CB26 /* MemberViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 689065251E2338C400E5CB26 /* MemberViewController.xib */; };
 		6890652C1E23470E00E5CB26 /* FavoriteViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6890652A1E23470E00E5CB26 /* FavoriteViewController.m */; };
 		6890652D1E23470E00E5CB26 /* FavoriteViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6890652B1E23470E00E5CB26 /* FavoriteViewController.xib */; };
+		68B68FEF1E24753400DCCF29 /* Utility.m in Sources */ = {isa = PBXBuildFile; fileRef = 68B68FEE1E24753400DCCF29 /* Utility.m */; };
+		68B68FF41E2484A600DCCF29 /* TextHorizontalSeparator.m in Sources */ = {isa = PBXBuildFile; fileRef = 68B68FF31E2484A600DCCF29 /* TextHorizontalSeparator.m */; };
 		68CA36A61E2362FF00A70BCC /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 68CA36A81E2362FF00A70BCC /* Localizable.strings */; };
 		68CA36AF1E23679800A70BCC /* LocalizedString.m in Sources */ = {isa = PBXBuildFile; fileRef = 68CA36AE1E23679800A70BCC /* LocalizedString.m */; };
 		68CA36B21E23709400A70BCC /* EntranceTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 68CA36B11E23709400A70BCC /* EntranceTableViewCell.m */; };
@@ -101,6 +103,10 @@
 		689065291E23470E00E5CB26 /* FavoriteViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FavoriteViewController.h; path = ViewControllers/Favorite/FavoriteViewController.h; sourceTree = "<group>"; };
 		6890652A1E23470E00E5CB26 /* FavoriteViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FavoriteViewController.m; path = ViewControllers/Favorite/FavoriteViewController.m; sourceTree = "<group>"; };
 		6890652B1E23470E00E5CB26 /* FavoriteViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = FavoriteViewController.xib; path = ViewControllers/Favorite/FavoriteViewController.xib; sourceTree = "<group>"; };
+		68B68FED1E24753400DCCF29 /* Utility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Utility.h; path = Utilities/Utility.h; sourceTree = "<group>"; };
+		68B68FEE1E24753400DCCF29 /* Utility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Utility.m; path = Utilities/Utility.m; sourceTree = "<group>"; };
+		68B68FF21E2484A600DCCF29 /* TextHorizontalSeparator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TextHorizontalSeparator.h; path = Component/Separator/TextHorizontalSeparator.h; sourceTree = "<group>"; };
+		68B68FF31E2484A600DCCF29 /* TextHorizontalSeparator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TextHorizontalSeparator.m; path = Component/Separator/TextHorizontalSeparator.m; sourceTree = "<group>"; };
 		68CA36A21E2362B600A70BCC /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/Main.strings"; sourceTree = "<group>"; };
 		68CA36A31E2362B600A70BCC /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
 		68CA36A91E23630500A70BCC /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = Base.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -166,6 +172,7 @@
 		685939A91E1F49DF00351FFB /* TreeMall */ = {
 			isa = PBXGroup;
 			children = (
+				68B68FF01E2483D600DCCF29 /* Component */,
 				689065041E23321E00E5CB26 /* ViewControllers */,
 				685939E01E1F4AD200351FFB /* Utilities */,
 				685939AD1E1F49DF00351FFB /* AppDelegate.h */,
@@ -212,6 +219,8 @@
 		685939E01E1F4AD200351FFB /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				68B68FED1E24753400DCCF29 /* Utility.h */,
+				68B68FEE1E24753400DCCF29 /* Utility.m */,
 				68CA36AC1E23675200A70BCC /* LocalizedStrings */,
 				685939E61E1F514F00351FFB /* Crypto */,
 				685939E11E1F4AEA00351FFB /* API */,
@@ -319,6 +328,23 @@
 				6890652B1E23470E00E5CB26 /* FavoriteViewController.xib */,
 			);
 			name = Favorite;
+			sourceTree = "<group>";
+		};
+		68B68FF01E2483D600DCCF29 /* Component */ = {
+			isa = PBXGroup;
+			children = (
+				68B68FF11E24843800DCCF29 /* Separator */,
+			);
+			name = Component;
+			sourceTree = "<group>";
+		};
+		68B68FF11E24843800DCCF29 /* Separator */ = {
+			isa = PBXGroup;
+			children = (
+				68B68FF21E2484A600DCCF29 /* TextHorizontalSeparator.h */,
+				68B68FF31E2484A600DCCF29 /* TextHorizontalSeparator.m */,
+			);
+			name = Separator;
 			sourceTree = "<group>";
 		};
 		68CA36AC1E23675200A70BCC /* LocalizedStrings */ = {
@@ -488,10 +514,12 @@
 				685939B21E1F49DF00351FFB /* ViewController.m in Sources */,
 				6890650E1E23334400E5CB26 /* EntranceViewController.m in Sources */,
 				685939E51E1F4E1700351FFB /* SHAPIAdapter.m in Sources */,
+				68B68FF41E2484A600DCCF29 /* TextHorizontalSeparator.m in Sources */,
 				689065261E2338C400E5CB26 /* MemberViewController.m in Sources */,
 				685939AF1E1F49DF00351FFB /* AppDelegate.m in Sources */,
 				689065141E23368100E5CB26 /* ShoppingMallViewController.m in Sources */,
 				68CA36B81E23722F00A70BCC /* EntranceMemberPromoteHeader.m in Sources */,
+				68B68FEF1E24753400DCCF29 /* Utility.m in Sources */,
 				689065201E23387200E5CB26 /* NotificationViewController.m in Sources */,
 				6890651A1E2337F900E5CB26 /* CartViewController.m in Sources */,
 				68CA36B21E23709400A70BCC /* EntranceTableViewCell.m in Sources */,
