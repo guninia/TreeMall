@@ -7,8 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "EntranceFunctionSectionHeader.h"
 
-@interface EntranceViewController : UIViewController <UITableViewDataSource, UITableViewDelegate>
+@interface EntranceViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, EntranceFunctionSectionHeaderDelegate>
 
 @property (nonatomic ,strong) IBOutlet UITableView *tableViewEntrance;
 @property (nonatomic, strong) NSMutableDictionary *dictionaryData;

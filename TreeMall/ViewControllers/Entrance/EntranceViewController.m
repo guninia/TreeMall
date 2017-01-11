@@ -8,13 +8,13 @@
 
 #import "EntranceViewController.h"
 #import "EntranceTableViewCell.h"
-#import "EntranceFunctionSectionHeader.h"
 #import "EntranceMemberPromoteHeader.h"
 #import "CryptoModule.h"
 #import "SHAPIAdapter.h"
 #import "APIDefinition.h"
 #import "Definition.h"
 #import "UIImageView+WebCache.h"
+#import "PromotionViewController.h"
 
 typedef enum : NSUInteger {
     TableViewSectionMemberPromotion,
@@ -61,7 +61,6 @@ typedef enum : NSUInteger {
 - (void)viewDidLayoutSubviews
 {
     [super viewDidLayoutSubviews];
-    NSLog(@"self.tableViewEntrance[%4.2f,%4.2f,%4.2f,%4.2f]", self.tableViewEntrance.frame.origin.x, self.tableViewEntrance.frame.origin.y, self.tableViewEntrance.frame.size.width, self.tableViewEntrance.frame.size.height);
 }
 
 - (void)didReceiveMemoryWarning {
@@ -210,6 +209,7 @@ typedef enum : NSUInteger {
             {
                 view = [[EntranceFunctionSectionHeader alloc] initWithReuseIdentifier:EntranceFunctionSectionHeaderIdentifier];
             }
+            ((EntranceFunctionSectionHeader *)view).delegate = self;
         }
             break;
         default:
@@ -276,6 +276,7 @@ typedef enum : NSUInteger {
         {
             NSDictionary *dictionary = [self dictionaryForProductAtIndex:indexPath.row];
             NSString *type = [dictionary objectForKey:SymphoxAPIParam_type];
+            NSString *link = [dictionary objectForKey:SymphoxAPIParam_link];
             if (type == nil)
             {
                 break;
@@ -283,17 +284,16 @@ typedef enum : NSUInteger {
             switch ([type integerValue]) {
                 case 0:
                 {
-                    
+                    if ([link isEqualToString:@"001"])
+                    {
+                        // Should go to Hot List page.
+                    }
                 }
                     break;
                 case 1:
                 {
-                    
-                }
-                    break;
-                case 2:
-                {
-                    
+                    // Should go to product detail page.
+                    // "link" would be the product ID. 
                 }
                     break;
                 default:
@@ -302,6 +302,32 @@ typedef enum : NSUInteger {
         }
             break;
             
+        default:
+            break;
+    }
+}
+
+#pragma mark - EntranceFunctionSectionHeaderDelegate
+
+- (void)entranceFunctionSectionHeader:(EntranceFunctionSectionHeader *)header didSelectFunction:(EntranceFunction)function
+{
+    switch (function) {
+        case EntranceFunctionExchange:
+        {
+            
+        }
+            break;
+        case EntranceFunctionCoupon:
+        {
+            
+        }
+            break;
+        case EntranceFunctionPromotion:
+        {
+            PromotionViewController *promotionViewController = [[PromotionViewController alloc] initWithNibName:@"PromotionViewController" bundle:[NSBundle mainBundle]];
+            [self.navigationController pushViewController:promotionViewController animated:YES];
+        }
+            break;
         default:
             break;
     }

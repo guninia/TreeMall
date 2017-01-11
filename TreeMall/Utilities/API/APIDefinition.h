@@ -14,6 +14,7 @@
 #ifdef DEBUG
 static NSString *SymphoxAPI_token = @"http://tomcat8.mdevelop.com/TreeMall/api/portal/app/token";
 static NSString *SymphoxAPI_homepage = @"http://tomcat8.mdevelop.com/TreeMall/api/onlineService.do";
+static NSString *SymphoxAPI_promotion = @"http://tomcat8.mdevelop.com/TreeMall/api/onlineService.do";
 #else
 static NSString *SymphoxAPI_token = @"https://api.symphox.com.tw/portal/app/token";
 #endif
@@ -30,6 +31,10 @@ static NSString *SymphoxAPIParam_type = @"type";
 static NSString *SymphoxAPIParam_serviceText = @"serviceText";
 static NSString *SymphoxAPIParam_toDayFocus = @"toDayFocus";
 static NSString *SymphoxAPIParam_now = @"now";
+static NSString *SymphoxAPIParam_serviceMessage = @"serviceMessage";
+static NSString *SymphoxAPIParam_name = @"name";
+static NSString *SymphoxAPIParam_tips = @"tips";
+static NSString *SymphoxAPIParam_content = @"content";
 
 
 #endif /* APIDefinition_h */

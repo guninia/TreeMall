@@ -78,16 +78,28 @@
 - (void)actButtonExchangePressed:(id)sender
 {
     NSLog(@"actButtonExchangePressed");
+    if (_delegate && [_delegate respondsToSelector:@selector(entranceFunctionSectionHeader:didSelectFunction:)])
+    {
+        [_delegate entranceFunctionSectionHeader:self didSelectFunction:EntranceFunctionExchange];
+    }
 }
 
 - (void)actButtonCouponPressed:(id)sender
 {
     NSLog(@"actButtonCouponPressed");
+    if (_delegate && [_delegate respondsToSelector:@selector(entranceFunctionSectionHeader:didSelectFunction:)])
+    {
+        [_delegate entranceFunctionSectionHeader:self didSelectFunction:EntranceFunctionCoupon];
+    }
 }
 
 - (void)actButtonPromotePressed:(id)sender
 {
     NSLog(@"actButtonPromotePressed");
+    if (_delegate && [_delegate respondsToSelector:@selector(entranceFunctionSectionHeader:didSelectFunction:)])
+    {
+        [_delegate entranceFunctionSectionHeader:self didSelectFunction:EntranceFunctionPromotion];
+    }
 }
 
 @end

@@ -10,8 +10,24 @@
 
 static NSString *EntranceFunctionSectionHeaderIdentifier = @"EntranceFunctionSectionHeader";
 
+typedef enum : NSUInteger {
+    EntranceFunctionExchange,
+    EntranceFunctionCoupon,
+    EntranceFunctionPromotion,
+    EntranceFunctionTotal
+} EntranceFunction;
+
+@class EntranceFunctionSectionHeader;
+
+@protocol EntranceFunctionSectionHeaderDelegate <NSObject>
+
+- (void)entranceFunctionSectionHeader:(EntranceFunctionSectionHeader *)header didSelectFunction:(EntranceFunction)function;
+
+@end
+
 @interface EntranceFunctionSectionHeader : UITableViewHeaderFooterView
 
+@property (nonatomic, weak) id <EntranceFunctionSectionHeaderDelegate> delegate;
 @property (nonatomic, strong) NSMutableArray *arrayButtons;
 
 @end
