@@ -35,7 +35,7 @@ static SHAPIAdapter *gAPIAdapter = nil;
         configuration.allowsCellularAccess = YES;
         configuration.timeoutIntervalForRequest = 60.0;
         configuration.HTTPMaximumConnectionsPerHost = 6.0;
-        configuration.requestCachePolicy = NSURLRequestUseProtocolCachePolicy;
+        configuration.requestCachePolicy = NSURLRequestReloadIgnoringLocalCacheData;
         _session = [NSURLSession sessionWithConfiguration:configuration delegate:self delegateQueue:[NSOperationQueue mainQueue]];
     }
     return self;
@@ -65,11 +65,33 @@ static SHAPIAdapter *gAPIAdapter = nil;
             case SHPostFormatJson:
             {
                 postRawData = [NSJSONSerialization dataWithJSONObject:postObject options:0 error:&error];
+                NSString *postString = [[NSString alloc] initWithData:postRawData encoding:NSUTF8StringEncoding];
+                NSLog(@"sendRequestFromObject - postRawData:\n%@", postString);
             }
                 break;
             case SHPostFormatXML:
             {
                 // I'm too lazy to implement this format.
+            }
+                break;
+            case SHPostFormatUrlEncoded:
+            {
+                if ([postObject isKindOfClass:[NSDictionary class]])
+                {
+                    NSMutableString *string = [NSMutableString string];
+                    NSDictionary *postDictionary = (NSDictionary *)postObject;
+                    for (NSString *key in [postDictionary allKeys])
+                    {
+                        if ([string length] > 0)
+                        {
+                            [string appendString:@"&"];
+                        }
+                        NSString *value = [postDictionary objectForKey:key];
+                        [string appendFormat:@"%@=%@", key, value];
+                    }
+                    NSLog(@"sendRequestFromObject - postString[%@]", string);
+                    postRawData = [string dataUsingEncoding:NSUTF8StringEncoding];
+                }
             }
                 break;
             case SHPostFormatNSData:
@@ -125,14 +147,15 @@ static SHAPIAdapter *gAPIAdapter = nil;
         }
         else
         {
-            postData = postData;
+            postData = postRawData;
         }
-
+        NSString *postString = [[NSString alloc] initWithData:postData encoding:NSUTF8StringEncoding];
+        NSLog(@"sendRequestToUrl - postString:\n%@", postString);
         NSString *lengthString = [NSString stringWithFormat:@"%lu", (unsigned long)[postData length]];
-        //        NSLog(@"sendRequestToUrl[%@] - encryptedData length[%@]", [url absoluteString], lengthString);
+        NSLog(@"sendRequestToUrl[%@] - post length[%@]", [url absoluteString], lengthString);
         [request setHTTPMethod:@"POST"];
         [request setValue:lengthString forHTTPHeaderField:@"Content-Length"];
-        [request setValue:@"application/x-www-form-urlencoded charset=utf-8" forHTTPHeaderField:@"Content-Type"];
+        [request setValue:@"application/x-www-form-urlencoded; charset=UTF-8" forHTTPHeaderField:@"Content-Type"];
         [request setHTTPBody:postData];
     }
     else
@@ -155,6 +178,10 @@ static SHAPIAdapter *gAPIAdapter = nil;
                 {
                     resultObject = data;
                 }
+            }
+            else
+            {
+                NSLog(@"[%@] error:\n%@", url.absoluteString, error.description);
             }
             if (object)
             {

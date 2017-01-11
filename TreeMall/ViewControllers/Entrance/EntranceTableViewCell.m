@@ -33,6 +33,12 @@
 {
     [super layoutSubviews];
 //    NSLog(@"EntranceTableViewCell[%4.2f,%4.2f]", self.frame.size.width, self.frame.size.height);
+    CGRect imageFrame = self.imageView.frame;
+    imageFrame.origin.x = 0.0;
+    imageFrame.origin.y = 0.0;
+    imageFrame.size.width = self.contentView.frame.size.width;
+    imageFrame.size.height = self.contentView.frame.size.height;
+    self.imageView.frame = imageFrame;
 }
 
 #pragma mark - Actions

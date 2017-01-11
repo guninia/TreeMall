@@ -11,5 +11,6 @@
 @interface EntranceViewController : UIViewController <UITableViewDataSource, UITableViewDelegate>
 
 @property (nonatomic ,strong) IBOutlet UITableView *tableViewEntrance;
+@property (nonatomic, strong) NSMutableDictionary *dictionaryData;
 
 @end

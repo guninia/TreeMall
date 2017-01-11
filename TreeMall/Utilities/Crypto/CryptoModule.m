@@ -47,7 +47,7 @@ static CryptoModule *gCryptoModule = nil;
         NSString *dateString = [dateFormmater stringFromDate:[NSDate date]];
         
         NSString *compositeString = [_apiKey stringByAppendingString:dateString];
-        
+        NSLog(@"compositeString[%@]", compositeString);
         NSString *md5String = [CryptoTool md5ForString:compositeString];
         
         _key = md5String;
@@ -59,7 +59,10 @@ static CryptoModule *gCryptoModule = nil;
 
 - (NSData *)encryptFromSourceData:(NSData *)sourceData
 {
+    NSLog(@"encryptFromSourceData: key[%@]", self.key);
     NSData *keyData = [self.key dataUsingEncoding:NSUTF8StringEncoding];
+    NSString *sourceString = [[NSString alloc] initWithData:sourceData encoding:NSUTF8StringEncoding];
+    NSLog(@"sourceString[%@]", sourceString);
     NSData *aesEncryptedData = [CryptoTool encryptData:sourceData withKey:keyData andIV:nil forAlgorithm:kCCAlgorithmAES];
     NSData *data = [CryptoTool base64EncodedDataFromData:aesEncryptedData withSeparateLines:NO];
     return data;
@@ -69,6 +72,8 @@ static CryptoModule *gCryptoModule = nil;
 
 - (NSData *)decryptFromSourceData:(NSData *)sourceData
 {
+    NSString *string = [[NSString alloc] initWithData:sourceData encoding:NSUTF8StringEncoding];
+    NSLog(@"decryptFromSourceData:\n%@", string);
     NSData *data = nil;
     
     return data;

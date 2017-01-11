@@ -13,6 +13,7 @@ typedef enum : NSUInteger {
     SHPostFormatNone,
     SHPostFormatJson,
     SHPostFormatXML,
+    SHPostFormatUrlEncoded,
     SHPostFormatNSData,
     SHPostFormatTotal
 } SHPostFormat;
