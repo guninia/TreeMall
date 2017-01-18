@@ -16,3 +16,9 @@
 "Login"="登入";
 "FacebookAccountLogin"="Facebook 帳號登入";
 "Google+AccountLogin"="Google+ 帳號登入";
+"PromotionNotification"="優惠通知";
+"Notice"="注意";
+"AccountInputError"="請輸入有效的電子郵件帳號";
+"PasswordInputError"="密碼請輸入6到20個英文字母或數字";
+"Confirm"="確認";
+"NetworkError"="網路連線失敗\n請檢查網路連線狀態";

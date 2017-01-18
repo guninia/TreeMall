@@ -13,7 +13,7 @@
 
 @protocol SHAPIDecryptModuleTemplate <NSObject>
 
-- (NSData *)decryptFromSourceData:(NSData *)sourceData;
+- (NSData *)decryptFromSourceData:(NSData *)sourceData completion:(void (^)(id, NSError *))block;
 
 @end
 

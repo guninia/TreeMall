@@ -9,10 +9,19 @@
 #import <Foundation/Foundation.h>
 #import "SHCryptoModuleTemplate.h"
 
+typedef enum : NSUInteger {
+    CryptoErrorCodeJsonError = 9999900,
+    CryptoErrorCodeDecryptAesError,
+    CryptoErrorCodeDecodeBase64Error,
+    CryptoErrorCodeUnexpectedFormatError,
+    CryptoErrorCodeNoResultError,
+    CryptoErrorCodeTotal
+} CryptoErrorCode;
+
 @interface CryptoModule : NSObject <SHAPIEncryptModuleTemplate, SHAPIDecryptModuleTemplate>
 
 @property (nonatomic, strong) NSString *apiKey;
-@property (nonatomic, strong) NSString *key;
+@property (nonatomic, strong) NSData *key;
 
 + (instancetype)sharedModule;
 

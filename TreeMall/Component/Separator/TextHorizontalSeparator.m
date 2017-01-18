@@ -62,7 +62,7 @@
     lineRightFrame.size.width = ceil(self.frame.size.width - lineRightFrame.origin.x);
     lineRight.frame = lineRightFrame;
     
-    NSLog(@"TextHorizontalSeparator - leftLine[%4.2f,%4.2f,%4.2f,%4.2f] label[%4.2f,%4.2f,%4.2f,%4.2f] lineRight[%4.2f,%4.2f,%4.2f,%4.2f]", lineLeft.frame.origin.x, lineLeft.frame.origin.y, lineLeft.frame.size.width, lineLeft.frame.size.height, labelText.frame.origin.x, labelText.frame.origin.y, labelText.frame.size.width, labelText.frame.size.height, lineRight.frame.origin.x, lineRight.frame.origin.y, lineRight.frame.size.width, lineRight.frame.size.height);
+//    NSLog(@"TextHorizontalSeparator - leftLine[%4.2f,%4.2f,%4.2f,%4.2f] label[%4.2f,%4.2f,%4.2f,%4.2f] lineRight[%4.2f,%4.2f,%4.2f,%4.2f]", lineLeft.frame.origin.x, lineLeft.frame.origin.y, lineLeft.frame.size.width, lineLeft.frame.size.height, labelText.frame.origin.x, labelText.frame.origin.y, labelText.frame.size.width, labelText.frame.size.height, lineRight.frame.origin.x, lineRight.frame.origin.y, lineRight.frame.size.width, lineRight.frame.size.height);
 }
 
 #pragma mark - Override

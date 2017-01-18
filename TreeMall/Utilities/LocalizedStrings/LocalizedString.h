@@ -20,5 +20,12 @@
 + (NSString *)Login;
 + (NSString *)facebookAccountLogin;
 + (NSString *)googlePlusAccountLogin;
++ (NSString *)PromotionNotification;
++ (NSString *)Notice;
++ (NSString *)AccountInputError;
++ (NSString *)PasswordInputError;
++ (NSString *)Confirm;
++ (NSString *)NetworkError;
+
 
 @end

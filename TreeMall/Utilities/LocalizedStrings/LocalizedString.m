@@ -111,4 +111,64 @@
     return googlePlusAccountLogin;
 }
 
++ (NSString *)PromotionNotification
+{
+    static NSString *promotionNotification = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        promotionNotification = NSLocalizedString(@"PromotionNotification", nil);
+    });
+    return promotionNotification;
+}
+
++ (NSString *)Notice
+{
+    static NSString *Notice = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        Notice = NSLocalizedString(@"Notice", nil);
+    });
+    return Notice;
+}
+
++ (NSString *)AccountInputError
+{
+    static NSString *AccountInputError = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        AccountInputError = NSLocalizedString(@"AccountInputError", nil);
+    });
+    return AccountInputError;
+}
+
++ (NSString *)PasswordInputError
+{
+    static NSString *PasswordInputError = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        PasswordInputError = NSLocalizedString(@"PasswordInputError", nil);
+    });
+    return PasswordInputError;
+}
+
++ (NSString *)Confirm
+{
+    static NSString *Confirm = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        Confirm = NSLocalizedString(@"Confirm", nil);
+    });
+    return Confirm;
+}
+
++ (NSString *)NetworkError
+{
+    static NSString *NetworkError = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        NetworkError = NSLocalizedString(@"NetworkError", nil);
+    });
+    return NetworkError;
+}
+
 @end

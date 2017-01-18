@@ -22,42 +22,61 @@
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self)
     {
-        NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
-        style.lineBreakMode = NSLineBreakByWordWrapping;
-        style.alignment = NSTextAlignmentLeft;
+        _shouldShowMask = NO;
+        [self setBackgroundColor:[UIColor clearColor]];
+        [self.contentView setBackgroundColor:[UIColor clearColor]];
+        
+        _containerView = [[UIView alloc] initWithFrame:CGRectZero];
+        [_containerView setBackgroundColor:[UIColor whiteColor]];
+        [_containerView.layer setShadowColor:[UIColor colorWithWhite:0.2 alpha:0.5].CGColor];
+        [_containerView.layer setShadowOffset:CGSizeMake(5.0, 5.0)];
+        [_containerView.layer setShadowRadius:5.0];
+        [_containerView.layer setShadowOpacity:1.0];
+        [_containerView.layer setMasksToBounds:NO];
+//        _containerView.layer.shadowPath = [UIBezierPath bezierPathWithRoundedRect:_containerView.bounds cornerRadius:5.0].CGPath;
+        [self.contentView addSubview:_containerView];
+        
+        NSMutableParagraphStyle *titleStyle = [[NSMutableParagraphStyle alloc] init];
+        titleStyle.lineBreakMode = NSLineBreakByWordWrapping;
+        titleStyle.alignment = NSTextAlignmentLeft;
+        NSMutableParagraphStyle *contentStyle = [[NSMutableParagraphStyle alloc] init];
+        contentStyle.lineBreakMode = NSLineBreakByWordWrapping;
+        contentStyle.alignment = NSTextAlignmentLeft;
+        contentStyle.lineSpacing = 2.0;
         
         _titleLabel = [[TTTAttributedLabel alloc] initWithFrame:CGRectZero];
         [_titleLabel setBackgroundColor:[UIColor clearColor]];
         [_titleLabel setTextColor:[UIColor blackColor]];
         [_titleLabel setNumberOfLines:0];
-        [_titleLabel setFont:[UIFont boldSystemFontOfSize:14.0]];
-        [self.contentView addSubview:_titleLabel];
+        [_containerView addSubview:_titleLabel];
         
         _subtitleLabel = [[UILabel alloc] initWithFrame:CGRectZero];
         [_subtitleLabel setBackgroundColor:[UIColor clearColor]];
         [_subtitleLabel setTextColor:[UIColor blackColor]];
-        [_subtitleLabel setFont:[UIFont boldSystemFontOfSize:14.0]];
-        [self.contentView addSubview:_subtitleLabel];
+        [_containerView addSubview:_subtitleLabel];
         
         _contentLabel = [[TTTAttributedLabel alloc] initWithFrame:CGRectZero];
         [_contentLabel setBackgroundColor:[UIColor clearColor]];
         [_contentLabel setTextColor:[UIColor grayColor]];
         [_contentLabel setNumberOfLines:0];
         [_contentLabel setFont:[UIFont systemFontOfSize:12.0]];
-        [self.contentView addSubview:_contentLabel];
+        [_containerView addSubview:_contentLabel];
         
         [self.detailTextLabel setBackgroundColor:[UIColor clearColor]];
         [self.detailTextLabel setTextColor:[UIColor blackColor]];
         [self.detailTextLabel setFont:[UIFont boldSystemFontOfSize:14.0]];
         
         _viewMask = [[UIView alloc] initWithFrame:CGRectZero];
-        [_viewMask setBackgroundColor:[UIColor colorWithWhite:0.5 alpha:0.5]];
-        [_viewMask setHidden:YES];
-        [self.contentView addSubview:_viewMask];
+        [_viewMask setBackgroundColor:[UIColor colorWithWhite:0.8 alpha:0.5]];
+        [_viewMask setHidden:!_shouldShowMask];
+        [_containerView addSubview:_viewMask];
         
-        titleAttributes = [NSDictionary dictionaryWithObjectsAndKeys:_titleLabel.font, NSFontAttributeName, style, NSParagraphStyleAttributeName, _titleLabel.textColor, NSForegroundColorAttributeName, nil];
-        subtitleAttributes = [NSDictionary dictionaryWithObjectsAndKeys:_subtitleLabel.font, NSFontAttributeName, _subtitleLabel.textColor, NSForegroundColorAttributeName, nil];
-        contentAttributes = [NSDictionary dictionaryWithObjectsAndKeys:_contentLabel.font, NSFontAttributeName, style, NSParagraphStyleAttributeName, _contentLabel.textColor, NSForegroundColorAttributeName, nil];
+        titleAttributes = [NSDictionary dictionaryWithObjectsAndKeys:[UIFont boldSystemFontOfSize:14.0], NSFontAttributeName, titleStyle, NSParagraphStyleAttributeName, _titleLabel.textColor, NSForegroundColorAttributeName, nil];
+        selectedTitleAttributes = [NSDictionary dictionaryWithObjectsAndKeys:[UIFont systemFontOfSize:14], NSFontAttributeName, titleStyle, NSParagraphStyleAttributeName, [UIColor grayColor], NSForegroundColorAttributeName, nil];
+        subtitleAttributes = [NSDictionary dictionaryWithObjectsAndKeys:[UIFont boldSystemFontOfSize:14.0], NSFontAttributeName, _subtitleLabel.textColor, NSForegroundColorAttributeName, nil];
+        selectedSubtitleAttributes = [NSDictionary dictionaryWithObjectsAndKeys:[UIFont systemFontOfSize:14.0], NSFontAttributeName, [UIColor grayColor], NSForegroundColorAttributeName, nil];
+        contentAttributes = [NSDictionary dictionaryWithObjectsAndKeys:_contentLabel.font, NSFontAttributeName, contentStyle, NSParagraphStyleAttributeName, _contentLabel.textColor, NSForegroundColorAttributeName, nil];
+        
         
         NSAttributedString *titleTailString = [[NSAttributedString alloc] initWithString:@"..." attributes:titleAttributes];
         NSAttributedString *contentTailString = [[NSAttributedString alloc] initWithString:@"..." attributes:contentAttributes];
@@ -76,21 +95,35 @@
 {
     [super layoutSubviews];
     
+    if (_containerView != nil)
+    {
+        CGFloat marginV = 5.0;
+        CGFloat marginH = 10.0;
+        [_containerView setFrame:CGRectMake(marginH, marginV, self.contentView.frame.size.width - marginH * 2, self.contentView.frame.size.height - marginV * 2)];
+    }
+    [_viewMask setFrame:_containerView.bounds];
+    
     CGFloat hInterval = 5.0;
     CGFloat vInterval = 5.0;
-    CGFloat originX = 0.0;
-    CGFloat originY = 5.0;
+    CGFloat leftMargin = 0.0;
+    CGFloat rightMargin = 10.0;
+    CGFloat topMargin = 5.0;
+    CGFloat botMargin = 10.0;
+    CGFloat originX = leftMargin;
+    CGFloat originY = topMargin;
     
     CGSize imageViewSize = CGSizeMake(40.0, 40.0);
     CGRect imageViewFrame = self.imageView.frame;
     imageViewFrame.origin.x = originX;
-    imageViewFrame.origin.y = ceil((self.contentView.frame.size.height - imageViewSize.height)/2);
+    imageViewFrame.origin.y = ceil((_containerView.frame.size.height - imageViewSize.height)/2);
     imageViewFrame.size = imageViewSize;
     originX = imageViewFrame.origin.x + imageViewFrame.size.width + hInterval;
-    CGFloat labelMaxWidth = self.contentView.frame.size.width - originX - hInterval;
+    CGFloat labelMaxWidth = _containerView.frame.size.width - originX - rightMargin;
     
     NSString *defaultTowLineString = @"XXXXX\nXXXXX";
     NSString *defaultOneLineString = @"XXXXX";
+    
+    
     
     if ([_title length] > 0)
     {
@@ -115,7 +148,7 @@
     contentFrame.origin.x = originX;
     contentFrame.origin.y = originY;
     contentFrame.size.width = labelMaxWidth;
-    contentFrame.size.height = self.contentView.frame.size.height - originY - vInterval;
+    contentFrame.size.height = _containerView.frame.size.height - originY - botMargin;
     _contentLabel.frame = contentFrame;
 }
 
@@ -128,7 +161,8 @@
         return;
     }
     _title = title;
-    NSAttributedString *attrTitle = [[NSAttributedString alloc] initWithString:_title attributes:titleAttributes];
+    NSDictionary *attributes = _shouldShowMask?selectedTitleAttributes:titleAttributes;
+    NSAttributedString *attrTitle = [[NSAttributedString alloc] initWithString:_title attributes:attributes];
     [_titleLabel setAttributedText:attrTitle];
     
     [self setNeedsLayout];
@@ -141,7 +175,8 @@
         return;
     }
     _subtitle = subtitle;
-    NSAttributedString *attrSubtitle = [[NSAttributedString alloc] initWithString:_subtitle attributes:subtitleAttributes];
+    NSDictionary *attributes = _shouldShowMask?selectedSubtitleAttributes:subtitleAttributes;
+    NSAttributedString *attrSubtitle = [[NSAttributedString alloc] initWithString:_subtitle attributes:attributes];
     [_subtitleLabel setAttributedText:attrSubtitle];
     
     [self setNeedsLayout];
@@ -156,9 +191,16 @@
     _content = content;
     NSAttributedString *attrContent = [[NSAttributedString alloc] initWithString:_content attributes:contentAttributes];
     [_contentLabel setText:attrContent];
-//    NSAttributedString *attrTail = [[NSAttributedString alloc] initWithString:@"..." attributes:contentAttributes];
-//    [_contentLabel setAttributedTruncationToken:attrTail];
     [self setNeedsLayout];
+}
+
+- (void)setShouldShowMask:(BOOL)shouldShowMask
+{
+    _shouldShowMask = shouldShowMask;
+    if (_viewMask)
+    {
+        [_viewMask setHidden:!shouldShowMask];
+    }
 }
 
 #pragma mark - Actions

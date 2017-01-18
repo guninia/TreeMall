@@ -10,8 +10,24 @@
 #import "LocalizedString.h"
 #import "Utility.h"
 #import <QuartzCore/QuartzCore.h>
+#import <FBSDKLoginKit/FBSDKLoginKit.h>
+#import <FBSDKCoreKit/FBSDKCoreKit.h>
+#import "APIDefinition.h"
+#import "CryptoModule.h"
+#import "SHAPIAdapter.h"
+#import "TMInfoManager.h"
 
 @interface LoginViewController ()
+
+- (void)loginFacebook;
+- (void)retrieveFacebookData;
+- (void)signInGoogle;
+- (void)registerWithOptions:(NSDictionary *)options andType:(NSString *)type;
+- (BOOL)processRegisterData:(NSData *)data;
+- (void)startPreloginProcess;
+- (BOOL)evaluateAccount:(NSString *)text;
+- (BOOL)evaluatePassword:(NSString *)text;
+- (void)loginWithOptions:(NSDictionary *)options;
 
 - (void)actButtonLoginPressed:(id)sender;
 - (void)actButtonFacebookAccountLoginPressed:(id)sender;
@@ -20,6 +36,9 @@
 - (void)actButtonAgreementContentPressed:(id)sender;
 - (void)actButtonJoinMemberPressed:(id)sender;
 - (void)actButtonForgetPasswordPressed:(id)sender;
+
+- (void)facebookTokenDidChangeNotification:(NSNotification *)notification;
+- (void)facebookProfileDidChangeNotification:(NSNotification *)notification;
 
 @end
 
@@ -39,6 +58,7 @@
     [_textFieldAccount setPlaceholder:[LocalizedString Account]];
     [_textFieldAccount setKeyboardType:UIKeyboardTypeEmailAddress];
     [_textFieldAccount setReturnKeyType:UIReturnKeyDone];
+    [_textFieldAccount setAutocapitalizationType:UITextAutocapitalizationTypeNone];
     [_textFieldAccount setAutocorrectionType:UITextAutocorrectionTypeNo];
     _textFieldAccount.delegate = self;
     [self.view addSubview:_textFieldAccount];
@@ -50,6 +70,7 @@
     [_textFieldPassword setReturnKeyType:UIReturnKeyDone];
     [_textFieldPassword setSecureTextEntry:YES];
     [_textFieldPassword setAutocorrectionType:UITextAutocorrectionTypeNo];
+    [_textFieldPassword setAutocapitalizationType:UITextAutocapitalizationTypeNone];
     _textFieldPassword.delegate = self;
     [self.view addSubview:_textFieldPassword];
     
@@ -73,27 +94,20 @@
     [_buttonFacebookLogin addTarget:self action:@selector(actButtonFacebookAccountLoginPressed:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:_buttonFacebookLogin];
     
-    _buttonGooglePlusLogin = [[UIButton alloc] initWithFrame:CGRectZero];
-    [_buttonGooglePlusLogin.layer setCornerRadius:5.0];
-    [_buttonGooglePlusLogin setBackgroundColor:[UIColor colorWithRed:(229.0/255.0) green:(64.0/255.0) blue:(54.0/255.0) alpha:1.0]];
-    [_buttonGooglePlusLogin setTitle:[LocalizedString googlePlusAccountLogin] forState:UIControlStateNormal];
-    [_buttonGooglePlusLogin addTarget:self action:@selector(actButtonGooglePlusAccountLoginPressed:) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:_buttonGooglePlusLogin];
-    
-    _checkButtonAgreement = [[UIButton alloc] initWithFrame:CGRectZero];
-    [_checkButtonAgreement setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
-    [_checkButtonAgreement setTitle:@"我什麼都同意" forState:UIControlStateNormal];
-    [_checkButtonAgreement.titleLabel setFont:[UIFont systemFontOfSize:14.0]];
-    [_checkButtonAgreement addTarget:self action:@selector(actCheckButtonAgreementPressed:) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:_checkButtonAgreement];
-    
-    _buttonAgreementContent = [[UIButton alloc] initWithFrame:CGRectZero];
-    [_buttonAgreementContent.layer setCornerRadius:3.0];
-    [_buttonAgreementContent setBackgroundColor:[UIColor grayColor]];
-    [_buttonAgreementContent setTitle:@"詳細內容" forState:UIControlStateNormal];
-    [_buttonAgreementContent.titleLabel setFont:[UIFont systemFontOfSize:12.0]];
-    [_buttonAgreementContent addTarget:self action:@selector(actButtonAgreementContentPressed:) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:_buttonAgreementContent];
+//    _checkButtonAgreement = [[UIButton alloc] initWithFrame:CGRectZero];
+//    [_checkButtonAgreement setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
+//    [_checkButtonAgreement setTitle:@"我什麼都同意" forState:UIControlStateNormal];
+//    [_checkButtonAgreement.titleLabel setFont:[UIFont systemFontOfSize:14.0]];
+//    [_checkButtonAgreement addTarget:self action:@selector(actCheckButtonAgreementPressed:) forControlEvents:UIControlEventTouchUpInside];
+//    [self.view addSubview:_checkButtonAgreement];
+//    
+//    _buttonAgreementContent = [[UIButton alloc] initWithFrame:CGRectZero];
+//    [_buttonAgreementContent.layer setCornerRadius:3.0];
+//    [_buttonAgreementContent setBackgroundColor:[UIColor grayColor]];
+//    [_buttonAgreementContent setTitle:@"詳細內容" forState:UIControlStateNormal];
+//    [_buttonAgreementContent.titleLabel setFont:[UIFont systemFontOfSize:12.0]];
+//    [_buttonAgreementContent addTarget:self action:@selector(actButtonAgreementContentPressed:) forControlEvents:UIControlEventTouchUpInside];
+//    [self.view addSubview:_buttonAgreementContent];
     
     _buttonJoinMember = [[UIButton alloc] initWithFrame:CGRectZero];
     [_buttonJoinMember setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
@@ -112,6 +126,48 @@
     [_buttonForgetpassword.titleLabel setFont:[UIFont systemFontOfSize:14.0]];
     [_buttonForgetpassword addTarget:self action:@selector(actButtonForgetPasswordPressed:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:_buttonForgetpassword];
+    
+    [FBSDKProfile enableUpdatesOnAccessTokenChange:YES];
+    
+    NSString *googleServiceInfoPath = [[NSBundle mainBundle] pathForResource:@"GoogleService-Info" ofType:@"plist"];
+    NSDictionary *googleInfo = [NSDictionary dictionaryWithContentsOfFile:googleServiceInfoPath];
+    if (googleInfo)
+    {
+        NSString *clientId = [googleInfo objectForKey:@"CLIENT_ID"];
+        NSLog(@"googleInfo:\n%@", googleInfo);
+        if (clientId)
+        {
+            [GIDSignIn sharedInstance].clientID = clientId;
+            [GIDSignIn sharedInstance].delegate = self;
+            [GIDSignIn sharedInstance].uiDelegate = self;
+            
+            _buttonGooglePlusLogin = [[UIButton alloc] initWithFrame:CGRectZero];
+            [_buttonGooglePlusLogin.layer setCornerRadius:5.0];
+            [_buttonGooglePlusLogin setBackgroundColor:[UIColor colorWithRed:(229.0/255.0) green:(64.0/255.0) blue:(54.0/255.0) alpha:1.0]];
+            [_buttonGooglePlusLogin setTitle:[LocalizedString googlePlusAccountLogin] forState:UIControlStateNormal];
+            [_buttonGooglePlusLogin addTarget:self action:@selector(actButtonGooglePlusAccountLoginPressed:) forControlEvents:UIControlEventTouchUpInside];
+            [self.view addSubview:_buttonGooglePlusLogin];
+        }
+    }
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(facebookTokenDidChangeNotification:) name:FBSDKAccessTokenDidChangeNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(facebookProfileDidChangeNotification:) name:FBSDKProfileDidChangeNotification object:nil];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    if (self.navigationController)
+    {
+        [self.navigationController setNavigationBarHidden:YES animated:animated];
+    }
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    if (self.navigationController)
+    {
+        [self.navigationController setNavigationBarHidden:NO animated:animated];
+    }
 }
 
 - (void)viewDidLayoutSubviews
@@ -192,33 +248,34 @@
         _buttonGooglePlusLogin.frame = frame;
         originY = _buttonGooglePlusLogin.frame.origin.y + _buttonGooglePlusLogin.frame.size.height + vInterval;
     }
-    if (_checkButtonAgreement != nil && _buttonAgreementContent != nil)
-    {
-        // Temporarily for pre-layout, should use real size later.
-        CGSize checkButtonSize = CGSizeMake(200.0, 30.0);
-        CGSize buttonSize = CGSizeMake(60.0, 20.0);
-        CGFloat hInterval = 5 * sizeRatio.width;
-        CGFloat totalWidth = checkButtonSize.width + hInterval + buttonSize.width;
-        CGFloat checkButtonOriginX = ceil((self.view.frame.size.width - totalWidth)/2);
-        
-        CGRect frame = _checkButtonAgreement.frame;
-        frame.origin.x = checkButtonOriginX;
-        frame.origin.y = originY;
-        frame.size.width = checkButtonSize.width;
-        frame.size.height = checkButtonSize.height;
-        _checkButtonAgreement.frame = frame;
-        
-        frame = _buttonAgreementContent.frame;
-        frame.origin.x = _checkButtonAgreement.frame.origin.x + _checkButtonAgreement.frame.size.width + hInterval;
-        frame.origin.y = ceil(_checkButtonAgreement.center.y - buttonSize.height / 2);
-        frame.size.width = buttonSize.width;
-        frame.size.height = buttonSize.height;
-        _buttonAgreementContent.frame = frame;
-        
-        originY = _checkButtonAgreement.frame.origin.y + _checkButtonAgreement.frame.size.height + vInterval;
-    }
+//    if (_checkButtonAgreement != nil && _buttonAgreementContent != nil)
+//    {
+//        // Temporarily for pre-layout, should use real size later.
+//        CGSize checkButtonSize = CGSizeMake(200.0, 30.0);
+//        CGSize buttonSize = CGSizeMake(60.0, 20.0);
+//        CGFloat hInterval = 5 * sizeRatio.width;
+//        CGFloat totalWidth = checkButtonSize.width + hInterval + buttonSize.width;
+//        CGFloat checkButtonOriginX = ceil((self.view.frame.size.width - totalWidth)/2);
+//        
+//        CGRect frame = _checkButtonAgreement.frame;
+//        frame.origin.x = checkButtonOriginX;
+//        frame.origin.y = originY;
+//        frame.size.width = checkButtonSize.width;
+//        frame.size.height = checkButtonSize.height;
+//        _checkButtonAgreement.frame = frame;
+//        
+//        frame = _buttonAgreementContent.frame;
+//        frame.origin.x = _checkButtonAgreement.frame.origin.x + _checkButtonAgreement.frame.size.width + hInterval;
+//        frame.origin.y = ceil(_checkButtonAgreement.center.y - buttonSize.height / 2);
+//        frame.size.width = buttonSize.width;
+//        frame.size.height = buttonSize.height;
+//        _buttonAgreementContent.frame = frame;
+//        
+//        originY = _checkButtonAgreement.frame.origin.y + _checkButtonAgreement.frame.size.height + vInterval;
+//    }
     if (_buttonJoinMember != nil && _buttonForgetpassword != nil)
     {
+        originY += vInterval;
         CGSize buttonSize = CGSizeMake(60.0, 20.0);
         CGFloat separatorLineWidth = 1.0;
         CGFloat hInterval = 5.0 * sizeRatio.width;
@@ -267,21 +324,232 @@
     return YES;
 }
 
+#pragma mark - Private Methods
+
+- (void)loginFacebook
+{
+    FBSDKLoginManager *login = [[FBSDKLoginManager alloc] init];
+    [login logInWithReadPermissions:[NSArray arrayWithObjects:@"public_profile", @"email", nil] fromViewController:self handler:^(FBSDKLoginManagerLoginResult *result, NSError *error){
+        if (error)
+        {
+            NSLog(@"Facebook login error:\n%@", error.description);
+        }
+        else if (result.isCancelled)
+        {
+            NSLog(@"Facebook login canceled.");
+        }
+        else
+        {
+            // Login success, should continue.
+            NSLog(@"Facebook login success.");
+        }
+    }];
+}
+
+- (void)retrieveFacebookData
+{
+    if ([FBSDKProfile currentProfile])
+    {
+        __weak LoginViewController *weakSelf = self;
+        FBSDKGraphRequest *request = [[FBSDKGraphRequest alloc] initWithGraphPath:@"me" parameters:[NSDictionary dictionaryWithObjectsAndKeys:@"gender, picture, email", @"fields", nil] HTTPMethod:@"GET"];
+        [request startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error){
+            NSLog(@"result:\n%@", [result description]);
+            NSString *email = [result objectForKey:@"email"];
+            NSString *ipAddress = [Utility ipAddress];
+            if (email != nil && ipAddress != nil)
+            {
+                NSDictionary *dictionary = [NSDictionary dictionaryWithObjectsAndKeys:email, SymphoxAPIParam_account, ipAddress, SymphoxAPIParam_ip, nil];
+                [weakSelf registerWithOptions:dictionary andType:@"facebook"];
+            }
+        }];
+    }
+}
+
+- (void)signInGoogle
+{
+    [GIDSignIn sharedInstance].scopes = [NSArray arrayWithObjects:@"profile", @"email", nil];
+    [[GIDSignIn sharedInstance] signIn];
+}
+
+- (void)registerWithOptions:(NSDictionary *)options andType:(NSString *)type
+{
+    __weak LoginViewController *weakSelf = self;
+    NSString *apiKey = [CryptoModule sharedModule].apiKey;
+    NSString *token = [SHAPIAdapter sharedAdapter].token;
+    NSURL *url = [[NSURL URLWithString:SymphoxAPI_register] URLByAppendingPathComponent:type];
+    NSLog(@"register url [%@]", [url absoluteString]);
+    NSDictionary *headerFields = [NSDictionary dictionaryWithObjectsAndKeys:apiKey, SymphoxAPIParam_key, token, SymphoxAPIParam_token, nil];
+    [[SHAPIAdapter sharedAdapter] sendRequestFromObject:weakSelf ToUrl:url withHeaderFields:headerFields andPostObject:options inPostFormat:SHPostFormatJson encrypted:YES decryptedReturnData:YES completion:^(id resultObject, NSError *error){
+        if (error == nil)
+        {
+            NSLog(@"resultObject[%@]:\n%@", [[resultObject class] description], [resultObject description]);
+            if ([resultObject isKindOfClass:[NSData class]])
+            {
+                NSData *data = (NSData *)resultObject;
+                NSString *string = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+                NSLog(@"string[%@]", string);
+                if ([self processRegisterData:data])
+                {
+                    // Should go next step.
+                }
+                else
+                {
+                    NSLog(@"Cannot process register data.");
+                }
+            }
+            else
+            {
+                NSLog(@"Unexpected data format.");
+            }
+        }
+        else
+        {
+            NSLog(@"error:\n%@", [error description]);
+        }
+    }];
+}
+
+- (BOOL)processRegisterData:(NSData *)data
+{
+    BOOL success = NO;
+    NSError *error = nil;
+    id jsonObject = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
+    if (error == nil)
+    {
+        if ([jsonObject isKindOfClass:[NSDictionary class]])
+        {
+            NSDictionary *dictionary = (NSDictionary *)jsonObject;
+            NSNumber *identifier = [dictionary objectForKey:SymphoxAPIParam_user_num];
+            if (identifier)
+            {
+                [TMInfoManager sharedManager].userIdentifier = identifier;
+            }
+            NSString *name = [dictionary objectForKey:SymphoxAPIParam_name];
+            if (name)
+            {
+                [TMInfoManager sharedManager].userName = name;
+            }
+            NSString *gender = [dictionary objectForKey:SymphoxAPIParam_sex];
+            if ([gender length] == 0)
+            {
+                [TMInfoManager sharedManager].userGender = TMGenderUnknown;
+            }
+            NSNumber *epoint = [dictionary objectForKey:SymphoxAPIParam_epoint];
+            if (epoint)
+            {
+                [TMInfoManager sharedManager].userEpoint = epoint;
+            }
+            NSNumber *ecoupon = [dictionary objectForKey:SymphoxAPIParam_ecoupon];
+            if (ecoupon)
+            {
+                [TMInfoManager sharedManager].userEcoupon = ecoupon;
+            }
+            success = YES;
+        }
+    }
+    return success;
+}
+
+- (void)startPreloginProcess
+{
+    NSString *account = [[_textFieldAccount text] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    if ([self evaluateAccount:account] == NO)
+    {
+        // Should show alert to modify account.
+        NSLog(@"Account is not illegal.");
+        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:[LocalizedString Notice] message:[LocalizedString AccountInputError] preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction *actionCancel = [UIAlertAction actionWithTitle:[LocalizedString Confirm] style:UIAlertActionStyleDefault handler:nil];
+        [alertController addAction:actionCancel];
+        [self presentViewController:alertController animated:YES completion:nil];
+        return;
+    }
+    NSString *password = [[_textFieldPassword text] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    if ([self evaluatePassword:password] == NO)
+    {
+        // Should show alert to modify password.
+        NSLog(@"Password is not illegal.");
+        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:[LocalizedString Notice] message:[LocalizedString PasswordInputError] preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction *actionCancel = [UIAlertAction actionWithTitle:[LocalizedString Confirm] style:UIAlertActionStyleDefault handler:nil];
+        [alertController addAction:actionCancel];
+        [self presentViewController:alertController animated:YES completion:nil];
+        return;
+    }
+    // Should start login
+    NSString *ipAddress = [Utility ipAddress];
+    if (ipAddress == nil)
+    {
+        NSLog(@"No ip address");
+        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:[LocalizedString Notice] message:[LocalizedString NetworkError] preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction *actionCancel = [UIAlertAction actionWithTitle:[LocalizedString Confirm] style:UIAlertActionStyleDefault handler:nil];
+        [alertController addAction:actionCancel];
+        [self presentViewController:alertController animated:YES completion:nil];
+    }
+    NSDictionary *options = [NSDictionary dictionaryWithObjectsAndKeys:account, SymphoxAPIParam_account, password, SymphoxAPIParam_password, ipAddress, SymphoxAPIParam_ip, nil];
+    [self loginWithOptions:options];
+}
+
+- (BOOL)evaluateAccount:(NSString *)text
+{
+    NSString *regularExpression = @"^[\\w-]+(\\.[\\w-]+)*@[\\w-]+(\\.[\\w-]+)+$";
+    NSPredicate *predicateAccount = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", regularExpression];
+    BOOL available = [predicateAccount evaluateWithObject:text];
+    return available;
+}
+
+- (BOOL)evaluatePassword:(NSString *)text
+{
+    NSString *regularExpression = @"^\\w{6,20}$";
+    NSPredicate *predicateAccount = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", regularExpression];
+    BOOL available = [predicateAccount evaluateWithObject:text];
+    return available;
+}
+
+- (void)loginWithOptions:(NSDictionary *)options
+{
+    __weak LoginViewController *weakSelf = self;
+    NSString *apiKey = [CryptoModule sharedModule].apiKey;
+    NSString *token = [SHAPIAdapter sharedAdapter].token;
+    NSURL *url = [NSURL URLWithString:SymphoxAPI_login];
+    NSLog(@"login url [%@]", [url absoluteString]);
+    NSDictionary *headerFields = [NSDictionary dictionaryWithObjectsAndKeys:apiKey, SymphoxAPIParam_key, token, SymphoxAPIParam_token, nil];
+    [[SHAPIAdapter sharedAdapter] sendRequestFromObject:weakSelf ToUrl:url withHeaderFields:headerFields andPostObject:options inPostFormat:SHPostFormatJson encrypted:YES decryptedReturnData:YES completion:^(id resultObject, NSError *error){
+        if (error == nil)
+        {
+            NSLog(@"resultObject[%@]:\n%@", [[resultObject class] description], [resultObject description]);
+            if ([resultObject isKindOfClass:[NSData class]])
+            {
+                NSData *data = (NSData *)resultObject;
+                NSString *string = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+                NSLog(@"string[%@]", string);
+                // Should continue to process data.
+            }
+            else
+            {
+                NSLog(@"Unexpected data format.");
+            }
+        }
+        else
+        {
+            NSLog(@"error:\n%@", [error description]);
+        }
+    }];
+}
+
 #pragma mark - Actions
 
 - (void)actButtonLoginPressed:(id)sender
 {
-    
+    [self startPreloginProcess];
 }
 
 - (void)actButtonFacebookAccountLoginPressed:(id)sender
 {
-    
+    [self loginFacebook];
 }
 
 - (void)actButtonGooglePlusAccountLoginPressed:(id)sender
 {
-    
+    [self signInGoogle];
 }
 
 - (void)actCheckButtonAgreementPressed:(id)sender
@@ -302,6 +570,54 @@
 - (void)actButtonForgetPasswordPressed:(id)sender
 {
     
+}
+
+#pragma mark - NSNotification Handler
+
+- (void)facebookTokenDidChangeNotification:(NSNotification *)notification
+{
+    NSLog(@"facebookTokenDidChangeNotification");
+    if ([FBSDKAccessToken currentAccessToken])
+    {
+        [self facebookProfileDidChangeNotification:notification];
+    }
+}
+
+- (void)facebookProfileDidChangeNotification:(NSNotification *)notification
+{
+    NSLog(@"facebookProfileDidChangeNotification");
+    [self retrieveFacebookData];
+}
+
+#pragma mark - GIDSignInDelegate
+
+- (void)signIn:(GIDSignIn *)signIn didSignInForUser:(GIDGoogleUser *)user withError:(NSError *)error
+{
+//    NSString *userId = user.userID;
+//    NSString *fullName = user.profile.name;
+    NSString *email = user.profile.email;
+//    NSLog(@"userId[%@] fullName[%@] email[%@]", userId, fullName, email);
+    NSString *ipAddress = [Utility ipAddress];
+    if (email && ipAddress)
+    {
+        NSDictionary *options = [NSDictionary dictionaryWithObjectsAndKeys:email, SymphoxAPIParam_account, ipAddress, SymphoxAPIParam_ip, nil];
+        [self registerWithOptions:options andType:@"google"];
+    }
+}
+
+- (void)signInWillDispatch:(GIDSignIn *)signIn error:(NSError *)error
+{
+    
+}
+
+- (void)signIn:(GIDSignIn *)signIn presentViewController:(UIViewController *)viewController
+{
+    [self presentViewController:viewController animated:YES completion:nil];
+}
+
+- (void)signIn:(GIDSignIn *)signIn dismissViewController:(UIViewController *)viewController
+{
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 #pragma mark - UITextFieldDelegate

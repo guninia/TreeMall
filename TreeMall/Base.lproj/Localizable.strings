@@ -16,3 +16,12 @@
 "Login"="Login";
 "FacebookAccountLogin"="Facebook Account Login";
 "Google+AccountLogin"="Google+ Account Login";
+"PromotionNotification"="Promotion Notification";
+"Notice"="Notice";
+"AccountInputError"="Account Input Error";
+"PasswordInputError"="Password Input Error";
+"Confirm"="Confirm";
+"MobileVerification"="Mobile Verification";
+"NetworkError"="Network error";
+
+

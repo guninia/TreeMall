@@ -7,6 +7,17 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6811BC641E275F6F00626A4A /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6811BC621E275F6F00626A4A /* FBSDKCoreKit.framework */; };
+		6811BC651E275F6F00626A4A /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6811BC631E275F6F00626A4A /* FBSDKLoginKit.framework */; };
+		6811BC671E27701500626A4A /* Bolts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6811BC661E27701500626A4A /* Bolts.framework */; };
+		6811BC6C1E27749F00626A4A /* GoogleAppUtilities.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6811BC681E27749F00626A4A /* GoogleAppUtilities.framework */; };
+		6811BC6D1E27749F00626A4A /* GoogleSignIn.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6811BC691E27749F00626A4A /* GoogleSignIn.framework */; };
+		6811BC6E1E27749F00626A4A /* GoogleSignInDependencies.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6811BC6A1E27749F00626A4A /* GoogleSignInDependencies.framework */; };
+		6811BC6F1E27749F00626A4A /* GoogleSymbolUtilities.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6811BC6B1E27749F00626A4A /* GoogleSymbolUtilities.framework */; };
+		6811BC711E2774B500626A4A /* GoogleSignIn.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 6811BC701E2774B500626A4A /* GoogleSignIn.bundle */; };
+		6811BC751E27757100626A4A /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6811BC741E27757100626A4A /* GoogleService-Info.plist */; };
+		6811BC771E27778A00626A4A /* SafariServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6811BC761E27778A00626A4A /* SafariServices.framework */; };
+		6811BC791E27779500626A4A /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6811BC781E27779500626A4A /* SystemConfiguration.framework */; };
 		685939AC1E1F49DF00351FFB /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 685939AB1E1F49DF00351FFB /* main.m */; };
 		685939AF1E1F49DF00351FFB /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 685939AE1E1F49DF00351FFB /* AppDelegate.m */; };
 		685939B21E1F49DF00351FFB /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 685939B11E1F49DF00351FFB /* ViewController.m */; };
@@ -19,6 +30,10 @@
 		685939E51E1F4E1700351FFB /* SHAPIAdapter.m in Sources */ = {isa = PBXBuildFile; fileRef = 685939E41E1F4E1700351FFB /* SHAPIAdapter.m */; };
 		685939E91E1F518700351FFB /* CryptoTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 685939E81E1F518700351FFB /* CryptoTool.m */; };
 		685939ED1E1F775900351FFB /* CryptoModule.m in Sources */ = {isa = PBXBuildFile; fileRef = 685939EC1E1F775900351FFB /* CryptoModule.m */; };
+		687E44501E2C71A700A7E2CA /* AESCrypt.m in Sources */ = {isa = PBXBuildFile; fileRef = 687E44481E2C71A700A7E2CA /* AESCrypt.m */; };
+		687E44511E2C71A700A7E2CA /* NSData+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 687E444A1E2C71A700A7E2CA /* NSData+Base64.m */; };
+		687E44521E2C71A700A7E2CA /* NSData+CommonCrypto.m in Sources */ = {isa = PBXBuildFile; fileRef = 687E444C1E2C71A700A7E2CA /* NSData+CommonCrypto.m */; };
+		687E44531E2C71A700A7E2CA /* NSString+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 687E444E1E2C71A700A7E2CA /* NSString+Base64.m */; };
 		6890650E1E23334400E5CB26 /* EntranceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6890650C1E23334400E5CB26 /* EntranceViewController.m */; };
 		6890650F1E23334400E5CB26 /* EntranceViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6890650D1E23334400E5CB26 /* EntranceViewController.xib */; };
 		689065141E23368100E5CB26 /* ShoppingMallViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 689065121E23368100E5CB26 /* ShoppingMallViewController.m */; };
@@ -31,6 +46,7 @@
 		689065271E2338C400E5CB26 /* MemberViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 689065251E2338C400E5CB26 /* MemberViewController.xib */; };
 		6890652C1E23470E00E5CB26 /* FavoriteViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6890652A1E23470E00E5CB26 /* FavoriteViewController.m */; };
 		6890652D1E23470E00E5CB26 /* FavoriteViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6890652B1E23470E00E5CB26 /* FavoriteViewController.xib */; };
+		68A85C7E1E2728CF004DD624 /* TMInfoManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 68A85C7D1E2728CF004DD624 /* TMInfoManager.m */; };
 		68B68FEF1E24753400DCCF29 /* Utility.m in Sources */ = {isa = PBXBuildFile; fileRef = 68B68FEE1E24753400DCCF29 /* Utility.m */; };
 		68B68FF41E2484A600DCCF29 /* TextHorizontalSeparator.m in Sources */ = {isa = PBXBuildFile; fileRef = 68B68FF31E2484A600DCCF29 /* TextHorizontalSeparator.m */; };
 		68B68FF91E24C30700DCCF29 /* PromotionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68B68FF71E24C30700DCCF29 /* PromotionViewController.m */; };
@@ -86,6 +102,17 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		6811BC621E275F6F00626A4A /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKCoreKit.framework; path = Frameworks/FBSDKCoreKit.framework; sourceTree = "<group>"; };
+		6811BC631E275F6F00626A4A /* FBSDKLoginKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKLoginKit.framework; path = Frameworks/FBSDKLoginKit.framework; sourceTree = "<group>"; };
+		6811BC661E27701500626A4A /* Bolts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Bolts.framework; path = Frameworks/Bolts.framework; sourceTree = "<group>"; };
+		6811BC681E27749F00626A4A /* GoogleAppUtilities.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GoogleAppUtilities.framework; path = Frameworks/GoogleAppUtilities.framework; sourceTree = "<group>"; };
+		6811BC691E27749F00626A4A /* GoogleSignIn.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GoogleSignIn.framework; path = Frameworks/GoogleSignIn.framework; sourceTree = "<group>"; };
+		6811BC6A1E27749F00626A4A /* GoogleSignInDependencies.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GoogleSignInDependencies.framework; path = Frameworks/GoogleSignInDependencies.framework; sourceTree = "<group>"; };
+		6811BC6B1E27749F00626A4A /* GoogleSymbolUtilities.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GoogleSymbolUtilities.framework; path = Frameworks/GoogleSymbolUtilities.framework; sourceTree = "<group>"; };
+		6811BC701E2774B500626A4A /* GoogleSignIn.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = GoogleSignIn.bundle; path = ../Frameworks/GoogleSignIn.bundle; sourceTree = "<group>"; };
+		6811BC741E27757100626A4A /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "Frameworks/GoogleService-Info.plist"; sourceTree = SOURCE_ROOT; };
+		6811BC761E27778A00626A4A /* SafariServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SafariServices.framework; path = System/Library/Frameworks/SafariServices.framework; sourceTree = SDKROOT; };
+		6811BC781E27779500626A4A /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		685939A71E1F49DF00351FFB /* TreeMall.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TreeMall.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		685939AB1E1F49DF00351FFB /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		685939AD1E1F49DF00351FFB /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -111,6 +138,14 @@
 		685939EB1E1F775900351FFB /* CryptoModule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CryptoModule.h; path = Utilities/Crypto/CryptoModule.h; sourceTree = "<group>"; };
 		685939EC1E1F775900351FFB /* CryptoModule.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CryptoModule.m; path = Utilities/Crypto/CryptoModule.m; sourceTree = "<group>"; };
 		685939EE1E1F978A00351FFB /* APIDefinition.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = APIDefinition.h; path = Utilities/API/APIDefinition.h; sourceTree = "<group>"; };
+		687E44471E2C71A700A7E2CA /* AESCrypt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AESCrypt.h; sourceTree = "<group>"; };
+		687E44481E2C71A700A7E2CA /* AESCrypt.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AESCrypt.m; sourceTree = "<group>"; };
+		687E44491E2C71A700A7E2CA /* NSData+Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+Base64.h"; sourceTree = "<group>"; };
+		687E444A1E2C71A700A7E2CA /* NSData+Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+Base64.m"; sourceTree = "<group>"; };
+		687E444B1E2C71A700A7E2CA /* NSData+CommonCrypto.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+CommonCrypto.h"; sourceTree = "<group>"; };
+		687E444C1E2C71A700A7E2CA /* NSData+CommonCrypto.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+CommonCrypto.m"; sourceTree = "<group>"; };
+		687E444D1E2C71A700A7E2CA /* NSString+Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Base64.h"; sourceTree = "<group>"; };
+		687E444E1E2C71A700A7E2CA /* NSString+Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Base64.m"; sourceTree = "<group>"; };
 		6890650B1E23334400E5CB26 /* EntranceViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EntranceViewController.h; path = ViewControllers/Entrance/EntranceViewController.h; sourceTree = "<group>"; };
 		6890650C1E23334400E5CB26 /* EntranceViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EntranceViewController.m; path = ViewControllers/Entrance/EntranceViewController.m; sourceTree = "<group>"; };
 		6890650D1E23334400E5CB26 /* EntranceViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = EntranceViewController.xib; path = ViewControllers/Entrance/EntranceViewController.xib; sourceTree = "<group>"; };
@@ -129,6 +164,8 @@
 		689065291E23470E00E5CB26 /* FavoriteViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FavoriteViewController.h; path = ViewControllers/Favorite/FavoriteViewController.h; sourceTree = "<group>"; };
 		6890652A1E23470E00E5CB26 /* FavoriteViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FavoriteViewController.m; path = ViewControllers/Favorite/FavoriteViewController.m; sourceTree = "<group>"; };
 		6890652B1E23470E00E5CB26 /* FavoriteViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = FavoriteViewController.xib; path = ViewControllers/Favorite/FavoriteViewController.xib; sourceTree = "<group>"; };
+		68A85C7C1E2728CF004DD624 /* TMInfoManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TMInfoManager.h; path = Utilities/Information/TMInfoManager.h; sourceTree = "<group>"; };
+		68A85C7D1E2728CF004DD624 /* TMInfoManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TMInfoManager.m; path = Utilities/Information/TMInfoManager.m; sourceTree = "<group>"; };
 		68B68FED1E24753400DCCF29 /* Utility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Utility.h; path = Utilities/Utility.h; sourceTree = "<group>"; };
 		68B68FEE1E24753400DCCF29 /* Utility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Utility.m; path = Utilities/Utility.m; sourceTree = "<group>"; };
 		68B68FF21E2484A600DCCF29 /* TextHorizontalSeparator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TextHorizontalSeparator.h; path = Component/Separator/TextHorizontalSeparator.h; sourceTree = "<group>"; };
@@ -208,6 +245,15 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6811BC791E27779500626A4A /* SystemConfiguration.framework in Frameworks */,
+				6811BC771E27778A00626A4A /* SafariServices.framework in Frameworks */,
+				6811BC6C1E27749F00626A4A /* GoogleAppUtilities.framework in Frameworks */,
+				6811BC6D1E27749F00626A4A /* GoogleSignIn.framework in Frameworks */,
+				6811BC6E1E27749F00626A4A /* GoogleSignInDependencies.framework in Frameworks */,
+				6811BC6F1E27749F00626A4A /* GoogleSymbolUtilities.framework in Frameworks */,
+				6811BC671E27701500626A4A /* Bolts.framework in Frameworks */,
+				6811BC641E275F6F00626A4A /* FBSDKCoreKit.framework in Frameworks */,
+				6811BC651E275F6F00626A4A /* FBSDKLoginKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -228,6 +274,39 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		6811BC611E275F6F00626A4A /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				6811BC781E27779500626A4A /* SystemConfiguration.framework */,
+				6811BC761E27778A00626A4A /* SafariServices.framework */,
+				6811BC681E27749F00626A4A /* GoogleAppUtilities.framework */,
+				6811BC691E27749F00626A4A /* GoogleSignIn.framework */,
+				6811BC6A1E27749F00626A4A /* GoogleSignInDependencies.framework */,
+				6811BC6B1E27749F00626A4A /* GoogleSymbolUtilities.framework */,
+				6811BC661E27701500626A4A /* Bolts.framework */,
+				6811BC621E275F6F00626A4A /* FBSDKCoreKit.framework */,
+				6811BC631E275F6F00626A4A /* FBSDKLoginKit.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		6811BC721E2774CF00626A4A /* OtherBundles */ = {
+			isa = PBXGroup;
+			children = (
+				6811BC731E27755B00626A4A /* Google */,
+			);
+			name = OtherBundles;
+			sourceTree = "<group>";
+		};
+		6811BC731E27755B00626A4A /* Google */ = {
+			isa = PBXGroup;
+			children = (
+				6811BC741E27757100626A4A /* GoogleService-Info.plist */,
+				6811BC701E2774B500626A4A /* GoogleSignIn.bundle */,
+			);
+			name = Google;
+			sourceTree = "<group>";
+		};
 		6859399E1E1F49DF00351FFB = {
 			isa = PBXGroup;
 			children = (
@@ -235,6 +314,7 @@
 				685939C61E1F49DF00351FFB /* TreeMallTests */,
 				685939D11E1F49DF00351FFB /* TreeMallUITests */,
 				685939A81E1F49DF00351FFB /* Products */,
+				6811BC611E275F6F00626A4A /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -272,6 +352,7 @@
 		685939AA1E1F49DF00351FFB /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				6811BC721E2774CF00626A4A /* OtherBundles */,
 				685939AB1E1F49DF00351FFB /* main.m */,
 				68CA36A81E2362FF00A70BCC /* Localizable.strings */,
 			);
@@ -299,6 +380,7 @@
 		685939E01E1F4AD200351FFB /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				68A85C7B1E272835004DD624 /* Infomation */,
 				68B68FED1E24753400DCCF29 /* Utility.h */,
 				68B68FEE1E24753400DCCF29 /* Utility.m */,
 				68CA36AC1E23675200A70BCC /* LocalizedStrings */,
@@ -329,6 +411,21 @@
 				685939EA1E1F724D00351FFB /* SHCryptoModuleTemplate.h */,
 			);
 			name = Crypto;
+			sourceTree = "<group>";
+		};
+		687E44451E2C71A700A7E2CA /* AESCrypt-ObjC */ = {
+			isa = PBXGroup;
+			children = (
+				687E44471E2C71A700A7E2CA /* AESCrypt.h */,
+				687E44481E2C71A700A7E2CA /* AESCrypt.m */,
+				687E44491E2C71A700A7E2CA /* NSData+Base64.h */,
+				687E444A1E2C71A700A7E2CA /* NSData+Base64.m */,
+				687E444B1E2C71A700A7E2CA /* NSData+CommonCrypto.h */,
+				687E444C1E2C71A700A7E2CA /* NSData+CommonCrypto.m */,
+				687E444D1E2C71A700A7E2CA /* NSString+Base64.h */,
+				687E444E1E2C71A700A7E2CA /* NSString+Base64.m */,
+			);
+			path = "AESCrypt-ObjC";
 			sourceTree = "<group>";
 		};
 		689065041E23321E00E5CB26 /* ViewControllers */ = {
@@ -412,6 +509,15 @@
 			name = Favorite;
 			sourceTree = "<group>";
 		};
+		68A85C7B1E272835004DD624 /* Infomation */ = {
+			isa = PBXGroup;
+			children = (
+				68A85C7C1E2728CF004DD624 /* TMInfoManager.h */,
+				68A85C7D1E2728CF004DD624 /* TMInfoManager.m */,
+			);
+			name = Infomation;
+			sourceTree = "<group>";
+		};
 		68B68FF01E2483D600DCCF29 /* Component */ = {
 			isa = PBXGroup;
 			children = (
@@ -463,6 +569,7 @@
 		68D55E4A1E25D938005D1BB7 /* ThirdParty */ = {
 			isa = PBXGroup;
 			children = (
+				687E44451E2C71A700A7E2CA /* AESCrypt-ObjC */,
 				68D55E931E26205B005D1BB7 /* TTTAttributedLabel */,
 				68D55E4B1E25D938005D1BB7 /* SDWebImage */,
 			);
@@ -647,6 +754,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6811BC711E2774B500626A4A /* GoogleSignIn.bundle in Resources */,
 				689065271E2338C400E5CB26 /* MemberViewController.xib in Resources */,
 				689065151E23368100E5CB26 /* ShoppingMallViewController.xib in Resources */,
 				68CA36BE1E23880400A70BCC /* LoginViewController.xib in Resources */,
@@ -659,6 +767,7 @@
 				685939B51E1F49DF00351FFB /* Main.storyboard in Resources */,
 				689065211E23387200E5CB26 /* NotificationViewController.xib in Resources */,
 				6890652D1E23470E00E5CB26 /* FavoriteViewController.xib in Resources */,
+				6811BC751E27757100626A4A /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -688,8 +797,10 @@
 				68D55E871E25D938005D1BB7 /* UIImageView+WebCache.m in Sources */,
 				685939B21E1F49DF00351FFB /* ViewController.m in Sources */,
 				68D55E7B1E25D938005D1BB7 /* SDImageCacheConfig.m in Sources */,
+				687E44511E2C71A700A7E2CA /* NSData+Base64.m in Sources */,
 				68B68FFD1E24C45600DCCF29 /* PromotionTableViewCell.m in Sources */,
 				6890650E1E23334400E5CB26 /* EntranceViewController.m in Sources */,
+				687E44501E2C71A700A7E2CA /* AESCrypt.m in Sources */,
 				685939E51E1F4E1700351FFB /* SHAPIAdapter.m in Sources */,
 				68D55E821E25D938005D1BB7 /* UIButton+WebCache.m in Sources */,
 				68D55E811E25D938005D1BB7 /* SDWebImagePrefetcher.m in Sources */,
@@ -701,6 +812,7 @@
 				689065141E23368100E5CB26 /* ShoppingMallViewController.m in Sources */,
 				68D55E7A1E25D938005D1BB7 /* SDImageCache.m in Sources */,
 				68D55E801E25D938005D1BB7 /* SDWebImageManager.m in Sources */,
+				687E44521E2C71A700A7E2CA /* NSData+CommonCrypto.m in Sources */,
 				68CA36B81E23722F00A70BCC /* EntranceMemberPromoteHeader.m in Sources */,
 				68D55E8F1E25DCF8005D1BB7 /* FLAnimatedImageView.m in Sources */,
 				68B68FEF1E24753400DCCF29 /* Utility.m in Sources */,
@@ -714,11 +826,13 @@
 				685939ED1E1F775900351FFB /* CryptoModule.m in Sources */,
 				68D55E8E1E25DCF8005D1BB7 /* FLAnimatedImage.m in Sources */,
 				68D55E881E25D938005D1BB7 /* UIView+WebCache.m in Sources */,
+				687E44531E2C71A700A7E2CA /* NSString+Base64.m in Sources */,
 				68D55E771E25D938005D1BB7 /* MKAnnotationView+WebCache.m in Sources */,
 				68D55E791E25D938005D1BB7 /* NSImage+WebCache.m in Sources */,
 				685939B81E1F49DF00351FFB /* TreeMall.xcdatamodeld in Sources */,
 				68D55E7D1E25D938005D1BB7 /* SDWebImageDecoder.m in Sources */,
 				68D55E851E25D938005D1BB7 /* UIImage+WebP.m in Sources */,
+				68A85C7E1E2728CF004DD624 /* TMInfoManager.m in Sources */,
 				68D55E7C1E25D938005D1BB7 /* SDWebImageCompat.m in Sources */,
 				68CA36BD1E23880400A70BCC /* LoginViewController.m in Sources */,
 				68D55E781E25D938005D1BB7 /* NSData+ImageContentType.m in Sources */,
@@ -888,10 +1002,15 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = XFNW4TD8ZL;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Frameworks",
+				);
 				INFOPLIST_FILE = TreeMall/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.Symphox.TreeMall;
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_BUNDLE_IDENTIFIER = com.cht.fiziko;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -901,10 +1020,15 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = XFNW4TD8ZL;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Frameworks",
+				);
 				INFOPLIST_FILE = TreeMall/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.Symphox.TreeMall;
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_BUNDLE_IDENTIFIER = com.cht.fiziko;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;

@@ -12,6 +12,9 @@
 #import "SHAPIAdapter.h"
 #import "APIDefinition.h"
 #import "Definition.h"
+#import "Utility.h"
+#import "LocalizedString.h"
+#import "TMInfoManager.h"
 
 @interface PromotionViewController ()
 
@@ -37,7 +40,11 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
+    self.title = [LocalizedString PromotionNotification];
+    
     [_tableViewPromotion registerClass:[PromotionTableViewCell class] forCellReuseIdentifier:PromotionTableViewCellIdentifier];
+    [_tableViewPromotion setBackgroundColor:[UIColor colorWithWhite:0.8 alpha:1.0]];
+    [_tableViewPromotion setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notificationHandlerTokenUpdated:) name:PostNotificationName_TokenUpdated object:nil];
     [self retrieveData];
@@ -149,6 +156,7 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     PromotionTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:PromotionTableViewCellIdentifier forIndexPath:indexPath];
+    [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
     if (indexPath.row < [_arrayPromotion count])
     {
         cell.imageView.backgroundColor = [UIColor redColor];
@@ -157,8 +165,9 @@
         NSString *subtitle = [dictionary objectForKey:SymphoxAPIParam_tips];
         NSString *content = [dictionary objectForKey:SymphoxAPIParam_content];
 //        NSString *type = [dictionary objectForKey:SymphoxAPIParam_type];
-//        NSString *identifier = [dictionary objectForKey:SymphoxAPIParam_id];
+        NSString *identifier = [dictionary objectForKey:SymphoxAPIParam_id];
         
+        cell.shouldShowMask = [[TMInfoManager sharedManager] alreadyReadPromotionForIdentifier:identifier];
         cell.title = (title == nil)?@"":title;
         cell.subtitle = (subtitle == nil)?@"":subtitle;
         cell.content = (content == nil)?@"":content;
@@ -172,6 +181,17 @@
 {
     CGFloat heightForRow = 120.0;
     return heightForRow;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.row < [_arrayPromotion count])
+    {
+        NSDictionary *dictionary = [_arrayPromotion objectAtIndex:indexPath.row];
+        NSString *identifier = [dictionary objectForKey:SymphoxAPIParam_id];
+        [[TMInfoManager sharedManager] readPromotionForIdentifier:identifier];
+        [tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationNone];
+    }
 }
 
 @end

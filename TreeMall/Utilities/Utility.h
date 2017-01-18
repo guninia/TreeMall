@@ -13,5 +13,6 @@
 
 + (CGSize)sizeRatioAccordingToRefrenceSize:(CGSize)referenceSize;
 + (CGSize)sizeRatioAccordingTo320x480;
++ (NSString *)ipAddress;
 
 @end

@@ -8,8 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import "TextHorizontalSeparator.h"
+#import <GoogleSignIn/GoogleSignIn.h>
 
-@interface LoginViewController : UIViewController <UITextFieldDelegate>
+@interface LoginViewController : UIViewController <UITextFieldDelegate, GIDSignInDelegate, GIDSignInUIDelegate>
 
 @property (nonatomic, strong) UIImageView *imageViewLogo;
 @property (nonatomic, strong) UITextField *textFieldAccount;

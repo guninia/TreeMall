@@ -122,7 +122,7 @@ typedef enum : NSUInteger {
     
     if (error == nil)
     {
-        NSLog(@"jsonObject[%@]:\n%@", [[jsonObject class] description], [jsonObject description]);
+//        NSLog(@"jsonObject[%@]:\n%@", [[jsonObject class] description], [jsonObject description]);
         if ([jsonObject isKindOfClass:[NSDictionary class]])
         {
             NSDictionary *dictionary = (NSDictionary *)jsonObject;

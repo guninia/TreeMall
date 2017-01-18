@@ -94,7 +94,8 @@
             // Should check user state here.
             shouldSelect = NO;
             LoginViewController *viewControllerLogin = [[LoginViewController alloc] initWithNibName:@"LoginViewController" bundle:[NSBundle mainBundle]];
-            [self presentViewController:viewControllerLogin animated:YES completion:nil];
+            UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:viewControllerLogin];
+            [self presentViewController:navigationController animated:YES completion:nil];
         }
     }
     return shouldSelect;

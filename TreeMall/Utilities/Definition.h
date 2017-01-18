@@ -13,4 +13,6 @@
 
 static NSString *PostNotificationName_TokenUpdated = @"TokenUpdated";
 
+#define TMMainColor [UIColor colorWithRed:(90.0/255.0) green:(190.0/255.0) blue:(40.0/255.0) alpha:1.0]
+
 #endif /* Definition_h */

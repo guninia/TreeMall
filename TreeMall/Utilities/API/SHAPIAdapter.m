@@ -59,6 +59,7 @@ static SHAPIAdapter *gAPIAdapter = nil;
     NSMutableURLRequest *request = nil;
     NSError *error = nil;
     NSData *postRawData = nil;
+    NSString *contentType = nil;
     if (postObject)
     {
         switch (format) {
@@ -67,11 +68,13 @@ static SHAPIAdapter *gAPIAdapter = nil;
                 postRawData = [NSJSONSerialization dataWithJSONObject:postObject options:0 error:&error];
                 NSString *postString = [[NSString alloc] initWithData:postRawData encoding:NSUTF8StringEncoding];
                 NSLog(@"sendRequestFromObject - postRawData:\n%@", postString);
+                contentType = @"application/octet-stream";
             }
                 break;
             case SHPostFormatXML:
             {
                 // I'm too lazy to implement this format.
+                contentType = @"application/text";
             }
                 break;
             case SHPostFormatUrlEncoded:
@@ -92,11 +95,13 @@ static SHAPIAdapter *gAPIAdapter = nil;
                     NSLog(@"sendRequestFromObject - postString[%@]", string);
                     postRawData = [string dataUsingEncoding:NSUTF8StringEncoding];
                 }
+                contentType = @"application/x-www-form-urlencoded; charset=utf8";
             }
                 break;
             case SHPostFormatNSData:
             {
                 postRawData = (NSData *)postObject;
+                contentType = @"application/x-www-form-urlencoded; charset=utf8";
             }
                 break;
             case SHPostFormatNone:
@@ -105,6 +110,9 @@ static SHAPIAdapter *gAPIAdapter = nil;
             }
                 break;
             default:
+            {
+                contentType = @"application/x-www-form-urlencoded; charset=utf8";
+            }
                 break;
         }
         //        NSLog(@"sendRequestToUrl - postDictionary:\n%@", postDictionary);
@@ -151,11 +159,12 @@ static SHAPIAdapter *gAPIAdapter = nil;
         }
         NSString *postString = [[NSString alloc] initWithData:postData encoding:NSUTF8StringEncoding];
         NSLog(@"sendRequestToUrl - postString:\n%@", postString);
-        NSString *lengthString = [NSString stringWithFormat:@"%lu", (unsigned long)[postData length]];
+        NSString *lengthString = [NSString stringWithFormat:@"%lu", (unsigned long)[postString length]];
         NSLog(@"sendRequestToUrl[%@] - post length[%@]", [url absoluteString], lengthString);
         [request setHTTPMethod:@"POST"];
         [request setValue:lengthString forHTTPHeaderField:@"Content-Length"];
-        [request setValue:@"application/x-www-form-urlencoded; charset=UTF-8" forHTTPHeaderField:@"Content-Type"];
+        [request setValue:contentType forHTTPHeaderField:@"Content-Type"];
+        NSLog(@"sendRequestToUrl - contentType[%@]", contentType);
         [request setHTTPBody:postData];
     }
     else
@@ -166,13 +175,18 @@ static SHAPIAdapter *gAPIAdapter = nil;
     NSURLSessionDataTask *task = [_session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error){
         if (block)
         {
-            id resultObject = nil;
+            NSLog(@"response[%@]:\nerror:\n%@\ndata:\n%@", [response description], [error description], [data description]);
+            __block id resultObject = nil;
             NSString *originalMessageFromServer = nil;
+            __block NSError *finalError = error;
             if (error == nil)
             {
-                if (shouldDecrypt && _decryptModule != nil && [_decryptModule respondsToSelector:@selector(decryptFromSourceData:)])
+                if (shouldDecrypt && _decryptModule != nil && [_decryptModule respondsToSelector:@selector(decryptFromSourceData:completion:)])
                 {
-                    resultObject = [_decryptModule decryptFromSourceData:data];
+                    [_decryptModule decryptFromSourceData:data completion:^(id decryptResult, NSError *decryptError){
+                        resultObject = decryptResult;
+                        finalError = decryptError;
+                    }];
                 }
                 else
                 {

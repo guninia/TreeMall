@@ -16,11 +16,15 @@ static NSString *PromotionTableViewCellIdentifier = @"PromotionTableViewCell";
     NSDictionary *titleAttributes;
     NSDictionary *subtitleAttributes;
     NSDictionary *contentAttributes;
+    NSDictionary *selectedTitleAttributes;
+    NSDictionary *selectedSubtitleAttributes;
 }
 
+@property (nonatomic, strong) UIView *containerView;
 @property (nonatomic, strong) NSString *title;
 @property (nonatomic, strong) NSString *subtitle;
 @property (nonatomic, strong) NSString *content;
+@property (nonatomic, assign) BOOL shouldShowMask;
 @property (nonatomic, strong) TTTAttributedLabel *titleLabel;
 @property (nonatomic, strong) UILabel *subtitleLabel;
 @property (nonatomic, strong) TTTAttributedLabel *contentLabel;
