@@ -196,12 +196,13 @@ static SHAPIAdapter *gAPIAdapter = nil;
             else
             {
                 NSLog(@"[%@] error:\n%@", url.absoluteString, error.description);
+                finalError = error;
             }
             if (object)
             {
                 // Make sure the block run in main thread, because there may be some UI initialize behavior in the block.
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    block(resultObject, originalMessageFromServer, error);
+                    block(resultObject, originalMessageFromServer, finalError);
                 });
             }
             return;

@@ -17,6 +17,8 @@ static NSString *SymphoxAPI_homepage = @"http://tomcat8.mdevelop.com/TreeMall/ap
 static NSString *SymphoxAPI_promotion = @"http://tomcat8.mdevelop.com/TreeMall/api/onlineService.do";
 static NSString *SymphoxAPI_register = @"http://tomcat8.mdevelop.com/TreeMall/api/portal/app/member/register";
 static NSString *SymphoxAPI_login = @"http://tomcat8.mdevelop.com/TreeMall/api/portal/app/member/identify";
+static NSString *SymphoxAPI_terms = @"http://tomcat8.mdevelop.com/TreeMall/api/onlineService.do";
+static NSString *SymphoxAPI_forgetPassword = @"http://tomcat8.mdevelop.com/TreeMall/api/portal/app/member/password/forget";
 #else
 static NSString *SymphoxAPI_token = @"https://api.symphox.com.tw/portal/app/token";
 #endif
@@ -49,6 +51,5 @@ static NSString *SymphoxAPIParam_user_num = @"user_num";
 static NSString *SymphoxAPIParam_sex = @"sex";
 static NSString *SymphoxAPIParam_epoint = @"epoint";
 static NSString *SymphoxAPIParam_ecoupon = @"ecoupon";
-
 
 #endif /* APIDefinition_h */

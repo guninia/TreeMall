@@ -20,8 +20,14 @@
 "Notice"="Notice";
 "AccountInputError"="Account Input Error";
 "PasswordInputError"="Password Input Error";
+"PhoneInputError"="Phone Input Error";
 "Confirm"="Confirm";
 "MobileVerification"="Mobile Verification";
 "NetworkError"="Network error";
+"RegisterFailed"="RegisterFailed";
+"LoginFailed"="LoginFailed";
+"UnknownError"="Unknown Error";
+"JoinMember"="Join Member";
+"ForgetPassword"="Forget Password";
 
 

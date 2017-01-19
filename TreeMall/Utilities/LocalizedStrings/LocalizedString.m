@@ -171,4 +171,64 @@
     return NetworkError;
 }
 
++ (NSString *)RegisterFailed
+{
+    static NSString *RegisterFailed = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        RegisterFailed = NSLocalizedString(@"NetworkError", nil);
+    });
+    return RegisterFailed;
+}
+
++ (NSString *)LoginFailed
+{
+    static NSString *LoginFailed = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        LoginFailed = NSLocalizedString(@"NetworkError", nil);
+    });
+    return LoginFailed;
+}
+
++ (NSString *)UnknownError
+{
+    static NSString *UnknownError = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        UnknownError = NSLocalizedString(@"UnknownError", nil);
+    });
+    return UnknownError;
+}
+
++ (NSString *)JoinMember
+{
+    static NSString *JoinMember = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        JoinMember = NSLocalizedString(@"JoinMember", nil);
+    });
+    return JoinMember;
+}
+
++ (NSString *)ForgetPassword
+{
+    static NSString *ForgetPassword = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        ForgetPassword = NSLocalizedString(@"ForgetPassword", nil);
+    });
+    return ForgetPassword;
+}
+
++ (NSString *)PhoneInputError
+{
+    static NSString *PhoneInputError = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        PhoneInputError = NSLocalizedString(@"PhoneInputError", nil);
+    });
+    return PhoneInputError;
+}
+
 @end

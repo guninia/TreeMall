@@ -8,7 +8,6 @@
 
 #import "CryptoModule.h"
 #import "CryptoTool.h"
-#import "NSData+CommonCrypto.h"
 #import "APIDefinition.h"
 
 static CryptoModule *gCryptoModule = nil;

@@ -16,6 +16,9 @@
 #import "CryptoModule.h"
 #import "SHAPIAdapter.h"
 #import "TMInfoManager.h"
+#import "Definition.h"
+#import "TermsViewController.h"
+#import "ForgetPasswordViewController.h"
 
 @interface LoginViewController ()
 
@@ -25,20 +28,19 @@
 - (void)registerWithOptions:(NSDictionary *)options andType:(NSString *)type;
 - (BOOL)processRegisterData:(NSData *)data;
 - (void)startPreloginProcess;
-- (BOOL)evaluateAccount:(NSString *)text;
-- (BOOL)evaluatePassword:(NSString *)text;
 - (void)loginWithOptions:(NSDictionary *)options;
 
 - (void)actButtonLoginPressed:(id)sender;
 - (void)actButtonFacebookAccountLoginPressed:(id)sender;
 - (void)actButtonGooglePlusAccountLoginPressed:(id)sender;
-- (void)actCheckButtonAgreementPressed:(id)sender;
+//- (void)actCheckButtonAgreementPressed:(id)sender;
 - (void)actButtonAgreementContentPressed:(id)sender;
 - (void)actButtonJoinMemberPressed:(id)sender;
 - (void)actButtonForgetPasswordPressed:(id)sender;
 
 - (void)facebookTokenDidChangeNotification:(NSNotification *)notification;
 - (void)facebookProfileDidChangeNotification:(NSNotification *)notification;
+- (void)userDidLoggedInNotification:(NSNotification *)notification;
 
 @end
 
@@ -101,13 +103,13 @@
 //    [_checkButtonAgreement addTarget:self action:@selector(actCheckButtonAgreementPressed:) forControlEvents:UIControlEventTouchUpInside];
 //    [self.view addSubview:_checkButtonAgreement];
 //    
-//    _buttonAgreementContent = [[UIButton alloc] initWithFrame:CGRectZero];
-//    [_buttonAgreementContent.layer setCornerRadius:3.0];
-//    [_buttonAgreementContent setBackgroundColor:[UIColor grayColor]];
-//    [_buttonAgreementContent setTitle:@"詳細內容" forState:UIControlStateNormal];
-//    [_buttonAgreementContent.titleLabel setFont:[UIFont systemFontOfSize:12.0]];
-//    [_buttonAgreementContent addTarget:self action:@selector(actButtonAgreementContentPressed:) forControlEvents:UIControlEventTouchUpInside];
-//    [self.view addSubview:_buttonAgreementContent];
+    _buttonAgreementContent = [[UIButton alloc] initWithFrame:CGRectZero];
+    [_buttonAgreementContent.layer setCornerRadius:3.0];
+    [_buttonAgreementContent setBackgroundColor:[UIColor grayColor]];
+    [_buttonAgreementContent setTitle:@"會員條款詳細內容" forState:UIControlStateNormal];
+    [_buttonAgreementContent.titleLabel setFont:[UIFont systemFontOfSize:12.0]];
+    [_buttonAgreementContent addTarget:self action:@selector(actButtonAgreementContentPressed:) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:_buttonAgreementContent];
     
     _buttonJoinMember = [[UIButton alloc] initWithFrame:CGRectZero];
     [_buttonJoinMember setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
@@ -160,6 +162,7 @@
     {
         [self.navigationController setNavigationBarHidden:YES animated:animated];
     }
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userDidLoggedInNotification:) name:PostNotificationName_UserLoggedIn object:nil];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -168,6 +171,13 @@
     {
         [self.navigationController setNavigationBarHidden:NO animated:animated];
     }
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:PostNotificationName_UserLoggedIn object:nil];
+}
+
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:FBSDKAccessTokenDidChangeNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:FBSDKProfileDidChangeNotification object:nil];
 }
 
 - (void)viewDidLayoutSubviews
@@ -273,9 +283,20 @@
 //        
 //        originY = _checkButtonAgreement.frame.origin.y + _checkButtonAgreement.frame.size.height + vInterval;
 //    }
+    if (_buttonAgreementContent != nil)
+    {
+        CGSize buttonSize = CGSizeMake(160.0, 20.0);
+        CGRect frame = _buttonAgreementContent.frame;
+        frame.origin.x = (self.view.frame.size.width - buttonSize.width)/2;
+        frame.origin.y = originY;
+        frame.size.width = buttonSize.width;
+        frame.size.height = buttonSize.height;
+        _buttonAgreementContent.frame = frame;
+        
+        originY = _buttonAgreementContent.frame.origin.y + _buttonAgreementContent.frame.size.height + vInterval;
+    }
     if (_buttonJoinMember != nil && _buttonForgetpassword != nil)
     {
-        originY += vInterval;
         CGSize buttonSize = CGSizeMake(60.0, 20.0);
         CGFloat separatorLineWidth = 1.0;
         CGFloat hInterval = 5.0 * sizeRatio.width;
@@ -391,6 +412,7 @@
                 if ([self processRegisterData:data])
                 {
                     // Should go next step.
+                    [[NSNotificationCenter defaultCenter] postNotificationName:PostNotificationName_UserLoggedIn object:nil];
                 }
                 else
                 {
@@ -453,23 +475,35 @@
 - (void)startPreloginProcess
 {
     NSString *account = [[_textFieldAccount text] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-    if ([self evaluateAccount:account] == NO)
+    if ([Utility evaluateEmail:account] == NO)
     {
         // Should show alert to modify account.
         NSLog(@"Account is not illegal.");
         UIAlertController *alertController = [UIAlertController alertControllerWithTitle:[LocalizedString Notice] message:[LocalizedString AccountInputError] preferredStyle:UIAlertControllerStyleAlert];
-        UIAlertAction *actionCancel = [UIAlertAction actionWithTitle:[LocalizedString Confirm] style:UIAlertActionStyleDefault handler:nil];
+        UIAlertAction *actionCancel = [UIAlertAction actionWithTitle:[LocalizedString Confirm] style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
+            [_textFieldPassword setText:@""];
+            if ([_textFieldAccount canBecomeFirstResponder])
+            {
+                [_textFieldAccount becomeFirstResponder];
+            }
+        }];
         [alertController addAction:actionCancel];
         [self presentViewController:alertController animated:YES completion:nil];
         return;
     }
     NSString *password = [[_textFieldPassword text] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-    if ([self evaluatePassword:password] == NO)
+    if ([Utility evaluatePassword:password] == NO)
     {
         // Should show alert to modify password.
         NSLog(@"Password is not illegal.");
         UIAlertController *alertController = [UIAlertController alertControllerWithTitle:[LocalizedString Notice] message:[LocalizedString PasswordInputError] preferredStyle:UIAlertControllerStyleAlert];
-        UIAlertAction *actionCancel = [UIAlertAction actionWithTitle:[LocalizedString Confirm] style:UIAlertActionStyleDefault handler:nil];
+        UIAlertAction *actionCancel = [UIAlertAction actionWithTitle:[LocalizedString Confirm] style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
+            [_textFieldPassword setText:@""];
+            if ([_textFieldAccount canBecomeFirstResponder])
+            {
+                [_textFieldAccount becomeFirstResponder];
+            }
+        }];
         [alertController addAction:actionCancel];
         [self presentViewController:alertController animated:YES completion:nil];
         return;
@@ -486,22 +520,6 @@
     }
     NSDictionary *options = [NSDictionary dictionaryWithObjectsAndKeys:account, SymphoxAPIParam_account, password, SymphoxAPIParam_password, ipAddress, SymphoxAPIParam_ip, nil];
     [self loginWithOptions:options];
-}
-
-- (BOOL)evaluateAccount:(NSString *)text
-{
-    NSString *regularExpression = @"^[\\w-]+(\\.[\\w-]+)*@[\\w-]+(\\.[\\w-]+)+$";
-    NSPredicate *predicateAccount = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", regularExpression];
-    BOOL available = [predicateAccount evaluateWithObject:text];
-    return available;
-}
-
-- (BOOL)evaluatePassword:(NSString *)text
-{
-    NSString *regularExpression = @"^\\w{6,20}$";
-    NSPredicate *predicateAccount = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", regularExpression];
-    BOOL available = [predicateAccount evaluateWithObject:text];
-    return available;
 }
 
 - (void)loginWithOptions:(NSDictionary *)options
@@ -522,6 +540,7 @@
                 NSString *string = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
                 NSLog(@"string[%@]", string);
                 // Should continue to process data.
+                [[NSNotificationCenter defaultCenter] postNotificationName:PostNotificationName_UserLoggedIn object:nil];
             }
             else
             {
@@ -531,6 +550,26 @@
         else
         {
             NSLog(@"error:\n%@", [error description]);
+            NSDictionary *userInfo = error.userInfo;
+            NSString *errorDescription = [userInfo objectForKey:SymphoxAPIParam_status_desc];
+            if (errorDescription == nil)
+            {
+                errorDescription = error.localizedDescription;
+            }
+            if (errorDescription == nil)
+            {
+                errorDescription = [LocalizedString UnknownError];
+            }
+            UIAlertController *alertController = [UIAlertController alertControllerWithTitle:[LocalizedString LoginFailed] message:errorDescription preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:[LocalizedString Confirm] style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
+                [_textFieldPassword setText:@""];
+                if ([_textFieldPassword canBecomeFirstResponder])
+                {
+                    [_textFieldPassword becomeFirstResponder];
+                }
+            }];
+            [alertController addAction:cancelAction];
+            [weakSelf presentViewController:alertController animated:YES completion:nil];
         }
     }];
 }
@@ -552,14 +591,22 @@
     [self signInGoogle];
 }
 
-- (void)actCheckButtonAgreementPressed:(id)sender
-{
-    
-}
-
+//- (void)actCheckButtonAgreementPressed:(id)sender
+//{
+//    
+//}
+//
 - (void)actButtonAgreementContentPressed:(id)sender
 {
-    
+    TermsViewController *viewController = [[TermsViewController alloc] initWithNibName:@"TermsViewController" bundle:[NSBundle mainBundle]];
+    if (self.navigationController)
+    {
+        [self.navigationController pushViewController:viewController animated:YES];
+    }
+    else
+    {
+        [self presentViewController:viewController animated:YES completion:nil];
+    }
 }
 
 - (void)actButtonJoinMemberPressed:(id)sender
@@ -569,7 +616,15 @@
 
 - (void)actButtonForgetPasswordPressed:(id)sender
 {
-    
+    ForgetPasswordViewController *viewController = [[ForgetPasswordViewController alloc] initWithNibName:@"ForgetPasswordViewController" bundle:[NSBundle mainBundle]];
+    if (self.navigationController)
+    {
+        [self.navigationController pushViewController:viewController animated:YES];
+    }
+    else
+    {
+        [self presentViewController:viewController animated:YES completion:nil];
+    }
 }
 
 #pragma mark - NSNotification Handler
@@ -589,12 +644,22 @@
     [self retrieveFacebookData];
 }
 
+- (void)userDidLoggedInNotification:(NSNotification *)notification
+{
+    if (self.navigationController)
+    {
+        [self.navigationController.presentingViewController dismissViewControllerAnimated:YES completion:nil];
+    }
+    else
+    {
+        [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
+    }
+}
+
 #pragma mark - GIDSignInDelegate
 
 - (void)signIn:(GIDSignIn *)signIn didSignInForUser:(GIDGoogleUser *)user withError:(NSError *)error
 {
-//    NSString *userId = user.userID;
-//    NSString *fullName = user.profile.name;
     NSString *email = user.profile.email;
 //    NSLog(@"userId[%@] fullName[%@] email[%@]", userId, fullName, email);
     NSString *ipAddress = [Utility ipAddress];

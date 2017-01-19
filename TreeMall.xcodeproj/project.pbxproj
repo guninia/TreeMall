@@ -30,10 +30,6 @@
 		685939E51E1F4E1700351FFB /* SHAPIAdapter.m in Sources */ = {isa = PBXBuildFile; fileRef = 685939E41E1F4E1700351FFB /* SHAPIAdapter.m */; };
 		685939E91E1F518700351FFB /* CryptoTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 685939E81E1F518700351FFB /* CryptoTool.m */; };
 		685939ED1E1F775900351FFB /* CryptoModule.m in Sources */ = {isa = PBXBuildFile; fileRef = 685939EC1E1F775900351FFB /* CryptoModule.m */; };
-		687E44501E2C71A700A7E2CA /* AESCrypt.m in Sources */ = {isa = PBXBuildFile; fileRef = 687E44481E2C71A700A7E2CA /* AESCrypt.m */; };
-		687E44511E2C71A700A7E2CA /* NSData+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 687E444A1E2C71A700A7E2CA /* NSData+Base64.m */; };
-		687E44521E2C71A700A7E2CA /* NSData+CommonCrypto.m in Sources */ = {isa = PBXBuildFile; fileRef = 687E444C1E2C71A700A7E2CA /* NSData+CommonCrypto.m */; };
-		687E44531E2C71A700A7E2CA /* NSString+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 687E444E1E2C71A700A7E2CA /* NSString+Base64.m */; };
 		6890650E1E23334400E5CB26 /* EntranceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6890650C1E23334400E5CB26 /* EntranceViewController.m */; };
 		6890650F1E23334400E5CB26 /* EntranceViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6890650D1E23334400E5CB26 /* EntranceViewController.xib */; };
 		689065141E23368100E5CB26 /* ShoppingMallViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 689065121E23368100E5CB26 /* ShoppingMallViewController.m */; };
@@ -82,6 +78,10 @@
 		68D55E8E1E25DCF8005D1BB7 /* FLAnimatedImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 68D55E8B1E25DCF8005D1BB7 /* FLAnimatedImage.m */; };
 		68D55E8F1E25DCF8005D1BB7 /* FLAnimatedImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 68D55E8D1E25DCF8005D1BB7 /* FLAnimatedImageView.m */; };
 		68D55E961E26205B005D1BB7 /* TTTAttributedLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 68D55E951E26205B005D1BB7 /* TTTAttributedLabel.m */; };
+		68E401311E309B7700BFF66B /* TermsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68E4012F1E309B7700BFF66B /* TermsViewController.m */; };
+		68E401321E309B7700BFF66B /* TermsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 68E401301E309B7700BFF66B /* TermsViewController.xib */; };
+		68E401361E30B09900BFF66B /* ForgetPasswordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68E401341E30B09900BFF66B /* ForgetPasswordViewController.m */; };
+		68E401371E30B09900BFF66B /* ForgetPasswordViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 68E401351E30B09900BFF66B /* ForgetPasswordViewController.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -138,14 +138,6 @@
 		685939EB1E1F775900351FFB /* CryptoModule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CryptoModule.h; path = Utilities/Crypto/CryptoModule.h; sourceTree = "<group>"; };
 		685939EC1E1F775900351FFB /* CryptoModule.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CryptoModule.m; path = Utilities/Crypto/CryptoModule.m; sourceTree = "<group>"; };
 		685939EE1E1F978A00351FFB /* APIDefinition.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = APIDefinition.h; path = Utilities/API/APIDefinition.h; sourceTree = "<group>"; };
-		687E44471E2C71A700A7E2CA /* AESCrypt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AESCrypt.h; sourceTree = "<group>"; };
-		687E44481E2C71A700A7E2CA /* AESCrypt.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AESCrypt.m; sourceTree = "<group>"; };
-		687E44491E2C71A700A7E2CA /* NSData+Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+Base64.h"; sourceTree = "<group>"; };
-		687E444A1E2C71A700A7E2CA /* NSData+Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+Base64.m"; sourceTree = "<group>"; };
-		687E444B1E2C71A700A7E2CA /* NSData+CommonCrypto.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+CommonCrypto.h"; sourceTree = "<group>"; };
-		687E444C1E2C71A700A7E2CA /* NSData+CommonCrypto.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+CommonCrypto.m"; sourceTree = "<group>"; };
-		687E444D1E2C71A700A7E2CA /* NSString+Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Base64.h"; sourceTree = "<group>"; };
-		687E444E1E2C71A700A7E2CA /* NSString+Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Base64.m"; sourceTree = "<group>"; };
 		6890650B1E23334400E5CB26 /* EntranceViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EntranceViewController.h; path = ViewControllers/Entrance/EntranceViewController.h; sourceTree = "<group>"; };
 		6890650C1E23334400E5CB26 /* EntranceViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EntranceViewController.m; path = ViewControllers/Entrance/EntranceViewController.m; sourceTree = "<group>"; };
 		6890650D1E23334400E5CB26 /* EntranceViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = EntranceViewController.xib; path = ViewControllers/Entrance/EntranceViewController.xib; sourceTree = "<group>"; };
@@ -238,6 +230,12 @@
 		68D55E8D1E25DCF8005D1BB7 /* FLAnimatedImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FLAnimatedImageView.m; sourceTree = "<group>"; };
 		68D55E941E26205B005D1BB7 /* TTTAttributedLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTTAttributedLabel.h; sourceTree = "<group>"; };
 		68D55E951E26205B005D1BB7 /* TTTAttributedLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTTAttributedLabel.m; sourceTree = "<group>"; };
+		68E4012E1E309B7700BFF66B /* TermsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TermsViewController.h; path = ViewControllers/Login/TermsViewController.h; sourceTree = "<group>"; };
+		68E4012F1E309B7700BFF66B /* TermsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TermsViewController.m; path = ViewControllers/Login/TermsViewController.m; sourceTree = "<group>"; };
+		68E401301E309B7700BFF66B /* TermsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = TermsViewController.xib; path = ViewControllers/Login/TermsViewController.xib; sourceTree = "<group>"; };
+		68E401331E30B09900BFF66B /* ForgetPasswordViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ForgetPasswordViewController.h; path = ViewControllers/Login/ForgetPasswordViewController.h; sourceTree = "<group>"; };
+		68E401341E30B09900BFF66B /* ForgetPasswordViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ForgetPasswordViewController.m; path = ViewControllers/Login/ForgetPasswordViewController.m; sourceTree = "<group>"; };
+		68E401351E30B09900BFF66B /* ForgetPasswordViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = ForgetPasswordViewController.xib; path = ViewControllers/Login/ForgetPasswordViewController.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -413,21 +411,6 @@
 			name = Crypto;
 			sourceTree = "<group>";
 		};
-		687E44451E2C71A700A7E2CA /* AESCrypt-ObjC */ = {
-			isa = PBXGroup;
-			children = (
-				687E44471E2C71A700A7E2CA /* AESCrypt.h */,
-				687E44481E2C71A700A7E2CA /* AESCrypt.m */,
-				687E44491E2C71A700A7E2CA /* NSData+Base64.h */,
-				687E444A1E2C71A700A7E2CA /* NSData+Base64.m */,
-				687E444B1E2C71A700A7E2CA /* NSData+CommonCrypto.h */,
-				687E444C1E2C71A700A7E2CA /* NSData+CommonCrypto.m */,
-				687E444D1E2C71A700A7E2CA /* NSString+Base64.h */,
-				687E444E1E2C71A700A7E2CA /* NSString+Base64.m */,
-			);
-			path = "AESCrypt-ObjC";
-			sourceTree = "<group>";
-		};
 		689065041E23321E00E5CB26 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
@@ -562,6 +545,12 @@
 				68CA36BA1E23880400A70BCC /* LoginViewController.h */,
 				68CA36BB1E23880400A70BCC /* LoginViewController.m */,
 				68CA36BC1E23880400A70BCC /* LoginViewController.xib */,
+				68E4012E1E309B7700BFF66B /* TermsViewController.h */,
+				68E4012F1E309B7700BFF66B /* TermsViewController.m */,
+				68E401301E309B7700BFF66B /* TermsViewController.xib */,
+				68E401331E30B09900BFF66B /* ForgetPasswordViewController.h */,
+				68E401341E30B09900BFF66B /* ForgetPasswordViewController.m */,
+				68E401351E30B09900BFF66B /* ForgetPasswordViewController.xib */,
 			);
 			name = Login;
 			sourceTree = "<group>";
@@ -569,7 +558,6 @@
 		68D55E4A1E25D938005D1BB7 /* ThirdParty */ = {
 			isa = PBXGroup;
 			children = (
-				687E44451E2C71A700A7E2CA /* AESCrypt-ObjC */,
 				68D55E931E26205B005D1BB7 /* TTTAttributedLabel */,
 				68D55E4B1E25D938005D1BB7 /* SDWebImage */,
 			);
@@ -758,6 +746,8 @@
 				689065271E2338C400E5CB26 /* MemberViewController.xib in Resources */,
 				689065151E23368100E5CB26 /* ShoppingMallViewController.xib in Resources */,
 				68CA36BE1E23880400A70BCC /* LoginViewController.xib in Resources */,
+				68E401371E30B09900BFF66B /* ForgetPasswordViewController.xib in Resources */,
+				68E401321E309B7700BFF66B /* TermsViewController.xib in Resources */,
 				685939BD1E1F49DF00351FFB /* LaunchScreen.storyboard in Resources */,
 				685939BA1E1F49DF00351FFB /* Assets.xcassets in Resources */,
 				6890650F1E23334400E5CB26 /* EntranceViewController.xib in Resources */,
@@ -794,13 +784,12 @@
 			files = (
 				68B68FF91E24C30700DCCF29 /* PromotionViewController.m in Sources */,
 				685939E91E1F518700351FFB /* CryptoTool.m in Sources */,
+				68E401361E30B09900BFF66B /* ForgetPasswordViewController.m in Sources */,
 				68D55E871E25D938005D1BB7 /* UIImageView+WebCache.m in Sources */,
 				685939B21E1F49DF00351FFB /* ViewController.m in Sources */,
 				68D55E7B1E25D938005D1BB7 /* SDImageCacheConfig.m in Sources */,
-				687E44511E2C71A700A7E2CA /* NSData+Base64.m in Sources */,
 				68B68FFD1E24C45600DCCF29 /* PromotionTableViewCell.m in Sources */,
 				6890650E1E23334400E5CB26 /* EntranceViewController.m in Sources */,
-				687E44501E2C71A700A7E2CA /* AESCrypt.m in Sources */,
 				685939E51E1F4E1700351FFB /* SHAPIAdapter.m in Sources */,
 				68D55E821E25D938005D1BB7 /* UIButton+WebCache.m in Sources */,
 				68D55E811E25D938005D1BB7 /* SDWebImagePrefetcher.m in Sources */,
@@ -812,7 +801,6 @@
 				689065141E23368100E5CB26 /* ShoppingMallViewController.m in Sources */,
 				68D55E7A1E25D938005D1BB7 /* SDImageCache.m in Sources */,
 				68D55E801E25D938005D1BB7 /* SDWebImageManager.m in Sources */,
-				687E44521E2C71A700A7E2CA /* NSData+CommonCrypto.m in Sources */,
 				68CA36B81E23722F00A70BCC /* EntranceMemberPromoteHeader.m in Sources */,
 				68D55E8F1E25DCF8005D1BB7 /* FLAnimatedImageView.m in Sources */,
 				68B68FEF1E24753400DCCF29 /* Utility.m in Sources */,
@@ -826,7 +814,6 @@
 				685939ED1E1F775900351FFB /* CryptoModule.m in Sources */,
 				68D55E8E1E25DCF8005D1BB7 /* FLAnimatedImage.m in Sources */,
 				68D55E881E25D938005D1BB7 /* UIView+WebCache.m in Sources */,
-				687E44531E2C71A700A7E2CA /* NSString+Base64.m in Sources */,
 				68D55E771E25D938005D1BB7 /* MKAnnotationView+WebCache.m in Sources */,
 				68D55E791E25D938005D1BB7 /* NSImage+WebCache.m in Sources */,
 				685939B81E1F49DF00351FFB /* TreeMall.xcdatamodeld in Sources */,
@@ -835,6 +822,7 @@
 				68A85C7E1E2728CF004DD624 /* TMInfoManager.m in Sources */,
 				68D55E7C1E25D938005D1BB7 /* SDWebImageCompat.m in Sources */,
 				68CA36BD1E23880400A70BCC /* LoginViewController.m in Sources */,
+				68E401311E309B7700BFF66B /* TermsViewController.m in Sources */,
 				68D55E781E25D938005D1BB7 /* NSData+ImageContentType.m in Sources */,
 				68D55E7E1E25D938005D1BB7 /* SDWebImageDownloader.m in Sources */,
 				68CA36AF1E23679800A70BCC /* LocalizedString.m in Sources */,

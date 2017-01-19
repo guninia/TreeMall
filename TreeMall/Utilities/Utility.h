@@ -14,5 +14,8 @@
 + (CGSize)sizeRatioAccordingToRefrenceSize:(CGSize)referenceSize;
 + (CGSize)sizeRatioAccordingTo320x480;
 + (NSString *)ipAddress;
++ (BOOL)evaluateEmail:(NSString *)text;
++ (BOOL)evaluatePassword:(NSString *)text;
++ (BOOL)evaluatePhoneNumber:(NSString *)text;
 
 @end

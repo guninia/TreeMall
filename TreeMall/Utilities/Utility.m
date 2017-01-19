@@ -62,4 +62,31 @@
     return address;
 }
 
++ (BOOL)evaluateEmail:(NSString *)text
+{
+    NSString *regularExpression = @"^[\\w-]+(\\.[\\w-]+)*@[\\w-]+(\\.[\\w-]+)+$";
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", regularExpression];
+    BOOL available = [predicate evaluateWithObject:text];
+    return available;
+}
+
++ (BOOL)evaluatePassword:(NSString *)text
+{
+    NSString *regularExpression = @"^\\w{6,20}$";
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", regularExpression];
+    BOOL available = [predicate evaluateWithObject:text];
+    return available;
+}
+
++ (BOOL)evaluatePhoneNumber:(NSString *)text
+{
+    NSString *regularExpressionPhone = @"^(0\\d{1,3}-)?\\d{5,8}(-\\d{1,5})?$";
+    NSString *regularExpressionCell = @"^09\\d{8}$";
+    NSPredicate *predicatePhone = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", regularExpressionPhone];
+    NSPredicate *predicateCell = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", regularExpressionCell];
+    NSCompoundPredicate *predicate = [NSCompoundPredicate orPredicateWithSubpredicates:[NSArray arrayWithObjects:predicatePhone, predicateCell, nil]];
+    BOOL available = [predicate evaluateWithObject:text];
+    return available;
+}
+
 @end

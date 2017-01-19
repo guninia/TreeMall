@@ -90,7 +90,6 @@ typedef enum : NSUInteger {
     }
     __weak EntranceViewController *weakSelf = self;
     NSURL *url = [NSURL URLWithString:SymphoxAPI_homepage];
-//    NSString *postString = [NSString stringWithFormat:@"%@=%@", SymphoxAPIParam_txid, @"TM_O_01"];
     NSDictionary *postDictionary = [NSDictionary dictionaryWithObjectsAndKeys:@"TM_O_01", SymphoxAPIParam_txid, nil];
     [[SHAPIAdapter sharedAdapter] sendRequestFromObject:weakSelf ToUrl:url withHeaderFields:nil andPostObject:postDictionary inPostFormat:SHPostFormatUrlEncoded encrypted:NO decryptedReturnData:NO completion:^(id resultObject, NSError *error){
         

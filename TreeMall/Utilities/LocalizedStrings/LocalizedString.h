@@ -26,6 +26,12 @@
 + (NSString *)PasswordInputError;
 + (NSString *)Confirm;
 + (NSString *)NetworkError;
++ (NSString *)RegisterFailed;
++ (NSString *)LoginFailed;
++ (NSString *)UnknownError;
++ (NSString *)JoinMember;
++ (NSString *)ForgetPassword;
++ (NSString *)PhoneInputError;
 
 
 @end
