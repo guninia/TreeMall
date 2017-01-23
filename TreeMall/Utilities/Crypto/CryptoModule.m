@@ -48,7 +48,7 @@ static CryptoModule *gCryptoModule = nil;
         NSString *dateString = [dateFormmater stringFromDate:[NSDate date]];
         
         NSString *compositeString = [_apiKey stringByAppendingString:dateString];
-        NSLog(@"compositeString[%@]", compositeString);
+//        NSLog(@"compositeString[%@]", compositeString);
         NSData *md5String = [CryptoTool md5DataForString:compositeString];
         
         _key = md5String;
@@ -60,9 +60,9 @@ static CryptoModule *gCryptoModule = nil;
 
 - (NSData *)encryptFromSourceData:(NSData *)sourceData
 {
-    NSLog(@"encryptFromSourceData - key[%@]", self.key);
-    NSString *sourceString = [[NSString alloc] initWithData:sourceData encoding:NSUTF8StringEncoding];
-    NSLog(@"encryptFromSourceData - sourceString[%@]", sourceString);
+//    NSLog(@"encryptFromSourceData - key[%@]", self.key);
+//    NSString *sourceString = [[NSString alloc] initWithData:sourceData encoding:NSUTF8StringEncoding];
+//    NSLog(@"encryptFromSourceData - sourceString[%@]", sourceString);
     NSData *aesEncryptedData = [CryptoTool encryptData:sourceData withKey:self.key andIV:nil forAlgorithm:CryptoAlgorithmAES128ECBPKCS7];
     NSData *data = [CryptoTool base64EncodedDataFromData:aesEncryptedData withSeparateLines:NO];
     return data;
@@ -96,26 +96,29 @@ static CryptoModule *gCryptoModule = nil;
             NSLog(@"API status[%@][%@]", statusId, statusDescription);
             
             NSString *result = [dictionary objectForKey:SymphoxAPIParam_result];
-            if (result)
+            if ([statusId compare:@"E000" options:NSCaseInsensitiveSearch] == NSOrderedSame)
             {
-                NSData *resultData = [result dataUsingEncoding:NSUTF8StringEncoding];
-                NSData *sourceData = [CryptoTool dataFromBase64EncodedData:resultData];
-                if (sourceData)
+                if (result)
                 {
-                    data = [CryptoTool decryptData:sourceData withKey:self.key andIV:nil forAlgorithm:CryptoAlgorithmAES128ECBPKCS7];
-                    if (data == nil)
+                    NSData *resultData = [result dataUsingEncoding:NSUTF8StringEncoding];
+                    NSData *sourceData = [CryptoTool dataFromBase64EncodedData:resultData];
+                    if (sourceData)
                     {
-                        error = [NSError errorWithDomain:NSCocoaErrorDomain code:CryptoErrorCodeDecryptAesError userInfo:userInfo];
+                        data = [CryptoTool decryptData:sourceData withKey:self.key andIV:nil forAlgorithm:CryptoAlgorithmAES128ECBPKCS7];
+                        if (data == nil)
+                        {
+                            error = [NSError errorWithDomain:NSCocoaErrorDomain code:CryptoErrorCodeDecryptAesError userInfo:userInfo];
+                        }
                     }
-                }
-                else
-                {
-                    error = [NSError errorWithDomain:NSCocoaErrorDomain code:CryptoErrorCodeDecodeBase64Error userInfo:userInfo];
+                    else
+                    {
+                        error = [NSError errorWithDomain:NSCocoaErrorDomain code:CryptoErrorCodeDecodeBase64Error userInfo:userInfo];
+                    }
                 }
             }
             else
             {
-                error = [NSError errorWithDomain:NSCocoaErrorDomain code:CryptoErrorCodeNoResultError userInfo:userInfo];
+                error = [NSError errorWithDomain:NSCocoaErrorDomain code:CryptoErrorCodeServerResponseError userInfo:userInfo];
             }
         }
         else

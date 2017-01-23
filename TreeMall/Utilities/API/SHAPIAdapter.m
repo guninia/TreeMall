@@ -92,7 +92,7 @@ static SHAPIAdapter *gAPIAdapter = nil;
                         NSString *value = [postDictionary objectForKey:key];
                         [string appendFormat:@"%@=%@", key, value];
                     }
-                    NSLog(@"sendRequestFromObject - postString[%@]", string);
+//                    NSLog(@"sendRequestFromObject - postString[%@]", string);
                     postRawData = [string dataUsingEncoding:NSUTF8StringEncoding];
                 }
                 contentType = @"application/x-www-form-urlencoded; charset=utf8";
@@ -142,7 +142,7 @@ static SHAPIAdapter *gAPIAdapter = nil;
         for (NSString *field in [headerFields allKeys])
         {
             NSString *value = [headerFields objectForKey:field];
-            NSLog(@"Field[%@] Value[%@]", field, value);
+//            NSLog(@"Field[%@] Value[%@]", field, value);
             [request addValue:value forHTTPHeaderField:field];
         }
     }
@@ -158,13 +158,13 @@ static SHAPIAdapter *gAPIAdapter = nil;
             postData = postRawData;
         }
         NSString *postString = [[NSString alloc] initWithData:postData encoding:NSUTF8StringEncoding];
-        NSLog(@"sendRequestToUrl - postString:\n%@", postString);
+//        NSLog(@"sendRequestToUrl - postString:\n%@", postString);
         NSString *lengthString = [NSString stringWithFormat:@"%lu", (unsigned long)[postString length]];
-        NSLog(@"sendRequestToUrl[%@] - post length[%@]", [url absoluteString], lengthString);
+//        NSLog(@"sendRequestToUrl[%@] - post length[%@]", [url absoluteString], lengthString);
         [request setHTTPMethod:@"POST"];
         [request setValue:lengthString forHTTPHeaderField:@"Content-Length"];
         [request setValue:contentType forHTTPHeaderField:@"Content-Type"];
-        NSLog(@"sendRequestToUrl - contentType[%@]", contentType);
+//        NSLog(@"sendRequestToUrl - contentType[%@]", contentType);
         [request setHTTPBody:postData];
     }
     else
@@ -175,7 +175,7 @@ static SHAPIAdapter *gAPIAdapter = nil;
     NSURLSessionDataTask *task = [_session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error){
         if (block)
         {
-            NSLog(@"response[%@]:\nerror:\n%@\ndata:\n%@", [response description], [error description], [data description]);
+//            NSLog(@"response[%@]:\nerror:\n%@\ndata:\n%@", [response description], [error description], [data description]);
             __block id resultObject = nil;
             NSString *originalMessageFromServer = nil;
             __block NSError *finalError = error;

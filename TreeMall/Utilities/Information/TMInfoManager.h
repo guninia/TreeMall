@@ -36,5 +36,6 @@ typedef enum : NSUInteger {
 
 - (void)readPromotionForIdentifier:(NSString *)identifier;
 - (BOOL)alreadyReadPromotionForIdentifier:(NSString *)identifier;
+- (void)updateUserInformationFromInfoDictionary:(NSDictionary *)infoDictionary;
 
 @end

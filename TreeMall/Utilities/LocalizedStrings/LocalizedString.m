@@ -186,7 +186,7 @@
     static NSString *LoginFailed = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        LoginFailed = NSLocalizedString(@"NetworkError", nil);
+        LoginFailed = NSLocalizedString(@"LoginFailed", nil);
     });
     return LoginFailed;
 }
@@ -229,6 +229,146 @@
         PhoneInputError = NSLocalizedString(@"PhoneInputError", nil);
     });
     return PhoneInputError;
+}
+
++ (NSString *)ProcessFailed
+{
+    static NSString *ProcessFailed = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        ProcessFailed = NSLocalizedString(@"ProcessFailed", nil);
+    });
+    return ProcessFailed;
+}
+
++ (NSString *)PasswordResent
+{
+    static NSString *PasswordResent = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        PasswordResent = NSLocalizedString(@"PasswordResent", nil);
+    });
+    return PasswordResent;
+}
+
++ (NSString *)MessageFromSMS
+{
+    static NSString *MessageFromSMS = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        MessageFromSMS = NSLocalizedString(@"MessageFromSMS", nil);
+    });
+    return MessageFromSMS;
+}
+
++ (NSString *)And
+{
+    static NSString *And = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        And = NSLocalizedString(@"And", nil);
+    });
+    return And;
+}
+
++ (NSString *)NoWayToSendPassword
+{
+    static NSString *NoWayToSendPassword = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        NoWayToSendPassword = NSLocalizedString(@"NoWayToSendPassword", nil);
+    });
+    return NoWayToSendPassword;
+}
+
++ (NSString *)UnexpectedFormatFromNetwork
+{
+    static NSString *UnexpectedFormatFromNetwork = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        UnexpectedFormatFromNetwork = NSLocalizedString(@"UnexpectedFormatFromNetwork", nil);
+    });
+    return UnexpectedFormatFromNetwork;
+}
+
++ (NSString *)UnexpectedFormatAfterParsing
+{
+    static NSString *UnexpectedFormatAfterParsing = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        UnexpectedFormatAfterParsing = NSLocalizedString(@"UnexpectedFormatAfterParsing", nil);
+    });
+    return UnexpectedFormatAfterParsing;
+}
+
++ (NSString *)EmailInputError
+{
+    static NSString *EmailInputError = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        EmailInputError = NSLocalizedString(@"EmailInputError", nil);
+    });
+    return EmailInputError;
+}
+
++ (NSString *)PasswordNotConfirmed
+{
+    static NSString *PasswordNotConfirmed = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        PasswordNotConfirmed = NSLocalizedString(@"PasswordNotConfirmed", nil);
+    });
+    return PasswordNotConfirmed;
+}
+
++ (NSString *)RequestMobileVerificationFailed
+{
+    static NSString *RequestMobileVerificationFailed = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        RequestMobileVerificationFailed = NSLocalizedString(@"RequestMobileVerificationFailed", nil);
+    });
+    return RequestMobileVerificationFailed;
+}
+
++ (NSString *)PleaseInputMobileVerificationCode
+{
+    static NSString *PleaseInputMobileVerificationCode = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        PleaseInputMobileVerificationCode = NSLocalizedString(@"PleaseInputMobileVerificationCode", nil);
+    });
+    return PleaseInputMobileVerificationCode;
+}
+
++ (NSString *)AlreadySendVerificationCode
+{
+    static NSString *AlreadySendVerificationCode = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        AlreadySendVerificationCode = NSLocalizedString(@"AlreadySendVerificationCode", nil);
+    });
+    return AlreadySendVerificationCode;
+}
+
++ (NSString *)ResendCode
+{
+    static NSString *ResendCode = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        ResendCode = NSLocalizedString(@"ResendCode", nil);
+    });
+    return ResendCode;
+}
+
++ (NSString *)NextStep
+{
+    static NSString *NextStep = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        NextStep = NSLocalizedString(@"NextStep", nil);
+    });
+    return NextStep;
 }
 
 @end

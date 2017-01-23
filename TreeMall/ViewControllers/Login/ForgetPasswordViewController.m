@@ -18,6 +18,7 @@
 
 - (void)startForgetPasswordProcess;
 - (void)requestPasswordWithOptions:(NSDictionary *)options;
+- (BOOL)processData:(id)data;
 
 - (IBAction)buttonConfirmPressed:(id)sender;
 
@@ -139,20 +140,33 @@
     NSLog(@"login url [%@]", [url absoluteString]);
     NSDictionary *headerFields = [NSDictionary dictionaryWithObjectsAndKeys:apiKey, SymphoxAPIParam_key, token, SymphoxAPIParam_token, nil];
     [[SHAPIAdapter sharedAdapter] sendRequestFromObject:weakSelf ToUrl:url withHeaderFields:headerFields andPostObject:options inPostFormat:SHPostFormatJson encrypted:YES decryptedReturnData:YES completion:^(id resultObject, NSError *error){
+        NSString *errorDescription = nil;
         if (error == nil)
         {
             NSLog(@"resultObject[%@]:\n%@", [[resultObject class] description], [resultObject description]);
             if ([resultObject isKindOfClass:[NSData class]])
             {
                 NSData *data = (NSData *)resultObject;
-                NSString *string = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-                NSLog(@"string[%@]", string);
-                // Should continue to process data.
+//                NSString *string = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+//                NSLog(@"string[%@]", string);
                 
+                id jsonObject = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
+                if (error == nil && jsonObject != nil)
+                {
+                    if ([self processData:jsonObject] == NO)
+                    {
+                        errorDescription = [LocalizedString UnexpectedFormatAfterParsing];
+                    }
+                }
+                else
+                {
+                    errorDescription = error.localizedDescription;
+                }
             }
             else
             {
                 NSLog(@"Unexpected data format.");
+                errorDescription = [LocalizedString UnexpectedFormatFromNetwork];
             }
         }
         else
@@ -168,7 +182,10 @@
             {
                 errorDescription = [LocalizedString UnknownError];
             }
-            UIAlertController *alertController = [UIAlertController alertControllerWithTitle:[LocalizedString LoginFailed] message:errorDescription preferredStyle:UIAlertControllerStyleAlert];
+        }
+        if (errorDescription != nil)
+        {
+            UIAlertController *alertController = [UIAlertController alertControllerWithTitle:[LocalizedString ProcessFailed] message:errorDescription preferredStyle:UIAlertControllerStyleAlert];
             UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:[LocalizedString Confirm] style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
                 [_textFieldAccount setText:@""];
                 [_textFieldPhone setText:@""];
@@ -181,6 +198,54 @@
             [weakSelf presentViewController:alertController animated:YES completion:nil];
         }
     }];
+}
+
+- (BOOL)processData:(id)data
+{
+    if ([data isKindOfClass:[NSDictionary class]] == NO)
+    {
+        return NO;
+    }
+    NSDictionary *jsonObject = (NSDictionary *)data;
+    BOOL sentByEmail = [[jsonObject objectForKey:SymphoxAPIParam_send_email] boolValue];
+    BOOL sentBySMS = [[jsonObject objectForKey:SymphoxAPIParam_send_sms] boolValue];
+    NSString *email = sentByEmail?@"Email":nil;
+    NSString *SMS = sentBySMS?[LocalizedString MessageFromSMS]:nil;
+    NSString *channel = nil;
+    NSString *message = nil;
+    if (email && SMS)
+    {
+        channel = [NSString stringWithFormat:@"%@%@%@", email, [LocalizedString And], SMS];
+    }
+    else if (email || SMS)
+    {
+        channel = (email == nil)?email:SMS;
+    }
+    else
+    {
+        message = [LocalizedString NoWayToSendPassword];
+    }
+    if (message == nil)
+    {
+        message = [NSString stringWithFormat:[LocalizedString PasswordResent], channel];
+    }
+    
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:[LocalizedString Notice] message:message preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *confirmAction = [UIAlertAction actionWithTitle:[LocalizedString Confirm] style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
+        if (self.navigationController)
+        {
+            [self.navigationController popToRootViewControllerAnimated:YES];
+        }
+        else if (self.presentingViewController)
+        {
+            [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
+        }
+    }];
+    [alertController addAction:confirmAction];
+    
+    [self presentViewController:alertController animated:YES completion:nil];
+    
+    return YES;
 }
 
 #pragma mark - UITextFieldDelegate

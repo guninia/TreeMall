@@ -42,7 +42,11 @@
 		689065271E2338C400E5CB26 /* MemberViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 689065251E2338C400E5CB26 /* MemberViewController.xib */; };
 		6890652C1E23470E00E5CB26 /* FavoriteViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6890652A1E23470E00E5CB26 /* FavoriteViewController.m */; };
 		6890652D1E23470E00E5CB26 /* FavoriteViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6890652B1E23470E00E5CB26 /* FavoriteViewController.xib */; };
+		689546441E35DFB400D5CD1E /* AuthenticateViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 689546421E35DFB400D5CD1E /* AuthenticateViewController.m */; };
+		689546451E35DFB400D5CD1E /* AuthenticateViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 689546431E35DFB400D5CD1E /* AuthenticateViewController.xib */; };
 		68A85C7E1E2728CF004DD624 /* TMInfoManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 68A85C7D1E2728CF004DD624 /* TMInfoManager.m */; };
+		68B26FB91E31CB5F00B6D757 /* RegisterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68B26FB71E31CB5F00B6D757 /* RegisterViewController.m */; };
+		68B26FBA1E31CB5F00B6D757 /* RegisterViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 68B26FB81E31CB5F00B6D757 /* RegisterViewController.xib */; };
 		68B68FEF1E24753400DCCF29 /* Utility.m in Sources */ = {isa = PBXBuildFile; fileRef = 68B68FEE1E24753400DCCF29 /* Utility.m */; };
 		68B68FF41E2484A600DCCF29 /* TextHorizontalSeparator.m in Sources */ = {isa = PBXBuildFile; fileRef = 68B68FF31E2484A600DCCF29 /* TextHorizontalSeparator.m */; };
 		68B68FF91E24C30700DCCF29 /* PromotionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68B68FF71E24C30700DCCF29 /* PromotionViewController.m */; };
@@ -156,8 +160,14 @@
 		689065291E23470E00E5CB26 /* FavoriteViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FavoriteViewController.h; path = ViewControllers/Favorite/FavoriteViewController.h; sourceTree = "<group>"; };
 		6890652A1E23470E00E5CB26 /* FavoriteViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FavoriteViewController.m; path = ViewControllers/Favorite/FavoriteViewController.m; sourceTree = "<group>"; };
 		6890652B1E23470E00E5CB26 /* FavoriteViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = FavoriteViewController.xib; path = ViewControllers/Favorite/FavoriteViewController.xib; sourceTree = "<group>"; };
+		689546411E35DFB400D5CD1E /* AuthenticateViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AuthenticateViewController.h; path = ViewControllers/Login/AuthenticateViewController.h; sourceTree = "<group>"; };
+		689546421E35DFB400D5CD1E /* AuthenticateViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AuthenticateViewController.m; path = ViewControllers/Login/AuthenticateViewController.m; sourceTree = "<group>"; };
+		689546431E35DFB400D5CD1E /* AuthenticateViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = AuthenticateViewController.xib; path = ViewControllers/Login/AuthenticateViewController.xib; sourceTree = "<group>"; };
 		68A85C7C1E2728CF004DD624 /* TMInfoManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TMInfoManager.h; path = Utilities/Information/TMInfoManager.h; sourceTree = "<group>"; };
 		68A85C7D1E2728CF004DD624 /* TMInfoManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TMInfoManager.m; path = Utilities/Information/TMInfoManager.m; sourceTree = "<group>"; };
+		68B26FB61E31CB5F00B6D757 /* RegisterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RegisterViewController.h; path = ViewControllers/Login/RegisterViewController.h; sourceTree = "<group>"; };
+		68B26FB71E31CB5F00B6D757 /* RegisterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RegisterViewController.m; path = ViewControllers/Login/RegisterViewController.m; sourceTree = "<group>"; };
+		68B26FB81E31CB5F00B6D757 /* RegisterViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = RegisterViewController.xib; path = ViewControllers/Login/RegisterViewController.xib; sourceTree = "<group>"; };
 		68B68FED1E24753400DCCF29 /* Utility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Utility.h; path = Utilities/Utility.h; sourceTree = "<group>"; };
 		68B68FEE1E24753400DCCF29 /* Utility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Utility.m; path = Utilities/Utility.m; sourceTree = "<group>"; };
 		68B68FF21E2484A600DCCF29 /* TextHorizontalSeparator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TextHorizontalSeparator.h; path = Component/Separator/TextHorizontalSeparator.h; sourceTree = "<group>"; };
@@ -551,6 +561,12 @@
 				68E401331E30B09900BFF66B /* ForgetPasswordViewController.h */,
 				68E401341E30B09900BFF66B /* ForgetPasswordViewController.m */,
 				68E401351E30B09900BFF66B /* ForgetPasswordViewController.xib */,
+				68B26FB61E31CB5F00B6D757 /* RegisterViewController.h */,
+				68B26FB71E31CB5F00B6D757 /* RegisterViewController.m */,
+				68B26FB81E31CB5F00B6D757 /* RegisterViewController.xib */,
+				689546411E35DFB400D5CD1E /* AuthenticateViewController.h */,
+				689546421E35DFB400D5CD1E /* AuthenticateViewController.m */,
+				689546431E35DFB400D5CD1E /* AuthenticateViewController.xib */,
 			);
 			name = Login;
 			sourceTree = "<group>";
@@ -749,6 +765,7 @@
 				68E401371E30B09900BFF66B /* ForgetPasswordViewController.xib in Resources */,
 				68E401321E309B7700BFF66B /* TermsViewController.xib in Resources */,
 				685939BD1E1F49DF00351FFB /* LaunchScreen.storyboard in Resources */,
+				689546451E35DFB400D5CD1E /* AuthenticateViewController.xib in Resources */,
 				685939BA1E1F49DF00351FFB /* Assets.xcassets in Resources */,
 				6890650F1E23334400E5CB26 /* EntranceViewController.xib in Resources */,
 				68B68FFA1E24C30700DCCF29 /* PromotionViewController.xib in Resources */,
@@ -757,6 +774,7 @@
 				685939B51E1F49DF00351FFB /* Main.storyboard in Resources */,
 				689065211E23387200E5CB26 /* NotificationViewController.xib in Resources */,
 				6890652D1E23470E00E5CB26 /* FavoriteViewController.xib in Resources */,
+				68B26FBA1E31CB5F00B6D757 /* RegisterViewController.xib in Resources */,
 				6811BC751E27757100626A4A /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -807,6 +825,7 @@
 				689065201E23387200E5CB26 /* NotificationViewController.m in Sources */,
 				68D55E831E25D938005D1BB7 /* UIImage+GIF.m in Sources */,
 				6890651A1E2337F900E5CB26 /* CartViewController.m in Sources */,
+				68B26FB91E31CB5F00B6D757 /* RegisterViewController.m in Sources */,
 				68CA36B21E23709400A70BCC /* EntranceTableViewCell.m in Sources */,
 				685939AC1E1F49DF00351FFB /* main.m in Sources */,
 				68D55E841E25D938005D1BB7 /* UIImage+MultiFormat.m in Sources */,
@@ -816,6 +835,7 @@
 				68D55E881E25D938005D1BB7 /* UIView+WebCache.m in Sources */,
 				68D55E771E25D938005D1BB7 /* MKAnnotationView+WebCache.m in Sources */,
 				68D55E791E25D938005D1BB7 /* NSImage+WebCache.m in Sources */,
+				689546441E35DFB400D5CD1E /* AuthenticateViewController.m in Sources */,
 				685939B81E1F49DF00351FFB /* TreeMall.xcdatamodeld in Sources */,
 				68D55E7D1E25D938005D1BB7 /* SDWebImageDecoder.m in Sources */,
 				68D55E851E25D938005D1BB7 /* UIImage+WebP.m in Sources */,

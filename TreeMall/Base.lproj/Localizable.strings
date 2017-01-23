@@ -29,5 +29,17 @@
 "UnknownError"="Unknown Error";
 "JoinMember"="Join Member";
 "ForgetPassword"="Forget Password";
-
-
+"ProcessFailed"="Process failed";
+"PasswordResent"="Password re-sent by %@";
+"MessageFromSMS"="Message From SMS";
+"And"="and";
+"NoWayToSendPassword"="No Way To Send Password";
+"UnexpectedFormatFromNetwork"="Unexpected Format From Network";
+"UnexpectedFormatAfterParsing"="Unexpected Format After Parsing";
+"EmailInputError"="Email Input Error";
+"PasswordNotConfirmed"="Password Not Confirmed";
+"RequestMobileVerificationFailed"="Request Mobile Verification Failed";
+"PleaseInputMobileVerificationCode"="Mobile Verify";
+"AlreadySendVerificationCode"="Already send verification code";
+"ResendCode"="Resend";
+"NextStep"="Next";

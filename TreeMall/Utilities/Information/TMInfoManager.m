@@ -8,6 +8,7 @@
 
 #import "TMInfoManager.h"
 #import "CryptoModule.h"
+#import "APIDefinition.h"
 
 static NSString *TMInfoArchiveKey_PromotionRead = @"PromotionRead";
 static NSString *TMInfoArchiveKey_UserInformation = @"UserInformation";
@@ -269,6 +270,48 @@ static NSUInteger PromotionReadNumberMax = 100;
         NSLog(@"TMInfoManager - No archive.");
     }
     return dictionary;
+}
+
+- (void)updateUserInformationFromInfoDictionary:(NSDictionary *)infoDictionary
+{
+    NSNumber *identifier = [infoDictionary objectForKey:SymphoxAPIParam_user_num];
+    NSString *name = [infoDictionary objectForKey:SymphoxAPIParam_name];
+    NSString *gender = [infoDictionary objectForKey:SymphoxAPIParam_sex];
+    NSNumber *epoint = [infoDictionary objectForKey:SymphoxAPIParam_epoint];
+    NSNumber *ecoupon = [infoDictionary objectForKey:SymphoxAPIParam_ecoupon];
+    if ((self.userIdentifier == nil) || ([[self.userIdentifier stringValue] isEqualToString:[identifier stringValue]] == NO))
+    {
+        self.userIdentifier = nil;
+        self.userName = nil;
+        self.userGender = TMGenderTotal;
+        self.userEpoint = nil;
+        self.userEcoupon = nil;
+    }
+    if (identifier)
+    {
+        self.userIdentifier = identifier;
+    }
+    if (name)
+    {
+        self.userName = name;
+    }
+    if ([gender length] == 0)
+    {
+        self.userGender = TMGenderUnknown;
+    }
+    else
+    {
+        // Should implement once receive real data.
+        self.userGender = TMGenderUnknown;
+    }
+    if (epoint)
+    {
+        self.userEpoint = epoint;
+    }
+    if (ecoupon)
+    {
+        self.userEcoupon = ecoupon;
+    }
 }
 
 #pragma mark - Private Methods

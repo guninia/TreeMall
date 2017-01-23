@@ -63,7 +63,7 @@
             {
                 NSData *data = (NSData *)resultObject;
                 NSString *string = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-                NSLog(@"string[%@]", string);
+//                NSLog(@"string[%@]", string);
                 [SHAPIAdapter sharedAdapter].token = string;
                 
                 [[NSNotificationCenter defaultCenter] postNotificationName:PostNotificationName_TokenUpdated object:nil];

@@ -15,6 +15,7 @@ typedef enum : NSUInteger {
     CryptoErrorCodeDecodeBase64Error,
     CryptoErrorCodeUnexpectedFormatError,
     CryptoErrorCodeNoResultError,
+    CryptoErrorCodeServerResponseError,
     CryptoErrorCodeTotal
 } CryptoErrorCode;
 

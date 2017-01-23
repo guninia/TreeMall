@@ -28,3 +28,17 @@
 "UnknownError"="發生不明錯誤\n請洽客服人員";
 "JoinMember"="加入會員";
 "ForgetPassword"="忘記密碼";
+"ProcessFailed"="無法完成作業";
+"PasswordResent"="密碼已透過%@重新發送";
+"MessageFromSMS"="簡訊";
+"And"="和";
+"NoWayToSendPassword"="您未留下可供重新發送密碼的方式\n請洽客服人員";
+"UnexpectedFormatFromNetwork"="網路資料格式錯誤";
+"UnexpectedFormatAfterParsing"="資料解析格式錯誤";
+"EmailInputError"="請輸入有效的電子郵件帳號";
+"PasswordNotConfirmed"="密碼驗證失敗\n「設定密碼」與「確認密碼」欄位\n需填入相同的內容";
+"RequestMobileVerificationFailed"="請求發送驗證碼失敗";
+"PleaseInputMobileVerificationCode"="請輸入手機驗證碼";
+"AlreadySendVerificationCode"="已發送簡訊驗證碼至您的手機";
+"ResendCode"="重發驗證碼";
+"NextStep"="下一步";

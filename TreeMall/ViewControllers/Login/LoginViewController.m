@@ -19,6 +19,7 @@
 #import "Definition.h"
 #import "TermsViewController.h"
 #import "ForgetPasswordViewController.h"
+#import "RegisterViewController.h"
 
 @interface LoginViewController ()
 
@@ -403,12 +404,12 @@
     [[SHAPIAdapter sharedAdapter] sendRequestFromObject:weakSelf ToUrl:url withHeaderFields:headerFields andPostObject:options inPostFormat:SHPostFormatJson encrypted:YES decryptedReturnData:YES completion:^(id resultObject, NSError *error){
         if (error == nil)
         {
-            NSLog(@"resultObject[%@]:\n%@", [[resultObject class] description], [resultObject description]);
+//            NSLog(@"resultObject[%@]:\n%@", [[resultObject class] description], [resultObject description]);
             if ([resultObject isKindOfClass:[NSData class]])
             {
                 NSData *data = (NSData *)resultObject;
-                NSString *string = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-                NSLog(@"string[%@]", string);
+//                NSString *string = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+//                NSLog(@"string[%@]", string);
                 if ([self processRegisterData:data])
                 {
                     // Should go next step.
@@ -441,31 +442,7 @@
         if ([jsonObject isKindOfClass:[NSDictionary class]])
         {
             NSDictionary *dictionary = (NSDictionary *)jsonObject;
-            NSNumber *identifier = [dictionary objectForKey:SymphoxAPIParam_user_num];
-            if (identifier)
-            {
-                [TMInfoManager sharedManager].userIdentifier = identifier;
-            }
-            NSString *name = [dictionary objectForKey:SymphoxAPIParam_name];
-            if (name)
-            {
-                [TMInfoManager sharedManager].userName = name;
-            }
-            NSString *gender = [dictionary objectForKey:SymphoxAPIParam_sex];
-            if ([gender length] == 0)
-            {
-                [TMInfoManager sharedManager].userGender = TMGenderUnknown;
-            }
-            NSNumber *epoint = [dictionary objectForKey:SymphoxAPIParam_epoint];
-            if (epoint)
-            {
-                [TMInfoManager sharedManager].userEpoint = epoint;
-            }
-            NSNumber *ecoupon = [dictionary objectForKey:SymphoxAPIParam_ecoupon];
-            if (ecoupon)
-            {
-                [TMInfoManager sharedManager].userEcoupon = ecoupon;
-            }
+            [[TMInfoManager sharedManager] updateUserInformationFromInfoDictionary:dictionary];
             success = YES;
         }
     }
@@ -531,9 +508,10 @@
     NSLog(@"login url [%@]", [url absoluteString]);
     NSDictionary *headerFields = [NSDictionary dictionaryWithObjectsAndKeys:apiKey, SymphoxAPIParam_key, token, SymphoxAPIParam_token, nil];
     [[SHAPIAdapter sharedAdapter] sendRequestFromObject:weakSelf ToUrl:url withHeaderFields:headerFields andPostObject:options inPostFormat:SHPostFormatJson encrypted:YES decryptedReturnData:YES completion:^(id resultObject, NSError *error){
+        NSString *errorDescription = nil;
         if (error == nil)
         {
-            NSLog(@"resultObject[%@]:\n%@", [[resultObject class] description], [resultObject description]);
+//            NSLog(@"resultObject[%@]:\n%@", [[resultObject class] description], [resultObject description]);
             if ([resultObject isKindOfClass:[NSData class]])
             {
                 NSData *data = (NSData *)resultObject;
@@ -545,13 +523,14 @@
             else
             {
                 NSLog(@"Unexpected data format.");
+                errorDescription = [LocalizedString UnexpectedFormatFromNetwork];
             }
         }
         else
         {
             NSLog(@"error:\n%@", [error description]);
             NSDictionary *userInfo = error.userInfo;
-            NSString *errorDescription = [userInfo objectForKey:SymphoxAPIParam_status_desc];
+            errorDescription = [userInfo objectForKey:SymphoxAPIParam_status_desc];
             if (errorDescription == nil)
             {
                 errorDescription = error.localizedDescription;
@@ -560,6 +539,9 @@
             {
                 errorDescription = [LocalizedString UnknownError];
             }
+        }
+        if (errorDescription != nil)
+        {
             UIAlertController *alertController = [UIAlertController alertControllerWithTitle:[LocalizedString LoginFailed] message:errorDescription preferredStyle:UIAlertControllerStyleAlert];
             UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:[LocalizedString Confirm] style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
                 [_textFieldPassword setText:@""];
@@ -611,7 +593,15 @@
 
 - (void)actButtonJoinMemberPressed:(id)sender
 {
-    
+    RegisterViewController *viewController = [[RegisterViewController alloc] initWithNibName:@"RegisterViewController" bundle:[NSBundle mainBundle]];
+    if (self.navigationController)
+    {
+        [self.navigationController pushViewController:viewController animated:YES];
+    }
+    else
+    {
+        [self presentViewController:viewController animated:YES completion:nil];
+    }
 }
 
 - (void)actButtonForgetPasswordPressed:(id)sender

@@ -32,6 +32,19 @@
 + (NSString *)JoinMember;
 + (NSString *)ForgetPassword;
 + (NSString *)PhoneInputError;
-
++ (NSString *)ProcessFailed;
++ (NSString *)PasswordResent;
++ (NSString *)MessageFromSMS;
++ (NSString *)And;
++ (NSString *)NoWayToSendPassword;
++ (NSString *)UnexpectedFormatFromNetwork;
++ (NSString *)UnexpectedFormatAfterParsing;
++ (NSString *)EmailInputError;
++ (NSString *)PasswordNotConfirmed;
++ (NSString *)RequestMobileVerificationFailed;
++ (NSString *)PleaseInputMobileVerificationCode;
++ (NSString *)AlreadySendVerificationCode;
++ (NSString *)ResendCode;
++ (NSString *)NextStep;
 
 @end
