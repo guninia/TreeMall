@@ -42,3 +42,12 @@
 "AlreadySendVerificationCode"="已發送簡訊驗證碼至您的手機";
 "ResendCode"="重發驗證碼";
 "NextStep"="下一步";
+"Authentication"="身份認證";
+"SelectAuthenticationType"="選擇身份認證項目";
+"CreditCardMemberAuth"="國泰世華信用卡卡友認證";
+"ConglomerateEmployeeAuth"="集團員工認證";
+"OtherCustomerOfCathay"="國泰金控其他客戶";
+"Cancel"="取消";
+"AuthenticateSuccess"="會員驗證成功";
+"AuthenticateFailed"="會員驗證失敗";
+

@@ -44,6 +44,9 @@
 		6890652D1E23470E00E5CB26 /* FavoriteViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6890652B1E23470E00E5CB26 /* FavoriteViewController.xib */; };
 		689546441E35DFB400D5CD1E /* AuthenticateViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 689546421E35DFB400D5CD1E /* AuthenticateViewController.m */; };
 		689546451E35DFB400D5CD1E /* AuthenticateViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 689546431E35DFB400D5CD1E /* AuthenticateViewController.xib */; };
+		689546481E35F38700D5CD1E /* PagingGridView.m in Sources */ = {isa = PBXBuildFile; fileRef = 689546471E35F38700D5CD1E /* PagingGridView.m */; };
+		6895464D1E3608E500D5CD1E /* WebViewViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6895464B1E3608E500D5CD1E /* WebViewViewController.m */; };
+		6895464E1E3608E500D5CD1E /* WebViewViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6895464C1E3608E500D5CD1E /* WebViewViewController.xib */; };
 		68A85C7E1E2728CF004DD624 /* TMInfoManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 68A85C7D1E2728CF004DD624 /* TMInfoManager.m */; };
 		68B26FB91E31CB5F00B6D757 /* RegisterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68B26FB71E31CB5F00B6D757 /* RegisterViewController.m */; };
 		68B26FBA1E31CB5F00B6D757 /* RegisterViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 68B26FB81E31CB5F00B6D757 /* RegisterViewController.xib */; };
@@ -163,6 +166,11 @@
 		689546411E35DFB400D5CD1E /* AuthenticateViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AuthenticateViewController.h; path = ViewControllers/Login/AuthenticateViewController.h; sourceTree = "<group>"; };
 		689546421E35DFB400D5CD1E /* AuthenticateViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AuthenticateViewController.m; path = ViewControllers/Login/AuthenticateViewController.m; sourceTree = "<group>"; };
 		689546431E35DFB400D5CD1E /* AuthenticateViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = AuthenticateViewController.xib; path = ViewControllers/Login/AuthenticateViewController.xib; sourceTree = "<group>"; };
+		689546461E35F38700D5CD1E /* PagingGridView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PagingGridView.h; path = Component/PagingGridView/PagingGridView.h; sourceTree = "<group>"; };
+		689546471E35F38700D5CD1E /* PagingGridView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PagingGridView.m; path = Component/PagingGridView/PagingGridView.m; sourceTree = "<group>"; };
+		6895464A1E3608E500D5CD1E /* WebViewViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WebViewViewController.h; path = ViewControllers/WebViewController/WebViewViewController.h; sourceTree = "<group>"; };
+		6895464B1E3608E500D5CD1E /* WebViewViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WebViewViewController.m; path = ViewControllers/WebViewController/WebViewViewController.m; sourceTree = "<group>"; };
+		6895464C1E3608E500D5CD1E /* WebViewViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = WebViewViewController.xib; path = ViewControllers/WebViewController/WebViewViewController.xib; sourceTree = "<group>"; };
 		68A85C7C1E2728CF004DD624 /* TMInfoManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TMInfoManager.h; path = Utilities/Information/TMInfoManager.h; sourceTree = "<group>"; };
 		68A85C7D1E2728CF004DD624 /* TMInfoManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TMInfoManager.m; path = Utilities/Information/TMInfoManager.m; sourceTree = "<group>"; };
 		68B26FB61E31CB5F00B6D757 /* RegisterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RegisterViewController.h; path = ViewControllers/Login/RegisterViewController.h; sourceTree = "<group>"; };
@@ -424,6 +432,7 @@
 		689065041E23321E00E5CB26 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				689546491E3608C200D5CD1E /* WebViewController */,
 				68B68FF51E24C28600DCCF29 /* Promotion */,
 				68CA36B91E2387DD00A70BCC /* Login */,
 				689065281E2346EB00E5CB26 /* Favorite */,
@@ -458,6 +467,8 @@
 				689065111E23368100E5CB26 /* ShoppingMallViewController.h */,
 				689065121E23368100E5CB26 /* ShoppingMallViewController.m */,
 				689065131E23368100E5CB26 /* ShoppingMallViewController.xib */,
+				689546461E35F38700D5CD1E /* PagingGridView.h */,
+				689546471E35F38700D5CD1E /* PagingGridView.m */,
 			);
 			name = ShoppingMall;
 			sourceTree = "<group>";
@@ -500,6 +511,16 @@
 				6890652B1E23470E00E5CB26 /* FavoriteViewController.xib */,
 			);
 			name = Favorite;
+			sourceTree = "<group>";
+		};
+		689546491E3608C200D5CD1E /* WebViewController */ = {
+			isa = PBXGroup;
+			children = (
+				6895464A1E3608E500D5CD1E /* WebViewViewController.h */,
+				6895464B1E3608E500D5CD1E /* WebViewViewController.m */,
+				6895464C1E3608E500D5CD1E /* WebViewViewController.xib */,
+			);
+			name = WebViewController;
 			sourceTree = "<group>";
 		};
 		68A85C7B1E272835004DD624 /* Infomation */ = {
@@ -769,6 +790,7 @@
 				685939BA1E1F49DF00351FFB /* Assets.xcassets in Resources */,
 				6890650F1E23334400E5CB26 /* EntranceViewController.xib in Resources */,
 				68B68FFA1E24C30700DCCF29 /* PromotionViewController.xib in Resources */,
+				6895464E1E3608E500D5CD1E /* WebViewViewController.xib in Resources */,
 				68CA36A61E2362FF00A70BCC /* Localizable.strings in Resources */,
 				6890651B1E2337F900E5CB26 /* CartViewController.xib in Resources */,
 				685939B51E1F49DF00351FFB /* Main.storyboard in Resources */,
@@ -802,6 +824,7 @@
 			files = (
 				68B68FF91E24C30700DCCF29 /* PromotionViewController.m in Sources */,
 				685939E91E1F518700351FFB /* CryptoTool.m in Sources */,
+				6895464D1E3608E500D5CD1E /* WebViewViewController.m in Sources */,
 				68E401361E30B09900BFF66B /* ForgetPasswordViewController.m in Sources */,
 				68D55E871E25D938005D1BB7 /* UIImageView+WebCache.m in Sources */,
 				685939B21E1F49DF00351FFB /* ViewController.m in Sources */,
@@ -829,6 +852,7 @@
 				68CA36B21E23709400A70BCC /* EntranceTableViewCell.m in Sources */,
 				685939AC1E1F49DF00351FFB /* main.m in Sources */,
 				68D55E841E25D938005D1BB7 /* UIImage+MultiFormat.m in Sources */,
+				689546481E35F38700D5CD1E /* PagingGridView.m in Sources */,
 				68D55E7F1E25D938005D1BB7 /* SDWebImageDownloaderOperation.m in Sources */,
 				685939ED1E1F775900351FFB /* CryptoModule.m in Sources */,
 				68D55E8E1E25DCF8005D1BB7 /* FLAnimatedImage.m in Sources */,

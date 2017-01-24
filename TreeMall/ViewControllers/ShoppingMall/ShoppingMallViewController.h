@@ -10,4 +10,8 @@
 
 @interface ShoppingMallViewController : UIViewController
 
+@property (nonatomic, strong) IBOutlet UICollectionView *collectionViewCategory;
+@property (nonatomic, strong) IBOutlet UITableView *tableViewSubcategory;
+@property (nonatomic, strong) IBOutlet UITableView *tableViewExtraSubcategory;
+
 @end

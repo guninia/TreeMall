@@ -62,14 +62,14 @@
     [_textFieldEmail setAutocorrectionType:UITextAutocorrectionTypeNo];
     [_textFieldEmail setAutocapitalizationType:UITextAutocapitalizationTypeNone];
     [_textFieldEmail setKeyboardType:UIKeyboardTypeEmailAddress];
-    [_textFieldEmail setReturnKeyType:UIReturnKeyDone];
+    [_textFieldEmail setReturnKeyType:UIReturnKeyNext];
     [_textFieldEmail setDelegate:self];
     
     [_textFieldPhone setKeyboardType:UIKeyboardTypePhonePad];
     [_textFieldPhone setDelegate:self];
     
     [_textFieldPassword setKeyboardType:UIKeyboardTypeASCIICapable];
-    [_textFieldPassword setReturnKeyType:UIReturnKeyDone];
+    [_textFieldPassword setReturnKeyType:UIReturnKeyNext];
     [_textFieldPassword setSecureTextEntry:YES];
     [_textFieldPassword setAutocorrectionType:UITextAutocorrectionTypeNo];
     [_textFieldPassword setAutocapitalizationType:UITextAutocapitalizationTypeNone];
@@ -357,9 +357,10 @@
     NSString *apiKey = [CryptoModule sharedModule].apiKey;
     NSString *token = [SHAPIAdapter sharedAdapter].token;
     NSURL *url = [[NSURL URLWithString:SymphoxAPI_register] URLByAppendingPathComponent:type];
-    NSLog(@"register url [%@]", [url absoluteString]);
+    NSLog(@"registerWithOptions - register url [%@]", [url absoluteString]);
     NSDictionary *headerFields = [NSDictionary dictionaryWithObjectsAndKeys:apiKey, SymphoxAPIParam_key, token, SymphoxAPIParam_token, nil];
     [[SHAPIAdapter sharedAdapter] sendRequestFromObject:weakSelf ToUrl:url withHeaderFields:headerFields andPostObject:options inPostFormat:SHPostFormatJson encrypted:YES decryptedReturnData:YES completion:^(id resultObject, NSError *error){
+        NSString *errorDescription = nil;
         if (error == nil)
         {
             //            NSLog(@"resultObject[%@]:\n%@", [[resultObject class] description], [resultObject description]);
@@ -378,17 +379,43 @@
                 }
                 else
                 {
-                    NSLog(@"Cannot process register data.");
+                    NSLog(@"registerWithOptions - Cannot process register data.");
+                    errorDescription = [LocalizedString UnexpectedFormatAfterParsing];
                 }
             }
             else
             {
-                NSLog(@"Unexpected data format.");
+                NSLog(@"registerWithOptions - Unexpected data format.");
+                errorDescription = [LocalizedString UnexpectedFormatFromNetwork];
             }
         }
         else
         {
-            NSLog(@"error:\n%@", [error description]);
+            NSLog(@"registerWithOptions - error:\n%@", [error description]);
+            NSDictionary *userInfo = error.userInfo;
+            errorDescription = [userInfo objectForKey:SymphoxAPIParam_status_desc];
+            if (errorDescription == nil)
+            {
+                errorDescription = error.localizedDescription;
+            }
+            if (errorDescription == nil)
+            {
+                errorDescription = [LocalizedString UnknownError];
+            }
+        }
+        if (errorDescription != nil)
+        {
+            UIAlertController *alertController = [UIAlertController alertControllerWithTitle:[LocalizedString RegisterFailed] message:errorDescription preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:[LocalizedString Confirm] style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
+                [_textFieldPassword setText:@""];
+                [_textFieldConfirm setText:@""];
+                if ([_textFieldPassword canBecomeFirstResponder])
+                {
+                    [_textFieldPassword becomeFirstResponder];
+                }
+            }];
+            [alertController addAction:cancelAction];
+            [weakSelf presentViewController:alertController animated:YES completion:nil];
         }
     }];
 }
@@ -470,6 +497,20 @@
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
     [textField resignFirstResponder];
+    if (textField == _textFieldEmail)
+    {
+        if ([_textFieldPhone canBecomeFirstResponder])
+        {
+            [_textFieldPhone becomeFirstResponder];
+        }
+    }
+    else if (textField == _textFieldPassword)
+    {
+        if ([_textFieldConfirm canBecomeFirstResponder])
+        {
+            [_textFieldConfirm becomeFirstResponder];
+        }
+    }
     return YES;
 }
 

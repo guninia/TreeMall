@@ -371,4 +371,84 @@
     return NextStep;
 }
 
++ (NSString *)Authentication
+{
+    static NSString *Authentication = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        Authentication = NSLocalizedString(@"Authentication", nil);
+    });
+    return Authentication;
+}
+
++ (NSString *)SelectAuthenticationType
+{
+    static NSString *SelectAuthenticationType = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        SelectAuthenticationType = NSLocalizedString(@"SelectAuthenticationType", nil);
+    });
+    return SelectAuthenticationType;
+}
+
++ (NSString *)CreditCardMemberAuth
+{
+    static NSString *CreditCardMemberAuth = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        CreditCardMemberAuth = NSLocalizedString(@"CreditCardMemberAuth", nil);
+    });
+    return CreditCardMemberAuth;
+}
+
++ (NSString *)ConglomerateEmployeeAuth
+{
+    static NSString *ConglomerateEmployeeAuth = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        ConglomerateEmployeeAuth = NSLocalizedString(@"ConglomerateEmployeeAuth", nil);
+    });
+    return ConglomerateEmployeeAuth;
+}
+
++ (NSString *)OtherCustomerOfCathay
+{
+    static NSString *OtherCustomerOfCathay = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        OtherCustomerOfCathay = NSLocalizedString(@"OtherCustomerOfCathay", nil);
+    });
+    return OtherCustomerOfCathay;
+}
+
++ (NSString *)Cancel
+{
+    static NSString *Cancel = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        Cancel = NSLocalizedString(@"Cancel", nil);
+    });
+    return Cancel;
+}
+
++ (NSString *)AuthenticateSuccess
+{
+    static NSString *AuthenticateSuccess = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        AuthenticateSuccess = NSLocalizedString(@"AuthenticateSuccess", nil);
+    });
+    return AuthenticateSuccess;
+}
+
++ (NSString *)AuthenticateFailed
+{
+    static NSString *AuthenticateFailed = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        AuthenticateFailed = NSLocalizedString(@"AuthenticateFailed", nil);
+    });
+    return AuthenticateFailed;
+}
+
 @end

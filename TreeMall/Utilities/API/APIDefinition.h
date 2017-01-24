@@ -20,6 +20,9 @@ static NSString *SymphoxAPI_login = @"http://tomcat8.mdevelop.com/TreeMall/api/p
 static NSString *SymphoxAPI_terms = @"http://tomcat8.mdevelop.com/TreeMall/api/onlineService.do";
 static NSString *SymphoxAPI_forgetPassword = @"http://tomcat8.mdevelop.com/TreeMall/api/portal/app/member/password/forget";
 static NSString *SymphoxAPI_mobileVerification = @"http://tomcat8.mdevelop.com/TreeMall/api/portal/app/member/verify/mobile";
+static NSString *SymphoxAPI_authenticationCreditCard = @"http://tomcat8.mdevelop.com/TreeMall/authId/bank.do";
+static NSString *SymphoxAPI_authenticationEmployee = @"http://tomcat8.mdevelop.com/TreeMall/authId/employee.do";
+static NSString *SymphoxAPI_authenticationCathayCustomer = @"http://tomcat8.mdevelop.com/TreeMall/authId/cathay.do";
 #else
 static NSString *SymphoxAPI_token = @"https://api.symphox.com.tw/portal/app/token";
 #endif

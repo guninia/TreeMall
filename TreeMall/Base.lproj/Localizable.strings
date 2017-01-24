@@ -43,3 +43,11 @@
 "AlreadySendVerificationCode"="Already send verification code";
 "ResendCode"="Resend";
 "NextStep"="Next";
+"Authentication"="Authentication";
+"SelectAuthenticationType"="Select authentication type";
+"CreditCardMemberAuth"="Credit Card Member Authentication";
+"ConglomerateEmployeeAuth"="Conglomerate Employee Authentication";
+"OtherCustomerOfCathay"="Other Customer of Cathay";
+"Cancel"="Cancel";
+"AuthenticateSuccess"="Authenticate successfaully";
+"AuthenticateFailed"="Authenticate failed";

@@ -88,7 +88,10 @@ static NSUInteger PromotionReadNumberMax = 100;
     if ([_userIdentifier unsignedLongLongValue] != [userIdentifier unsignedLongLongValue])
     {
         _userIdentifier = userIdentifier;
-        [_dictionaryUserInfo setObject:_userIdentifier forKey:TMInfoArchiveKey_UserIdentifier];
+        if (_userIdentifier)
+        {
+            [_dictionaryUserInfo setObject:_userIdentifier forKey:TMInfoArchiveKey_UserIdentifier];
+        }
     }
 }
 
@@ -106,7 +109,10 @@ static NSUInteger PromotionReadNumberMax = 100;
     if ([_userName isEqualToString:userName] == NO)
     {
         _userName = userName;
-        [_dictionaryUserInfo setObject:_userName forKey:TMInfoArchiveKey_UserName];
+        if (_userName)
+        {
+            [_dictionaryUserInfo setObject:_userName forKey:TMInfoArchiveKey_UserName];
+        }
     }
 }
 
@@ -124,7 +130,10 @@ static NSUInteger PromotionReadNumberMax = 100;
     if ([_userEmail isEqualToString:userEmail] == NO)
     {
         _userEmail = userEmail;
-        [_dictionaryUserInfo setObject:_userEmail forKey:TMInfoArchiveKey_UserEmail];
+        if (_userEmail)
+        {
+            [_dictionaryUserInfo setObject:_userEmail forKey:TMInfoArchiveKey_UserEmail];
+        }
     }
 }
 
@@ -164,7 +173,10 @@ static NSUInteger PromotionReadNumberMax = 100;
     if ([_userEpoint unsignedLongLongValue] != [userEpoint unsignedLongLongValue])
     {
         _userEpoint = userEpoint;
-        [_dictionaryUserInfo setObject:userEpoint forKey:TMInfoArchiveKey_UserEpoint];
+        if (_userEpoint)
+        {
+            [_dictionaryUserInfo setObject:userEpoint forKey:TMInfoArchiveKey_UserEpoint];
+        }
     }
 }
 
@@ -182,7 +194,10 @@ static NSUInteger PromotionReadNumberMax = 100;
     if ([_userEcoupon unsignedLongLongValue] != [userEcoupon unsignedLongLongValue])
     {
         _userEcoupon = userEcoupon;
-        [_dictionaryUserInfo setObject:_userEcoupon forKey:TMInfoArchiveKey_UserEcoupon];
+        if (_userEcoupon)
+        {
+            [_dictionaryUserInfo setObject:_userEcoupon forKey:TMInfoArchiveKey_UserEcoupon];
+        }
     }
 }
 

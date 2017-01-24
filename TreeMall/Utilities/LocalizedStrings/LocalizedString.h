@@ -46,5 +46,14 @@
 + (NSString *)AlreadySendVerificationCode;
 + (NSString *)ResendCode;
 + (NSString *)NextStep;
++ (NSString *)Authentication;
++ (NSString *)SelectAuthenticationType;
++ (NSString *)CreditCardMemberAuth;
++ (NSString *)ConglomerateEmployeeAuth;
++ (NSString *)OtherCustomerOfCathay;
++ (NSString *)Cancel;
++ (NSString *)AuthenticateSuccess;
++ (NSString *)AuthenticateFailed;
+
 
 @end

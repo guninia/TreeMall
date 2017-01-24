@@ -25,5 +25,7 @@ typedef enum : NSUInteger {
 @property (nonatomic, strong) NSData *key;
 
 + (instancetype)sharedModule;
+- (NSData *)encryptFromSourceData:(NSData *)sourceData;
+- (NSData *)decryptFromSourceData:(NSData *)sourceData completion:(void (^)(id, NSError *))block;
 
 @end

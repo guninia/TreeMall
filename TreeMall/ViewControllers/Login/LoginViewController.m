@@ -130,6 +130,8 @@
     [_buttonForgetpassword addTarget:self action:@selector(actButtonForgetPasswordPressed:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:_buttonForgetpassword];
     
+    
+    
     [FBSDKProfile enableUpdatesOnAccessTokenChange:YES];
     
     NSString *googleServiceInfoPath = [[NSBundle mainBundle] pathForResource:@"GoogleService-Info" ofType:@"plist"];
