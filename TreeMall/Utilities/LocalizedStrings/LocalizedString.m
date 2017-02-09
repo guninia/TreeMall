@@ -451,4 +451,94 @@
     return AuthenticateFailed;
 }
 
++ (NSString *)See_S_All
+{
+    static NSString *See_S_All = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        See_S_All = NSLocalizedString(@"See_S_All", nil);
+    });
+    return See_S_All;
+}
+
++ (NSString *)Category_N_List
+{
+    static NSString *Category_N_List = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        Category_N_List = NSLocalizedString(@"Category_N_List", nil);
+    });
+    return Category_N_List;
+}
+
++ (NSString *)ClickToDiscount
+{
+    static NSString *ClickToDiscount = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        ClickToDiscount = NSLocalizedString(@"Category_N_List", nil);
+    });
+    return ClickToDiscount;
+}
+
++ (NSString *)S_InstallmentNumber
+{
+    static NSString *S_InstallmentNumber = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        S_InstallmentNumber = NSLocalizedString(@"S_InstallmentNumber", nil);
+    });
+    return S_InstallmentNumber;
+}
+
++ (NSString *)Free_S_Point
+{
+    static NSString *Free_S_Point = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        Free_S_Point = NSLocalizedString(@"Free_S_Point", nil);
+    });
+    return Free_S_Point;
+}
+
++ (NSString *)F_PercentOff
+{
+    static NSString *F_PercentOff = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        F_PercentOff = NSLocalizedString(@"F_PercentOff", nil);
+    });
+    return F_PercentOff;
+}
+
++ (NSString *)CannotLoadData
+{
+    static NSString *CannotLoadData = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        CannotLoadData = NSLocalizedString(@"CannotLoadData", nil);
+    });
+    return CannotLoadData;
+}
+
++ (NSString *)GoBack
+{
+    static NSString *GoBack = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        GoBack = NSLocalizedString(@"GoBack", nil);
+    });
+    return GoBack;
+}
+
++ (NSString *)Reload
+{
+    static NSString *Reload = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        Reload = NSLocalizedString(@"Reload", nil);
+    });
+    return Reload;
+}
+
 @end

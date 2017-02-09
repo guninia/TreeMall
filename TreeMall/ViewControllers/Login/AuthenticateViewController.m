@@ -168,7 +168,7 @@
     }
 //    NSString *encodedString = [encryptedString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     NSString *encodedString = [encryptedString stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet alphanumericCharacterSet]];
-    NSLog(@"encodedUrlStringForUrlString - encodedString[%@]", encodedString);
+//    NSLog(@"encodedUrlStringForUrlString - encodedString[%@]", encodedString);
     NSString *encodedUrlString = [urlString stringByAppendingFormat:@"?body=%@", encodedString];
     return encodedUrlString;
 }

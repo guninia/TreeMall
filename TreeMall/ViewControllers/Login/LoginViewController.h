@@ -24,5 +24,6 @@
 @property (nonatomic, strong) UIButton *buttonJoinMember;
 @property (nonatomic, strong) UIView *separatorVertical;
 @property (nonatomic, strong) UIButton *buttonForgetpassword;
+@property (nonatomic, strong) UIButton *buttonClose;
 
 @end

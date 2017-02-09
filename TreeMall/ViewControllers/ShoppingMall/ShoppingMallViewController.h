@@ -8,10 +8,17 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ShoppingMallViewController : UIViewController
+@interface ShoppingMallViewController : UIViewController <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UITableViewDataSource, UITableViewDelegate>
 
 @property (nonatomic, strong) IBOutlet UICollectionView *collectionViewCategory;
 @property (nonatomic, strong) IBOutlet UITableView *tableViewSubcategory;
 @property (nonatomic, strong) IBOutlet UITableView *tableViewExtraSubcategory;
+
+@property (nonatomic, strong) NSMutableArray *arrayMainCategory;
+@property (nonatomic, assign) NSInteger selectedMainCategoryIndex;
+@property (nonatomic, strong) NSMutableArray *arraySubcategory;
+@property (nonatomic, assign) NSInteger selectedSubcategoryIndex;
+@property (nonatomic, strong) NSMutableArray *arrayExtraSubcategory;
+@property (nonatomic, strong) NSMutableArray *arrayExtraSubcategorySeeAll;
 
 @end

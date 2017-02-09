@@ -54,6 +54,14 @@
 + (NSString *)Cancel;
 + (NSString *)AuthenticateSuccess;
 + (NSString *)AuthenticateFailed;
-
++ (NSString *)See_S_All;
++ (NSString *)Category_N_List;
++ (NSString *)ClickToDiscount;
++ (NSString *)S_InstallmentNumber;
++ (NSString *)Free_S_Point;
++ (NSString *)F_PercentOff;
++ (NSString *)CannotLoadData;
++ (NSString *)GoBack;
++ (NSString *)Reload;
 
 @end

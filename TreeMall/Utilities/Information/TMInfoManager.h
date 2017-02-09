@@ -19,6 +19,8 @@ typedef enum : NSUInteger {
 @interface TMInfoManager : NSObject
 {
     NSMutableDictionary *_dictionaryUserInfo;
+    NSMutableDictionary *_dictionaryCachedCategories;
+    NSNumber *_numberArchiveTimestamp;
 }
 
 @property (nonatomic, strong) NSMutableOrderedSet *orderedSetPromotionRead;
@@ -37,5 +39,7 @@ typedef enum : NSUInteger {
 - (void)readPromotionForIdentifier:(NSString *)identifier;
 - (BOOL)alreadyReadPromotionForIdentifier:(NSString *)identifier;
 - (void)updateUserInformationFromInfoDictionary:(NSDictionary *)infoDictionary;
+- (void)setSubcategories:(NSArray *)subcategories forIdentifier:(NSString *)identifier atLayer:(NSNumber *)layer;
+- (NSArray *)subcategoriesForIdentifier:(NSString *)identifier atLayer:(NSNumber *)layer;
 
 @end

@@ -50,4 +50,13 @@
 "Cancel"="取消";
 "AuthenticateSuccess"="會員驗證成功";
 "AuthenticateFailed"="會員驗證失敗";
+"See_S_All"="看%@全部";
+"Category_N_List"="類別\n清單";
+"ClickToDiscount"="點我現折";
+"S_InstallmentNumber"="%li期";
+"Free_S_Point"="贈送%li點";
+"F_PercentOff"="%.2f折";
+"CannotLoadData"="無法取得相關內容";
+"GoBack"="回上頁";
+"Reload"="重新讀取";
 

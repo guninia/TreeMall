@@ -18,6 +18,8 @@ static NSString *TMInfoArchiveKey_UserEmail = @"UserEmail";
 static NSString *TMInfoArchiveKey_UserGender = @"UserGender";
 static NSString *TMInfoArchiveKey_UserEpoint = @"UserEpoint";
 static NSString *TMInfoArchiveKey_UserEcoupon = @"UserEcoupon";
+static NSString *TMInfoArchiveKey_CachedCategories = @"CachedCategories";
+static NSString *TMInfoArchiveKey_ArchiveTimestamp = @"ArchiveTimestamp";
 
 static TMInfoManager *gTMInfoManager = nil;
 
@@ -27,6 +29,7 @@ static NSUInteger PromotionReadNumberMax = 100;
 
 - (NSURL *)urlForInfoDirectory;
 - (NSURL *)urlForInfoArchive;
+- (NSString *)keyForCategoryIdentifier:(NSString *)identifier withLayer:(NSNumber *)layer;
 
 @end
 
@@ -57,12 +60,15 @@ static NSUInteger PromotionReadNumberMax = 100;
     {
         _orderedSetPromotionRead = [[NSMutableOrderedSet alloc] initWithCapacity:0];
         _dictionaryUserInfo = [[NSMutableDictionary alloc] initWithCapacity:0];
+        _dictionaryCachedCategories = [[NSMutableDictionary alloc] initWithCapacity:0];
+        _numberArchiveTimestamp = nil;
         _userIdentifier = nil;
         _userName = nil;
         _userEmail = nil;
         _userGender = TMGenderTotal;
         _userEpoint = nil;
         _userEcoupon = nil;
+        
         NSDictionary *dictionaryArchive = [self loadFromArchive];
         if (dictionaryArchive)
         {
@@ -75,6 +81,27 @@ static NSUInteger PromotionReadNumberMax = 100;
             if (dictionaryUserInfo)
             {
                 [_dictionaryUserInfo setDictionary:dictionaryUserInfo];
+            }
+            BOOL shouldUpdateCachedData = YES;
+            NSNumber *numberTimestamp = [dictionaryArchive objectForKey:TMInfoArchiveKey_ArchiveTimestamp];
+            if (numberTimestamp)
+            {
+                _numberArchiveTimestamp = numberTimestamp;
+                NSTimeInterval archiveTime = [_numberArchiveTimestamp doubleValue];
+                NSTimeInterval currentTime = [[NSDate date] timeIntervalSince1970];
+                NSTimeInterval cachedAvail = 60.0 * 60.0 * 12;
+                if (fabs((currentTime - archiveTime)) < cachedAvail)
+                {
+                    shouldUpdateCachedData = NO;
+                }
+            }
+            if (shouldUpdateCachedData == NO)
+            {
+                NSDictionary *dictionaryCategories = [dictionaryArchive objectForKey:TMInfoArchiveKey_CachedCategories];
+                if (dictionaryCategories)
+                {
+                    [_dictionaryCachedCategories setDictionary:dictionaryCategories];
+                }
             }
         }
     }
@@ -240,6 +267,11 @@ static NSUInteger PromotionReadNumberMax = 100;
     NSMutableDictionary *dictionaryArchive = [NSMutableDictionary dictionary];
     [dictionaryArchive setObject:[_orderedSetPromotionRead array] forKey:TMInfoArchiveKey_PromotionRead];
     [dictionaryArchive setObject:_dictionaryUserInfo forKey:TMInfoArchiveKey_UserInformation];
+    [dictionaryArchive setObject:_dictionaryCachedCategories forKey:TMInfoArchiveKey_CachedCategories];
+    if (_numberArchiveTimestamp)
+    {
+        [dictionaryArchive setObject:_numberArchiveTimestamp forKey:TMInfoArchiveKey_ArchiveTimestamp];
+    }
     NSMutableData *archiveData = [[NSMutableData alloc] initWithCapacity:0];
     NSKeyedArchiver *archiver = [[NSKeyedArchiver alloc] initForWritingWithMutableData:archiveData];
     [archiver encodeObject:dictionaryArchive forKey:[CryptoModule sharedModule].apiKey];
@@ -329,6 +361,24 @@ static NSUInteger PromotionReadNumberMax = 100;
     }
 }
 
+- (void)setSubcategories:(NSArray *)subcategories forIdentifier:(NSString *)identifier atLayer:(NSNumber *)layer
+{
+    if (subcategories == nil)
+        return;
+    _numberArchiveTimestamp = [NSNumber numberWithDouble:[[NSDate date] timeIntervalSince1970]];
+    NSString *key = [self keyForCategoryIdentifier:identifier withLayer:layer];
+    [_dictionaryCachedCategories setObject:subcategories forKey:key];
+}
+
+- (NSArray *)subcategoriesForIdentifier:(NSString *)identifier atLayer:(NSNumber *)layer
+{
+    NSString *key = [self keyForCategoryIdentifier:identifier withLayer:layer];
+    NSLog(@"subcategoriesForIdentifier - key[%@]", key);
+    NSArray *categories = [_dictionaryCachedCategories objectForKey:key];
+    NSLog(@"subcategoriesForIdentifier - categories:\n%@", [categories description]);
+    return categories;
+}
+
 #pragma mark - Private Methods
 
 - (NSURL *)urlForInfoDirectory
@@ -355,6 +405,20 @@ static NSUInteger PromotionReadNumberMax = 100;
 {
     NSURL *url = [[[self urlForInfoDirectory] URLByAppendingPathComponent:@"archive"] URLByAppendingPathExtension:@"dat"];
     return url;
+}
+
+- (NSString *)keyForCategoryIdentifier:(NSString *)identifier withLayer:(NSNumber *)layer
+{
+    NSMutableString *key = [NSMutableString string];
+    if (identifier)
+    {
+        [key appendString:identifier];
+    }
+    if (layer)
+    {
+        [key appendFormat:@"_%@", [layer stringValue]];
+    }
+    return key;
 }
 
 @end

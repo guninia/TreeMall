@@ -38,6 +38,7 @@
 - (void)actButtonAgreementContentPressed:(id)sender;
 - (void)actButtonJoinMemberPressed:(id)sender;
 - (void)actButtonForgetPasswordPressed:(id)sender;
+- (void)actButtonClosePressed:(id)sender;
 
 - (void)facebookTokenDidChangeNotification:(NSNotification *)notification;
 - (void)facebookProfileDidChangeNotification:(NSNotification *)notification;
@@ -52,7 +53,12 @@
     // Do any additional setup after loading the view from its nib.
     
     _imageViewLogo = [[UIImageView alloc] initWithFrame:CGRectZero];
-    [_imageViewLogo setBackgroundColor:[UIColor grayColor]];
+    UIImage *image = [UIImage imageNamed:@"log_ico_logo"];
+    if (image)
+    {
+        [_imageViewLogo setImage:image];
+    }
+    [_imageViewLogo setBackgroundColor:[UIColor clearColor]];
     [_imageViewLogo setContentMode:UIViewContentModeScaleAspectFit];
     [self.view addSubview:_imageViewLogo];
     
@@ -79,7 +85,7 @@
     
     _buttonLogin = [[UIButton alloc] initWithFrame:CGRectZero];
     [_buttonLogin.layer setCornerRadius:5.0];
-    [_buttonLogin setBackgroundColor:[UIColor colorWithRed:(152.0/255.0) green:(194.0/255.0) blue:(68.0/255.0) alpha:1.0]];
+    [_buttonLogin setBackgroundColor:[UIColor colorWithRed:(132.0/255.0) green:(187.0/255.0) blue:(29.0/255.0) alpha:1.0]];
     [_buttonLogin setTitle:[LocalizedString Login] forState:UIControlStateNormal];
     [_buttonLogin addTarget:self action:@selector(actButtonLoginPressed:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:_buttonLogin];
@@ -92,7 +98,7 @@
     
     _buttonFacebookLogin = [[UIButton alloc] initWithFrame:CGRectZero];
     [_buttonFacebookLogin.layer setCornerRadius:5.0];
-    [_buttonFacebookLogin setBackgroundColor:[UIColor colorWithRed:(140.0/255.0) green:(172.0/255.0) blue:(240.0/255.0) alpha:1.0]];
+    [_buttonFacebookLogin setBackgroundColor:[UIColor colorWithRed:(124.0/255.0) green:(163.0/255.0) blue:(243.0/255.0) alpha:1.0]];
     [_buttonFacebookLogin setTitle:[LocalizedString facebookAccountLogin] forState:UIControlStateNormal];
     [_buttonFacebookLogin addTarget:self action:@selector(actButtonFacebookAccountLoginPressed:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:_buttonFacebookLogin];
@@ -130,7 +136,17 @@
     [_buttonForgetpassword addTarget:self action:@selector(actButtonForgetPasswordPressed:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:_buttonForgetpassword];
     
-    
+    _buttonClose = [[UIButton alloc] initWithFrame:CGRectZero];
+    if (_buttonClose)
+    {
+        UIImage *image = [UIImage imageNamed:@"car_popup_close"];
+        if (image)
+        {
+            [_buttonClose setImage:image forState:UIControlStateNormal];
+        }
+        [_buttonClose addTarget:self action:@selector(actButtonClosePressed:) forControlEvents:UIControlEventTouchUpInside];
+        [self.view addSubview:_buttonClose];
+    }
     
     [FBSDKProfile enableUpdatesOnAccessTokenChange:YES];
     
@@ -148,7 +164,7 @@
             
             _buttonGooglePlusLogin = [[UIButton alloc] initWithFrame:CGRectZero];
             [_buttonGooglePlusLogin.layer setCornerRadius:5.0];
-            [_buttonGooglePlusLogin setBackgroundColor:[UIColor colorWithRed:(229.0/255.0) green:(64.0/255.0) blue:(54.0/255.0) alpha:1.0]];
+            [_buttonGooglePlusLogin setBackgroundColor:[UIColor colorWithRed:(248.0/255.0) green:(34.0/255.0) blue:(35.0/255.0) alpha:1.0]];
             [_buttonGooglePlusLogin setTitle:[LocalizedString googlePlusAccountLogin] forState:UIControlStateNormal];
             [_buttonGooglePlusLogin addTarget:self action:@selector(actButtonGooglePlusAccountLoginPressed:) forControlEvents:UIControlEventTouchUpInside];
             [self.view addSubview:_buttonGooglePlusLogin];
@@ -187,15 +203,17 @@
 {
     [super viewDidLayoutSubviews];
     CGSize sizeRatio = [Utility sizeRatioAccordingTo320x480];
-    CGSize logoSize = CGSizeMake(self.view.frame.size.width, 100.0 * sizeRatio.height);
+    CGSize logoSize = CGSizeMake(210.0 * sizeRatio.height, 80.0 * sizeRatio.height);
     CGSize columnSize = CGSizeMake(280.0, 40.0);
     CGFloat columnOriginX = ceil((self.view.frame.size.width - columnSize.width)/2);
     CGFloat vInterval = 10.0 * sizeRatio.height;
     
-    CGFloat originY = 0.0;
+    CGFloat originY = 20.0 * sizeRatio.height;
     if (_imageViewLogo != nil)
     {
         CGRect frame = _imageViewLogo.frame;
+        frame.origin.x = (self.view.frame.size.width - logoSize.width)/2;
+        frame.origin.y = originY;
         frame.size.width = logoSize.width;
         frame.size.height = logoSize.height;
         _imageViewLogo.frame = frame;
@@ -325,6 +343,11 @@
         _buttonForgetpassword.frame = frame;
         
         originY = _buttonJoinMember.frame.origin.y + _buttonJoinMember.frame.size.height + vInterval;
+    }
+    if (_buttonClose != nil)
+    {
+        CGSize size = CGSizeMake(40.0, 40.0);
+        [_buttonClose setFrame:CGRectMake(0.0, 0.0, size.width, size.height)];
     }
 }
 
@@ -517,8 +540,8 @@
             if ([resultObject isKindOfClass:[NSData class]])
             {
                 NSData *data = (NSData *)resultObject;
-                NSString *string = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-                NSLog(@"string[%@]", string);
+//                NSString *string = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+//                NSLog(@"string[%@]", string);
                 // Should continue to process data.
                 [[NSNotificationCenter defaultCenter] postNotificationName:PostNotificationName_UserLoggedIn object:nil];
             }
@@ -617,6 +640,21 @@
     {
         [self presentViewController:viewController animated:YES completion:nil];
     }
+}
+
+- (void)actButtonClosePressed:(id)sender
+{
+    if (self.navigationController.presentingViewController)
+    {
+        [self.navigationController.presentingViewController dismissViewControllerAnimated:YES completion:nil];
+        return;
+    }
+    if (self.navigationController)
+    {
+        [self.navigationController popViewControllerAnimated:YES];
+        return;
+    }
+    [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
 #pragma mark - NSNotification Handler

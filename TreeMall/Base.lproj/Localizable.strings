@@ -51,3 +51,12 @@
 "Cancel"="Cancel";
 "AuthenticateSuccess"="Authenticate successfaully";
 "AuthenticateFailed"="Authenticate failed";
+"See_S_All"="See all of %@";
+"Category_N_List"="Category\nList";
+"ClickToDiscount"="Discount";
+"S_InstallmentNumber"="%li Installments";
+"Free_S_Point"="Free %li Points";
+"F_PercentOff"="%.2f％ off";
+"CannotLoadData"="Cannot load data";
+"GoBack"="Back";
+"Reload"="Reload";
