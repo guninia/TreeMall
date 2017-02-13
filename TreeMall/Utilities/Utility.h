@@ -17,5 +17,6 @@
 + (BOOL)evaluateEmail:(NSString *)text;
 + (BOOL)evaluatePassword:(NSString *)text;
 + (BOOL)evaluatePhoneNumber:(NSString *)text;
++ (UIImage *)colorizeImage:(UIImage *)image withColor:(UIColor *)color;
 
 @end

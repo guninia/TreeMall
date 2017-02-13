@@ -9,6 +9,8 @@
 #import "TMInfoManager.h"
 #import "CryptoModule.h"
 #import "APIDefinition.h"
+#import "SHAPIAdapter.h"
+#import "Definition.h"
 
 static NSString *TMInfoArchiveKey_PromotionRead = @"PromotionRead";
 static NSString *TMInfoArchiveKey_UserInformation = @"UserInformation";
@@ -61,6 +63,8 @@ static NSUInteger PromotionReadNumberMax = 100;
         _orderedSetPromotionRead = [[NSMutableOrderedSet alloc] initWithCapacity:0];
         _dictionaryUserInfo = [[NSMutableDictionary alloc] initWithCapacity:0];
         _dictionaryCachedCategories = [[NSMutableDictionary alloc] initWithCapacity:0];
+        _dictionaryInitialFilter = [[NSMutableDictionary alloc] initWithCapacity:0];
+        _dictionaryMainCategoryNameMapping = [[NSMutableDictionary alloc] initWithCapacity:0];
         _numberArchiveTimestamp = nil;
         _userIdentifier = nil;
         _userName = nil;
@@ -377,6 +381,37 @@ static NSUInteger PromotionReadNumberMax = 100;
     NSArray *categories = [_dictionaryCachedCategories objectForKey:key];
     NSLog(@"subcategoriesForIdentifier - categories:\n%@", [categories description]);
     return categories;
+}
+
+- (void)retrieveToken
+{
+    CryptoModule *module = [CryptoModule sharedModule];
+    [SHAPIAdapter sharedAdapter].encryptModule = module;
+    [SHAPIAdapter sharedAdapter].decryptModule = module;
+    
+    __weak TMInfoManager *weakSelf = self;
+    NSString *apiKey = [CryptoModule sharedModule].apiKey;
+    NSDictionary *headerFields = [NSDictionary dictionaryWithObjectsAndKeys:apiKey, @"sym-api-key", nil];
+    NSURL *url = [NSURL URLWithString:SymphoxAPI_token];
+    [[SHAPIAdapter sharedAdapter] sendRequestFromObject:weakSelf ToUrl:url withHeaderFields:headerFields andPostObject:[NSMutableData dataWithLength:0] inPostFormat:SHPostFormatNSData encrypted:YES decryptedReturnData:NO completion:^(id resultObject, NSError *error){
+        if (error == nil)
+        {
+            //            NSLog(@"resultObject[%@]:\n%@", [[resultObject class] description], [resultObject description]);
+            if ([resultObject isKindOfClass:[NSData class]])
+            {
+                NSData *data = (NSData *)resultObject;
+                NSString *string = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+                //                NSLog(@"string[%@]", string);
+                [SHAPIAdapter sharedAdapter].token = string;
+                
+                [[NSNotificationCenter defaultCenter] postNotificationName:PostNotificationName_TokenUpdated object:self];
+            }
+        }
+        else
+        {
+            [[NSNotificationCenter defaultCenter] postNotificationName:PostNotificationName_NoInitialToken object:self];
+        }
+    }];
 }
 
 #pragma mark - Private Methods

@@ -59,4 +59,14 @@
 "CannotLoadData"="無法取得相關內容";
 "GoBack"="回上頁";
 "Reload"="重新讀取";
+"PleaseTryAgainLater"="請稍後再試";
+"LowPriceFirst"="價格低到高";
+"HighPriceFirst"="價格高到低";
+"LowPointFirst"="點數低到高";
+"HighPointFirst"="點數高到低";
+"OnShelfOrder"="商品上架日";
+"Point"="點";
+"ChooseOrder"="請選擇排序方式";
+"CategoryList"="類別清單";
+"AdvanceFilter"="進階篩選";
 

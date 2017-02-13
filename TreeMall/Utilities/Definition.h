@@ -12,9 +12,11 @@
 #import <Foundation/Foundation.h>
 
 static NSString *PostNotificationName_TokenUpdated = @"TokenUpdated";
+static NSString *PostNotificationName_NoInitialToken = @"NoInitialToken";
 static NSString *PostNotificationName_UserLoggedIn = @"UserLoggedIn";
 static NSString *PostNotificationName_UserRegisterred = @"UserRegisterred";
 static NSString *PostNotificationName_UserAuthenticated = @"UserAuthenticated";
+static NSString *PostNotificationName_EntranceDataPrepared = @"EntranceDataPrepared";
 
 #define TMMainColor [UIColor colorWithRed:(90.0/255.0) green:(190.0/255.0) blue:(40.0/255.0) alpha:1.0]
 

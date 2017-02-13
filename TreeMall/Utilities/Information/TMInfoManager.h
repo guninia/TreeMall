@@ -30,6 +30,8 @@ typedef enum : NSUInteger {
 @property (nonatomic, assign) TMGender userGender;
 @property (nonatomic, assign) NSNumber *userEpoint;
 @property (nonatomic, assign) NSNumber *userEcoupon;
+@property (nonatomic, strong) NSMutableDictionary *dictionaryInitialFilter;
+@property (nonatomic, strong) NSMutableDictionary *dictionaryMainCategoryNameMapping;
 
 + (instancetype)sharedManager;
 
@@ -41,5 +43,7 @@ typedef enum : NSUInteger {
 - (void)updateUserInformationFromInfoDictionary:(NSDictionary *)infoDictionary;
 - (void)setSubcategories:(NSArray *)subcategories forIdentifier:(NSString *)identifier atLayer:(NSNumber *)layer;
 - (NSArray *)subcategoriesForIdentifier:(NSString *)identifier atLayer:(NSNumber *)layer;
+
+- (void)retrieveToken;
 
 @end

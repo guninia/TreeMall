@@ -14,6 +14,10 @@
 #import "TMInfoManager.h"
 #import "LoadingFooterView.h"
 #import "LocalizedString.h"
+#import "UIViewController+FTPopMenu.h"
+#import "ProductFilterViewController.h"
+#import "ProductDetailViewController.h"
+#import "Utility.h"
 
 @interface ProductListViewController ()
 
@@ -21,6 +25,8 @@
 - (BOOL)processSubcategoryData:(id)data forLayerIndex:(NSInteger)layerIndex;
 - (void)retrieveProductsForConditions:(NSDictionary *)conditions byRefreshing:(BOOL)refresh;
 - (BOOL)processProductsData:(id)data byRefreshing:(BOOL)refresh;
+- (void)prepareSortOption;
+- (void)refreshAllContentForHallId:(NSString *)hallId andLayer:(NSNumber *)layer withName:(NSString *)name;
 
 @end
 
@@ -39,6 +45,10 @@
         _currentProductPage = 0;
         _shouldShowLoadingFooter = YES;
         _isLoading = NO;
+        _arraySortOption = [[NSMutableArray alloc] initWithCapacity:0];
+        _currentSortOption = SortOptionTotal;
+        _shouldShowSubCategory = YES;
+        [self prepareSortOption];
     }
     return self;
 }
@@ -47,57 +57,15 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     NSLog(@"ProductListViewController - hallId[%@] layer[%li] name[%@]", _hallId, (long)[_layer integerValue], _name);
+    
+    // Build and add subviews
+    self.navigationItem.titleView = self.viewTitle;
     [self.view addSubview:self.viewSubcategory];
     [self.view addSubview:self.tableViewProduct];
+    self.viewTool.delegate = self;
+    self.viewTitle.delegate = self;
     
-    if (_arraySubcategory == nil || [_arraySubcategory count] == 0)
-    {
-        // Should load subcategories from server
-        [self retrieveSubcategoryDataForIdentifier:self.hallId andLayer:self.layer];
-    }
-    else
-    {
-        _viewSubcategory.dataArray = _arraySubcategory;
-    }
-    
-    if (self.hallId && self.layer)
-    {
-        NSString *layerKey = nil;
-        switch ([self.layer integerValue]) {
-            case 1:
-            {
-                layerKey = SymphoxAPIParam_cpse_id;
-            }
-                break;
-            case 2:
-            {
-                layerKey = SymphoxAPIParam_cpnhl_id;
-            }
-                break;
-            case 3:
-            {
-                layerKey = SymphoxAPIParam_cpte_id;
-            }
-                break;
-            case 4:
-            {
-                layerKey = SymphoxAPIParam_cptm_id;
-            }
-                break;
-            default:
-                break;
-        }
-        [_dictionaryConditions setObject:self.hallId forKey:layerKey];
-    }
-    if (_currentProductPage == 0)
-    {
-        _currentProductPage = 1;
-        [_dictionaryConditions setObject:[NSNumber numberWithInteger:_currentProductPage] forKey:SymphoxAPIParam_page];
-    }
-    if ([_dictionaryConditions count] > 0)
-    {
-        [self retrieveProductsForConditions:_dictionaryConditions byRefreshing:YES];
-    }
+    [self refreshAllContentForHallId:self.hallId andLayer:self.layer withName:self.name];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -120,12 +88,19 @@
 - (void)viewDidLayoutSubviews
 {
     [super viewDidLayoutSubviews];
-    if (self.viewSubcategory)
+    
+    if (self.shouldShowSubCategory && self.viewSubcategory)
     {
         CGRect frame = CGRectMake(0.0, 0.0, self.view.frame.size.width, self.viewTool.frame.origin.y);
         NSLog(@"frame[%4.2f,%4.2f,%4.2f,%4.2f]", frame.origin.x, frame.origin.y, frame.size.width, frame.size.height);
         self.viewSubcategory.frame = frame;
         [self.viewSubcategory setNeedsLayout];
+    }
+    else
+    {
+        CGRect frame = self.viewTool.frame;
+        frame.origin.y = 0.0;
+        self.viewTool.frame = frame;
     }
     if (self.tableViewProduct)
     {
@@ -135,11 +110,23 @@
     }
 }
 
+- (ProductListTitleView *)viewTitle
+{
+    if (_viewTitle == nil)
+    {
+        CGSize screenRatio = [Utility sizeRatioAccordingTo320x480];
+        _viewTitle = [[ProductListTitleView alloc] initWithFrame:CGRectMake(0.0, 0.0, 180.0 * screenRatio.width, 40.0)];
+        [_viewTitle setBackgroundColor:[UIColor clearColor]];
+    }
+    return _viewTitle;
+}
+
 - (ProductSubcategoryView *)viewSubcategory
 {
     if (_viewSubcategory == nil)
     {
         _viewSubcategory = [[ProductSubcategoryView alloc] initWithFrame:CGRectZero];
+        _viewSubcategory.delegate = self;
     }
     return _viewSubcategory;
 }
@@ -251,6 +238,12 @@
     {
         return;
     }
+    if (refresh)
+    {
+        [self.arrayProducts removeAllObjects];
+        self.shouldShowLoadingFooter = YES;
+        [self.tableViewProduct reloadData];
+    }
     self.isLoading = YES;
     __weak ProductListViewController *weakSelf = self;
     NSString *apiKey = [CryptoModule sharedModule].apiKey;
@@ -265,8 +258,8 @@
             if ([resultObject isKindOfClass:[NSData class]])
             {
                 NSData *data = (NSData *)resultObject;
-//                NSString *string = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-//                NSLog(@"retrieveProductsForConditions:\n%@", string);
+                NSString *string = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+                NSLog(@"retrieveProductsForConditions:\n%@", string);
                 if ([self processProductsData:data byRefreshing:refresh] == NO)
                 {
                     NSLog(@"retrieveProductsForConditions - Cannot process data");
@@ -343,6 +336,37 @@
                 }
             }
             [self.tableViewProduct reloadData];
+            
+            if ([[TMInfoManager sharedManager].dictionaryInitialFilter count] == 0)
+            {
+                NSNumber *numberMinPrice = [result objectForKey:SymphoxAPIParam_min_price];
+                if (numberMinPrice != nil && ([numberMinPrice isEqual:[NSNull null]] == NO))
+                {
+                    [[TMInfoManager sharedManager].dictionaryInitialFilter setObject:numberMinPrice forKey:SymphoxAPIParam_min_price];
+                }
+                NSNumber *numberMaxPrice = [result objectForKey:SymphoxAPIParam_max_price];
+                if (numberMaxPrice != nil && ([numberMaxPrice isEqual:[NSNull null]] == NO))
+                {
+                    [[TMInfoManager sharedManager].dictionaryInitialFilter setObject:numberMaxPrice forKey:SymphoxAPIParam_max_price];
+                }
+                NSNumber *numberMinPoint = [result objectForKey:SymphoxAPIParam_min_point];
+                if (numberMinPoint != nil && ([numberMinPoint isEqual:[NSNull null]] == NO))
+                {
+                    [[TMInfoManager sharedManager].dictionaryInitialFilter setObject:numberMinPoint forKey:SymphoxAPIParam_min_point];
+                }
+                NSNumber *numberMaxPoint = [result objectForKey:SymphoxAPIParam_max_point];
+                if (numberMaxPoint != nil && ([numberMaxPoint isEqual:[NSNull null]] == NO))
+                {
+                    [[TMInfoManager sharedManager].dictionaryInitialFilter setObject:numberMaxPoint forKey:SymphoxAPIParam_max_point];
+                }
+                
+                NSArray *categories = [dictionary objectForKey:SymphoxAPIParam_categoryLv1];
+                if (categories != nil && ([categories isEqual:[NSNull null]] == NO))
+                {
+                    [[TMInfoManager sharedManager].dictionaryInitialFilter setObject:categories forKey:SymphoxAPIParam_categoryLv1];
+                }
+                
+            }
             success = YES;
         }
         else
@@ -356,6 +380,152 @@
     }
     
     return success;
+}
+
+- (void)prepareSortOption
+{
+    for (NSInteger index = 0; index < SortOptionTotal; index++)
+    {
+        NSMutableDictionary *dictionary = [NSMutableDictionary dictionary];
+        NSString *name = nil;
+        NSInteger sortIndex = NSNotFound;
+        switch (index) {
+            case SortOptionPriceLowFirst:
+            {
+                name = [LocalizedString LowPriceFirst];
+                sortIndex = 1;
+            }
+                break;
+            case SortOptionPriceHighFirst:
+            {
+                name = [LocalizedString HighPriceFirst];
+                sortIndex = 4;
+            }
+                break;
+            case SortOptionPointLowFirst:
+            {
+                name = [LocalizedString LowPointFirst];
+                sortIndex = 2;
+            }
+                break;
+            case SortOptionPointHighFirst:
+            {
+                name = [LocalizedString HighPointFirst];
+                sortIndex = 5;
+            }
+                break;
+            case SortOptionOnShelfOrder:
+            {
+                name = [LocalizedString OnShelfOrder];
+                sortIndex = 3;
+            }
+                break;
+            default:
+                break;
+        }
+        if (sortIndex != NSNotFound)
+        {
+            NSString *sortId = [NSString stringWithFormat:@"%li", (long)sortIndex];
+            [dictionary setObject:sortId forKey:SymphoxAPIParam_sort_type];
+        }
+        if (name != nil)
+        {
+            [dictionary setObject:name forKey:SymphoxAPIParam_name];
+        }
+        [_arraySortOption addObject:dictionary];
+    }
+}
+
+- (void)refreshAllContentForHallId:(NSString *)hallId andLayer:(NSNumber *)layer withName:(NSString *)name
+{
+    self.hallId = hallId;
+    self.layer = layer;
+    self.name = name;
+    self.currentProductPage = 0;
+    self.arraySubcategory = nil;
+    
+    // Set view title
+    if (self.name != nil)
+    {
+        self.viewTitle.titleText = self.name;
+    }
+    
+    // Deal with ProductSubcategoryView and layer
+    if ([_layer integerValue] >= 4)
+    {
+        _shouldShowSubCategory = NO;
+    }
+    if (_shouldShowSubCategory)
+    {
+        if (_arraySubcategory == nil || [_arraySubcategory count] == 0)
+        {
+            // Should load subcategories from server
+            [self retrieveSubcategoryDataForIdentifier:self.hallId andLayer:self.layer];
+        }
+        else
+        {
+            self.viewSubcategory.dataArray = _arraySubcategory;
+        }
+    }
+    else
+    {
+        [self.viewSubcategory setHidden:YES];
+    }
+    
+    // Prepare to retrieve product list.
+    if (self.hallId && self.layer)
+    {
+        NSString *layerKey = nil;
+        switch ([self.layer integerValue]) {
+            case 1:
+            {
+                layerKey = SymphoxAPIParam_cpse_id;
+            }
+                break;
+            case 2:
+            {
+                layerKey = SymphoxAPIParam_cpnhl_id;
+            }
+                break;
+            case 3:
+            {
+                layerKey = SymphoxAPIParam_cpte_id;
+            }
+                break;
+            case 4:
+            {
+                layerKey = SymphoxAPIParam_cptm_id;
+            }
+                break;
+            default:
+                break;
+        }
+        [_dictionaryConditions setObject:self.hallId forKey:layerKey];
+    }
+    if (_currentProductPage == 0)
+    {
+        _currentProductPage = 1;
+        [_dictionaryConditions setObject:[NSNumber numberWithInteger:_currentProductPage] forKey:SymphoxAPIParam_page];
+        if (_currentSortOption == SortOptionTotal)
+        {
+            _currentSortOption = SortOptionPriceLowFirst;
+            NSDictionary *sortContent = [_arraySortOption objectAtIndex:_currentSortOption];
+            NSString *sortType = [sortContent objectForKey:SymphoxAPIParam_sort_type];
+            if (sortType)
+            {
+                [_dictionaryConditions setObject:sortType forKey:SymphoxAPIParam_sort_type];
+            }
+            NSString *name = [sortContent objectForKey:SymphoxAPIParam_name];
+            if (name)
+            {
+                [self.viewTool.buttonSort setTitle:name forState:UIControlStateNormal];
+            }
+        }
+    }
+    if ([_dictionaryConditions count] > 0)
+    {
+        [self retrieveProductsForConditions:_dictionaryConditions byRefreshing:YES];
+    }
 }
 
 #pragma mark - UITableViewDataSource
@@ -454,7 +624,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    CGFloat heightForRow = 160.0;
+    CGFloat heightForRow = 168.0;
     return heightForRow;
 }
 
@@ -495,6 +665,122 @@
         LoadingFooterView *loadingView = (LoadingFooterView *)view;
         [loadingView.activityIndicator stopAnimating];
     }
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    ProductDetailViewController *viewController = [[ProductDetailViewController alloc] initWithNibName:@"ProductDetailViewController" bundle:[NSBundle mainBundle]];
+    [self.navigationController pushViewController:viewController animated:YES];
+}
+
+#pragma mark - ProductListToolViewDelegate
+
+- (void)productListToolView:(ProductListToolView *)view didSelectSortBySender:(id)sender
+{
+    if (_isLoading)
+    {
+        return;
+    }
+    __weak ProductListViewController *weakSelf = self;
+    [self showFTMenuFromView:view.buttonSort title:[LocalizedString ChooseOrder] textColor:[UIColor blackColor] perferedWidth:200.0 menuKey:SymphoxAPIParam_name inDictionaryFromArray:self.arraySortOption doneBlock:^(NSInteger selectedIndex){
+        
+        // Get information of selected sort type
+        NSDictionary *dictionary = [weakSelf.arraySortOption objectAtIndex:selectedIndex];
+        NSString *sortType = [dictionary objectForKey:SymphoxAPIParam_sort_type];
+        
+        // Change the sort button text
+        NSString *name = [dictionary objectForKey:SymphoxAPIParam_name];
+        if (name)
+        {
+            [weakSelf.viewTool.buttonSort setTitle:name forState:UIControlStateNormal];
+        }
+        
+        // Refresh the product list
+        if (sortType)
+        {
+            [weakSelf.dictionaryConditions setObject:sortType forKey:SymphoxAPIParam_sort_type];
+        }
+        weakSelf.currentProductPage = 1;
+        [weakSelf.dictionaryConditions setObject:[NSNumber numberWithInteger:weakSelf.currentProductPage] forKey:SymphoxAPIParam_page];
+        [weakSelf retrieveProductsForConditions:weakSelf.dictionaryConditions byRefreshing:YES];
+        
+    } cancelBlock:nil];
+}
+
+- (void)productListToolView:(ProductListToolView *)view didSelectFilterBySender:(id)sender
+{
+//    if (self.isLoading)
+//        return;
+//    ProductFilterViewController *viewController = [[ProductFilterViewController alloc] initWithNibName:@"ProductFilterViewController" bundle:[NSBundle mainBundle]];
+//    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:viewController];
+//    [self presentViewController:navigationController animated:YES completion:nil];
+}
+
+#pragma mark - ProductSubcategoryViewDelegate
+
+- (void)productSubcategoryView:(ProductSubcategoryView *)view didSelectShowAllBySender:(id)sender
+{
+    NSLog(@"arraySubcategory:\n%@", [_arraySubcategory description]);
+    if ([_arraySubcategory count] == 0)
+    {
+        return;
+    }
+    __weak ProductListViewController *weakSelf = self;
+    [self showFTMenuFromView:view.buttonShowAll title:nil textColor:[UIColor blackColor] perferedWidth:200.0 menuKey:SymphoxAPIParam_name inDictionaryFromArray:self.arraySubcategory doneBlock:^(NSInteger selectedIndex){
+        if (selectedIndex >= [weakSelf.arraySubcategory count])
+        {
+            return;
+        }
+        NSDictionary *dictionary = [weakSelf.arraySubcategory objectAtIndex:selectedIndex];
+        NSString *hallId = [dictionary objectForKey:SymphoxAPIParam_hall_id];
+        NSNumber *layer = [dictionary objectForKey:SymphoxAPIParam_layer];
+        NSString *name = [dictionary objectForKey:SymphoxAPIParam_name];
+        ProductListViewController *viewController = [[ProductListViewController alloc] initWithNibName:@"ProductListViewController" bundle:[NSBundle mainBundle]];
+        viewController.hallId = hallId;
+        viewController.layer = layer;
+        viewController.name = name;
+        viewController.arrayCategory = weakSelf.arraySubcategory;
+        [weakSelf.navigationController pushViewController:viewController animated:YES];
+    } cancelBlock:nil];
+}
+
+- (void)productSubcategoryView:(ProductSubcategoryView *)view didSelectSubcategoryAtIndex:(NSInteger)index
+{
+    NSDictionary *dictionary = [_arraySubcategory objectAtIndex:index];
+    NSLog(@"dictionary:\n%@", [dictionary description]);
+    NSString *hallId = [dictionary objectForKey:SymphoxAPIParam_hall_id];
+    NSNumber *layer = [dictionary objectForKey:SymphoxAPIParam_layer];
+    NSString *name = [dictionary objectForKey:SymphoxAPIParam_name];
+    ProductListViewController *viewController = [[ProductListViewController alloc] initWithNibName:@"ProductListViewController" bundle:[NSBundle mainBundle]];
+    viewController.hallId = hallId;
+    viewController.layer = layer;
+    viewController.name = name;
+    viewController.arrayCategory = self.arraySubcategory;
+    [self.navigationController pushViewController:viewController animated:YES];
+}
+
+#pragma mark - ProductListTitleViewDelegate
+
+- (void)productListTitleView:(ProductListTitleView *)view willSelectTitleBySender:(id)sender
+{
+    if (self.isLoading)
+    {
+        return;
+    }
+//    NSLog(@"self.arrayCategory:\n%@", [self.arrayCategory description]);
+    __weak ProductListViewController *weakSelf = self;
+    [self showFTMenuFromView:self.viewTitle title:nil textColor:[UIColor blackColor] perferedWidth:200.0 menuKey:SymphoxAPIParam_name inDictionaryFromArray:self.arrayCategory doneBlock:^(NSInteger selectedIndex){
+        if (selectedIndex >= [weakSelf.arrayCategory count])
+        {
+            return;
+        }
+        NSDictionary *dictionary = [weakSelf.arrayCategory objectAtIndex:selectedIndex];
+        NSString *hallId = [dictionary objectForKey:SymphoxAPIParam_hall_id];
+        NSNumber *layer = [dictionary objectForKey:SymphoxAPIParam_layer];
+        NSString *name = [dictionary objectForKey:SymphoxAPIParam_name];
+        
+        [weakSelf refreshAllContentForHallId:hallId andLayer:layer withName:name];
+    } cancelBlock:nil];
 }
 
 @end

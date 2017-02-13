@@ -92,12 +92,9 @@
     if (_buttonSort == nil)
     {
         _buttonSort = [[UIButton alloc] initWithFrame:CGRectZero];
-        UIImage *image = [UIImage imageNamed:@"sho_ico_arr_dn_g"];
-        if (image)
-        {
-            [_buttonSort setImage:image forState:UIControlStateNormal];
-        }
-        
+        [_buttonSort setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
+        [_buttonSort setContentHorizontalAlignment:UIControlContentHorizontalAlignmentLeft];
+        [_buttonSort setContentEdgeInsets:UIEdgeInsetsMake(0.0, 10.0, 0.0, 0.0)];
         [_buttonSort addTarget:self action:@selector(buttonSortPressed:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _buttonSort;

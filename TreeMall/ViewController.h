@@ -7,10 +7,14 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "FullScreenLoadingView.h"
 
 @interface ViewController : UIViewController <UITabBarControllerDelegate>
 
 @property (nonatomic, strong) UITabBarController *tbControllerMain;
+@property (nonatomic, strong) UIImageView *imageViewLaunchScreen;
+@property (nonatomic, strong) FullScreenLoadingView *viewLoading;
+@property (nonatomic, assign) BOOL initialized;
 
 @end
 

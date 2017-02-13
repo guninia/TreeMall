@@ -26,6 +26,7 @@ static NSString *SymphoxAPI_authenticationCathayCustomer = @"http://tomcat8.mdev
 static NSString *SymphoxAPI_MainCategories = @"http://tomcat8.mdevelop.com/TreeMall/api/onlineService.do";
 static NSString *SymphoxAPI_Subcategories = @"http://tomcat8.mdevelop.com/TreeMall/api/portal/app/mall/hall";
 static NSString *SymphoxAPI_Search = @"http://tomcat8.mdevelop.com/TreeMall/api/eiffel/search/treemall";
+static NSString *SymphoxAPI_mainCategoryNameMapping = @"http://tomcat8.mdevelop.com/TreeMall/api/onlineService.do";
 #else
 static NSString *SymphoxAPI_token = @"https://api.symphox.com.tw/portal/app/token";
 #endif
@@ -120,6 +121,8 @@ static NSString *SymphoxAPIParam_max_point = @"max_point";
 static NSString *SymphoxAPIParam_display_name = @"display_name";
 static NSString *SymphoxAPIParam_document_num = @"document_num";
 static NSString *SymphoxAPIParam_hall = @"hall";
+static NSString *SymphoxAPIParam_categoryLv1 = @"categoryLv1";
+static NSString *SymphoxAPIParam_hallMap = @"hallMap";
 
 
 #endif /* APIDefinition_h */

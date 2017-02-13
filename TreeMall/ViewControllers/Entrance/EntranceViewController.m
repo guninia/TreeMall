@@ -98,6 +98,8 @@ typedef enum : NSUInteger {
             if ([self processData:resultObject])
             {
                 [_tableViewEntrance reloadData];
+                
+                [[NSNotificationCenter defaultCenter] postNotificationName:PostNotificationName_EntranceDataPrepared object:self];
             }
             else
             {

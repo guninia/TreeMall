@@ -541,4 +541,104 @@
     return Reload;
 }
 
++ (NSString *)PleaseTryAgainLater
+{
+    static NSString *PleaseTryAgainLater = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        PleaseTryAgainLater = NSLocalizedString(@"PleaseTryAgainLater", nil);
+    });
+    return PleaseTryAgainLater;
+}
+
++ (NSString *)LowPriceFirst
+{
+    static NSString *LowPriceFirst = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        LowPriceFirst = NSLocalizedString(@"LowPriceFirst", nil);
+    });
+    return LowPriceFirst;
+}
+
++ (NSString *)HighPriceFirst
+{
+    static NSString *HighPriceFirst = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        HighPriceFirst = NSLocalizedString(@"HighPriceFirst", nil);
+    });
+    return HighPriceFirst;
+}
+
++ (NSString *)LowPointFirst
+{
+    static NSString *LowPointFirst = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        LowPointFirst = NSLocalizedString(@"LowPointFirst", nil);
+    });
+    return LowPointFirst;
+}
+
++ (NSString *)HighPointFirst
+{
+    static NSString *HighPointFirst = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        HighPointFirst = NSLocalizedString(@"HighPointFirst", nil);
+    });
+    return HighPointFirst;
+}
+
++ (NSString *)OnShelfOrder
+{
+    static NSString *OnShelfOrder = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        OnShelfOrder = NSLocalizedString(@"OnShelfOrder", nil);
+    });
+    return OnShelfOrder;
+}
+
++ (NSString *)Point
+{
+    static NSString *Point = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        Point = NSLocalizedString(@"Point", nil);
+    });
+    return Point;
+}
+
++ (NSString *)ChooseOrder
+{
+    static NSString *ChooseOrder = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        ChooseOrder = NSLocalizedString(@"ChooseOrder", nil);
+    });
+    return ChooseOrder;
+}
+
++ (NSString *)CategoryList
+{
+    static NSString *CategoryList = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        CategoryList = NSLocalizedString(@"CategoryList", nil);
+    });
+    return CategoryList;
+}
+
++ (NSString *)AdvanceFilter
+{
+    static NSString *AdvanceFilter = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        AdvanceFilter = NSLocalizedString(@"AdvanceFilter", nil);
+    });
+    return AdvanceFilter;
+}
+
 @end

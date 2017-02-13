@@ -9,9 +9,21 @@
 #import <UIKit/UIKit.h>
 #import "ProductSubcategoryView.h"
 #import "ProductListToolView.h"
+#import "ProductListTitleView.h"
 
-@interface ProductListViewController : UIViewController <ProductSubcategoryViewDelegate, ProductListToolViewDelegate, UITableViewDataSource, UITableViewDelegate>
 
+typedef enum : NSUInteger {
+    SortOptionPriceLowFirst,
+    SortOptionPriceHighFirst,
+    SortOptionPointLowFirst,
+    SortOptionPointHighFirst,
+    SortOptionOnShelfOrder,
+    SortOptionTotal
+} SortOption;
+
+@interface ProductListViewController : UIViewController <ProductSubcategoryViewDelegate, ProductListToolViewDelegate, UITableViewDataSource, UITableViewDelegate, ProductListTitleViewDelegate>
+
+@property (nonatomic, strong) ProductListTitleView *viewTitle;
 @property (nonatomic, strong) ProductSubcategoryView *viewSubcategory;
 @property (nonatomic, strong) IBOutlet ProductListToolView *viewTool;
 @property (nonatomic, strong) IBOutlet UITableView *tableViewProduct;
@@ -24,7 +36,10 @@
 @property (nonatomic, strong) NSMutableDictionary *dictionarySubcategory;
 @property (nonatomic, strong) NSMutableDictionary *dictionaryConditions;
 @property (nonatomic, assign) NSInteger currentProductPage;
+@property (nonatomic, assign) BOOL shouldShowSubCategory;
 @property (nonatomic, assign) BOOL shouldShowLoadingFooter;
 @property (nonatomic, assign) BOOL isLoading;
+@property (nonatomic, strong) NSMutableArray *arraySortOption;
+@property (nonatomic, assign) SortOption currentSortOption;
 
 @end

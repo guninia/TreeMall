@@ -7,14 +7,10 @@
 //
 
 #import "AppDelegate.h"
-#import "SHAPIAdapter.h"
-#import "CryptoModule.h"
-#import "APIDefinition.h"
 #import "Definition.h"
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
 #import <GoogleSignIn/GoogleSignIn.h>
 #import "TMInfoManager.h"
-#import "CryptoTool.h"
 
 @interface AppDelegate ()
 
@@ -47,29 +43,7 @@
     
     
     // Prepare API connection
-    CryptoModule *module = [CryptoModule sharedModule];
-    [SHAPIAdapter sharedAdapter].encryptModule = module;
-    [SHAPIAdapter sharedAdapter].decryptModule = module;
-    
-    __weak AppDelegate *weakSelf = self;
-    NSString *apiKey = [CryptoModule sharedModule].apiKey;
-    NSDictionary *headerFields = [NSDictionary dictionaryWithObjectsAndKeys:apiKey, @"sym-api-key", nil];
-    NSURL *url = [NSURL URLWithString:SymphoxAPI_token];
-    [[SHAPIAdapter sharedAdapter] sendRequestFromObject:weakSelf ToUrl:url withHeaderFields:headerFields andPostObject:[NSMutableData dataWithLength:0] inPostFormat:SHPostFormatNSData encrypted:YES decryptedReturnData:NO completion:^(id resultObject, NSError *error){
-        if (error == nil)
-        {
-//            NSLog(@"resultObject[%@]:\n%@", [[resultObject class] description], [resultObject description]);
-            if ([resultObject isKindOfClass:[NSData class]])
-            {
-                NSData *data = (NSData *)resultObject;
-                NSString *string = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-//                NSLog(@"string[%@]", string);
-                [SHAPIAdapter sharedAdapter].token = string;
-                
-                [[NSNotificationCenter defaultCenter] postNotificationName:PostNotificationName_TokenUpdated object:nil];
-            }
-        }
-    }];
+    [[TMInfoManager sharedManager] retrieveToken];
     return YES;
 }
 

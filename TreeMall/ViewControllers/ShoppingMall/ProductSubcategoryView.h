@@ -14,7 +14,7 @@
 
 @optional
 - (void)productSubcategoryView:(ProductSubcategoryView *)view didSelectShowAllBySender:(id)sender;
-- (void)productSubcategoryView:(ProductSubcategoryView *)view didSelectSubcategory:(NSString *)categoryId atIndex:(NSInteger)index;
+- (void)productSubcategoryView:(ProductSubcategoryView *)view didSelectSubcategoryAtIndex:(NSInteger)index;
 
 @end
 

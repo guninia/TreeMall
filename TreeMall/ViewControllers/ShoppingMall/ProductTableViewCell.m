@@ -68,10 +68,10 @@ static NSInteger MaxTagsNumber = 4;
 {
     [super layoutSubviews];
     
-    CGFloat marginL = 8.0;
-    CGFloat marginR = 8.0;
-    CGFloat marginT = 6.0;
-    CGFloat marginB = 2.0;
+    CGFloat marginL = 12.0;
+    CGFloat marginR = 12.0;
+    CGFloat marginT = 10.0;
+    CGFloat marginB = 6.0;
     
     CGFloat containMarginH = 8.0;
     CGFloat containMarginV = 8.0;
@@ -437,7 +437,7 @@ static NSInteger MaxTagsNumber = 4;
             NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
             [formatter setNumberStyle:NSNumberFormatterDecimalStyle];
             NSString *formattedString = [formatter stringFromNumber:point];
-            NSString *pointString = [NSString stringWithFormat:@"%@", formattedString];
+            NSString *pointString = [[NSString stringWithFormat:@"%@", formattedString] stringByAppendingString:[LocalizedString Point]];
             [self.labelPoint setText:pointString];
         }
     }

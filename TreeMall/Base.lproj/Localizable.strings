@@ -60,3 +60,13 @@
 "CannotLoadData"="Cannot load data";
 "GoBack"="Back";
 "Reload"="Reload";
+"PleaseTryAgainLater"="Please try again later";
+"LowPriceFirst"="Low price first";
+"HighPriceFirst"="High price first";
+"LowPointFirst"="Low point first";
+"HighPointFirst"="High point first";
+"OnShelfOrder"="On-Shelf order";
+"Point"="points";
+"ChooseOrder"="Choose order";
+"CategoryList"="Category list";
+"AdvanceFilter"="Advance Filter";

@@ -61,6 +61,7 @@ typedef enum : NSUInteger {
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
+    self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
     
     UICollectionViewFlowLayout *flowLayout = [[UICollectionViewFlowLayout alloc] init];
     [flowLayout setScrollDirection:UICollectionViewScrollDirectionHorizontal];
@@ -74,17 +75,32 @@ typedef enum : NSUInteger {
     [_tableViewSubcategory setBackgroundColor:[UIColor colorWithWhite:(245.0/255.0) alpha:1.0]];
     [_tableViewSubcategory setSeparatorColor:[UIColor colorWithWhite:(232.0/255.0) alpha:1.0]];
     [_tableViewSubcategory setSeparatorStyle:UITableViewCellSeparatorStyleSingleLine];
+    [_tableViewSubcategory setShowsVerticalScrollIndicator:NO];
+    [_tableViewSubcategory setShowsHorizontalScrollIndicator:NO];
     [_tableViewSubcategory registerClass:[SubcategoryTableViewCell class] forCellReuseIdentifier:SubcategoryTableViewCellIdentifier];
     [_tableViewSubcategory setTag:ViewTagTableViewSubcategory];
     
     [_tableViewExtraSubcategory setBackgroundColor:[UIColor colorWithWhite:(194.0/255.0) alpha:1.0]];
     [_tableViewExtraSubcategory setSeparatorColor:[UIColor colorWithWhite:(163.0/255.0) alpha:1.0]];
     [_tableViewExtraSubcategory setSeparatorStyle:UITableViewCellSeparatorStyleSingleLine];
+    [_tableViewExtraSubcategory setShowsVerticalScrollIndicator:NO];
+    [_tableViewExtraSubcategory setShowsHorizontalScrollIndicator:NO];
     [_tableViewExtraSubcategory registerClass:[ExtraSubcategoryTableViewCell class] forCellReuseIdentifier:ExtraSubcategoryTableViewCellIdentifier];
     [_tableViewExtraSubcategory registerClass:[ExtraSubcategorySeeAllTableViewCell class] forCellReuseIdentifier:ExtraSubcategorySeeAllTableViewCellIdentifier];
     [_tableViewExtraSubcategory setTag:ViewTagTableViewExtraSubcategory];
     
     [self retrieveMainCategoryData];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    // Should clear the product filter to prevent wrong filter options
+    if ([[TMInfoManager sharedManager].dictionaryInitialFilter count] > 0)
+    {
+        [[TMInfoManager sharedManager].dictionaryInitialFilter removeAllObjects];
+    }
 }
 
 - (void)didReceiveMemoryWarning {
@@ -128,8 +144,8 @@ typedef enum : NSUInteger {
         if (error == nil)
         {
 //            NSLog(@"resultObject:\n%@", [resultObject description]);
-            NSString *resultString = [[NSString alloc] initWithData:resultObject encoding:NSUTF8StringEncoding];
-            NSLog(@"retrieveMainCategoryData - resultString:\n%@", resultString);
+//            NSString *resultString = [[NSString alloc] initWithData:resultObject encoding:NSUTF8StringEncoding];
+//            NSLog(@"retrieveMainCategoryData - resultString:\n%@", resultString);
             if ([self processMainCategoryData:resultObject] == NO)
             {
                 NSLog(@"Cannot process retrieved data from [%@]", [url absoluteString]);
@@ -369,7 +385,7 @@ typedef enum : NSUInteger {
         NSDictionary *dictionary = [_arrayMainCategory objectAtIndex:indexPath.row];
         NSString *name = [dictionary objectForKey:SymphoxAPIParam_name];
         NSString *imagePath = [dictionary objectForKey:SymphoxAPIParam_img];
-        NSLog(@"cell[%li/%li][%@][%@]", (long)indexPath.section, (long)indexPath.row, name, imagePath);
+//        NSLog(@"cell[%li/%li][%@][%@]", (long)indexPath.section, (long)indexPath.row, name, imagePath);
         if (name)
         {
             cell.textLabel.text = name;

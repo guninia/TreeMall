@@ -12,7 +12,7 @@
 #import "ProductSubcategoryCollectionViewCell.h"
 #import "APIDefinition.h"
 
-static CGFloat kIntervalH = 8.0;
+static CGFloat kIntervalH = 10.0;
 
 @interface ProductSubcategoryView ()
 
@@ -58,9 +58,9 @@ static CGFloat kIntervalH = 8.0;
 {
     [super layoutSubviews];
     
-    CGFloat marginT = 5.0;
-    CGFloat marginL = 8.0;
-    CGFloat marginB = 5.0;
+    CGFloat marginT = 10.0;
+    CGFloat marginL = 10.0;
+    CGFloat marginB = 10.0;
     CGFloat marginR = 0.0;
     CGFloat intervalV = kIntervalH;
     
@@ -171,6 +171,16 @@ static CGFloat kIntervalH = 8.0;
 //    NSLog(@"cellForItemAtIndexPath - name[%@]", name);
     cell.textLabel.text = (name == nil)?@"":name;
     return cell;
+}
+
+#pragma mark - UICollectionViewDelegate
+
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (_delegate && [_delegate respondsToSelector:@selector(productSubcategoryView:didSelectSubcategoryAtIndex:)])
+    {
+        [_delegate productSubcategoryView:self didSelectSubcategoryAtIndex:indexPath.row];
+    }
 }
 
 #pragma mark - UICollectionViewDelegateFlowLayout

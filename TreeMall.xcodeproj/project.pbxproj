@@ -55,10 +55,47 @@
 		689546481E35F38700D5CD1E /* PagingGridView.m in Sources */ = {isa = PBXBuildFile; fileRef = 689546471E35F38700D5CD1E /* PagingGridView.m */; };
 		6895464D1E3608E500D5CD1E /* WebViewViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6895464B1E3608E500D5CD1E /* WebViewViewController.m */; };
 		6895464E1E3608E500D5CD1E /* WebViewViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6895464C1E3608E500D5CD1E /* WebViewViewController.xib */; };
+		68968EB71E51AD6300419619 /* ProductFilterTextCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 68968EB61E51AD6300419619 /* ProductFilterTextCollectionViewCell.m */; };
+		68968ED81E51B71B00419619 /* slider-default-handle-highlighted.png in Resources */ = {isa = PBXBuildFile; fileRef = 68968EBA1E51B71A00419619 /* slider-default-handle-highlighted.png */; };
+		68968ED91E51B71B00419619 /* slider-default-handle-highlighted@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 68968EBB1E51B71A00419619 /* slider-default-handle-highlighted@2x.png */; };
+		68968EDA1E51B71B00419619 /* slider-default-handle.png in Resources */ = {isa = PBXBuildFile; fileRef = 68968EBC1E51B71A00419619 /* slider-default-handle.png */; };
+		68968EDB1E51B71B00419619 /* slider-default-handle@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 68968EBD1E51B71A00419619 /* slider-default-handle@2x.png */; };
+		68968EDC1E51B71B00419619 /* slider-default-track.png in Resources */ = {isa = PBXBuildFile; fileRef = 68968EBE1E51B71A00419619 /* slider-default-track.png */; };
+		68968EDD1E51B71B00419619 /* slider-default-track@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 68968EBF1E51B71A00419619 /* slider-default-track@2x.png */; };
+		68968EDE1E51B71B00419619 /* slider-default-trackBackground.png in Resources */ = {isa = PBXBuildFile; fileRef = 68968EC01E51B71A00419619 /* slider-default-trackBackground.png */; };
+		68968EDF1E51B71B00419619 /* slider-default-trackCrossedOver.png in Resources */ = {isa = PBXBuildFile; fileRef = 68968EC11E51B71B00419619 /* slider-default-trackCrossedOver.png */; };
+		68968EE01E51B71B00419619 /* slider-default-trackCrossedOver@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 68968EC21E51B71B00419619 /* slider-default-trackCrossedOver@2x.png */; };
+		68968EE11E51B71B00419619 /* slider-default_trackBackground@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 68968EC31E51B71B00419619 /* slider-default_trackBackground@2x.png */; };
+		68968EE21E51B71B00419619 /* slider-default7-handle.png in Resources */ = {isa = PBXBuildFile; fileRef = 68968EC51E51B71B00419619 /* slider-default7-handle.png */; };
+		68968EE31E51B71B00419619 /* slider-default7-handle@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 68968EC61E51B71B00419619 /* slider-default7-handle@2x.png */; };
+		68968EE41E51B71B00419619 /* slider-default7-track.png in Resources */ = {isa = PBXBuildFile; fileRef = 68968EC71E51B71B00419619 /* slider-default7-track.png */; };
+		68968EE51E51B71B00419619 /* slider-default7-track@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 68968EC81E51B71B00419619 /* slider-default7-track@2x.png */; };
+		68968EE61E51B71B00419619 /* slider-default7-trackBackground.png in Resources */ = {isa = PBXBuildFile; fileRef = 68968EC91E51B71B00419619 /* slider-default7-trackBackground.png */; };
+		68968EE71E51B71B00419619 /* slider-default7-trackBackground@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 68968ECA1E51B71B00419619 /* slider-default7-trackBackground@2x.png */; };
+		68968EE81E51B71B00419619 /* slider-default7-trackCrossedOver.png in Resources */ = {isa = PBXBuildFile; fileRef = 68968ECB1E51B71B00419619 /* slider-default7-trackCrossedOver.png */; };
+		68968EE91E51B71B00419619 /* slider-default7-trackCrossedOver@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 68968ECC1E51B71B00419619 /* slider-default7-trackCrossedOver@2x.png */; };
+		68968EEA1E51B71B00419619 /* slider-metal-handle-highlighted.png in Resources */ = {isa = PBXBuildFile; fileRef = 68968ECE1E51B71B00419619 /* slider-metal-handle-highlighted.png */; };
+		68968EEB1E51B71B00419619 /* slider-metal-handle-highlighted@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 68968ECF1E51B71B00419619 /* slider-metal-handle-highlighted@2x.png */; };
+		68968EEC1E51B71B00419619 /* slider-metal-handle.png in Resources */ = {isa = PBXBuildFile; fileRef = 68968ED01E51B71B00419619 /* slider-metal-handle.png */; };
+		68968EED1E51B71B00419619 /* slider-metal-handle@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 68968ED11E51B71B00419619 /* slider-metal-handle@2x.png */; };
+		68968EEE1E51B71B00419619 /* slider-metal-track.png in Resources */ = {isa = PBXBuildFile; fileRef = 68968ED21E51B71B00419619 /* slider-metal-track.png */; };
+		68968EEF1E51B71B00419619 /* slider-metal-track@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 68968ED31E51B71B00419619 /* slider-metal-track@2x.png */; };
+		68968EF01E51B71B00419619 /* slider-metal-trackBackground.png in Resources */ = {isa = PBXBuildFile; fileRef = 68968ED41E51B71B00419619 /* slider-metal-trackBackground.png */; };
+		68968EF11E51B71B00419619 /* slider-metal-trackBackground@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 68968ED51E51B71B00419619 /* slider-metal-trackBackground@2x.png */; };
+		68968EF21E51B71B00419619 /* NMRangeSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = 68968ED71E51B71B00419619 /* NMRangeSlider.m */; };
+		68A8279A1E4D9C6F00E63552 /* FTPopMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 68A827951E4D9C6F00E63552 /* FTPopMenu.m */; };
+		68A8279B1E4D9C6F00E63552 /* FTPopTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68A827971E4D9C6F00E63552 /* FTPopTableViewController.m */; };
+		68A8279C1E4D9C6F00E63552 /* UIViewController+FTPopMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 68A827991E4D9C6F00E63552 /* UIViewController+FTPopMenu.m */; };
+		68A827A01E4DB56400E63552 /* ProductFilterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68A8279E1E4DB56400E63552 /* ProductFilterViewController.m */; };
+		68A827A11E4DB56400E63552 /* ProductFilterViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 68A8279F1E4DB56400E63552 /* ProductFilterViewController.xib */; };
+		68A827A51E4DB62D00E63552 /* ProductDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68A827A31E4DB62D00E63552 /* ProductDetailViewController.m */; };
+		68A827A61E4DB62D00E63552 /* ProductDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 68A827A41E4DB62D00E63552 /* ProductDetailViewController.xib */; };
+		68A827AC1E4DC52700E63552 /* ProductListTitleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 68A827AB1E4DC52700E63552 /* ProductListTitleView.m */; };
 		68A85C7E1E2728CF004DD624 /* TMInfoManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 68A85C7D1E2728CF004DD624 /* TMInfoManager.m */; };
 		68AC12141E42D0BB0080183F /* ProductSubcategoryView.m in Sources */ = {isa = PBXBuildFile; fileRef = 68AC12131E42D0BB0080183F /* ProductSubcategoryView.m */; };
 		68B26FB91E31CB5F00B6D757 /* RegisterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68B26FB71E31CB5F00B6D757 /* RegisterViewController.m */; };
 		68B26FBA1E31CB5F00B6D757 /* RegisterViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 68B26FB81E31CB5F00B6D757 /* RegisterViewController.xib */; };
+		68B5EEC91E4C69910030A2ED /* FullScreenLoadingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 68B5EEC81E4C69910030A2ED /* FullScreenLoadingView.m */; };
 		68B68FEF1E24753400DCCF29 /* Utility.m in Sources */ = {isa = PBXBuildFile; fileRef = 68B68FEE1E24753400DCCF29 /* Utility.m */; };
 		68B68FF41E2484A600DCCF29 /* TextHorizontalSeparator.m in Sources */ = {isa = PBXBuildFile; fileRef = 68B68FF31E2484A600DCCF29 /* TextHorizontalSeparator.m */; };
 		68B68FF91E24C30700DCCF29 /* PromotionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68B68FF71E24C30700DCCF29 /* PromotionViewController.m */; };
@@ -199,6 +236,50 @@
 		6895464A1E3608E500D5CD1E /* WebViewViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WebViewViewController.h; path = ViewControllers/WebViewController/WebViewViewController.h; sourceTree = "<group>"; };
 		6895464B1E3608E500D5CD1E /* WebViewViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WebViewViewController.m; path = ViewControllers/WebViewController/WebViewViewController.m; sourceTree = "<group>"; };
 		6895464C1E3608E500D5CD1E /* WebViewViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = WebViewViewController.xib; path = ViewControllers/WebViewController/WebViewViewController.xib; sourceTree = "<group>"; };
+		68968EB51E51AD6300419619 /* ProductFilterTextCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ProductFilterTextCollectionViewCell.h; path = ViewControllers/ShoppingMall/ProductFilterTextCollectionViewCell.h; sourceTree = "<group>"; };
+		68968EB61E51AD6300419619 /* ProductFilterTextCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ProductFilterTextCollectionViewCell.m; path = ViewControllers/ShoppingMall/ProductFilterTextCollectionViewCell.m; sourceTree = "<group>"; };
+		68968EBA1E51B71A00419619 /* slider-default-handle-highlighted.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "slider-default-handle-highlighted.png"; sourceTree = "<group>"; };
+		68968EBB1E51B71A00419619 /* slider-default-handle-highlighted@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "slider-default-handle-highlighted@2x.png"; sourceTree = "<group>"; };
+		68968EBC1E51B71A00419619 /* slider-default-handle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "slider-default-handle.png"; sourceTree = "<group>"; };
+		68968EBD1E51B71A00419619 /* slider-default-handle@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "slider-default-handle@2x.png"; sourceTree = "<group>"; };
+		68968EBE1E51B71A00419619 /* slider-default-track.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "slider-default-track.png"; sourceTree = "<group>"; };
+		68968EBF1E51B71A00419619 /* slider-default-track@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "slider-default-track@2x.png"; sourceTree = "<group>"; };
+		68968EC01E51B71A00419619 /* slider-default-trackBackground.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "slider-default-trackBackground.png"; sourceTree = "<group>"; };
+		68968EC11E51B71B00419619 /* slider-default-trackCrossedOver.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "slider-default-trackCrossedOver.png"; sourceTree = "<group>"; };
+		68968EC21E51B71B00419619 /* slider-default-trackCrossedOver@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "slider-default-trackCrossedOver@2x.png"; sourceTree = "<group>"; };
+		68968EC31E51B71B00419619 /* slider-default_trackBackground@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "slider-default_trackBackground@2x.png"; sourceTree = "<group>"; };
+		68968EC51E51B71B00419619 /* slider-default7-handle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "slider-default7-handle.png"; sourceTree = "<group>"; };
+		68968EC61E51B71B00419619 /* slider-default7-handle@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "slider-default7-handle@2x.png"; sourceTree = "<group>"; };
+		68968EC71E51B71B00419619 /* slider-default7-track.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "slider-default7-track.png"; sourceTree = "<group>"; };
+		68968EC81E51B71B00419619 /* slider-default7-track@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "slider-default7-track@2x.png"; sourceTree = "<group>"; };
+		68968EC91E51B71B00419619 /* slider-default7-trackBackground.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "slider-default7-trackBackground.png"; sourceTree = "<group>"; };
+		68968ECA1E51B71B00419619 /* slider-default7-trackBackground@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "slider-default7-trackBackground@2x.png"; sourceTree = "<group>"; };
+		68968ECB1E51B71B00419619 /* slider-default7-trackCrossedOver.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "slider-default7-trackCrossedOver.png"; sourceTree = "<group>"; };
+		68968ECC1E51B71B00419619 /* slider-default7-trackCrossedOver@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "slider-default7-trackCrossedOver@2x.png"; sourceTree = "<group>"; };
+		68968ECE1E51B71B00419619 /* slider-metal-handle-highlighted.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "slider-metal-handle-highlighted.png"; sourceTree = "<group>"; };
+		68968ECF1E51B71B00419619 /* slider-metal-handle-highlighted@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "slider-metal-handle-highlighted@2x.png"; sourceTree = "<group>"; };
+		68968ED01E51B71B00419619 /* slider-metal-handle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "slider-metal-handle.png"; sourceTree = "<group>"; };
+		68968ED11E51B71B00419619 /* slider-metal-handle@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "slider-metal-handle@2x.png"; sourceTree = "<group>"; };
+		68968ED21E51B71B00419619 /* slider-metal-track.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "slider-metal-track.png"; sourceTree = "<group>"; };
+		68968ED31E51B71B00419619 /* slider-metal-track@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "slider-metal-track@2x.png"; sourceTree = "<group>"; };
+		68968ED41E51B71B00419619 /* slider-metal-trackBackground.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "slider-metal-trackBackground.png"; sourceTree = "<group>"; };
+		68968ED51E51B71B00419619 /* slider-metal-trackBackground@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "slider-metal-trackBackground@2x.png"; sourceTree = "<group>"; };
+		68968ED61E51B71B00419619 /* NMRangeSlider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NMRangeSlider.h; sourceTree = "<group>"; };
+		68968ED71E51B71B00419619 /* NMRangeSlider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NMRangeSlider.m; sourceTree = "<group>"; };
+		68A827941E4D9C6F00E63552 /* FTPopMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FTPopMenu.h; sourceTree = "<group>"; };
+		68A827951E4D9C6F00E63552 /* FTPopMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FTPopMenu.m; sourceTree = "<group>"; };
+		68A827961E4D9C6F00E63552 /* FTPopTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FTPopTableViewController.h; sourceTree = "<group>"; };
+		68A827971E4D9C6F00E63552 /* FTPopTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FTPopTableViewController.m; sourceTree = "<group>"; };
+		68A827981E4D9C6F00E63552 /* UIViewController+FTPopMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+FTPopMenu.h"; sourceTree = "<group>"; };
+		68A827991E4D9C6F00E63552 /* UIViewController+FTPopMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+FTPopMenu.m"; sourceTree = "<group>"; };
+		68A8279D1E4DB56400E63552 /* ProductFilterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ProductFilterViewController.h; path = ViewControllers/ShoppingMall/ProductFilterViewController.h; sourceTree = "<group>"; };
+		68A8279E1E4DB56400E63552 /* ProductFilterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ProductFilterViewController.m; path = ViewControllers/ShoppingMall/ProductFilterViewController.m; sourceTree = "<group>"; };
+		68A8279F1E4DB56400E63552 /* ProductFilterViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = ProductFilterViewController.xib; path = ViewControllers/ShoppingMall/ProductFilterViewController.xib; sourceTree = "<group>"; };
+		68A827A21E4DB62D00E63552 /* ProductDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ProductDetailViewController.h; path = ViewControllers/ShoppingMall/ProductDetailViewController.h; sourceTree = "<group>"; };
+		68A827A31E4DB62D00E63552 /* ProductDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ProductDetailViewController.m; path = ViewControllers/ShoppingMall/ProductDetailViewController.m; sourceTree = "<group>"; };
+		68A827A41E4DB62D00E63552 /* ProductDetailViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = ProductDetailViewController.xib; path = ViewControllers/ShoppingMall/ProductDetailViewController.xib; sourceTree = "<group>"; };
+		68A827AA1E4DC52700E63552 /* ProductListTitleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ProductListTitleView.h; path = ViewControllers/ShoppingMall/ProductListTitleView.h; sourceTree = "<group>"; };
+		68A827AB1E4DC52700E63552 /* ProductListTitleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ProductListTitleView.m; path = ViewControllers/ShoppingMall/ProductListTitleView.m; sourceTree = "<group>"; };
 		68A85C7C1E2728CF004DD624 /* TMInfoManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TMInfoManager.h; path = Utilities/Information/TMInfoManager.h; sourceTree = "<group>"; };
 		68A85C7D1E2728CF004DD624 /* TMInfoManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TMInfoManager.m; path = Utilities/Information/TMInfoManager.m; sourceTree = "<group>"; };
 		68AC12121E42D0BB0080183F /* ProductSubcategoryView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ProductSubcategoryView.h; path = ViewControllers/ShoppingMall/ProductSubcategoryView.h; sourceTree = "<group>"; };
@@ -206,6 +287,8 @@
 		68B26FB61E31CB5F00B6D757 /* RegisterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RegisterViewController.h; path = ViewControllers/Login/RegisterViewController.h; sourceTree = "<group>"; };
 		68B26FB71E31CB5F00B6D757 /* RegisterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RegisterViewController.m; path = ViewControllers/Login/RegisterViewController.m; sourceTree = "<group>"; };
 		68B26FB81E31CB5F00B6D757 /* RegisterViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = RegisterViewController.xib; path = ViewControllers/Login/RegisterViewController.xib; sourceTree = "<group>"; };
+		68B5EEC71E4C69910030A2ED /* FullScreenLoadingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FullScreenLoadingView.h; sourceTree = "<group>"; };
+		68B5EEC81E4C69910030A2ED /* FullScreenLoadingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FullScreenLoadingView.m; sourceTree = "<group>"; };
 		68B68FED1E24753400DCCF29 /* Utility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Utility.h; path = Utilities/Utility.h; sourceTree = "<group>"; };
 		68B68FEE1E24753400DCCF29 /* Utility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Utility.m; path = Utilities/Utility.m; sourceTree = "<group>"; };
 		68B68FF21E2484A600DCCF29 /* TextHorizontalSeparator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TextHorizontalSeparator.h; path = Component/Separator/TextHorizontalSeparator.h; sourceTree = "<group>"; };
@@ -520,6 +603,8 @@
 				68164D8F1E39D11F00006398 /* ProductListViewController.h */,
 				68164D901E39D11F00006398 /* ProductListViewController.m */,
 				68164D911E39D11F00006398 /* ProductListViewController.xib */,
+				68A827AA1E4DC52700E63552 /* ProductListTitleView.h */,
+				68A827AB1E4DC52700E63552 /* ProductListTitleView.m */,
 				680957761E432D4D00DA2BEA /* ProductTableViewCell.h */,
 				680957771E432D4D00DA2BEA /* ProductTableViewCell.m */,
 				6819AB501E4981A900735EA3 /* DiscountLabelView.h */,
@@ -532,6 +617,14 @@
 				680957711E43051C00DA2BEA /* ProductSubcategoryCollectionViewCell.m */,
 				680957731E43195F00DA2BEA /* ProductListToolView.h */,
 				680957741E43195F00DA2BEA /* ProductListToolView.m */,
+				68A8279D1E4DB56400E63552 /* ProductFilterViewController.h */,
+				68A8279E1E4DB56400E63552 /* ProductFilterViewController.m */,
+				68A8279F1E4DB56400E63552 /* ProductFilterViewController.xib */,
+				68968EB51E51AD6300419619 /* ProductFilterTextCollectionViewCell.h */,
+				68968EB61E51AD6300419619 /* ProductFilterTextCollectionViewCell.m */,
+				68A827A21E4DB62D00E63552 /* ProductDetailViewController.h */,
+				68A827A31E4DB62D00E63552 /* ProductDetailViewController.m */,
+				68A827A41E4DB62D00E63552 /* ProductDetailViewController.xib */,
 			);
 			name = ShoppingMall;
 			sourceTree = "<group>";
@@ -586,6 +679,78 @@
 			name = WebViewController;
 			sourceTree = "<group>";
 		};
+		68968EB81E51B71A00419619 /* NMRangeSlider */ = {
+			isa = PBXGroup;
+			children = (
+				68968EB91E51B71A00419619 /* DefaultTheme */,
+				68968EC41E51B71B00419619 /* DefaultTheme7 */,
+				68968ECD1E51B71B00419619 /* MetalTheme */,
+				68968ED61E51B71B00419619 /* NMRangeSlider.h */,
+				68968ED71E51B71B00419619 /* NMRangeSlider.m */,
+			);
+			path = NMRangeSlider;
+			sourceTree = "<group>";
+		};
+		68968EB91E51B71A00419619 /* DefaultTheme */ = {
+			isa = PBXGroup;
+			children = (
+				68968EBA1E51B71A00419619 /* slider-default-handle-highlighted.png */,
+				68968EBB1E51B71A00419619 /* slider-default-handle-highlighted@2x.png */,
+				68968EBC1E51B71A00419619 /* slider-default-handle.png */,
+				68968EBD1E51B71A00419619 /* slider-default-handle@2x.png */,
+				68968EBE1E51B71A00419619 /* slider-default-track.png */,
+				68968EBF1E51B71A00419619 /* slider-default-track@2x.png */,
+				68968EC01E51B71A00419619 /* slider-default-trackBackground.png */,
+				68968EC11E51B71B00419619 /* slider-default-trackCrossedOver.png */,
+				68968EC21E51B71B00419619 /* slider-default-trackCrossedOver@2x.png */,
+				68968EC31E51B71B00419619 /* slider-default_trackBackground@2x.png */,
+			);
+			path = DefaultTheme;
+			sourceTree = "<group>";
+		};
+		68968EC41E51B71B00419619 /* DefaultTheme7 */ = {
+			isa = PBXGroup;
+			children = (
+				68968EC51E51B71B00419619 /* slider-default7-handle.png */,
+				68968EC61E51B71B00419619 /* slider-default7-handle@2x.png */,
+				68968EC71E51B71B00419619 /* slider-default7-track.png */,
+				68968EC81E51B71B00419619 /* slider-default7-track@2x.png */,
+				68968EC91E51B71B00419619 /* slider-default7-trackBackground.png */,
+				68968ECA1E51B71B00419619 /* slider-default7-trackBackground@2x.png */,
+				68968ECB1E51B71B00419619 /* slider-default7-trackCrossedOver.png */,
+				68968ECC1E51B71B00419619 /* slider-default7-trackCrossedOver@2x.png */,
+			);
+			path = DefaultTheme7;
+			sourceTree = "<group>";
+		};
+		68968ECD1E51B71B00419619 /* MetalTheme */ = {
+			isa = PBXGroup;
+			children = (
+				68968ECE1E51B71B00419619 /* slider-metal-handle-highlighted.png */,
+				68968ECF1E51B71B00419619 /* slider-metal-handle-highlighted@2x.png */,
+				68968ED01E51B71B00419619 /* slider-metal-handle.png */,
+				68968ED11E51B71B00419619 /* slider-metal-handle@2x.png */,
+				68968ED21E51B71B00419619 /* slider-metal-track.png */,
+				68968ED31E51B71B00419619 /* slider-metal-track@2x.png */,
+				68968ED41E51B71B00419619 /* slider-metal-trackBackground.png */,
+				68968ED51E51B71B00419619 /* slider-metal-trackBackground@2x.png */,
+			);
+			path = MetalTheme;
+			sourceTree = "<group>";
+		};
+		68A827931E4D9C6F00E63552 /* FTPopMenu */ = {
+			isa = PBXGroup;
+			children = (
+				68A827941E4D9C6F00E63552 /* FTPopMenu.h */,
+				68A827951E4D9C6F00E63552 /* FTPopMenu.m */,
+				68A827961E4D9C6F00E63552 /* FTPopTableViewController.h */,
+				68A827971E4D9C6F00E63552 /* FTPopTableViewController.m */,
+				68A827981E4D9C6F00E63552 /* UIViewController+FTPopMenu.h */,
+				68A827991E4D9C6F00E63552 /* UIViewController+FTPopMenu.m */,
+			);
+			path = FTPopMenu;
+			sourceTree = "<group>";
+		};
 		68A85C7B1E272835004DD624 /* Infomation */ = {
 			isa = PBXGroup;
 			children = (
@@ -595,9 +760,20 @@
 			name = Infomation;
 			sourceTree = "<group>";
 		};
+		68B5EEC61E4C69910030A2ED /* LoadingView */ = {
+			isa = PBXGroup;
+			children = (
+				68B5EEC71E4C69910030A2ED /* FullScreenLoadingView.h */,
+				68B5EEC81E4C69910030A2ED /* FullScreenLoadingView.m */,
+			);
+			name = LoadingView;
+			path = Component/LoadingView;
+			sourceTree = "<group>";
+		};
 		68B68FF01E2483D600DCCF29 /* Component */ = {
 			isa = PBXGroup;
 			children = (
+				68B5EEC61E4C69910030A2ED /* LoadingView */,
 				68B68FF11E24843800DCCF29 /* Separator */,
 			);
 			name = Component;
@@ -658,6 +834,8 @@
 		68D55E4A1E25D938005D1BB7 /* ThirdParty */ = {
 			isa = PBXGroup;
 			children = (
+				68968EB81E51B71A00419619 /* NMRangeSlider */,
+				68A827931E4D9C6F00E63552 /* FTPopMenu */,
 				68D55E931E26205B005D1BB7 /* TTTAttributedLabel */,
 				68D55E4B1E25D938005D1BB7 /* SDWebImage */,
 			);
@@ -843,25 +1021,53 @@
 			buildActionMask = 2147483647;
 			files = (
 				6811BC711E2774B500626A4A /* GoogleSignIn.bundle in Resources */,
+				68968EE91E51B71B00419619 /* slider-default7-trackCrossedOver@2x.png in Resources */,
+				68968EDA1E51B71B00419619 /* slider-default-handle.png in Resources */,
+				68968EE41E51B71B00419619 /* slider-default7-track.png in Resources */,
 				689065271E2338C400E5CB26 /* MemberViewController.xib in Resources */,
+				68968EDB1E51B71B00419619 /* slider-default-handle@2x.png in Resources */,
+				68968EDF1E51B71B00419619 /* slider-default-trackCrossedOver.png in Resources */,
 				689065151E23368100E5CB26 /* ShoppingMallViewController.xib in Resources */,
+				68968EE81E51B71B00419619 /* slider-default7-trackCrossedOver.png in Resources */,
 				68CA36BE1E23880400A70BCC /* LoginViewController.xib in Resources */,
 				68E401371E30B09900BFF66B /* ForgetPasswordViewController.xib in Resources */,
 				68E401321E309B7700BFF66B /* TermsViewController.xib in Resources */,
+				68968ED81E51B71B00419619 /* slider-default-handle-highlighted.png in Resources */,
+				68968EEB1E51B71B00419619 /* slider-metal-handle-highlighted@2x.png in Resources */,
 				685939BD1E1F49DF00351FFB /* LaunchScreen.storyboard in Resources */,
+				68968EE11E51B71B00419619 /* slider-default_trackBackground@2x.png in Resources */,
+				68968EDC1E51B71B00419619 /* slider-default-track.png in Resources */,
+				68968EEF1E51B71B00419619 /* slider-metal-track@2x.png in Resources */,
 				689546451E35DFB400D5CD1E /* AuthenticateViewController.xib in Resources */,
+				68968EE51E51B71B00419619 /* slider-default7-track@2x.png in Resources */,
+				68968ED91E51B71B00419619 /* slider-default-handle-highlighted@2x.png in Resources */,
+				68968EDE1E51B71B00419619 /* slider-default-trackBackground.png in Resources */,
 				685939BA1E1F49DF00351FFB /* Assets.xcassets in Resources */,
+				68968EEE1E51B71B00419619 /* slider-metal-track.png in Resources */,
+				68968EE21E51B71B00419619 /* slider-default7-handle.png in Resources */,
 				6890650F1E23334400E5CB26 /* EntranceViewController.xib in Resources */,
+				68968EE71E51B71B00419619 /* slider-default7-trackBackground@2x.png in Resources */,
 				68B68FFA1E24C30700DCCF29 /* PromotionViewController.xib in Resources */,
 				6895464E1E3608E500D5CD1E /* WebViewViewController.xib in Resources */,
+				68968EF01E51B71B00419619 /* slider-metal-trackBackground.png in Resources */,
+				68968EE61E51B71B00419619 /* slider-default7-trackBackground.png in Resources */,
 				68CA36A61E2362FF00A70BCC /* Localizable.strings in Resources */,
+				68A827A11E4DB56400E63552 /* ProductFilterViewController.xib in Resources */,
 				6890651B1E2337F900E5CB26 /* CartViewController.xib in Resources */,
+				68968EE01E51B71B00419619 /* slider-default-trackCrossedOver@2x.png in Resources */,
+				68968EE31E51B71B00419619 /* slider-default7-handle@2x.png in Resources */,
+				68968EEA1E51B71B00419619 /* slider-metal-handle-highlighted.png in Resources */,
 				685939B51E1F49DF00351FFB /* Main.storyboard in Resources */,
 				689065211E23387200E5CB26 /* NotificationViewController.xib in Resources */,
 				6890652D1E23470E00E5CB26 /* FavoriteViewController.xib in Resources */,
 				68B26FBA1E31CB5F00B6D757 /* RegisterViewController.xib in Resources */,
+				68A827A61E4DB62D00E63552 /* ProductDetailViewController.xib in Resources */,
+				68968EED1E51B71B00419619 /* slider-metal-handle@2x.png in Resources */,
 				68164D931E39D11F00006398 /* ProductListViewController.xib in Resources */,
 				6811BC751E27757100626A4A /* GoogleService-Info.plist in Resources */,
+				68968EF11E51B71B00419619 /* slider-metal-trackBackground@2x.png in Resources */,
+				68968EEC1E51B71B00419619 /* slider-metal-handle.png in Resources */,
+				68968EDD1E51B71B00419619 /* slider-default-track@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -893,9 +1099,12 @@
 				68164D921E39D11F00006398 /* ProductListViewController.m in Sources */,
 				68E401361E30B09900BFF66B /* ForgetPasswordViewController.m in Sources */,
 				68D55E871E25D938005D1BB7 /* UIImageView+WebCache.m in Sources */,
+				68968EF21E51B71B00419619 /* NMRangeSlider.m in Sources */,
 				685939B21E1F49DF00351FFB /* ViewController.m in Sources */,
+				68A8279B1E4D9C6F00E63552 /* FTPopTableViewController.m in Sources */,
 				68D55E7B1E25D938005D1BB7 /* SDImageCacheConfig.m in Sources */,
 				68164D8E1E39B26300006398 /* ExtraSubcategoryHeaderView.m in Sources */,
+				68A827A51E4DB62D00E63552 /* ProductDetailViewController.m in Sources */,
 				68B68FFD1E24C45600DCCF29 /* PromotionTableViewCell.m in Sources */,
 				6890650E1E23334400E5CB26 /* EntranceViewController.m in Sources */,
 				68164D961E39E44400006398 /* ExtraSubcategorySeeAllTableViewCell.m in Sources */,
@@ -910,6 +1119,8 @@
 				68D55E861E25D938005D1BB7 /* UIImageView+HighlightedWebCache.m in Sources */,
 				689065141E23368100E5CB26 /* ShoppingMallViewController.m in Sources */,
 				68D55E7A1E25D938005D1BB7 /* SDImageCache.m in Sources */,
+				68A827AC1E4DC52700E63552 /* ProductListTitleView.m in Sources */,
+				68968EB71E51AD6300419619 /* ProductFilterTextCollectionViewCell.m in Sources */,
 				68D55E801E25D938005D1BB7 /* SDWebImageManager.m in Sources */,
 				68CA36B81E23722F00A70BCC /* EntranceMemberPromoteHeader.m in Sources */,
 				680957721E43051C00DA2BEA /* ProductSubcategoryCollectionViewCell.m in Sources */,
@@ -919,8 +1130,10 @@
 				68D55E831E25D938005D1BB7 /* UIImage+GIF.m in Sources */,
 				6890651A1E2337F900E5CB26 /* CartViewController.m in Sources */,
 				68B26FB91E31CB5F00B6D757 /* RegisterViewController.m in Sources */,
+				68B5EEC91E4C69910030A2ED /* FullScreenLoadingView.m in Sources */,
 				68CA36B21E23709400A70BCC /* EntranceTableViewCell.m in Sources */,
 				685939AC1E1F49DF00351FFB /* main.m in Sources */,
+				68A8279C1E4D9C6F00E63552 /* UIViewController+FTPopMenu.m in Sources */,
 				68D55E841E25D938005D1BB7 /* UIImage+MultiFormat.m in Sources */,
 				689546481E35F38700D5CD1E /* PagingGridView.m in Sources */,
 				68D55E7F1E25D938005D1BB7 /* SDWebImageDownloaderOperation.m in Sources */,
@@ -947,8 +1160,10 @@
 				68CA36B51E23712700A70BCC /* EntranceFunctionSectionHeader.m in Sources */,
 				68FBDE041E3757F7007F5C13 /* MainCategoryCollectionViewCell.m in Sources */,
 				68D55E761E25D938005D1BB7 /* FLAnimatedImageView+WebCache.m in Sources */,
+				68A827A01E4DB56400E63552 /* ProductFilterViewController.m in Sources */,
 				68DC2BAB1E487B28003573AC /* LoadingFooterView.m in Sources */,
 				6890652C1E23470E00E5CB26 /* FavoriteViewController.m in Sources */,
+				68A8279A1E4D9C6F00E63552 /* FTPopMenu.m in Sources */,
 				68D55E961E26205B005D1BB7 /* TTTAttributedLabel.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

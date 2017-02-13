@@ -63,5 +63,15 @@
 + (NSString *)CannotLoadData;
 + (NSString *)GoBack;
 + (NSString *)Reload;
++ (NSString *)PleaseTryAgainLater;
++ (NSString *)LowPriceFirst;
++ (NSString *)HighPriceFirst;
++ (NSString *)LowPointFirst;
++ (NSString *)HighPointFirst;
++ (NSString *)OnShelfOrder;
++ (NSString *)Point;
++ (NSString *)ChooseOrder;
++ (NSString *)CategoryList;
++ (NSString *)AdvanceFilter;
 
 @end
