@@ -517,8 +517,8 @@ NSUInteger DeviceSystemMajorVersion() {
     
     float xValue = ((self.bounds.size.width-thumbRect.size.width)*((value - _minimumValue) / (_maximumValue - _minimumValue)));
     thumbRect.origin = CGPointMake(xValue, (self.bounds.size.height/2.0f) - (thumbRect.size.height/2.0f));
-    
-    return CGRectIntegral(thumbRect);
+    CGRect thumbRectIntegral = CGRectIntegral(thumbRect);
+    return thumbRectIntegral;
 
 }
 
@@ -583,6 +583,7 @@ NSUInteger DeviceSystemMajorVersion() {
     self.lowerHandle.hidden = self.lowerHandleHidden;
     
     // Layoput the upper handle
+    CGRect thumbRect = [self thumbRectForValue:_upperValue image:self.upperHandleImageNormal];
     self.upperHandle.frame = [self thumbRectForValue:_upperValue image:self.upperHandleImageNormal];
     self.upperHandle.image = self.upperHandleImageNormal;
     self.upperHandle.highlightedImage = self.upperHandleImageHighlighted;

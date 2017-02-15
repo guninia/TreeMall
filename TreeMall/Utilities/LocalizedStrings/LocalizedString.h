@@ -73,5 +73,15 @@
 + (NSString *)ChooseOrder;
 + (NSString *)CategoryList;
 + (NSString *)AdvanceFilter;
++ (NSString *)Category;
++ (NSString *)PriceRange;
++ (NSString *)PointRange;
++ (NSString *)Coupon;
++ (NSString *)DeliverType;
++ (NSString *)Reset;
++ (NSString *)CannotRetrieveFilterOptions;
++ (NSString *)NoSpecific;
++ (NSString *)Fast;
++ (NSString *)ReceiveAtConvenientStore;
 
 @end

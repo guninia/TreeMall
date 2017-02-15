@@ -167,7 +167,7 @@
     NSString *apiKey = [CryptoModule sharedModule].apiKey;
     NSString *token = [SHAPIAdapter sharedAdapter].token;
     NSURL *url = [NSURL URLWithString:SymphoxAPI_Subcategories];
-    NSLog(@"retrieveSubcategoryDataForIdentifier - url [%@]", [url absoluteString]);
+//    NSLog(@"retrieveSubcategoryDataForIdentifier - url [%@]", [url absoluteString]);
     NSDictionary *headerFields = [NSDictionary dictionaryWithObjectsAndKeys:apiKey, SymphoxAPIParam_key, token, SymphoxAPIParam_token, nil];
     [[SHAPIAdapter sharedAdapter] sendRequestFromObject:weakSelf ToUrl:url withHeaderFields:headerFields andPostObject:options inPostFormat:SHPostFormatJson encrypted:YES decryptedReturnData:YES completion:^(id resultObject, NSError *error){
         if (error == nil)
@@ -249,7 +249,7 @@
     NSString *apiKey = [CryptoModule sharedModule].apiKey;
     NSString *token = [SHAPIAdapter sharedAdapter].token;
     NSURL *url = [NSURL URLWithString:SymphoxAPI_Search];
-    NSLog(@"retrieveSubcategoryDataForIdentifier - url [%@]", [url absoluteString]);
+//    NSLog(@"retrieveSubcategoryDataForIdentifier - url [%@]", [url absoluteString]);
     NSDictionary *headerFields = [NSDictionary dictionaryWithObjectsAndKeys:apiKey, SymphoxAPIParam_key, token, SymphoxAPIParam_token, nil];
     [[SHAPIAdapter sharedAdapter] sendRequestFromObject:weakSelf ToUrl:url withHeaderFields:headerFields andPostObject:conditions inPostFormat:SHPostFormatJson encrypted:YES decryptedReturnData:YES completion:^(id resultObject, NSError *error){
         if (error == nil)
@@ -709,11 +709,24 @@
 
 - (void)productListToolView:(ProductListToolView *)view didSelectFilterBySender:(id)sender
 {
-//    if (self.isLoading)
-//        return;
-//    ProductFilterViewController *viewController = [[ProductFilterViewController alloc] initWithNibName:@"ProductFilterViewController" bundle:[NSBundle mainBundle]];
-//    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:viewController];
-//    [self presentViewController:navigationController animated:YES completion:nil];
+    if (self.isLoading)
+        return;
+    if ([[TMInfoManager sharedManager].dictionaryInitialFilter count] == 0)
+    {
+        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:[LocalizedString CannotRetrieveFilterOptions] preferredStyle:UIAlertControllerStyleAlert];
+        __weak ProductListViewController *weakSelf = self;
+        UIAlertAction *actionReload = [UIAlertAction actionWithTitle:[LocalizedString Reload] style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
+            [weakSelf refreshAllContentForHallId:weakSelf.hallId andLayer:weakSelf.layer withName:weakSelf.name];
+        }];
+        UIAlertAction *actionConfirm = [UIAlertAction actionWithTitle:[LocalizedString Confirm] style:UIAlertActionStyleDefault handler:nil];
+        [alertController addAction:actionReload];
+        [alertController addAction:actionConfirm];
+        [self presentViewController:alertController animated:YES completion:nil];
+        return;
+    }
+    ProductFilterViewController *viewController = [[ProductFilterViewController alloc] initWithNibName:@"ProductFilterViewController" bundle:[NSBundle mainBundle]];
+    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:viewController];
+    [self presentViewController:navigationController animated:YES completion:nil];
 }
 
 #pragma mark - ProductSubcategoryViewDelegate

@@ -55,6 +55,7 @@
 		689546481E35F38700D5CD1E /* PagingGridView.m in Sources */ = {isa = PBXBuildFile; fileRef = 689546471E35F38700D5CD1E /* PagingGridView.m */; };
 		6895464D1E3608E500D5CD1E /* WebViewViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6895464B1E3608E500D5CD1E /* WebViewViewController.m */; };
 		6895464E1E3608E500D5CD1E /* WebViewViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6895464C1E3608E500D5CD1E /* WebViewViewController.xib */; };
+		689613CA1E52AAE800066BE7 /* LabelRangeSliderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 689613C91E52AAE800066BE7 /* LabelRangeSliderView.m */; };
 		68968EB71E51AD6300419619 /* ProductFilterTextCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 68968EB61E51AD6300419619 /* ProductFilterTextCollectionViewCell.m */; };
 		68968ED81E51B71B00419619 /* slider-default-handle-highlighted.png in Resources */ = {isa = PBXBuildFile; fileRef = 68968EBA1E51B71A00419619 /* slider-default-handle-highlighted.png */; };
 		68968ED91E51B71B00419619 /* slider-default-handle-highlighted@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 68968EBB1E51B71A00419619 /* slider-default-handle-highlighted@2x.png */; };
@@ -236,6 +237,8 @@
 		6895464A1E3608E500D5CD1E /* WebViewViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WebViewViewController.h; path = ViewControllers/WebViewController/WebViewViewController.h; sourceTree = "<group>"; };
 		6895464B1E3608E500D5CD1E /* WebViewViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WebViewViewController.m; path = ViewControllers/WebViewController/WebViewViewController.m; sourceTree = "<group>"; };
 		6895464C1E3608E500D5CD1E /* WebViewViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = WebViewViewController.xib; path = ViewControllers/WebViewController/WebViewViewController.xib; sourceTree = "<group>"; };
+		689613C81E52AAE800066BE7 /* LabelRangeSliderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LabelRangeSliderView.h; path = ViewControllers/ShoppingMall/LabelRangeSliderView.h; sourceTree = "<group>"; };
+		689613C91E52AAE800066BE7 /* LabelRangeSliderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LabelRangeSliderView.m; path = ViewControllers/ShoppingMall/LabelRangeSliderView.m; sourceTree = "<group>"; };
 		68968EB51E51AD6300419619 /* ProductFilterTextCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ProductFilterTextCollectionViewCell.h; path = ViewControllers/ShoppingMall/ProductFilterTextCollectionViewCell.h; sourceTree = "<group>"; };
 		68968EB61E51AD6300419619 /* ProductFilterTextCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ProductFilterTextCollectionViewCell.m; path = ViewControllers/ShoppingMall/ProductFilterTextCollectionViewCell.m; sourceTree = "<group>"; };
 		68968EBA1E51B71A00419619 /* slider-default-handle-highlighted.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "slider-default-handle-highlighted.png"; sourceTree = "<group>"; };
@@ -622,6 +625,8 @@
 				68A8279F1E4DB56400E63552 /* ProductFilterViewController.xib */,
 				68968EB51E51AD6300419619 /* ProductFilterTextCollectionViewCell.h */,
 				68968EB61E51AD6300419619 /* ProductFilterTextCollectionViewCell.m */,
+				689613C81E52AAE800066BE7 /* LabelRangeSliderView.h */,
+				689613C91E52AAE800066BE7 /* LabelRangeSliderView.m */,
 				68A827A21E4DB62D00E63552 /* ProductDetailViewController.h */,
 				68A827A31E4DB62D00E63552 /* ProductDetailViewController.m */,
 				68A827A41E4DB62D00E63552 /* ProductDetailViewController.xib */,
@@ -1126,6 +1131,7 @@
 				680957721E43051C00DA2BEA /* ProductSubcategoryCollectionViewCell.m in Sources */,
 				68D55E8F1E25DCF8005D1BB7 /* FLAnimatedImageView.m in Sources */,
 				68B68FEF1E24753400DCCF29 /* Utility.m in Sources */,
+				689613CA1E52AAE800066BE7 /* LabelRangeSliderView.m in Sources */,
 				689065201E23387200E5CB26 /* NotificationViewController.m in Sources */,
 				68D55E831E25D938005D1BB7 /* UIImage+GIF.m in Sources */,
 				6890651A1E2337F900E5CB26 /* CartViewController.m in Sources */,

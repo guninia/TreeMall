@@ -641,4 +641,104 @@
     return AdvanceFilter;
 }
 
++ (NSString *)Category
+{
+    static NSString *Category = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        Category = NSLocalizedString(@"Category", nil);
+    });
+    return Category;
+}
+
++ (NSString *)PriceRange
+{
+    static NSString *PriceRange = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        PriceRange = NSLocalizedString(@"PriceRange", nil);
+    });
+    return PriceRange;
+}
+
++ (NSString *)PointRange
+{
+    static NSString *PointRange = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        PointRange = NSLocalizedString(@"PointRange", nil);
+    });
+    return PointRange;
+}
+
++ (NSString *)Coupon
+{
+    static NSString *Coupon = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        Coupon = NSLocalizedString(@"Coupon", nil);
+    });
+    return Coupon;
+}
+
++ (NSString *)DeliverType
+{
+    static NSString *DeliverType = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        DeliverType = NSLocalizedString(@"DeliverType", nil);
+    });
+    return DeliverType;
+}
+
++ (NSString *)Reset
+{
+    static NSString *Reset = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        Reset = NSLocalizedString(@"Reset", nil);
+    });
+    return Reset;
+}
+
++ (NSString *)CannotRetrieveFilterOptions
+{
+    static NSString *CannotRetrieveFilterOptions = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        CannotRetrieveFilterOptions = NSLocalizedString(@"CannotRetrieveFilterOptions", nil);
+    });
+    return CannotRetrieveFilterOptions;
+}
+
++ (NSString *)NoSpecific
+{
+    static NSString *NoSpecific = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        NoSpecific = NSLocalizedString(@"NoSpecific", nil);
+    });
+    return NoSpecific;
+}
+
++ (NSString *)Fast
+{
+    static NSString *Fast = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        Fast = NSLocalizedString(@"Fast", nil);
+    });
+    return Fast;
+}
+
++ (NSString *)ReceiveAtConvenientStore
+{
+    static NSString *ReceiveAtConvenientStore = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        ReceiveAtConvenientStore = NSLocalizedString(@"ReceiveAtConvenientStore", nil);
+    });
+    return ReceiveAtConvenientStore;
+}
+
 @end

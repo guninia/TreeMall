@@ -223,7 +223,7 @@ typedef enum : NSUInteger {
     NSString *apiKey = [CryptoModule sharedModule].apiKey;
     NSString *token = [SHAPIAdapter sharedAdapter].token;
     NSURL *url = [NSURL URLWithString:SymphoxAPI_Subcategories];
-    NSLog(@"retrieveSubcategoryDataForIdentifier - url [%@]", [url absoluteString]);
+//    NSLog(@"retrieveSubcategoryDataForIdentifier - url [%@]", [url absoluteString]);
     NSDictionary *headerFields = [NSDictionary dictionaryWithObjectsAndKeys:apiKey, SymphoxAPIParam_key, token, SymphoxAPIParam_token, nil];
     [[SHAPIAdapter sharedAdapter] sendRequestFromObject:weakSelf ToUrl:url withHeaderFields:headerFields andPostObject:options inPostFormat:SHPostFormatJson encrypted:YES decryptedReturnData:YES completion:^(id resultObject, NSError *error){
         if (error == nil)
@@ -254,7 +254,7 @@ typedef enum : NSUInteger {
 
 - (BOOL)processSubcategoryData:(id)data forIdentifier:(NSString *)identifier forLayerIndex:(NSInteger)layerIndex
 {
-    NSLog(@"processSubcategoryData - layerIndex[%li]", (long)layerIndex);
+//    NSLog(@"processSubcategoryData - layerIndex[%li]", (long)layerIndex);
     BOOL canProcess = NO;
     NSError *error = nil;
     id jsonObject = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];

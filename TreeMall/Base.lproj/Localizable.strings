@@ -70,3 +70,13 @@
 "ChooseOrder"="Choose order";
 "CategoryList"="Category list";
 "AdvanceFilter"="Advance Filter";
+"Category"="Category";
+"PriceRange"="Price range";
+"PointRange"="Point range";
+"Coupon"="Coupon";
+"DeliverType"="Deliver type";
+"Reset"="Reset";
+"CannotRetrieveFilterOptions"="Cannot retrieve filter options";
+"NoSpecific"="Not Specific";
+"Fast"="Fast";
+"ReceiveAtConvenientStore"="Receive At Convenient Store";

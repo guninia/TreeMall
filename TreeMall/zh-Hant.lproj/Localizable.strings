@@ -69,4 +69,13 @@
 "ChooseOrder"="請選擇排序方式";
 "CategoryList"="類別清單";
 "AdvanceFilter"="進階篩選";
-
+"Category"="分類";
+"PriceRange"="價格範圍";
+"PointRange"="點數範圍";
+"Coupon"="折價券";
+"DeliverType"="配送方式";
+"Reset"="重設";
+"CannotRetrieveFilterOptions"="無法取得過濾條件";
+"NoSpecific"="不限";
+"Fast"="快速";
+"ReceiveAtConvenientStore"="超商取貨";

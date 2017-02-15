@@ -12,4 +12,6 @@ static NSString *ProductFilterTextCollectionViewCellIdentifier = @"ProductFilter
 
 @interface ProductFilterTextCollectionViewCell : UICollectionViewCell
 
+@property (nonatomic, strong) UILabel *labelText;
+
 @end

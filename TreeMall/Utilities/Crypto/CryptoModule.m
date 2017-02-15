@@ -93,7 +93,7 @@ static CryptoModule *gCryptoModule = nil;
             {
                 [userInfo setObject:statusDescription forKey:SymphoxAPIParam_status_desc];
             }
-            NSLog(@"API status[%@][%@]", statusId, statusDescription);
+//            NSLog(@"API status[%@][%@]", statusId, statusDescription);
             
             NSString *result = [dictionary objectForKey:SymphoxAPIParam_result];
             if ([statusId compare:@"E000" options:NSCaseInsensitiveSearch] == NSOrderedSame)

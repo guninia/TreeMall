@@ -377,9 +377,9 @@ static NSUInteger PromotionReadNumberMax = 100;
 - (NSArray *)subcategoriesForIdentifier:(NSString *)identifier atLayer:(NSNumber *)layer
 {
     NSString *key = [self keyForCategoryIdentifier:identifier withLayer:layer];
-    NSLog(@"subcategoriesForIdentifier - key[%@]", key);
+//    NSLog(@"subcategoriesForIdentifier - key[%@]", key);
     NSArray *categories = [_dictionaryCachedCategories objectForKey:key];
-    NSLog(@"subcategoriesForIdentifier - categories:\n%@", [categories description]);
+//    NSLog(@"subcategoriesForIdentifier - categories:\n%@", [categories description]);
     return categories;
 }
 
