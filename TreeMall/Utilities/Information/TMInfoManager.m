@@ -23,6 +23,8 @@ static NSString *TMInfoArchiveKey_UserEcoupon = @"UserEcoupon";
 static NSString *TMInfoArchiveKey_CachedCategories = @"CachedCategories";
 static NSString *TMInfoArchiveKey_ArchiveTimestamp = @"ArchiveTimestamp";
 
+static NSString *SeparatorBetweenIdAndLayer = @"_";
+
 static TMInfoManager *gTMInfoManager = nil;
 
 static NSUInteger PromotionReadNumberMax = 100;
@@ -383,6 +385,79 @@ static NSUInteger PromotionReadNumberMax = 100;
     return categories;
 }
 
+- (NSDictionary *)cachedDictionaries
+{
+    return _dictionaryCachedCategories;
+}
+
+- (NSArray *)categoriesContainsCategoryWithIdentifier:(NSString *)identifier
+{
+    NSArray *categories = nil;
+    for (NSString *key in [_dictionaryCachedCategories allKeys])
+    {
+        id value = [_dictionaryCachedCategories objectForKey:key];
+        if ([value isKindOfClass:[NSArray class]])
+        {
+            NSArray *array = (NSArray *)value;
+            for (NSDictionary *category in array)
+            {
+                NSString *hallId = [category objectForKey:SymphoxAPIParam_hall_id];
+                if ([hallId isEqualToString:identifier])
+                {
+                    categories = array;
+                    break;
+                }
+            }
+        }
+        if (categories != nil)
+        {
+            break;
+        }
+    }
+    return categories;
+}
+
+- (void)findSiblingsInSameLayerAndContentForCategoryIdentifier:(NSString *)identifier withCompletion:(void (^)(NSArray *, NSDictionary *, NSNumber *))block
+{
+    NSArray *siblings = nil;
+    NSDictionary *content = nil;
+    NSNumber *layerNumber = nil;
+    for (NSString *key in [_dictionaryCachedCategories allKeys])
+    {
+        id value = [_dictionaryCachedCategories objectForKey:key];
+        if ([value isKindOfClass:[NSArray class]])
+        {
+            NSArray *array = (NSArray *)value;
+            for (NSDictionary *category in array)
+            {
+                NSString *hallId = [category objectForKey:SymphoxAPIParam_hall_id];
+                if ([hallId isEqualToString:identifier])
+                {
+                    siblings = array;
+                    content = category;
+                    break;
+                }
+            }
+        }
+        if (siblings != nil && content != nil)
+        {
+            NSArray *keyComponents = [key componentsSeparatedByString:SeparatorBetweenIdAndLayer];
+            
+            NSString *parentLayerString = [keyComponents lastObject];
+            if (parentLayerString)
+            {
+                NSInteger layer = [parentLayerString integerValue] + 1;
+                layerNumber = [NSNumber numberWithInteger:layer];
+            }
+            break;
+        }
+    }
+    if (block)
+    {
+        block(siblings, content, layerNumber);
+    }
+}
+
 - (void)retrieveToken
 {
     CryptoModule *module = [CryptoModule sharedModule];
@@ -451,7 +526,8 @@ static NSUInteger PromotionReadNumberMax = 100;
     }
     if (layer)
     {
-        [key appendFormat:@"_%@", [layer stringValue]];
+        [key appendString:SeparatorBetweenIdAndLayer];
+        [key appendString:[layer stringValue]];
     }
     return key;
 }

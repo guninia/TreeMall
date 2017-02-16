@@ -250,7 +250,6 @@
 
 - (void)updateValueLabel
 {
-//    NSLog(@"updateValueLabel - self.labelLowerValue[%4.2f,%4.2f,%4.2f,%4.2f]", self.labelLowerValue.frame.origin.x, self.labelLowerValue.frame.origin.y, self.labelLowerValue.frame.size.width, self.labelLowerValue.frame.size.height);
     if (self.labelLowerValue && [self.labelLowerValue isHidden] == NO)
     {
         CGRect frame = self.labelLowerValue.frame;
@@ -258,11 +257,11 @@
         center.x = self.slider.frame.origin.x + self.slider.lowerCenter.x;
         center.y = self.slider.frame.origin.y - frame.size.height / 2;
         self.labelLowerValue.center = center;
-//        NSLog(@"self.labelLowerValue[%4.2f,%4.2f,%4.2f,%4.2f]", self.labelLowerValue.frame.origin.x, self.labelLowerValue.frame.origin.y, self.labelLowerValue.frame.size.width, self.labelLowerValue.frame.size.height);
         
         NSString *formattedString = [self.formatter stringFromNumber:[NSNumber numberWithFloat:self.slider.lowerValue]];
         NSString *string = [NSString stringWithFormat:@"%@%@", ((_textPrefix == nil)?@"":_textPrefix), formattedString];
         self.labelLowerValue.text = string;
+        NSLog(@"lowerCenter[%4.2f,%4.2f]", center.x, center.y);
     }
     if (self.labelHigherValue && [self.labelHigherValue isHidden] == NO)
     {
@@ -275,7 +274,20 @@
         NSString *formattedString = [self.formatter stringFromNumber:[NSNumber numberWithFloat:self.slider.upperValue]];
         NSString *string = [NSString stringWithFormat:@"%@%@", ((_textPrefix == nil)?@"":_textPrefix), formattedString];
         self.labelHigherValue.text = string;
+        NSLog(@"higherCenter[%4.2f,%4.2f]", center.x, center.y);
     }
+}
+
+#pragma mark - Public Methods
+
+- (void)reset
+{
+    self.slider.lowerValue = self.slider.minimumValue;
+    self.slider.upperValue = self.slider.maximumValue;
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self updateValueLabel];
+    });
 }
 
 #pragma mark - Actions

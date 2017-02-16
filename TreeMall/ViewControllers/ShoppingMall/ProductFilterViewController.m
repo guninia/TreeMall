@@ -37,6 +37,8 @@ typedef enum : NSUInteger {
 - (void)prepareOptionsDefaultFromDictionary:(NSDictionary *)defaultDictionary;
 - (void)retrieveMainCategoryNameMapping;
 - (BOOL)processMainCategoryNameMappingData:(id)data;
+- (void)resetAllSettings;
+- (void)buildConditionsAndApply;
 
 - (void)dismiss;
 - (void)buttonItemClosePressed:(id)sender;
@@ -58,6 +60,8 @@ typedef enum : NSUInteger {
         _selectIndexForCategory = NSNotFound;
         _selectIndexForCoupon = NSNotFound;
         _selectIndexForDeliverType = NSNotFound;
+        _selectedRangeForPrice = NSMakeRange(0, 0);
+        _selectedRangeForPoint = NSMakeRange(0, 0);
         // Prepare options
         [self prepareOptionsDefaultFromDictionary:[TMInfoManager sharedManager].dictionaryInitialFilter];
     }
@@ -85,8 +89,8 @@ typedef enum : NSUInteger {
     [self.scrollView addSubview:self.collectionViewCoupon];
     [self.scrollView addSubview:self.labelDeliverType];
     [self.scrollView addSubview:self.collectionViewDeliverType];
-    [self.scrollView addSubview:self.buttonReset];
-    [self.scrollView addSubview:self.buttonConfirm];
+    [self.view addSubview:self.buttonReset];
+    [self.view addSubview:self.buttonConfirm];
     
     [self.collectionViewCategory reloadData];
     [self.collectionViewCoupon reloadData];
@@ -223,14 +227,34 @@ typedef enum : NSUInteger {
 {
     [super viewDidLayoutSubviews];
     
+    CGFloat viewWidth = self.view.frame.size.width - (kMarginLeft + kMarginRight);
+    
+    CGFloat buttonWidth = (viewWidth - kIntervalH)/2;
+    CGFloat buttonHeight = 40.0;
+    CGFloat originX = self.view.frame.size.width - kMarginRight - buttonWidth;
+    CGFloat originY = self.view.frame.size.height - kMarginBot - buttonHeight;
+    if (self.buttonConfirm && [self.buttonConfirm isHidden] == NO)
+    {
+        CGRect frame = CGRectMake(originX, originY, buttonWidth, buttonHeight);
+        self.buttonConfirm.frame = frame;
+        originX = self.buttonConfirm.frame.origin.x - kIntervalV - buttonWidth;
+    }
+    if (self.buttonReset && [self.buttonReset isHidden] == NO)
+    {
+        CGRect frame = CGRectMake(originX, originY, buttonWidth, buttonHeight);
+        self.buttonReset.frame = frame;
+        originX = self.buttonReset.frame.origin.x - kIntervalV - buttonWidth;
+    }
+    originY -= kIntervalV;
+    
     if (self.scrollView)
     {
-        self.scrollView.frame = self.view.bounds;
+        self.scrollView.frame = CGRectMake(0.0, 0.0, self.view.frame.size.width, originY);
     }
     
-    CGFloat originX = kMarginLeft;
-    CGFloat originY = kMarginTop;
-    CGFloat viewWidth = self.view.frame.size.width - (kMarginLeft + kMarginRight);
+    originX = kMarginLeft;
+    originY = kMarginTop;
+    
     
     if (self.labelCategory && [self.labelCategory isHidden] == NO)
     {
@@ -332,24 +356,7 @@ typedef enum : NSUInteger {
         originY = self.collectionViewDeliverType.frame.origin.y + self.collectionViewDeliverType.frame.size.height + kIntervalV;
     }
     
-    
-    CGFloat buttonWidth = (viewWidth - kIntervalH)/2;
-    CGFloat buttonHeight = 40.0;
-    originX = self.view.frame.size.width - kMarginRight - buttonWidth;
-    if (self.buttonConfirm && [self.buttonConfirm isHidden] == NO)
-    {
-        CGRect frame = CGRectMake(originX, originY, buttonWidth, buttonHeight);
-        self.buttonConfirm.frame = frame;
-        originX = self.buttonConfirm.frame.origin.x - kIntervalV - buttonWidth;
-    }
-    if (self.buttonReset && [self.buttonReset isHidden] == NO)
-    {
-        CGRect frame = CGRectMake(originX, originY, buttonWidth, buttonHeight);
-        self.buttonReset.frame = frame;
-        originX = self.buttonReset.frame.origin.x - kIntervalV - buttonWidth;
-        originY = self.buttonReset.frame.origin.y + self.buttonReset.frame.size.height;
-    }
-    CGFloat scrollContentHeight = originY + kMarginBot;
+    CGFloat scrollContentHeight = originY - kIntervalV + kMarginBot;
     [self.scrollView setContentSize:CGSizeMake(self.scrollView.frame.size.width, scrollContentHeight)];
 }
 
@@ -635,7 +642,7 @@ typedef enum : NSUInteger {
 - (BOOL)processMainCategoryNameMappingData:(id)data
 {
     BOOL success = NO;
-    NSString *string = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+//    NSString *string = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
 //    NSLog(@"processMainCategoryNameMappingData -\n%@", string);
     NSError *error = nil;
     id jsonObject = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
@@ -655,6 +662,120 @@ typedef enum : NSUInteger {
         }
     }
     return success;
+}
+
+- (void)resetAllSettings
+{
+    self.selectIndexForCategory = NSNotFound;
+    self.selectIndexForCoupon = NSNotFound;
+    self.selectIndexForDeliverType = NSNotFound;
+    
+    [self.collectionViewCategory reloadData];
+    [self.collectionViewCoupon reloadData];
+    [self.collectionViewDeliverType reloadData];
+    
+    self.selectedRangeForPrice = NSMakeRange(0, 0);
+    self.selectedRangeForPoint = NSMakeRange(0, 0);
+    
+    [self.sliderViewPrice reset];
+    [self.sliderViewPoint reset];
+}
+
+- (void)buildConditionsAndApply
+{
+    NSMutableDictionary *conditions = [NSMutableDictionary dictionary];
+    if (self.selectIndexForCategory != NSNotFound && self.selectIndexForCategory < [self.arrayCategoryDefault count])
+    {
+        NSDictionary *category = [self.arrayCategoryDefault objectAtIndex:self.selectIndexForCategory];
+        NSString *hallId = [category objectForKey:SymphoxAPIParam_display_name];
+        
+        // According to design, this hallId would be the main category ID.
+        [conditions setObject:hallId forKey:SymphoxAPIParam_cpse_id];
+    }
+    if (self.selectIndexForCoupon != NSNotFound && self.selectIndexForCategory < [self.arrayCoupon count])
+    {
+        NSNumber *coupon = [self.arrayCoupon objectAtIndex:self.selectIndexForCoupon];
+        NSString *stringCoupon = [coupon stringValue];
+        if (stringCoupon)
+        {
+            [conditions setObject:stringCoupon forKey:SymphoxAPIParam_ecoupon_type];
+        }
+    }
+    if (self.selectIndexForDeliverType != NSNotFound && self.selectIndexForDeliverType < [self.arrayDeliverType count])
+    {
+        NSString *carrierType = nil;
+        NSString *deliverStore = nil;
+        switch (self.selectIndexForDeliverType) {
+            case DeliverTypeFast:
+            {
+                carrierType = SymphoxAPIParamValue_Y;
+            }
+                break;
+            case DeliverTypeConvenienceStore:
+            {
+                deliverStore = SymphoxAPIParamValue_Y;
+            }
+                break;
+            default:
+                break;
+        }
+        if (carrierType)
+        {
+            [conditions setObject:carrierType forKey:SymphoxAPIParam_carrier_type];
+        }
+        if (deliverStore)
+        {
+            [conditions setObject:deliverStore forKey:SymphoxAPIParam_delivery_store];
+        }
+    }
+    if ([self.sliderViewPrice isHidden] == NO)
+    {
+        if (self.sliderViewPrice.slider.lowerValue != self.sliderViewPrice.slider.minimumValue)
+        {
+            NSNumber *number = [NSNumber numberWithFloat:self.sliderViewPrice.slider.lowerValue];
+            NSString *string = [number stringValue];
+            if (string)
+            {
+                [conditions setObject:string forKey:SymphoxAPIParam_price_from];
+            }
+        }
+        if (self.sliderViewPrice.slider.upperValue != self.sliderViewPrice.slider.maximumValue)
+        {
+            NSNumber *number = [NSNumber numberWithFloat:self.sliderViewPrice.slider.upperValue];
+            NSString *string = [number stringValue];
+            if (string)
+            {
+                [conditions setObject:string forKey:SymphoxAPIParam_price_to];
+            }
+        }
+    }
+    if ([self.sliderViewPoint isHidden] == NO)
+    {
+        if (self.sliderViewPoint.slider.lowerValue != self.sliderViewPoint.slider.minimumValue)
+        {
+            NSNumber *number = [NSNumber numberWithFloat:self.sliderViewPoint.slider.lowerValue];
+            NSString *string = [number stringValue];
+            if (string)
+            {
+                [conditions setObject:string forKey:SymphoxAPIParam_point_from];
+            }
+        }
+        if (self.sliderViewPoint.slider.upperValue != self.sliderViewPoint.slider.maximumValue)
+        {
+            NSNumber *number = [NSNumber numberWithFloat:self.sliderViewPoint.slider.upperValue];
+            NSString *string = [number stringValue];
+            if (string)
+            {
+                [conditions setObject:string forKey:SymphoxAPIParam_point_to];
+            }
+        }
+    }
+    NSLog(@"set conditions as follows:\n%@", [conditions description]);
+    if (_delegate && [_delegate respondsToSelector:@selector(productFilterViewController:didSelectAdvancedConditions:)])
+    {
+        [_delegate productFilterViewController:self didSelectAdvancedConditions:conditions];
+    }
+    [self dismiss];
 }
 
 - (void)dismiss
@@ -684,12 +805,12 @@ typedef enum : NSUInteger {
 
 - (void)buttonResetPressed:(id)sender
 {
-    
+    [self resetAllSettings];
 }
 
 - (void)buttonConfirmPressed:(id)sender
 {
-    
+    [self buildConditionsAndApply];
 }
 
 #pragma mark - UICollectionViewDataSource
@@ -771,6 +892,40 @@ typedef enum : NSUInteger {
     }
     cell.labelText.text = text;
     return cell;
+}
+
+#pragma mark - UICollectionViewDelegate
+
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    switch (collectionView.tag) {
+        case CollectionViewTagCategory:
+        {
+            if (indexPath.row < [self.arrayCategoryDefault count])
+            {
+                self.selectIndexForCategory = indexPath.row;
+            }
+        }
+            break;
+        case CollectionViewTagCoupon:
+        {
+            if (indexPath.row < [self.arrayCoupon count])
+            {
+                self.selectIndexForCoupon = indexPath.row;
+            }
+        }
+            break;
+        case CollectionViewTagDeliverType:
+        {
+            if (indexPath.row < [self.arrayDeliverType count])
+            {
+                self.selectIndexForDeliverType = indexPath.row;
+            }
+        }
+            break;
+        default:
+            break;
+    }
 }
 
 #pragma mark - UICollecitonViewDelegateFlowLayout

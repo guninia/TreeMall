@@ -43,7 +43,9 @@ typedef enum : NSUInteger {
 - (void)updateUserInformationFromInfoDictionary:(NSDictionary *)infoDictionary;
 - (void)setSubcategories:(NSArray *)subcategories forIdentifier:(NSString *)identifier atLayer:(NSNumber *)layer;
 - (NSArray *)subcategoriesForIdentifier:(NSString *)identifier atLayer:(NSNumber *)layer;
-
+- (NSDictionary *)cachedDictionaries;
+- (NSArray *)categoriesContainsCategoryWithIdentifier:(NSString *)identifier;
+- (void)findSiblingsInSameLayerAndContentForCategoryIdentifier:(NSString *)identifier withCompletion:(void (^)(NSArray *sibings, NSDictionary *content, NSNumber *layer))block;
 - (void)retrieveToken;
 
 @end

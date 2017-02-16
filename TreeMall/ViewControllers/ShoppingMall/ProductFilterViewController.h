@@ -16,8 +16,17 @@ typedef enum : NSUInteger {
     DeliverTypeTotal
 } DeliverType;
 
+@class ProductFilterViewController;
+
+@protocol ProductFilterViewControllerDelegate <NSObject>
+
+- (void)productFilterViewController:(ProductFilterViewController *)viewController didSelectAdvancedConditions:(NSDictionary *)conditions;
+
+@end
+
 @interface ProductFilterViewController : UIViewController <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout>
 
+@property (nonatomic, weak) id <ProductFilterViewControllerDelegate> delegate;
 @property (nonatomic, strong) NSArray *arrayCategoryDefault;
 @property (nonatomic, strong) NSNumber *numberMinPriceDefault;
 @property (nonatomic, strong) NSNumber *numberMaxPriceDefault;
@@ -40,6 +49,8 @@ typedef enum : NSUInteger {
 @property (nonatomic, assign) NSInteger selectIndexForCategory;
 @property (nonatomic, assign) NSInteger selectIndexForCoupon;
 @property (nonatomic, assign) NSInteger selectIndexForDeliverType;
+@property (nonatomic, assign) NSRange selectedRangeForPrice;
+@property (nonatomic, assign) NSRange selectedRangeForPoint;
 
 @property (nonatomic, strong) UICollectionView *collectionViewCategory;
 @property (nonatomic, strong) UICollectionView *collectionViewCoupon;

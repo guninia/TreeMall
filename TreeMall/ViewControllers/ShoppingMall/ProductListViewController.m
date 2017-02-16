@@ -15,7 +15,6 @@
 #import "LoadingFooterView.h"
 #import "LocalizedString.h"
 #import "UIViewController+FTPopMenu.h"
-#import "ProductFilterViewController.h"
 #import "ProductDetailViewController.h"
 #import "Utility.h"
 
@@ -250,6 +249,7 @@
     NSString *token = [SHAPIAdapter sharedAdapter].token;
     NSURL *url = [NSURL URLWithString:SymphoxAPI_Search];
 //    NSLog(@"retrieveSubcategoryDataForIdentifier - url [%@]", [url absoluteString]);
+    NSLog(@"retrieveProductsForConditions - conditions:\n%@", [conditions description]);
     NSDictionary *headerFields = [NSDictionary dictionaryWithObjectsAndKeys:apiKey, SymphoxAPIParam_key, token, SymphoxAPIParam_token, nil];
     [[SHAPIAdapter sharedAdapter] sendRequestFromObject:weakSelf ToUrl:url withHeaderFields:headerFields andPostObject:conditions inPostFormat:SHPostFormatJson encrypted:YES decryptedReturnData:YES completion:^(id resultObject, NSError *error){
         if (error == nil)
@@ -725,6 +725,7 @@
         return;
     }
     ProductFilterViewController *viewController = [[ProductFilterViewController alloc] initWithNibName:@"ProductFilterViewController" bundle:[NSBundle mainBundle]];
+    viewController.delegate = self;
     UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:viewController];
     [self presentViewController:navigationController animated:YES completion:nil];
 }
@@ -794,6 +795,45 @@
         
         [weakSelf refreshAllContentForHallId:hallId andLayer:layer withName:name];
     } cancelBlock:nil];
+}
+
+#pragma mark - ProductFilterViewControllerDelegate
+
+- (void)productFilterViewController:(ProductFilterViewController *)viewController didSelectAdvancedConditions:(NSDictionary *)conditions
+{
+    // Deal with hallId
+    NSString *selectedHallId = [conditions objectForKey:SymphoxAPIParam_cpse_id];
+    __block NSString *newHallId = nil;
+    __block NSNumber *newLayer = nil;
+    __block NSString *newName = nil;
+    
+    NSArray *cachedDictionaries = [[TMInfoManager sharedManager] categoriesContainsCategoryWithIdentifier:selectedHallId];
+    NSLog(@"cachedDictionaries\n%@", cachedDictionaries);
+    
+    // Remove all category relative condition
+    [self.dictionaryConditions removeObjectForKey:SymphoxAPIParam_cpse_id];
+    [self.dictionaryConditions removeObjectForKey:SymphoxAPIParam_cpnhl_id];
+    [self.dictionaryConditions removeObjectForKey:SymphoxAPIParam_cpte_id];
+    [self.dictionaryConditions removeObjectForKey:SymphoxAPIParam_cptm_id];
+    [self.dictionaryConditions removeObjectForKey:SymphoxAPIParam_carrier_type];
+    [self.dictionaryConditions removeObjectForKey:SymphoxAPIParam_delivery_store];
+    [self.dictionaryConditions removeObjectForKey:SymphoxAPIParam_ecoupon_type];
+    [self.dictionaryConditions removeObjectForKey:SymphoxAPIParam_price_from];
+    [self.dictionaryConditions removeObjectForKey:SymphoxAPIParam_price_to];
+    [self.dictionaryConditions removeObjectForKey:SymphoxAPIParam_point_from];
+    [self.dictionaryConditions removeObjectForKey:SymphoxAPIParam_point_to];
+    
+    __weak ProductListViewController *weakSelf = self;
+    [[TMInfoManager sharedManager] findSiblingsInSameLayerAndContentForCategoryIdentifier:selectedHallId withCompletion:^(NSArray *siblings, NSDictionary *content, NSNumber *layer){
+//        NSLog(@"siblings[%li]:\n%@", (long)[layer integerValue], [siblings description]);
+//        NSLog(@"content:\n%@", [content description]);
+        weakSelf.arrayCategory = siblings;
+        newName = [content objectForKey:SymphoxAPIParam_name];
+        newLayer = layer;
+        newHallId = selectedHallId;
+        [weakSelf.dictionaryConditions addEntriesFromDictionary:conditions];
+        [weakSelf refreshAllContentForHallId:newHallId andLayer:newLayer withName:newName];
+    }];
 }
 
 @end

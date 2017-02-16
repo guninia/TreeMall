@@ -123,6 +123,8 @@ static NSString *SymphoxAPIParam_document_num = @"document_num";
 static NSString *SymphoxAPIParam_hall = @"hall";
 static NSString *SymphoxAPIParam_categoryLv1 = @"categoryLv1";
 static NSString *SymphoxAPIParam_hallMap = @"hallMap";
+static NSString *SymphoxAPIParamValue_N = @"N";
+static NSString *SymphoxAPIParamValue_Y = @"Y";
 
 
 #endif /* APIDefinition_h */

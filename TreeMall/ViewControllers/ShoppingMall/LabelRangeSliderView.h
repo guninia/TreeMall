@@ -21,4 +21,7 @@
 @property (nonatomic, strong) NSString *textHigherBoundary;
 @property (nonatomic, strong) NSNumberFormatter *formatter;
 @property (nonatomic, strong) NSString *textPrefix;
+
+- (void)reset;
+
 @end
