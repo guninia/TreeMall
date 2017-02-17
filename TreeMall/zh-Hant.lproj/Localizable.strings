@@ -79,3 +79,9 @@
 "NoSpecific"="不限";
 "Fast"="快速";
 "ReceiveAtConvenientStore"="超商取貨";
+"Search"="搜尋";
+"KeywordSearch"="關鍵字搜尋";
+"PleaseInputKeyword"="請輸入關鍵字";
+"LatestSearch__"="最近搜尋...";
+"HotSearch__"="熱門搜尋...";
+

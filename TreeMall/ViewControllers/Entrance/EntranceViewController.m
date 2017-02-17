@@ -28,6 +28,7 @@ typedef enum : NSUInteger {
 - (BOOL)processData:(id)data;
 - (NSDictionary *)dictionaryForProductAtIndex:(NSInteger)index;
 
+- (void)buttonItemSearchPressed:(id)sender;
 - (void)notificationHandlerTokenUpdated:(NSNotification *)notification;
 
 @end
@@ -47,6 +48,12 @@ typedef enum : NSUInteger {
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
+    UIImage *image = [UIImage imageNamed:@"sho_btn_mag"];
+    if (image)
+    {
+        UIBarButtonItem *rightItem = [[UIBarButtonItem alloc] initWithImage:image style:UIBarButtonItemStylePlain target:self action:@selector(buttonItemSearchPressed:)];
+        [self.navigationItem setRightBarButtonItem:rightItem];
+    }
     
     [_tableViewEntrance registerClass:[EntranceTableViewCell class] forCellReuseIdentifier:EntranceTableViewCellIdentifier];
     [_tableViewEntrance registerClass:[EntranceFunctionSectionHeader class] forHeaderFooterViewReuseIdentifier:EntranceFunctionSectionHeaderIdentifier];
@@ -154,6 +161,16 @@ typedef enum : NSUInteger {
         dictionary = [array objectAtIndex:index];
     }
     return dictionary;
+}
+
+#pragma mark - Actions
+
+- (void)buttonItemSearchPressed:(id)sender
+{
+    SearchViewController *viewController = [[SearchViewController alloc] initWithNibName:@"SearchViewController" bundle:[NSBundle mainBundle]];
+    viewController.delegate = self;
+    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:viewController];
+    [self presentViewController:navigationController animated:YES completion:nil];
 }
 
 #pragma mark - Notification Handler
@@ -332,6 +349,13 @@ typedef enum : NSUInteger {
         default:
             break;
     }
+}
+
+#pragma mark - SearchViewControllerDelegate
+
+- (void)searchViewController:(SearchViewController *)viewController didSelectToSearchKeyword:(NSString *)keyword
+{
+    NSLog(@"Should start search by keyword \"%@\"", keyword);
 }
 
 @end

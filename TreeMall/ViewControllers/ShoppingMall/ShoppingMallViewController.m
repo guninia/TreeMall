@@ -37,6 +37,7 @@ typedef enum : NSUInteger {
 - (void)setSubcategoryFromCategories:(NSArray *)categories forIdentifier:(NSString *)identifier andLayerIndex:(NSInteger)layerIndex;
 - (void)presentProductListViewForIdentifier:(NSString *)identifier named:(NSString *)name andLayer:(NSNumber *)layer withCategories:(NSArray *)categories andSubcategories:(NSArray *)subcategories;
 
+- (void)buttonItemSearchPressed:(id)sender;
 - (void)notificationHandlerTokenUpdated:(NSNotification *)notification;
 
 @end
@@ -62,6 +63,12 @@ typedef enum : NSUInteger {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
+    UIImage *image = [UIImage imageNamed:@"sho_btn_mag"];
+    if (image)
+    {
+        UIBarButtonItem *rightItem = [[UIBarButtonItem alloc] initWithImage:image style:UIBarButtonItemStylePlain target:self action:@selector(buttonItemSearchPressed:)];
+        [self.navigationItem setRightBarButtonItem:rightItem];
+    }
     
     UICollectionViewFlowLayout *flowLayout = [[UICollectionViewFlowLayout alloc] init];
     [flowLayout setScrollDirection:UICollectionViewScrollDirectionHorizontal];
@@ -356,7 +363,15 @@ typedef enum : NSUInteger {
     [self.navigationController pushViewController:viewController animated:YES];
 }
 
+#pragma mark - Actions
 
+- (void)buttonItemSearchPressed:(id)sender
+{
+    SearchViewController *viewController = [[SearchViewController alloc] initWithNibName:@"SearchViewController" bundle:[NSBundle mainBundle]];
+    viewController.delegate = self;
+    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:viewController];
+    [self presentViewController:navigationController animated:YES completion:nil];
+}
 
 #pragma mark - Notification Handler
 
@@ -600,6 +615,13 @@ typedef enum : NSUInteger {
         default:
             break;
     }
+}
+
+#pragma mark - SearchViewControllerDelegate
+
+- (void)searchViewController:(SearchViewController *)viewController didSelectToSearchKeyword:(NSString *)keyword
+{
+    NSLog(@"Should start search by keyword \"%@\"", keyword);
 }
 
 @end

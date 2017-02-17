@@ -32,6 +32,7 @@ typedef enum : NSUInteger {
 @property (nonatomic, assign) NSNumber *userEcoupon;
 @property (nonatomic, strong) NSMutableDictionary *dictionaryInitialFilter;
 @property (nonatomic, strong) NSMutableDictionary *dictionaryMainCategoryNameMapping;
+@property (nonatomic, strong) NSMutableOrderedSet *orderedSetKeyword;
 
 + (instancetype)sharedManager;
 
@@ -47,5 +48,8 @@ typedef enum : NSUInteger {
 - (NSArray *)categoriesContainsCategoryWithIdentifier:(NSString *)identifier;
 - (void)findSiblingsInSameLayerAndContentForCategoryIdentifier:(NSString *)identifier withCompletion:(void (^)(NSArray *sibings, NSDictionary *content, NSNumber *layer))block;
 - (void)retrieveToken;
+- (void)addKeyword:(NSString *)keyword;
+- (NSArray *)keywords;
+- (void)removeAllKeywords;
 
 @end

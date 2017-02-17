@@ -27,6 +27,8 @@
 - (void)prepareSortOption;
 - (void)refreshAllContentForHallId:(NSString *)hallId andLayer:(NSNumber *)layer withName:(NSString *)name;
 
+- (void)buttonItemSearchPressed:(id)sender;
+
 @end
 
 @implementation ProductListViewController
@@ -59,6 +61,12 @@
     
     // Build and add subviews
     self.navigationItem.titleView = self.viewTitle;
+    UIImage *image = [UIImage imageNamed:@"sho_btn_mag"];
+    if (image)
+    {
+        UIBarButtonItem *rightItem = [[UIBarButtonItem alloc] initWithImage:image style:UIBarButtonItemStylePlain target:self action:@selector(buttonItemSearchPressed:)];
+        [self.navigationItem setRightBarButtonItem:rightItem];
+    }
     [self.view addSubview:self.viewSubcategory];
     [self.view addSubview:self.tableViewProduct];
     self.viewTool.delegate = self;
@@ -528,6 +536,16 @@
     }
 }
 
+#pragma mark - Actions
+
+- (void)buttonItemSearchPressed:(id)sender
+{
+    SearchViewController *viewController = [[SearchViewController alloc] initWithNibName:@"SearchViewController" bundle:[NSBundle mainBundle]];
+    viewController.delegate = self;
+    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:viewController];
+    [self presentViewController:navigationController animated:YES completion:nil];
+}
+
 #pragma mark - UITableViewDataSource
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -834,6 +852,13 @@
         [weakSelf.dictionaryConditions addEntriesFromDictionary:conditions];
         [weakSelf refreshAllContentForHallId:newHallId andLayer:newLayer withName:newName];
     }];
+}
+
+#pragma mark - SearchViewControllerDelegate
+
+- (void)searchViewController:(SearchViewController *)viewController didSelectToSearchKeyword:(NSString *)keyword
+{
+    NSLog(@"Should start search by keyword \"%@\"", keyword);
 }
 
 @end

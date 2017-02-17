@@ -27,6 +27,7 @@ static NSString *SymphoxAPI_MainCategories = @"http://tomcat8.mdevelop.com/TreeM
 static NSString *SymphoxAPI_Subcategories = @"http://tomcat8.mdevelop.com/TreeMall/api/portal/app/mall/hall";
 static NSString *SymphoxAPI_Search = @"http://tomcat8.mdevelop.com/TreeMall/api/eiffel/search/treemall";
 static NSString *SymphoxAPI_mainCategoryNameMapping = @"http://tomcat8.mdevelop.com/TreeMall/api/onlineService.do";
+static NSString *SymphoxAPI_hotKeywords = @"http://tomcat8.mdevelop.com/TreeMall/api/portal/app/mall/keyword";
 #else
 static NSString *SymphoxAPI_token = @"https://api.symphox.com.tw/portal/app/token";
 #endif

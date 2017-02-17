@@ -22,6 +22,7 @@ static NSString *TMInfoArchiveKey_UserEpoint = @"UserEpoint";
 static NSString *TMInfoArchiveKey_UserEcoupon = @"UserEcoupon";
 static NSString *TMInfoArchiveKey_CachedCategories = @"CachedCategories";
 static NSString *TMInfoArchiveKey_ArchiveTimestamp = @"ArchiveTimestamp";
+static NSString *TMInfoArchiveKey_OrderSetKeyword = @"OrderSetKeyword";
 
 static NSString *SeparatorBetweenIdAndLayer = @"_";
 
@@ -67,6 +68,7 @@ static NSUInteger PromotionReadNumberMax = 100;
         _dictionaryCachedCategories = [[NSMutableDictionary alloc] initWithCapacity:0];
         _dictionaryInitialFilter = [[NSMutableDictionary alloc] initWithCapacity:0];
         _dictionaryMainCategoryNameMapping = [[NSMutableDictionary alloc] initWithCapacity:0];
+        _orderedSetKeyword = [[NSMutableOrderedSet alloc] initWithCapacity:0];
         _numberArchiveTimestamp = nil;
         _userIdentifier = nil;
         _userName = nil;
@@ -87,6 +89,11 @@ static NSUInteger PromotionReadNumberMax = 100;
             if (dictionaryUserInfo)
             {
                 [_dictionaryUserInfo setDictionary:dictionaryUserInfo];
+            }
+            NSArray *arrayKeyword = [dictionaryArchive objectForKey:TMInfoArchiveKey_OrderSetKeyword];
+            if (arrayKeyword)
+            {
+                [_orderedSetKeyword addObjectsFromArray:arrayKeyword];
             }
             BOOL shouldUpdateCachedData = YES;
             NSNumber *numberTimestamp = [dictionaryArchive objectForKey:TMInfoArchiveKey_ArchiveTimestamp];
@@ -274,6 +281,7 @@ static NSUInteger PromotionReadNumberMax = 100;
     [dictionaryArchive setObject:[_orderedSetPromotionRead array] forKey:TMInfoArchiveKey_PromotionRead];
     [dictionaryArchive setObject:_dictionaryUserInfo forKey:TMInfoArchiveKey_UserInformation];
     [dictionaryArchive setObject:_dictionaryCachedCategories forKey:TMInfoArchiveKey_CachedCategories];
+    [dictionaryArchive setObject:[_orderedSetKeyword array] forKey:TMInfoArchiveKey_OrderSetKeyword];
     if (_numberArchiveTimestamp)
     {
         [dictionaryArchive setObject:_numberArchiveTimestamp forKey:TMInfoArchiveKey_ArchiveTimestamp];
@@ -487,6 +495,35 @@ static NSUInteger PromotionReadNumberMax = 100;
             [[NSNotificationCenter defaultCenter] postNotificationName:PostNotificationName_NoInitialToken object:self];
         }
     }];
+}
+
+- (void)addKeyword:(NSString *)keyword
+{
+    if (keyword == nil)
+        return;
+    if ([_orderedSetKeyword containsObject:keyword])
+    {
+        NSInteger index = [_orderedSetKeyword indexOfObject:keyword];
+        if (index > 0)
+        {
+            [_orderedSetKeyword exchangeObjectAtIndex:index withObjectAtIndex:0];
+        }
+    }
+    else
+    {
+        [_orderedSetKeyword insertObject:keyword atIndex:0];
+    }
+}
+
+- (NSArray *)keywords
+{
+    NSArray *keywords = [[_orderedSetKeyword array] copy];
+    return keywords;
+}
+
+- (void)removeAllKeywords
+{
+    [_orderedSetKeyword removeAllObjects];
 }
 
 #pragma mark - Private Methods

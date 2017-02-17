@@ -83,5 +83,10 @@
 + (NSString *)NoSpecific;
 + (NSString *)Fast;
 + (NSString *)ReceiveAtConvenientStore;
++ (NSString *)Search;
++ (NSString *)KeywordSearch;
++ (NSString *)PleaseInputKeyword;
++ (NSString *)LatestSearch__;
++ (NSString *)HotSearch__;
 
 @end

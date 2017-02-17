@@ -741,4 +741,54 @@
     return ReceiveAtConvenientStore;
 }
 
++ (NSString *)Search
+{
+    static NSString *Search = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        Search = NSLocalizedString(@"Search", nil);
+    });
+    return Search;
+}
+
++ (NSString *)KeywordSearch
+{
+    static NSString *KeywordSearch = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        KeywordSearch = NSLocalizedString(@"KeywordSearch", nil);
+    });
+    return KeywordSearch;
+}
+
++ (NSString *)PleaseInputKeyword
+{
+    static NSString *PleaseInputKeyword = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        PleaseInputKeyword = NSLocalizedString(@"PleaseInputKeyword", nil);
+    });
+    return PleaseInputKeyword;
+}
+
++ (NSString *)LatestSearch__
+{
+    static NSString *LatestSearch__ = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        LatestSearch__ = NSLocalizedString(@"LatestSearch__", nil);
+    });
+    return LatestSearch__;
+}
+
++ (NSString *)HotSearch__
+{
+    static NSString *HotSearch__ = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        HotSearch__ = NSLocalizedString(@"HotSearch__", nil);
+    });
+    return HotSearch__;
+}
+
 @end

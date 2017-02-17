@@ -60,6 +60,7 @@ static SHAPIAdapter *gAPIAdapter = nil;
     NSError *error = nil;
     NSData *postRawData = nil;
     NSString *contentType = nil;
+    BOOL forcePost = YES;
     if (postObject)
     {
         switch (format) {
@@ -107,6 +108,7 @@ static SHAPIAdapter *gAPIAdapter = nil;
             case SHPostFormatNone:
             {
                 postRawData = nil;
+                forcePost = NO;
             }
                 break;
             default:
@@ -169,7 +171,7 @@ static SHAPIAdapter *gAPIAdapter = nil;
     }
     else
     {
-        [request setHTTPMethod:@"GET"];
+        [request setHTTPMethod:forcePost?@"POST":@"GET"];
     }
     
     NSURLSessionDataTask *task = [_session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error){

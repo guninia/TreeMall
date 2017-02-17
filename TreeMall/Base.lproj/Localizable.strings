@@ -80,3 +80,9 @@
 "NoSpecific"="Not Specific";
 "Fast"="Fast";
 "ReceiveAtConvenientStore"="Receive At Convenient Store";
+"Search"="Search";
+"KeywordSearch"="Keyword Search";
+"PleaseInputKeyword"="Please input keyword";
+"LatestSearch__"="Latest search...";
+"HotSearch__"="Hot search...";
+

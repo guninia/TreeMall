@@ -7,8 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "SearchViewController.h"
 
-@interface ShoppingMallViewController : UIViewController <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UITableViewDataSource, UITableViewDelegate>
+@interface ShoppingMallViewController : UIViewController <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UITableViewDataSource, UITableViewDelegate, SearchViewControllerDelegate>
 
 @property (nonatomic, strong) IBOutlet UICollectionView *collectionViewCategory;
 @property (nonatomic, strong) IBOutlet UITableView *tableViewSubcategory;
