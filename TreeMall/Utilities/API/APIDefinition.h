@@ -127,5 +127,6 @@ static NSString *SymphoxAPIParam_hallMap = @"hallMap";
 static NSString *SymphoxAPIParamValue_N = @"N";
 static NSString *SymphoxAPIParamValue_Y = @"Y";
 
+static NSString *SymphoxAPIError_E301 = @"E301";
 
 #endif /* APIDefinition_h */

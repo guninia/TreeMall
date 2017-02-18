@@ -791,4 +791,14 @@
     return HotSearch__;
 }
 
++ (NSString *)SearchResult
+{
+    static NSString *SearchResult = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        SearchResult = NSLocalizedString(@"SearchResult", nil);
+    });
+    return SearchResult;
+}
+
 @end

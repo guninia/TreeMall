@@ -41,7 +41,10 @@ typedef enum : NSUInteger {
 @property (nonatomic, assign) BOOL shouldShowSubCategory;
 @property (nonatomic, assign) BOOL shouldShowLoadingFooter;
 @property (nonatomic, assign) BOOL isLoading;
+@property (nonatomic, assign) BOOL isSearchResult;
 @property (nonatomic, strong) NSMutableArray *arraySortOption;
 @property (nonatomic, assign) SortOption currentSortOption;
+
+- (void)addKeywordToConditions:(NSString *)keyword;
 
 @end

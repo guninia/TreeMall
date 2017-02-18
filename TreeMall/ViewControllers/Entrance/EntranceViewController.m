@@ -15,6 +15,7 @@
 #import "Definition.h"
 #import "UIImageView+WebCache.h"
 #import "PromotionViewController.h"
+#import "ProductListViewController.h"
 
 typedef enum : NSUInteger {
     TableViewSectionMemberPromotion,
@@ -48,6 +49,7 @@ typedef enum : NSUInteger {
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
+    self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
     UIImage *image = [UIImage imageNamed:@"sho_btn_mag"];
     if (image)
     {
@@ -356,6 +358,13 @@ typedef enum : NSUInteger {
 - (void)searchViewController:(SearchViewController *)viewController didSelectToSearchKeyword:(NSString *)keyword
 {
     NSLog(@"Should start search by keyword \"%@\"", keyword);
+    ProductListViewController *listViewController = [[ProductListViewController alloc] initWithNibName:@"ProductListViewController" bundle:[NSBundle mainBundle]];
+    listViewController.isSearchResult = YES;
+    [listViewController addKeywordToConditions:keyword];
+    listViewController.hallId = nil;
+    listViewController.layer = nil;
+    listViewController.name = nil;
+    [self.navigationController pushViewController:listViewController animated:YES];
 }
 
 @end

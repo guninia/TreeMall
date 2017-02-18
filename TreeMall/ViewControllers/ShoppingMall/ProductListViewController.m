@@ -46,6 +46,7 @@
         _currentProductPage = 0;
         _shouldShowLoadingFooter = YES;
         _isLoading = NO;
+        _isSearchResult = NO;
         _arraySortOption = [[NSMutableArray alloc] initWithCapacity:0];
         _currentSortOption = SortOptionTotal;
         _shouldShowSubCategory = YES;
@@ -58,7 +59,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     NSLog(@"ProductListViewController - hallId[%@] layer[%li] name[%@]", _hallId, (long)[_layer integerValue], _name);
-    
+    self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
     // Build and add subviews
     self.navigationItem.titleView = self.viewTitle;
     UIImage *image = [UIImage imageNamed:@"sho_btn_mag"];
@@ -280,8 +281,27 @@
         }
         else
         {
+            NSString *errorMessage = [LocalizedString CannotLoadData];
+            NSDictionary *userInfo = error.userInfo;
+            BOOL errorProductNotFound = NO;
+            if (userInfo)
+            {
+                NSString *errorId = [userInfo objectForKey:SymphoxAPIParam_id];
+                if ([errorId compare:SymphoxAPIError_E301 options:NSCaseInsensitiveSearch] == NSOrderedSame)
+                {
+                    errorProductNotFound = YES;
+                }
+                if (errorProductNotFound)
+                {
+                    NSString *serverMessage = [userInfo objectForKey:SymphoxAPIParam_status_desc];
+                    if (serverMessage)
+                    {
+                        errorMessage = serverMessage;
+                    }
+                }
+            }
             NSLog(@"retrieveProductsForConditions - error:\n%@", [error description]);
-            UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:[LocalizedString CannotLoadData] preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:errorMessage preferredStyle:UIAlertControllerStyleAlert];
             UIAlertAction *backAction = [UIAlertAction actionWithTitle:[LocalizedString GoBack] style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
                 if (weakSelf.navigationController)
                 {
@@ -293,11 +313,14 @@
                     [weakSelf.presentingViewController dismissViewControllerAnimated:YES completion:nil];
                 }
             }];
-            UIAlertAction *reloadAction = [UIAlertAction actionWithTitle:[LocalizedString Reload] style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
-                [weakSelf retrieveProductsForConditions:conditions byRefreshing:refresh];
-            }];
             [alertController addAction:backAction];
-            [alertController addAction:reloadAction];
+            if (errorProductNotFound == NO)
+            {
+                UIAlertAction *reloadAction = [UIAlertAction actionWithTitle:[LocalizedString Reload] style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
+                    [weakSelf retrieveProductsForConditions:conditions byRefreshing:refresh];
+                }];
+                [alertController addAction:reloadAction];
+            }
             [weakSelf presentViewController:alertController animated:YES completion:nil];
         }
         weakSelf.isLoading = NO;
@@ -453,13 +476,29 @@
     self.arraySubcategory = nil;
     
     // Set view title
-    if (self.name != nil)
+    if (_isSearchResult)
+    {
+        self.viewTitle.titleText = [LocalizedString SearchResult];
+    }
+    else if (self.name != nil)
     {
         self.viewTitle.titleText = self.name;
     }
+    else
+    {
+        self.viewTitle.titleText = @"";
+    }
+    if ([self.arrayCategory count] > 1)
+    {
+        [self.viewTitle.buttonArrowDown setHidden:NO];
+    }
+    else
+    {
+        [self.viewTitle.buttonArrowDown setHidden:YES];
+    }
     
     // Deal with ProductSubcategoryView and layer
-    if ([_layer integerValue] >= 4)
+    if ([_layer integerValue] >= 4 || _isSearchResult)
     {
         _shouldShowSubCategory = NO;
     }
@@ -534,6 +573,15 @@
     {
         [self retrieveProductsForConditions:_dictionaryConditions byRefreshing:YES];
     }
+}
+
+#pragma mark - Public Methods
+
+- (void)addKeywordToConditions:(NSString *)keyword
+{
+    if (keyword == nil || [keyword length] == 0)
+        return;
+    [self.dictionaryConditions setObject:keyword forKey:SymphoxAPIParam_keywords];
 }
 
 #pragma mark - Actions
@@ -800,6 +848,10 @@
         return;
     }
 //    NSLog(@"self.arrayCategory:\n%@", [self.arrayCategory description]);
+    if ([self.arrayCategory count] <= 1)
+    {
+        return;
+    }
     __weak ProductListViewController *weakSelf = self;
     [self showFTMenuFromView:self.viewTitle title:nil textColor:[UIColor blackColor] perferedWidth:200.0 menuKey:SymphoxAPIParam_name inDictionaryFromArray:self.arrayCategory doneBlock:^(NSInteger selectedIndex){
         if (selectedIndex >= [weakSelf.arrayCategory count])
@@ -859,6 +911,13 @@
 - (void)searchViewController:(SearchViewController *)viewController didSelectToSearchKeyword:(NSString *)keyword
 {
     NSLog(@"Should start search by keyword \"%@\"", keyword);
+    ProductListViewController *listViewController = [[ProductListViewController alloc] initWithNibName:@"ProductListViewController" bundle:[NSBundle mainBundle]];
+    listViewController.isSearchResult = YES;
+    [listViewController addKeywordToConditions:keyword];
+    listViewController.hallId = nil;
+    listViewController.layer = nil;
+    listViewController.name = nil;
+    [self.navigationController pushViewController:listViewController animated:YES];
 }
 
 @end

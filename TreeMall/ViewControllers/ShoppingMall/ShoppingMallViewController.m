@@ -622,6 +622,13 @@ typedef enum : NSUInteger {
 - (void)searchViewController:(SearchViewController *)viewController didSelectToSearchKeyword:(NSString *)keyword
 {
     NSLog(@"Should start search by keyword \"%@\"", keyword);
+    ProductListViewController *listViewController = [[ProductListViewController alloc] initWithNibName:@"ProductListViewController" bundle:[NSBundle mainBundle]];
+    listViewController.isSearchResult = YES;
+    [listViewController addKeywordToConditions:keyword];
+    listViewController.hallId = nil;
+    listViewController.layer = nil;
+    listViewController.name = nil;
+    [self.navigationController pushViewController:listViewController animated:YES];
 }
 
 @end

@@ -88,5 +88,6 @@
 + (NSString *)PleaseInputKeyword;
 + (NSString *)LatestSearch__;
 + (NSString *)HotSearch__;
++ (NSString *)SearchResult;
 
 @end
