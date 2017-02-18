@@ -736,6 +736,8 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     ProductDetailViewController *viewController = [[ProductDetailViewController alloc] initWithNibName:@"ProductDetailViewController" bundle:[NSBundle mainBundle]];
+    NSDictionary *dictionary = [self.arrayProducts objectAtIndex:indexPath.row];
+    viewController.dictionaryCommon = dictionary;
     [self.navigationController pushViewController:viewController animated:YES];
 }
 

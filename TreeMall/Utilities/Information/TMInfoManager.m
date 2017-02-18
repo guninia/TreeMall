@@ -23,6 +23,8 @@ static NSString *TMInfoArchiveKey_UserEcoupon = @"UserEcoupon";
 static NSString *TMInfoArchiveKey_CachedCategories = @"CachedCategories";
 static NSString *TMInfoArchiveKey_ArchiveTimestamp = @"ArchiveTimestamp";
 static NSString *TMInfoArchiveKey_OrderSetKeyword = @"OrderSetKeyword";
+static NSString *TMInfoArchiveKey_Favorites = @"Favorites";
+static NSString *TMInfoArchiveKey_FavoritesDetail = @"FavoritesDetail";
 
 static NSString *SeparatorBetweenIdAndLayer = @"_";
 
@@ -69,6 +71,8 @@ static NSUInteger PromotionReadNumberMax = 100;
         _dictionaryInitialFilter = [[NSMutableDictionary alloc] initWithCapacity:0];
         _dictionaryMainCategoryNameMapping = [[NSMutableDictionary alloc] initWithCapacity:0];
         _orderedSetKeyword = [[NSMutableOrderedSet alloc] initWithCapacity:0];
+        _arrayFavorite = [[NSMutableArray alloc] initWithCapacity:0];
+        _dictionaryFavoriteDetail = [[NSMutableDictionary alloc] initWithCapacity:0];
         _numberArchiveTimestamp = nil;
         _userIdentifier = nil;
         _userName = nil;
@@ -94,6 +98,16 @@ static NSUInteger PromotionReadNumberMax = 100;
             if (arrayKeyword)
             {
                 [_orderedSetKeyword addObjectsFromArray:arrayKeyword];
+            }
+            NSArray *arrayFavorites = [dictionaryArchive objectForKey:TMInfoArchiveKey_Favorites];
+            if (arrayFavorites)
+            {
+                [_arrayFavorite addObjectsFromArray:arrayFavorites];
+            }
+            NSDictionary *dictionaryFavoriteDetail = [dictionaryArchive objectForKey:TMInfoArchiveKey_FavoritesDetail];
+            if (dictionaryFavoriteDetail)
+            {
+                [_dictionaryFavoriteDetail setDictionary:dictionaryFavoriteDetail];
             }
             BOOL shouldUpdateCachedData = YES;
             NSNumber *numberTimestamp = [dictionaryArchive objectForKey:TMInfoArchiveKey_ArchiveTimestamp];
@@ -282,6 +296,8 @@ static NSUInteger PromotionReadNumberMax = 100;
     [dictionaryArchive setObject:_dictionaryUserInfo forKey:TMInfoArchiveKey_UserInformation];
     [dictionaryArchive setObject:_dictionaryCachedCategories forKey:TMInfoArchiveKey_CachedCategories];
     [dictionaryArchive setObject:[_orderedSetKeyword array] forKey:TMInfoArchiveKey_OrderSetKeyword];
+    [dictionaryArchive setObject:_arrayFavorite forKey:TMInfoArchiveKey_Favorites];
+    [dictionaryArchive setObject:_dictionaryFavoriteDetail forKey:TMInfoArchiveKey_FavoritesDetail];
     if (_numberArchiveTimestamp)
     {
         [dictionaryArchive setObject:_numberArchiveTimestamp forKey:TMInfoArchiveKey_ArchiveTimestamp];

@@ -801,4 +801,14 @@
     return SearchResult;
 }
 
++ (NSString *)Promotions
+{
+    static NSString *Promotions = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        Promotions = NSLocalizedString(@"Promotions", nil);
+    });
+    return Promotions;
+}
+
 @end

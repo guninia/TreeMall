@@ -33,6 +33,8 @@ typedef enum : NSUInteger {
 @property (nonatomic, strong) NSMutableDictionary *dictionaryInitialFilter;
 @property (nonatomic, strong) NSMutableDictionary *dictionaryMainCategoryNameMapping;
 @property (nonatomic, strong) NSMutableOrderedSet *orderedSetKeyword;
+@property (nonatomic, strong) NSMutableArray *arrayFavorite;
+@property (nonatomic, strong) NSMutableDictionary *dictionaryFavoriteDetail;
 
 + (instancetype)sharedManager;
 

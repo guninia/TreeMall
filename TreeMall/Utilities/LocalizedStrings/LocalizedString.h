@@ -89,5 +89,6 @@
 + (NSString *)LatestSearch__;
 + (NSString *)HotSearch__;
 + (NSString *)SearchResult;
++ (NSString *)Promotions;
 
 @end
