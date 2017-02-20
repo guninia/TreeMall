@@ -23,6 +23,7 @@ static NSString *TMInfoArchiveKey_UserEcoupon = @"UserEcoupon";
 static NSString *TMInfoArchiveKey_CachedCategories = @"CachedCategories";
 static NSString *TMInfoArchiveKey_ArchiveTimestamp = @"ArchiveTimestamp";
 static NSString *TMInfoArchiveKey_OrderSetKeyword = @"OrderSetKeyword";
+static NSString *TMInfoArchiveKey_OrderSetFavoriteId = @"OrderSetFavoriteId";
 static NSString *TMInfoArchiveKey_Favorites = @"Favorites";
 static NSString *TMInfoArchiveKey_FavoritesDetail = @"FavoritesDetail";
 
@@ -73,6 +74,7 @@ static NSUInteger PromotionReadNumberMax = 100;
         _orderedSetKeyword = [[NSMutableOrderedSet alloc] initWithCapacity:0];
         _arrayFavorite = [[NSMutableArray alloc] initWithCapacity:0];
         _dictionaryFavoriteDetail = [[NSMutableDictionary alloc] initWithCapacity:0];
+        _orderedSetFavoriteId = [[NSMutableOrderedSet alloc] initWithCapacity:0];
         _numberArchiveTimestamp = nil;
         _userIdentifier = nil;
         _userName = nil;
@@ -102,12 +104,18 @@ static NSUInteger PromotionReadNumberMax = 100;
             NSArray *arrayFavorites = [dictionaryArchive objectForKey:TMInfoArchiveKey_Favorites];
             if (arrayFavorites)
             {
+                NSLog(@"arrayFavorites:\n%@", [arrayFavorites description]);
                 [_arrayFavorite addObjectsFromArray:arrayFavorites];
             }
             NSDictionary *dictionaryFavoriteDetail = [dictionaryArchive objectForKey:TMInfoArchiveKey_FavoritesDetail];
             if (dictionaryFavoriteDetail)
             {
                 [_dictionaryFavoriteDetail setDictionary:dictionaryFavoriteDetail];
+            }
+            NSArray *arrayFavoriteId = [dictionaryArchive objectForKey:TMInfoArchiveKey_OrderSetFavoriteId];
+            if (arrayFavoriteId)
+            {
+                [_orderedSetKeyword addObjectsFromArray:arrayFavoriteId];
             }
             BOOL shouldUpdateCachedData = YES;
             NSNumber *numberTimestamp = [dictionaryArchive objectForKey:TMInfoArchiveKey_ArchiveTimestamp];
@@ -296,6 +304,7 @@ static NSUInteger PromotionReadNumberMax = 100;
     [dictionaryArchive setObject:_dictionaryUserInfo forKey:TMInfoArchiveKey_UserInformation];
     [dictionaryArchive setObject:_dictionaryCachedCategories forKey:TMInfoArchiveKey_CachedCategories];
     [dictionaryArchive setObject:[_orderedSetKeyword array] forKey:TMInfoArchiveKey_OrderSetKeyword];
+    [dictionaryArchive setObject:[_orderedSetFavoriteId array] forKey:TMInfoArchiveKey_OrderSetFavoriteId];
     [dictionaryArchive setObject:_arrayFavorite forKey:TMInfoArchiveKey_Favorites];
     [dictionaryArchive setObject:_dictionaryFavoriteDetail forKey:TMInfoArchiveKey_FavoritesDetail];
     if (_numberArchiveTimestamp)
@@ -542,6 +551,22 @@ static NSUInteger PromotionReadNumberMax = 100;
     [_orderedSetKeyword removeAllObjects];
 }
 
+- (void)setUserGenderByGenderText:(NSString *)genderText
+{
+    if ([genderText compare:@"m" options:NSCaseInsensitiveSearch] == NSOrderedSame)
+    {
+        self.userGender = TMGenderMale;
+    }
+    else if ([genderText compare:@"f" options:NSCaseInsensitiveSearch] == NSOrderedSame)
+    {
+        self.userGender = TMGenderFemale;
+    }
+    else
+    {
+        self.userGender = TMGenderUnknown;
+    }
+}
+
 #pragma mark - Private Methods
 
 - (NSURL *)urlForInfoDirectory
@@ -583,6 +608,32 @@ static NSUInteger PromotionReadNumberMax = 100;
         [key appendString:[layer stringValue]];
     }
     return key;
+}
+
+- (BOOL)addProductToFavorite:(NSDictionary *)product
+{
+    NSLog(@"product:\n%@", product);
+    NSNumber *productId = [product objectForKey:SymphoxAPIParam_cpdt_num];
+    if (productId == nil || [productId isEqual:[NSNull null]])
+    {
+        NSLog(@"addProductToFavorite - Cannot find product identifier");
+        return NO;
+    }
+    if ([self.orderedSetFavoriteId containsObject:productId])
+    {
+        NSLog(@"addProductToFavorite - Already in the favorite list.");
+        return NO;
+    }
+    [self.orderedSetFavoriteId addObject:productId];
+    [self.arrayFavorite addObject:product];
+    NSLog(@"orderedSetFavoriteId[%li] arrayFavorite[%li]", (long)self.orderedSetFavoriteId.count, (long)self.arrayFavorite.count);
+    return YES;
+}
+
+- (NSArray *)favorites
+{
+    NSArray *favorites = self.arrayFavorite;
+    return favorites;
 }
 
 @end

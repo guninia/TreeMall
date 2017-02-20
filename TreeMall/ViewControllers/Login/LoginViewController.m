@@ -30,6 +30,7 @@
 - (BOOL)processRegisterData:(NSData *)data;
 - (void)startPreloginProcess;
 - (void)loginWithOptions:(NSDictionary *)options;
+- (BOOL)processLoginData:(NSData *)data;
 
 - (void)actButtonLoginPressed:(id)sender;
 - (void)actButtonFacebookAccountLoginPressed:(id)sender;
@@ -543,6 +544,7 @@
 //                NSString *string = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
 //                NSLog(@"string[%@]", string);
                 // Should continue to process data.
+                [weakSelf processLoginData:data];
                 [[NSNotificationCenter defaultCenter] postNotificationName:PostNotificationName_UserLoggedIn object:nil];
             }
             else
@@ -579,6 +581,40 @@
             [weakSelf presentViewController:alertController animated:YES completion:nil];
         }
     }];
+}
+
+- (BOOL)processLoginData:(NSData *)data
+{
+    BOOL success = NO;
+    if (data == nil || [data isEqual:[NSNull null]])
+    {
+        return success;
+    }
+    NSError *error = nil;
+    id jsonObject = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
+    
+    if ([jsonObject isKindOfClass:[NSDictionary class]])
+    {
+        NSDictionary *dictionary = (NSDictionary *)jsonObject;
+        NSNumber *userId = [dictionary objectForKey:SymphoxAPIParam_user_num];
+        if (userId)
+        {
+            [TMInfoManager sharedManager].userIdentifier = userId;
+            success = YES;
+        }
+        NSString *userGender = [dictionary objectForKey:SymphoxAPIParam_sex];
+        if (userGender)
+        {
+            [[TMInfoManager sharedManager] setUserGenderByGenderText:userGender];
+        }
+        NSString *userName = [dictionary objectForKey:SymphoxAPIParam_name];
+        if (userName)
+        {
+            [TMInfoManager sharedManager].userName = userName;
+        }
+    }
+    
+    return success;
 }
 
 #pragma mark - Actions

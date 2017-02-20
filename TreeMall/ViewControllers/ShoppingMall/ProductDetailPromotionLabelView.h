@@ -15,6 +15,7 @@
 @property (nonatomic, strong) NSString *promotion;
 @property (nonatomic, strong) NSDictionary *attributesPromotion;
 
-- (CGFloat)referenceHeightForPromotion:(NSString *)promotion;
+- (CGFloat)referenceHeightForViewWidth:(CGFloat)viewWidth;
+- (CGFloat)referenceHeightForPromotion:(NSString *)promotion withViewWidth:(CGFloat)viewWidth;
 
 @end

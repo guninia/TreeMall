@@ -622,6 +622,7 @@
 {
     ProductTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:ProductTableViewCellIdentifier forIndexPath:indexPath];
     [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
+//    NSLog(@"cellForRowAtIndexPath[%li][%li]", (long)indexPath.section, (long)indexPath.row);
     if (indexPath.row < [_arrayProducts count])
     {
         NSDictionary *dictionary = [_arrayProducts objectAtIndex:indexPath.row];
@@ -629,19 +630,19 @@
         cell.imagePath = imagePath;
         NSMutableArray *arrayTags = [NSMutableArray array];
         NSNumber *quick = [dictionary objectForKey:SymphoxAPIParam_quick];
-        if (quick && [quick boolValue])
+        if (quick && ([quick isEqual:[NSNull null]] == NO) && [quick boolValue])
         {
             NSDictionary *dictionary = [NSDictionary dictionaryWithObjectsAndKeys:@"8H", ProductTableViewCellTagText, [UIColor colorWithRed:(152.0/255.0) green:(194.0/255.0) blue:(67.0/255.0) alpha:1.0], NSForegroundColorAttributeName, nil];
             [arrayTags addObject:dictionary];
         }
         NSNumber *discountNow = [dictionary objectForKey:SymphoxAPIParam_chk_tactic_click];
-        if (discountNow && [discountNow boolValue])
+        if (discountNow && ([discountNow isEqual:[NSNull null]] == NO) && [discountNow boolValue])
         {
             NSDictionary *dictionary = [NSDictionary dictionaryWithObjectsAndKeys:[LocalizedString ClickToDiscount], ProductTableViewCellTagText, [UIColor colorWithRed:(134.0/255.0) green:(209.0/255.0) blue:(188.0/255.0) alpha:1.0], NSForegroundColorAttributeName, nil];
             [arrayTags addObject:dictionary];
         }
         NSArray *installments = [dictionary objectForKey:SymphoxAPIParam_seekInstallmentList];
-        if (installments && [installments count] > 0)
+        if (installments && ([installments isEqual:[NSNull null]] == NO) && [installments count] > 0)
         {
             NSDictionary *longestPeriodInstallment = [installments lastObject];
             NSNumber *installmentNumber = [longestPeriodInstallment objectForKey:SymphoxAPIParam_installment_num];

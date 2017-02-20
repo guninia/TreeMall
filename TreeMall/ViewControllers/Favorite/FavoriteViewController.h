@@ -7,7 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "ProductTableViewCell.h"
+#import "LoadingFooterView.h"
 
-@interface FavoriteViewController : UIViewController
+@interface FavoriteViewController : UIViewController <UITableViewDataSource, UITableViewDelegate>
+
+@property (nonatomic, strong) UITableView *tableViewFavorites;
+@property (nonatomic, strong) NSArray *arrayFavorites;
+@property (nonatomic, assign) BOOL shouldShowLoadingFooter;
 
 @end

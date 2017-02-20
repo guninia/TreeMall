@@ -157,11 +157,18 @@ static CGFloat marginR = 10.0;
 - (void)initialize
 {
     [self addSubview:self.labelTitle];
+    [self addSubview:self.labelPromotion];
 }
 
 #pragma mark - Public Methods
 
-- (CGFloat)referenceHeightForPromotion:(NSString *)promotion withViewWidth:(CGFloat)viewWidth;
+- (CGFloat)referenceHeightForViewWidth:(CGFloat)viewWidth
+{
+    CGFloat referenceHeight = [self referenceHeightForPromotion:self.labelPromotion.text withViewWidth:viewWidth];
+    return referenceHeight;
+}
+
+- (CGFloat)referenceHeightForPromotion:(NSString *)promotion withViewWidth:(CGFloat)viewWidth
 {
     CGFloat referenceHeight = 0.0;
     if (promotion == nil)

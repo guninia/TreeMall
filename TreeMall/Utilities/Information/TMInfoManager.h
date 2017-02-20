@@ -33,6 +33,7 @@ typedef enum : NSUInteger {
 @property (nonatomic, strong) NSMutableDictionary *dictionaryInitialFilter;
 @property (nonatomic, strong) NSMutableDictionary *dictionaryMainCategoryNameMapping;
 @property (nonatomic, strong) NSMutableOrderedSet *orderedSetKeyword;
+@property (nonatomic, strong) NSMutableOrderedSet *orderedSetFavoriteId;
 @property (nonatomic, strong) NSMutableArray *arrayFavorite;
 @property (nonatomic, strong) NSMutableDictionary *dictionaryFavoriteDetail;
 
@@ -53,5 +54,9 @@ typedef enum : NSUInteger {
 - (void)addKeyword:(NSString *)keyword;
 - (NSArray *)keywords;
 - (void)removeAllKeywords;
+
+- (void)setUserGenderByGenderText:(NSString *)genderText;
+- (BOOL)addProductToFavorite:(NSDictionary *)product;
+- (NSArray *)favorites;
 
 @end

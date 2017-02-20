@@ -811,4 +811,24 @@
     return Promotions;
 }
 
++ (NSString *)AddToCart
+{
+    static NSString *AddToCart = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        AddToCart = NSLocalizedString(@"AddToCart", nil);
+    });
+    return AddToCart;
+}
+
++ (NSString *)Purchase
+{
+    static NSString *Purchase = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        Purchase = NSLocalizedString(@"Purchase", nil);
+    });
+    return Purchase;
+}
+
 @end

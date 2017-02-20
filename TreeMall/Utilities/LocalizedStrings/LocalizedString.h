@@ -90,5 +90,7 @@
 + (NSString *)HotSearch__;
 + (NSString *)SearchResult;
 + (NSString *)Promotions;
++ (NSString *)AddToCart;
++ (NSString *)Purchase;
 
 @end
