@@ -26,6 +26,10 @@
 		68164D931E39D11F00006398 /* ProductListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 68164D911E39D11F00006398 /* ProductListViewController.xib */; };
 		68164D961E39E44400006398 /* ExtraSubcategorySeeAllTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 68164D951E39E44400006398 /* ExtraSubcategorySeeAllTableViewCell.m */; };
 		6819AB521E4981A900735EA3 /* DiscountLabelView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6819AB511E4981A900735EA3 /* DiscountLabelView.m */; };
+		681FC3371E5C333B00AC11CB /* ImageTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 681FC3361E5C333B00AC11CB /* ImageTextView.m */; };
+		681FC33B1E5C3A8700AC11CB /* ProductDetailSectionTitleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 681FC33A1E5C3A8700AC11CB /* ProductDetailSectionTitleView.m */; };
+		6826E9E51E5BE52E001E572A /* BorderedDoubleLabelView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6826E9E41E5BE52E001E572A /* BorderedDoubleLabelView.m */; };
+		6826E9EA1E5BF044001E572A /* ImageTitleButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 6826E9E91E5BF044001E572A /* ImageTitleButton.m */; };
 		685939AC1E1F49DF00351FFB /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 685939AB1E1F49DF00351FFB /* main.m */; };
 		685939AF1E1F49DF00351FFB /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 685939AE1E1F49DF00351FFB /* AppDelegate.m */; };
 		685939B21E1F49DF00351FFB /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 685939B11E1F49DF00351FFB /* ViewController.m */; };
@@ -194,6 +198,14 @@
 		68164D951E39E44400006398 /* ExtraSubcategorySeeAllTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ExtraSubcategorySeeAllTableViewCell.m; path = ViewControllers/ShoppingMall/ExtraSubcategorySeeAllTableViewCell.m; sourceTree = "<group>"; };
 		6819AB501E4981A900735EA3 /* DiscountLabelView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DiscountLabelView.h; path = ViewControllers/ShoppingMall/DiscountLabelView.h; sourceTree = "<group>"; };
 		6819AB511E4981A900735EA3 /* DiscountLabelView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DiscountLabelView.m; path = ViewControllers/ShoppingMall/DiscountLabelView.m; sourceTree = "<group>"; };
+		681FC3351E5C333B00AC11CB /* ImageTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ImageTextView.h; path = Component/ImageTextView/ImageTextView.h; sourceTree = "<group>"; };
+		681FC3361E5C333B00AC11CB /* ImageTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ImageTextView.m; path = Component/ImageTextView/ImageTextView.m; sourceTree = "<group>"; };
+		681FC3391E5C3A8700AC11CB /* ProductDetailSectionTitleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ProductDetailSectionTitleView.h; path = ViewControllers/ShoppingMall/ProductDetailSectionTitleView.h; sourceTree = "<group>"; };
+		681FC33A1E5C3A8700AC11CB /* ProductDetailSectionTitleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ProductDetailSectionTitleView.m; path = ViewControllers/ShoppingMall/ProductDetailSectionTitleView.m; sourceTree = "<group>"; };
+		6826E9E31E5BE52E001E572A /* BorderedDoubleLabelView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BorderedDoubleLabelView.h; path = Component/BorderedDoubleLabelView/BorderedDoubleLabelView.h; sourceTree = "<group>"; };
+		6826E9E41E5BE52E001E572A /* BorderedDoubleLabelView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BorderedDoubleLabelView.m; path = Component/BorderedDoubleLabelView/BorderedDoubleLabelView.m; sourceTree = "<group>"; };
+		6826E9E81E5BF044001E572A /* ImageTitleButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ImageTitleButton.h; path = Component/ImageTitleButton/ImageTitleButton.h; sourceTree = "<group>"; };
+		6826E9E91E5BF044001E572A /* ImageTitleButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ImageTitleButton.m; path = Component/ImageTitleButton/ImageTitleButton.m; sourceTree = "<group>"; };
 		685939A71E1F49DF00351FFB /* TreeMall.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TreeMall.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		685939AB1E1F49DF00351FFB /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		685939AD1E1F49DF00351FFB /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -470,6 +482,33 @@
 			name = Google;
 			sourceTree = "<group>";
 		};
+		681FC3381E5C334500AC11CB /* ImageTextView */ = {
+			isa = PBXGroup;
+			children = (
+				681FC3351E5C333B00AC11CB /* ImageTextView.h */,
+				681FC3361E5C333B00AC11CB /* ImageTextView.m */,
+			);
+			name = ImageTextView;
+			sourceTree = "<group>";
+		};
+		6826E9E61E5BED21001E572A /* BorderedDoubleLabelView */ = {
+			isa = PBXGroup;
+			children = (
+				6826E9E31E5BE52E001E572A /* BorderedDoubleLabelView.h */,
+				6826E9E41E5BE52E001E572A /* BorderedDoubleLabelView.m */,
+			);
+			name = BorderedDoubleLabelView;
+			sourceTree = "<group>";
+		};
+		6826E9E71E5BF013001E572A /* ImageTitleButton */ = {
+			isa = PBXGroup;
+			children = (
+				6826E9E81E5BF044001E572A /* ImageTitleButton.h */,
+				6826E9E91E5BF044001E572A /* ImageTitleButton.m */,
+			);
+			name = ImageTitleButton;
+			sourceTree = "<group>";
+		};
 		6859399E1E1F49DF00351FFB = {
 			isa = PBXGroup;
 			children = (
@@ -660,6 +699,8 @@
 				689F66491E5AC56400CC3664 /* ProductDetailBottomBar.m */,
 				6887999D1E5AD12B00495A77 /* ProductDetailImageCollectionViewCell.h */,
 				6887999E1E5AD12B00495A77 /* ProductDetailImageCollectionViewCell.m */,
+				681FC3391E5C3A8700AC11CB /* ProductDetailSectionTitleView.h */,
+				681FC33A1E5C3A8700AC11CB /* ProductDetailSectionTitleView.m */,
 			);
 			name = ShoppingMall;
 			sourceTree = "<group>";
@@ -822,6 +863,9 @@
 		68B68FF01E2483D600DCCF29 /* Component */ = {
 			isa = PBXGroup;
 			children = (
+				681FC3381E5C334500AC11CB /* ImageTextView */,
+				6826E9E71E5BF013001E572A /* ImageTitleButton */,
+				6826E9E61E5BED21001E572A /* BorderedDoubleLabelView */,
 				68BE095E1E583F080046B477 /* ProductPriceLabel */,
 				68B5EEC61E4C69910030A2ED /* LoadingView */,
 				68B68FF11E24843800DCCF29 /* Separator */,
@@ -1154,6 +1198,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				68B68FF91E24C30700DCCF29 /* PromotionViewController.m in Sources */,
+				6826E9EA1E5BF044001E572A /* ImageTitleButton.m in Sources */,
 				685939E91E1F518700351FFB /* CryptoTool.m in Sources */,
 				6895464D1E3608E500D5CD1E /* WebViewViewController.m in Sources */,
 				680957751E43195F00DA2BEA /* ProductListToolView.m in Sources */,
@@ -1170,6 +1215,7 @@
 				6890650E1E23334400E5CB26 /* EntranceViewController.m in Sources */,
 				68164D961E39E44400006398 /* ExtraSubcategorySeeAllTableViewCell.m in Sources */,
 				685939E51E1F4E1700351FFB /* SHAPIAdapter.m in Sources */,
+				681FC33B1E5C3A8700AC11CB /* ProductDetailSectionTitleView.m in Sources */,
 				68D55E821E25D938005D1BB7 /* UIButton+WebCache.m in Sources */,
 				68D55E811E25D938005D1BB7 /* SDWebImagePrefetcher.m in Sources */,
 				68D55E891E25D938005D1BB7 /* UIView+WebCacheOperation.m in Sources */,
@@ -1206,6 +1252,7 @@
 				68D55E7F1E25D938005D1BB7 /* SDWebImageDownloaderOperation.m in Sources */,
 				685939ED1E1F775900351FFB /* CryptoModule.m in Sources */,
 				68D55E8E1E25DCF8005D1BB7 /* FLAnimatedImage.m in Sources */,
+				6826E9E51E5BE52E001E572A /* BorderedDoubleLabelView.m in Sources */,
 				6887999F1E5AD12B00495A77 /* ProductDetailImageCollectionViewCell.m in Sources */,
 				68CF5E601E38ABF400341EF1 /* SubcategoryTableViewCell.m in Sources */,
 				68D55E881E25D938005D1BB7 /* UIView+WebCache.m in Sources */,
@@ -1216,6 +1263,7 @@
 				685939B81E1F49DF00351FFB /* TreeMall.xcdatamodeld in Sources */,
 				68D55E7D1E25D938005D1BB7 /* SDWebImageDecoder.m in Sources */,
 				68D55E851E25D938005D1BB7 /* UIImage+WebP.m in Sources */,
+				681FC3371E5C333B00AC11CB /* ImageTextView.m in Sources */,
 				68A85C7E1E2728CF004DD624 /* TMInfoManager.m in Sources */,
 				6819AB521E4981A900735EA3 /* DiscountLabelView.m in Sources */,
 				68D55E7C1E25D938005D1BB7 /* SDWebImageCompat.m in Sources */,

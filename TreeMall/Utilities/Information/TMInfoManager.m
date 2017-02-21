@@ -115,7 +115,7 @@ static NSUInteger PromotionReadNumberMax = 100;
             NSArray *arrayFavoriteId = [dictionaryArchive objectForKey:TMInfoArchiveKey_OrderSetFavoriteId];
             if (arrayFavoriteId)
             {
-                [_orderedSetKeyword addObjectsFromArray:arrayFavoriteId];
+                [_orderedSetFavoriteId addObjectsFromArray:arrayFavoriteId];
             }
             BOOL shouldUpdateCachedData = YES;
             NSNumber *numberTimestamp = [dictionaryArchive objectForKey:TMInfoArchiveKey_ArchiveTimestamp];

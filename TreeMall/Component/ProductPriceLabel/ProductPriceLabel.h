@@ -16,4 +16,6 @@
 @property (nonatomic, assign) BOOL shouldShowCutLine;
 @property (nonatomic, strong) NSNumberFormatter *formatter;
 
+- (CGSize)referenceSize;
+
 @end

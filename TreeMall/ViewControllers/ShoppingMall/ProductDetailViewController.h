@@ -10,8 +10,12 @@
 #import "ProductDetailPromotionLabelView.h"
 #import "ProductPriceLabel.h"
 #import "ProductDetailBottomBar.h"
+#import "BorderedDoubleLabelView.h"
+#import "ImageTitleButton.h"
+#import "ImageTextView.h"
+#import "ProductDetailSectionTitleView.h"
 
-@interface ProductDetailViewController : UIViewController <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, ProductDetailBottomBarDelegate>
+@interface ProductDetailViewController : UIViewController <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, ProductDetailBottomBarDelegate, BorderedDoubleViewDelegate>
 
 @property (nonatomic, strong) NSDictionary *dictionaryCommon;
 @property (nonatomic, strong) NSDictionary *dictionaryDetail;
@@ -25,6 +29,15 @@
 @property (nonatomic, strong) ProductDetailPromotionLabelView *viewPromotion;
 @property (nonatomic, strong) ProductPriceLabel *labelOriginPrice;
 @property (nonatomic, strong) ProductPriceLabel *labelPrice;
+@property (nonatomic, strong) UIView *separator;
+@property (nonatomic, strong) BorderedDoubleLabelView *viewPoint;
+@property (nonatomic, strong) BorderedDoubleLabelView *viewPointCash;
+@property (nonatomic, strong) BorderedDoubleLabelView *viewPointFeedback;
+@property (nonatomic, strong) ImageTitleButton *buttonExchangeDesc;
+@property (nonatomic, strong) ImageTitleButton *buttonInstallmentCal;
+@property (nonatomic, strong) BorderedDoubleLabelView *viewChooseSpec;
+@property (nonatomic, strong) ImageTextView *viewNotice;
+@property (nonatomic, strong) ProductDetailSectionTitleView *viewSpecTitle;
 @property (nonatomic, strong) ProductDetailBottomBar *bottomBar;
 
 @end

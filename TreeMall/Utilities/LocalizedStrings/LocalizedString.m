@@ -831,4 +831,104 @@
     return Purchase;
 }
 
++ (NSString *)OriginPrice_C_$
+{
+    static NSString *OriginPrice_C_$ = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        OriginPrice_C_$ = NSLocalizedString(@"OriginPrice_C_$", nil);
+    });
+    return OriginPrice_C_$;
+}
+
++ (NSString *)PointNumber
+{
+    static NSString *PointNumber = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        PointNumber = NSLocalizedString(@"PointNumber", nil);
+    });
+    return PointNumber;
+}
+
++ (NSString *)PointAddCash
+{
+    static NSString *PointAddCash = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        PointAddCash = NSLocalizedString(@"PointAddCash", nil);
+    });
+    return PointAddCash;
+}
+
++ (NSString *)FeedbackPointUpTo_S
+{
+    static NSString *FeedbackPointUpTo_S = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        FeedbackPointUpTo_S = NSLocalizedString(@"FeedbackPointUpTo_S", nil);
+    });
+    return FeedbackPointUpTo_S;
+}
+
++ (NSString *)Detail_RA_
+{
+    static NSString *Detail_RA_ = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        Detail_RA_ = NSLocalizedString(@"Detail_RA_", nil);
+    });
+    return Detail_RA_;
+}
+
++ (NSString *)ExchangeDescription
+{
+    static NSString *ExchangeDescription = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        ExchangeDescription = NSLocalizedString(@"ExchangeDescription", nil);
+    });
+    return ExchangeDescription;
+}
+
++ (NSString *)InstallmentsCalculation
+{
+    static NSString *InstallmentsCalculation = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        InstallmentsCalculation = NSLocalizedString(@"InstallmentsCalculation", nil);
+    });
+    return InstallmentsCalculation;
+}
+
++ (NSString *)ChooseSpec
+{
+    static NSString *ChooseSpec = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        ChooseSpec = NSLocalizedString(@"ChooseSpec", nil);
+    });
+    return ChooseSpec;
+}
+
++ (NSString *)ProductDetailNotice
+{
+    static NSString *ProductDetailNotice = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        ProductDetailNotice = NSLocalizedString(@"ProductDetailNotice", nil);
+    });
+    return ProductDetailNotice;
+}
+
++ (NSString *)ProductIntroduce
+{
+    static NSString *ProductIntroduce = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        ProductIntroduce = NSLocalizedString(@"ProductIntroduce", nil);
+    });
+    return ProductIntroduce;
+}
+
 @end

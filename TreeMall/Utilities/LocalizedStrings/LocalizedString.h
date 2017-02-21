@@ -92,5 +92,16 @@
 + (NSString *)Promotions;
 + (NSString *)AddToCart;
 + (NSString *)Purchase;
++ (NSString *)OriginPrice_C_$;
++ (NSString *)PointNumber;
++ (NSString *)PointAddCash;
++ (NSString *)FeedbackPointUpTo_S;
++ (NSString *)Detail_RA_;
++ (NSString *)ExchangeDescription;
++ (NSString *)InstallmentsCalculation;
++ (NSString *)ChooseSpec;
++ (NSString *)ProductDetailNotice;
++ (NSString *)ProductIntroduce;
+
 
 @end

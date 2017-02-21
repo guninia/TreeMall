@@ -118,4 +118,19 @@
     [self addSubview:self.viewLine];
 }
 
+#pragma mark - Public Methods
+
+- (CGSize)referenceSize
+{
+    NSString *targetText = self.text;
+    if (targetText == nil)
+    {
+        return CGSizeZero;
+    }
+    NSDictionary *attributes = [NSDictionary dictionaryWithObjectsAndKeys:self.font, NSFontAttributeName, nil];
+    CGSize sizeText = [targetText sizeWithAttributes:attributes];
+    CGSize sizeLabel = CGSizeMake(ceil(sizeText.width), ceil(sizeText.height));
+    return sizeLabel;
+}
+
 @end

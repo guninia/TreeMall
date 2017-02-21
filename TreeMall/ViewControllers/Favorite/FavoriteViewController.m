@@ -31,12 +31,17 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
+    [self.view addSubview:self.tableViewFavorites];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
     self.arrayFavorites = [[TMInfoManager sharedManager] favorites];
+    NSLog(@"self.arrayFavorites[%li]:\n%@", (long)self.arrayFavorites.count, [self.arrayFavorites description]);
     if (self.arrayFavorites != nil)
     {
         _shouldShowLoadingFooter = NO;
     }
-    [self.view addSubview:self.tableViewFavorites];
     [self.tableViewFavorites reloadData];
 }
 

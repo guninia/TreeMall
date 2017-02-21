@@ -88,4 +88,14 @@
 "Promotions"="優惠活動";
 "AddToCart"="加入購物車";
 "Purchase"="直接購買";
+"OriginPrice_C_$"="原價：＄";
+"PointNumber"="點數";
+"PointAddCash"="點＋現";
+"FeedbackPointUpTo_S"="貨到最高贈%@點";
+"Detail_RA_"="詳情 ＞";
+"ExchangeDescription"="兌換說明";
+"InstallmentsCalculation"="分期試算";
+"ChooseSpec"="選擇規格";
+"ProductDetailNotice"="【注意事項】本商品適用之折價券折抵面額，請以付款頁提供選項為準。";
+"ProductIntroduce"="商品簡介";
 

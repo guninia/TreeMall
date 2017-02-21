@@ -89,4 +89,13 @@
 "Promotions"="Promotions";
 "AddToCart"="Add To Cart";
 "Purchase"="Purchase";
-
+"OriginPrice_C_$"="Origin price：＄";
+"PointNumber"="Point";
+"PointAddCash"="Point+cash";
+"FeedbackPointUpTo_S"="Feedback point up to %@";
+"Detail_RA_"="Detail＞";
+"ExchangeDescription"="Exchange Description";
+"InstallmentsCalculation"="Installments Calculation";
+"ChooseSpec"="Choose Spec";
+"ProductDetailNotice"="Product Detail Notice";
+"ProductIntroduce"="Product Introduce";
