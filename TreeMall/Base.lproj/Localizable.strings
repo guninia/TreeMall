@@ -99,3 +99,21 @@
 "ChooseSpec"="Choose Spec";
 "ProductDetailNotice"="Product Detail Notice";
 "ProductIntroduce"="Product Introduce";
+"Welcome_S__S_"="Welcome！%@%@";
+"PersonalDataModify"="Personal Data Modify";
+"MyPoints"="My Points";
+"TotalCount"="Total";
+"ExpiredThisMonth"="Expired This Month";
+"MyCoupon"="My Coupon";
+"MyOrder"="My Order";
+"Processing_BRA_S_BRA"="Processing(%@)";
+"Shipped_BRA_S_BRA"="Shipped(%@)";
+"ReturnReplace_BRA_S_BRA"="Return or Replace(%@)";
+"All"="All";
+"Processing"="Processing";
+"Shipping"="Shipping";
+"Return"="Return";
+"PleaseInputProductName"="Please input product name";
+"OrderTime"="Order time";
+"ShipType"="Ship type";
+

@@ -10,6 +10,8 @@
 		680957721E43051C00DA2BEA /* ProductSubcategoryCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 680957711E43051C00DA2BEA /* ProductSubcategoryCollectionViewCell.m */; };
 		680957751E43195F00DA2BEA /* ProductListToolView.m in Sources */ = {isa = PBXBuildFile; fileRef = 680957741E43195F00DA2BEA /* ProductListToolView.m */; };
 		680957781E432D4D00DA2BEA /* ProductTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 680957771E432D4D00DA2BEA /* ProductTableViewCell.m */; };
+		680DC91B1E5ED05A00C97653 /* DropdownListButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 680DC91A1E5ED05A00C97653 /* DropdownListButton.m */; };
+		680DC91E1E5EE3AC00C97653 /* OrderTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 680DC91D1E5EE3AC00C97653 /* OrderTableViewCell.m */; };
 		6811BC641E275F6F00626A4A /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6811BC621E275F6F00626A4A /* FBSDKCoreKit.framework */; };
 		6811BC651E275F6F00626A4A /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6811BC631E275F6F00626A4A /* FBSDKLoginKit.framework */; };
 		6811BC671E27701500626A4A /* Bolts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6811BC661E27701500626A4A /* Bolts.framework */; };
@@ -42,7 +44,12 @@
 		685939E51E1F4E1700351FFB /* SHAPIAdapter.m in Sources */ = {isa = PBXBuildFile; fileRef = 685939E41E1F4E1700351FFB /* SHAPIAdapter.m */; };
 		685939E91E1F518700351FFB /* CryptoTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 685939E81E1F518700351FFB /* CryptoTool.m */; };
 		685939ED1E1F775900351FFB /* CryptoModule.m in Sources */ = {isa = PBXBuildFile; fileRef = 685939EC1E1F775900351FFB /* CryptoModule.m */; };
+		6863A1D71E5E7C550036E0A8 /* IconLabelView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6863A1D61E5E7C550036E0A8 /* IconLabelView.m */; };
+		6863A1DC1E5EBD3D0036E0A8 /* OrderListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6863A1DA1E5EBD3D0036E0A8 /* OrderListViewController.m */; };
+		6863A1DD1E5EBD3D0036E0A8 /* OrderListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6863A1DB1E5EBD3D0036E0A8 /* OrderListViewController.xib */; };
 		6887999F1E5AD12B00495A77 /* ProductDetailImageCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6887999E1E5AD12B00495A77 /* ProductDetailImageCollectionViewCell.m */; };
+		688EF5F01E5D3EF20047E2DC /* MemberTitleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 688EF5EF1E5D3EF20047E2DC /* MemberTitleView.m */; };
+		688EF5F31E5D474C0047E2DC /* MemberPointView.m in Sources */ = {isa = PBXBuildFile; fileRef = 688EF5F21E5D474C0047E2DC /* MemberPointView.m */; };
 		6890650E1E23334400E5CB26 /* EntranceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6890650C1E23334400E5CB26 /* EntranceViewController.m */; };
 		6890650F1E23334400E5CB26 /* EntranceViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6890650D1E23334400E5CB26 /* EntranceViewController.xib */; };
 		689065141E23368100E5CB26 /* ShoppingMallViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 689065121E23368100E5CB26 /* ShoppingMallViewController.m */; };
@@ -178,6 +185,10 @@
 		680957741E43195F00DA2BEA /* ProductListToolView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ProductListToolView.m; path = ViewControllers/ShoppingMall/ProductListToolView.m; sourceTree = "<group>"; };
 		680957761E432D4D00DA2BEA /* ProductTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ProductTableViewCell.h; path = ViewControllers/ShoppingMall/ProductTableViewCell.h; sourceTree = "<group>"; };
 		680957771E432D4D00DA2BEA /* ProductTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ProductTableViewCell.m; path = ViewControllers/ShoppingMall/ProductTableViewCell.m; sourceTree = "<group>"; };
+		680DC9191E5ED05A00C97653 /* DropdownListButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DropdownListButton.h; path = Component/DropdownListButton/DropdownListButton.h; sourceTree = "<group>"; };
+		680DC91A1E5ED05A00C97653 /* DropdownListButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DropdownListButton.m; path = Component/DropdownListButton/DropdownListButton.m; sourceTree = "<group>"; };
+		680DC91C1E5EE3AC00C97653 /* OrderTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OrderTableViewCell.h; path = ViewControllers/OrderList/OrderTableViewCell.h; sourceTree = "<group>"; };
+		680DC91D1E5EE3AC00C97653 /* OrderTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OrderTableViewCell.m; path = ViewControllers/OrderList/OrderTableViewCell.m; sourceTree = "<group>"; };
 		6811BC621E275F6F00626A4A /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKCoreKit.framework; path = Frameworks/FBSDKCoreKit.framework; sourceTree = "<group>"; };
 		6811BC631E275F6F00626A4A /* FBSDKLoginKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKLoginKit.framework; path = Frameworks/FBSDKLoginKit.framework; sourceTree = "<group>"; };
 		6811BC661E27701500626A4A /* Bolts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Bolts.framework; path = Frameworks/Bolts.framework; sourceTree = "<group>"; };
@@ -231,8 +242,17 @@
 		685939EB1E1F775900351FFB /* CryptoModule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CryptoModule.h; path = Utilities/Crypto/CryptoModule.h; sourceTree = "<group>"; };
 		685939EC1E1F775900351FFB /* CryptoModule.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CryptoModule.m; path = Utilities/Crypto/CryptoModule.m; sourceTree = "<group>"; };
 		685939EE1E1F978A00351FFB /* APIDefinition.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = APIDefinition.h; path = Utilities/API/APIDefinition.h; sourceTree = "<group>"; };
+		6863A1D51E5E7C550036E0A8 /* IconLabelView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IconLabelView.h; path = Component/IconLabelView/IconLabelView.h; sourceTree = "<group>"; };
+		6863A1D61E5E7C550036E0A8 /* IconLabelView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = IconLabelView.m; path = Component/IconLabelView/IconLabelView.m; sourceTree = "<group>"; };
+		6863A1D91E5EBD3D0036E0A8 /* OrderListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OrderListViewController.h; path = ViewControllers/OrderList/OrderListViewController.h; sourceTree = "<group>"; };
+		6863A1DA1E5EBD3D0036E0A8 /* OrderListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OrderListViewController.m; path = ViewControllers/OrderList/OrderListViewController.m; sourceTree = "<group>"; };
+		6863A1DB1E5EBD3D0036E0A8 /* OrderListViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OrderListViewController.xib; path = ViewControllers/OrderList/OrderListViewController.xib; sourceTree = "<group>"; };
 		6887999D1E5AD12B00495A77 /* ProductDetailImageCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ProductDetailImageCollectionViewCell.h; path = ViewControllers/ShoppingMall/ProductDetailImageCollectionViewCell.h; sourceTree = "<group>"; };
 		6887999E1E5AD12B00495A77 /* ProductDetailImageCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ProductDetailImageCollectionViewCell.m; path = ViewControllers/ShoppingMall/ProductDetailImageCollectionViewCell.m; sourceTree = "<group>"; };
+		688EF5EE1E5D3EF20047E2DC /* MemberTitleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MemberTitleView.h; path = ViewControllers/Member/MemberTitleView.h; sourceTree = "<group>"; };
+		688EF5EF1E5D3EF20047E2DC /* MemberTitleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MemberTitleView.m; path = ViewControllers/Member/MemberTitleView.m; sourceTree = "<group>"; };
+		688EF5F11E5D474C0047E2DC /* MemberPointView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MemberPointView.h; path = ViewControllers/Member/MemberPointView.h; sourceTree = "<group>"; };
+		688EF5F21E5D474C0047E2DC /* MemberPointView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MemberPointView.m; path = ViewControllers/Member/MemberPointView.m; sourceTree = "<group>"; };
 		6890650B1E23334400E5CB26 /* EntranceViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EntranceViewController.h; path = ViewControllers/Entrance/EntranceViewController.h; sourceTree = "<group>"; };
 		6890650C1E23334400E5CB26 /* EntranceViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EntranceViewController.m; path = ViewControllers/Entrance/EntranceViewController.m; sourceTree = "<group>"; };
 		6890650D1E23334400E5CB26 /* EntranceViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = EntranceViewController.xib; path = ViewControllers/Entrance/EntranceViewController.xib; sourceTree = "<group>"; };
@@ -449,6 +469,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		680DC9181E5ED01C00C97653 /* DropdownListButton */ = {
+			isa = PBXGroup;
+			children = (
+				680DC9191E5ED05A00C97653 /* DropdownListButton.h */,
+				680DC91A1E5ED05A00C97653 /* DropdownListButton.m */,
+			);
+			name = DropdownListButton;
+			sourceTree = "<group>";
+		};
 		6811BC611E275F6F00626A4A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -615,9 +644,31 @@
 			name = Crypto;
 			sourceTree = "<group>";
 		};
+		6863A1D41E5E7C330036E0A8 /* IconLabelView */ = {
+			isa = PBXGroup;
+			children = (
+				6863A1D51E5E7C550036E0A8 /* IconLabelView.h */,
+				6863A1D61E5E7C550036E0A8 /* IconLabelView.m */,
+			);
+			name = IconLabelView;
+			sourceTree = "<group>";
+		};
+		6863A1D81E5EBD130036E0A8 /* OrderListViewController */ = {
+			isa = PBXGroup;
+			children = (
+				6863A1D91E5EBD3D0036E0A8 /* OrderListViewController.h */,
+				6863A1DA1E5EBD3D0036E0A8 /* OrderListViewController.m */,
+				6863A1DB1E5EBD3D0036E0A8 /* OrderListViewController.xib */,
+				680DC91C1E5EE3AC00C97653 /* OrderTableViewCell.h */,
+				680DC91D1E5EE3AC00C97653 /* OrderTableViewCell.m */,
+			);
+			name = OrderListViewController;
+			sourceTree = "<group>";
+		};
 		689065041E23321E00E5CB26 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				6863A1D81E5EBD130036E0A8 /* OrderListViewController */,
 				68981FA51E5598E600A2707A /* Search */,
 				689546491E3608C200D5CD1E /* WebView */,
 				68B68FF51E24C28600DCCF29 /* Promotion */,
@@ -731,6 +782,10 @@
 				689065231E2338C400E5CB26 /* MemberViewController.h */,
 				689065241E2338C400E5CB26 /* MemberViewController.m */,
 				689065251E2338C400E5CB26 /* MemberViewController.xib */,
+				688EF5EE1E5D3EF20047E2DC /* MemberTitleView.h */,
+				688EF5EF1E5D3EF20047E2DC /* MemberTitleView.m */,
+				688EF5F11E5D474C0047E2DC /* MemberPointView.h */,
+				688EF5F21E5D474C0047E2DC /* MemberPointView.m */,
 			);
 			name = Member;
 			sourceTree = "<group>";
@@ -863,6 +918,8 @@
 		68B68FF01E2483D600DCCF29 /* Component */ = {
 			isa = PBXGroup;
 			children = (
+				680DC9181E5ED01C00C97653 /* DropdownListButton */,
+				6863A1D41E5E7C330036E0A8 /* IconLabelView */,
 				681FC3381E5C334500AC11CB /* ImageTextView */,
 				6826E9E71E5BF013001E572A /* ImageTitleButton */,
 				6826E9E61E5BED21001E572A /* BorderedDoubleLabelView */,
@@ -1167,6 +1224,7 @@
 				6890652D1E23470E00E5CB26 /* FavoriteViewController.xib in Resources */,
 				68B26FBA1E31CB5F00B6D757 /* RegisterViewController.xib in Resources */,
 				68A827A61E4DB62D00E63552 /* ProductDetailViewController.xib in Resources */,
+				6863A1DD1E5EBD3D0036E0A8 /* OrderListViewController.xib in Resources */,
 				68968EED1E51B71B00419619 /* slider-metal-handle@2x.png in Resources */,
 				68164D931E39D11F00006398 /* ProductListViewController.xib in Resources */,
 				6811BC751E27757100626A4A /* GoogleService-Info.plist in Resources */,
@@ -1203,6 +1261,7 @@
 				6895464D1E3608E500D5CD1E /* WebViewViewController.m in Sources */,
 				680957751E43195F00DA2BEA /* ProductListToolView.m in Sources */,
 				68164D921E39D11F00006398 /* ProductListViewController.m in Sources */,
+				6863A1D71E5E7C550036E0A8 /* IconLabelView.m in Sources */,
 				68E401361E30B09900BFF66B /* ForgetPasswordViewController.m in Sources */,
 				68D55E871E25D938005D1BB7 /* UIImageView+WebCache.m in Sources */,
 				68968EF21E51B71B00419619 /* NMRangeSlider.m in Sources */,
@@ -1222,6 +1281,7 @@
 				68B68FF41E2484A600DCCF29 /* TextHorizontalSeparator.m in Sources */,
 				689065261E2338C400E5CB26 /* MemberViewController.m in Sources */,
 				68BE09611E583F080046B477 /* ProductPriceLabel.m in Sources */,
+				680DC91B1E5ED05A00C97653 /* DropdownListButton.m in Sources */,
 				685939AF1E1F49DF00351FFB /* AppDelegate.m in Sources */,
 				68CF5E631E38AC5900341EF1 /* ExtraSubcategoryTableViewCell.m in Sources */,
 				68D55E861E25D938005D1BB7 /* UIImageView+HighlightedWebCache.m in Sources */,
@@ -1236,6 +1296,7 @@
 				680957721E43051C00DA2BEA /* ProductSubcategoryCollectionViewCell.m in Sources */,
 				68D55E8F1E25DCF8005D1BB7 /* FLAnimatedImageView.m in Sources */,
 				68B68FEF1E24753400DCCF29 /* Utility.m in Sources */,
+				680DC91E1E5EE3AC00C97653 /* OrderTableViewCell.m in Sources */,
 				689613CA1E52AAE800066BE7 /* LabelRangeSliderView.m in Sources */,
 				689065201E23387200E5CB26 /* NotificationViewController.m in Sources */,
 				68D55E831E25D938005D1BB7 /* UIImage+GIF.m in Sources */,
@@ -1260,6 +1321,7 @@
 				68D55E791E25D938005D1BB7 /* NSImage+WebCache.m in Sources */,
 				68AC12141E42D0BB0080183F /* ProductSubcategoryView.m in Sources */,
 				689546441E35DFB400D5CD1E /* AuthenticateViewController.m in Sources */,
+				688EF5F01E5D3EF20047E2DC /* MemberTitleView.m in Sources */,
 				685939B81E1F49DF00351FFB /* TreeMall.xcdatamodeld in Sources */,
 				68D55E7D1E25D938005D1BB7 /* SDWebImageDecoder.m in Sources */,
 				68D55E851E25D938005D1BB7 /* UIImage+WebP.m in Sources */,
@@ -1267,6 +1329,7 @@
 				68A85C7E1E2728CF004DD624 /* TMInfoManager.m in Sources */,
 				6819AB521E4981A900735EA3 /* DiscountLabelView.m in Sources */,
 				68D55E7C1E25D938005D1BB7 /* SDWebImageCompat.m in Sources */,
+				6863A1DC1E5EBD3D0036E0A8 /* OrderListViewController.m in Sources */,
 				680957781E432D4D00DA2BEA /* ProductTableViewCell.m in Sources */,
 				68CA36BD1E23880400A70BCC /* LoginViewController.m in Sources */,
 				68E401311E309B7700BFF66B /* TermsViewController.m in Sources */,
@@ -1277,6 +1340,7 @@
 				68FBDE041E3757F7007F5C13 /* MainCategoryCollectionViewCell.m in Sources */,
 				68D55E761E25D938005D1BB7 /* FLAnimatedImageView+WebCache.m in Sources */,
 				68ACE8901E56DA2000A821DA /* SearchCollectionViewCell.m in Sources */,
+				688EF5F31E5D474C0047E2DC /* MemberPointView.m in Sources */,
 				68A827A01E4DB56400E63552 /* ProductFilterViewController.m in Sources */,
 				68DC2BAB1E487B28003573AC /* LoadingFooterView.m in Sources */,
 				6890652C1E23470E00E5CB26 /* FavoriteViewController.m in Sources */,

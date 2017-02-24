@@ -88,16 +88,32 @@
     NSInteger keySize = 0;
     NSInteger blockSize = 0;
     CCOptions options = 0;
-    
+    CCAlgorithm ccAlgorithm = 0;
     switch (algorithm) {
-        case kCCAlgorithmAES:
+        case CryptoAlgorithmAES128ECBPKCS7:
         {
+            ccAlgorithm = kCCAlgorithmAES128;
             keySize = kCCKeySizeAES128;
             blockSize = kCCBlockSizeAES128;
             options = (kCCOptionPKCS7Padding | kCCOptionECBMode);
         }
             break;
-            
+        case CryptoAlgorithmAES128CBCPKCS7:
+        {
+            ccAlgorithm = kCCAlgorithmAES128;
+            keySize = kCCKeySizeAES128;
+            blockSize = kCCBlockSizeAES128;
+            options = kCCOptionPKCS7Padding;
+        }
+            break;
+        case CryptoAlgorithmAES256CBCPKCS7:
+        {
+            ccAlgorithm = kCCAlgorithmAES;
+            keySize = kCCKeySizeAES256;
+            blockSize = kCCBlockSizeAES128;
+            options = kCCOptionPKCS7Padding;
+        }
+            break;
         default:
             break;
     }
@@ -122,7 +138,7 @@
     
     // do encrypt
     size_t decryptedSize = 0;
-    CCCryptorStatus cryptStatus = CCCrypt(kCCDecrypt, algorithm, options, cKey, keySize, cIv, [sourceData bytes], dataLength, buffer, bufferSize, &decryptedSize);
+    CCCryptorStatus cryptStatus = CCCrypt(kCCDecrypt, ccAlgorithm, options, cKey, keySize, cIv, [sourceData bytes], dataLength, buffer, bufferSize, &decryptedSize);
     if (cryptStatus == kCCSuccess)
     {
         result = [NSData dataWithBytesNoCopy:buffer length:decryptedSize];

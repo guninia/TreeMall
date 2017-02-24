@@ -612,6 +612,7 @@
         {
             [TMInfoManager sharedManager].userName = userName;
         }
+        [[TMInfoManager sharedManager] saveToArchive];
     }
     
     return success;

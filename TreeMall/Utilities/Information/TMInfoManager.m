@@ -32,12 +32,15 @@ static NSString *SeparatorBetweenIdAndLayer = @"_";
 static TMInfoManager *gTMInfoManager = nil;
 
 static NSUInteger PromotionReadNumberMax = 100;
+static NSUInteger SearchKeywordNumberMax = 8;
 
 @interface TMInfoManager ()
 
 - (NSURL *)urlForInfoDirectory;
 - (NSURL *)urlForInfoArchive;
 - (NSString *)keyForCategoryIdentifier:(NSString *)identifier withLayer:(NSNumber *)layer;
+- (void)retrieveUserInformation;
+- (void)processUserInfomation:(NSData *)data;
 
 @end
 
@@ -82,6 +85,7 @@ static NSUInteger PromotionReadNumberMax = 100;
         _userGender = TMGenderTotal;
         _userEpoint = nil;
         _userEcoupon = nil;
+        archiveQueue = dispatch_queue_create("ArchiveQueue", DISPATCH_QUEUE_SERIAL);
         
         NSDictionary *dictionaryArchive = [self loadFromArchive];
         if (dictionaryArchive)
@@ -104,7 +108,7 @@ static NSUInteger PromotionReadNumberMax = 100;
             NSArray *arrayFavorites = [dictionaryArchive objectForKey:TMInfoArchiveKey_Favorites];
             if (arrayFavorites)
             {
-                NSLog(@"arrayFavorites:\n%@", [arrayFavorites description]);
+//                NSLog(@"arrayFavorites:\n%@", [arrayFavorites description]);
                 [_arrayFavorite addObjectsFromArray:arrayFavorites];
             }
             NSDictionary *dictionaryFavoriteDetail = [dictionaryArchive objectForKey:TMInfoArchiveKey_FavoritesDetail];
@@ -279,7 +283,11 @@ static NSUInteger PromotionReadNumberMax = 100;
     if ([self alreadyReadPromotionForIdentifier:identifier])
     {
         NSInteger currentIndex = [_orderedSetPromotionRead indexOfObject:identifier];
-        [_orderedSetPromotionRead exchangeObjectAtIndex:0 withObjectAtIndex:currentIndex];
+        if (currentIndex != 0)
+        {
+            [_orderedSetPromotionRead removeObjectAtIndex:currentIndex];
+            [_orderedSetPromotionRead insertObject:identifier atIndex:0];
+        }
     }
     else
     {
@@ -299,30 +307,33 @@ static NSUInteger PromotionReadNumberMax = 100;
 
 - (void)saveToArchive
 {
-    NSMutableDictionary *dictionaryArchive = [NSMutableDictionary dictionary];
-    [dictionaryArchive setObject:[_orderedSetPromotionRead array] forKey:TMInfoArchiveKey_PromotionRead];
-    [dictionaryArchive setObject:_dictionaryUserInfo forKey:TMInfoArchiveKey_UserInformation];
-    [dictionaryArchive setObject:_dictionaryCachedCategories forKey:TMInfoArchiveKey_CachedCategories];
-    [dictionaryArchive setObject:[_orderedSetKeyword array] forKey:TMInfoArchiveKey_OrderSetKeyword];
-    [dictionaryArchive setObject:[_orderedSetFavoriteId array] forKey:TMInfoArchiveKey_OrderSetFavoriteId];
-    [dictionaryArchive setObject:_arrayFavorite forKey:TMInfoArchiveKey_Favorites];
-    [dictionaryArchive setObject:_dictionaryFavoriteDetail forKey:TMInfoArchiveKey_FavoritesDetail];
-    if (_numberArchiveTimestamp)
-    {
-        [dictionaryArchive setObject:_numberArchiveTimestamp forKey:TMInfoArchiveKey_ArchiveTimestamp];
-    }
-    NSMutableData *archiveData = [[NSMutableData alloc] initWithCapacity:0];
-    NSKeyedArchiver *archiver = [[NSKeyedArchiver alloc] initForWritingWithMutableData:archiveData];
-    [archiver encodeObject:dictionaryArchive forKey:[CryptoModule sharedModule].apiKey];
-    [archiver finishEncoding];
-    
-    NSURL *url = [self urlForInfoArchive];
-    NSLog(@"urlString[%@]", [url path]);
-    NSError *error = nil;
-    if ([archiveData writeToURL:url options:0 error:&error] == NO)
-    {
-        NSLog(@"TMInfoManager - archve failed.\n%@", [error description]);
-    }
+    __weak TMInfoManager *weakSelf = self;
+    dispatch_async(archiveQueue, ^{
+        NSMutableDictionary *dictionaryArchive = [NSMutableDictionary dictionary];
+        [dictionaryArchive setObject:[_orderedSetPromotionRead array] forKey:TMInfoArchiveKey_PromotionRead];
+        [dictionaryArchive setObject:_dictionaryUserInfo forKey:TMInfoArchiveKey_UserInformation];
+        [dictionaryArchive setObject:_dictionaryCachedCategories forKey:TMInfoArchiveKey_CachedCategories];
+        [dictionaryArchive setObject:[_orderedSetKeyword array] forKey:TMInfoArchiveKey_OrderSetKeyword];
+        [dictionaryArchive setObject:[_orderedSetFavoriteId array] forKey:TMInfoArchiveKey_OrderSetFavoriteId];
+        [dictionaryArchive setObject:_arrayFavorite forKey:TMInfoArchiveKey_Favorites];
+        [dictionaryArchive setObject:_dictionaryFavoriteDetail forKey:TMInfoArchiveKey_FavoritesDetail];
+        if (_numberArchiveTimestamp)
+        {
+            [dictionaryArchive setObject:_numberArchiveTimestamp forKey:TMInfoArchiveKey_ArchiveTimestamp];
+        }
+        NSMutableData *archiveData = [[NSMutableData alloc] initWithCapacity:0];
+        NSKeyedArchiver *archiver = [[NSKeyedArchiver alloc] initForWritingWithMutableData:archiveData];
+        [archiver encodeObject:dictionaryArchive forKey:[CryptoModule sharedModule].apiKey];
+        [archiver finishEncoding];
+        
+        NSURL *url = [weakSelf urlForInfoArchive];
+//        NSLog(@"urlString[%@]", [url path]);
+        NSError *error = nil;
+        if ([archiveData writeToURL:url options:0 error:&error] == NO)
+        {
+            NSLog(@"TMInfoManager - archve failed.\n%@", [error description]);
+        }
+    });
 }
 
 - (NSDictionary *)loadFromArchive
@@ -360,6 +371,11 @@ static NSUInteger PromotionReadNumberMax = 100;
 
 - (void)updateUserInformationFromInfoDictionary:(NSDictionary *)infoDictionary
 {
+    
+    //
+    //  Need to do modification for data incoming.
+    //
+    
     NSNumber *identifier = [infoDictionary objectForKey:SymphoxAPIParam_user_num];
     NSString *name = [infoDictionary objectForKey:SymphoxAPIParam_name];
     NSString *gender = [infoDictionary objectForKey:SymphoxAPIParam_sex];
@@ -513,6 +529,11 @@ static NSUInteger PromotionReadNumberMax = 100;
                 [SHAPIAdapter sharedAdapter].token = string;
                 
                 [[NSNotificationCenter defaultCenter] postNotificationName:PostNotificationName_TokenUpdated object:self];
+                
+                if (weakSelf.userIdentifier != nil)
+                {
+                    [weakSelf retrieveUserInformation];
+                }
             }
         }
         else
@@ -531,11 +552,16 @@ static NSUInteger PromotionReadNumberMax = 100;
         NSInteger index = [_orderedSetKeyword indexOfObject:keyword];
         if (index > 0)
         {
-            [_orderedSetKeyword exchangeObjectAtIndex:index withObjectAtIndex:0];
+            [_orderedSetKeyword removeObjectAtIndex:index];
+            [_orderedSetKeyword insertObject:keyword atIndex:0];
         }
     }
     else
     {
+        if ([_orderedSetKeyword count] >= SearchKeywordNumberMax)
+        {
+            [_orderedSetKeyword removeObject:[_orderedSetKeyword lastObject]];
+        }
         [_orderedSetKeyword insertObject:keyword atIndex:0];
     }
 }
@@ -565,6 +591,32 @@ static NSUInteger PromotionReadNumberMax = 100;
     {
         self.userGender = TMGenderUnknown;
     }
+}
+
+- (BOOL)addProductToFavorite:(NSDictionary *)product
+{
+    NSLog(@"product:\n%@", product);
+    NSNumber *productId = [product objectForKey:SymphoxAPIParam_cpdt_num];
+    if (productId == nil || [productId isEqual:[NSNull null]])
+    {
+        NSLog(@"addProductToFavorite - Cannot find product identifier");
+        return NO;
+    }
+    if ([self.orderedSetFavoriteId containsObject:productId])
+    {
+        NSLog(@"addProductToFavorite - Already in the favorite list.");
+        return NO;
+    }
+    [self.orderedSetFavoriteId addObject:productId];
+    [self.arrayFavorite addObject:product];
+    NSLog(@"orderedSetFavoriteId[%li] arrayFavorite[%li]", (long)self.orderedSetFavoriteId.count, (long)self.arrayFavorite.count);
+    return YES;
+}
+
+- (NSArray *)favorites
+{
+    NSArray *favorites = self.arrayFavorite;
+    return favorites;
 }
 
 #pragma mark - Private Methods
@@ -610,30 +662,47 @@ static NSUInteger PromotionReadNumberMax = 100;
     return key;
 }
 
-- (BOOL)addProductToFavorite:(NSDictionary *)product
+- (void)retrieveUserInformation
 {
-    NSLog(@"product:\n%@", product);
-    NSNumber *productId = [product objectForKey:SymphoxAPIParam_cpdt_num];
-    if (productId == nil || [productId isEqual:[NSNull null]])
-    {
-        NSLog(@"addProductToFavorite - Cannot find product identifier");
-        return NO;
-    }
-    if ([self.orderedSetFavoriteId containsObject:productId])
-    {
-        NSLog(@"addProductToFavorite - Already in the favorite list.");
-        return NO;
-    }
-    [self.orderedSetFavoriteId addObject:productId];
-    [self.arrayFavorite addObject:product];
-    NSLog(@"orderedSetFavoriteId[%li] arrayFavorite[%li]", (long)self.orderedSetFavoriteId.count, (long)self.arrayFavorite.count);
-    return YES;
+    __weak TMInfoManager *weakSelf = self;
+    NSString *apiKey = [CryptoModule sharedModule].apiKey;
+    NSString *token = [SHAPIAdapter sharedAdapter].token;
+    NSURL *url = [NSURL URLWithString:SymphoxAPI_memberInformation];
+    NSLog(@"retrieveUserInformation - [%@]", [url absoluteString]);
+    NSDictionary *headerFields = [NSDictionary dictionaryWithObjectsAndKeys:apiKey, SymphoxAPIParam_key, token, SymphoxAPIParam_token, nil];
+    NSDictionary *options = [NSDictionary dictionaryWithObjectsAndKeys:self.userIdentifier, SymphoxAPIParam_user_num, nil];
+    [[SHAPIAdapter sharedAdapter] sendRequestFromObject:weakSelf ToUrl:url withHeaderFields:headerFields andPostObject:options inPostFormat:SHPostFormatJson encrypted:YES decryptedReturnData:YES completion:^(id resultObject, NSError *error){
+        if (error == nil)
+        {
+            NSLog(@"retrieveUserInformation - resultObject[%@]:\n%@", [[resultObject class] description], [resultObject description]);
+            if ([resultObject isKindOfClass:[NSData class]])
+            {
+                NSData *data = (NSData *)resultObject;
+                [weakSelf processUserInfomation:data];
+            }
+        }
+        else
+        {
+            NSLog(@"retrieveUserInformation - error:\n%@", [error description]);
+        }
+    }];
 }
 
-- (NSArray *)favorites
+- (void)processUserInfomation:(NSData *)data
 {
-    NSArray *favorites = self.arrayFavorite;
-    return favorites;
+    if (data == nil)
+        return;
+    NSError *error = nil;
+    id jsonObject = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
+    if (error == nil && jsonObject)
+    {
+        NSLog(@"processUserInfomation - jsonObject:\n%@", jsonObject);
+        if ([jsonObject isKindOfClass:[NSDictionary class]])
+        {
+            [self updateUserInformationFromInfoDictionary:jsonObject];
+            
+        }
+    }
 }
 
 @end

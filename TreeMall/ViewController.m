@@ -17,6 +17,7 @@
 #import "Utility.h"
 #import "Definition.h"
 #import "TMInfoManager.h"
+#import "CryptoTool.h"
 
 @interface ViewController ()
 
@@ -29,6 +30,16 @@
 @end
 
 @implementation ViewController
+
+- (instancetype)initWithCoder:(NSCoder *)aDecoder
+{
+    self = [super initWithCoder:aDecoder];
+    if (self)
+    {
+        _initialized = NO;
+    }
+    return self;
+}
 
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -288,10 +299,14 @@
         if ([rootViewController isKindOfClass:[MemberViewController class]])
         {
             // Should check user state here.
-            shouldSelect = NO;
-            LoginViewController *viewControllerLogin = [[LoginViewController alloc] initWithNibName:@"LoginViewController" bundle:[NSBundle mainBundle]];
-            UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:viewControllerLogin];
-            [self presentViewController:navigationController animated:YES completion:nil];
+            if ([TMInfoManager sharedManager].userIdentifier == nil)
+            {
+                shouldSelect = NO;
+                    
+                LoginViewController *viewControllerLogin = [[LoginViewController alloc] initWithNibName:@"LoginViewController" bundle:[NSBundle mainBundle]];
+                UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:viewControllerLogin];
+                [self presentViewController:navigationController animated:YES completion:nil];
+            }
         }
     }
     return shouldSelect;

@@ -16,11 +16,20 @@ typedef enum : NSUInteger {
     TMGenderTotal
 } TMGender;
 
+typedef enum : NSUInteger {
+    OCBStatusActivated,
+    OCBStatusShouldActivateInTreeMall,
+    OCBStatusShouldActivateInBank,
+    OCBStatusUpdateInBankThenActivateInTreeMall,
+    OCBStatusTotal
+} OCBStatus;
+
 @interface TMInfoManager : NSObject
 {
     NSMutableDictionary *_dictionaryUserInfo;
     NSMutableDictionary *_dictionaryCachedCategories;
     NSNumber *_numberArchiveTimestamp;
+    dispatch_queue_t archiveQueue;
 }
 
 @property (nonatomic, strong) NSMutableOrderedSet *orderedSetPromotionRead;
@@ -28,8 +37,26 @@ typedef enum : NSUInteger {
 @property (nonatomic, strong) NSString *userName;
 @property (nonatomic, strong) NSString *userEmail;
 @property (nonatomic, assign) TMGender userGender;
-@property (nonatomic, assign) NSNumber *userEpoint;
-@property (nonatomic, assign) NSNumber *userEcoupon;
+@property (nonatomic, strong) NSNumber *userEpoint;
+@property (nonatomic, strong) NSNumber *userEcoupon;
+@property (nonatomic, strong) NSString *userAuthStatus;
+@property (nonatomic, strong) NSString *userBirth;
+@property (nonatomic, strong) NSString *userEmailMasked;
+@property (nonatomic, assign) BOOL userIsEmailMember;
+@property (nonatomic, assign) BOOL userEmailAuth;
+@property (nonatomic, strong) NSString *userInvoiceTitle;
+@property (nonatomic, strong) NSString *userInvoiceType;
+@property (nonatomic, strong) NSString *userMobileMasked;
+@property (nonatomic, assign) BOOL userIsNewMember;
+@property (nonatomic, assign) OCBStatus userOcbStatus;
+@property (nonatomic, strong) NSString *userOcbUrl;
+@property (nonatomic, assign) BOOL userHasPassword;
+@property (nonatomic, strong) NSString *userTaxId;
+@property (nonatomic, strong) NSString *userTelephoneAreaCode;
+@property (nonatomic, strong) NSString *userTelephoneExtension;
+@property (nonatomic, strong) NSString *userTelephone;
+@property (nonatomic, strong) NSString *userIDCardNumber;
+@property (nonatomic, strong) NSString *userZipCode;
 @property (nonatomic, strong) NSMutableDictionary *dictionaryInitialFilter;
 @property (nonatomic, strong) NSMutableDictionary *dictionaryMainCategoryNameMapping;
 @property (nonatomic, strong) NSMutableOrderedSet *orderedSetKeyword;

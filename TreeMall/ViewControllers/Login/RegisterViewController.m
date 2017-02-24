@@ -336,7 +336,7 @@
 
 - (void)startRegisterProcedureWithVerificationCode:(NSString *)verificationCode
 {
-    if ([verificationCode length] == 0)
+    if ([verificationCode length] == 0 || [verificationCode length] != 4)
     {
         __weak RegisterViewController *weakSelf = self;
         UIAlertController *alertController = [UIAlertController alertControllerWithTitle:[LocalizedString Notice] message:[LocalizedString PleaseInputMobileVerificationCode] preferredStyle:UIAlertControllerStyleAlert];

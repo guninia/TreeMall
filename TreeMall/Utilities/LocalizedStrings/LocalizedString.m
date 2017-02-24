@@ -931,4 +931,174 @@
     return ProductIntroduce;
 }
 
++ (NSString *)Welcome_S__S_
+{
+    static NSString *Welcome_S__S_ = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        Welcome_S__S_ = NSLocalizedString(@"Welcome_S__S_", nil);
+    });
+    return Welcome_S__S_;
+}
+
++ (NSString *)PersonalDataModify
+{
+    static NSString *PersonalDataModify = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        PersonalDataModify = NSLocalizedString(@"PersonalDataModify", nil);
+    });
+    return PersonalDataModify;
+}
+
++ (NSString *)MyPoints
+{
+    static NSString *MyPoints = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        MyPoints = NSLocalizedString(@"MyPoints", nil);
+    });
+    return MyPoints;
+}
+
++ (NSString *)TotalCount
+{
+    static NSString *TotalCount = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        TotalCount = NSLocalizedString(@"TotalCount", nil);
+    });
+    return TotalCount;
+}
+
++ (NSString *)ExpiredThisMonth
+{
+    static NSString *ExpiredThisMonth = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        ExpiredThisMonth = NSLocalizedString(@"ExpiredThisMonth", nil);
+    });
+    return ExpiredThisMonth;
+}
+
++ (NSString *)MyCoupon
+{
+    static NSString *MyCoupon = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        MyCoupon = NSLocalizedString(@"MyCoupon", nil);
+    });
+    return MyCoupon;
+}
+
++ (NSString *)MyOrder
+{
+    static NSString *MyOrder = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        MyOrder = NSLocalizedString(@"MyOrder", nil);
+    });
+    return MyOrder;
+}
+
++ (NSString *)Processing_BRA_S_BRA
+{
+    static NSString *Processing_BRA_S_BRA = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        Processing_BRA_S_BRA = NSLocalizedString(@"Processing_BRA_S_BRA", nil);
+    });
+    return Processing_BRA_S_BRA;
+}
+
++ (NSString *)Shipped_BRA_S_BRA
+{
+    static NSString *Shipped_BRA_S_BRA = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        Shipped_BRA_S_BRA = NSLocalizedString(@"Shipped_BRA_S_BRA", nil);
+    });
+    return Shipped_BRA_S_BRA;
+}
+
++ (NSString *)ReturnReplace_BRA_S_BRA
+{
+    static NSString *ReturnReplace_BRA_S_BRA = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        ReturnReplace_BRA_S_BRA = NSLocalizedString(@"ReturnReplace_BRA_S_BRA", nil);
+    });
+    return ReturnReplace_BRA_S_BRA;
+}
+
++ (NSString *)All
+{
+    static NSString *All = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        All = NSLocalizedString(@"All", nil);
+    });
+    return All;
+}
+
++ (NSString *)Processing
+{
+    static NSString *Processing = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        Processing = NSLocalizedString(@"Processing", nil);
+    });
+    return Processing;
+}
+
++ (NSString *)Shipping
+{
+    static NSString *Shipping = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        Shipping = NSLocalizedString(@"Shipping", nil);
+    });
+    return Shipping;
+}
+
++ (NSString *)Return
+{
+    static NSString *Return = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        Return = NSLocalizedString(@"Return", nil);
+    });
+    return Return;
+}
+
++ (NSString *)PleaseInputProductName
+{
+    static NSString *PleaseInputProductName = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        PleaseInputProductName = NSLocalizedString(@"PleaseInputProductName", nil);
+    });
+    return PleaseInputProductName;
+}
+
++ (NSString *)OrderTime
+{
+    static NSString *OrderTime = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        OrderTime = NSLocalizedString(@"OrderTime", nil);
+    });
+    return OrderTime;
+}
+
++ (NSString *)ShipType
+{
+    static NSString *ShipType = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        ShipType = NSLocalizedString(@"ShipType", nil);
+    });
+    return ShipType;
+}
+
 @end

@@ -102,6 +102,22 @@
 + (NSString *)ChooseSpec;
 + (NSString *)ProductDetailNotice;
 + (NSString *)ProductIntroduce;
-
++ (NSString *)Welcome_S__S_;
++ (NSString *)PersonalDataModify;
++ (NSString *)MyPoints;
++ (NSString *)TotalCount;
++ (NSString *)ExpiredThisMonth;
++ (NSString *)MyCoupon;
++ (NSString *)MyOrder;
++ (NSString *)Processing_BRA_S_BRA;
++ (NSString *)Shipped_BRA_S_BRA;
++ (NSString *)ReturnReplace_BRA_S_BRA;
++ (NSString *)All;
++ (NSString *)Processing;
++ (NSString *)Shipping;
++ (NSString *)Return;
++ (NSString *)PleaseInputProductName;
++ (NSString *)OrderTime;
++ (NSString *)ShipType;
 
 @end
