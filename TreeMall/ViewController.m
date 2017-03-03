@@ -23,9 +23,11 @@
 
 - (void)showLaunchScreenLoadingViewAnimated:(BOOL)animated;
 - (void)hideLaunchScreenLoadingViewAnimated:(BOOL)animated;
+- (void)postUserLogoutProcedure;
 
 - (void)handlerOfNoInitialTokenNotification:(NSNotification *)notification;
 - (void)handlerOfEntranceDataPreparedNotification:(NSNotification *)notification;
+- (void)handlerOfUserLogoutNotification:(NSNotification *)notification;
 
 @end
 
@@ -172,6 +174,7 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handlerOfNoInitialTokenNotification:) name:PostNotificationName_NoInitialToken object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handlerOfEntranceDataPreparedNotification:) name:PostNotificationName_EntranceDataPrepared object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handlerOfUserLogoutNotification:) name:PostNotificationName_UserLogout object:nil];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -191,6 +194,8 @@
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:PostNotificationName_NoInitialToken object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:PostNotificationName_EntranceDataPrepared object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:PostNotificationName_UserLogout object:nil];
 }
 
 #pragma mark - Override
@@ -269,6 +274,11 @@
     }
 }
 
+- (void)postUserLogoutProcedure
+{
+    [self.tabBarController setSelectedIndex:0];
+}
+
 #pragma mark - NSNotification Handler
 
 - (void)handlerOfNoInitialTokenNotification:(NSNotification *)notification
@@ -285,6 +295,11 @@
 {
     self.initialized = YES;
     [self hideLaunchScreenLoadingViewAnimated:YES];
+}
+
+- (void)handlerOfUserLogoutNotification:(NSNotification *)notification
+{
+    [self postUserLogoutProcedure];
 }
 
 #pragma mark - UITabBarControllerDelegate

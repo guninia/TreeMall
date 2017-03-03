@@ -23,7 +23,7 @@
 			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>fb237433409965191</string>
+				<string>fb1798865203679792</string>
 			</array>
 		</dict>
 		<dict>
@@ -46,7 +46,7 @@
 	<key>CFBundleVersion</key>
 	<string>1</string>
 	<key>FacebookAppID</key>
-	<string>237433409965191</string>
+	<string>1798865203679792</string>
 	<key>FacebookDisplayName</key>
 	<string>運動平台</string>
 	<key>LSApplicationQueriesSchemes</key>

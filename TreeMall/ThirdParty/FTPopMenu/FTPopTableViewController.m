@@ -62,7 +62,7 @@ static NSString * const FTPopTableViewControllerCellIdentifier = @"FTPopTableVie
 -(UIColor *)tintColor
 {
     if (!_tintColor) {
-        _tintColor = [UIColor clearColor];
+        _tintColor = [UIColor whiteColor];
     }
     return _tintColor;
 }
@@ -70,7 +70,7 @@ static NSString * const FTPopTableViewControllerCellIdentifier = @"FTPopTableVie
 -(UIColor *)textColor
 {
     if (!_textColor) {
-        _textColor = [UIColor whiteColor];
+        _textColor = [UIColor blackColor];
     }
     return _textColor;
 }

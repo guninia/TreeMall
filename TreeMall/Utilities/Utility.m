@@ -89,6 +89,14 @@
     return available;
 }
 
++ (BOOL)evaluateIdCardNumber:(NSString *)text
+{
+    NSString *regularExpression = @"^[a-zA-Z]{1}[1-2]{1}\\d{8}$";
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", regularExpression];
+    BOOL available = [predicate evaluateWithObject:text];
+    return available;
+}
+
 + (UIImage *)colorizeImage:(UIImage *)image withColor:(UIColor *)color
 {
     UIGraphicsBeginImageContextWithOptions(image.size, NO, image.scale);

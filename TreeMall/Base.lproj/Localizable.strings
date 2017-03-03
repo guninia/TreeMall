@@ -99,7 +99,7 @@
 "ChooseSpec"="Choose Spec";
 "ProductDetailNotice"="Product Detail Notice";
 "ProductIntroduce"="Product Introduce";
-"Welcome_S__S_"="Welcome！%@%@";
+"Welcome_S__S_"="Welcome！%@%@!";
 "PersonalDataModify"="Personal Data Modify";
 "MyPoints"="My Points";
 "TotalCount"="Total";
@@ -116,4 +116,21 @@
 "PleaseInputProductName"="Please input product name";
 "OrderTime"="Order time";
 "ShipType"="Ship type";
-
+"Mister"="Mr.";
+"Miss"="Ms.";
+"ThayPoint"="Point";
+"DancingDividend"="Dividend";
+"Pieces"="Piece(s)";
+"Logout"="Logout";
+"LogoutReconfirm"="Are you sure to logout this accout?";
+"NotUsed"="Available";
+"AlreadyUsed"="Used";
+"Expired"="Expired";
+"ValueHighToLow"="Value High To Low";
+"ValueLowToHigh"="Value Low To High";
+"ValidDateEarlyToLate"="Valid Date Early To Late";
+"ValidDateLateToEarly"="Valid Date Late To Early";
+"OrderId"="Order ID";
+"Start"="start";
+"Due"="due";
+"CouponDetail"="Coupon Detail";

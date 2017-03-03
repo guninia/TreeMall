@@ -20,9 +20,17 @@ typedef enum : NSUInteger {
     OCBStatusActivated,
     OCBStatusShouldActivateInTreeMall,
     OCBStatusShouldActivateInBank,
-    OCBStatusUpdateInBankThenActivateInTreeMall,
+    OCBStatusExpired, /*Update In Bank Then Activate In TreeMall*/
     OCBStatusTotal
 } OCBStatus;
+
+typedef enum : NSUInteger {
+    CouponStateStart,
+    CouponStateNotUsed = CouponStateStart,
+    CouponStateAlreadyUsed,
+    CouponStateExpired,
+    CouponStateTotal
+} CouponState;
 
 @interface TMInfoManager : NSObject
 {
@@ -39,6 +47,11 @@ typedef enum : NSUInteger {
 @property (nonatomic, assign) TMGender userGender;
 @property (nonatomic, strong) NSNumber *userEpoint;
 @property (nonatomic, strong) NSNumber *userEcoupon;
+@property (nonatomic, strong) NSNumber *userPointTotal;
+@property (nonatomic, strong) NSNumber *userPointDividend;
+@property (nonatomic, strong) NSNumber *userPointExpired;
+@property (nonatomic, strong) NSString *userPointAdText;
+@property (nonatomic, strong) NSString *userPointAdUrl;
 @property (nonatomic, strong) NSString *userAuthStatus;
 @property (nonatomic, strong) NSString *userBirth;
 @property (nonatomic, strong) NSString *userEmailMasked;
@@ -57,6 +70,7 @@ typedef enum : NSUInteger {
 @property (nonatomic, strong) NSString *userTelephone;
 @property (nonatomic, strong) NSString *userIDCardNumber;
 @property (nonatomic, strong) NSString *userZipCode;
+@property (nonatomic, strong) NSString *userAddress;
 @property (nonatomic, strong) NSMutableDictionary *dictionaryInitialFilter;
 @property (nonatomic, strong) NSMutableDictionary *dictionaryMainCategoryNameMapping;
 @property (nonatomic, strong) NSMutableOrderedSet *orderedSetKeyword;
@@ -85,5 +99,8 @@ typedef enum : NSUInteger {
 - (void)setUserGenderByGenderText:(NSString *)genderText;
 - (BOOL)addProductToFavorite:(NSDictionary *)product;
 - (NSArray *)favorites;
+- (void)retrievePointDataFromObject:(id)object withCompletion:(void (^)(id result, NSError *error))block;
+- (void)retrieveCouponDataFromObject:(id)object forPageIndex:(NSInteger)pageIndex couponState:(CouponState)state sortFactor:(NSString *)factor withSortOrder:(NSString *)order withCompletion:(void (^)(id result, NSError *error))block;
+- (void)logoutUser;
 
 @end

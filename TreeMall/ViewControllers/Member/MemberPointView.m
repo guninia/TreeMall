@@ -20,6 +20,12 @@
         [self addSubview:self.labelTitle];
         [self addSubview:self.labelPoint];
         [self addSubview:self.labelDividend];
+        [self addSubview:self.viewTotalPoint];
+        [self addSubview:self.viewExpired];
+        self.numberPoint = nil;
+        self.numberDividend = nil;
+        self.numberTotal = nil;
+        self.numberExpired = nil;
     }
     return self;
 }
@@ -87,14 +93,14 @@
     originX = marginL;
     if (self.viewTotalPoint)
     {
-        CGRect frame = CGRectMake(0.0, originY, self.frame.size.width, 40.0);
+        CGRect frame = CGRectMake(0.0, originY, self.frame.size.width, 30.0);
         self.viewTotalPoint.frame = frame;
         
-        originY = self.viewTotalPoint.frame.origin.y + self.viewTotalPoint.frame.size.height + intervalV;
+        originY = self.viewTotalPoint.frame.origin.y + self.viewTotalPoint.frame.size.height;
     }
     if (self.viewExpired)
     {
-        CGRect frame = CGRectMake(0.0, originY, self.frame.size.width, 40.0);
+        CGRect frame = CGRectMake(0.0, originY, self.frame.size.width, 30.0);
         self.viewExpired.frame = frame;
     }
 }
@@ -121,7 +127,7 @@
         [_labelTitle setBackgroundColor:[UIColor clearColor]];
         [_labelTitle setTextColor:[UIColor colorWithRed:(152.0/255.0) green:(192.0/255.0) blue:(67.0/255.0) alpha:1.0]];
         [_labelTitle setText:[LocalizedString MyPoints]];
-        UIFont *font = [UIFont systemFontOfSize:14.0];
+        UIFont *font = [UIFont systemFontOfSize:18.0];
         [_labelTitle setFont:font];
     }
     return _labelTitle;
@@ -140,7 +146,7 @@
         [_labelPoint setNumberOfLines:0];
         [_labelPoint setTextAlignment:NSTextAlignmentCenter];
         [_labelPoint setLineBreakMode:NSLineBreakByWordWrapping];
-        UIFont *font = [UIFont systemFontOfSize:12.0];
+        UIFont *font = [UIFont systemFontOfSize:18.0];
         [_labelPoint setFont:font];
     }
     return _labelPoint;
@@ -159,7 +165,7 @@
         [_labelDividend setNumberOfLines:0];
         [_labelDividend setTextAlignment:NSTextAlignmentCenter];
         [_labelDividend setLineBreakMode:NSLineBreakByWordWrapping];
-        UIFont *font = [UIFont systemFontOfSize:12.0];
+        UIFont *font = [UIFont systemFontOfSize:18.0];
         [_labelDividend setFont:font];
     }
     return _labelDividend;
@@ -172,6 +178,10 @@
         _viewTotalPoint = [[BorderedDoubleLabelView alloc] initWithFrame:CGRectZero];
         [_viewTotalPoint.layer setBorderWidth:0.0];
         [_viewTotalPoint.labelL setText:[LocalizedString TotalCount]];
+        [_viewTotalPoint.labelL setFont:[UIFont systemFontOfSize:18.0]];
+        [_viewTotalPoint.labelL setTextColor:[UIColor darkGrayColor]];
+        [_viewTotalPoint.labelR setFont:[UIFont systemFontOfSize:18.0]];
+        [_viewTotalPoint.labelR setTextColor:[UIColor darkGrayColor]];
     }
     return _viewTotalPoint;
 }
@@ -183,8 +193,86 @@
         _viewExpired = [[BorderedDoubleLabelView alloc] initWithFrame:CGRectZero];
         [_viewExpired.layer setBorderWidth:0.0];
         [_viewExpired.labelL setText:[LocalizedString ExpiredThisMonth]];
+        [_viewExpired.labelL setFont:[UIFont systemFontOfSize:18.0]];
+        [_viewExpired.labelL setTextColor:[UIColor darkGrayColor]];
+        [_viewExpired.labelR setFont:[UIFont systemFontOfSize:18.0]];
+        [_viewExpired.labelR setTextColor:[UIColor darkGrayColor]];
     }
     return _viewExpired;
+}
+
+- (void)setNumberPoint:(NSNumber *)numberPoint
+{
+    _numberPoint = numberPoint;
+    NSString *stringPoint = @"0";
+    if ([_numberPoint integerValue] > 0)
+    {
+        stringPoint = [self.formatter stringFromNumber:_numberPoint];
+    }
+    NSString *totalString = [NSString stringWithFormat:@"%@\n%@%@", [LocalizedString ThayPoint], stringPoint, [LocalizedString Point]];
+    NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
+    style.lineSpacing = 10.0;
+    style.lineBreakMode = self.labelPoint.lineBreakMode;
+    style.alignment = self.labelPoint.textAlignment;
+    NSDictionary *attributes = [NSDictionary dictionaryWithObjectsAndKeys:style, NSParagraphStyleAttributeName, nil];
+    NSAttributedString *attrString = [[NSAttributedString alloc] initWithString:totalString attributes:attributes];
+    [self.labelPoint setAttributedText:attrString];
+}
+
+- (void)setNumberDividend:(NSNumber *)numberDividend
+{
+    _numberDividend = numberDividend;
+    NSString *stringDividend = @"0";
+    if ([_numberDividend integerValue] > 0)
+    {
+        stringDividend = [self.formatter stringFromNumber:_numberDividend];
+    }
+    NSString *totalString = [NSString stringWithFormat:@"%@\n%@%@", [LocalizedString DancingDividend], stringDividend, [LocalizedString Point]];
+    NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
+    style.lineSpacing = 10.0;
+    style.lineBreakMode = self.labelDividend.lineBreakMode;
+    style.alignment = self.labelDividend.textAlignment;
+    NSDictionary *attributes = [NSDictionary dictionaryWithObjectsAndKeys:style, NSParagraphStyleAttributeName, nil];
+    NSAttributedString *attrString = [[NSAttributedString alloc] initWithString:totalString attributes:attributes];
+    [self.labelDividend setAttributedText:attrString];
+}
+
+- (void)setNumberTotal:(NSNumber *)numberTotal
+{
+    _numberTotal = numberTotal;
+    NSString *stringTotal = @"0";
+    if ([_numberTotal integerValue] > 0)
+    {
+        stringTotal = [self.formatter stringFromNumber:_numberTotal];
+    }
+    NSString *totalString = [NSString stringWithFormat:@"%@%@", stringTotal, [LocalizedString Point]];
+    NSMutableAttributedString *attrString = [[NSMutableAttributedString alloc] initWithString:totalString];
+    [attrString addAttribute:NSForegroundColorAttributeName value:[UIColor redColor] range:NSMakeRange(0, [stringTotal length])];
+    [self.viewTotalPoint.labelR setAttributedText:attrString];
+}
+
+- (void)setNumberExpired:(NSNumber *)numberExpired
+{
+    _numberExpired = numberExpired;
+    NSString *stringExpired = @"0";
+    if ([_numberExpired integerValue] > 0)
+    {
+        stringExpired = [self.formatter stringFromNumber:_numberExpired];
+    }
+    NSString *totalString = [NSString stringWithFormat:@"%@%@", stringExpired, [LocalizedString Point]];
+    NSMutableAttributedString *attrString = [[NSMutableAttributedString alloc] initWithString:totalString];
+    [attrString addAttribute:NSForegroundColorAttributeName value:[UIColor redColor] range:NSMakeRange(0, [stringExpired length])];
+    [self.viewExpired.labelR setAttributedText:attrString];
+}
+
+- (NSNumberFormatter *)formatter
+{
+    if (_formatter == nil)
+    {
+        _formatter = [[NSNumberFormatter alloc] init];
+        [_formatter setNumberStyle:NSNumberFormatterDecimalStyle];
+    }
+    return _formatter;
 }
 
 @end

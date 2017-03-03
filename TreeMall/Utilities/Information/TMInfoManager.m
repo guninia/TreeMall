@@ -20,6 +20,26 @@ static NSString *TMInfoArchiveKey_UserEmail = @"UserEmail";
 static NSString *TMInfoArchiveKey_UserGender = @"UserGender";
 static NSString *TMInfoArchiveKey_UserEpoint = @"UserEpoint";
 static NSString *TMInfoArchiveKey_UserEcoupon = @"UserEcoupon";
+static NSString *TMInfoArchiveKey_UserAuthStatus = @"UserAuthStatus";
+static NSString *TMInfoArchiveKey_UserBirth = @"UserBirth";
+static NSString *TMInfoArchiveKey_UserEmailMasked = @"UserEmailMasked";
+static NSString *TMInfoArchiveKey_UserIsEmailMember = @"UserIsEmailMember";
+static NSString *TMInfoArchiveKey_UserEmailAuth = @"UserEmailAuth";
+static NSString *TMInfoArchiveKey_UserInvoiceTitle = @"UserInvoiceTitle";
+static NSString *TMInfoArchiveKey_UserInvoiceType = @"UserInvoiceType";
+static NSString *TMInfoArchiveKey_UserMobileMasked = @"UserMobileMasked";
+static NSString *TMInfoArchiveKey_UserIsNewMember = @"UserIsNewMember";
+static NSString *TMInfoArchiveKey_UserOcbStatus = @"UserOcbStatus";
+static NSString *TMInfoArchiveKey_UserOcbUrl = @"UserOcbUrl";
+static NSString *TMInfoArchiveKey_UserHasPassword = @"UserHasPassword";
+static NSString *TMInfoArchiveKey_UserTaxId = @"UserTaxId";
+static NSString *TMInfoArchiveKey_UserTelephoneAreaCode = @"UserTelephoneAreaCode";
+static NSString *TMInfoArchiveKey_UserTelephoneExtension = @"UserTelephoneExtension";
+static NSString *TMInfoArchiveKey_UserTelephone = @"UserTelephone";
+static NSString *TMInfoArchiveKey_UserIdCardNumber = @"UserIdCardNumber";
+static NSString *TMInfoArchiveKey_UserZipCode = @"UserZipCode";
+static NSString *TMInfoArchiveKey_UserAddress = @"UserAddress";
+
 static NSString *TMInfoArchiveKey_CachedCategories = @"CachedCategories";
 static NSString *TMInfoArchiveKey_ArchiveTimestamp = @"ArchiveTimestamp";
 static NSString *TMInfoArchiveKey_OrderSetKeyword = @"OrderSetKeyword";
@@ -38,9 +58,12 @@ static NSUInteger SearchKeywordNumberMax = 8;
 
 - (NSURL *)urlForInfoDirectory;
 - (NSURL *)urlForInfoArchive;
+- (void)deleteArchive;
 - (NSString *)keyForCategoryIdentifier:(NSString *)identifier withLayer:(NSNumber *)layer;
 - (void)retrieveUserInformation;
 - (void)processUserInfomation:(NSData *)data;
+- (void)processUserPoint:(NSData *)data;
+- (id)processUserCoupon:(NSData *)data;
 
 @end
 
@@ -52,6 +75,25 @@ static NSUInteger SearchKeywordNumberMax = 8;
 @synthesize userGender = _userGender;
 @synthesize userEpoint = _userEpoint;
 @synthesize userEcoupon = _userEcoupon;
+@synthesize userAuthStatus = _userAuthStatus;
+@synthesize userBirth = _userBirth;
+@synthesize userEmailMasked = _userEmailMasked;
+@synthesize userIsEmailMember = _userIsEmailMember;
+@synthesize userEmailAuth = _userEmailAuth;
+@synthesize userInvoiceTitle = _userInvoiceTitle;
+@synthesize userInvoiceType = _userInvoiceType;
+@synthesize userMobileMasked = _userMobileMasked;
+@synthesize userIsNewMember = _userIsNewMember;
+@synthesize userOcbStatus = _userOcbStatus;
+@synthesize userOcbUrl = _userOcbUrl;
+@synthesize userHasPassword = _userHasPassword;
+@synthesize userTaxId = _userTaxId;
+@synthesize userTelephoneAreaCode = _userTelephoneAreaCode;
+@synthesize userTelephoneExtension = _userTelephoneExtension;
+@synthesize userTelephone = _userTelephone;
+@synthesize userIDCardNumber = _userIDCardNumber;
+@synthesize userZipCode = _userZipCode;
+@synthesize userAddress = _userAddress;
 
 #pragma mark - Constructor
 
@@ -84,7 +126,32 @@ static NSUInteger SearchKeywordNumberMax = 8;
         _userEmail = nil;
         _userGender = TMGenderTotal;
         _userEpoint = nil;
+        _userPointTotal = nil;
+        _userPointDividend = nil;
+        _userPointExpired = nil;
+        _userPointAdText = nil;
+        _userPointAdUrl = nil;
         _userEcoupon = nil;
+        _userAuthStatus = nil;
+        _userBirth = nil;
+        _userEmailMasked = nil;
+        _userIsEmailMember = NO;
+        _userEmailAuth = NO;
+        _userInvoiceTitle =  nil;
+        _userInvoiceType = nil;
+        _userMobileMasked = nil;
+        _userIsNewMember = NO;
+        _userOcbStatus = OCBStatusTotal;
+        _userOcbUrl = nil;
+        _userHasPassword = NO;
+        _userTaxId = nil;
+        _userTelephoneAreaCode = nil;
+        _userTelephoneExtension = nil;
+        _userTelephone = nil;
+        _userIDCardNumber = nil;
+        _userZipCode = nil;
+        _userAddress = nil;
+        
         archiveQueue = dispatch_queue_create("ArchiveQueue", DISPATCH_QUEUE_SERIAL);
         
         NSDictionary *dictionaryArchive = [self loadFromArchive];
@@ -234,46 +301,384 @@ static NSUInteger SearchKeywordNumberMax = 8;
     return _userGender;
 }
 
-- (void)setUserEpoint:(NSNumber *)userEpoint
+- (void)setUserAuthStatus:(NSString *)userAuthStatus
 {
-    if ([_userEpoint unsignedLongLongValue] != [userEpoint unsignedLongLongValue])
+    if ([userAuthStatus isEqualToString:_userAuthStatus] == NO)
     {
-        _userEpoint = userEpoint;
-        if (_userEpoint)
+        _userAuthStatus = userAuthStatus;
+        if (_userAuthStatus)
         {
-            [_dictionaryUserInfo setObject:userEpoint forKey:TMInfoArchiveKey_UserEpoint];
+            [_dictionaryUserInfo setObject:_userAuthStatus forKey:TMInfoArchiveKey_UserAuthStatus];
         }
     }
 }
 
-- (NSNumber *)userEpoint
+- (NSString *)userAuthStatus
 {
-    if (_userEpoint == nil)
+    if (_userAuthStatus == nil)
     {
-        _userEpoint = [_dictionaryUserInfo objectForKey:TMInfoArchiveKey_UserEpoint];
+        _userAuthStatus = [_dictionaryUserInfo objectForKey:TMInfoArchiveKey_UserAuthStatus];
     }
-    return _userEpoint;
+    return _userAuthStatus;
 }
 
-- (void)setUserEcoupon:(NSNumber *)userEcoupon
+- (void)setUserBirth:(NSString *)userBirth
 {
-    if ([_userEcoupon unsignedLongLongValue] != [userEcoupon unsignedLongLongValue])
+    if ([userBirth isEqualToString:_userBirth] == NO)
     {
-        _userEcoupon = userEcoupon;
-        if (_userEcoupon)
+        _userBirth = userBirth;
+        if (_userBirth)
         {
-            [_dictionaryUserInfo setObject:_userEcoupon forKey:TMInfoArchiveKey_UserEcoupon];
+            [_dictionaryUserInfo setObject:_userBirth forKey:TMInfoArchiveKey_UserBirth];
         }
     }
 }
 
-- (NSNumber *)userEcoupon
+- (NSString *)userBirth
 {
-    if (_userEcoupon == 0)
+    if (_userBirth == nil)
     {
-        _userEcoupon = [_dictionaryUserInfo objectForKey:TMInfoArchiveKey_UserEcoupon];
+        _userBirth = [_dictionaryUserInfo objectForKey:TMInfoArchiveKey_UserBirth];
     }
-    return _userEcoupon;
+    return _userBirth;
+}
+
+- (void)setUserEmailMasked:(NSString *)userEmailMasked
+{
+    if ([userEmailMasked isEqualToString:_userEmailMasked] == NO)
+    {
+        _userEmailMasked = userEmailMasked;
+        [_dictionaryUserInfo setObject:_userEmailMasked forKey:TMInfoArchiveKey_UserEmailMasked];
+    }
+}
+
+- (NSString *)userEmailMasked
+{
+    if (_userEmailMasked == nil)
+    {
+        _userEmailMasked = [_dictionaryUserInfo objectForKey:TMInfoArchiveKey_UserEmailMasked];
+    }
+    return _userEmailMasked;
+}
+
+- (void)setUserIsEmailMember:(BOOL)userIsEmailMember
+{
+    _userIsEmailMember = userIsEmailMember;
+    [_dictionaryUserInfo setObject:[NSNumber numberWithBool:_userIsEmailMember] forKey:TMInfoArchiveKey_UserIsEmailMember];
+}
+
+- (BOOL)userIsEmailMember
+{
+    NSNumber *numberBool = [_dictionaryUserInfo objectForKey:TMInfoArchiveKey_UserIsEmailMember];
+    if (numberBool)
+    {
+        _userIsEmailMember = [numberBool boolValue];
+    }
+    return _userIsEmailMember;
+}
+
+- (void)setUserEmailAuth:(BOOL)userEmailAuth
+{
+    _userEmailAuth = userEmailAuth;
+    [_dictionaryUserInfo setObject:[NSNumber numberWithBool:_userEmailAuth] forKey:TMInfoArchiveKey_UserEmailAuth];
+}
+
+- (BOOL)userEmailAuth
+{
+    NSNumber *numberBool = [_dictionaryUserInfo objectForKey:TMInfoArchiveKey_UserEmailAuth];
+    if (numberBool)
+    {
+        _userEmailAuth = [numberBool boolValue];
+    }
+    return _userEmailAuth;
+}
+
+- (void)setUserInvoiceTitle:(NSString *)userInvoiceTitle
+{
+    if ([userInvoiceTitle isEqualToString:_userInvoiceTitle] == NO)
+    {
+        _userInvoiceTitle = userInvoiceTitle;
+        if (_userInvoiceTitle != nil)
+        {
+            [_dictionaryUserInfo setObject:_userInvoiceTitle forKey:TMInfoArchiveKey_UserInvoiceTitle];
+        }
+    }
+}
+
+- (NSString *)userInvoiceTitle
+{
+    if (_userInvoiceTitle == nil)
+    {
+        _userInvoiceTitle = [_dictionaryUserInfo objectForKey:TMInfoArchiveKey_UserInvoiceTitle];
+    }
+    return _userInvoiceTitle;
+}
+
+- (void)setUserInvoiceType:(NSString *)userInvoiceType
+{
+    if ([userInvoiceType isEqualToString:_userInvoiceType] == NO)
+    {
+        _userInvoiceType = userInvoiceType;
+        if (_userInvoiceType != nil)
+        {
+            [_dictionaryUserInfo setObject:_userInvoiceType forKey:TMInfoArchiveKey_UserInvoiceType];
+        }
+    }
+}
+
+- (NSString *)userInvoiceType
+{
+    if (_userInvoiceType == nil)
+    {
+        _userInvoiceType = [_dictionaryUserInfo objectForKey:TMInfoArchiveKey_UserInvoiceType];
+    }
+    return _userInvoiceType;
+}
+
+- (void)setUserMobileMasked:(NSString *)userMobileMasked
+{
+    if ([userMobileMasked isEqualToString:_userMobileMasked] == NO)
+    {
+        _userMobileMasked = userMobileMasked;
+        if (_userMobileMasked != nil)
+        {
+            [_dictionaryUserInfo setObject:_userMobileMasked forKey:TMInfoArchiveKey_UserMobileMasked];
+        }
+    }
+}
+
+- (NSString *)userMobileMasked
+{
+    if (_userMobileMasked == nil)
+    {
+        _userMobileMasked = [_dictionaryUserInfo objectForKey:TMInfoArchiveKey_UserMobileMasked];
+    }
+    return _userMobileMasked;
+}
+
+- (void)setUserIsNewMember:(BOOL)userIsNewMember
+{
+    _userIsNewMember = userIsNewMember;
+    [_dictionaryUserInfo setObject:[NSNumber numberWithBool:_userIsNewMember] forKey:TMInfoArchiveKey_UserIsNewMember];
+}
+
+- (BOOL)userIsNewMember
+{
+    NSString *numberBool = [_dictionaryUserInfo objectForKey:TMInfoArchiveKey_UserIsNewMember];
+    if (numberBool)
+    {
+        _userIsNewMember = [numberBool boolValue];
+    }
+    return _userIsNewMember;
+}
+
+- (void)setUserOcbStatus:(OCBStatus)userOcbStatus
+{
+    if (userOcbStatus != _userOcbStatus)
+    {
+        _userOcbStatus = userOcbStatus;
+        if (_userOcbStatus != OCBStatusTotal)
+        {
+            [_dictionaryUserInfo setObject:[NSNumber numberWithUnsignedInteger:_userOcbStatus] forKey:TMInfoArchiveKey_UserOcbStatus];
+        }
+    }
+}
+
+- (OCBStatus)userOcbStatus
+{
+    if (_userOcbStatus == OCBStatusTotal)
+    {
+        NSNumber *numberBool = [_dictionaryUserInfo objectForKey:TMInfoArchiveKey_UserOcbStatus];
+        if (numberBool)
+        {
+            _userOcbStatus = [numberBool boolValue];
+        }
+    }
+    return _userOcbStatus;
+}
+
+- (void)setUserOcbUrl:(NSString *)userOcbUrl
+{
+    if ([userOcbUrl isEqualToString:_userOcbUrl] == NO)
+    {
+        _userOcbUrl = userOcbUrl;
+        if (_userOcbUrl != nil)
+        {
+            [_dictionaryUserInfo setObject:_userOcbUrl forKey:TMInfoArchiveKey_UserOcbUrl];
+        }
+    }
+}
+
+- (NSString *)userOcbUrl
+{
+    if (_userOcbUrl == nil)
+    {
+        _userOcbUrl = [_dictionaryUserInfo objectForKey:TMInfoArchiveKey_UserOcbUrl];
+    }
+    return _userOcbUrl;
+}
+
+- (void)setUserHasPassword:(BOOL)userHasPassword
+{
+    _userHasPassword = userHasPassword;
+    [_dictionaryUserInfo setObject:[NSNumber numberWithBool:_userHasPassword] forKey:TMInfoArchiveKey_UserHasPassword];
+}
+
+- (BOOL)userHasPassword
+{
+    NSNumber *numberBool = [_dictionaryUserInfo objectForKey:TMInfoArchiveKey_UserHasPassword];
+    if (numberBool != nil)
+    {
+        _userHasPassword = [numberBool boolValue];
+    }
+    return _userHasPassword;
+}
+
+- (void)setUserTaxId:(NSString *)userTaxId
+{
+    if ([userTaxId isEqualToString:_userTaxId] == NO)
+    {
+        _userTaxId = userTaxId;
+        if (_userTaxId != nil)
+        {
+            [_dictionaryUserInfo setObject:_userTaxId forKey:TMInfoArchiveKey_UserTaxId];
+        }
+    }
+}
+
+- (NSString *)userTaxId
+{
+    if (_userTaxId == nil)
+    {
+        _userTaxId = [_dictionaryUserInfo objectForKey:TMInfoArchiveKey_UserTaxId];
+    }
+    return _userTaxId;
+}
+
+- (void)setUserTelephoneAreaCode:(NSString *)userTelephoneAreaCode
+{
+    if ([userTelephoneAreaCode isEqualToString:_userTelephoneAreaCode] == NO)
+    {
+        _userTelephoneAreaCode = userTelephoneAreaCode;
+        if (_userTelephoneAreaCode != nil)
+        {
+            [_dictionaryUserInfo setObject:_userTelephoneAreaCode forKey:TMInfoArchiveKey_UserTelephoneAreaCode];
+        }
+    }
+}
+
+- (NSString *)userTelephoneAreaCode
+{
+    if (_userTelephoneAreaCode == nil)
+    {
+        _userTelephoneAreaCode = [_dictionaryUserInfo objectForKey:TMInfoArchiveKey_UserTelephoneAreaCode];
+    }
+    return _userTelephoneAreaCode;
+}
+
+- (void)setUserTelephoneExtension:(NSString *)userTelephoneExtension
+{
+    if ([userTelephoneExtension isEqualToString:_userTelephoneExtension] == NO)
+    {
+        _userTelephoneExtension = userTelephoneExtension;
+        if (_userTelephoneExtension != nil)
+        {
+            [_dictionaryUserInfo setObject:_userTelephoneExtension forKey:TMInfoArchiveKey_UserTelephoneExtension];
+        }
+    }
+}
+
+- (NSString *)userTelephoneExtension
+{
+    if (_userTelephoneExtension == nil)
+    {
+        _userTelephoneExtension = [_dictionaryUserInfo objectForKey:TMInfoArchiveKey_UserTelephoneExtension];
+    }
+    return _userTelephoneExtension;
+}
+
+- (void)setUserTelephone:(NSString *)userTelephone
+{
+    if ([userTelephone isEqualToString:_userTelephone] == NO)
+    {
+        _userTelephone = userTelephone;
+        if (_userTelephone != nil)
+        {
+            [_dictionaryUserInfo setObject:_userTelephone forKey:TMInfoArchiveKey_UserTelephone];
+        }
+    }
+}
+
+- (NSString *)userTelephone
+{
+    if (_userTelephone == nil)
+    {
+        _userTelephone = [_dictionaryUserInfo objectForKey:TMInfoArchiveKey_UserTelephone];
+    }
+    return _userTelephone;
+}
+
+- (void)setUserIDCardNumber:(NSString *)userIDCardNumber
+{
+    if ([userIDCardNumber isEqualToString:_userIDCardNumber] == NO)
+    {
+        _userIDCardNumber = userIDCardNumber;
+        if (_userIDCardNumber != nil)
+        {
+            [_dictionaryUserInfo setObject:_userIDCardNumber forKey:TMInfoArchiveKey_UserIdCardNumber];
+        }
+    }
+}
+
+- (NSString *)userIDCardNumber
+{
+    if (_userIDCardNumber == nil)
+    {
+        _userIDCardNumber = [_dictionaryUserInfo objectForKey:TMInfoArchiveKey_UserIdCardNumber];
+    }
+    return _userIDCardNumber;
+}
+
+- (void)setUserZipCode:(NSString *)userZipCode
+{
+    if ([userZipCode isEqualToString:_userZipCode] == NO)
+    {
+        _userZipCode = userZipCode;
+        if (_userZipCode != nil)
+        {
+            [_dictionaryUserInfo setObject:_userZipCode forKey:TMInfoArchiveKey_UserZipCode];
+        }
+    }
+}
+
+- (NSString *)userZipCode
+{
+    if (_userZipCode == nil)
+    {
+        _userZipCode = [_dictionaryUserInfo objectForKey:TMInfoArchiveKey_UserZipCode];
+    }
+    return _userZipCode;
+}
+
+- (void)setUserAddress:(NSString *)userAddress
+{
+    if ([userAddress isEqualToString:_userAddress] == NO)
+    {
+        _userAddress = userAddress;
+        if (_userAddress != nil)
+        {
+            [_dictionaryUserInfo setObject:_userAddress forKey:TMInfoArchiveKey_UserAddress];
+        }
+    }
+}
+
+- (NSString *)userAddress
+{
+    if (_userAddress == nil)
+    {
+        _userAddress = [_dictionaryUserInfo objectForKey:TMInfoArchiveKey_UserAddress];
+    }
+    return _userAddress;
 }
 
 #pragma mark - Public Methods
@@ -381,6 +786,27 @@ static NSUInteger SearchKeywordNumberMax = 8;
     NSString *gender = [infoDictionary objectForKey:SymphoxAPIParam_sex];
     NSNumber *epoint = [infoDictionary objectForKey:SymphoxAPIParam_epoint];
     NSNumber *ecoupon = [infoDictionary objectForKey:SymphoxAPIParam_ecoupon];
+    
+    NSString *authStatus = [infoDictionary objectForKey:SymphoxAPIParam_auth_status];
+    NSString *birth = [infoDictionary objectForKey:SymphoxAPIParam_birthday];
+    NSString *emailMasked = [infoDictionary objectForKey:SymphoxAPIParam_email];
+    NSString *emailMember = [infoDictionary objectForKey:SymphoxAPIParam_email_member];
+    NSString *emailAuth = [infoDictionary objectForKey:SymphoxAPIParam_email_status];
+    NSString *invoiceTitle = [infoDictionary objectForKey:SymphoxAPIParam_inv_title];
+    NSString *invoiceType = [infoDictionary objectForKey:SymphoxAPIParam_inv_type];
+    NSString *mobileMasked = [infoDictionary objectForKey:SymphoxAPIParam_mobile];
+    NSString *newMember = [infoDictionary objectForKey:SymphoxAPIParam_new_member];
+    NSString *ocbStatus = [infoDictionary objectForKey:SymphoxAPIParam_ocb_status];
+    NSString *ocbUrl = [infoDictionary objectForKey:SymphoxAPIParam_ocb_url];
+    NSString *passwordStatus = [infoDictionary objectForKey:SymphoxAPIParam_pwd_status];
+    NSString *taxId = [infoDictionary objectForKey:SymphoxAPIParam_tax_id];
+    NSString *telephoneAreaCode = [infoDictionary objectForKey:SymphoxAPIParam_tel_area];
+    NSString *telephoneExtension = [infoDictionary objectForKey:SymphoxAPIParam_tel_ex];
+    NSString *telephone = [infoDictionary objectForKey:SymphoxAPIParam_tel_num];
+    NSString *idCardNumber = [infoDictionary objectForKey:SymphoxAPIParam_user_id];
+    NSString *zipCode = [infoDictionary objectForKey:SymphoxAPIParam_zip];
+    NSString *address = [infoDictionary objectForKey:SymphoxAPIParam_address];
+    
     if ((self.userIdentifier == nil) || ([[self.userIdentifier stringValue] isEqualToString:[identifier stringValue]] == NO))
     {
         self.userIdentifier = nil;
@@ -397,13 +823,23 @@ static NSUInteger SearchKeywordNumberMax = 8;
     {
         self.userName = name;
     }
-    if ([gender length] == 0)
+    if (gender && ([gender isEqual:[NSNull null]] == NO) && ([gender length] > 0))
     {
-        self.userGender = TMGenderUnknown;
+        if ([gender compare:SymphoxAPIParamValue_m options:NSCaseInsensitiveSearch] == NSOrderedSame)
+        {
+            self.userGender = TMGenderMale;
+        }
+        else if ([gender compare:SymphoxAPIParamValue_f options:NSCaseInsensitiveSearch] == NSOrderedSame)
+        {
+            self.userGender = TMGenderFemale;
+        }
+        else
+        {
+            self.userGender = TMGenderUnknown;
+        }
     }
     else
     {
-        // Should implement once receive real data.
         self.userGender = TMGenderUnknown;
     }
     if (epoint)
@@ -413,6 +849,119 @@ static NSUInteger SearchKeywordNumberMax = 8;
     if (ecoupon)
     {
         self.userEcoupon = ecoupon;
+    }
+    if (authStatus && ([authStatus isEqual:[NSNull null]] == NO) && [authStatus length] > 0)
+    {
+        self.userAuthStatus = authStatus;
+    }
+    if (birth && ([birth isEqual:[NSNull null]] == NO) && ([birth length] > 0))
+    {
+        self.userBirth = birth;
+    }
+    if (emailMasked && ([emailMasked isEqual:[NSNull null]] == NO) && ([emailMasked length] > 0))
+    {
+        self.userEmailMasked = emailMasked;
+    }
+    if (emailMember && ([emailMember isEqual:[NSNull null]] == NO) && ([emailMember length] > 0))
+    {
+        BOOL isEmailMember = [emailMember boolValue];
+        self.userIsEmailMember = isEmailMember;
+    }
+    if (emailAuth && ([emailAuth isEqual:[NSNull null]] == NO) && ([emailAuth length] > 0))
+    {
+        BOOL isEmailAuth = [emailAuth boolValue];
+        self.userEmailAuth = isEmailAuth;
+    }
+    if (invoiceTitle && ([invoiceTitle isEqual:[NSNull null]] == NO) && ([invoiceTitle length] > 0))
+    {
+        self.userInvoiceTitle = invoiceTitle;
+    }
+    if (invoiceTitle && ([invoiceTitle isEqual:[NSNull null]] == NO) && ([invoiceTitle length] > 0))
+    {
+        self.userInvoiceType = invoiceType;
+    }
+    if (mobileMasked && ([mobileMasked isEqual:[NSNull null]] == NO) && ([mobileMasked length] > 0))
+    {
+        self.userMobileMasked = mobileMasked;
+    }
+    if (newMember && ([newMember isEqual:[NSNull null]] == NO) && ([newMember length] > 0))
+    {
+        BOOL isNewMember = [newMember boolValue];
+        self.userIsNewMember = isNewMember;
+    }
+    if (ocbStatus && ([ocbStatus isEqual:[NSNull null]] == NO) && ([ocbStatus length] > 0))
+    {
+        if ([ocbStatus compare:SymphoxAPIParamValue_Y options:NSCaseInsensitiveSearch] == NSOrderedSame)
+        {
+            self.userOcbStatus = OCBStatusActivated;
+        }
+        else if ([ocbStatus compare:SymphoxAPIParamValue_T options:NSCaseInsensitiveSearch] == NSOrderedSame)
+        {
+            self.userOcbStatus = OCBStatusShouldActivateInTreeMall;
+        }
+        else if ([ocbStatus compare:SymphoxAPIParamValue_N options:NSCaseInsensitiveSearch] == NSOrderedSame)
+        {
+            self.userOcbStatus = OCBStatusShouldActivateInBank;
+        }
+        else if ([ocbStatus compare:SymphoxAPIParamValue_E options:NSCaseInsensitiveSearch] == NSOrderedSame)
+        {
+            self.userOcbStatus = OCBStatusExpired;
+        }
+    }
+    if (ocbUrl && ([ocbUrl isEqual:[NSNull null]] == NO) && ([ocbUrl length] > 0))
+    {
+        self.userOcbUrl = ocbUrl;
+    }
+    if (passwordStatus && ([passwordStatus isEqual:[NSNull null]] == NO) && ([passwordStatus length] > 0))
+    {
+        BOOL hasPassword = [passwordStatus boolValue];
+        self.userHasPassword = hasPassword;
+    }
+    if (taxId && ([taxId isEqual:[NSNull null]] == NO) && ([taxId length] > 0))
+    {
+        self.userTaxId = taxId;
+    }
+    if (telephoneAreaCode && ([telephoneAreaCode isEqual:[NSNull null]] == NO) && ([telephoneAreaCode length] > 0))
+    {
+        self.userTelephoneAreaCode = telephoneAreaCode;
+    }
+    if (telephoneExtension && ([telephoneExtension isEqual:[NSNull null]] == NO) && ([telephoneExtension length] > 0))
+    {
+        self.userTelephoneExtension = telephoneExtension;
+    }
+    if (telephone && ([telephone isEqual:[NSNull null]] == NO) && ([telephone length] > 0))
+    {
+        self.userTelephone = telephone;
+    }
+    if (idCardNumber && ([idCardNumber isEqual:[NSNull null]] == NO) && ([idCardNumber length] > 0))
+    {
+        self.userIDCardNumber = idCardNumber;
+    }
+    if (zipCode && ([zipCode isEqual:[NSNull null]] == NO) && ([zipCode length] > 0))
+    {
+        self.userZipCode = zipCode;
+    }
+    if (address && ([address isEqual:[NSNull null]] == NO) && ([address length] > 0))
+    {
+        self.userAddress = address;
+    }
+    [self saveToArchive];
+    
+    // Assume that userAuthStatus should always be in the user information, if it is missing, we should reload user information again.
+    if (self.userAuthStatus == nil)
+    {
+        // Should retrieve user information
+        [self retrieveUserInformation];
+    }
+    
+    if (self.userEpoint == nil && self.userIdentifier)
+    {
+        [self retrievePointDataFromObject:nil withCompletion:nil];
+    }
+    
+    if (self.userEcoupon == nil && self.userIdentifier)
+    {
+        [self retrieveCouponDataFromObject:nil forPageIndex:1 couponState:CouponStateNotUsed sortFactor:SymphoxAPIParamValue_worth withSortOrder:SymphoxAPIParamValue_desc withCompletion:nil];
     }
 }
 
@@ -619,6 +1168,131 @@ static NSUInteger SearchKeywordNumberMax = 8;
     return favorites;
 }
 
+- (void)retrievePointDataFromObject:(id)object withCompletion:(void (^)(id, NSError *))block
+{
+    __weak TMInfoManager *weakSelf = self;
+    NSString *apiKey = [CryptoModule sharedModule].apiKey;
+    NSString *token = [SHAPIAdapter sharedAdapter].token;
+    NSURL *url = [NSURL URLWithString:SymphoxAPI_memberPoint];
+//    NSLog(@"retrieveUserInformation - [%@]", [url absoluteString]);
+    NSDictionary *headerFields = [NSDictionary dictionaryWithObjectsAndKeys:apiKey, SymphoxAPIParam_key, token, SymphoxAPIParam_token, nil];
+    NSDictionary *options = [NSDictionary dictionaryWithObjectsAndKeys:self.userIdentifier, SymphoxAPIParam_user_num, nil];
+    [[SHAPIAdapter sharedAdapter] sendRequestFromObject:weakSelf ToUrl:url withHeaderFields:headerFields andPostObject:options inPostFormat:SHPostFormatJson encrypted:YES decryptedReturnData:YES completion:^(id resultObject, NSError *error){
+        if (error == nil)
+        {
+//            NSLog(@"retrievePointDataFromObject - resultObject[%@]:\n%@", [[resultObject class] description], [resultObject description]);
+            if ([resultObject isKindOfClass:[NSData class]])
+            {
+                NSData *data = (NSData *)resultObject;
+                [weakSelf processUserPoint:data];
+            }
+        }
+        else
+        {
+            NSLog(@"retrievePointDataFromObject - error:\n%@", [error description]);
+        }
+    }];
+}
+
+- (void)retrieveCouponDataFromObject:(id)object forPageIndex:(NSInteger)pageIndex couponState:(CouponState)state sortFactor:(NSString *)factor withSortOrder:(NSString *)order withCompletion:(void (^)(id, NSError *))block
+{
+    __weak TMInfoManager *weakSelf = self;
+    NSString *apiKey = [CryptoModule sharedModule].apiKey;
+    NSString *token = [SHAPIAdapter sharedAdapter].token;
+    NSURL *url = [NSURL URLWithString:SymphoxAPI_memberCoupon];
+//    NSLog(@"retrieveUserInformation - [%@]", [url absoluteString]);
+    NSString *stateText = SymphoxAPIParamValue_NotUsed_cht;
+    switch (state) {
+        case CouponStateAlreadyUsed:
+            stateText = SymphoxAPIParamValue_AlreadyUsed_cht;
+            break;
+        case CouponStateExpired:
+            stateText = SymphoxAPIParamValue_Expired_cht;
+            break;
+        default:
+            stateText = SymphoxAPIParamValue_NotUsed_cht;
+            break;
+    }
+    NSNumber *numberPage = [NSNumber numberWithInteger:pageIndex];
+    NSNumber *numberPageCount = [NSNumber numberWithInteger:25];
+    NSDictionary *headerFields = [NSDictionary dictionaryWithObjectsAndKeys:apiKey, SymphoxAPIParam_key, token, SymphoxAPIParam_token, nil];
+    NSDictionary *options = [NSDictionary dictionaryWithObjectsAndKeys:self.userIdentifier, SymphoxAPIParam_user_num, stateText, SymphoxAPIParam_status, factor, SymphoxAPIParam_sort_column, order, SymphoxAPIParam_sort_order, numberPage, SymphoxAPIParam_page, numberPageCount, SymphoxAPIParam_page_count, nil];
+    [[SHAPIAdapter sharedAdapter] sendRequestFromObject:weakSelf ToUrl:url withHeaderFields:headerFields andPostObject:options inPostFormat:SHPostFormatJson encrypted:YES decryptedReturnData:YES completion:^(id resultObject, NSError *error){
+        id result = nil;
+        if (error == nil)
+        {
+//            NSLog(@"retrievePointDataFromObject - resultObject[%@]:\n%@", [[resultObject class] description], [resultObject description]);
+            if ([resultObject isKindOfClass:[NSData class]])
+            {
+                NSData *data = (NSData *)resultObject;
+                result = [weakSelf processUserCoupon:data];
+            }
+        }
+        else
+        {
+            NSLog(@"retrievePointDataFromObject - error:\n%@", [error description]);
+        }
+        if (object != nil && block != nil)
+        {
+            block(result, error);
+        }
+    }];
+}
+
+- (void)logoutUser
+{
+    [_orderedSetPromotionRead removeAllObjects];
+    [_dictionaryUserInfo removeAllObjects];
+    [_dictionaryInitialFilter removeAllObjects];
+    [_orderedSetKeyword removeAllObjects];
+    [_arrayFavorite removeAllObjects];
+    [_dictionaryFavoriteDetail removeAllObjects];
+    [_orderedSetFavoriteId removeAllObjects];
+    _numberArchiveTimestamp = nil;
+    _userIdentifier = nil;
+    _userName = nil;
+    _userEmail = nil;
+    _userGender = TMGenderTotal;
+    _userEpoint = nil;
+    _userPointTotal = nil;
+    _userPointDividend = nil;
+    _userPointExpired = nil;
+    _userPointAdText = nil;
+    _userPointAdUrl = nil;
+    _userEcoupon = nil;
+    _userAuthStatus = nil;
+    _userBirth = nil;
+    _userEmailMasked = nil;
+    _userIsEmailMember = NO;
+    _userEmailAuth = NO;
+    _userInvoiceTitle =  nil;
+    _userInvoiceType = nil;
+    _userMobileMasked = nil;
+    _userIsNewMember = NO;
+    _userOcbStatus = OCBStatusTotal;
+    _userOcbUrl = nil;
+    _userHasPassword = NO;
+    _userTaxId = nil;
+    _userTelephoneAreaCode = nil;
+    _userTelephoneExtension = nil;
+    _userTelephone = nil;
+    _userIDCardNumber = nil;
+    _userZipCode = nil;
+    _userAddress = nil;
+    
+    NSURL *url = [self urlForInfoArchive];
+    if ([[NSFileManager defaultManager] fileExistsAtPath:[url path]])
+    {
+        NSError *error = nil;
+        [[NSFileManager defaultManager] removeItemAtURL:url error:&error];
+        if (error)
+        {
+            NSLog(@"Cannot remove archive. Error:\n%@", [error description]);
+        }
+    }
+    [[NSNotificationCenter defaultCenter] postNotificationName:PostNotificationName_UserLogout object:self];
+}
+
 #pragma mark - Private Methods
 
 - (NSURL *)urlForInfoDirectory
@@ -700,9 +1374,83 @@ static NSUInteger SearchKeywordNumberMax = 8;
         if ([jsonObject isKindOfClass:[NSDictionary class]])
         {
             [self updateUserInformationFromInfoDictionary:jsonObject];
-            
+            [[NSNotificationCenter defaultCenter] postNotificationName:PostNotificationName_UserInformationUpdated object:self];
         }
     }
+}
+
+- (void)processUserPoint:(NSData *)data
+{
+    if (data == nil)
+        return;
+    NSError *error = nil;
+    id jsonObject = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
+    if (error == nil && jsonObject)
+    {
+        NSLog(@"processUserPoint - jsonObject:\n%@", jsonObject);
+        if ([jsonObject isKindOfClass:[NSDictionary class]])
+        {
+            NSDictionary *dictionary = (NSDictionary *)jsonObject;
+            NSInteger totalPoint = 0;
+            NSNumber *epoint = [dictionary objectForKey:SymphoxAPIParam_epoint];
+            if (epoint && [epoint isEqual:[NSNull null]] == NO)
+            {
+                self.userEpoint = epoint;
+                totalPoint +=  [self.userEpoint integerValue];
+            }
+            NSNumber *pointDividend = [dictionary objectForKey:SymphoxAPIParam_point];
+            if (pointDividend && [pointDividend isEqual:[NSNull null]] == NO)
+            {
+                self.userPointDividend = pointDividend;
+                totalPoint += [self.userPointDividend integerValue];
+            }
+            self.userPointTotal = [NSNumber numberWithInteger:totalPoint];
+            
+            NSNumber *pointExpired = [dictionary objectForKey:SymphoxAPIParam_exp_point];
+            if (pointExpired && [pointExpired isEqual:[NSNull null]] == NO)
+            {
+                self.userPointExpired = pointExpired;
+            }
+            NSString *adText = [dictionary objectForKey:SymphoxAPIParam_ad_text];
+            if (adText && [adText isEqual:[NSNull null]] == NO)
+            {
+                self.userPointAdText = adText;
+            }
+            NSString *adUrl = [dictionary objectForKey:SymphoxAPIParam_ad_url];
+            if (adUrl && [adUrl isEqual:[NSNull null]] == NO)
+            {
+                self.userPointAdUrl = adUrl;
+            }
+        }
+        [[NSNotificationCenter defaultCenter] postNotificationName:PostNotificationName_UserPointUpdated object:self];
+    }
+}
+
+- (id)processUserCoupon:(NSData *)data
+{
+    id resultObject = nil;
+    
+    if (data == nil)
+        return resultObject;
+    
+    NSError *error = nil;
+    id jsonObject = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
+    if (error == nil && jsonObject)
+    {
+        NSLog(@"processUserCoupon - jsonObject:\n%@", jsonObject);
+        if ([jsonObject isKindOfClass:[NSDictionary class]])
+        {
+            NSDictionary *dictionary = (NSDictionary *)jsonObject;
+            NSNumber *quantity = [dictionary objectForKey:SymphoxAPIParam_qty];
+            if (quantity)
+            {
+                self.userEcoupon = quantity;
+            }
+            resultObject = dictionary;
+            [[NSNotificationCenter defaultCenter] postNotificationName:PostNotificationName_UserCouponUpdated object:self];
+        }
+    }
+    return resultObject;
 }
 
 @end

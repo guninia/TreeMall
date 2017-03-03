@@ -15,6 +15,8 @@
     self = [super initWithFrame:frame];
     if (self)
     {
+        _marginLeft = 5.0;
+        _marginRight = 5.0;
         [self addSubview:self.label];
         [self addSubview:self.imageViewIcon];
     }
@@ -35,17 +37,14 @@
 {
     [super layoutSubviews];
     
-    CGFloat marginL = 5.0;
-    CGFloat marginR = 5.0;
-    
     if (self.imageViewIcon.image)
     {
-        CGRect frame = CGRectMake(self.frame.size.width - marginR - self.imageViewIcon.image.size.width, (self.frame.size.height - self.imageViewIcon.image.size.height)/2, self.imageViewIcon.image.size.width, self.imageViewIcon.image.size.height);
+        CGRect frame = CGRectMake(self.frame.size.width - self.marginRight - self.imageViewIcon.image.size.width, (self.frame.size.height - self.imageViewIcon.image.size.height)/2, self.imageViewIcon.image.size.width, self.imageViewIcon.image.size.height);
         self.imageViewIcon.frame = frame;
     }
     if (self.label)
     {
-        CGRect frame = CGRectMake(marginL, 0.0, self.imageViewIcon.frame.origin.x - marginL, self.frame.size.height);
+        CGRect frame = CGRectMake(self.marginLeft, 0.0, self.imageViewIcon.frame.origin.x - self.marginLeft, self.frame.size.height);
         self.label.frame = frame;
     }
 }

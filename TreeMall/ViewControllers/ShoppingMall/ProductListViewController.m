@@ -751,7 +751,7 @@
         return;
     }
     __weak ProductListViewController *weakSelf = self;
-    [self showFTMenuFromView:view.buttonSort title:[LocalizedString ChooseOrder] textColor:[UIColor blackColor] perferedWidth:200.0 menuKey:SymphoxAPIParam_name inDictionaryFromArray:self.arraySortOption doneBlock:^(NSInteger selectedIndex){
+    [self showFTMenuFromView:view.buttonSort title:nil textColor:[UIColor blackColor] perferedWidth:200.0 menuKey:SymphoxAPIParam_name inDictionaryFromArray:self.arraySortOption doneBlock:^(NSInteger selectedIndex){
         
         // Get information of selected sort type
         NSDictionary *dictionary = [weakSelf.arraySortOption objectAtIndex:selectedIndex];

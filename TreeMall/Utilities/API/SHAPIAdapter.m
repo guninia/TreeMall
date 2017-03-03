@@ -66,7 +66,7 @@ static SHAPIAdapter *gAPIAdapter = nil;
         switch (format) {
             case SHPostFormatJson:
             {
-                postRawData = [NSJSONSerialization dataWithJSONObject:postObject options:0 error:&error];
+                postRawData = [NSJSONSerialization dataWithJSONObject:postObject options:NSJSONWritingPrettyPrinted error:&error];
 //                NSString *postString = [[NSString alloc] initWithData:postRawData encoding:NSUTF8StringEncoding];
 //                NSLog(@"sendRequestFromObject - postRawData:\n%@", postString);
                 contentType = @"application/octet-stream";

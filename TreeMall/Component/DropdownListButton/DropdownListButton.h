@@ -12,5 +12,7 @@
 
 @property (nonatomic, strong) UILabel *label;
 @property (nonatomic, strong) UIImageView *imageViewIcon;
+@property (nonatomic, assign) CGFloat marginLeft;
+@property (nonatomic, assign) CGFloat marginRight;
 
 @end

@@ -119,5 +119,24 @@
 + (NSString *)PleaseInputProductName;
 + (NSString *)OrderTime;
 + (NSString *)ShipType;
++ (NSString *)Mister;
++ (NSString *)Miss;
++ (NSString *)ThayPoint;
++ (NSString *)DancingDividend;
++ (NSString *)Pieces;
++ (NSString *)Logout;
++ (NSString *)LogoutReconfirm;
++ (NSString *)NotUsed;
++ (NSString *)AlreadyUsed;
++ (NSString *)Expired;
++ (NSString *)ValueHighToLow;
++ (NSString *)ValueLowToHigh;
++ (NSString *)ValidDateEarlyToLate;
++ (NSString *)ValidDateLateToEarly;
++ (NSString *)OrderId;
++ (NSString *)Due;
++ (NSString *)Start;
++ (NSString *)CouponDetail;
+
 
 @end

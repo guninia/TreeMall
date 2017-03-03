@@ -60,7 +60,7 @@
     
     CGFloat marginL = 10.0;
     CGFloat marginR = 10.0;
-    NSInteger intervalH = 10.0;
+    NSInteger intervalH = 5.0;
     CGFloat originX = marginL;
     if (self.labelL)
     {
@@ -77,12 +77,8 @@
         NSDictionary *attributes = [NSDictionary dictionaryWithObjectsAndKeys:self.labelR.font, NSFontAttributeName, nil];
         CGSize sizeText = [self.labelR.text sizeWithAttributes:attributes];
         CGSize sizeLabel = CGSizeMake(ceil(sizeText.width), ceil(sizeText.height));
-        CGFloat labelOriginX = self.frame.size.width - marginR - sizeLabel.width;
-        if (labelOriginX < originX)
-        {
-            labelOriginX = originX;
-            sizeLabel.width = self.frame.size.width - marginR - originX;
-        }
+        CGFloat labelOriginX = originX;
+        sizeLabel.width = self.frame.size.width - marginR - originX;
         CGRect frame = CGRectMake(labelOriginX, (self.frame.size.height - sizeLabel.height)/2, sizeLabel.width, sizeLabel.height);
         self.labelR.frame = frame;
     }
@@ -112,6 +108,7 @@
     if (_labelR == nil)
     {
         _labelR = [[UILabel alloc] initWithFrame:CGRectZero];
+        [_labelR setBackgroundColor:[UIColor redColor]];
         UIFont *font = [UIFont systemFontOfSize:12.0];
         [_labelR setFont:font];
         [_labelR setBackgroundColor:[UIColor clearColor]];

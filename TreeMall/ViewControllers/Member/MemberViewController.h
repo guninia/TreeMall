@@ -12,7 +12,7 @@
 #import "ProductDetailSectionTitleView.h"
 #import "IconLabelView.h"
 
-@interface MemberViewController : UIViewController
+@interface MemberViewController : UIViewController <ProductDetailSectionTitleViewDelegate>
 
 @property (nonatomic, strong) UIScrollView *scrollView;
 @property (nonatomic, strong) MemberTitleView *viewTitle;
@@ -23,4 +23,6 @@
 @property (nonatomic, strong) IconLabelView *viewProcessing;
 @property (nonatomic, strong) IconLabelView *viewShipped;
 @property (nonatomic, strong) IconLabelView *viewReturnReplace;
+@property (nonatomic, strong) NSNumber *numberCoupon;
+
 @end

@@ -17,5 +17,10 @@
 @property (nonatomic, strong) UILabel *labelDividend;
 @property (nonatomic, strong) BorderedDoubleLabelView *viewTotalPoint;
 @property (nonatomic, strong) BorderedDoubleLabelView *viewExpired;
+@property (nonatomic, strong) NSNumber *numberPoint;
+@property (nonatomic, strong) NSNumber *numberDividend;
+@property (nonatomic, strong) NSNumber *numberTotal;
+@property (nonatomic, strong) NSNumber *numberExpired;
+@property (nonatomic, strong) NSNumberFormatter *formatter;
 
 @end

@@ -1101,4 +1101,184 @@
     return ShipType;
 }
 
++ (NSString *)Mister
+{
+    static NSString *Mister = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        Mister = NSLocalizedString(@"Mister", nil);
+    });
+    return Mister;
+}
+
++ (NSString *)Miss
+{
+    static NSString *Miss = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        Miss = NSLocalizedString(@"Miss", nil);
+    });
+    return Miss;
+}
+
++ (NSString *)ThayPoint
+{
+    static NSString *ThayPoint = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        ThayPoint = NSLocalizedString(@"ThayPoint", nil);
+    });
+    return ThayPoint;
+}
+
++ (NSString *)DancingDividend
+{
+    static NSString *DancingDividend = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        DancingDividend = NSLocalizedString(@"DancingDividend", nil);
+    });
+    return DancingDividend;
+}
+
++ (NSString *)Pieces
+{
+    static NSString *Pieces = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        Pieces = NSLocalizedString(@"Pieces", nil);
+    });
+    return Pieces;
+}
+
++ (NSString *)Logout
+{
+    static NSString *Logout = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        Logout = NSLocalizedString(@"Logout", nil);
+    });
+    return Logout;
+}
+
++ (NSString *)LogoutReconfirm
+{
+    static NSString *LogoutReconfirm = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        LogoutReconfirm = NSLocalizedString(@"LogoutReconfirm", nil);
+    });
+    return LogoutReconfirm;
+}
+
++ (NSString *)NotUsed
+{
+    static NSString *NotUsed = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        NotUsed = NSLocalizedString(@"NotUsed", nil);
+    });
+    return NotUsed;
+}
+
++ (NSString *)AlreadyUsed
+{
+    static NSString *AlreadyUsed = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        AlreadyUsed = NSLocalizedString(@"AlreadyUsed", nil);
+    });
+    return AlreadyUsed;
+}
+
++ (NSString *)Expired
+{
+    static NSString *Expired = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        Expired = NSLocalizedString(@"Expired", nil);
+    });
+    return Expired;
+}
+
++ (NSString *)ValueHighToLow
+{
+    static NSString *ValueHighToLow = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        ValueHighToLow = NSLocalizedString(@"ValueHighToLow", nil);
+    });
+    return ValueHighToLow;
+}
+
++ (NSString *)ValueLowToHigh
+{
+    static NSString *ValueLowToHigh = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        ValueLowToHigh = NSLocalizedString(@"ValueLowToHigh", nil);
+    });
+    return ValueLowToHigh;
+}
+
++ (NSString *)ValidDateEarlyToLate
+{
+    static NSString *ValidDateEarlyToLate = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        ValidDateEarlyToLate = NSLocalizedString(@"ValidDateEarlyToLate", nil);
+    });
+    return ValidDateEarlyToLate;
+}
+
++ (NSString *)ValidDateLateToEarly
+{
+    static NSString *ValidDateLateToEarly = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        ValidDateLateToEarly = NSLocalizedString(@"ValidDateLateToEarly", nil);
+    });
+    return ValidDateLateToEarly;
+}
+
++ (NSString *)OrderId
+{
+    static NSString *OrderId = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        OrderId = NSLocalizedString(@"OrderId", nil);
+    });
+    return OrderId;
+}
+
++ (NSString *)Due
+{
+    static NSString *Due = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        Due = NSLocalizedString(@"Due", nil);
+    });
+    return Due;
+}
+
++ (NSString *)Start
+{
+    static NSString *Start = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        Start = NSLocalizedString(@"Start", nil);
+    });
+    return Start;
+}
+
++ (NSString *)CouponDetail
+{
+    static NSString *CouponDetail = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        CouponDetail = NSLocalizedString(@"CouponDetail", nil);
+    });
+    return CouponDetail;
+}
+
 @end

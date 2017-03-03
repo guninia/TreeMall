@@ -478,7 +478,7 @@
 - (void)startPreloginProcess
 {
     NSString *account = [[_textFieldAccount text] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-    if ([Utility evaluateEmail:account] == NO)
+    if ([Utility evaluateEmail:account] == NO && [Utility evaluateIdCardNumber:account] == NO)
     {
         // Should show alert to modify account.
         NSLog(@"Account is not illegal.");
@@ -596,23 +596,7 @@
     if ([jsonObject isKindOfClass:[NSDictionary class]])
     {
         NSDictionary *dictionary = (NSDictionary *)jsonObject;
-        NSNumber *userId = [dictionary objectForKey:SymphoxAPIParam_user_num];
-        if (userId)
-        {
-            [TMInfoManager sharedManager].userIdentifier = userId;
-            success = YES;
-        }
-        NSString *userGender = [dictionary objectForKey:SymphoxAPIParam_sex];
-        if (userGender)
-        {
-            [[TMInfoManager sharedManager] setUserGenderByGenderText:userGender];
-        }
-        NSString *userName = [dictionary objectForKey:SymphoxAPIParam_name];
-        if (userName)
-        {
-            [TMInfoManager sharedManager].userName = userName;
-        }
-        [[TMInfoManager sharedManager] saveToArchive];
+        [[TMInfoManager sharedManager] updateUserInformationFromInfoDictionary:dictionary];
     }
     
     return success;
