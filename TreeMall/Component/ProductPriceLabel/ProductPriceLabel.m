@@ -116,6 +116,7 @@
 - (void)initialize
 {
     [self addSubview:self.viewLine];
+    self.shouldShowCutLine = NO;
 }
 
 #pragma mark - Public Methods

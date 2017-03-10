@@ -10,8 +10,22 @@
 #import "ProductDetailImageCollectionViewCell.h"
 #import "TMInfoManager.h"
 #import "LocalizedString.h"
+#import "APIDefinition.h"
+#import "CryptoModule.h"
+#import "SHAPIAdapter.h"
+#import "UIImageView+WebCache.h"
 
 @interface ProductDetailViewController ()
+
+- (void)retrieveDataForIdentifer:(NSNumber *)identifier;
+- (BOOL)processProductData:(id)data;
+- (void)layoutCustomSubviews;
+- (void)refreshContent;
+- (NSAttributedString *)attributedStringFromHtmlString:(NSString *)html;
+- (void)retrieveTermsForType:(TermType)type;
+- (BOOL)processTermsData:(id)data;
+- (void)buttonLinkPressed:(id)sender;
+- (void)linkLongPressed:(UILongPressGestureRecognizer *)gestureRecognizer;
 
 @end
 
@@ -24,7 +38,10 @@
     {
         _dictionaryCommon = nil;
         _dictionaryDetail = nil;
-        _arrayImage = nil;
+        _arrayImagePath = nil;
+        _productIdentifier = nil;
+        _specIndex = NSNotFound;
+        _arrayViewNotice = [[NSMutableArray alloc] initWithCapacity:0];
     }
     return self;
 }
@@ -33,7 +50,6 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     [self.view setBackgroundColor:[UIColor whiteColor]];
-    
     [self.view addSubview:self.scrollView];
     [self.scrollView addSubview:self.collectionViewImage];
     [self.scrollView addSubview:self.pageControlImage];
@@ -49,9 +65,41 @@
     [self.scrollView addSubview:self.buttonExchangeDesc];
     [self.scrollView addSubview:self.buttonInstallmentCal];
     [self.scrollView addSubview:self.viewChooseSpec];
-    [self.scrollView addSubview:self.viewNotice];
+    [self.scrollView addSubview:self.labelAdText];
+    [self.scrollView addSubview:self.viewIntroTitle];
+    [self.scrollView addSubview:self.labelIntro];
     [self.scrollView addSubview:self.viewSpecTitle];
+    [self.scrollView addSubview:self.labelSpec];
+    [self.scrollView addSubview:self.viewRemarkTitle];
+    [self.scrollView addSubview:self.labelRemark];
+    [self.scrollView addSubview:self.viewShippingAndWarrentyTitle];
+    [self.scrollView addSubview:self.labelShippingAndWarrenty];
     [self.view addSubview:self.bottomBar];
+    
+    if (self.dictionaryCommon != nil)
+    {
+        if (self.productIdentifier == nil)
+        {
+            NSNumber *productIdentifier = [self.dictionaryCommon objectForKey:SymphoxAPIParam_cpdt_num];
+            if (productIdentifier && ([productIdentifier isEqual:[NSNull null]] == NO))
+            {
+                self.productIdentifier = productIdentifier;
+            }
+        }
+        if (self.title == nil)
+        {
+            NSString *name = [self.dictionaryCommon objectForKey:SymphoxAPIParam_cpdt_name];
+            if (name && [name isEqual:[NSNull null]] == NO && [name length] > 0)
+            {
+                self.title = name;
+            }
+        }
+    }
+    if (self.productIdentifier != nil)
+    {
+        [self retrieveDataForIdentifer:self.productIdentifier];
+    }
+    [self retrieveTermsForType:TermTypeShippingAndWarrenty];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -75,163 +123,31 @@
 {
     [super viewDidLayoutSubviews];
     
-    CGFloat scrollBottom = self.view.frame.size.height;
-    if (self.bottomBar)
+    [self layoutCustomSubviews];
+}
+
+- (void)setSpecIndex:(NSInteger)specIndex
+{
+    _specIndex = specIndex;
+    if (self.dictionaryDetail == nil)
     {
-        CGFloat bottomBarHeight = 49.0;
-        CGRect frame = CGRectMake(0.0, self.view.frame.size.height - bottomBarHeight, self.view.frame.size.width, bottomBarHeight);
-        self.bottomBar.frame = frame;
-        scrollBottom = self.bottomBar.frame.origin.y;
+        return;
     }
-    if (self.scrollView)
+    NSArray *array = [self.dictionaryDetail objectForKey:SymphoxAPIParam_standard];
+    if (array == nil)
     {
-        CGRect frame = CGRectMake(0.0, 0.0, self.view.frame.size.width, scrollBottom);
-        self.scrollView.frame = frame;
+        return;
     }
-    CGFloat originY = 0.0;
-    CGFloat originX = 0.0;
-    CGFloat marginL = 10.0;
-    CGFloat marginR = 10.0;
-    CGFloat marginB = 10.0;
-    CGFloat columnWidth = self.scrollView.frame.size.width - (marginL + marginR);
-    
-    if (self.collectionViewImage)
+    if (_specIndex < 0 || _specIndex >= [array count])
     {
-        CGRect frame = CGRectMake(originX, originY, self.scrollView.frame.size.width, self.scrollView.frame.size.width);
-        self.collectionViewImage.frame = frame;
-        originY = self.collectionViewImage.frame.origin.x + self.collectionViewImage.frame.size.height;
+        return;
     }
-    if (self.pageControlImage)
+    NSDictionary *dictionary = [array objectAtIndex:_specIndex];
+    NSString *name = [dictionary objectForKey:SymphoxAPIParam_name];
+    if (name && [name isEqual:[NSNull null]] == NO)
     {
-        CGSize size = [self.pageControlImage sizeForNumberOfPages:[self.arrayImage count]];
-        CGRect frame = CGRectMake((self.scrollView.frame.size.width - size.width)/2, originY, size.width, size.height);
-        self.pageControlImage.frame = frame;
-        originY = self.pageControlImage.frame.origin.y + self.pageControlImage.frame.size.height;
+        [self.viewChooseSpec.labelL setText:name];
     }
-    if (self.labelMarketing && [self.labelMarketing isHidden] == NO)
-    {
-        originX = marginL;
-        NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
-        style.lineBreakMode = self.labelMarketing.lineBreakMode;
-        style.alignment = self.labelMarketing.textAlignment;
-        NSDictionary *attributes = [NSDictionary dictionaryWithObjectsAndKeys:self.labelMarketing.font, NSFontAttributeName, style, NSParagraphStyleAttributeName, nil];
-        CGRect boundingRect = [self.labelMarketing.text boundingRectWithSize:CGSizeMake(columnWidth, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin attributes:attributes context:nil];
-        CGRect frame = CGRectMake(originX, originY, ceil(boundingRect.size.width), ceil(boundingRect.size.height));
-        self.labelMarketing.frame = frame;
-        originY = self.labelMarketing.frame.origin.y + self.labelMarketing.frame.size.height + 2.0;
-    }
-    if (self.labelProductName && [self.labelProductName isHidden] == NO)
-    {
-        originX = marginL;
-        NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
-        style.lineBreakMode = self.labelProductName.lineBreakMode;
-        style.alignment = self.labelProductName.textAlignment;
-        NSDictionary *attributes = [NSDictionary dictionaryWithObjectsAndKeys:self.labelProductName.font, NSFontAttributeName, style, NSParagraphStyleAttributeName, nil];
-        CGRect boundingRect = [self.labelProductName.text boundingRectWithSize:CGSizeMake(columnWidth, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin attributes:attributes context:nil];
-        CGRect frame = CGRectMake(originX, originY, ceil(boundingRect.size.width), ceil(boundingRect.size.height));
-        self.labelProductName.frame = frame;
-        originY = self.labelProductName.frame.origin.y + self.labelProductName.frame.size.height + 2.0;
-    }
-    if (self.viewPromotion && [self.viewPromotion isHidden] == NO)
-    {
-        CGFloat height = [self.viewPromotion referenceHeightForViewWidth:self.scrollView.frame.size.width];
-        CGRect frame = CGRectMake(0.0, originY, self.scrollView.frame.size.width, height);
-        self.viewPromotion.frame = frame;
-        originY = self.viewPromotion.frame.origin.y + self.viewPromotion.frame.size.height + 2.0;
-    }
-    CGFloat priceOriginX = self.scrollView.frame.size.width - marginR;
-    CGFloat priceBottomY = originY;
-    if (self.labelPrice && [self.labelPrice isHidden] == NO)
-    {
-        CGSize size = [self.labelPrice referenceSize];
-        priceOriginX -= size.width;
-        if (originY + size.height > priceBottomY)
-        {
-            priceBottomY = originY + size.height;
-        }
-        CGFloat buttonOriginY = priceBottomY - size.height;
-        CGRect frame = CGRectMake(priceOriginX, buttonOriginY, size.width, size.height);
-        self.labelPrice.frame = frame;
-        priceOriginX -= 3.0;
-    }
-    if (self.labelOriginPrice && [self.labelOriginPrice isHidden] == NO)
-    {
-        CGSize size = [self.labelOriginPrice referenceSize];
-        priceOriginX -= size.width;
-        if (originY + size.height > priceBottomY)
-        {
-            priceBottomY = originY + size.height;
-        }
-        CGFloat buttonOriginY = priceBottomY - size.height;
-        CGRect frame = CGRectMake(priceOriginX, buttonOriginY, size.width, size.height);
-        self.labelOriginPrice.frame = frame;
-    }
-    originY = priceBottomY + 2.0;
-    if (self.separator)
-    {
-        CGFloat separatorHeight = 1.0;
-        CGRect frame = CGRectMake(originX, originY, columnWidth, separatorHeight);
-        self.separator.frame = frame;
-        originY = self.separator.frame.origin.y + self.separator.frame.size.height + 5.0;
-    }
-    CGFloat intervalH = 5.0;
-    CGFloat halfColumnWidth = ceil((self.scrollView.frame.size.width - (marginL + marginR + intervalH))/2);
-    CGFloat columnHeight = 40.0;
-    if (self.viewPoint)
-    {
-        CGRect frame = CGRectMake(originX, originY, halfColumnWidth, columnHeight);
-        self.viewPoint.frame = frame;
-        originX = self.viewPoint.frame.origin.x + self.viewPoint.frame.size.width + intervalH;
-    }
-    if (self.viewPointCash)
-    {
-        CGRect frame = CGRectMake(originX, originY, halfColumnWidth, columnHeight);
-        self.viewPointCash.frame = frame;
-        originY = self.viewPointCash.frame.origin.y + self.viewPointCash.frame.size.height + 3.0;
-    }
-    originX = marginL;
-    if (self.viewPointFeedback)
-    {
-        CGRect frame = CGRectMake(originX, originY, columnWidth, columnHeight);
-        self.viewPointFeedback.frame = frame;
-        originY = self.viewPointFeedback.frame.origin.y + self.viewPointFeedback.frame.size.height + 5.0;
-    }
-    if (self.buttonExchangeDesc)
-    {
-        CGRect frame = CGRectMake(originX, originY, halfColumnWidth, columnHeight);
-        self.buttonExchangeDesc.frame = frame;
-        originX = self.buttonExchangeDesc.frame.origin.x + self.buttonExchangeDesc.frame.size.width + intervalH;
-    }
-    if (self.buttonInstallmentCal)
-    {
-        CGRect frame = CGRectMake(originX, originY, halfColumnWidth, columnHeight);
-        self.buttonInstallmentCal.frame = frame;
-        originY = self.buttonInstallmentCal.frame.origin.y + self.buttonInstallmentCal.frame.size.height + 5.0;
-    }
-    originX = marginL;
-    if (self.viewChooseSpec)
-    {
-        CGRect frame = CGRectMake(originX, originY, columnWidth, columnHeight);
-        self.viewChooseSpec.frame = frame;
-        originY = self.viewChooseSpec.frame.origin.y + self.viewChooseSpec.frame.size.height + 5.0;
-    }
-    if (self.viewNotice)
-    {
-        CGSize size = [self.viewNotice referenceSizeForViewWidth:columnWidth];
-        CGRect frame = CGRectMake(originX, originY, size.width, size.height);
-        self.viewNotice.frame = frame;
-        originY = self.viewNotice.frame.origin.y + self.viewNotice.frame.size.height + 5.0;
-    }
-    
-    if (self.viewSpecTitle)
-    {
-        CGRect frame = CGRectMake(0.0, originY, self.scrollView.frame.size.width, 50.0);
-        self.viewSpecTitle.frame = frame;
-        originY = self.viewSpecTitle.frame.origin.y + self.viewSpecTitle.frame.size.height;
-    }
-    
-    scrollBottom = originY + marginB;
-    [self.scrollView setContentSize:CGSizeMake(self.scrollView.frame.size.width, scrollBottom)];
 }
 
 - (UIScrollView *)scrollView
@@ -250,8 +166,9 @@
     if (_collectionViewImage == nil)
     {
         UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
+        layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
         _collectionViewImage = [[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:layout];
-        [_collectionViewImage setBackgroundColor:[UIColor grayColor]];
+        [_collectionViewImage setBackgroundColor:[UIColor whiteColor]];
         [_collectionViewImage setDelegate:self];
         [_collectionViewImage setDataSource:self];
         [_collectionViewImage setPagingEnabled:YES];
@@ -265,6 +182,7 @@
     if (_pageControlImage == nil)
     {
         _pageControlImage = [[UIPageControl alloc] initWithFrame:CGRectZero];
+        [_pageControlImage setBackgroundColor:[UIColor clearColor]];
         [_pageControlImage setPageIndicatorTintColor:[UIColor lightGrayColor]];
         [_pageControlImage setCurrentPageIndicatorTintColor:[UIColor colorWithRed:(130.0/255.0) green:(193.0/255.0) blue:(88.0/255.0) alpha:1.0]];
     }
@@ -308,6 +226,7 @@
     if (_viewPromotion == nil)
     {
         _viewPromotion = [[ProductDetailPromotionLabelView alloc] initWithFrame:CGRectZero];
+        _viewPromotion.tintColor = [UIColor orangeColor];
     }
     return _viewPromotion;
 }
@@ -342,7 +261,8 @@
     {
         _labelOriginPrice = [[ProductPriceLabel alloc] initWithFrame:CGRectZero];
         [_labelOriginPrice setBackgroundColor:[UIColor clearColor]];
-        [_labelOriginPrice setTextColor:[UIColor redColor]];
+        [_labelOriginPrice setTextColor:[UIColor lightGrayColor]];
+        [_labelOriginPrice.viewLine setBackgroundColor:_labelOriginPrice.textColor];
         UIFont *font = [UIFont systemFontOfSize:12.0];
         [_labelOriginPrice setFont:font];
         [_labelOriginPrice setPrefix:[LocalizedString OriginPrice_C_$]];
@@ -367,6 +287,7 @@
     {
         _viewPoint = [[BorderedDoubleLabelView alloc] initWithFrame:CGRectZero];
         [_viewPoint.labelL setText:[LocalizedString PointNumber]];
+        [_viewPoint.labelR setTextColor:[UIColor orangeColor]];
     }
     return _viewPoint;
 }
@@ -377,6 +298,7 @@
     {
         _viewPointCash = [[BorderedDoubleLabelView alloc] initWithFrame:CGRectZero];
         [_viewPointCash.labelL setText:[LocalizedString PointAddCash]];
+        [_viewPointCash.labelR setTextColor:[UIColor orangeColor]];
     }
     return _viewPointCash;
 }
@@ -437,19 +359,45 @@
     return _viewChooseSpec;
 }
 
-- (ImageTextView *)viewNotice
+- (DTAttributedLabel *)labelAdText
 {
-    if (_viewNotice == nil)
+    if (_labelAdText == nil)
     {
-        _viewNotice = [[ImageTextView alloc] initWithFrame:CGRectZero];
-        UIImage *image = [UIImage imageNamed:@"sho_ico_warring"];
+        _labelAdText = [[DTAttributedLabel alloc] initWithFrame:CGRectZero];
+        _labelAdText.layoutFrameHeightIsConstrainedByBounds = NO;
+        _labelAdText.shouldDrawLinks = YES;
+        _labelAdText.shouldDrawImages = YES;
+        _labelAdText.delegate = self;
+    }
+    return _labelAdText;
+}
+
+- (ProductDetailSectionTitleView *)viewIntroTitle
+{
+    if (_viewIntroTitle == nil)
+    {
+        _viewIntroTitle = [[ProductDetailSectionTitleView alloc] initWithFrame:CGRectZero];
+        UIImage *image = [UIImage imageNamed:@"sho_info_ico1"];
         if (image)
         {
-            _viewNotice.imageViewIcon.image = image;
+            [_viewIntroTitle.viewTitle.imageViewIcon setImage:image];
         }
-        [_viewNotice.labelText setText:[LocalizedString ProductDetailNotice]];
+        [_viewIntroTitle.viewTitle.labelText setText:[LocalizedString ProductIntroduce]];
     }
-    return _viewNotice;
+    return _viewIntroTitle;
+}
+
+- (DTAttributedLabel *)labelIntro
+{
+    if (_labelIntro == nil)
+    {
+        _labelIntro = [[DTAttributedLabel alloc] initWithFrame:CGRectZero];
+        _labelIntro.layoutFrameHeightIsConstrainedByBounds = NO;
+        _labelIntro.shouldDrawLinks = YES;
+        _labelIntro.shouldDrawImages = YES;
+        _labelIntro.delegate = self;
+    }
+    return _labelIntro;
 }
 
 - (ProductDetailSectionTitleView *)viewSpecTitle
@@ -457,14 +405,868 @@
     if (_viewSpecTitle == nil)
     {
         _viewSpecTitle = [[ProductDetailSectionTitleView alloc] initWithFrame:CGRectZero];
-        UIImage *image = [UIImage imageNamed:@"sho_info_ico1"];
+        UIImage *image = [UIImage imageNamed:@"sho_info_ico2"];
         if (image)
         {
             [_viewSpecTitle.viewTitle.imageViewIcon setImage:image];
         }
-        [_viewSpecTitle.viewTitle.labelText setText:[LocalizedString ProductIntroduce]];
+        [_viewSpecTitle.viewTitle.labelText setText:[LocalizedString ProductSpec]];
     }
     return _viewSpecTitle;
+}
+
+- (DTAttributedLabel *)labelSpec
+{
+    if (_labelSpec == nil)
+    {
+        _labelSpec = [[DTAttributedLabel alloc] initWithFrame:CGRectZero];
+        _labelSpec.layoutFrameHeightIsConstrainedByBounds = NO;
+        _labelSpec.shouldDrawLinks = YES;
+        _labelSpec.shouldDrawImages = YES;
+        _labelSpec.delegate = self;
+    }
+    return _labelSpec;
+}
+
+- (ProductDetailSectionTitleView *)viewRemarkTitle
+{
+    if (_viewRemarkTitle == nil)
+    {
+        _viewRemarkTitle = [[ProductDetailSectionTitleView alloc] initWithFrame:CGRectZero];
+        UIImage *image = [UIImage imageNamed:@"sho_info_ico4"];
+        if (image)
+        {
+            [_viewRemarkTitle.viewTitle.imageViewIcon setImage:image];
+        }
+        [_viewRemarkTitle.viewTitle.labelText setText:[LocalizedString Remark]];
+    }
+    return _viewRemarkTitle;
+}
+
+- (DTAttributedLabel *)labelRemark
+{
+    if (_labelRemark == nil)
+    {
+        _labelRemark = [[DTAttributedLabel alloc] initWithFrame:CGRectZero];
+        _labelRemark.layoutFrameHeightIsConstrainedByBounds = NO;
+        _labelRemark.shouldDrawLinks = YES;
+        _labelRemark.shouldDrawImages = YES;
+        _labelRemark.delegate = self;
+    }
+    return _labelRemark;
+}
+
+- (ProductDetailSectionTitleView *)viewShippingAndWarrentyTitle
+{
+    if (_viewShippingAndWarrentyTitle == nil)
+    {
+        _viewShippingAndWarrentyTitle = [[ProductDetailSectionTitleView alloc] initWithFrame:CGRectZero];
+        UIImage *image = [UIImage imageNamed:@"sho_info_ico3"];
+        if (image)
+        {
+            [_viewShippingAndWarrentyTitle.viewTitle.imageViewIcon setImage:image];
+        }
+        [_viewShippingAndWarrentyTitle.viewTitle.labelText setText:[LocalizedString ShippingAndWarrentyDescription]];
+    }
+    return _viewShippingAndWarrentyTitle;
+}
+
+- (DTAttributedLabel *)labelShippingAndWarrenty
+{
+    if (_labelShippingAndWarrenty == nil)
+    {
+        _labelShippingAndWarrenty = [[DTAttributedLabel alloc] initWithFrame:CGRectZero];
+        _labelShippingAndWarrenty.layoutFrameHeightIsConstrainedByBounds = NO;
+        _labelShippingAndWarrenty.shouldDrawLinks = YES;
+        _labelShippingAndWarrenty.shouldDrawImages = YES;
+        _labelShippingAndWarrenty.delegate = self;
+    }
+    return _labelShippingAndWarrenty;
+}
+
+#pragma mark - Private Methods
+
+- (void)retrieveDataForIdentifer:(NSNumber *)identifier
+{
+    if (identifier == nil)
+    {
+        return;
+    }
+    __weak ProductDetailViewController *weakSelf = self;
+    NSString *apiKey = [CryptoModule sharedModule].apiKey;
+    NSString *token = [SHAPIAdapter sharedAdapter].token;
+    NSURL *url = [NSURL URLWithString:SymphoxAPI_productDetail];
+    //    NSLog(@"retrieveDataForIdentifer - url [%@]", [url absoluteString]);
+    NSDictionary *headerFields = [NSDictionary dictionaryWithObjectsAndKeys:apiKey, SymphoxAPIParam_key, token, SymphoxAPIParam_token, nil];
+    NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:identifier, SymphoxAPIParam_cpdt_num, nil];
+    [[SHAPIAdapter sharedAdapter] sendRequestFromObject:weakSelf ToUrl:url withHeaderFields:headerFields andPostObject:parameters inPostFormat:SHPostFormatJson encrypted:YES decryptedReturnData:YES completion:^(id resultObject, NSError *error){
+        if (error == nil)
+        {
+            //            NSLog(@"resultObject[%@]:\n%@", [[resultObject class] description], [resultObject description]);
+            if ([resultObject isKindOfClass:[NSData class]])
+            {
+                NSData *data = (NSData *)resultObject;
+                NSString *string = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+                NSLog(@"retrieveDataForIdentifer:\n%@", string);
+                if ([weakSelf processProductData:data])
+                {
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [weakSelf layoutCustomSubviews];
+                    });
+                }
+                else
+                {
+                    NSLog(@"retrieveDataForIdentifer - Cannot process data.");
+                }
+            }
+            else
+            {
+                NSLog(@"retrieveDataForIdentifer - Unexpected data format.");
+            }
+        }
+        else
+        {
+            NSString *errorMessage = [LocalizedString CannotLoadData];
+            NSDictionary *userInfo = error.userInfo;
+            BOOL errorProductNotFound = NO;
+            if (userInfo)
+            {
+                NSString *errorId = [userInfo objectForKey:SymphoxAPIParam_id];
+                if ([errorId compare:SymphoxAPIError_E301 options:NSCaseInsensitiveSearch] == NSOrderedSame)
+                {
+                    errorProductNotFound = YES;
+                }
+                if (errorProductNotFound)
+                {
+                    NSString *serverMessage = [userInfo objectForKey:SymphoxAPIParam_status_desc];
+                    if (serverMessage)
+                    {
+                        errorMessage = serverMessage;
+                    }
+                }
+            }
+            NSLog(@"retrieveDataForIdentifer - error:\n%@", [error description]);
+            UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:errorMessage preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertAction *backAction = [UIAlertAction actionWithTitle:[LocalizedString GoBack] style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
+                if (weakSelf.navigationController)
+                {
+                    [weakSelf.navigationController popViewControllerAnimated:YES];
+                    return;
+                }
+                if (weakSelf.presentingViewController)
+                {
+                    [weakSelf.presentingViewController dismissViewControllerAnimated:YES completion:nil];
+                }
+            }];
+            [alertController addAction:backAction];
+            if (errorProductNotFound == NO)
+            {
+                UIAlertAction *reloadAction = [UIAlertAction actionWithTitle:[LocalizedString Reload] style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
+                    [weakSelf retrieveDataForIdentifer:identifier];
+                }];
+                [alertController addAction:reloadAction];
+            }
+            [weakSelf presentViewController:alertController animated:YES completion:nil];
+        }
+    }];
+}
+
+- (BOOL)processProductData:(id)data
+{
+    BOOL success = NO;
+    if (data == nil)
+    {
+        return success;
+    }
+    NSError *error = nil;
+    id jsonObject = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
+    if (error == nil && jsonObject)
+    {
+        if ([jsonObject isKindOfClass:[NSDictionary class]])
+        {
+            self.dictionaryDetail = (NSDictionary *)jsonObject;
+            [self refreshContent];
+            success = YES;
+        }
+    }
+    return success;
+}
+
+- (void)layoutCustomSubviews
+{
+    CGFloat scrollBottom = self.view.frame.size.height;
+    if (self.bottomBar)
+    {
+        CGFloat bottomBarHeight = 49.0;
+        CGRect frame = CGRectMake(0.0, self.view.frame.size.height - bottomBarHeight, self.view.frame.size.width, bottomBarHeight);
+        self.bottomBar.frame = frame;
+        scrollBottom = self.bottomBar.frame.origin.y;
+    }
+    if (self.scrollView)
+    {
+        CGRect frame = CGRectMake(0.0, 0.0, self.view.frame.size.width, scrollBottom);
+        self.scrollView.frame = frame;
+    }
+    CGFloat originY = 0.0;
+    CGFloat originX = 0.0;
+    CGFloat marginL = 10.0;
+    CGFloat marginR = 10.0;
+    CGFloat marginB = 10.0;
+    CGFloat columnWidth = self.scrollView.frame.size.width - (marginL + marginR);
+    
+    if (self.collectionViewImage && [self.collectionViewImage isHidden] == NO)
+    {
+        CGRect frame = CGRectMake(originX, originY, self.scrollView.frame.size.width, self.scrollView.frame.size.width);
+        self.collectionViewImage.frame = frame;
+        originY = self.collectionViewImage.frame.origin.x + self.collectionViewImage.frame.size.height;
+    }
+    if (self.pageControlImage && [self.pageControlImage isHidden] == NO)
+    {
+        CGSize size = [self.pageControlImage sizeForNumberOfPages:[self.arrayImagePath count]];
+        CGRect frame = CGRectMake((self.scrollView.frame.size.width - size.width)/2, originY, size.width, size.height);
+        self.pageControlImage.frame = frame;
+        originY = self.pageControlImage.frame.origin.y + self.pageControlImage.frame.size.height;
+    }
+    if (self.labelMarketing && [self.labelMarketing isHidden] == NO)
+    {
+        originX = marginL;
+        NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
+        style.lineBreakMode = self.labelMarketing.lineBreakMode;
+        style.alignment = self.labelMarketing.textAlignment;
+        NSDictionary *attributes = [NSDictionary dictionaryWithObjectsAndKeys:self.labelMarketing.font, NSFontAttributeName, style, NSParagraphStyleAttributeName, nil];
+        CGRect boundingRect = [self.labelMarketing.text boundingRectWithSize:CGSizeMake(columnWidth, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin attributes:attributes context:nil];
+        CGRect frame = CGRectMake(originX, originY, ceil(boundingRect.size.width), ceil(boundingRect.size.height));
+        self.labelMarketing.frame = frame;
+        originY = self.labelMarketing.frame.origin.y + self.labelMarketing.frame.size.height + 2.0;
+    }
+    if (self.labelProductName && [self.labelProductName isHidden] == NO)
+    {
+        originX = marginL;
+        NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
+        style.lineBreakMode = self.labelProductName.lineBreakMode;
+        style.alignment = self.labelProductName.textAlignment;
+        NSDictionary *attributes = [NSDictionary dictionaryWithObjectsAndKeys:self.labelProductName.font, NSFontAttributeName, style, NSParagraphStyleAttributeName, nil];
+        CGRect boundingRect = [self.labelProductName.text boundingRectWithSize:CGSizeMake(columnWidth, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin attributes:attributes context:nil];
+        CGRect frame = CGRectMake(originX, originY, ceil(boundingRect.size.width), ceil(boundingRect.size.height));
+        self.labelProductName.frame = frame;
+        originY = self.labelProductName.frame.origin.y + self.labelProductName.frame.size.height + 2.0;
+    }
+    if (self.viewPromotion && [self.viewPromotion isHidden] == NO)
+    {
+        CGFloat height = [self.viewPromotion referenceHeightForViewWidth:self.scrollView.frame.size.width];
+        CGRect frame = CGRectMake(marginL, originY, self.scrollView.frame.size.width - (marginL + marginR), height);
+        self.viewPromotion.frame = frame;
+        originY = self.viewPromotion.frame.origin.y + self.viewPromotion.frame.size.height + 2.0;
+    }
+    CGFloat priceOriginX = self.scrollView.frame.size.width - marginR;
+    CGFloat priceBottomY = originY;
+    if (self.labelPrice && [self.labelPrice isHidden] == NO)
+    {
+        CGSize size = [self.labelPrice referenceSize];
+        priceOriginX -= size.width;
+        if (originY + size.height > priceBottomY)
+        {
+            priceBottomY = originY + size.height;
+        }
+        CGFloat buttonOriginY = priceBottomY - size.height;
+        CGRect frame = CGRectMake(priceOriginX, buttonOriginY, size.width, size.height);
+        self.labelPrice.frame = frame;
+        priceOriginX -= 3.0;
+    }
+    if (self.labelOriginPrice && [self.labelOriginPrice isHidden] == NO)
+    {
+        CGSize size = [self.labelOriginPrice referenceSize];
+        priceOriginX -= size.width;
+        if (originY + size.height > priceBottomY)
+        {
+            priceBottomY = originY + size.height;
+        }
+        CGFloat buttonOriginY = priceBottomY - size.height;
+        CGRect frame = CGRectMake(priceOriginX, buttonOriginY, size.width, size.height);
+        self.labelOriginPrice.frame = frame;
+    }
+    originY = priceBottomY + 2.0;
+    if (self.separator)
+    {
+        CGFloat separatorHeight = 1.0;
+        CGRect frame = CGRectMake(originX, originY, columnWidth, separatorHeight);
+        self.separator.frame = frame;
+        originY = self.separator.frame.origin.y + self.separator.frame.size.height + 5.0;
+    }
+    CGFloat intervalH = 5.0;
+    CGFloat halfColumnWidth = ceil((self.scrollView.frame.size.width - (marginL + marginR + intervalH))/2);
+    CGFloat columnHeight = 40.0;
+    if (self.viewPoint)
+    {
+        CGRect frame = CGRectMake(originX, originY, halfColumnWidth, columnHeight);
+        self.viewPoint.frame = frame;
+        originX = self.viewPoint.frame.origin.x + self.viewPoint.frame.size.width + intervalH;
+        [self.viewPoint setNeedsLayout];
+    }
+    if (self.viewPointCash)
+    {
+        CGRect frame = CGRectMake(originX, originY, halfColumnWidth, columnHeight);
+        self.viewPointCash.frame = frame;
+        originY = self.viewPointCash.frame.origin.y + self.viewPointCash.frame.size.height + 3.0;
+        [self.viewPointCash setNeedsLayout];
+    }
+    originX = marginL;
+    if (self.viewPointFeedback && [self.viewPointFeedback isHidden] == NO)
+    {
+        CGRect frame = CGRectMake(originX, originY, columnWidth, columnHeight);
+        self.viewPointFeedback.frame = frame;
+        originY = self.viewPointFeedback.frame.origin.y + self.viewPointFeedback.frame.size.height + 5.0;
+        [self.viewPointFeedback setNeedsLayout];
+    }
+    if (self.buttonExchangeDesc)
+    {
+        CGRect frame = CGRectMake(originX, originY, halfColumnWidth, columnHeight);
+        self.buttonExchangeDesc.frame = frame;
+        originX = self.buttonExchangeDesc.frame.origin.x + self.buttonExchangeDesc.frame.size.width + intervalH;
+    }
+    if (self.buttonInstallmentCal)
+    {
+        CGRect frame = CGRectMake(originX, originY, halfColumnWidth, columnHeight);
+        self.buttonInstallmentCal.frame = frame;
+        originY = self.buttonInstallmentCal.frame.origin.y + self.buttonInstallmentCal.frame.size.height + 5.0;
+    }
+    originX = marginL;
+    if (self.viewChooseSpec)
+    {
+        CGRect frame = CGRectMake(originX, originY, columnWidth, columnHeight);
+        self.viewChooseSpec.frame = frame;
+        originY = self.viewChooseSpec.frame.origin.y + self.viewChooseSpec.frame.size.height + 5.0;
+        [self.viewChooseSpec setNeedsLayout];
+    }
+    if ([self.arrayViewNotice count] > 0)
+    {
+        for (ImageTextView *view in self.arrayViewNotice)
+        {
+            CGSize size = [view referenceSizeForViewWidth:columnWidth];
+            CGRect frame = CGRectMake(originX, originY, size.width, size.height);
+            view.frame = frame;
+            originY = view.frame.origin.y + view.frame.size.height + 5.0;
+        }
+    }
+    
+    if (self.labelAdText && [self.labelAdText isHidden] == NO)
+    {
+        CGFloat maxWidth = self.scrollView.frame.size.width - marginL - marginR;
+        CGSize size = [self.labelAdText suggestedFrameSizeToFitEntireStringConstraintedToWidth:maxWidth];
+        CGRect frame = CGRectMake(originX, originY, maxWidth, ceil(size.height));
+        self.labelAdText.frame = frame;
+        originY = self.labelAdText.frame.origin.y + self.labelAdText.frame.size.height + 5.0;
+    }
+    
+    if (self.viewIntroTitle && [self.viewIntroTitle isHidden] == NO)
+    {
+        CGRect frame = CGRectMake(0.0, originY, self.scrollView.frame.size.width, 50.0);
+        self.viewIntroTitle.frame = frame;
+        originY = self.viewIntroTitle.frame.origin.y + self.viewIntroTitle.frame.size.height + 5.0;
+    }
+    
+    if (self.labelIntro && [self.labelIntro isHidden] == NO)
+    {
+        CGFloat maxWidth = self.scrollView.frame.size.width - marginL - marginR;
+        CGSize size = [self.labelIntro suggestedFrameSizeToFitEntireStringConstraintedToWidth:maxWidth];
+        CGRect frame = CGRectMake(originX, originY, maxWidth, ceil(size.height));
+        self.labelIntro.frame = frame;
+        originY = self.labelIntro.frame.origin.y + self.labelIntro.frame.size.height + 5.0;
+    }
+    
+    if (self.viewSpecTitle && [self.viewSpecTitle isHidden] == NO)
+    {
+        CGRect frame = CGRectMake(0.0, originY, self.scrollView.frame.size.width, 50.0);
+        self.viewSpecTitle.frame = frame;
+        originY = self.viewSpecTitle.frame.origin.y + self.viewSpecTitle.frame.size.height + 5.0;
+    }
+    
+    if (self.labelSpec && [self.labelSpec isHidden] == NO)
+    {
+        CGFloat maxWidth = self.scrollView.frame.size.width - marginL - marginR;
+        CGSize size = [self.labelSpec suggestedFrameSizeToFitEntireStringConstraintedToWidth:maxWidth];
+        CGRect frame = CGRectMake(originX, originY, maxWidth, ceil(size.height));
+        self.labelSpec.frame = frame;
+        originY = self.labelSpec.frame.origin.y + self.labelSpec.frame.size.height + 5.0;
+    }
+    
+    if (self.viewRemarkTitle && [self.viewRemarkTitle isHidden] == NO)
+    {
+        CGRect frame = CGRectMake(0.0, originY, self.scrollView.frame.size.width, 50.0);
+        self.viewRemarkTitle.frame = frame;
+        originY = self.viewRemarkTitle.frame.origin.y + self.viewRemarkTitle.frame.size.height + 5.0;
+    }
+    if (self.labelRemark && [self.labelRemark isHidden] == NO)
+    {
+        CGFloat maxWidth = self.scrollView.frame.size.width - marginL - marginR;
+        CGSize size = [self.labelRemark suggestedFrameSizeToFitEntireStringConstraintedToWidth:maxWidth];
+        CGRect frame = CGRectMake(originX, originY, maxWidth, ceil(size.height));
+        self.labelRemark.frame = frame;
+        originY = self.labelRemark.frame.origin.y + self.labelRemark.frame.size.height + 5.0;
+    }
+    if (self.viewShippingAndWarrentyTitle && [self.viewShippingAndWarrentyTitle isHidden] == NO)
+    {
+        CGRect frame = CGRectMake(0.0, originY, self.scrollView.frame.size.width, 50.0);
+        self.viewShippingAndWarrentyTitle.frame = frame;
+        originY = self.viewShippingAndWarrentyTitle.frame.origin.y + self.viewShippingAndWarrentyTitle.frame.size.height + 5.0;
+    }
+    if (self.labelShippingAndWarrenty && [self.labelShippingAndWarrenty isHidden] == NO)
+    {
+        CGFloat maxWidth = self.scrollView.frame.size.width - marginL - marginR;
+        CGSize size = [self.labelShippingAndWarrenty suggestedFrameSizeToFitEntireStringConstraintedToWidth:maxWidth];
+        CGRect frame = CGRectMake(originX, originY, maxWidth, ceil(size.height));
+        self.labelShippingAndWarrenty.frame = frame;
+        originY = self.labelShippingAndWarrenty.frame.origin.y + self.labelShippingAndWarrenty.frame.size.height + 5.0;
+    }
+    
+    scrollBottom = originY + marginB;
+    [self.scrollView setContentSize:CGSizeMake(self.scrollView.frame.size.width, scrollBottom)];
+}
+
+- (void)refreshContent
+{
+    if (self.dictionaryDetail == nil)
+    {
+        return;
+    }
+    for (ImageTextView *view in self.arrayViewNotice)
+    {
+        [view removeFromSuperview];
+    }
+    [self.arrayViewNotice removeAllObjects];
+    
+    // Images and pageControl
+    NSArray *imagePaths = [self.dictionaryDetail objectForKey:SymphoxAPIParam_img_url];
+    if (imagePaths && [imagePaths isEqual:[NSNull null]] == NO && [imagePaths count] > 0)
+    {
+        self.arrayImagePath = imagePaths;
+        [self.collectionViewImage reloadData];
+        [self.pageControlImage setNumberOfPages:[self.arrayImagePath count]];
+        [self.collectionViewImage setHidden:NO];
+        [self.pageControlImage setHidden:NO];
+    }
+    else
+    {
+        [self.collectionViewImage setHidden:YES];
+        [self.pageControlImage setHidden:YES];
+    }
+    
+    NSString *marketName = [self.dictionaryDetail objectForKey:SymphoxAPIParam_market_name];
+    if (marketName)
+    {
+        [self.labelMarketing setText:marketName];
+        [self.labelMarketing setHidden:NO];
+    }
+    else
+    {
+        [self.labelMarketing setText:@""];
+        [self.labelMarketing setHidden:YES];
+    }
+    
+    NSString *productName = [self.dictionaryDetail objectForKey:SymphoxAPIParam_name];
+    if (productName)
+    {
+        [self.labelProductName setText:productName];
+        [self.labelProductName setHidden:NO];
+    }
+    else
+    {
+        [self.labelProductName setText:@""];
+        [self.labelProductName setHidden:YES];
+    }
+    
+    NSString *promotion = [self.dictionaryDetail objectForKey:SymphoxAPIParam_campaign_discount];
+    if (promotion && [promotion isEqual:[NSNull null]] == NO && [promotion length] > 0)
+    {
+        [self.viewPromotion setPromotion:promotion];
+        [self.viewPromotion setHidden:NO];
+    }
+    else
+    {
+        [self.viewPromotion.labelPromotion setText:@""];
+        [self.viewPromotion setHidden:YES];
+    }
+    
+    NSNumber *originPrice = [self.dictionaryDetail objectForKey:SymphoxAPIParam_market_price];
+    if (originPrice && [originPrice isEqual:[NSNull null]] == NO)
+    {
+        self.labelOriginPrice.price = originPrice;
+        [self.labelOriginPrice setHidden:NO];
+    }
+    else
+    {
+        self.labelOriginPrice.price = nil;
+        [self.labelOriginPrice setHidden:YES];
+    }
+    
+    NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
+    [formatter setNumberStyle:NSNumberFormatterDecimalStyle];
+    
+    NSDictionary *dictionaryPrice = [self.dictionaryDetail objectForKey:SymphoxAPIParam_price];
+    if (dictionaryPrice && [dictionaryPrice isEqual:[NSNull null]] == NO)
+    {
+        if (self.viewPoint)
+        {
+            NSString *stringPoint = nil;
+            NSDictionary *dictionary = [dictionaryPrice objectForKey:SymphoxAPIParam_01];
+            if (dictionary && [dictionary isEqual:[NSNull null]] == NO)
+            {
+                NSNumber *point = [dictionary objectForKey:SymphoxAPIParam_point];
+                if (point && [point isEqual:[NSNull null]] == NO)
+                {
+                    stringPoint = [formatter stringFromNumber:point];
+                }
+            }
+            if (stringPoint)
+            {
+                self.viewPoint.labelR.textColor = [UIColor orangeColor];
+            }
+            else
+            {
+                stringPoint = @"－－";
+                self.viewPoint.labelR.textColor = [UIColor lightGrayColor];
+            }
+            NSString *totalString = [NSString stringWithFormat:@"%@%@", stringPoint, [LocalizedString Point]];
+            self.viewPoint.labelR.text = totalString;
+        }
+        if (self.viewPointCash)
+        {
+            NSString *stringPoint = nil;
+            NSString *stringCash = nil;
+            NSDictionary *dictionary = [dictionaryPrice objectForKey:SymphoxAPIParam_02];
+            if (dictionary && [dictionary isEqual:[NSNull null]] == NO)
+            {
+                NSNumber *point = [dictionary objectForKey:SymphoxAPIParam_point];
+                if (point && [point isEqual:[NSNull null]] == NO)
+                {
+                    stringPoint = [formatter stringFromNumber:point];
+                }
+                NSNumber *cash = [dictionary objectForKey:SymphoxAPIParam_cash];
+                if (cash && [cash isEqual:[NSNull null]] == NO)
+                {
+                    stringCash = [formatter stringFromNumber:cash];
+                }
+            }
+            
+            NSString *stringPointWithSuffix = nil;
+            if (stringPoint)
+            {
+                stringPointWithSuffix = [NSString stringWithFormat:@"%@%@", stringPoint, [LocalizedString Point]];
+            }
+            NSString *stringCashWithPrefix = nil;
+            if (stringCash)
+            {
+                stringCashWithPrefix = [NSString stringWithFormat:@"＄%@", stringCash];
+            }
+            NSString *totalString = nil;
+            if (stringPoint || stringCash)
+            {
+                totalString = [NSString stringWithFormat:@"%@＋%@", stringPointWithSuffix, stringCashWithPrefix];
+                self.viewPointCash.labelR.textColor = [UIColor orangeColor];
+            }
+            else
+            {
+                totalString = @"－－";
+                self.viewPointCash.labelR.textColor = [UIColor lightGrayColor];
+            }
+            self.viewPointCash.labelR.text = totalString;
+        }
+        if (self.labelPrice)
+        {
+            NSNumber *cash = nil;
+            NSDictionary *dictionary = [dictionaryPrice objectForKey:SymphoxAPIParam_03];
+            if (dictionary && [dictionary isEqual:[NSNull null]] == NO)
+            {
+                cash = [dictionary objectForKey:SymphoxAPIParam_cash];
+            }
+            if (cash && [cash isEqual:[NSNull null]] == NO)
+            {
+                self.labelPrice.price = cash;
+                [self.labelPrice setHidden:NO];
+            }
+            else
+            {
+                [self.labelPrice setHidden:YES];
+            }
+        }
+    }
+    
+    NSNumber *numberFeedbackPoint = [self.dictionaryDetail objectForKey:SymphoxAPIParam_freepoint];
+    if (numberFeedbackPoint && [numberFeedbackPoint isEqual:[NSNull null]] == NO)
+    {
+        NSString *stringPoint = [formatter stringFromNumber:numberFeedbackPoint];
+        NSString *totalString = [NSString stringWithFormat:[LocalizedString FeedbackPointUpTo_S], stringPoint];
+        NSRange range = [totalString rangeOfString:stringPoint];
+        NSMutableAttributedString *attrString = [[NSMutableAttributedString alloc] initWithString:totalString];
+        [attrString addAttribute:NSForegroundColorAttributeName value:[UIColor orangeColor] range:range];
+        [self.viewPointFeedback.labelL setAttributedText:attrString];
+        [self.viewPointFeedback setHidden:NO];
+    }
+    else
+    {
+        [self.viewPointFeedback.labelL setText:@""];
+        [self.viewPointFeedback setHidden:YES];
+    }
+    
+    NSArray *arraySpec = [self.dictionaryDetail objectForKey:SymphoxAPIParam_standard];
+    if (arraySpec && [arraySpec isEqual:[NSNull null]] == NO && [arraySpec count] > 0)
+    {
+        for (NSInteger index = 0; index < [arraySpec count]; index++)
+        {
+            NSDictionary *dictionary = [arraySpec objectAtIndex:index];
+            NSNumber *productId = [dictionary objectForKey:SymphoxAPIParam_cpdt_num];
+            if ([productId isEqualToNumber:self.productIdentifier])
+            {
+                self.specIndex = index;
+                break;
+            }
+        }
+    }
+    
+//    NSArray *arrayNotice = [self.dictionaryDetail objectForKey:SymphoxAPIParam_attention];
+    NSArray *arrayNotice = [NSArray arrayWithObjects:[LocalizedString ProductDetailNotice], nil];
+    if (arrayNotice && [arrayNotice isEqual:[NSNull null]] == NO && [arrayNotice count] > 0)
+    {
+        for (NSString *stringNotice in arrayNotice)
+        {
+            if ([stringNotice isEqual:[NSNull null]])
+                continue;
+            ImageTextView *view = [[ImageTextView alloc] initWithFrame:CGRectZero];
+            view.backgroundColor = [UIColor clearColor];
+            UIImage *image = [UIImage imageNamed:@"sho_ico_warring"];
+            if (image)
+            {
+                view.imageViewIcon.image = image;
+            }
+            [view.labelText setText:stringNotice];
+            [self.arrayViewNotice addObject:view];
+            [self.scrollView addSubview:view];
+        }
+    }
+    
+    if (self.labelAdText)
+    {
+        BOOL shouldShow = NO;
+        NSString *stringAdTest = [self.dictionaryDetail objectForKey:SymphoxAPIParam_ad_text];
+        if (stringAdTest && [stringAdTest isEqual:[NSNull null]] == NO && [stringAdTest length] > 0)
+        {
+//            NSData *data = [stringAdTest dataUsingEncoding:NSUTF8StringEncoding];
+//            NSAttributedString *attrString = [[NSAttributedString alloc] initWithHTMLData:data documentAttributes:nil];
+            NSAttributedString *attrString = [self attributedStringFromHtmlString:stringAdTest];
+            if (attrString)
+            {
+                self.labelAdText.attributedString = attrString;
+                shouldShow = YES;
+            }
+        }
+        [self.labelAdText setHidden:!shouldShow];
+    }
+    
+    if (self.viewIntroTitle && self.labelIntro)
+    {
+        BOOL shouldShow = NO;
+        NSDictionary *dictionary = [self.dictionaryDetail objectForKey:SymphoxAPIParam_description];
+        if (dictionary && [dictionary isEqual:[NSNull null]] == NO && [dictionary count] > 0)
+        {
+            NSString *text = [dictionary objectForKey:SymphoxAPIParam_text];
+            if (text && [text isEqual:[NSNull null]] == NO && [text length] > 0)
+            {
+                NSData *data = [text dataUsingEncoding:NSUTF8StringEncoding];
+                NSAttributedString *attrString = [[NSAttributedString alloc] initWithHTMLData:data documentAttributes:nil];
+                if (attrString)
+                {
+                    self.labelIntro.attributedString = attrString;
+                    shouldShow = YES;
+                }
+            }
+        }
+        [self.viewIntroTitle setHidden:!shouldShow];
+        [self.labelIntro setHidden:!shouldShow];
+    }
+    
+    if (self.viewSpecTitle && self.labelSpec)
+    {
+        BOOL shouldShow = NO;
+        NSDictionary *dictionary = [self.dictionaryDetail objectForKey:SymphoxAPIParam_specification];
+        if (dictionary && [dictionary isEqual:[NSNull null]] == NO && [dictionary count] > 0)
+        {
+            NSString *text = [dictionary objectForKey:SymphoxAPIParam_text];
+            if (text && [text isEqual:[NSNull null]] == NO && [text length] > 0)
+            {
+                NSData *data = [text dataUsingEncoding:NSUTF8StringEncoding];
+                NSAttributedString *attrString = [[NSAttributedString alloc] initWithHTMLData:data documentAttributes:nil];
+                if (attrString)
+                {
+                    self.labelSpec.attributedString = attrString;
+                    shouldShow = YES;
+                }
+            }
+        }
+        [self.viewSpecTitle setHidden:!shouldShow];
+        [self.labelSpec setHidden:!shouldShow];
+    }
+    
+    if (self.viewRemarkTitle && self.labelRemark)
+    {
+        BOOL shouldShow = NO;
+        NSString *text = [self.dictionaryDetail objectForKey:SymphoxAPIParam_remark];
+        if (text && [text isEqual:[NSNull null]] == NO && [text length] > 0)
+        {
+            NSData *data = [text dataUsingEncoding:NSUTF8StringEncoding];
+            NSAttributedString *attrString = [[NSAttributedString alloc] initWithHTMLData:data documentAttributes:nil];
+            if (attrString)
+            {
+                self.labelRemark.attributedString = attrString;
+                shouldShow = YES;
+            }
+        }
+        [self.viewRemarkTitle setHidden:!shouldShow];
+        [self.labelRemark setHidden:!shouldShow];
+    }
+}
+
+- (NSAttributedString *)attributedStringFromHtmlString:(NSString *)html
+{
+    // Load HTML data
+    NSData *data = [html dataUsingEncoding:NSUTF8StringEncoding];
+    
+    // Create attributed string from HTML
+    CGSize maxImageSize = CGSizeMake(self.view.bounds.size.width - 20.0, self.view.bounds.size.height - 20.0);
+    
+    // example for setting a willFlushCallback, that gets called before elements are written to the generated attributed string
+    void (^callBackBlock)(DTHTMLElement *element) = ^(DTHTMLElement *element) {
+        
+        // the block is being called for an entire paragraph, so we check the individual elements
+        
+        for (DTHTMLElement *oneChildElement in element.childNodes)
+        {
+            // if an element is larger than twice the font size put it in it's own block
+            if (oneChildElement.displayStyle == DTHTMLElementDisplayStyleInline && oneChildElement.textAttachment.displaySize.height > 2.0 * oneChildElement.fontDescriptor.pointSize)
+            {
+                oneChildElement.displayStyle = DTHTMLElementDisplayStyleBlock;
+                oneChildElement.paragraphStyle.minimumLineHeight = element.textAttachment.displaySize.height;
+                oneChildElement.paragraphStyle.maximumLineHeight = element.textAttachment.displaySize.height;
+            }
+        }
+    };
+    
+    NSMutableDictionary *options = [NSMutableDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithFloat:1.0], NSTextSizeMultiplierDocumentOption, [NSValue valueWithCGSize:maxImageSize], DTMaxImageSize,
+                                    @"Times New Roman", DTDefaultFontFamily,  @"purple", DTDefaultLinkColor, @"red", DTDefaultLinkHighlightColor, callBackBlock, DTWillFlushBlockCallBack, nil];
+    
+    NSAttributedString *string = [[NSAttributedString alloc] initWithHTMLData:data options:options documentAttributes:NULL];
+    
+    return string;
+}
+
+- (void)retrieveTermsForType:(TermType)type
+{
+    __weak ProductDetailViewController *weakSelf = self;
+    NSURL *url = [NSURL URLWithString:SymphoxAPI_terms];
+    NSDictionary *postDictionary = [NSDictionary dictionaryWithObjectsAndKeys:@"TM_O_03", SymphoxAPIParam_txid, [NSString stringWithFormat:@"%lu", (unsigned long)type], SymphoxAPIParam_type, nil];
+    [[SHAPIAdapter sharedAdapter] sendRequestFromObject:weakSelf ToUrl:url withHeaderFields:nil andPostObject:postDictionary inPostFormat:SHPostFormatUrlEncoded encrypted:NO decryptedReturnData:NO completion:^(id resultObject, NSError *error){
+        
+        if (error == nil)
+        {
+            NSString *string = [[NSString alloc] initWithData:resultObject encoding:NSUTF8StringEncoding];
+            NSLog(@"retrieveTermsForType - string:\n%@", string);
+            if ([weakSelf processTermsData:resultObject])
+            {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [weakSelf layoutCustomSubviews];
+                });
+            }
+            else
+            {
+                NSLog(@"Cannot process terms data.");
+            }
+        }
+        else
+        {
+            NSLog(@"error:\n%@", error);
+        }
+        
+    }];
+}
+
+- (BOOL)processTermsData:(id)data
+{
+    BOOL success = NO;
+    if ([data isKindOfClass:[NSData class]])
+    {
+        NSData *sourceData = (NSData *)data;
+        NSError *error = nil;
+        id jsonObject = [NSJSONSerialization JSONObjectWithData:sourceData options:0 error:&error];
+        if (error == nil && jsonObject)
+        {
+            if ([jsonObject isKindOfClass:[NSDictionary class]])
+            {
+                NSDictionary *dictionary = (NSDictionary *)jsonObject;
+                NSString *result = [dictionary objectForKey:SymphoxAPIParam_result];
+                if (result && [result integerValue] == 0)
+                {
+                    NSString *content = [dictionary objectForKey:SymphoxAPIParam_content];
+                    if (content && [content isEqual:[NSNull null]] == NO && [content length] > 0)
+                    {
+                        NSData *data = [content dataUsingEncoding:NSUTF8StringEncoding];
+                        NSAttributedString *attrString = [[NSAttributedString alloc] initWithHTMLData:data documentAttributes:nil];
+                        if (attrString)
+                        {
+                            self.labelShippingAndWarrenty.attributedString = attrString;
+                            success = YES;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    [self.viewShippingAndWarrentyTitle setHidden:!success];
+    [self.labelShippingAndWarrenty setHidden:!success];
+    return success;
+}
+
+#pragma mark - Actions
+
+- (void)buttonLinkPressed:(id)sender
+{
+    if ([sender isKindOfClass:[DTLinkButton class]] == NO)
+        return;
+    DTLinkButton *buttonLink = (DTLinkButton *)sender;
+    NSURL *url = buttonLink.URL;
+    if (url == nil)
+        return;
+    if ([[UIApplication sharedApplication] canOpenURL:url])
+    {
+        [[UIApplication sharedApplication] openURL:url];
+    }
+}
+
+- (void)linkLongPressed:(UILongPressGestureRecognizer *)gestureRecognizer
+{
+    if (gestureRecognizer.state == UIGestureRecognizerStateBegan)
+    {
+        DTLinkButton *button = (id)[gestureRecognizer view];
+        button.highlighted = NO;
+        
+        if ([[UIApplication sharedApplication] canOpenURL:[button.URL absoluteURL]])
+        {
+            UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+            UIAlertAction *actionOpenInSafari = [UIAlertAction actionWithTitle:[LocalizedString OpenInSafari] style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
+                [[UIApplication sharedApplication] openURL:button.URL];
+            }];
+            UIAlertAction *actionCopyLink = [UIAlertAction actionWithTitle:[LocalizedString CopyLink] style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
+                NSString *urlString = [button.URL absoluteString];
+                if (urlString)
+                {
+                    [[UIPasteboard generalPasteboard] setString:[button.URL absoluteString]];
+                }
+            }];
+            UIAlertAction *actionCancel = [UIAlertAction actionWithTitle:[LocalizedString Cancel] style:UIAlertActionStyleDestructive handler:nil];
+            [alertController addAction:actionOpenInSafari];
+            [alertController addAction:actionCopyLink];
+            [alertController addAction:actionCancel];
+            [self presentViewController:alertController animated:YES completion:nil];
+        }
+    }
 }
 
 #pragma mark - ProductDetailBottomBarDelegate
@@ -491,13 +1293,58 @@
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-    return 0;
+    NSInteger numberOfItems = [self.arrayImagePath count];
+    return numberOfItems;
 }
 
-- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
+- (__kindof UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     ProductDetailImageCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:ProductDetailImageCollectionViewCellIdentifier forIndexPath:indexPath];
+    if (indexPath.row < [self.arrayImagePath count])
+    {
+        NSString *imagePath = [self.arrayImagePath objectAtIndex:indexPath.row];
+        cell.imagePath = imagePath;
+    }
     return cell;
+}
+
+#pragma mark - UICollectionViewDelegate
+
+- (void)collectionView:(UICollectionView *)collectionView didEndDisplayingCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    if ([cell isKindOfClass:[ProductDetailImageCollectionViewCell class]])
+    {
+        ProductDetailImageCollectionViewCell *imageCell = (ProductDetailImageCollectionViewCell *)cell;
+        imageCell.imageView.image = nil;
+    }
+}
+
+#pragma mark - UIScrollViewDelegate
+
+- (void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset
+{
+    CGFloat value = targetContentOffset->x / scrollView.frame.size.width;
+//    NSLog(@"scrollViewWillEndDragging to [%4.2f]", value);
+    NSInteger pageIndex = [[NSNumber numberWithDouble:value] integerValue];
+    [self.pageControlImage setCurrentPage:pageIndex];
+}
+
+#pragma mark - UICollectionViewDelegateFlowLayout
+
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    CGSize size = collectionView.frame.size;
+    return size;
+}
+
+- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section
+{
+    return 0.0;
+}
+
+- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section
+{
+    return 0.0;
 }
 
 #pragma mark - BorderedDoubleLabelViewDelegate
@@ -505,6 +1352,39 @@
 - (void)didTouchUpInsideBorderedDoubleView:(BorderedDoubleLabelView *)view
 {
     
+}
+
+#pragma mark - DTAttributedTextContentViewDelegate
+
+- (UIView *)attributedTextContentView:(DTAttributedTextContentView *)attributedTextContentView viewForAttributedString:(NSAttributedString *)string frame:(CGRect)frame
+{
+    NSDictionary *attributes = [string attributesAtIndex:0 effectiveRange:NULL];
+    
+    NSURL *URL = [attributes objectForKey:DTLinkAttribute];
+    NSString *identifier = [attributes objectForKey:DTGUIDAttribute];
+    
+    
+    DTLinkButton *button = [[DTLinkButton alloc] initWithFrame:frame];
+    button.URL = URL;
+    button.minimumHitSize = CGSizeMake(25, 25); // adjusts it's bounds so that button is always large enough
+    button.GUID = identifier;
+    
+    // get image with normal link text
+    UIImage *normalImage = [attributedTextContentView contentImageWithBounds:frame options:DTCoreTextLayoutFrameDrawingDefault];
+    [button setImage:normalImage forState:UIControlStateNormal];
+    
+    // get image for highlighted link text
+    UIImage *highlightImage = [attributedTextContentView contentImageWithBounds:frame options:DTCoreTextLayoutFrameDrawingDrawLinksHighlighted];
+    [button setImage:highlightImage forState:UIControlStateHighlighted];
+    
+    // use normal push action for opening URL
+    [button addTarget:self action:@selector(buttonLinkPressed:) forControlEvents:UIControlEventTouchUpInside];
+    
+    // demonstrate combination with long press
+    UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(linkLongPressed:)];
+    [button addGestureRecognizer:longPress];
+    
+    return button;
 }
 
 @end

@@ -362,7 +362,7 @@ typedef enum : NSUInteger {
     return view;
 }
 
-- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
+- (__kindof UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     SearchCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:SearchCollectionViewCellIdentifier forIndexPath:indexPath];
     NSString *text = @"";

@@ -24,11 +24,13 @@
     self = [super initWithFrame:frame];
     if (self)
     {
-        [self setBackgroundColor:[UIColor colorWithRed:(242.0/255.0) green:(157.0/255.0) blue:(56.0/255.0) alpha:1.0]];
+        self.backgorundColorValid = [UIColor colorWithRed:(242.0/255.0) green:(157.0/255.0) blue:(56.0/255.0) alpha:1.0];
+        self.backgroundColorInvalid = [UIColor lightGrayColor];
+        [self setBackgroundColor:self.backgorundColorValid];
         [self addSubview:self.buttonFavorite];
-        [self addSubview:self.buttonAddToCart];
         [self addSubview:self.separator];
-        [self addSubview:self.buttonPurchase];
+        
+        [self addSubview:self.labelInvalid];
     }
     return self;
 }
@@ -142,6 +144,17 @@
         [_buttonPurchase addTarget:self action:@selector(buttonPurchasePressed:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _buttonPurchase;
+}
+
+- (UILabel *)labelInvalid
+{
+    if (_labelInvalid == nil)
+    {
+        _labelInvalid = [[UILabel alloc] initWithFrame:CGRectZero];
+        [_labelInvalid setTextColor:[UIColor whiteColor]];
+        [_labelInvalid setAdjustsFontSizeToFitWidth:YES];
+    }
+    return _labelInvalid;
 }
 
 #pragma mark - Actions

@@ -47,7 +47,7 @@
     CGFloat marginL = 10.0;
     CGFloat marginR = 10.0;
     CGFloat marginT = 5.0;
-    CGFloat marginB = 10.0;
+//    CGFloat marginB = 10.0;
     CGFloat originX = marginL;
     CGFloat originY = marginT;
     CGFloat intervalH = 5.0;

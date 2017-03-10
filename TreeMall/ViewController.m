@@ -18,6 +18,7 @@
 #import "Definition.h"
 #import "TMInfoManager.h"
 #import "CryptoTool.h"
+#import "DTCoreText.h"
 
 @interface ViewController ()
 
@@ -56,7 +57,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
-    
     NSMutableArray *vControllerArray = [NSMutableArray array];
     NSMutableDictionary *itemImageDictionary = [NSMutableDictionary dictionary];
     NSMutableDictionary *itemSelectedImageDictionary = [NSMutableDictionary dictionary];

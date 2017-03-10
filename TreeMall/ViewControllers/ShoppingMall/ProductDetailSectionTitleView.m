@@ -22,6 +22,7 @@
     if (self)
     {
         _delegate = nil;
+        _topSeparatorHeight = 10.0;
         self.backgroundColor = [UIColor lightGrayColor];
         [self addSubview:self.viewBackground];
         [self addSubview:self.viewTitle];
@@ -54,7 +55,7 @@
 {
     [super layoutSubviews];
     
-    CGFloat marginT = 10.0;
+    CGFloat marginT = self.topSeparatorHeight;
     CGFloat marginL = 10.0;
     CGFloat marginR = 10.0;
     CGFloat originY = marginT;
@@ -148,6 +149,16 @@
         [_buttonRight addTarget:self action:@selector(buttonPressed:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _buttonRight;
+}
+
+- (void)setTopSeparatorHeight:(CGFloat)topSeparatorHeight
+{
+    if (topSeparatorHeight < 0.0)
+        topSeparatorHeight = 0.0;
+    if (_topSeparatorHeight == topSeparatorHeight)
+        return;
+    _topSeparatorHeight = topSeparatorHeight;
+    [self setNeedsLayout];
 }
 
 #pragma mark - Actions

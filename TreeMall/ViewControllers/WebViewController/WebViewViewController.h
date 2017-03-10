@@ -9,12 +9,14 @@
 #import <UIKit/UIKit.h>
 #import <WebKit/WebKit.h>
 
-@interface WebViewViewController : UIViewController <WKUIDelegate>
+@interface WebViewViewController : UIViewController <WKUIDelegate, WKNavigationDelegate>
 
 @property (nonatomic, strong) WKWebView *webView;
 
 @property (nonatomic, strong) NSString *urlString;
 
 @property (nonatomic, strong) NSURL *url;
+
+@property (nonatomic, strong) UIActivityIndicatorView *activityIndicator;
 
 @end

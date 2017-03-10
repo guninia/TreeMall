@@ -99,6 +99,7 @@
 "ChooseSpec"="Choose Spec";
 "ProductDetailNotice"="Product Detail Notice";
 "ProductIntroduce"="Product Introduce";
+"ProductSpec"="Product Spec";
 "Welcome_S__S_"="Welcome！%@%@!";
 "PersonalDataModify"="Personal Data Modify";
 "MyPoints"="My Points";
@@ -134,3 +135,17 @@
 "Start"="start";
 "Due"="due";
 "CouponDetail"="Coupon Detail";
+"CampaignLink"="Campaign Link";
+"AvailableHall"="Available Hall(s)";
+"AvailableProduct"="Available Product(s)";
+"Remark"="Remark";
+"ShippingAndWarrentyDescription"="Shipping And Warrenty";
+"OpenInSafari"="Open in safari";
+"CopyLink"="Copy link";
+"LatestMonth"="Latest Month";
+"LatestHalfYear"="Latest Half Year";
+"LatestYear"="LatestYear";
+"CommonDelivery"="CommonDelivery";
+"FastDelivery"="FastDelivery";
+"StorePickUp"="Pick-Up In Store";
+

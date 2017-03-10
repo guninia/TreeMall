@@ -26,5 +26,6 @@
 @property (nonatomic, strong) UIView *bottomLine;
 @property (nonatomic, strong) UIButton *buttonTransparent;
 @property (nonatomic, strong) UIButton *buttonRight;
+@property (nonatomic, assign) CGFloat topSeparatorHeight;
 
 @end

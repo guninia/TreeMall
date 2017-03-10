@@ -1201,22 +1201,13 @@ static NSUInteger SearchKeywordNumberMax = 8;
     NSString *token = [SHAPIAdapter sharedAdapter].token;
     NSURL *url = [NSURL URLWithString:SymphoxAPI_memberCoupon];
 //    NSLog(@"retrieveUserInformation - [%@]", [url absoluteString]);
-    NSString *stateText = SymphoxAPIParamValue_NotUsed_cht;
-    switch (state) {
-        case CouponStateAlreadyUsed:
-            stateText = SymphoxAPIParamValue_AlreadyUsed_cht;
-            break;
-        case CouponStateExpired:
-            stateText = SymphoxAPIParamValue_Expired_cht;
-            break;
-        default:
-            stateText = SymphoxAPIParamValue_NotUsed_cht;
-            break;
-    }
+//    NSString *stateText = SymphoxAPIParamValue_NotUsed_cht;
+    NSNumber *numberState = [NSNumber numberWithUnsignedInteger:state];
+    
     NSNumber *numberPage = [NSNumber numberWithInteger:pageIndex];
     NSNumber *numberPageCount = [NSNumber numberWithInteger:25];
     NSDictionary *headerFields = [NSDictionary dictionaryWithObjectsAndKeys:apiKey, SymphoxAPIParam_key, token, SymphoxAPIParam_token, nil];
-    NSDictionary *options = [NSDictionary dictionaryWithObjectsAndKeys:self.userIdentifier, SymphoxAPIParam_user_num, stateText, SymphoxAPIParam_status, factor, SymphoxAPIParam_sort_column, order, SymphoxAPIParam_sort_order, numberPage, SymphoxAPIParam_page, numberPageCount, SymphoxAPIParam_page_count, nil];
+    NSDictionary *options = [NSDictionary dictionaryWithObjectsAndKeys:self.userIdentifier, SymphoxAPIParam_user_num, numberState, SymphoxAPIParam_status, factor, SymphoxAPIParam_sort_column, order, SymphoxAPIParam_sort_order, numberPage, SymphoxAPIParam_page, numberPageCount, SymphoxAPIParam_page_count, nil];
     [[SHAPIAdapter sharedAdapter] sendRequestFromObject:weakSelf ToUrl:url withHeaderFields:headerFields andPostObject:options inPostFormat:SHPostFormatJson encrypted:YES decryptedReturnData:YES completion:^(id resultObject, NSError *error){
         id result = nil;
         if (error == nil)
@@ -1280,16 +1271,7 @@ static NSUInteger SearchKeywordNumberMax = 8;
     _userZipCode = nil;
     _userAddress = nil;
     
-    NSURL *url = [self urlForInfoArchive];
-    if ([[NSFileManager defaultManager] fileExistsAtPath:[url path]])
-    {
-        NSError *error = nil;
-        [[NSFileManager defaultManager] removeItemAtURL:url error:&error];
-        if (error)
-        {
-            NSLog(@"Cannot remove archive. Error:\n%@", [error description]);
-        }
-    }
+    [self deleteArchive];
     [[NSNotificationCenter defaultCenter] postNotificationName:PostNotificationName_UserLogout object:self];
 }
 
@@ -1321,6 +1303,20 @@ static NSUInteger SearchKeywordNumberMax = 8;
     return url;
 }
 
+- (void)deleteArchive
+{
+    NSURL *url = [self urlForInfoArchive];
+    if ([[NSFileManager defaultManager] fileExistsAtPath:[url path]])
+    {
+        NSError *error = nil;
+        [[NSFileManager defaultManager] removeItemAtURL:url error:&error];
+        if (error)
+        {
+            NSLog(@"Cannot remove archive. Error:\n%@", [error description]);
+        }
+    }
+}
+
 - (NSString *)keyForCategoryIdentifier:(NSString *)identifier withLayer:(NSNumber *)layer
 {
     NSMutableString *key = [NSMutableString string];
@@ -1342,13 +1338,13 @@ static NSUInteger SearchKeywordNumberMax = 8;
     NSString *apiKey = [CryptoModule sharedModule].apiKey;
     NSString *token = [SHAPIAdapter sharedAdapter].token;
     NSURL *url = [NSURL URLWithString:SymphoxAPI_memberInformation];
-    NSLog(@"retrieveUserInformation - [%@]", [url absoluteString]);
+//    NSLog(@"retrieveUserInformation - [%@]", [url absoluteString]);
     NSDictionary *headerFields = [NSDictionary dictionaryWithObjectsAndKeys:apiKey, SymphoxAPIParam_key, token, SymphoxAPIParam_token, nil];
     NSDictionary *options = [NSDictionary dictionaryWithObjectsAndKeys:self.userIdentifier, SymphoxAPIParam_user_num, nil];
     [[SHAPIAdapter sharedAdapter] sendRequestFromObject:weakSelf ToUrl:url withHeaderFields:headerFields andPostObject:options inPostFormat:SHPostFormatJson encrypted:YES decryptedReturnData:YES completion:^(id resultObject, NSError *error){
         if (error == nil)
         {
-            NSLog(@"retrieveUserInformation - resultObject[%@]:\n%@", [[resultObject class] description], [resultObject description]);
+//            NSLog(@"retrieveUserInformation - resultObject[%@]:\n%@", [[resultObject class] description], [resultObject description]);
             if ([resultObject isKindOfClass:[NSData class]])
             {
                 NSData *data = (NSData *)resultObject;
@@ -1370,7 +1366,7 @@ static NSUInteger SearchKeywordNumberMax = 8;
     id jsonObject = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
     if (error == nil && jsonObject)
     {
-        NSLog(@"processUserInfomation - jsonObject:\n%@", jsonObject);
+//        NSLog(@"processUserInfomation - jsonObject:\n%@", jsonObject);
         if ([jsonObject isKindOfClass:[NSDictionary class]])
         {
             [self updateUserInformationFromInfoDictionary:jsonObject];
@@ -1387,7 +1383,7 @@ static NSUInteger SearchKeywordNumberMax = 8;
     id jsonObject = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
     if (error == nil && jsonObject)
     {
-        NSLog(@"processUserPoint - jsonObject:\n%@", jsonObject);
+//        NSLog(@"processUserPoint - jsonObject:\n%@", jsonObject);
         if ([jsonObject isKindOfClass:[NSDictionary class]])
         {
             NSDictionary *dictionary = (NSDictionary *)jsonObject;
@@ -1437,7 +1433,7 @@ static NSUInteger SearchKeywordNumberMax = 8;
     id jsonObject = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
     if (error == nil && jsonObject)
     {
-        NSLog(@"processUserCoupon - jsonObject:\n%@", jsonObject);
+//        NSLog(@"processUserCoupon - jsonObject:\n%@", jsonObject);
         if ([jsonObject isKindOfClass:[NSDictionary class]])
         {
             NSDictionary *dictionary = (NSDictionary *)jsonObject;

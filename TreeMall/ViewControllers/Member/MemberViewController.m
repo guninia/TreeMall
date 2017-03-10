@@ -12,6 +12,7 @@
 #import "Definition.h"
 #import "APIDefinition.h"
 #import "CouponListViewController.h"
+#import "OrderListViewController.h"
 
 typedef enum : NSUInteger {
     SectionTitleTagCoupon = 1000,
@@ -391,6 +392,8 @@ typedef enum : NSUInteger {
         case SectionTitleTagOrder:
         {
             NSLog(@"didPressButtonBySender - SectionTitleTagOrder");
+            OrderListViewController *viewController = [[OrderListViewController alloc] initWithNibName:@"OrderListViewController" bundle:[NSBundle mainBundle]];
+            [self.navigationController pushViewController:viewController animated:YES];
         }
             break;
         default:

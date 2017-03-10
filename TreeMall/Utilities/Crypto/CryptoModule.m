@@ -72,8 +72,8 @@ static CryptoModule *gCryptoModule = nil;
 
 - (NSData *)decryptFromSourceData:(NSData *)sourceData completion:(void (^)(id, NSError *))block
 {
-    NSString *string = [[NSString alloc] initWithData:sourceData encoding:NSUTF8StringEncoding];
-    NSLog(@"decryptFromSourceData:\n%@", string);
+//    NSString *string = [[NSString alloc] initWithData:sourceData encoding:NSUTF8StringEncoding];
+//    NSLog(@"decryptFromSourceData:\n%@", string);
     NSError *error = nil;
     NSData *data = nil;
     id jsonObject = [NSJSONSerialization JSONObjectWithData:sourceData options:0 error:&error];

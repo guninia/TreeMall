@@ -8,7 +8,11 @@
 
 #import "OrderListViewController.h"
 #import "LocalizedString.h"
-#import "OrderTableViewCell.h"
+#import "TMInfoManager.h"
+#import "Definition.h"
+#import "OrderHeaderReusableView.h"
+#import "OrderListCollectionViewCell.h"
+#import "LoadingFoorterReusableView.h"
 
 @interface OrderListViewController ()
 
@@ -21,19 +25,39 @@
 
 @implementation OrderListViewController
 
+- (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+{
+    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    if (self)
+    {
+        _currentPage = 0;
+        _arrayDeliverTypes = DeliverTypeNoSpecific;
+        _arrayOrderTimeOptions = OrderTimeNoSpecific;
+    }
+    return self;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     self.title = [LocalizedString MyOrder];
+    [self.view setBackgroundColor:[UIColor colorWithWhite:0.9 alpha:1.0]];
     
-    [self.view addSubview:self.viewSegmentedBackground];
-    [self.viewSegmentedBackground addSubview:self.segmentedControlState];
+    [self.view addSubview:self.segmentedView];
     [self.view addSubview:self.viewSearchBackground];
     [self.viewSearchBackground addSubview:self.textFieldSearch];
     [self.view addSubview:self.viewButtonBackground];
     [self.viewButtonBackground addSubview:self.buttonOrderTime];
     [self.viewButtonBackground addSubview:self.separator];
     [self.viewButtonBackground addSubview:self.buttonShipType];
+    [self.view addSubview:self.viewTitle];
+    [self.view addSubview:self.collectionView];
+    
+    if (_currentPage == 0)
+    {
+        [self.segmentedView.segmentedControl setSelectedSegmentIndex:0];
+    }
+    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -60,19 +84,15 @@
     CGFloat marginT = 10.0;
     CGFloat marginL = 10.0;
     CGFloat marginR = 10.0;
+    CGFloat intervalV = 10.0;
     
     CGFloat originY = marginT;
     
-    if (self.viewSegmentedBackground)
+    if (self.segmentedView)
     {
-        CGRect frame = CGRectMake(marginL, originY, (self.view.frame.size.width - (marginL + marginR)), 40.0);
-        self.viewSegmentedBackground.frame = frame;
-        [self.viewSegmentedBackground.layer setCornerRadius:(self.viewSegmentedBackground.frame.size.height / 2)];
-        originY = self.viewSegmentedBackground.frame.origin.y + self.viewSegmentedBackground.frame.size.height + 10.0;
-        if (self.segmentedControlState)
-        {
-            [self.segmentedControlState setFrame:self.viewSegmentedBackground.bounds];
-        }
+        CGRect frame = CGRectMake(marginL, originY, (self.view.frame.size.width - marginL - marginR), 40.0);
+        self.segmentedView.frame = frame;
+        originY = self.segmentedView.frame.origin.y + self.segmentedView.frame.size.height + intervalV;
     }
     
     if (self.viewSearchBackground)
@@ -83,7 +103,7 @@
         
         if (self.textFieldSearch)
         {
-            CGRect frame = CGRectInset(self.viewSearchBackground.bounds, 20.0, 0.0);
+            CGRect frame = CGRectInset(self.viewSearchBackground.bounds, 10.0, 0.0);
             self.textFieldSearch.frame = frame;
         }
     }
@@ -117,29 +137,57 @@
         }
     }
     
+    if (self.viewTitle)
+    {
+        CGRect frame = CGRectMake(marginL, originY, self.view.frame.size.width - marginL - marginR, 40.0);
+        self.viewTitle.frame = frame;
+        originY = self.viewTitle.frame.origin.y + self.viewTitle.frame.size.height;
+    }
+    
+    if (self.collectionView)
+    {
+        CGRect frame = CGRectMake(0.0, originY, self.view.frame.size.width, self.view.frame.size.height - originY);
+        self.collectionView.frame = frame;
+    }
 }
 
-- (UIView *)viewSegmentedBackground
+- (SemiCircleEndsSegmentedView *)segmentedView
 {
-    if (_viewSegmentedBackground == nil)
+    if (_segmentedView == nil)
     {
-        _viewSegmentedBackground = [[UIView alloc] initWithFrame:CGRectZero];
-        [_viewSegmentedBackground.layer setBorderWidth:1.0];
-        [_viewSegmentedBackground.layer setBorderColor:self.segmentedControlState.tintColor.CGColor];
-        [_viewSegmentedBackground setClipsToBounds:YES];
+        NSMutableArray *items = [NSMutableArray array];
+        for (NSInteger index = OrderStateStart; index < OrderStateTotal; index++)
+        {
+            switch (index) {
+                case OrderStateNoSpecific:
+                {
+                    [items addObject:[LocalizedString All]];
+                }
+                    break;
+                case OrderStateProcessing:
+                {
+                    [items addObject:[LocalizedString Processing]];
+                }
+                    break;
+                case OrderStateShipping:
+                {
+                    [items addObject:[LocalizedString Shipping]];
+                }
+                    break;
+                case OrderStateReturnOrReplace:
+                {
+                    [items addObject:[LocalizedString Return]];
+                }
+                    break;
+                default:
+                    break;
+            }
+        }
+        _segmentedView = [[SemiCircleEndsSegmentedView alloc] initWithFrame:CGRectZero andItems:items];
+        [_segmentedView setDelegate:self];
+        [_segmentedView setTintColor:TMMainColor];
     }
-    return _viewSegmentedBackground;
-}
-
-- (UISegmentedControl *)segmentedControlState
-{
-    if (_segmentedControlState == nil)
-    {
-        NSArray *items = [NSArray arrayWithObjects:[LocalizedString All], [LocalizedString Processing], [LocalizedString Shipping], [LocalizedString Return], nil];
-        _segmentedControlState = [[UISegmentedControl alloc] initWithItems:items];
-        [_segmentedControlState addTarget:self action:@selector(segmentedControlStateValueChanged:) forControlEvents:UIControlEventValueChanged];
-    }
-    return _segmentedControlState;
+    return _segmentedView;
 }
 
 - (UIView *)viewSearchBackground
@@ -194,6 +242,8 @@
         _buttonOrderTime = [[DropdownListButton alloc] initWithFrame:CGRectZero];
         _buttonOrderTime.label.text = [LocalizedString OrderTime];
         [_buttonOrderTime addTarget:self action:@selector(buttonOrderTimePressed:) forControlEvents:UIControlEventTouchUpInside];
+        _buttonOrderTime.marginLeft = 10.0;
+        _buttonOrderTime.marginRight = 10.0;
     }
     return _buttonOrderTime;
 }
@@ -205,6 +255,8 @@
         _buttonShipType = [[DropdownListButton alloc] initWithFrame:CGRectZero];
         _buttonShipType.label.text = [LocalizedString ShipType];
         [_buttonShipType addTarget:self action:@selector(buttonShipTypePressed:) forControlEvents:UIControlEventTouchUpInside];
+        _buttonShipType.marginLeft = 10.0;
+        _buttonShipType.marginRight = 10.0;
     }
     return _buttonShipType;
 }
@@ -219,18 +271,115 @@
     return _separator;
 }
 
-- (UITableView *)tableView
+- (ProductDetailSectionTitleView *)viewTitle
 {
-    if (_tableView == nil)
+    if (_viewTitle == nil)
     {
-        _tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
-        [_tableView setShowsVerticalScrollIndicator:NO];
-        [_tableView setShowsHorizontalScrollIndicator:NO];
-        [_tableView setDataSource:self];
-        [_tableView setDelegate:self];
-        [_tableView registerClass:[OrderTableViewCell class] forCellReuseIdentifier:OrderTableViewCellIdentifier];
+        _viewTitle = [[ProductDetailSectionTitleView alloc] initWithFrame:CGRectZero];
+        UIImage *image = [UIImage imageNamed:@"men_my_icon1"];
+        if (image)
+        {
+            [_viewTitle.viewTitle.imageViewIcon setImage:image];
+        }
+        [_viewTitle.viewTitle.labelText setText:[LocalizedString MyOrder]];
+        [_viewTitle.viewTitle.labelText setFont:[UIFont systemFontOfSize:18.0]];
+        [_viewTitle.viewTitle.labelText setTextColor:[UIColor colorWithRed:(142.0/255.0) green:(170.0/255.0) blue:(214.0/255.0) alpha:1.0]];
+        [_viewTitle setBackgroundColor:[UIColor clearColor]];
+        [_viewTitle.viewBackground setBackgroundColor:[UIColor clearColor]];
+        [_viewTitle.bottomLine setHidden:YES];
+        _viewTitle.topSeparatorHeight = 0.0;
     }
-    return _tableView;
+    return _viewTitle;
+}
+
+- (UICollectionView *)collectionView
+{
+    if (_collectionView == nil)
+    {
+        UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
+        _collectionView = [[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:layout];
+        [_collectionView setDelegate:self];
+        [_collectionView setDataSource:self];
+        [_collectionView setShowsVerticalScrollIndicator:NO];
+        [_collectionView setShowsHorizontalScrollIndicator:NO];
+        [_collectionView setBackgroundColor:self.view.backgroundColor];
+        [_collectionView registerClass:[OrderListCollectionViewCell class] forCellWithReuseIdentifier:OrderListCollectionViewCellIdentifier];
+        [_collectionView registerClass:[OrderHeaderReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:OrderHeaderReusableViewIdentifier];
+        [_collectionView registerClass:[LoadingFoorterReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:LoadingFoorterReusableViewIdentifier];
+    }
+    return _collectionView;
+}
+
+- (NSMutableArray *)arrayOrderTimeOptions
+{
+    if (_arrayOrderTimeOptions == nil)
+    {
+        _arrayOrderTimeOptions = [[NSMutableArray alloc] initWithCapacity:0];
+        for (NSInteger index = OrderTimeNoSpecific; index < OrderStateTotal; index++)
+        {
+            switch (index) {
+                case OrderStateNoSpecific:
+                {
+                    [_arrayOrderTimeOptions addObject:[LocalizedString All]];
+                }
+                    break;
+                case OrderTimeLatestMonth:
+                {
+                    [_arrayOrderTimeOptions addObject:[LocalizedString LatestMonth]];
+                }
+                    break;
+                case OrderTimeLatestHalfYear:
+                {
+                    [_arrayOrderTimeOptions addObject:[LocalizedString LatestHalfYear]];
+                }
+                    break;
+                case OrderTimeLatestYear:
+                {
+                    [_arrayOrderTimeOptions addObject:[LocalizedString LatestYear]];
+                }
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+    return _arrayOrderTimeOptions;
+}
+
+- (NSMutableArray *)arrayDeliverTypes
+{
+    if (_arrayDeliverTypes == nil)
+    {
+        _arrayDeliverTypes = [[NSMutableArray alloc] initWithCapacity:0];
+        for (NSInteger index = DeliverTypeStart; index < DeliverTypeTotal; index++)
+        {
+            switch (index) {
+                case DeliverTypeNoSpecific:
+                {
+                    [_arrayDeliverTypes addObject:[LocalizedString All]];
+                }
+                    break;
+                case DeliverTypeCommon:
+                {
+                    [_arrayDeliverTypes addObject:[LocalizedString CommonDelivery]];
+                }
+                    break;
+                case DeliverTypeFastDelivery:
+                {
+                    [_arrayDeliverTypes addObject:[LocalizedString FastDelivery]];
+                }
+                    break;
+                case DeliverTypeStorePickUp:
+                {
+                    [_arrayDeliverTypes addObject:[LocalizedString StorePickUp]];
+                }
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+    return _arrayDeliverTypes;
 }
 
 #pragma mark - Actions
@@ -302,25 +451,104 @@
     return YES;
 }
 
-#pragma mark - UITableViewDataSource
+#pragma mark - UICollectionViewDataSource
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
 {
     return 1;
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
     return 1;
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+- (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath
 {
-    OrderTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:OrderTableViewCellIdentifier forIndexPath:indexPath];
+    UICollectionReusableView *view = nil;
+    if ([kind isEqualToString:UICollectionElementKindSectionHeader])
+    {
+        OrderHeaderReusableView *headerView = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:OrderHeaderReusableViewIdentifier forIndexPath:indexPath];
+        [headerView setBackgroundColor:[UIColor clearColor]];
+        view = headerView;
+    }
+    else if ([kind isEqualToString:UICollectionElementKindSectionFooter])
+    {
+        LoadingFoorterReusableView *footerView = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:LoadingFoorterReusableViewIdentifier forIndexPath:indexPath];
+        [footerView setBackgroundColor:[UIColor clearColor]];
+        view = footerView;
+    }
+    return view;
+}
+
+- (__kindof UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    OrderListCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:OrderListCollectionViewCellIdentifier forIndexPath:indexPath];
+    cell.backgroundColor = [UIColor whiteColor];
     return cell;
 }
 
-#pragma mark - UITableViewDelegate
+#pragma mark - UICollectionViewDelegateFlowLayout
 
+- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section
+{
+    return 0.0;
+}
+
+- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section
+{
+    return 0.0;
+}
+
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section
+{
+    CGSize referenceSize = CGSizeMake(collectionView.frame.size.width, 60.0);
+    return referenceSize;
+}
+
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForFooterInSection:(NSInteger)section
+{
+    CGSize referenceSize = CGSizeZero;
+    if (section == ([self numberOfSectionsInCollectionView:collectionView] - 1))
+    {
+        referenceSize = CGSizeMake(collectionView.frame.size.width, 50.0);
+    }
+    return referenceSize;
+}
+
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    UIEdgeInsets edgeInsets = [self collectionView:collectionView layout:collectionViewLayout insetForSectionAtIndex:indexPath.section];
+    CGFloat itemWidth = collectionView.frame.size.width - edgeInsets.left - edgeInsets.right;
+    CGFloat itemHeight = 200.0;
+    CGSize sizeForItem = CGSizeMake(itemWidth, itemHeight);
+    return sizeForItem;
+}
+
+- (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section
+{
+    UIEdgeInsets edgeInsets = UIEdgeInsetsMake(0.0, 10.0, 10.0, 10.0);
+    return edgeInsets;
+}
+
+#pragma mark - UICollectionViewDelegate
+
+- (void)collectionView:(UICollectionView *)collectionView willDisplaySupplementaryView:(UICollectionReusableView *)view forElementKind:(NSString *)elementKind atIndexPath:(NSIndexPath *)indexPath
+{
+    if ([view isKindOfClass:[LoadingFoorterReusableView class]])
+    {
+        LoadingFoorterReusableView *loadingView = (LoadingFoorterReusableView *)view;
+        [loadingView.activityIndicator startAnimating];
+    }
+}
+
+- (void)collectionView:(UICollectionView *)collectionView didEndDisplayingSupplementaryView:(UICollectionReusableView *)view forElementOfKind:(NSString *)elementKind atIndexPath:(NSIndexPath *)indexPath
+{
+    if ([view isKindOfClass:[LoadingFoorterReusableView class]])
+    {
+        LoadingFoorterReusableView *loadingView = (LoadingFoorterReusableView *)view;
+        [loadingView.activityIndicator stopAnimating];
+    }
+}
 
 @end

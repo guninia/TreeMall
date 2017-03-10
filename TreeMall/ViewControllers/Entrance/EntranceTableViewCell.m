@@ -17,7 +17,7 @@
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self)
     {
-        
+        self.imageView.contentMode = UIViewContentModeScaleAspectFill;
     }
     return self;
 }

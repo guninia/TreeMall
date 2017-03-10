@@ -71,7 +71,7 @@
         {
             NSString *string = [[NSString alloc] initWithData:resultObject encoding:NSUTF8StringEncoding];
             NSLog(@"retrieveData - string:\n%@", string);
-            if ([self processData:resultObject] == NO)
+            if ([weakSelf processData:resultObject] == NO)
             {
                 NSLog(@"Cannot process terms data.");
             }

@@ -158,7 +158,7 @@ static CGFloat kIntervalH = 10.0;
     return numberOfItems;
 }
 
-- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
+- (__kindof UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     ProductSubcategoryCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:ProductSubcategoryCollectionViewCellIdentifier forIndexPath:indexPath];
     cell.tag = indexPath.row;

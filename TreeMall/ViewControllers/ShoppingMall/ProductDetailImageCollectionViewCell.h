@@ -13,5 +13,7 @@ static NSString *ProductDetailImageCollectionViewCellIdentifier = @"ProductDetai
 @interface ProductDetailImageCollectionViewCell : UICollectionViewCell
 
 @property (nonatomic, strong) UIImageView *imageView;
+@property (nonatomic, strong) NSString *imagePath;
+@property (nonatomic, strong) UIActivityIndicatorView *activityIndicator;
 
 @end

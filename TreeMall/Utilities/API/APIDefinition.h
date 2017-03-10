@@ -31,6 +31,7 @@ static NSString *SymphoxAPI_hotKeywords = @"http://tomcat8.mdevelop.com/TreeMall
 static NSString *SymphoxAPI_memberInformation = @"http://tomcat8.mdevelop.com/TreeMall/api/portal/app/member/info";
 static NSString *SymphoxAPI_memberPoint = @"http://tomcat8.mdevelop.com/TreeMall/api/portal/app/member/point";
 static NSString *SymphoxAPI_memberCoupon = @"http://tomcat8.mdevelop.com/TreeMall/api/portal/app/member/ecoupon";
+static NSString *SymphoxAPI_productDetail = @"http://tomcat8.mdevelop.com/TreeMall/api/portal/app/mall/product";
 
 #else
 static NSString *SymphoxAPI_token = @"https://api.symphox.com.tw/portal/app/token";
@@ -178,7 +179,41 @@ static NSString *SymphoxAPIParam_description = @"description";
 static NSString *SymphoxAPIParam_start_date = @"start_date";
 static NSString *SymphoxAPIParam_end_date = @"end_date";
 static NSString *SymphoxAPIParam_product = @"product";
+static NSString *SymphoxAPIParam_remark = @"remark";
+static NSString *SymphoxAPIParam_free_point = @"free_point";
+static NSString *SymphoxAPIParam_market_price = @"market_price";
+static NSString *SymphoxAPIParam_is_quick = @"is_quick";
+static NSString *SymphoxAPIParam_is_store = @"is_store";
+static NSString *SymphoxAPIParam_discount = @"discount";
+static NSString *SymphoxAPIParam_hall_discount = @"hall_discount";
+static NSString *SymphoxAPIParam_campaign_discount = @"campaign_discount";
+static NSString *SymphoxAPIParam_message = @"message";
+static NSString *SymphoxAPIParam_price = @"price";
+static NSString *SymphoxAPIParam_01 = @"01";
+static NSString *SymphoxAPIParam_02 = @"02";
+static NSString *SymphoxAPIParam_03 = @"03";
+static NSString *SymphoxAPIParam_cash = @"cash";
+static NSString *SymphoxAPIParam_text = @"text";
+static NSString *SymphoxAPIParam_img_url = @"img_url";
+static NSString *SymphoxAPIParam_specification = @"specification";
+static NSString *SymphoxAPIParam_attention = @"attention";
+static NSString *SymphoxAPIParam_standard = @"standard";
+static NSString *SymphoxAPIParam_installment = @"installment";
+static NSString *SymphoxAPIParam_term = @"term";
+static NSString *SymphoxAPIParam_cathay_only = @"cathay_only";
+static NSString *SymphoxAPIParam_shopping = @"shopping";
 
 static NSString *SymphoxAPIError_E301 = @"E301";
+
+typedef enum : NSUInteger {
+    TermTypeMemberTerms,
+    TermTypeExchangeDescription,
+    TermTypeInstallmentBank,
+    TermTypeShippingAndWarrenty,
+    TermTypeEcommertialTerm,
+    TermTypeInvoiceCreate,
+    TermTypePurchaseComplete,
+    TermTypeTotal
+} TermType;
 
 #endif /* APIDefinition_h */

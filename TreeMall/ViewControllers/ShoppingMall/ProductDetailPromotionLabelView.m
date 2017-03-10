@@ -9,9 +9,9 @@
 #import "ProductDetailPromotionLabelView.h"
 #import "LocalizedString.h"
 
-static CGFloat kTextIndent = 3.0;
-static CGFloat marginL = 10.0;
-static CGFloat marginR = 10.0;
+static CGFloat kTextIndent = 5.0;
+static CGFloat marginL = 5.0;
+static CGFloat marginR = 5.0;
 
 @interface ProductDetailPromotionLabelView ()
 
@@ -61,25 +61,19 @@ static CGFloat marginR = 10.0;
     if (self.labelTitle)
     {
         CGSize titleSize = [self.labelTitle.text sizeWithAttributes:[NSDictionary dictionaryWithObjectsAndKeys:self.labelTitle.font, NSFontAttributeName, nil]];
-        titleLabelSize = CGSizeMake(ceil(titleSize.width + kTextIndent * 2), ceil(titleSize.height));
+        titleLabelSize = CGSizeMake(ceil(titleSize.width + kTextIndent * 2), self.frame.size.height);
     }
     
-    CGFloat maxPromotionWidth = self.frame.size.width - (marginL + marginR - titleLabelSize.width);
-    CGSize promotionLabelSize = CGSizeZero;
-    if (self.labelPromotion)
-    {
-        CGSize size = [self.labelPromotion.text boundingRectWithSize:CGSizeMake(maxPromotionWidth, MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:self.attributesPromotion context:nil].size;
-        promotionLabelSize = CGSizeMake(ceil(size.width), ceil(size.height));
-        titleLabelSize.height = promotionLabelSize.height;
-    }
     if (self.labelTitle)
     {
-        CGRect frame = CGRectMake(originX, (self.frame.size.height - titleLabelSize.height)/2, titleLabelSize.width, titleLabelSize.height);
+        CGRect frame = CGRectMake(0.0, (self.frame.size.height - titleLabelSize.height)/2, titleLabelSize.width, titleLabelSize.height);
         self.labelTitle.frame = frame;
-        originX = self.labelTitle.frame.origin.x + self.labelTitle.frame.size.width;
+        originX = self.labelTitle.frame.origin.x + self.labelTitle.frame.size.width + marginL;
     }
     if (self.labelPromotion)
     {
+        CGFloat maxPromotionWidth = self.frame.size.width - (marginL + marginR + titleLabelSize.width);
+        CGSize promotionLabelSize = CGSizeMake(maxPromotionWidth, self.frame.size.height);
         CGRect frame = CGRectMake(originX, (self.frame.size.height - promotionLabelSize.height)/2, promotionLabelSize.width, promotionLabelSize.height);
         self.labelPromotion.frame = frame;
     }
@@ -89,7 +83,8 @@ static CGFloat marginR = 10.0;
 {
     [super setTintColor:tintColor];
     self.labelTitle.backgroundColor = tintColor;
-    [self.labelPromotion.layer setBorderColor:tintColor.CGColor];
+    [self.labelPromotion setTextColor:tintColor];
+    [self.layer setBorderColor:tintColor.CGColor];
 }
 
 - (UILabel *)labelTitle
@@ -115,8 +110,7 @@ static CGFloat marginR = 10.0;
         [_labelPromotion setBackgroundColor:[UIColor clearColor]];
         [_labelPromotion setTextColor:self.tintColor];
         [_labelPromotion setTextAlignment:NSTextAlignmentLeft];
-        [_labelPromotion.layer setBorderWidth:1.0];
-        [_labelPromotion.layer setBorderColor:self.tintColor.CGColor];
+        [_labelPromotion setLineBreakMode:NSLineBreakByWordWrapping];
         [_labelPromotion setNumberOfLines:0];
         UIFont *font = [UIFont systemFontOfSize:14.0];
         [_labelPromotion setFont:font];
@@ -142,12 +136,10 @@ static CGFloat marginR = 10.0;
     if (_attributesPromotion == nil)
     {
         NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
-        style.firstLineHeadIndent = kTextIndent;
-        style.headIndent = kTextIndent;
-        style.tailIndent = kTextIndent;
         style.lineBreakMode = NSLineBreakByWordWrapping;
         style.alignment = NSTextAlignmentLeft;
-        _attributesPromotion = [[NSDictionary alloc] initWithObjectsAndKeys:style, NSParagraphStyleAttributeName, nil];
+        UIFont *font = self.labelPromotion.font;
+        _attributesPromotion = [[NSDictionary alloc] initWithObjectsAndKeys:style, NSParagraphStyleAttributeName, font, NSFontAttributeName, nil];
     }
     return _attributesPromotion;
 }
@@ -158,6 +150,8 @@ static CGFloat marginR = 10.0;
 {
     [self addSubview:self.labelTitle];
     [self addSubview:self.labelPromotion];
+    [self.layer setBorderWidth:1.0];
+    [self.layer setBorderColor:self.tintColor.CGColor];
 }
 
 #pragma mark - Public Methods
@@ -178,11 +172,13 @@ static CGFloat marginR = 10.0;
     CGFloat marginV = 8.0;
     CGSize titleSize = [self.labelTitle.text sizeWithAttributes:[NSDictionary dictionaryWithObjectsAndKeys:self.labelTitle.font, NSFontAttributeName, nil]];
     CGSize titleLabelSize = CGSizeMake(ceil(titleSize.width + kTextIndent * 2), ceil(titleSize.height));
-    CGFloat maxPromotionWidth = viewWidth - (marginL + marginR - titleLabelSize.width);
+    CGFloat maxPromotionWidth = viewWidth - (marginL + marginR + titleLabelSize.width);
     CGSize size = [promotion boundingRectWithSize:CGSizeMake(maxPromotionWidth, MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:self.attributesPromotion context:nil].size;
     CGSize promotionLabelSize = CGSizeMake(ceil(size.width), ceil(size.height));
     
-    referenceHeight = promotionLabelSize.height + marginV * 2;
+    CGFloat maxHeight = MAX(titleLabelSize.height, promotionLabelSize.height);
+    
+    referenceHeight = maxHeight + marginV * 2;
     
     return referenceHeight;
 }

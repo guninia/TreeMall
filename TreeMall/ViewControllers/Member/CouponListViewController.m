@@ -59,7 +59,6 @@
     {
         // Set initial value
         [self.segmentedView.segmentedControl setSelectedSegmentIndex:0];
-        self.sortType = 0;
         
 //        // Initial fetch
 //        NSInteger nextPage = _currentPage + 1;
@@ -277,9 +276,11 @@
     }
     if (sortOrderText && sortTypeText)
     {
+        [self.segmentedView.segmentedControl setEnabled:NO];
+        [self.buttonSort setEnabled:NO];
         __weak CouponListViewController *weakSelf = self;
         [[TMInfoManager sharedManager] retrieveCouponDataFromObject:weakSelf forPageIndex:page couponState:state sortFactor:sortTypeText withSortOrder:sortOrderText withCompletion:^(id resultObject, NSError *error){
-            NSLog(@"resultObject:\n%@", [resultObject description]);
+//            NSLog(@"resultObject:\n%@", [resultObject description]);
             if (error == nil && resultObject)
             {
                 if ([resultObject isKindOfClass:[NSDictionary class]])
@@ -305,6 +306,23 @@
                     [weakSelf.tableViewCoupon reloadData];
                 });
             }
+            else
+            {
+                UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:[LocalizedString CannotLoadData] preferredStyle:UIAlertControllerStyleAlert];
+                UIAlertAction *actionBack = [UIAlertAction actionWithTitle:[LocalizedString GoBack] style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
+                    [weakSelf.navigationController popViewControllerAnimated:YES];
+                }];
+                UIAlertAction *actionReload = [UIAlertAction actionWithTitle:[LocalizedString Reload] style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
+                    [weakSelf retrieveCouponDataForState:state sortByType:sortType atPage:page];
+                }];
+                [alertController addAction:actionBack];
+                [alertController addAction:actionReload];
+                [weakSelf presentViewController:alertController animated:YES completion:nil];
+            }
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [weakSelf.segmentedView.segmentedControl setEnabled:YES];
+                [weakSelf.buttonSort setEnabled:YES];
+            });
         }];
     }
 }
@@ -472,11 +490,30 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    CouponTableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
     if (indexPath.row < [self.arrayCoupon count])
     {
         NSDictionary *dictionary = [self.arrayCoupon objectAtIndex:indexPath.row];
         CouponDetailViewController *viewController = [[CouponDetailViewController alloc] initWithNibName:@"CouponDetailViewController" bundle:[NSBundle mainBundle]];
         viewController.dictionaryData = dictionary;
+        if (cell)
+        {
+            NSString *stringValue = cell.labelValue.text;
+            if (stringValue && [stringValue length] > 0)
+            {
+                viewController.stringCouponValue = stringValue;
+            }
+            NSString *stringDateStart = cell.labelDateStart.text;
+            if (stringDateStart && [stringDateStart length] > 0)
+            {
+                viewController.stringDateStart = stringDateStart;
+            }
+            NSString *stringDateGoodThru = cell.labelDateGoodThru.text;
+            if (stringDateGoodThru && [stringDateGoodThru length] > 0)
+            {
+                viewController.stringDateGoodThru = stringDateGoodThru;
+            }
+        }
         [self.navigationController pushViewController:viewController animated:YES];
     }
 }

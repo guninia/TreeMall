@@ -32,6 +32,15 @@ typedef enum : NSUInteger {
     CouponStateTotal
 } CouponState;
 
+typedef enum : NSUInteger {
+    OrderStateStart,
+    OrderStateNoSpecific = OrderStateStart,
+    OrderStateProcessing,
+    OrderStateShipping,
+    OrderStateReturnOrReplace,
+    OrderStateTotal
+} OrderState;
+
 @interface TMInfoManager : NSObject
 {
     NSMutableDictionary *_dictionaryUserInfo;

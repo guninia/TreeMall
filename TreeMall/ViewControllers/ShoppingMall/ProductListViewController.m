@@ -267,8 +267,8 @@
             if ([resultObject isKindOfClass:[NSData class]])
             {
                 NSData *data = (NSData *)resultObject;
-                NSString *string = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-                NSLog(@"retrieveProductsForConditions:\n%@", string);
+//                NSString *string = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+//                NSLog(@"retrieveProductsForConditions:\n%@", string);
                 if ([self processProductsData:data byRefreshing:refresh] == NO)
                 {
                     NSLog(@"retrieveProductsForConditions - Cannot process data");

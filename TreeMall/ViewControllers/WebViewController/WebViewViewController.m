@@ -21,6 +21,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
+    UIBarButtonItem *rightItem = [[UIBarButtonItem alloc] initWithCustomView:self.activityIndicator];
+    [self.navigationItem setRightBarButtonItem:rightItem];
     [self.view addSubview:self.webView];
     
     if (self.url)
@@ -59,6 +61,7 @@
         WKWebViewConfiguration *configuration = [[WKWebViewConfiguration alloc] init];
         _webView = [[WKWebView alloc] initWithFrame:CGRectZero configuration:configuration];
         _webView.UIDelegate = self;
+        _webView.navigationDelegate = self;
     }
     return _webView;
 }
@@ -91,6 +94,16 @@
     [self loadRequestFromUrl:_url];
 }
 
+- (UIActivityIndicatorView *)activityIndicator
+{
+    if (_activityIndicator == nil)
+    {
+        _activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
+        [_activityIndicator setHidesWhenStopped:YES];
+    }
+    return _activityIndicator;
+}
+
 #pragma mark - Private Methods
 
 - (void)loadRequestFromUrl:(NSURL *)url
@@ -99,9 +112,22 @@
     {
         [self.webView stopLoading];
     }
-    
+    [self.activityIndicator startAnimating];
     NSURLRequest *request = [NSURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:30.0];
     [self.webView loadRequest:request];
+}
+
+#pragma mark - WKNavigationDelegate
+
+- (void)webView:(WKWebView *)webView didFailNavigation:(WKNavigation *)navigation withError:(NSError *)error
+{
+    NSLog(@"error\n%@", [error description]);
+    [self.activityIndicator stopAnimating];
+}
+
+- (void)webView:(WKWebView *)webView didFinishNavigation:(WKNavigation *)navigation
+{
+    [self.activityIndicator stopAnimating];
 }
 
 #pragma mark - WKUIDelegate

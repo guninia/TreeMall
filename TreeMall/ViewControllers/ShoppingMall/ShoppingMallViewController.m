@@ -19,6 +19,7 @@
 #import "ProductListViewController.h"
 #import "ExtraSubcategorySeeAllTableViewCell.h"
 #import "TMInfoManager.h"
+#import "LoadingFooterView.h"
 
 typedef enum : NSUInteger {
     ViewTagCollectionViewMainCategory,
@@ -36,6 +37,7 @@ typedef enum : NSUInteger {
 - (BOOL)processSubcategoryData:(id)data forIdentifier:(NSString *)identifier forLayerIndex:(NSInteger)layerIndex;
 - (void)setSubcategoryFromCategories:(NSArray *)categories forIdentifier:(NSString *)identifier andLayerIndex:(NSInteger)layerIndex;
 - (void)presentProductListViewForIdentifier:(NSString *)identifier named:(NSString *)name andLayer:(NSNumber *)layer withCategories:(NSArray *)categories andSubcategories:(NSArray *)subcategories;
+- (void)clearSubcategoryTableViewForLayer:(NSNumber *)layer;
 
 - (void)buttonItemSearchPressed:(id)sender;
 - (void)notificationHandlerTokenUpdated:(NSNotification *)notification;
@@ -85,6 +87,7 @@ typedef enum : NSUInteger {
     [_tableViewSubcategory setShowsVerticalScrollIndicator:NO];
     [_tableViewSubcategory setShowsHorizontalScrollIndicator:NO];
     [_tableViewSubcategory registerClass:[SubcategoryTableViewCell class] forCellReuseIdentifier:SubcategoryTableViewCellIdentifier];
+    [_tableViewSubcategory registerClass:[LoadingFooterView class] forHeaderFooterViewReuseIdentifier:LoadingFooterViewIdentifier];
     [_tableViewSubcategory setTag:ViewTagTableViewSubcategory];
     
     [_tableViewExtraSubcategory setBackgroundColor:[UIColor colorWithWhite:(194.0/255.0) alpha:1.0]];
@@ -94,6 +97,7 @@ typedef enum : NSUInteger {
     [_tableViewExtraSubcategory setShowsHorizontalScrollIndicator:NO];
     [_tableViewExtraSubcategory registerClass:[ExtraSubcategoryTableViewCell class] forCellReuseIdentifier:ExtraSubcategoryTableViewCellIdentifier];
     [_tableViewExtraSubcategory registerClass:[ExtraSubcategorySeeAllTableViewCell class] forCellReuseIdentifier:ExtraSubcategorySeeAllTableViewCellIdentifier];
+    [_tableViewExtraSubcategory registerClass:[LoadingFooterView class] forHeaderFooterViewReuseIdentifier:LoadingFooterViewIdentifier];
     [_tableViewExtraSubcategory setTag:ViewTagTableViewExtraSubcategory];
     
     [self retrieveMainCategoryData];
@@ -215,6 +219,7 @@ typedef enum : NSUInteger {
 
 - (void)retrieveSubcategoryDataForIdentifier:(NSString *)identifier andLayer:(NSNumber *)layer
 {
+    [self clearSubcategoryTableViewForLayer:layer];
     NSArray *categories = [[TMInfoManager sharedManager] subcategoriesForIdentifier:identifier atLayer:layer];
     NSInteger layerIndex = [layer integerValue];
     if (categories)
@@ -363,6 +368,29 @@ typedef enum : NSUInteger {
     [self.navigationController pushViewController:viewController animated:YES];
 }
 
+- (void)clearSubcategoryTableViewForLayer:(NSNumber *)layer
+{
+    NSInteger layerIndex = [layer integerValue];
+    switch (layerIndex) {
+        case 1:
+        {
+            [self.arraySubcategory removeAllObjects];
+            [self.tableViewSubcategory reloadData];
+            [self.arrayExtraSubcategory removeAllObjects];
+            [self.tableViewExtraSubcategory reloadData];
+        }
+            break;
+        case 2:
+        {
+            [self.arrayExtraSubcategory removeAllObjects];
+            [self.tableViewExtraSubcategory reloadData];
+        }
+            break;
+        default:
+            break;
+    }
+}
+
 #pragma mark - Actions
 
 - (void)buttonItemSearchPressed:(id)sender
@@ -391,7 +419,7 @@ typedef enum : NSUInteger {
     return numberOfItems;
 }
 
-- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
+- (__kindof UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     MainCategoryCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:MainCategoryCollectionViewCellIdentifier forIndexPath:indexPath];
     cell.tag = indexPath.row;
@@ -465,11 +493,11 @@ typedef enum : NSUInteger {
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    NSInteger numberOfSections = 1;
+    NSInteger numberOfSections = 2;
     switch (tableView.tag) {
         case ViewTagTableViewExtraSubcategory:
         {
-            numberOfSections = 2;
+            numberOfSections = 3;
         }
             break;
             
@@ -492,7 +520,10 @@ typedef enum : NSUInteger {
         {
             if (section == 0)
             {
-                numberOfRows = 1;
+                if ([self.arrayExtraSubcategory count] > 0)
+                {
+                    numberOfRows = 1;
+                }
             }
             else if (section == 1)
             {
@@ -552,7 +583,57 @@ typedef enum : NSUInteger {
     return cell;
 }
 
+- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
+{
+    LoadingFooterView *footerView = [tableView dequeueReusableHeaderFooterViewWithIdentifier:LoadingFooterViewIdentifier];
+    return footerView;
+}
+
 #pragma mark - UITableViewDelegate
+
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+{
+    CGFloat heightForFooter = 0.0;
+    switch (tableView.tag) {
+        case ViewTagTableViewSubcategory:
+        {
+            if (section == 1 && [self.arraySubcategory count] == 0)
+            {
+                heightForFooter = 40.0;
+            }
+        }
+            break;
+        case ViewTagTableViewExtraSubcategory:
+        {
+            if (section == 2 && [self.arrayExtraSubcategory count] == 0)
+            {
+                heightForFooter = 40.0;
+            }
+        }
+            break;
+        default:
+            break;
+    }
+    return heightForFooter;
+}
+
+- (void)tableView:(UITableView *)tableView willDisplayFooterView:(UIView *)view forSection:(NSInteger)section
+{
+    if ([view isKindOfClass:[LoadingFooterView class]])
+    {
+        LoadingFooterView *loadingView = (LoadingFooterView *)view;
+        [loadingView.activityIndicator startAnimating];
+    }
+}
+
+- (void)tableView:(UITableView *)tableView didEndDisplayingFooterView:(UIView *)view forSection:(NSInteger)section
+{
+    if ([view isKindOfClass:[LoadingFooterView class]])
+    {
+        LoadingFooterView *loadingView = (LoadingFooterView *)view;
+        [loadingView.activityIndicator stopAnimating];
+    }
+}
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {

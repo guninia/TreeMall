@@ -14,12 +14,15 @@
 #import "ImageTitleButton.h"
 #import "ImageTextView.h"
 #import "ProductDetailSectionTitleView.h"
+#import "DTCoreText.h"
 
-@interface ProductDetailViewController : UIViewController <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, ProductDetailBottomBarDelegate, BorderedDoubleViewDelegate>
+@interface ProductDetailViewController : UIViewController <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, ProductDetailBottomBarDelegate, BorderedDoubleViewDelegate, DTAttributedTextContentViewDelegate>
 
 @property (nonatomic, strong) NSDictionary *dictionaryCommon;
 @property (nonatomic, strong) NSDictionary *dictionaryDetail;
-@property (nonatomic, strong) NSArray *arrayImage;
+@property (nonatomic, strong) NSArray *arrayImagePath;
+@property (nonatomic, strong) NSNumber *productIdentifier;
+@property (nonatomic, assign) NSInteger specIndex;
 
 @property (nonatomic, strong) UIScrollView *scrollView;
 @property (nonatomic, strong) UICollectionView *collectionViewImage;
@@ -36,8 +39,17 @@
 @property (nonatomic, strong) ImageTitleButton *buttonExchangeDesc;
 @property (nonatomic, strong) ImageTitleButton *buttonInstallmentCal;
 @property (nonatomic, strong) BorderedDoubleLabelView *viewChooseSpec;
-@property (nonatomic, strong) ImageTextView *viewNotice;
+@property (nonatomic, strong) DTAttributedLabel *labelAdText;
+@property (nonatomic, strong) ProductDetailSectionTitleView *viewIntroTitle;
+@property (nonatomic, strong) DTAttributedLabel *labelIntro;
 @property (nonatomic, strong) ProductDetailSectionTitleView *viewSpecTitle;
+@property (nonatomic, strong) DTAttributedLabel *labelSpec;
+@property (nonatomic, strong) ProductDetailSectionTitleView *viewRemarkTitle;
+@property (nonatomic, strong) DTAttributedLabel *labelRemark;
+@property (nonatomic, strong) ProductDetailSectionTitleView *viewShippingAndWarrentyTitle;
+@property (nonatomic, strong) DTAttributedLabel *labelShippingAndWarrenty;
+@property (nonatomic, assign) CGSize sizeTextViewSpec;
 @property (nonatomic, strong) ProductDetailBottomBar *bottomBar;
+@property (nonatomic, strong) NSMutableArray *arrayViewNotice;
 
 @end

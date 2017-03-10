@@ -102,6 +102,7 @@
 + (NSString *)ChooseSpec;
 + (NSString *)ProductDetailNotice;
 + (NSString *)ProductIntroduce;
++ (NSString *)ProductSpec;
 + (NSString *)Welcome_S__S_;
 + (NSString *)PersonalDataModify;
 + (NSString *)MyPoints;
@@ -137,6 +138,18 @@
 + (NSString *)Due;
 + (NSString *)Start;
 + (NSString *)CouponDetail;
-
++ (NSString *)CampaignLink;
++ (NSString *)AvailableHall;
++ (NSString *)AvailableProduct;
++ (NSString *)Remark;
++ (NSString *)ShippingAndWarrentyDescription;
++ (NSString *)OpenInSafari;
++ (NSString *)CopyLink;
++ (NSString *)LatestMonth;
++ (NSString *)LatestHalfYear;
++ (NSString *)LatestYear;
++ (NSString *)CommonDelivery;
++ (NSString *)FastDelivery;
++ (NSString *)StorePickUp;
 
 @end

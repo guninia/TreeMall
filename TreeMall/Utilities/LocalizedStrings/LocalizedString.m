@@ -931,6 +931,16 @@
     return ProductIntroduce;
 }
 
++ (NSString *)ProductSpec
+{
+    static NSString *ProductSpec = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        ProductSpec = NSLocalizedString(@"ProductSpec", nil);
+    });
+    return ProductSpec;
+}
+
 + (NSString *)Welcome_S__S_
 {
     static NSString *Welcome_S__S_ = nil;
@@ -1279,6 +1289,136 @@
         CouponDetail = NSLocalizedString(@"CouponDetail", nil);
     });
     return CouponDetail;
+}
+
++ (NSString *)CampaignLink
+{
+    static NSString *CampaignLink = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        CampaignLink = NSLocalizedString(@"CampaignLink", nil);
+    });
+    return CampaignLink;
+}
+
++ (NSString *)AvailableHall
+{
+    static NSString *AvailableHall = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        AvailableHall = NSLocalizedString(@"AvailableHall", nil);
+    });
+    return AvailableHall;
+}
+
++ (NSString *)AvailableProduct
+{
+    static NSString *AvailableProduct = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        AvailableProduct = NSLocalizedString(@"AvailableProduct", nil);
+    });
+    return AvailableProduct;
+}
+
++ (NSString *)Remark
+{
+    static NSString *Remark = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        Remark = NSLocalizedString(@"Remark", nil);
+    });
+    return Remark;
+}
+
++ (NSString *)ShippingAndWarrentyDescription
+{
+    static NSString *ShippingAndWarrentyDescription = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        ShippingAndWarrentyDescription = NSLocalizedString(@"ShippingAndWarrentyDescription", nil);
+    });
+    return ShippingAndWarrentyDescription;
+}
+
++ (NSString *)OpenInSafari
+{
+    static NSString *OpenInSafari = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        OpenInSafari = NSLocalizedString(@"OpenInSafari", nil);
+    });
+    return OpenInSafari;
+}
+
++ (NSString *)CopyLink
+{
+    static NSString *CopyLink = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        CopyLink = NSLocalizedString(@"CopyLink", nil);
+    });
+    return CopyLink;
+}
+
++ (NSString *)LatestMonth
+{
+    static NSString *LatestMonth = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        LatestMonth = NSLocalizedString(@"LatestMonth", nil);
+    });
+    return LatestMonth;
+}
+
++ (NSString *)LatestHalfYear
+{
+    static NSString *LatestHalfYear = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        LatestHalfYear = NSLocalizedString(@"LatestHalfYear", nil);
+    });
+    return LatestHalfYear;
+}
+
++ (NSString *)LatestYear
+{
+    static NSString *LatestYear = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        LatestYear = NSLocalizedString(@"LatestYear", nil);
+    });
+    return LatestYear;
+}
+
++ (NSString *)CommonDelivery
+{
+    static NSString *CommonDelivery = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        CommonDelivery = NSLocalizedString(@"CommonDelivery", nil);
+    });
+    return CommonDelivery;
+}
+
++ (NSString *)FastDelivery
+{
+    static NSString *FastDelivery = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        FastDelivery = NSLocalizedString(@"FastDelivery", nil);
+    });
+    return FastDelivery;
+}
+
++ (NSString *)StorePickUp
+{
+    static NSString *StorePickUp = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        StorePickUp = NSLocalizedString(@"StorePickUp", nil);
+    });
+    return StorePickUp;
 }
 
 @end

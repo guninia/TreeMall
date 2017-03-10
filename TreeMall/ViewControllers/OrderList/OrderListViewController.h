@@ -8,19 +8,44 @@
 
 #import <UIKit/UIKit.h>
 #import "DropdownListButton.h"
+#import "SemiCircleEndsSegmentedView.h"
+#import "ProductDetailSectionTitleView.h"
 
-@interface OrderListViewController : UIViewController <UITextFieldDelegate, UITableViewDataSource, UITableViewDelegate>
+typedef enum : NSUInteger {
+    OrderTimeStart,
+    OrderTimeNoSpecific = OrderTimeStart,
+    OrderTimeLatestMonth,
+    OrderTimeLatestHalfYear,
+    OrderTimeLatestYear,
+    OrderTimeTotal
+} OrderTime;
 
-@property (nonatomic, strong) UIView *viewSegmentedBackground;
-@property (nonatomic, strong) UISegmentedControl *segmentedControlState;
+typedef enum : NSUInteger {
+    DeliverTypeStart,
+    DeliverTypeNoSpecific = DeliverTypeStart,
+    DeliverTypeCommon,
+    DeliverTypeFastDelivery,
+    DeliverTypeStorePickUp,
+    DeliverTypeTotal
+} DeliverType;
+
+@interface OrderListViewController : UIViewController <UITextFieldDelegate, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, SemiCircleEndsSegmentedViewDelegate>
+
+@property (nonatomic, strong) SemiCircleEndsSegmentedView *segmentedView;
 @property (nonatomic, strong) UIView *viewSearchBackground;
 @property (nonatomic, strong) UITextField *textFieldSearch;
 @property (nonatomic, strong) UIView *viewButtonBackground;
 @property (nonatomic, strong) DropdownListButton *buttonOrderTime;
 @property (nonatomic, strong) DropdownListButton *buttonShipType;
 @property (nonatomic, strong) UIView *separator;
-@property (nonatomic, strong) UITableView *tableView;
+@property (nonatomic, strong) ProductDetailSectionTitleView *viewTitle;
+@property (nonatomic, strong) UICollectionView *collectionView;
 
+@property (nonatomic, strong) NSMutableArray *arrayOrderTimeOptions;
+@property (nonatomic, strong) NSMutableArray *arrayDeliverTypes;
+@property (nonatomic, assign) OrderTime orderTime;
+@property (nonatomic, assign) DeliverType deliverType;
+@property (nonatomic, assign) NSInteger currentPage;
 
 
 @end

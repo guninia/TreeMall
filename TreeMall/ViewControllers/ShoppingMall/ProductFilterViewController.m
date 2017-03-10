@@ -840,7 +840,7 @@ typedef enum : NSUInteger {
     return numberOfItems;
 }
 
-- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
+- (__kindof UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     ProductFilterTextCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:ProductFilterTextCollectionViewCellIdentifier forIndexPath:indexPath];
     NSString *text = @"";

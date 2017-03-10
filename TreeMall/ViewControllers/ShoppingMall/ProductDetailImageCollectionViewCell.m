@@ -7,6 +7,7 @@
 //
 
 #import "ProductDetailImageCollectionViewCell.h"
+#import "UIImageView+WebCache.h"
 
 @implementation ProductDetailImageCollectionViewCell
 
@@ -15,7 +16,9 @@
     self = [super initWithFrame:frame];
     if (self)
     {
+        _imagePath = nil;
         [self.contentView addSubview:self.imageView];
+        [self.contentView addSubview:self.activityIndicator];
     }
     return self;
 }
@@ -30,6 +33,10 @@
     {
         self.imageView.frame = self.contentView.bounds;
     }
+    if (self.activityIndicator)
+    {
+        self.activityIndicator.center = self.imageView.center;
+    }
 }
 
 - (UIImageView *)imageView
@@ -37,8 +44,52 @@
     if (_imageView == nil)
     {
         _imageView = [[UIImageView alloc] initWithFrame:CGRectZero];
+        [_imageView setContentMode:UIViewContentModeScaleAspectFill];
+        [_imageView.layer setMasksToBounds:YES];
     }
     return _imageView;
+}
+
+- (UIActivityIndicatorView *)activityIndicator
+{
+    if (_activityIndicator == nil)
+    {
+        _activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+        [_activityIndicator setHidesWhenStopped:YES];
+    }
+    return _activityIndicator;
+}
+
+- (void)setImagePath:(NSString *)imagePath
+{
+    _imagePath = imagePath;
+    if (_imagePath == nil)
+    {
+        return;
+    }
+    NSURL *url = [NSURL URLWithString:imagePath];
+    if (url == nil)
+    {
+        return;
+    }
+    
+    [self.activityIndicator startAnimating];
+    UIImage *placeholder = [UIImage imageNamed:@"transparent"];
+    __weak ProductDetailImageCollectionViewCell *weakSelf = self;
+    [self.imageView sd_setImageWithURL:url placeholderImage:placeholder options:(SDWebImageAvoidAutoSetImage) completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL){
+        if ([[imageURL absoluteString] isEqualToString:imagePath])
+        {
+            if (error == nil && image)
+            {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [weakSelf.imageView setImage:image];
+                });
+            }
+        }
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [weakSelf.activityIndicator stopAnimating];
+        });
+    }];
 }
 
 @end

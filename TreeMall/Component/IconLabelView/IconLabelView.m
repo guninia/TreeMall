@@ -8,7 +8,7 @@
 
 #import "IconLabelView.h"
 
-static intervalV = 5.0;
+static CGFloat intervalV = 5.0;
 
 @implementation IconLabelView
 
