@@ -184,8 +184,8 @@
             if ([resultObject isKindOfClass:[NSData class]])
             {
                 NSData *data = (NSData *)resultObject;
-                NSString *string = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-                NSLog(@"retrieveSubcategoryDataForIdentifier - string[%@]", string);
+//                NSString *string = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+//                NSLog(@"retrieveSubcategoryDataForIdentifier - string[%@]", string);
                 NSInteger layerIndex = [layer integerValue];
                 if ([self processSubcategoryData:data forLayerIndex:layerIndex])
                 {
@@ -269,7 +269,7 @@
                 NSData *data = (NSData *)resultObject;
 //                NSString *string = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
 //                NSLog(@"retrieveProductsForConditions:\n%@", string);
-                if ([self processProductsData:data byRefreshing:refresh] == NO)
+                if ([weakSelf processProductsData:data byRefreshing:refresh] == NO)
                 {
                     NSLog(@"retrieveProductsForConditions - Cannot process data");
                 }
@@ -373,6 +373,7 @@
                 NSNumber *numberMinPrice = [result objectForKey:SymphoxAPIParam_min_price];
                 if (numberMinPrice != nil && ([numberMinPrice isEqual:[NSNull null]] == NO))
                 {
+                    NSLog(@"numberMinPrice[%f]", [numberMinPrice floatValue]);
                     [[TMInfoManager sharedManager].dictionaryInitialFilter setObject:numberMinPrice forKey:SymphoxAPIParam_min_price];
                 }
                 NSNumber *numberMaxPrice = [result objectForKey:SymphoxAPIParam_max_price];
@@ -383,6 +384,7 @@
                 NSNumber *numberMinPoint = [result objectForKey:SymphoxAPIParam_min_point];
                 if (numberMinPoint != nil && ([numberMinPoint isEqual:[NSNull null]] == NO))
                 {
+//                    NSLog(@"numberMinPoint[%f]", [numberMinPoint floatValue]);
                     [[TMInfoManager sharedManager].dictionaryInitialFilter setObject:numberMinPoint forKey:SymphoxAPIParam_min_point];
                 }
                 NSNumber *numberMaxPoint = [result objectForKey:SymphoxAPIParam_max_point];

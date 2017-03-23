@@ -10,6 +10,8 @@
 #import "DropdownListButton.h"
 #import "SemiCircleEndsSegmentedView.h"
 #import "ProductDetailSectionTitleView.h"
+#import "TMInfoManager.h"
+#import "OrderHeaderReusableView.h"
 
 typedef enum : NSUInteger {
     OrderTimeStart,
@@ -29,11 +31,11 @@ typedef enum : NSUInteger {
     DeliverTypeTotal
 } DeliverType;
 
-@interface OrderListViewController : UIViewController <UITextFieldDelegate, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, SemiCircleEndsSegmentedViewDelegate>
+@interface OrderListViewController : UIViewController <UITextFieldDelegate, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, SemiCircleEndsSegmentedViewDelegate, OrderHeaderReusableViewDelegate>
 
 @property (nonatomic, strong) SemiCircleEndsSegmentedView *segmentedView;
 @property (nonatomic, strong) UIView *viewSearchBackground;
-@property (nonatomic, strong) UITextField *textFieldSearch;
+@property (nonatomic, strong) UITextField *textFieldProductName;
 @property (nonatomic, strong) UIView *viewButtonBackground;
 @property (nonatomic, strong) DropdownListButton *buttonOrderTime;
 @property (nonatomic, strong) DropdownListButton *buttonShipType;
@@ -45,7 +47,12 @@ typedef enum : NSUInteger {
 @property (nonatomic, strong) NSMutableArray *arrayDeliverTypes;
 @property (nonatomic, assign) OrderTime orderTime;
 @property (nonatomic, assign) DeliverType deliverType;
+@property (nonatomic, assign) OrderState orderState;
 @property (nonatomic, assign) NSInteger currentPage;
+@property (nonatomic, assign) BOOL isLoading;
+@property (nonatomic, assign) NSInteger totalOrder;
+@property (nonatomic, assign) BOOL shouldShowLoadingView;
+@property (nonatomic, strong) NSMutableArray *arrayCarts;
 
 
 @end

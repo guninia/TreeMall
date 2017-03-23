@@ -13,6 +13,7 @@
 #import "APIDefinition.h"
 #import "CouponListViewController.h"
 #import "OrderListViewController.h"
+#import "MemberSettingsViewController.h"
 
 typedef enum : NSUInteger {
     SectionTitleTagCoupon = 1000,
@@ -26,6 +27,7 @@ typedef enum : NSUInteger {
 - (void)reconfirmAndLogout;
 
 - (void)buttonItemLogoutPressed:(id)sender;
+- (void)buttonItemQAPressed:(id)sender;
 
 @end
 
@@ -37,6 +39,12 @@ typedef enum : NSUInteger {
     self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
     UIBarButtonItem *leftItem = [[UIBarButtonItem alloc] initWithTitle:[LocalizedString Logout] style:UIBarButtonItemStylePlain target:self action:@selector(buttonItemLogoutPressed:)];
     [self.navigationItem setLeftBarButtonItem:leftItem];
+    UIImage *image = [UIImage imageNamed:@"men_my_sev_h_info"];
+    if (image)
+    {
+        UIBarButtonItem *rightItem = [[UIBarButtonItem alloc] initWithImage:image style:UIBarButtonItemStylePlain target:self action:@selector(buttonItemQAPressed:)];
+        [self.navigationItem setRightBarButtonItem:rightItem];
+    }
     
     [self.view setBackgroundColor:[UIColor whiteColor]];
     [self.view addSubview:self.viewTitle];
@@ -165,6 +173,7 @@ typedef enum : NSUInteger {
     if (_viewTitle == nil)
     {
         _viewTitle = [[MemberTitleView alloc] initWithFrame:CGRectZero];
+        _viewTitle.delegate = self;
     }
     return _viewTitle;
 }
@@ -377,6 +386,11 @@ typedef enum : NSUInteger {
     [self reconfirmAndLogout];
 }
 
+- (void)buttonItemQAPressed:(id)sender
+{
+    
+}
+
 #pragma mark - ProductDetailSectionTitleViewDelegate
 
 - (void)productDetailSectionTitleView:(ProductDetailSectionTitleView *)view didPressButtonBySender:(id)sender
@@ -399,6 +413,14 @@ typedef enum : NSUInteger {
         default:
             break;
     }
+}
+
+#pragma mark - MemberTitleViewDelegate
+
+- (void)memberTitleView:(MemberTitleView *)view didSelectToModifyPersonalInformationBySender:(id)sender
+{
+    MemberSettingsViewController *viewController = [[MemberSettingsViewController alloc] initWithNibName:@"MemberSettingsViewController" bundle:[NSBundle mainBundle]];
+    [self.navigationController pushViewController:viewController animated:YES];
 }
 
 @end

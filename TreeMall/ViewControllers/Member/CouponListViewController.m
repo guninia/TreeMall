@@ -60,9 +60,9 @@
         // Set initial value
         [self.segmentedView.segmentedControl setSelectedSegmentIndex:0];
         
-//        // Initial fetch
-//        NSInteger nextPage = _currentPage + 1;
-//        [self retrieveCouponDataForState:self.stateIndex sortByType:self.sortType atPage:nextPage];
+        // Initial fetch
+        NSInteger nextPage = _currentPage + 1;
+        [self retrieveCouponDataForState:self.stateIndex sortByType:self.sortType atPage:nextPage];
     }
     [self.tableViewCoupon reloadData];
 }
@@ -471,11 +471,11 @@
     {
         LoadingFooterView *footerView = (LoadingFooterView *)view;
         [footerView.activityIndicator startAnimating];
-    }
-    if (section == 1)
-    {
-        NSInteger nextPage = self.currentPage + 1;
-        [self retrieveCouponDataForState:self.stateIndex sortByType:self.sortType atPage:nextPage];
+        if (section == 1 && [self.arrayCoupon count] > 0)
+        {
+            NSInteger nextPage = self.currentPage + 1;
+            [self retrieveCouponDataForState:self.stateIndex sortByType:self.sortType atPage:nextPage];
+        }
     }
 }
 

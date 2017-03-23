@@ -104,7 +104,7 @@
 - (void)startAuthenticateWithUrlString:(NSString *)urlString
 {
     NSNumber *userIndentifier = [TMInfoManager sharedManager].userIdentifier;
-    NSString *ipAddress = [Utility ipAddress];
+    NSString *ipAddress = [Utility ipAddressPreferIPv6:YES];
     if (userIndentifier == nil || ipAddress == nil)
     {
         NSLog(@"presentActionSheetForAuthenticateType - Missing necessary information.");

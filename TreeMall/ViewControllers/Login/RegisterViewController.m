@@ -239,7 +239,7 @@
         return;
     }
     // Should request SMS
-    NSString *ipAddress = [Utility ipAddress];
+    NSString *ipAddress = [Utility ipAddressPreferIPv6:YES];
     if (ipAddress == nil)
     {
         UIAlertController *alertController = [UIAlertController alertControllerWithTitle:[LocalizedString Notice] message:[LocalizedString NetworkError] preferredStyle:UIAlertControllerStyleAlert];

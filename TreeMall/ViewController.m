@@ -18,7 +18,6 @@
 #import "Definition.h"
 #import "TMInfoManager.h"
 #import "CryptoTool.h"
-#import "DTCoreText.h"
 
 @interface ViewController ()
 

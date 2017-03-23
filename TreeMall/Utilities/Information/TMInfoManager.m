@@ -60,7 +60,6 @@ static NSUInteger SearchKeywordNumberMax = 8;
 - (NSURL *)urlForInfoArchive;
 - (void)deleteArchive;
 - (NSString *)keyForCategoryIdentifier:(NSString *)identifier withLayer:(NSNumber *)layer;
-- (void)retrieveUserInformation;
 - (void)processUserInfomation:(NSData *)data;
 - (void)processUserPoint:(NSData *)data;
 - (id)processUserCoupon:(NSData *)data;
@@ -1275,6 +1274,32 @@ static NSUInteger SearchKeywordNumberMax = 8;
     [[NSNotificationCenter defaultCenter] postNotificationName:PostNotificationName_UserLogout object:self];
 }
 
+- (void)retrieveUserInformation
+{
+    __weak TMInfoManager *weakSelf = self;
+    NSString *apiKey = [CryptoModule sharedModule].apiKey;
+    NSString *token = [SHAPIAdapter sharedAdapter].token;
+    NSURL *url = [NSURL URLWithString:SymphoxAPI_memberInformation];
+//    NSLog(@"retrieveUserInformation - [%@]", [url absoluteString]);
+    NSDictionary *headerFields = [NSDictionary dictionaryWithObjectsAndKeys:apiKey, SymphoxAPIParam_key, token, SymphoxAPIParam_token, nil];
+    NSDictionary *options = [NSDictionary dictionaryWithObjectsAndKeys:self.userIdentifier, SymphoxAPIParam_user_num, nil];
+    [[SHAPIAdapter sharedAdapter] sendRequestFromObject:weakSelf ToUrl:url withHeaderFields:headerFields andPostObject:options inPostFormat:SHPostFormatJson encrypted:YES decryptedReturnData:YES completion:^(id resultObject, NSError *error){
+        if (error == nil)
+        {
+            //            NSLog(@"retrieveUserInformation - resultObject[%@]:\n%@", [[resultObject class] description], [resultObject description]);
+            if ([resultObject isKindOfClass:[NSData class]])
+            {
+                NSData *data = (NSData *)resultObject;
+                [weakSelf processUserInfomation:data];
+            }
+        }
+        else
+        {
+            NSLog(@"retrieveUserInformation - error:\n%@", [error description]);
+        }
+    }];
+}
+
 #pragma mark - Private Methods
 
 - (NSURL *)urlForInfoDirectory
@@ -1330,32 +1355,6 @@ static NSUInteger SearchKeywordNumberMax = 8;
         [key appendString:[layer stringValue]];
     }
     return key;
-}
-
-- (void)retrieveUserInformation
-{
-    __weak TMInfoManager *weakSelf = self;
-    NSString *apiKey = [CryptoModule sharedModule].apiKey;
-    NSString *token = [SHAPIAdapter sharedAdapter].token;
-    NSURL *url = [NSURL URLWithString:SymphoxAPI_memberInformation];
-//    NSLog(@"retrieveUserInformation - [%@]", [url absoluteString]);
-    NSDictionary *headerFields = [NSDictionary dictionaryWithObjectsAndKeys:apiKey, SymphoxAPIParam_key, token, SymphoxAPIParam_token, nil];
-    NSDictionary *options = [NSDictionary dictionaryWithObjectsAndKeys:self.userIdentifier, SymphoxAPIParam_user_num, nil];
-    [[SHAPIAdapter sharedAdapter] sendRequestFromObject:weakSelf ToUrl:url withHeaderFields:headerFields andPostObject:options inPostFormat:SHPostFormatJson encrypted:YES decryptedReturnData:YES completion:^(id resultObject, NSError *error){
-        if (error == nil)
-        {
-//            NSLog(@"retrieveUserInformation - resultObject[%@]:\n%@", [[resultObject class] description], [resultObject description]);
-            if ([resultObject isKindOfClass:[NSData class]])
-            {
-                NSData *data = (NSData *)resultObject;
-                [weakSelf processUserInfomation:data];
-            }
-        }
-        else
-        {
-            NSLog(@"retrieveUserInformation - error:\n%@", [error description]);
-        }
-    }];
 }
 
 - (void)processUserInfomation:(NSData *)data

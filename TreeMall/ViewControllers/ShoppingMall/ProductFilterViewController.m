@@ -100,23 +100,6 @@ typedef enum : NSUInteger {
     [formatter setNumberStyle:NSNumberFormatterDecimalStyle];
     if (self.sliderViewPrice)
     {
-        NSNumber *numberMinPrice = nil;
-        if (self.numberMinPriceDefault)
-        {
-            numberMinPrice = self.numberMinPriceDefault;
-        }
-        else
-        {
-            numberMinPrice = [NSNumber numberWithInteger:0];
-        }
-        if (numberMinPrice)
-        {
-            NSString *formattedString = [formatter stringFromNumber:numberMinPrice];
-            self.sliderViewPrice.textLowerBoundary = formattedString;
-            self.sliderViewPrice.slider.minimumValue = [numberMinPrice floatValue];
-            self.sliderViewPrice.slider.lowerValue = [numberMinPrice floatValue];
-        }
-        
         NSNumber *numberMaxPrice = nil;
         if (self.numberMaxPriceDefault)
         {
@@ -147,6 +130,28 @@ typedef enum : NSUInteger {
             self.sliderViewPrice.slider.upperValue = [numberMaxPrice floatValue];
         }
         
+        NSNumber *numberMinPrice = nil;
+        if (self.numberMinPriceDefault)
+        {
+            numberMinPrice = self.numberMinPriceDefault;
+        }
+        else
+        {
+            numberMinPrice = [NSNumber numberWithInteger:0];
+        }
+        NSLog(@"viewDidLoad - numberMinPrice[%f]", [numberMinPrice floatValue]);
+        if (numberMinPrice)
+        {
+            NSString *formattedString = [formatter stringFromNumber:numberMinPrice];
+            self.sliderViewPrice.textLowerBoundary = formattedString;
+            self.sliderViewPrice.slider.minimumValue = [numberMinPrice floatValue];
+            self.sliderViewPrice.slider.lowerValue = [numberMinPrice floatValue];
+        }
+        NSLog(@"viewDidLoad - numberMinPrice[%f]", [numberMinPrice floatValue]);
+        NSLog(@"viewDidLoad - self.sliderViewPrice.slider.lowerValue[%f]", self.sliderViewPrice.slider.lowerValue);
+        
+        
+        
         if ([self.numberMinPriceDefault integerValue] == [self.numberMaxPriceDefault integerValue])
         {
             [self.sliderViewPrice setHidden:YES];
@@ -155,20 +160,6 @@ typedef enum : NSUInteger {
     }
     if (self.sliderViewPoint)
     {
-        NSNumber *numberMinPoint = nil;
-        if (self.numberMinPointDefault)
-        {
-            numberMinPoint = self.numberMinPointDefault;
-        }
-        else
-        {
-            numberMinPoint = [NSNumber numberWithInteger:0];
-        }
-        NSString *formattedString = [formatter stringFromNumber:numberMinPoint];
-        self.sliderViewPrice.textLowerBoundary = formattedString;
-        self.sliderViewPrice.slider.minimumValue = [numberMinPoint floatValue];
-        self.sliderViewPrice.slider.lowerValue = [numberMinPoint floatValue];
-        
         NSNumber *numberMaxPoint = nil;
         if (self.numberMaxPointDefault)
         {
@@ -198,6 +189,24 @@ typedef enum : NSUInteger {
             self.sliderViewPoint.slider.maximumValue = [numberMaxPoint floatValue];
             self.sliderViewPoint.slider.upperValue = [numberMaxPoint floatValue];
         }
+        
+        NSNumber *numberMinPoint = nil;
+        if (self.numberMinPointDefault)
+        {
+            numberMinPoint = self.numberMinPointDefault;
+        }
+        else
+        {
+            numberMinPoint = [NSNumber numberWithInteger:0];
+        }
+//        NSLog(@"numberMinPoint[%f]", [numberMinPoint floatValue]);
+        NSString *formattedString = [formatter stringFromNumber:numberMinPoint];
+        self.sliderViewPoint.textLowerBoundary = formattedString;
+        self.sliderViewPoint.slider.minimumValue = [numberMinPoint floatValue];
+        self.sliderViewPoint.slider.lowerValue = [numberMinPoint floatValue];
+//        NSLog(@"self.sliderViewPoint.slider.lowerValue[%f]", self.sliderViewPoint.slider.lowerValue);
+        
+        
         if ([self.numberMinPointDefault integerValue] == [self.numberMaxPointDefault integerValue])
         {
             [self.sliderViewPoint setHidden:YES];

@@ -10,6 +10,21 @@
 
 static NSString *OrderHeaderReusableViewIdentifier = @"OrderHeaderReusableView";
 
+@class OrderHeaderReusableView;
+
+@protocol OrderHeaderReusableViewDelegate <NSObject>
+
+- (void)orderHeaderReusableView:(OrderHeaderReusableView *)view didPressButtonBySender:(id)sender;
+
+@end
+
 @interface OrderHeaderReusableView : UICollectionReusableView
+
+@property (nonatomic, weak) id <OrderHeaderReusableViewDelegate> delegate;
+@property (nonatomic, strong) UIView *viewBackground;
+@property (nonatomic, strong) UIView *viewTopLine;
+@property (nonatomic, strong) UIButton *button;
+@property (nonatomic, strong) UILabel *labelDateTime;
+@property (nonatomic, strong) UILabel *labelSerialNumber;
 
 @end

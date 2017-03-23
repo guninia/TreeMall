@@ -8,15 +8,24 @@
 
 #import "OrderListViewController.h"
 #import "LocalizedString.h"
-#import "TMInfoManager.h"
 #import "Definition.h"
-#import "OrderHeaderReusableView.h"
 #import "OrderListCollectionViewCell.h"
 #import "LoadingFoorterReusableView.h"
+#import "APIDefinition.h"
+#import "CryptoModule.h"
+#import "SHAPIAdapter.h"
+#import "UIViewController+FTPopMenu.h"
+#import "OrderDetailViewController.h"
 
 @interface OrderListViewController ()
 
-- (void)segmentedControlStateValueChanged:(id)sender;
+- (void)resetPreviousOrderData;
+- (void)requestOrderOfPage:(NSInteger)page forOrderState:(OrderState)state atTime:(OrderTime)orderTime deliverBy:(DeliverType)deliverType;
+- (BOOL)processOrderData:(id)data;
+- (NSDictionary *)ordersOfCartIndex:(NSInteger)index;
+- (NSInteger)numberOfOrdersOfCartIndex:(NSInteger)index;
+- (NSDictionary *)orderForIndex:(NSInteger)orderIndex inCartIndex:(NSInteger)cartIndex;
+
 - (void)buttonSearchPressed:(id)sender;
 - (void)buttonOrderTimePressed:(id)sender;
 - (void)buttonShipTypePressed:(id)sender;
@@ -31,8 +40,10 @@
     if (self)
     {
         _currentPage = 0;
-        _arrayDeliverTypes = DeliverTypeNoSpecific;
-        _arrayOrderTimeOptions = OrderTimeNoSpecific;
+        _deliverType = DeliverTypeNoSpecific;
+        _orderTime = OrderTimeNoSpecific;
+        _orderState = OrderStateNoSpecific;
+        _shouldShowLoadingView = YES;
     }
     return self;
 }
@@ -40,12 +51,13 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
+    self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
     self.title = [LocalizedString MyOrder];
     [self.view setBackgroundColor:[UIColor colorWithWhite:0.9 alpha:1.0]];
     
     [self.view addSubview:self.segmentedView];
     [self.view addSubview:self.viewSearchBackground];
-    [self.viewSearchBackground addSubview:self.textFieldSearch];
+    [self.viewSearchBackground addSubview:self.textFieldProductName];
     [self.view addSubview:self.viewButtonBackground];
     [self.viewButtonBackground addSubview:self.buttonOrderTime];
     [self.viewButtonBackground addSubview:self.separator];
@@ -53,11 +65,13 @@
     [self.view addSubview:self.viewTitle];
     [self.view addSubview:self.collectionView];
     
-    if (_currentPage == 0)
+    if (self.currentPage == 0)
     {
-        [self.segmentedView.segmentedControl setSelectedSegmentIndex:0];
+        [self.segmentedView.segmentedControl setSelectedSegmentIndex:self.orderState];
+        
+        NSInteger nextPage = self.currentPage + 1;
+        [self requestOrderOfPage:nextPage forOrderState:self.orderState atTime:self.orderTime deliverBy:self.deliverType];
     }
-    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -101,10 +115,10 @@
         self.viewSearchBackground.frame = frame;
         originY = self.viewSearchBackground.frame.origin.y + self.viewSearchBackground.frame.size.height + 5.0;
         
-        if (self.textFieldSearch)
+        if (self.textFieldProductName)
         {
             CGRect frame = CGRectInset(self.viewSearchBackground.bounds, 10.0, 0.0);
-            self.textFieldSearch.frame = frame;
+            self.textFieldProductName.frame = frame;
         }
     }
     
@@ -200,14 +214,14 @@
     return _viewSearchBackground;
 }
 
-- (UITextField *)textFieldSearch
+- (UITextField *)textFieldProductName
 {
-    if (_textFieldSearch == nil)
+    if (_textFieldProductName == nil)
     {
-        _textFieldSearch = [[UITextField alloc] initWithFrame:CGRectZero];
-        [_textFieldSearch setBackgroundColor:[UIColor clearColor]];
-        [_textFieldSearch setPlaceholder:[LocalizedString PleaseInputProductName]];
-        [_textFieldSearch setDelegate:self];
+        _textFieldProductName = [[UITextField alloc] initWithFrame:CGRectZero];
+        [_textFieldProductName setBackgroundColor:[UIColor clearColor]];
+        [_textFieldProductName setPlaceholder:[LocalizedString PleaseInputProductName]];
+        [_textFieldProductName setDelegate:self];
         UIImage *image = [[UIImage imageNamed:@"sho_btn_mag"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         if (image)
         {
@@ -216,13 +230,13 @@
             button.backgroundColor = [UIColor clearColor];
             [button setImage:image forState:UIControlStateNormal];
             [button addTarget:self action:@selector(buttonSearchPressed:) forControlEvents:UIControlEventTouchUpInside];
-            _textFieldSearch.rightView = button;
-            _textFieldSearch.rightViewMode = UITextFieldViewModeAlways;
+            _textFieldProductName.rightView = button;
+            _textFieldProductName.rightViewMode = UITextFieldViewModeAlways;
         }
-        [_textFieldSearch setKeyboardType:UIKeyboardTypeDefault];
-        [_textFieldSearch setReturnKeyType:UIReturnKeySearch];
+        [_textFieldProductName setKeyboardType:UIKeyboardTypeDefault];
+        [_textFieldProductName setReturnKeyType:UIReturnKeySearch];
     }
-    return _textFieldSearch;
+    return _textFieldProductName;
 }
 
 - (UIView *)viewButtonBackground
@@ -382,71 +396,300 @@
     return _arrayDeliverTypes;
 }
 
-#pragma mark - Actions
-
-- (void)segmentedControlStateValueChanged:(id)sender
+- (void)setOrderTime:(OrderTime)orderTime
 {
+    _orderTime = orderTime;
     
+    if (_orderTime < [self.arrayOrderTimeOptions count])
+    {
+        NSString *string = [self.arrayOrderTimeOptions objectAtIndex:_orderTime];
+        self.buttonOrderTime.label.text = string;
+    }
 }
+
+- (void)setDeliverType:(DeliverType)deliverType
+{
+    _deliverType = deliverType;
+    
+    if (_deliverType < [self.arrayDeliverTypes count])
+    {
+        NSString *string = [self.arrayDeliverTypes objectAtIndex:_deliverType];
+        self.buttonShipType.label.text = string;
+    }
+}
+
+- (void)setIsLoading:(BOOL)isLoading
+{
+    _isLoading = isLoading;
+    [self.segmentedView.segmentedControl setEnabled:!_isLoading];
+    [self.textFieldProductName setEnabled:!_isLoading];
+    [self.buttonOrderTime setEnabled:!_isLoading];
+    [self.buttonShipType setEnabled:!_isLoading];
+}
+
+- (NSMutableArray *)arrayCarts
+{
+    if (_arrayCarts == nil)
+    {
+        _arrayCarts = [[NSMutableArray alloc] initWithCapacity:0];
+    }
+    return _arrayCarts;
+}
+
+#pragma mark - Private Methods
+
+- (void)resetPreviousOrderData
+{
+    self.currentPage = 0;
+    self.totalOrder = 0;
+    self.shouldShowLoadingView = YES;
+    if ([self.arrayCarts count] > 0)
+    {
+        [self.arrayCarts removeAllObjects];
+    }
+    __weak OrderListViewController *weakSelf = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [weakSelf.collectionView reloadData];
+    });
+}
+
+- (void)requestOrderOfPage:(NSInteger)page forOrderState:(OrderState)state atTime:(OrderTime)orderTime deliverBy:(DeliverType)deliverType
+{
+    if (self.isLoading)
+    {
+        return;
+    }
+    NSNumber *userIndentifier = [TMInfoManager sharedManager].userIdentifier;
+    if (userIndentifier == nil)
+        return;
+    NSMutableDictionary *options = [NSMutableDictionary dictionary];
+    [options setObject:userIndentifier forKey:SymphoxAPIParam_user_num];
+    
+    NSString *productName = [self.textFieldProductName text];
+    if (productName && [productName length] > 0)
+    {
+        [options setObject:productName forKey:SymphoxAPIParam_name];
+    }
+    NSNumber *numberState = [NSNumber numberWithInteger:state];
+    if (numberState)
+    {
+        [options setObject:numberState forKey:SymphoxAPIParam_status];
+    }
+    NSNumber *numberOrderTime = [NSNumber numberWithInteger:orderTime];
+    if (numberOrderTime)
+    {
+        [options setObject:numberOrderTime forKey:SymphoxAPIParam_time];
+    }
+    NSNumber *numberDeliverType = [NSNumber numberWithInteger:deliverType];
+    if (numberDeliverType)
+    {
+        [options setObject:numberDeliverType forKey:SymphoxAPIParam_delivery_type];
+    }
+    NSNumber *numberPage = [NSNumber numberWithInteger:page];
+    if (numberPage)
+    {
+        [options setObject:numberPage forKey:SymphoxAPIParam_page];
+    }
+    NSNumber *numberPageCount = [NSNumber numberWithInteger:25];
+    if (numberPageCount)
+    {
+        [options setObject:numberPageCount forKey:SymphoxAPIParam_page_count];
+    }
+    
+    if (page == 1)
+    {
+        [self resetPreviousOrderData];
+    }
+    self.isLoading = YES;
+    __weak OrderListViewController *weakSelf = self;
+    NSString *apiKey = [CryptoModule sharedModule].apiKey;
+    NSString *token = [SHAPIAdapter sharedAdapter].token;
+    NSURL *url = [NSURL URLWithString:SymphoxAPI_memberOrder];
+    //    NSLog(@"retrieveSubcategoryDataForIdentifier - url [%@]", [url absoluteString]);
+    NSLog(@"requestOrder - options:\n%@", [options description]);
+    NSDictionary *headerFields = [NSDictionary dictionaryWithObjectsAndKeys:apiKey, SymphoxAPIParam_key, token, SymphoxAPIParam_token, nil];
+    [[SHAPIAdapter sharedAdapter] sendRequestFromObject:weakSelf ToUrl:url withHeaderFields:headerFields andPostObject:options inPostFormat:SHPostFormatJson encrypted:YES decryptedReturnData:YES completion:^(id resultObject, NSError *error){
+        if (error == nil)
+        {
+//            NSLog(@"resultObject[%@]:\n%@", [[resultObject class] description], [resultObject description]);
+            if ([resultObject isKindOfClass:[NSData class]])
+            {
+                NSData *data = (NSData *)resultObject;
+//                NSString *string = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+//                NSLog(@"retrieveProductsForConditions:\n%@", string);
+                if ([self processOrderData:data])
+                {
+                    weakSelf.currentPage = page;
+                }
+                else
+                {
+                    NSLog(@"requestOrderOfPage - Cannot process data");
+                }
+            }
+            else
+            {
+                NSLog(@"requestOrderOfPage - Unexpected data format.");
+            }
+        }
+        else
+        {
+            NSString *errorMessage = [LocalizedString CannotLoadData];
+            NSDictionary *userInfo = error.userInfo;
+            BOOL errorProductNotFound = NO;
+            if (userInfo)
+            {
+                NSString *errorId = [userInfo objectForKey:SymphoxAPIParam_id];
+                if ([errorId compare:SymphoxAPIError_E301 options:NSCaseInsensitiveSearch] == NSOrderedSame)
+                {
+                    errorProductNotFound = YES;
+                }
+                if (errorProductNotFound)
+                {
+                    NSString *serverMessage = [userInfo objectForKey:SymphoxAPIParam_status_desc];
+                    if (serverMessage)
+                    {
+                        errorMessage = serverMessage;
+                    }
+                }
+            }
+            NSLog(@"requestOrderOfPage - error:\n%@", [error description]);
+        }
+        weakSelf.isLoading = NO;
+    }];
+}
+
+- (BOOL)processOrderData:(id)data
+{
+    BOOL success = NO;
+//    NSString *string = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+//    NSLog(@"processOrderData:\n%@", string);
+
+    NSError *error = nil;
+    id jsonObject = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
+    if (error)
+    {
+        NSLog(@"processOrderData error:\n%@", [error description]);
+        return success;
+    }
+    if ([jsonObject isKindOfClass:[NSDictionary class]])
+    {
+        NSDictionary *dictionary = (NSDictionary *)jsonObject;
+        NSNumber *numberSize = [dictionary objectForKey:SymphoxAPIParam_size];
+        if (numberSize)
+        {
+            self.totalOrder = [numberSize integerValue];
+        }
+        NSArray *array = [dictionary objectForKey:SymphoxAPIParam_list];
+        if (array)
+        {
+            [self.arrayCarts addObjectsFromArray:array];
+        }
+        if (self.totalOrder > [self.arrayCarts count])
+        {
+            self.shouldShowLoadingView = YES;
+        }
+        success = YES;
+    }
+    [self.collectionView reloadData];
+    return success;
+}
+
+- (NSDictionary *)ordersOfCartIndex:(NSInteger)index
+{
+    NSDictionary *orders = nil;
+    if (index >= [self.arrayCarts count])
+    {
+        return orders;
+    }
+    NSDictionary *dictionary = [self.arrayCarts objectAtIndex:index];
+    orders = [dictionary objectForKey:SymphoxAPIParam_order];
+    if ([orders isEqual:[NSNull null]])
+    {
+        orders = nil;
+    }
+    return orders;
+}
+
+- (NSInteger)numberOfOrdersOfCartIndex:(NSInteger)index
+{
+    NSInteger numberOfOrders = 0;
+    NSDictionary *orders = [self ordersOfCartIndex:index];
+    if (orders == nil)
+    {
+        return numberOfOrders;
+    }
+    numberOfOrders = [orders count];
+    return numberOfOrders;
+}
+
+- (NSDictionary *)orderForIndex:(NSInteger)orderIndex inCartIndex:(NSInteger)cartIndex
+{
+    NSDictionary *order = nil;
+    NSDictionary *orders = [self ordersOfCartIndex:cartIndex];
+    if (orders == nil)
+    {
+        return order;
+    }
+    if (orderIndex >= [orders count])
+    {
+        return order;
+    }
+    // Server index start from 1.
+    NSInteger orderIndexForServer = orderIndex + 1;
+    NSString *stringIndex = [NSString stringWithFormat:@"%li", (long)orderIndexForServer];
+//    NSLog(@"stringIndex[%@]", stringIndex);
+    NSArray *array = [orders objectForKey:stringIndex];
+    if ([array count] > 0)
+    {
+        order = [array objectAtIndex:0];
+    }
+    return order;
+}
+
+#pragma mark - Actions
 
 - (void)buttonSearchPressed:(id)sender
 {
-    NSString *text = self.textFieldSearch.text;
-    if ([text length] == 0)
+    // Should start search.
+    [self requestOrderOfPage:1 forOrderState:self.orderState atTime:self.orderTime deliverBy:self.deliverType];
+    if ([self.textFieldProductName isFirstResponder])
     {
-        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:[LocalizedString Notice] message:[LocalizedString PleaseInputProductName] preferredStyle:UIAlertControllerStyleAlert];
-        __weak OrderListViewController *weakSelf = self;
-        UIAlertAction *confirmAction = [UIAlertAction actionWithTitle:[LocalizedString Confirm] style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
-            [weakSelf.textFieldSearch setText:@""];
-            if ([weakSelf.textFieldSearch canBecomeFirstResponder])
-            {
-                [weakSelf.textFieldSearch becomeFirstResponder];
-            }
-        }];
-        [alertController addAction:confirmAction];
-        [self presentViewController:alertController animated:YES completion:nil];
-        return;
+        [self.textFieldProductName resignFirstResponder];
     }
-    else
-    {
-        // Should start search.
-    }
-    [self.textFieldSearch resignFirstResponder];
 }
 
 - (void)buttonOrderTimePressed:(id)sender
 {
-    
+    __weak OrderListViewController *weakSelf = self;
+    [self showFTMenuFromView:self.buttonOrderTime menuArray:self.arrayOrderTimeOptions doneBlock:^(NSInteger selectedIndex){
+        weakSelf.orderTime = selectedIndex;
+        [weakSelf requestOrderOfPage:1 forOrderState:weakSelf.orderState atTime:weakSelf.orderTime deliverBy:weakSelf.deliverType];
+    } cancelBlock:nil];
 }
 
 - (void)buttonShipTypePressed:(id)sender
 {
-    
+    __weak OrderListViewController *weakSelf = self;
+    [self showFTMenuFromView:self.buttonShipType menuArray:self.arrayDeliverTypes doneBlock:^(NSInteger selectedIndex){
+        weakSelf.deliverType = selectedIndex;
+        [weakSelf requestOrderOfPage:1 forOrderState:weakSelf.orderState atTime:weakSelf.orderTime deliverBy:weakSelf.deliverType];
+    } cancelBlock:nil];
 }
 
 #pragma mark - UITextFieldDelegate
 
+- (void)textFieldDidBeginEditing:(UITextField *)textField
+{
+    if ([textField.text length] > 0)
+    {
+        [textField selectAll:nil];
+    }
+}
+
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
-    NSString *text = textField.text;
-    if ([text length] == 0)
-    {
-        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:[LocalizedString Notice] message:[LocalizedString PleaseInputProductName] preferredStyle:UIAlertControllerStyleAlert];
-        __weak OrderListViewController *weakSelf = self;
-        UIAlertAction *confirmAction = [UIAlertAction actionWithTitle:[LocalizedString Confirm] style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
-            [weakSelf.textFieldSearch setText:@""];
-            if ([weakSelf.textFieldSearch canBecomeFirstResponder])
-            {
-                [weakSelf.textFieldSearch becomeFirstResponder];
-            }
-        }];
-        [alertController addAction:confirmAction];
-        [self presentViewController:alertController animated:YES completion:nil];
-    }
-    else
-    {
-        // Should start search.
-    }
+    // Should start search.
+    [self requestOrderOfPage:1 forOrderState:self.orderState atTime:self.orderTime deliverBy:self.deliverType];
     [textField resignFirstResponder];
     return YES;
 }
@@ -455,12 +698,20 @@
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
 {
-    return 1;
+    // Add one section for loading view
+    NSInteger numberOfSections = [self.arrayCarts count] + 1;
+//    NSLog(@"numberOfSections[%li]", (long)numberOfSections);
+    return numberOfSections;
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-    return 1;
+    NSInteger numberOfItems = 0;
+    if (section < [self.arrayCarts count])
+    {
+        numberOfItems = [self numberOfOrdersOfCartIndex:section];
+    }
+    return numberOfItems;
 }
 
 - (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath
@@ -470,6 +721,23 @@
     {
         OrderHeaderReusableView *headerView = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:OrderHeaderReusableViewIdentifier forIndexPath:indexPath];
         [headerView setBackgroundColor:[UIColor clearColor]];
+        headerView.tag = indexPath.section;
+        headerView.delegate = self;
+        if (indexPath.section < [self.arrayCarts count])
+        {
+            NSDictionary *dictionary = [self.arrayCarts objectAtIndex:indexPath.section];
+            NSString *authorizationId = [dictionary objectForKey:SymphoxAPIParam_cart_id];
+            if (authorizationId)
+            {
+                NSString *string = [NSString stringWithFormat:@"%@%@", [LocalizedString OrderAuthrizationNumber], authorizationId];
+                headerView.labelSerialNumber.text = string;
+            }
+            NSString *authorizationDate = [dictionary objectForKey:SymphoxAPIParam_cart_day];
+            if (authorizationDate)
+            {
+                headerView.labelDateTime.text = authorizationDate;
+            }
+        }
         view = headerView;
     }
     else if ([kind isEqualToString:UICollectionElementKindSectionFooter])
@@ -485,6 +753,61 @@
 {
     OrderListCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:OrderListCollectionViewCellIdentifier forIndexPath:indexPath];
     cell.backgroundColor = [UIColor whiteColor];
+    [cell prepareForReuse];
+    NSDictionary *dictionaryOrder  =[self orderForIndex:indexPath.row inCartIndex:indexPath.section];
+    if (dictionaryOrder)
+    {
+//        NSLog(@"cellForItemAtIndexPath:\n%@", [dictionaryOrder description]);
+        NSDictionary *dictionaryDelivery = [dictionaryOrder objectForKey:SymphoxAPIParam_delivery];
+        if (dictionaryDelivery && [dictionaryDelivery isEqual:[NSNull null]] == NO && [dictionaryDelivery count] > 0)
+        {
+            NSArray *array = [dictionaryDelivery objectForKey:SymphoxAPIParam_step];
+            if (array && [array isEqual:[NSNull null]] == NO && [array count] > 0)
+            {
+                cell.progressView.arrayProgress = array;
+                cell.progressView.hidden = NO;
+            }
+//            NSLog(@"cellForItemAtIndexPath[%li][%li] - cell.progressView [%@]", (long)indexPath.section, (long)indexPath.row, [cell.progressView isHidden]?@"hidden":@"shown");
+            NSString *message = [dictionaryDelivery objectForKey:SymphoxAPIParam_message];
+//            NSLog(@"cellForItemAtIndexPath - message[%@]", message);
+            if (message && [message isEqual:[NSNull null]] == NO && [message length] > 0)
+            {
+                NSString *totalString = [NSString stringWithFormat:@"%@ %@", [LocalizedString T_CatId], message];
+                [cell.buttonDeliverId setTitle:totalString forState:UIControlStateNormal];
+                cell.buttonDeliverId.hidden = NO;
+            }
+//            NSLog(@"cellForItemAtIndexPath[%li][%li] - cell.buttonDeliverId [%@]", (long)indexPath.section, (long)indexPath.row, [cell.buttonDeliverId isHidden]?@"hidden":@"shown");
+        }
+        NSUInteger itemCount = 0;
+        NSArray *arrayItem = [dictionaryOrder objectForKey:SymphoxAPIParam_item];
+        if (arrayItem && [arrayItem isEqual:[NSNull null]] == NO && [arrayItem count] > 0)
+        {
+            NSDictionary *dictionary = [arrayItem objectAtIndex:0];
+            NSString *stringImageUrl = [dictionary objectForKey:SymphoxAPIParam_img_url];
+            if (stringImageUrl && [stringImageUrl isEqual:[NSNull null]] == NO && [stringImageUrl length] > 0)
+            {
+                NSURL *url = [NSURL URLWithString:stringImageUrl];
+                cell.imageUrl = url;
+            }
+            NSString *name = [dictionary objectForKey:SymphoxAPIParam_name];
+            if (name && [name isEqual:[NSNull null]] == NO && [name length] > 0)
+            {
+                NSAttributedString *attrString = [[NSAttributedString alloc] initWithString:name attributes:cell.attributesTitle];
+                [cell.labelTitle setAttributedText:attrString];
+            }
+            itemCount = [arrayItem count];
+        }
+        NSString *stringTotalProduct = [NSString stringWithFormat:[LocalizedString Total_N_Product], (unsigned long)itemCount];
+        [cell.buttonTotalProducts setTitle:stringTotalProduct forState:UIControlStateNormal];
+        
+        NSString *status = [dictionaryOrder objectForKey:SymphoxAPIParam_status];
+        if (status && [status isEqual:[NSNull null]] == NO && [status length] > 0)
+        {
+            cell.labelOrderState.text = status;
+            cell.labelOrderState.hidden = NO;
+        }
+        [cell setNeedsDisplay];
+    }
     return cell;
 }
 
@@ -502,7 +825,11 @@
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section
 {
-    CGSize referenceSize = CGSizeMake(collectionView.frame.size.width, 60.0);
+    CGSize referenceSize = CGSizeZero;
+    if (section < [self.arrayCarts count])
+    {
+        referenceSize = CGSizeMake(collectionView.frame.size.width, 50.0);
+    }
     return referenceSize;
 }
 
@@ -511,7 +838,10 @@
     CGSize referenceSize = CGSizeZero;
     if (section == ([self numberOfSectionsInCollectionView:collectionView] - 1))
     {
-        referenceSize = CGSizeMake(collectionView.frame.size.width, 50.0);
+        if (self.shouldShowLoadingView)
+        {
+            referenceSize = CGSizeMake(collectionView.frame.size.width, 50.0);
+        }
     }
     return referenceSize;
 }
@@ -520,7 +850,17 @@
 {
     UIEdgeInsets edgeInsets = [self collectionView:collectionView layout:collectionViewLayout insetForSectionAtIndex:indexPath.section];
     CGFloat itemWidth = collectionView.frame.size.width - edgeInsets.left - edgeInsets.right;
-    CGFloat itemHeight = 200.0;
+    NSDictionary *dictionaryDelivery = nil;
+    NSDictionary *dictionaryOrder = [self orderForIndex:indexPath.row inCartIndex:indexPath.section];
+    if (dictionaryOrder && [dictionaryOrder isEqual:[NSNull null]] == NO && [dictionaryOrder count] > 0)
+    {
+        dictionaryDelivery = [dictionaryOrder objectForKey:SymphoxAPIParam_delivery];
+        if ([dictionaryDelivery isEqual:[NSNull null]])
+        {
+            dictionaryDelivery = nil;
+        }
+    }
+    CGFloat itemHeight = [OrderListCollectionViewCell heightForCellWidth:itemWidth andDataDictionary:dictionaryDelivery];
     CGSize sizeForItem = CGSizeMake(itemWidth, itemHeight);
     return sizeForItem;
 }
@@ -539,6 +879,10 @@
     {
         LoadingFoorterReusableView *loadingView = (LoadingFoorterReusableView *)view;
         [loadingView.activityIndicator startAnimating];
+        if ([self.arrayCarts count] > 0)
+        {
+            [self requestOrderOfPage:(self.currentPage + 1) forOrderState:self.orderState atTime:self.orderTime deliverBy:self.deliverType];
+        }
     }
 }
 
@@ -549,6 +893,32 @@
         LoadingFoorterReusableView *loadingView = (LoadingFoorterReusableView *)view;
         [loadingView.activityIndicator stopAnimating];
     }
+}
+
+#pragma mark - SemiCircleEndsSegmentedViewDelegate
+
+- (void)semiCircleEndsSegmentedView:(SemiCircleEndsSegmentedView *)view didChangeToIndex:(NSInteger)index
+{
+    self.orderState = index;
+    [self requestOrderOfPage:1 forOrderState:self.orderState atTime:self.orderTime deliverBy:self.deliverType];
+}
+
+#pragma mark - OrderHeaderReusableViewDelegate
+
+- (void)orderHeaderReusableView:(OrderHeaderReusableView *)view didPressButtonBySender:(id)sender
+{
+    NSInteger section = view.tag;
+    if (section >= [self.arrayCarts count])
+        return;
+    
+    id orders = [self.arrayCarts objectAtIndex:section];
+    NSLog(@"orders:\n%@", [orders description]);
+    OrderDetailViewController *viewController = [[OrderDetailViewController alloc] initWithNibName:@"OrderDetailViewController" bundle:[NSBundle mainBundle]];
+    if ([orders isKindOfClass:[NSDictionary class]])
+    {
+        viewController.dictionaryOrder = orders;
+    }
+    [self.navigationController pushViewController:viewController animated:YES];
 }
 
 @end

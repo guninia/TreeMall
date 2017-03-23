@@ -9,6 +9,13 @@
 #import "Utility.h"
 #import <ifaddrs.h>
 #import <arpa/inet.h>
+#import <net/if.h>
+
+#define NETWORK_CELLULAR @"pdp_ip0"
+#define NETWORK_WIFI @"en0"
+#define NETWORK_VPN @"utun0"
+#define IPADDRESS_IPv4 @"ipv4"
+#define IPADDRESS_IPv6 @"ipv6"
 
 @implementation Utility
 
@@ -60,6 +67,82 @@
     // Free memory
     freeifaddrs(interfaces);
     return address;
+}
+
++ (NSString *)ipAddressPreferIPv6:(BOOL)preferIPv6
+{
+    NSArray *searchArray = nil;
+    if (preferIPv6)
+    {
+        searchArray = [NSArray arrayWithObjects:
+                       [NSString stringWithFormat:@"%@/%@", NETWORK_CELLULAR, IPADDRESS_IPv6],
+                       [NSString stringWithFormat:@"%@/%@", NETWORK_CELLULAR, IPADDRESS_IPv4],
+                       [NSString stringWithFormat:@"%@/%@", NETWORK_WIFI, IPADDRESS_IPv6],
+                       [NSString stringWithFormat:@"%@/%@", NETWORK_WIFI, IPADDRESS_IPv4],
+                       [NSString stringWithFormat:@"%@/%@", NETWORK_VPN, IPADDRESS_IPv6],
+                       [NSString stringWithFormat:@"%@/%@", NETWORK_VPN, IPADDRESS_IPv4], nil];
+    }
+    else
+    {
+        searchArray = [NSArray arrayWithObjects:
+                       [NSString stringWithFormat:@"%@/%@", NETWORK_CELLULAR, IPADDRESS_IPv4],
+                       [NSString stringWithFormat:@"%@/%@", NETWORK_CELLULAR, IPADDRESS_IPv6],
+                       [NSString stringWithFormat:@"%@/%@", NETWORK_WIFI, IPADDRESS_IPv4],
+                       [NSString stringWithFormat:@"%@/%@", NETWORK_WIFI, IPADDRESS_IPv6],
+                       [NSString stringWithFormat:@"%@/%@", NETWORK_VPN, IPADDRESS_IPv4],
+                       [NSString stringWithFormat:@"%@/%@", NETWORK_VPN, IPADDRESS_IPv6], nil];
+    }
+    
+    NSDictionary *addresses = [self getIPAddresses];
+    NSLog(@"addresses: %@", addresses);
+    
+    __block NSString *address;
+    [searchArray enumerateObjectsUsingBlock:^(NSString *key, NSUInteger idx, BOOL *stop)
+     {
+         address = addresses[key];
+         if(address) *stop = YES;
+     } ];
+    return address ? address : @"0.0.0.0";
+}
+
++ (NSDictionary *)getIPAddresses
+{
+    NSMutableDictionary *addresses = [NSMutableDictionary dictionary];
+    
+    // retrieve the current interfaces - returns 0 on success
+    struct ifaddrs *interfaces;
+    if(!getifaddrs(&interfaces)) {
+        // Loop through linked list of interfaces
+        struct ifaddrs *interface;
+        for(interface=interfaces; interface; interface=interface->ifa_next) {
+            if(!(interface->ifa_flags & IFF_UP) /* || (interface->ifa_flags & IFF_LOOPBACK) */ ) {
+                continue; // deeply nested code harder to read
+            }
+            const struct sockaddr_in *addr = (const struct sockaddr_in*)interface->ifa_addr;
+            char addrBuf[ MAX(INET_ADDRSTRLEN, INET6_ADDRSTRLEN) ];
+            if(addr && (addr->sin_family==AF_INET || addr->sin_family==AF_INET6)) {
+                NSString *name = [NSString stringWithUTF8String:interface->ifa_name];
+                NSString *type;
+                if(addr->sin_family == AF_INET) {
+                    if(inet_ntop(AF_INET, &addr->sin_addr, addrBuf, INET_ADDRSTRLEN)) {
+                        type = IPADDRESS_IPv4;
+                    }
+                } else {
+                    const struct sockaddr_in6 *addr6 = (const struct sockaddr_in6*)interface->ifa_addr;
+                    if(inet_ntop(AF_INET6, &addr6->sin6_addr, addrBuf, INET6_ADDRSTRLEN)) {
+                        type = IPADDRESS_IPv6;
+                    }
+                }
+                if(type) {
+                    NSString *key = [NSString stringWithFormat:@"%@/%@", name, type];
+                    addresses[key] = [NSString stringWithUTF8String:addrBuf];
+                }
+            }
+        }
+        // Free memory
+        freeifaddrs(interfaces);
+    }
+    return [addresses count] ? addresses : nil;
 }
 
 + (BOOL)evaluateEmail:(NSString *)text

@@ -403,7 +403,7 @@
         [request startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error){
             NSLog(@"result:\n%@", [result description]);
             NSString *email = [result objectForKey:@"email"];
-            NSString *ipAddress = [Utility ipAddress];
+            NSString *ipAddress = [Utility ipAddressPreferIPv6:YES];
             if (email != nil && ipAddress != nil)
             {
                 NSDictionary *dictionary = [NSDictionary dictionaryWithObjectsAndKeys:email, SymphoxAPIParam_account, ipAddress, SymphoxAPIParam_ip, nil];
@@ -512,7 +512,7 @@
         return;
     }
     // Should start login
-    NSString *ipAddress = [Utility ipAddress];
+    NSString *ipAddress = [Utility ipAddressPreferIPv6:YES];
     if (ipAddress == nil)
     {
         NSLog(@"No ip address");
@@ -713,7 +713,7 @@
 {
     NSString *email = user.profile.email;
 //    NSLog(@"userId[%@] fullName[%@] email[%@]", userId, fullName, email);
-    NSString *ipAddress = [Utility ipAddress];
+    NSString *ipAddress = [Utility ipAddressPreferIPv6:YES];
     if (email && ipAddress)
     {
         NSDictionary *options = [NSDictionary dictionaryWithObjectsAndKeys:email, SymphoxAPIParam_account, ipAddress, SymphoxAPIParam_ip, nil];

@@ -151,5 +151,32 @@
 + (NSString *)CommonDelivery;
 + (NSString *)FastDelivery;
 + (NSString *)StorePickUp;
++ (NSString *)OrderAuthrizationNumber;
++ (NSString *)T_CatId;
++ (NSString *)Total_N_Product;
++ (NSString *)EmailAuthentication;
++ (NSString *)IdentityAuthentication;
++ (NSString *)BasicInformationModification;
++ (NSString *)ContactsSettings;
++ (NSString *)ChangePassword;
++ (NSString *)NewsletterSubscribe;
++ (NSString *)CompleteAuthenticationToGet_N_Points;
++ (NSString *)CardMemberAuthenticationNotComplete;
++ (NSString *)Authenticated;
++ (NSString *)AccountInformationMaintain;
++ (NSString *)PleaseInputYourEmail;
++ (NSString *)PleaseInputEmail;
++ (NSString *)PleaseInputOldPassword;
++ (NSString *)PleaseInputNewPassword;
++ (NSString *)PleaseConfirmNewPassword;
++ (NSString *)PleaseInputYourNewPassword;
++ (NSString *)PleaseInputValidEmail;
++ (NSString *)PleaseInputValidPassword;
++ (NSString *)Send;
++ (NSString *)ToSubscribeNewsletterPleaseCheckAndSend;
++ (NSString *)_M_Reminder_M_;
++ (NSString *)NewsletterSubscriptionNotation;
++ (NSString *)SubscribeNewsletter;
++ (NSString *)UpdateNewsletterSubscriptionSuccess;
 
 @end

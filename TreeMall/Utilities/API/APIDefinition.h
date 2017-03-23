@@ -32,6 +32,11 @@ static NSString *SymphoxAPI_memberInformation = @"http://tomcat8.mdevelop.com/Tr
 static NSString *SymphoxAPI_memberPoint = @"http://tomcat8.mdevelop.com/TreeMall/api/portal/app/member/point";
 static NSString *SymphoxAPI_memberCoupon = @"http://tomcat8.mdevelop.com/TreeMall/api/portal/app/member/ecoupon";
 static NSString *SymphoxAPI_productDetail = @"http://tomcat8.mdevelop.com/TreeMall/api/portal/app/mall/product";
+static NSString *SymphoxAPI_memberOrder = @"http://tomcat8.mdevelop.com/TreeMall/api/portal/app/member/order";
+static NSString *SymphoxAPI_emailAuth = @"http://tomcat8.mdevelop.com/TreeMall/api/portal/app/member/verify/email";
+static NSString *SymphoxAPI_changePassword = @"http://tomcat8.mdevelop.com/TreeMall/api/portal/app/member/password/update";
+static NSString *SymphoxAPI_newsletter = @"http://tomcat8.mdevelop.com/TreeMall/api/portal/app/member/edm";
+static NSString *SymphoxAPI_subscribeNewsletter = @"http://tomcat8.mdevelop.com/TreeMall/api/portal/app/member/edm/update";
 
 #else
 static NSString *SymphoxAPI_token = @"https://api.symphox.com.tw/portal/app/token";
@@ -202,6 +207,19 @@ static NSString *SymphoxAPIParam_installment = @"installment";
 static NSString *SymphoxAPIParam_term = @"term";
 static NSString *SymphoxAPIParam_cathay_only = @"cathay_only";
 static NSString *SymphoxAPIParam_shopping = @"shopping";
+static NSString *SymphoxAPIParam_time = @"time";
+static NSString *SymphoxAPIParam_delivery_type = @"delivery_type";
+static NSString *SymphoxAPIParam_cart_id = @"cart_id";
+static NSString *SymphoxAPIParam_cart_day = @"cart_day";
+static NSString *SymphoxAPIParam_platform = @"platform";
+static NSString *SymphoxAPIParam_order = @"order";
+static NSString *SymphoxAPIParam_trade_mode = @"trade_mode";
+static NSString *SymphoxAPIParam_delivery = @"delivery";
+static NSString *SymphoxAPIParam_step = @"step";
+static NSString *SymphoxAPIParam_item = @"item";
+static NSString *SymphoxAPIParam_old_pwd = @"old_pwd";
+static NSString *SymphoxAPIParam_subscribe = @"subscribe";
+static NSString *SymphoxAPIParam_edm_id = @"edm_id";
 
 static NSString *SymphoxAPIError_E301 = @"E301";
 

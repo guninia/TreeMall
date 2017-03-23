@@ -1421,4 +1421,274 @@
     return StorePickUp;
 }
 
++ (NSString *)OrderAuthrizationNumber
+{
+    static NSString *OrderAuthrizationNumber = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        OrderAuthrizationNumber = NSLocalizedString(@"OrderAuthrizationNumber", nil);
+    });
+    return OrderAuthrizationNumber;
+}
+
++ (NSString *)T_CatId
+{
+    static NSString *T_CatId = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        T_CatId = NSLocalizedString(@"T_CatId", nil);
+    });
+    return T_CatId;
+}
+
++ (NSString *)Total_N_Product
+{
+    static NSString *Total_N_Product = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        Total_N_Product = NSLocalizedString(@"Total_N_Product", nil);
+    });
+    return Total_N_Product;
+}
+
++ (NSString *)EmailAuthentication
+{
+    static NSString *EmailAuthentication = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        EmailAuthentication = NSLocalizedString(@"EmailAuthentication", nil);
+    });
+    return EmailAuthentication;
+}
+
++ (NSString *)IdentityAuthentication
+{
+    static NSString *IdentityAuthentication = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        IdentityAuthentication = NSLocalizedString(@"IdentityAuthentication", nil);
+    });
+    return IdentityAuthentication;
+}
+
++ (NSString *)BasicInformationModification
+{
+    static NSString *BasicInformationModification = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        BasicInformationModification = NSLocalizedString(@"BasicInformationModification", nil);
+    });
+    return BasicInformationModification;
+}
+
++ (NSString *)ContactsSettings
+{
+    static NSString *ContactsSettings = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        ContactsSettings = NSLocalizedString(@"ContactsSettings", nil);
+    });
+    return ContactsSettings;
+}
+
++ (NSString *)ChangePassword
+{
+    static NSString *ChangePassword = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        ChangePassword = NSLocalizedString(@"ChangePassword", nil);
+    });
+    return ChangePassword;
+}
+
++ (NSString *)NewsletterSubscribe
+{
+    static NSString *NewsletterSubscribe = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        NewsletterSubscribe = NSLocalizedString(@"NewsletterSubscribe", nil);
+    });
+    return NewsletterSubscribe;
+}
+
++ (NSString *)CompleteAuthenticationToGet_N_Points
+{
+    static NSString *CompleteAuthenticationToGet_N_Points = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        CompleteAuthenticationToGet_N_Points = NSLocalizedString(@"CompleteAuthenticationToGet_N_Points", nil);
+    });
+    return CompleteAuthenticationToGet_N_Points;
+}
+
++ (NSString *)CardMemberAuthenticationNotComplete
+{
+    static NSString *CardMemberAuthenticationNotComplete = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        CardMemberAuthenticationNotComplete = NSLocalizedString(@"CardMemberAuthenticationNotComplete", nil);
+    });
+    return CardMemberAuthenticationNotComplete;
+}
+
++ (NSString *)Authenticated
+{
+    static NSString *Authenticated = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        Authenticated = NSLocalizedString(@"Authenticated", nil);
+    });
+    return Authenticated;
+}
+
++ (NSString *)AccountInformationMaintain
+{
+    static NSString *AccountInformationMaintain = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        AccountInformationMaintain = NSLocalizedString(@"AccountInformationMaintain", nil);
+    });
+    return AccountInformationMaintain;
+}
+
++ (NSString *)PleaseInputYourEmail
+{
+    static NSString *PleaseInputYourEmail = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        PleaseInputYourEmail = NSLocalizedString(@"PleaseInputYourEmail", nil);
+    });
+    return PleaseInputYourEmail;
+}
+
++ (NSString *)PleaseInputEmail
+{
+    static NSString *PleaseInputEmail = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        PleaseInputEmail = NSLocalizedString(@"PleaseInputEmail", nil);
+    });
+    return PleaseInputEmail;
+}
+
++ (NSString *)PleaseInputOldPassword
+{
+    static NSString *PleaseInputOldPassword = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        PleaseInputOldPassword = NSLocalizedString(@"PleaseInputOldPassword", nil);
+    });
+    return PleaseInputOldPassword;
+}
+
++ (NSString *)PleaseInputNewPassword
+{
+    static NSString *PleaseInputNewPassword = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        PleaseInputNewPassword = NSLocalizedString(@"PleaseInputNewPassword", nil);
+    });
+    return PleaseInputNewPassword;
+}
+
++ (NSString *)PleaseConfirmNewPassword
+{
+    static NSString *PleaseConfirmNewPassword = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        PleaseConfirmNewPassword = NSLocalizedString(@"PleaseConfirmNewPassword", nil);
+    });
+    return PleaseConfirmNewPassword;
+}
+
++ (NSString *)PleaseInputYourNewPassword
+{
+    static NSString *PleaseInputYourNewPassword = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        PleaseInputYourNewPassword = NSLocalizedString(@"PleaseInputYourNewPassword", nil);
+    });
+    return PleaseInputYourNewPassword;
+}
+
++ (NSString *)PleaseInputValidEmail
+{
+    static NSString *PleaseInputValidEmail = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        PleaseInputValidEmail = NSLocalizedString(@"PleaseInputValidEmail", nil);
+    });
+    return PleaseInputValidEmail;
+}
+
++ (NSString *)PleaseInputValidPassword
+{
+    static NSString *PleaseInputValidPassword = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        PleaseInputValidPassword = NSLocalizedString(@"PleaseInputValidPassword", nil);
+    });
+    return PleaseInputValidPassword;
+}
+
++ (NSString *)Send
+{
+    static NSString *Send = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        Send = NSLocalizedString(@"Send", nil);
+    });
+    return Send;
+}
+
++ (NSString *)ToSubscribeNewsletterPleaseCheckAndSend
+{
+    static NSString *ToSubscribeNewsletterPleaseCheckAndSend = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        ToSubscribeNewsletterPleaseCheckAndSend = NSLocalizedString(@"ToSubscribeNewsletterPleaseCheckAndSend", nil);
+    });
+    return ToSubscribeNewsletterPleaseCheckAndSend;
+}
+
++ (NSString *)_M_Reminder_M_
+{
+    static NSString *_M_Reminder_M_ = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        _M_Reminder_M_ = NSLocalizedString(@"_M_Reminder_M_", nil);
+    });
+    return _M_Reminder_M_;
+}
+
++ (NSString *)NewsletterSubscriptionNotation
+{
+    static NSString *NewsletterSubscriptionNotation = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        NewsletterSubscriptionNotation = NSLocalizedString(@"NewsletterSubscriptionNotation", nil);
+    });
+    return NewsletterSubscriptionNotation;
+}
+
++ (NSString *)SubscribeNewsletter
+{
+    static NSString *SubscribeNewsletter = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        SubscribeNewsletter = NSLocalizedString(@"SubscribeNewsletter", nil);
+    });
+    return SubscribeNewsletter;
+}
+
++ (NSString *)UpdateNewsletterSubscriptionSuccess
+{
+    static NSString *UpdateNewsletterSubscriptionSuccess = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        UpdateNewsletterSubscriptionSuccess = NSLocalizedString(@"UpdateNewsletterSubscriptionSuccess", nil);
+    });
+    return UpdateNewsletterSubscriptionSuccess;
+}
+
 @end

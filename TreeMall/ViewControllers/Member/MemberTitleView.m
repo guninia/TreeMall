@@ -57,12 +57,8 @@
     
     if (self.buttonModify)
     {
-        CGSize sizeImage = CGSizeZero;
-        UIImage *image = [self.buttonModify imageForState:UIControlStateNormal];
-        if (image)
-        {
-            sizeImage = image.size;
-        }
+        CGSize sizeImage = CGSizeMake(self.frame.size.height, self.frame.size.height);
+        
         CGRect frame = CGRectMake((self.frame.size.width - marginR - sizeImage.width), (self.frame.size.height - sizeImage.height)/2, sizeImage.width, sizeImage.height);
         self.buttonModify.frame = frame;
     }

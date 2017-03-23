@@ -14,7 +14,7 @@
 #import "ImageTitleButton.h"
 #import "ImageTextView.h"
 #import "ProductDetailSectionTitleView.h"
-#import "DTCoreText.h"
+#import <DTCoreText.h>
 
 @interface ProductDetailViewController : UIViewController <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, ProductDetailBottomBarDelegate, BorderedDoubleViewDelegate, DTAttributedTextContentViewDelegate>
 

@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "DiscountLabelView.h"
-#import "TTTAttributedLabel.h"
+#import <TTTAttributedLabel.h>
 
 static NSString *ProductTableViewCellIdentifier = @"ProductTableViewCell";
 

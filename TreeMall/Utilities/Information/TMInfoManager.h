@@ -111,5 +111,6 @@ typedef enum : NSUInteger {
 - (void)retrievePointDataFromObject:(id)object withCompletion:(void (^)(id result, NSError *error))block;
 - (void)retrieveCouponDataFromObject:(id)object forPageIndex:(NSInteger)pageIndex couponState:(CouponState)state sortFactor:(NSString *)factor withSortOrder:(NSString *)order withCompletion:(void (^)(id result, NSError *error))block;
 - (void)logoutUser;
+- (void)retrieveUserInformation;
 
 @end

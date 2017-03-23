@@ -14,6 +14,7 @@
 + (CGSize)sizeRatioAccordingToRefrenceSize:(CGSize)referenceSize;
 + (CGSize)sizeRatioAccordingTo320x480;
 + (NSString *)ipAddress;
++ (NSString *)ipAddressPreferIPv6:(BOOL)preferIPv6;
 + (BOOL)evaluateEmail:(NSString *)text;
 + (BOOL)evaluatePassword:(NSString *)text;
 + (BOOL)evaluatePhoneNumber:(NSString *)text;
