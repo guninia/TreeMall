@@ -174,4 +174,6 @@
 "NewsletterSubscriptionNotation"="會員訂閱電子報可獨享不定期隱藏驚喜優惠，還能即時掌握您的點數、折價券等各項會員權益唷！";
 "SubscribeNewsletter"="訂閱電子報";
 "UpdateNewsletterSubscriptionSuccess"="更新電子報設定成功！";
-
+"ExchangeRecommended"="兌點推薦";
+"CouponRecommended"="折價券推薦";
+"PreferentialNotification"="優惠推薦";

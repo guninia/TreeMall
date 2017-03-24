@@ -175,3 +175,6 @@
 "NewsletterSubscriptionNotation"="After subscribing, you'll get the point or coupon occasionally.";
 "SubscribeNewsletter"="Subscribe Newsletter";
 "UpdateNewsletterSubscriptionSuccess"="Success!";
+"ExchangeRecommended"="Exchange";
+"CouponRecommended"="Coupon";
+"PreferentialNotification"="Preferential";

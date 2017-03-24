@@ -25,6 +25,7 @@
 - (NSDictionary *)ordersOfCartIndex:(NSInteger)index;
 - (NSInteger)numberOfOrdersOfCartIndex:(NSInteger)index;
 - (NSDictionary *)orderForIndex:(NSInteger)orderIndex inCartIndex:(NSInteger)cartIndex;
+- (void)startSearchFromTextField:(UITextField *)textField;
 
 - (void)buttonSearchPressed:(id)sender;
 - (void)buttonOrderTimePressed:(id)sender;
@@ -646,16 +647,21 @@
     return order;
 }
 
+- (void)startSearchFromTextField:(UITextField *)textField
+{
+    if ([textField isFirstResponder])
+    {
+        [textField resignFirstResponder];
+    }
+    [self requestOrderOfPage:1 forOrderState:self.orderState atTime:self.orderTime deliverBy:self.deliverType];
+}
+
 #pragma mark - Actions
 
 - (void)buttonSearchPressed:(id)sender
 {
     // Should start search.
-    [self requestOrderOfPage:1 forOrderState:self.orderState atTime:self.orderTime deliverBy:self.deliverType];
-    if ([self.textFieldProductName isFirstResponder])
-    {
-        [self.textFieldProductName resignFirstResponder];
-    }
+    [self startSearchFromTextField:self.textFieldProductName];
 }
 
 - (void)buttonOrderTimePressed:(id)sender
@@ -689,8 +695,7 @@
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
     // Should start search.
-    [self requestOrderOfPage:1 forOrderState:self.orderState atTime:self.orderTime deliverBy:self.deliverType];
-    [textField resignFirstResponder];
+    [self startSearchFromTextField:textField];
     return YES;
 }
 

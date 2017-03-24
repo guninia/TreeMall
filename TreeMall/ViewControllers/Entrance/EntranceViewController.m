@@ -31,6 +31,7 @@ typedef enum : NSUInteger {
 
 - (void)buttonItemSearchPressed:(id)sender;
 - (void)notificationHandlerTokenUpdated:(NSNotification *)notification;
+- (void)handlerOfUserInformationUpdatedNotification:(NSNotification *)notification;
 
 @end
 
@@ -49,8 +50,20 @@ typedef enum : NSUInteger {
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
+    [self.navigationController.navigationBar setBarTintColor:[UIColor whiteColor]];
+    [self.navigationController.navigationBar setTintColor:[UIColor colorWithRed:(100.0/255.0) green:(170.0/255.0) blue:(80.0/255.0) alpha:1.0]];
+    [self.navigationController.navigationBar setBackgroundImage:[[UIImage alloc] init] forBarMetrics:UIBarMetricsDefault];
+    [self.navigationController.navigationBar setShadowImage:[[UIImage alloc] init]];
+    if (self.navigationItem)
+    {
+        UIImage *image = [[UIImage imageNamed:@"ind_logo"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        UIImageView *imageView = [[UIImageView alloc] initWithImage:image];
+        [imageView setTintColor:[UIColor colorWithRed:(100.0/255.0) green:(170.0/255.0) blue:(80.0/255.0) alpha:1.0]];
+        self.navigationItem.titleView = imageView;
+    }
+    
     self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
-    UIImage *image = [UIImage imageNamed:@"sho_btn_mag"];
+    UIImage *image = [[UIImage imageNamed:@"sho_btn_mag"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     if (image)
     {
         UIBarButtonItem *rightItem = [[UIBarButtonItem alloc] initWithImage:image style:UIBarButtonItemStylePlain target:self action:@selector(buttonItemSearchPressed:)];
@@ -65,6 +78,7 @@ typedef enum : NSUInteger {
     [_tableViewEntrance setShowsHorizontalScrollIndicator:NO];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notificationHandlerTokenUpdated:) name:PostNotificationName_TokenUpdated object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handlerOfUserInformationUpdatedNotification:) name:PostNotificationName_UserInformationUpdated object:nil];
 }
 
 - (void)viewDidLayoutSubviews
@@ -75,6 +89,12 @@ typedef enum : NSUInteger {
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:PostNotificationName_TokenUpdated object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:PostNotificationName_UserInformationUpdated object:nil];
 }
 
 /*
@@ -269,7 +289,7 @@ typedef enum : NSUInteger {
     switch (section) {
         case TableViewSectionMemberPromotion:
         {
-            heightForHeader = 100.0;
+            heightForHeader = 200.0;
         }
             break;
         case TableViewSectionProductPromotion:

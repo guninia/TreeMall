@@ -79,6 +79,7 @@
 		68968EB71E51AD6300419619 /* ProductFilterTextCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 68968EB61E51AD6300419619 /* ProductFilterTextCollectionViewCell.m */; };
 		68981FA91E55991E00A2707A /* SearchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68981FA71E55991E00A2707A /* SearchViewController.m */; };
 		68981FAA1E55991E00A2707A /* SearchViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 68981FA81E55991E00A2707A /* SearchViewController.xib */; };
+		68987D9A1E8510800077A62B /* VerticalImageTextButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 68987D991E8510800077A62B /* VerticalImageTextButton.m */; };
 		689929D01E821D96001EDA0C /* CircularSideLabelView.m in Sources */ = {isa = PBXBuildFile; fileRef = 689929CF1E821D96001EDA0C /* CircularSideLabelView.m */; };
 		689F664A1E5AC56400CC3664 /* ProductDetailBottomBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 689F66491E5AC56400CC3664 /* ProductDetailBottomBar.m */; };
 		68A8279A1E4D9C6F00E63552 /* FTPopMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 68A827951E4D9C6F00E63552 /* FTPopMenu.m */; };
@@ -279,6 +280,8 @@
 		68981FA61E55991E00A2707A /* SearchViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SearchViewController.h; path = ViewControllers/Search/SearchViewController.h; sourceTree = "<group>"; };
 		68981FA71E55991E00A2707A /* SearchViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SearchViewController.m; path = ViewControllers/Search/SearchViewController.m; sourceTree = "<group>"; };
 		68981FA81E55991E00A2707A /* SearchViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = SearchViewController.xib; path = ViewControllers/Search/SearchViewController.xib; sourceTree = "<group>"; };
+		68987D981E8510800077A62B /* VerticalImageTextButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VerticalImageTextButton.h; path = Component/VerticalImageTextButton/VerticalImageTextButton.h; sourceTree = "<group>"; };
+		68987D991E8510800077A62B /* VerticalImageTextButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = VerticalImageTextButton.m; path = Component/VerticalImageTextButton/VerticalImageTextButton.m; sourceTree = "<group>"; };
 		689929CE1E821D96001EDA0C /* CircularSideLabelView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CircularSideLabelView.h; path = Component/CircularSideLabelView/CircularSideLabelView.h; sourceTree = "<group>"; };
 		689929CF1E821D96001EDA0C /* CircularSideLabelView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CircularSideLabelView.m; path = Component/CircularSideLabelView/CircularSideLabelView.m; sourceTree = "<group>"; };
 		689F66481E5AC56400CC3664 /* ProductDetailBottomBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ProductDetailBottomBar.h; path = ViewControllers/ShoppingMall/ProductDetailBottomBar.h; sourceTree = "<group>"; };
@@ -819,6 +822,15 @@
 			name = Search;
 			sourceTree = "<group>";
 		};
+		68987D9B1E8510870077A62B /* VerticalImageTextButton */ = {
+			isa = PBXGroup;
+			children = (
+				68987D981E8510800077A62B /* VerticalImageTextButton.h */,
+				68987D991E8510800077A62B /* VerticalImageTextButton.m */,
+			);
+			name = VerticalImageTextButton;
+			sourceTree = "<group>";
+		};
 		689929CD1E821D47001EDA0C /* CircularSideLabelView */ = {
 			isa = PBXGroup;
 			children = (
@@ -874,6 +886,7 @@
 		68B68FF01E2483D600DCCF29 /* Component */ = {
 			isa = PBXGroup;
 			children = (
+				68987D9B1E8510870077A62B /* VerticalImageTextButton */,
 				68B0FDE01E837EB700BE273F /* PureTextTableHeaderFooterView */,
 				689929CD1E821D47001EDA0C /* CircularSideLabelView */,
 				689130111E68116B00CE834A /* SemiCircleEndsSegmentedView */,
@@ -1354,6 +1367,7 @@
 				68E401311E309B7700BFF66B /* TermsViewController.m in Sources */,
 				68D751941E812E4C00487088 /* MemberSettingsTableViewCell.m in Sources */,
 				68CA36AF1E23679800A70BCC /* LocalizedString.m in Sources */,
+				68987D9A1E8510800077A62B /* VerticalImageTextButton.m in Sources */,
 				68CA36B51E23712700A70BCC /* EntranceFunctionSectionHeader.m in Sources */,
 				68FBDE041E3757F7007F5C13 /* MainCategoryCollectionViewCell.m in Sources */,
 				68E470331E72A0990040213B /* OrderListCollectionViewCell.m in Sources */,

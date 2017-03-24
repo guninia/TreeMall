@@ -178,5 +178,8 @@
 + (NSString *)NewsletterSubscriptionNotation;
 + (NSString *)SubscribeNewsletter;
 + (NSString *)UpdateNewsletterSubscriptionSuccess;
++ (NSString *)ExchangeRecommended;
++ (NSString *)CouponRecommended;
++ (NSString *)PreferentialNotification;
 
 @end

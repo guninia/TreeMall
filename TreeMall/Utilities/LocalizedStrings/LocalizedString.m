@@ -1691,4 +1691,33 @@
     return UpdateNewsletterSubscriptionSuccess;
 }
 
++ (NSString *)ExchangeRecommended
+{
+    static NSString *ExchangeRecommended = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        ExchangeRecommended = NSLocalizedString(@"ExchangeRecommended", nil);
+    });
+    return ExchangeRecommended;
+}
+
++ (NSString *)CouponRecommended
+{
+    static NSString *CouponRecommended = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        CouponRecommended = NSLocalizedString(@"CouponRecommended", nil);
+    });
+    return CouponRecommended;
+}
+
++ (NSString *)PreferentialNotification
+{
+    static NSString *PreferentialNotification = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        PreferentialNotification = NSLocalizedString(@"PreferentialNotification", nil);
+    });
+    return PreferentialNotification;
+}
 @end

@@ -12,7 +12,7 @@
 
 @interface EntranceViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, EntranceFunctionSectionHeaderDelegate, SearchViewControllerDelegate>
 
-@property (nonatomic ,strong) IBOutlet UITableView *tableViewEntrance;
+@property (nonatomic, weak) IBOutlet UITableView *tableViewEntrance;
 @property (nonatomic, strong) NSMutableDictionary *dictionaryData;
 
 @end

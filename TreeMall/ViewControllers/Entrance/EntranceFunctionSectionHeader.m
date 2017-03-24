@@ -7,6 +7,8 @@
 //
 
 #import "EntranceFunctionSectionHeader.h"
+#import "VerticalImageTextButton.h"
+#import "LocalizedString.h"
 
 @interface EntranceFunctionSectionHeader ()
 
@@ -25,23 +27,38 @@
     self = [super initWithReuseIdentifier:reuseIdentifier];
     if (self)
     {
-        [self.contentView setBackgroundColor:[UIColor greenColor]];
+        [self.contentView setBackgroundColor:[UIColor whiteColor]];
         _arrayButtons = [[NSMutableArray alloc] initWithCapacity:0];
         
-        UIButton *button1 = [[UIButton alloc] initWithFrame:CGRectZero];
-        [button1 setTitle:@"兌點推薦" forState:UIControlStateNormal];
+        VerticalImageTextButton *button1 = [[VerticalImageTextButton alloc] initWithFrame:CGRectZero];
+        [button1.labelText setText:[LocalizedString ExchangeRecommended]];
+        UIImage *image1 = [UIImage imageNamed:@"btn_ind_point"];
+        if (image1)
+        {
+            [button1.imageViewIcon setImage:image1];
+        }
         [button1 addTarget:self action:@selector(actButtonExchangePressed:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:button1];
         [_arrayButtons addObject:button1];
         
-        UIButton *button2 = [[UIButton alloc] initWithFrame:CGRectZero];
-        [button2 setTitle:@"折價券推薦" forState:UIControlStateNormal];
+        VerticalImageTextButton *button2 = [[VerticalImageTextButton alloc] initWithFrame:CGRectZero];
+        [button2.labelText setText:[LocalizedString CouponRecommended]];
+        UIImage *image2 = [UIImage imageNamed:@"btn_ind_sale"];
+        if (image2)
+        {
+            [button2.imageViewIcon setImage:image2];
+        }
         [button2 addTarget:self action:@selector(actButtonCouponPressed:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:button2];
         [_arrayButtons addObject:button2];
         
-        UIButton *button3 = [[UIButton alloc] initWithFrame:CGRectZero];
-        [button3 setTitle:@"優惠通知" forState:UIControlStateNormal];
+        VerticalImageTextButton *button3 = [[VerticalImageTextButton alloc] initWithFrame:CGRectZero];
+        [button3.labelText setText:[LocalizedString PreferentialNotification]];
+        UIImage *image3 = [UIImage imageNamed:@"btn_ind_notice"];
+        if (image3)
+        {
+            [button3.imageViewIcon setImage:image3];
+        }
         [button3 addTarget:self action:@selector(actButtonPromotePressed:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:button3];
         [_arrayButtons addObject:button3];
@@ -56,12 +73,13 @@
     [super layoutSubviews];
 //    NSLog(@"EntranceFunctionSectionHeader[%4.2f,%4.2f]", self.frame.size.width, self.frame.size.height);
     
-    CGSize buttonSize = CGSizeMake(60.0, 60.0);
+    CGSize buttonSize = CGSizeMake(100.0, 60.0);
     CGFloat hInterval = ceil((self.frame.size.width - buttonSize.width * [_arrayButtons count])/([_arrayButtons count] + 1));
     for (NSInteger index = 0; index < [_arrayButtons count]; index++)
     {
-        UIButton *button = [_arrayButtons objectAtIndex:index];
+        VerticalImageTextButton *button = [_arrayButtons objectAtIndex:index];
         [button setFrame:CGRectMake(hInterval + (buttonSize.width + hInterval) * index, (self.frame.size.height - buttonSize.height) / 2, buttonSize.width, buttonSize.height)];
+        [button setNeedsLayout];
     }
 }
 

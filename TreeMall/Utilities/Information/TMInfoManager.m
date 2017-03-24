@@ -60,7 +60,7 @@ static NSUInteger SearchKeywordNumberMax = 8;
 - (NSURL *)urlForInfoArchive;
 - (void)deleteArchive;
 - (NSString *)keyForCategoryIdentifier:(NSString *)identifier withLayer:(NSNumber *)layer;
-- (void)processUserInfomation:(NSData *)data;
+- (void)processUserInformation:(NSData *)data;
 - (void)processUserPoint:(NSData *)data;
 - (id)processUserCoupon:(NSData *)data;
 
@@ -1290,7 +1290,7 @@ static NSUInteger SearchKeywordNumberMax = 8;
             if ([resultObject isKindOfClass:[NSData class]])
             {
                 NSData *data = (NSData *)resultObject;
-                [weakSelf processUserInfomation:data];
+                [weakSelf processUserInformation:data];
             }
         }
         else
@@ -1357,7 +1357,7 @@ static NSUInteger SearchKeywordNumberMax = 8;
     return key;
 }
 
-- (void)processUserInfomation:(NSData *)data
+- (void)processUserInformation:(NSData *)data
 {
     if (data == nil)
         return;
