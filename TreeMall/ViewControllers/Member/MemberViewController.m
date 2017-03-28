@@ -14,6 +14,9 @@
 #import "CouponListViewController.h"
 #import "OrderListViewController.h"
 #import "MemberSettingsViewController.h"
+#import "CryptoModule.h"
+#import "SHAPIAdapter.h"
+#import "APIDefinition.h"
 
 typedef enum : NSUInteger {
     SectionTitleTagCoupon = 1000,
@@ -25,6 +28,9 @@ typedef enum : NSUInteger {
 
 - (void)refreshContent;
 - (void)reconfirmAndLogout;
+- (void)resetAllContent;
+- (void)retrieveOrderNumberOfStatus;
+- (BOOL)processOrderNumberOfStatusData:(id)data;
 
 - (void)buttonItemLogoutPressed:(id)sender;
 - (void)buttonItemQAPressed:(id)sender;
@@ -32,6 +38,16 @@ typedef enum : NSUInteger {
 @end
 
 @implementation MemberViewController
+
+- (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+{
+    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    if (self)
+    {
+        _arrayOfOrderNumberOfStatus = nil;
+    }
+    return self;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -57,11 +73,12 @@ typedef enum : NSUInteger {
     [self.scrollView addSubview:self.viewShipped];
     [self.scrollView addSubview:self.viewReturnReplace];
     
-    NSLog(@"User:\nName: %@\nIdentifier: %li\nEmail: %@\nGender: %li\nEpoint: %li\nEcoupon: %li", [TMInfoManager sharedManager].userName, (long)[[TMInfoManager sharedManager].userIdentifier integerValue], [TMInfoManager sharedManager].userEmail, (long)([TMInfoManager sharedManager].userGender), (long)([[TMInfoManager sharedManager].userEpoint integerValue]), (long)([[TMInfoManager sharedManager].userEcoupon integerValue]));
+//    NSLog(@"User:\nName: %@\nIdentifier: %li\nEmail: %@\nGender: %li\nEpoint: %li\nEcoupon: %li", [TMInfoManager sharedManager].userName, (long)[[TMInfoManager sharedManager].userIdentifier integerValue], [TMInfoManager sharedManager].userEmail, (long)([TMInfoManager sharedManager].userGender), (long)([[TMInfoManager sharedManager].userEpoint integerValue]), (long)([[TMInfoManager sharedManager].userEcoupon integerValue]));
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshContent) name:PostNotificationName_UserInformationUpdated object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshContent) name:PostNotificationName_UserPointUpdated object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshContent) name:PostNotificationName_UserCouponUpdated object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resetAllContent) name:PostNotificationName_UserLogout object:nil];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -69,6 +86,7 @@ typedef enum : NSUInteger {
     [super viewWillAppear:animated];
 //    NSLog(@"MemberViewController - viewWillAppear");
     [self refreshContent];
+    [self retrieveOrderNumberOfStatus];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -81,6 +99,7 @@ typedef enum : NSUInteger {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:PostNotificationName_UserInformationUpdated object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:PostNotificationName_UserPointUpdated object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:PostNotificationName_UserCouponUpdated object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:PostNotificationName_UserLogout object:nil];
 }
 
 /*
@@ -304,6 +323,54 @@ typedef enum : NSUInteger {
     [self.viewTotalCoupon.labelR setAttributedText:attrString];
 }
 
+- (void)setNumberOrderProcessing:(NSNumber *)numberOrderProcessing
+{
+    _numberOrderProcessing = numberOrderProcessing;
+    NSString *stringValue = nil;
+    if (_numberOrderProcessing == nil)
+    {
+        stringValue = @"0";
+    }
+    else
+    {
+        stringValue = [_numberOrderProcessing stringValue];
+    }
+    NSString *string = [NSString stringWithFormat:[LocalizedString Processing_BRA_S_BRA], stringValue];
+    _viewProcessing.label.text = string;
+}
+
+- (void)setNumberOrderShipping:(NSNumber *)numberOrderShipping
+{
+    _numberOrderShipping = numberOrderShipping;
+    NSString *stringValue = nil;
+    if (_numberOrderShipping == nil)
+    {
+        stringValue = @"0";
+    }
+    else
+    {
+        stringValue = [_numberOrderShipping stringValue];
+    }
+    NSString *string = [NSString stringWithFormat:[LocalizedString Shipped_BRA_S_BRA], @"0"];
+    _viewShipped.label.text = string;
+}
+
+- (void)setNumberOrderReturnReplace:(NSNumber *)numberOrderReturnReplace
+{
+    _numberOrderReturnReplace = numberOrderReturnReplace;
+    NSString *stringValue = nil;
+    if (_numberOrderReturnReplace == nil)
+    {
+        stringValue = @"0";
+    }
+    else
+    {
+        stringValue = [_numberOrderReturnReplace stringValue];
+    }
+    NSString *string = [NSString stringWithFormat:[LocalizedString ReturnReplace_BRA_S_BRA], @"0"];
+    _viewReturnReplace.label.text = string;
+}
+
 #pragma mark - Private Methods
 
 - (void)refreshContent
@@ -364,6 +431,42 @@ typedef enum : NSUInteger {
         self.viewPoint.numberExpired = pointExpired;
     }
     [self.viewPoint setNeedsLayout];
+    
+    if (self.arrayOfOrderNumberOfStatus)
+    {
+        self.numberOrderProcessing = [NSNumber numberWithInteger:0];
+        self.numberOrderShipping = [NSNumber numberWithInteger:0];
+        self.numberOrderReturnReplace = [NSNumber numberWithInteger:0];
+        for (NSDictionary *dictionary in self.arrayOfOrderNumberOfStatus)
+        {
+            NSNumber *numberStatus = [dictionary objectForKey:SymphoxAPIParam_status];
+            if (numberStatus == nil)
+                continue;
+            NSNumber *quantity = [dictionary objectForKey:SymphoxAPIParam_qty];
+            switch ([numberStatus integerValue]) {
+                case 1:
+                {
+                    // Processing
+                    self.numberOrderProcessing = quantity;
+                }
+                    break;
+                case 2:
+                {
+                    // Shipping
+                    self.numberOrderShipping = quantity;
+                }
+                    break;
+                case 3:
+                {
+                    // Return and replace
+                    self.numberOrderReturnReplace = quantity;
+                }
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
 }
 
 - (void)reconfirmAndLogout
@@ -377,6 +480,78 @@ typedef enum : NSUInteger {
     [alertController addAction:actionCancel];
     [alertController addAction:actionConfirm];
     [self presentViewController:alertController animated:YES completion:nil];
+}
+
+- (void)resetAllContent
+{
+    __weak MemberViewController *weakSelf = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        weakSelf.viewTitle.labelWelcome.text = @"";
+        weakSelf.viewPoint.labelPoint.text = @"";
+        weakSelf.viewPoint.labelDividend.text = @"";
+        weakSelf.viewPoint.viewExpired.labelR.text = @"";
+        weakSelf.viewPoint.viewTotalPoint.labelR.text = @"";
+        
+        weakSelf.viewTotalCoupon.labelR.text = @"";
+        weakSelf.viewProcessing.label.text = @"";
+        weakSelf.viewShipped.label.text = @"";
+        weakSelf.viewReturnReplace.label.text = @"";
+    });
+}
+
+- (void)retrieveOrderNumberOfStatus
+{
+    NSNumber *identifier = [TMInfoManager sharedManager].userIdentifier;
+    if (identifier == nil)
+        return;
+    __weak MemberViewController *weakSelf = self;
+    NSString *apiKey = [CryptoModule sharedModule].apiKey;
+    NSString *token = [SHAPIAdapter sharedAdapter].token;
+    NSURL *url = [NSURL URLWithString:SymphoxAPI_orderNumberOfStatus];
+    NSDictionary *headerFields = [NSDictionary dictionaryWithObjectsAndKeys:apiKey, SymphoxAPIParam_key, token, SymphoxAPIParam_token, nil];
+    NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:identifier, SymphoxAPIParam_user_num, nil];
+    NSLog(@"retrieveOrderNumberOfStatus - params:\n%@", [params description]);
+    [[SHAPIAdapter sharedAdapter] sendRequestFromObject:weakSelf ToUrl:url withHeaderFields:headerFields andPostObject:params inPostFormat:SHPostFormatJson encrypted:YES decryptedReturnData:YES completion:^(id resultObject, NSError *error){
+        if (error == nil)
+        {
+//            NSLog(@"resultObject[%@]:\n%@", [[resultObject class] description], [resultObject description]);
+            if ([resultObject isKindOfClass:[NSData class]])
+            {
+                NSData *data = (NSData *)resultObject;
+                NSString *string = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+                NSLog(@"retrieveOrderNumberOfStatus:\n%@", string);
+                if ([weakSelf processOrderNumberOfStatusData:data])
+                {
+                    [weakSelf refreshContent];
+                }
+                else
+                {
+                    NSLog(@"retrieveProductsForConditions - Cannot process data");
+                }
+            }
+            else
+            {
+                NSLog(@"retrieveProductsForConditions - Unexpected data format.");
+            }
+        }
+    }];
+}
+
+- (BOOL)processOrderNumberOfStatusData:(id)data
+{
+    BOOL success = NO;
+    NSError *error = nil;
+    id jsonObject = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
+    if (error == nil && jsonObject)
+    {
+        NSLog(@"processOrderNumberOfStatusData - jsonObject:\n%@", [jsonObject description]);
+        if ([jsonObject isKindOfClass:[NSArray class]])
+        {
+            self.arrayOfOrderNumberOfStatus = (NSArray *)jsonObject;
+        }
+        success = YES;
+    }
+    return success;
 }
 
 #pragma mark - Actions

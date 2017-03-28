@@ -1720,4 +1720,45 @@
     });
     return PreferentialNotification;
 }
+
++ (NSString *)GoodMorning
+{
+    static NSString *GoodMorning = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        GoodMorning = NSLocalizedString(@"GoodMorning", nil);
+    });
+    return GoodMorning;
+}
+
++ (NSString *)GoodNoon
+{
+    static NSString *GoodNoon = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        GoodNoon = NSLocalizedString(@"GoodNoon", nil);
+    });
+    return GoodNoon;
+}
+
++ (NSString *)GoodAfternoon
+{
+    static NSString *GoodAfternoon = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        GoodAfternoon = NSLocalizedString(@"GoodAfternoon", nil);
+    });
+    return GoodAfternoon;
+}
+
++ (NSString *)GoodEvening
+{
+    static NSString *GoodEvening = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        GoodEvening = NSLocalizedString(@"GoodEvening", nil);
+    });
+    return GoodEvening;
+}
+
 @end

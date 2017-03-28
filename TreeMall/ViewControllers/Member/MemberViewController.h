@@ -24,5 +24,9 @@
 @property (nonatomic, strong) IconLabelView *viewShipped;
 @property (nonatomic, strong) IconLabelView *viewReturnReplace;
 @property (nonatomic, strong) NSNumber *numberCoupon;
+@property (nonatomic, strong) NSArray *arrayOfOrderNumberOfStatus;
+@property (nonatomic, strong) NSNumber *numberOrderProcessing;
+@property (nonatomic, strong) NSNumber *numberOrderShipping;
+@property (nonatomic, strong) NSNumber *numberOrderReturnReplace;
 
 @end

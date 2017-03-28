@@ -143,7 +143,7 @@
         NSString *errorDescription = nil;
         if (error == nil)
         {
-            NSLog(@"resultObject[%@]:\n%@", [[resultObject class] description], [resultObject description]);
+//            NSLog(@"resultObject[%@]:\n%@", [[resultObject class] description], [resultObject description]);
             if ([resultObject isKindOfClass:[NSData class]])
             {
                 NSData *data = (NSData *)resultObject;

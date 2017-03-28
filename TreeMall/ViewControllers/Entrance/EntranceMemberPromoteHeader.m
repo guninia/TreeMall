@@ -9,6 +9,14 @@
 #import "EntranceMemberPromoteHeader.h"
 #import "LocalizedString.h"
 #import <math.h>
+#import <UIImageView+WebCache.h>
+
+@interface EntranceMemberPromoteHeader ()
+
+- (void)buttonPromotionPressed:(id)sender;
+- (void)buttonMarketingPressed:(id)sender;
+
+@end
 
 @implementation EntranceMemberPromoteHeader
 
@@ -23,12 +31,13 @@
         [self.contentView addSubview:self.imageViewBackground];
         [self.contentView addSubview:self.labelGreetings];
         [self.contentView addSubview:self.viewImageBackground];
-        [self.contentView addSubview:self.imageViewPromotion];
+        [self.contentView addSubview:self.buttonPromotion];
         [self.contentView addSubview:self.labelPointTitle];
         [self.contentView addSubview:self.labelPointValue];
         [self.contentView addSubview:self.labelCouponTitle];
         [self.contentView addSubview:self.labelCouponValue];
         [self.contentView addSubview:self.buttonMarketing];
+        [self.contentView addSubview:self.buttonMarketingArrow];
     }
     return self;
 }
@@ -47,17 +56,44 @@
 {
     [super layoutSubviews];
     
+    CGFloat marginL = 10.0;
+    CGFloat marginR = 10.0;
+    CGFloat intervalH = 5.0;
+    CGFloat intervalV = 5.0;
+    
+    if (self.labelGreetings)
+    {
+        NSString *defaultString = @"ＸＸＸＸＸＸ";
+        CGSize sizeText = [defaultString sizeWithAttributes:[NSDictionary dictionaryWithObjectsAndKeys:self.labelGreetings.font, NSFontAttributeName, nil]];
+        CGSize sizeLabel = CGSizeMake(ceil(sizeText.width), ceil(sizeText.height));
+        CGRect frame = CGRectMake(marginL, 0.0, self.contentView.frame.size.width - (marginL + marginR), sizeLabel.height);
+        self.labelGreetings.frame = frame;
+    }
+    
     if (self.buttonMarketing)
     {
+        self.buttonMarketing.marginR = 40.0;
+        self.buttonMarketing.marginL = 20.0;
         CGFloat height = 30.0;
         CGRect frame = CGRectMake(0.0, self.contentView.frame.size.height - height, self.contentView.frame.size.width, height);
         self.buttonMarketing.frame = frame;
+        if (self.buttonMarketingArrow)
+        {
+            CGSize size = CGSizeMake(10.0, 15.0);
+            CGRect frame = CGRectMake(self.buttonMarketing.frame.origin.x + self.buttonMarketing.frame.size.width - 10.0 - size.width, (self.buttonMarketing.frame.origin.y + (self.buttonMarketing.frame.size.height - size.height)/2), size.width, size.height);
+            self.buttonMarketingArrow.frame = frame;
+        }
     }
     
     if (self.imageViewBackground)
     {
         CGSize sizeImage = self.imageViewBackground.image.size;
         CGSize sizeBackground = CGSizeMake(self.contentView.frame.size.width, ceil(sizeImage.height * (self.contentView.frame.size.width / sizeImage.width)));
+        CGFloat maxHeight = self.buttonMarketing.frame.origin.y - (CGRectGetMaxY(self.labelGreetings.frame) + intervalV);
+        if (sizeBackground.height > maxHeight)
+        {
+            sizeBackground.height = maxHeight;
+        }
         CGRect frame = CGRectMake(0.0, self.buttonMarketing.frame.origin.y - sizeBackground.height, sizeBackground.width, sizeBackground.height);
         self.imageViewBackground.frame = frame;
     }
@@ -71,17 +107,15 @@
         self.viewImageBackground.layer.cornerRadius = radius;
     }
     
-    if (self.imageViewPromotion)
+    if (self.buttonPromotion)
     {
-        CGRect frame = CGRectInset(self.viewImageBackground.frame, 5.0, 5.0);
-        self.imageViewPromotion.frame = frame;
-        self.imageViewPromotion.layer.cornerRadius = self.imageViewPromotion.frame.size.height / 2;
+//        CGRect frame = CGRectInset(self.viewImageBackground.frame, 5.0, 5.0);
+        CGRect frame = self.viewImageBackground.frame;
+        self.buttonPromotion.frame = frame;
+        self.buttonPromotion.layer.cornerRadius = self.buttonPromotion.frame.size.height / 2;
     }
     
-    CGFloat marginL = 10.0;
-    CGFloat marginR = 10.0;
-    CGFloat intervalH = 5.0;
-    CGFloat intervalV = 5.0;
+    
     
     NSString *defaultString = @"ＸＸＸＸ";
     CGSize textTitleSize = [defaultString sizeWithAttributes:[NSDictionary dictionaryWithObjectsAndKeys:self.labelPointTitle.font, NSFontAttributeName, nil]];
@@ -122,12 +156,6 @@
         CGRect frame = CGRectMake(labelROriginX, originY, labelLengthR, labelTitleHeight);
         self.labelCouponTitle.frame = frame;
     }
-    
-    if (self.labelGreetings)
-    {
-        CGRect frame = CGRectMake(marginL, 0.0, self.contentView.frame.size.width - (marginL + marginR), self.viewImageBackground.frame.origin.y);
-        self.labelGreetings.frame = frame;
-    }
 }
 
 - (UIImageView *)imageViewBackground
@@ -153,6 +181,7 @@
         [_labelGreetings setFont:font];
         [_labelGreetings setTextColor:[UIColor grayColor]];
         [_labelGreetings setBackgroundColor:[UIColor clearColor]];
+        [_labelGreetings setTextAlignment:NSTextAlignmentCenter];
     }
     return _labelGreetings;
 }
@@ -168,13 +197,16 @@
     return _viewImageBackground;
 }
 
-- (UIImageView *)imageViewPromotion
+- (UIButton *)buttonPromotion
 {
-    if (_imageViewPromotion == nil)
+    if (_buttonPromotion == nil)
     {
-        _imageViewPromotion = [[UIImageView alloc] initWithFrame:CGRectZero];
+        _buttonPromotion = [[UIButton alloc] initWithFrame:CGRectZero];
+        [_buttonPromotion setBackgroundColor:[UIColor clearColor]];
+        [_buttonPromotion.layer setMasksToBounds:YES];
+        [_buttonPromotion addTarget:self action:@selector(buttonPromotionPressed:) forControlEvents:UIControlEventTouchUpInside];
     }
-    return _imageViewPromotion;
+    return _buttonPromotion;
 }
 
 - (UILabel *)labelPointTitle
@@ -199,7 +231,7 @@
         _labelPointValue = [[UILabel alloc] initWithFrame:CGRectZero];
         [_labelPointValue setBackgroundColor:[UIColor clearColor]];
         [_labelPointValue setTextColor:[UIColor whiteColor]];
-        UIFont *font = [UIFont systemFontOfSize:14.0];
+        UIFont *font = [UIFont systemFontOfSize:18.0];
         [_labelPointValue setFont:font];
         [_labelPointValue setAdjustsFontSizeToFitWidth:YES];
         [_labelPointValue setTextAlignment:NSTextAlignmentCenter];
@@ -229,7 +261,7 @@
         _labelCouponValue = [[UILabel alloc] initWithFrame:CGRectZero];
         [_labelCouponValue setBackgroundColor:[UIColor clearColor]];
         [_labelCouponValue setTextColor:[UIColor whiteColor]];
-        UIFont *font = [UIFont systemFontOfSize:14.0];
+        UIFont *font = [UIFont systemFontOfSize:18.0];
         [_labelCouponValue setFont:font];
         [_labelCouponValue setAdjustsFontSizeToFitWidth:YES];
         [_labelCouponValue setTextAlignment:NSTextAlignmentCenter];
@@ -248,9 +280,115 @@
         {
             [_buttonMarketing.imageViewIcon setImage:image];
         }
-        
+        [_buttonMarketing.labelText setTextAlignment:NSTextAlignmentLeft];
+        [_buttonMarketing.layer setCornerRadius:0.0];
+        [_buttonMarketing addTarget:self action:@selector(buttonMarketingPressed:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _buttonMarketing;
+}
+
+- (UIButton *)buttonMarketingArrow
+{
+    if (_buttonMarketingArrow == nil)
+    {
+        _buttonMarketingArrow = [[UIButton alloc] initWithFrame:CGRectZero];
+        UIImage *image = [[UIImage imageNamed:@"men_my_ord_go"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        if (image)
+        {
+            [_buttonMarketingArrow setImage:image forState:UIControlStateNormal];
+        }
+        [_buttonMarketingArrow.imageView setTintColor:[UIColor whiteColor]];
+        [_buttonMarketingArrow addTarget:self action:@selector(buttonMarketingPressed:) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _buttonMarketingArrow;
+}
+
+- (NSNumberFormatter *)numberFormatter
+{
+    if (_numberFormatter == nil)
+    {
+        _numberFormatter = [[NSNumberFormatter alloc] init];
+        [_numberFormatter setNumberStyle:NSNumberFormatterDecimalStyle];
+    }
+    return _numberFormatter;
+}
+
+- (void)setNumberTotalPoint:(NSNumber *)numberTotalPoint
+{
+    _numberTotalPoint = numberTotalPoint;
+    if (_numberTotalPoint == nil)
+    {
+        self.labelPointValue.text = @"－－";
+        self.labelPointTitle.hidden = YES;
+        self.labelPointValue.hidden = YES;
+    }
+    else
+    {
+        NSString *string = [self.numberFormatter stringFromNumber:_numberTotalPoint];
+        self.labelPointValue.text = string;
+        self.labelPointTitle.hidden = NO;
+        self.labelPointValue.hidden = NO;
+    }
+}
+
+- (void)setNumberCouponValue:(NSNumber *)numberCouponValue
+{
+    _numberCouponValue = numberCouponValue;
+    if (_numberCouponValue == nil)
+    {
+        self.labelCouponValue.text = @"－－";
+        self.labelCouponTitle.hidden = YES;
+        self.labelCouponValue.hidden = YES;
+    }
+    else
+    {
+        NSString *prefix = @"＄";
+        NSString *string = [self.numberFormatter stringFromNumber:_numberCouponValue];
+        self.labelCouponValue.text = [NSString stringWithFormat:@"%@%@", prefix, string];
+        self.labelCouponTitle.hidden = NO;
+        self.labelCouponValue.hidden = NO;
+    }
+}
+
+- (void)setPromotionImageUrlPath:(NSString *)promotionImageUrlPath
+{
+    _promotionImageUrlPath = promotionImageUrlPath;
+    if (_promotionImageUrlPath == nil)
+    {
+        [self.buttonPromotion setBackgroundImage:nil forState:UIControlStateNormal];
+    }
+    else
+    {
+        NSURL *url = [NSURL URLWithString:_promotionImageUrlPath];
+        if (url)
+        {
+            __weak EntranceMemberPromoteHeader *weakSelf = self;
+            [[SDWebImageDownloader sharedDownloader] downloadImageWithURL:url options:0 progress:nil completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, BOOL finished){
+                if (error == nil && image)
+                {
+                    [weakSelf.buttonPromotion setBackgroundImage:image forState:UIControlStateNormal];
+                }
+            }];
+        }
+    }
+}
+
+#pragma mark - Actions
+
+- (void)buttonPromotionPressed:(id)sender
+{
+    if (_delegate && [_delegate respondsToSelector:@selector(entranceMemberPromoteHeader:didPressedPromotionBySender:)])
+    {
+        [_delegate entranceMemberPromoteHeader:self didPressedPromotionBySender:sender];
+    }
+}
+
+- (void)buttonMarketingPressed:(id)sender
+{
+    if (_delegate && [_delegate respondsToSelector:@selector(entranceMemberPromoteHeader:didPressedMarketingBySender:)])
+    {
+        [_delegate entranceMemberPromoteHeader:self didPressedMarketingBySender:sender];
+    }
 }
 
 @end

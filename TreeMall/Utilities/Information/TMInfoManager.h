@@ -56,6 +56,7 @@ typedef enum : NSUInteger {
 @property (nonatomic, assign) TMGender userGender;
 @property (nonatomic, strong) NSNumber *userEpoint;
 @property (nonatomic, strong) NSNumber *userEcoupon;
+@property (nonatomic, strong) NSNumber *userCouponAmount;
 @property (nonatomic, strong) NSNumber *userPointTotal;
 @property (nonatomic, strong) NSNumber *userPointDividend;
 @property (nonatomic, strong) NSNumber *userPointExpired;

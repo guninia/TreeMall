@@ -8,7 +8,6 @@
 
 #import "EntranceViewController.h"
 #import "EntranceTableViewCell.h"
-#import "EntranceMemberPromoteHeader.h"
 #import "CryptoModule.h"
 #import "SHAPIAdapter.h"
 #import "APIDefinition.h"
@@ -16,6 +15,9 @@
 #import "UIImageView+WebCache.h"
 #import "PromotionViewController.h"
 #import "ProductListViewController.h"
+#import "TMInfoManager.h"
+#import "LocalizedString.h"
+#import "Utility.h"
 
 typedef enum : NSUInteger {
     TableViewSectionMemberPromotion,
@@ -28,10 +30,15 @@ typedef enum : NSUInteger {
 - (BOOL)retrieveData;
 - (BOOL)processData:(id)data;
 - (NSDictionary *)dictionaryForProductAtIndex:(NSInteger)index;
+- (void)refreshTableView;
+- (NSString *)greetingsMessage;
 
 - (void)buttonItemSearchPressed:(id)sender;
 - (void)notificationHandlerTokenUpdated:(NSNotification *)notification;
 - (void)handlerOfUserInformationUpdatedNotification:(NSNotification *)notification;
+- (void)handlerOfUserPointUpdatedNotification:(NSNotification *)notification;
+- (void)handlerOfUserCouponUpdatedNotification:(NSNotification *)notification;
+- (void)handlerOfUserLogoutNotification:(NSNotification *)notification;
 
 @end
 
@@ -79,6 +86,15 @@ typedef enum : NSUInteger {
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notificationHandlerTokenUpdated:) name:PostNotificationName_TokenUpdated object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handlerOfUserInformationUpdatedNotification:) name:PostNotificationName_UserInformationUpdated object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handlerOfUserPointUpdatedNotification:) name:PostNotificationName_UserPointUpdated object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handlerOfUserCouponUpdatedNotification:) name:PostNotificationName_UserCouponUpdated object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handlerOfUserLogoutNotification:) name:PostNotificationName_UserLogout object:nil];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [self.tableViewEntrance reloadData];
 }
 
 - (void)viewDidLayoutSubviews
@@ -95,6 +111,8 @@ typedef enum : NSUInteger {
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:PostNotificationName_TokenUpdated object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:PostNotificationName_UserInformationUpdated object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:PostNotificationName_UserPointUpdated object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:PostNotificationName_UserCouponUpdated object:nil];
 }
 
 /*
@@ -152,7 +170,7 @@ typedef enum : NSUInteger {
     
     if (error == nil)
     {
-//        NSLog(@"jsonObject[%@]:\n%@", [[jsonObject class] description], [jsonObject description]);
+//        NSLog(@"processData - jsonObject[%@]:\n%@", [[jsonObject class] description], [jsonObject description]);
         if ([jsonObject isKindOfClass:[NSDictionary class]])
         {
             NSDictionary *dictionary = (NSDictionary *)jsonObject;
@@ -185,6 +203,68 @@ typedef enum : NSUInteger {
     return dictionary;
 }
 
+- (void)refreshTableView
+{
+    __weak EntranceViewController *weakSelf = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+//        [weakSelf.tableViewEntrance reloadSections:[NSIndexSet indexSetWithIndex:TableViewSectionMemberPromotion] withRowAnimation:UITableViewRowAnimationNone];
+        [weakSelf.tableViewEntrance reloadData];
+    });
+}
+
+- (NSString *)greetingsMessage
+{
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateFormat:@"hh"];
+    
+    NSString *stringGreetingsTime = nil;
+    NSDateComponents *components = [[NSCalendar currentCalendar] components:NSCalendarUnitHour fromDate:[NSDate date]];
+    NSInteger hour = components.hour;
+    if (hour >= 0 && hour < 11)
+    {
+        // Morning
+        stringGreetingsTime = [LocalizedString GoodMorning];
+    }
+    else if (hour >= 11 && hour < 13)
+    {
+        // Noon
+        stringGreetingsTime = [LocalizedString GoodNoon];
+    }
+    else if (hour >= 13 && hour < 17)
+    {
+        // Afternoon
+        stringGreetingsTime = [LocalizedString GoodAfternoon];
+    }
+    else if (hour >= 17)
+    {
+        // Evening
+        stringGreetingsTime = [LocalizedString GoodEvening];
+    }
+    
+    NSString *userName = [TMInfoManager sharedManager].userName;
+    if (userName)
+    {
+        NSString *stringGender = nil;
+        switch ([TMInfoManager sharedManager].userGender) {
+            case TMGenderMale:
+            {
+                stringGender = [LocalizedString Mister];
+            }
+                break;
+            case TMGenderFemale:
+            {
+                stringGender = [LocalizedString Miss];
+            }
+                break;
+            default:
+                break;
+        }
+        stringGreetingsTime = [stringGreetingsTime stringByAppendingFormat:@"%@%@", userName, (stringGender == nil)?@"":stringGender];
+    }
+    
+    return stringGreetingsTime;
+}
+
 #pragma mark - Actions
 
 - (void)buttonItemSearchPressed:(id)sender
@@ -200,6 +280,26 @@ typedef enum : NSUInteger {
 - (void)notificationHandlerTokenUpdated:(NSNotification *)notification
 {
     [self retrieveData];
+}
+
+- (void)handlerOfUserInformationUpdatedNotification:(NSNotification *)notification
+{
+    [self refreshTableView];
+}
+
+- (void)handlerOfUserPointUpdatedNotification:(NSNotification *)notification
+{
+    [self refreshTableView];
+}
+
+- (void)handlerOfUserCouponUpdatedNotification:(NSNotification *)notification
+{
+    [self refreshTableView];
+}
+
+- (void)handlerOfUserLogoutNotification:(NSNotification *)notification
+{
+    [self refreshTableView];
 }
 
 #pragma mark - UITableViewDataSource
@@ -235,11 +335,37 @@ typedef enum : NSUInteger {
     switch (section) {
         case TableViewSectionMemberPromotion:
         {
-            view = [tableView dequeueReusableHeaderFooterViewWithIdentifier:EntranceMemberPromoteHeaderIdentifier];
-            if (view == nil)
+            EntranceMemberPromoteHeader *header = [tableView dequeueReusableHeaderFooterViewWithIdentifier:EntranceMemberPromoteHeaderIdentifier];
+            if (header == nil)
             {
-                view = [[EntranceMemberPromoteHeader alloc] initWithReuseIdentifier:EntranceMemberPromoteHeaderIdentifier];
+                header = [[EntranceMemberPromoteHeader alloc] initWithReuseIdentifier:EntranceMemberPromoteHeaderIdentifier];
             }
+            header.delegate = self;
+            NSString *message = [self greetingsMessage];
+            header.labelGreetings.text = message;
+            NSNumber *pointTotal = [TMInfoManager sharedManager].userPointTotal;
+            header.numberTotalPoint = pointTotal;
+            NSNumber *couponAmount = [TMInfoManager sharedManager].userCouponAmount;
+            header.numberCouponValue = couponAmount;
+            NSDictionary *dictionaryMarketing = [self.dictionaryData objectForKey:SymphoxAPIParam_serviceText];
+            if (dictionaryMarketing && [dictionaryMarketing isEqual:[NSNull null]] == NO)
+            {
+                NSString *string = [dictionaryMarketing objectForKey:SymphoxAPIParam_message];
+                if (string && [string isEqual:[NSNull null]] == NO && [string length] > 0)
+                {
+                    header.buttonMarketing.labelText.text = string;
+                }
+            }
+            NSDictionary *dictionaryFocus = [self.dictionaryData objectForKey:SymphoxAPIParam_toDayFocus];
+            if (dictionaryFocus && [dictionaryFocus isEqual:[NSNull null]] == NO)
+            {
+                NSString *imageUrlPath = [dictionaryFocus objectForKey:SymphoxAPIParam_img];
+                if (imageUrlPath && [imageUrlPath isEqual:[NSNull null]] == NO && [imageUrlPath length] > 0)
+                {
+                    header.promotionImageUrlPath = imageUrlPath;
+                }
+            }
+            view = header;
         }
             break;
         case TableViewSectionProductPromotion:
@@ -289,7 +415,9 @@ typedef enum : NSUInteger {
     switch (section) {
         case TableViewSectionMemberPromotion:
         {
-            heightForHeader = 200.0;
+            UIImage *image = [UIImage imageNamed:@"bg_ind_up"];
+            CGFloat referenceHeightDiffRatio = [Utility sizeRatioAccordingTo320x480].height - 1;
+            heightForHeader = ceil(200.0 + image.size.height * referenceHeightDiffRatio);
         }
             break;
         case TableViewSectionProductPromotion:
@@ -301,6 +429,11 @@ typedef enum : NSUInteger {
             break;
     }
     return heightForHeader;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView estimatedHeightForHeaderInSection:(NSInteger)section
+{
+    return [self tableView:tableView heightForHeaderInSection:section];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -344,6 +477,62 @@ typedef enum : NSUInteger {
             
         default:
             break;
+    }
+}
+
+#pragma mark - EntranceMemberPromoteHeaderDelegate
+
+- (void)entranceMemberPromoteHeader:(EntranceMemberPromoteHeader *)header didPressedPromotionBySender:(id)sender
+{
+    NSDictionary *dictionaryFocus = [self.dictionaryData objectForKey:SymphoxAPIParam_toDayFocus];
+    if (dictionaryFocus && [dictionaryFocus isEqual:[NSNull null]] == NO)
+    {
+        NSString *type = [dictionaryFocus objectForKey:SymphoxAPIParam_type];
+        NSString *stringLink = [dictionaryFocus objectForKey:SymphoxAPIParam_link];
+        if (stringLink && [stringLink isEqual:[NSNull null]] == NO && [stringLink length] > 0)
+        {
+            switch ([type integerValue]) {
+                case 0:
+                {
+                    // App page
+                }
+                    break;
+                case 1:
+                {
+                    // Hyperlink
+                }
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+}
+
+- (void)entranceMemberPromoteHeader:(EntranceMemberPromoteHeader *)header didPressedMarketingBySender:(id)sender
+{
+    NSDictionary *dictionaryMarketing = [self.dictionaryData objectForKey:SymphoxAPIParam_serviceText];
+    if (dictionaryMarketing && [dictionaryMarketing isEqual:[NSNull null]] == NO)
+    {
+        NSString *type = [dictionaryMarketing objectForKey:SymphoxAPIParam_type];
+        NSString *stringLink = [dictionaryMarketing objectForKey:SymphoxAPIParam_link];
+        if (stringLink && [stringLink isEqual:[NSNull null]] == NO && [stringLink length] > 0)
+        {
+            switch ([type integerValue]) {
+                case 0:
+                {
+                    // App page
+                }
+                    break;
+                case 1:
+                {
+                    // Hyperlink
+                }
+                    break;
+                default:
+                    break;
+            }
+        }
     }
 }
 

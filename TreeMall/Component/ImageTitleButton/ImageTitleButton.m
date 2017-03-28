@@ -15,6 +15,8 @@
     self = [super initWithFrame:frame];
     if (self)
     {
+        _marginL = 10.0;
+        _marginR = 20.0;
         [self.layer setCornerRadius:3.0];
         [self addSubview:self.imageViewIcon];
         [self addSubview:self.labelText];
@@ -36,8 +38,8 @@
 {
     [super layoutSubviews];
     
-    CGFloat marginL = 10.0;
-    CGFloat marginR = 20.0;
+    CGFloat marginL = self.marginL;
+    CGFloat marginR = self.marginR;
     CGFloat intervalH = 10.0;
     CGFloat originX = marginL;
     

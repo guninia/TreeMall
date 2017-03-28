@@ -8,9 +8,10 @@
 
 #import <UIKit/UIKit.h>
 #import "EntranceFunctionSectionHeader.h"
+#import "EntranceMemberPromoteHeader.h"
 #import "SearchViewController.h"
 
-@interface EntranceViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, EntranceFunctionSectionHeaderDelegate, SearchViewControllerDelegate>
+@interface EntranceViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, EntranceFunctionSectionHeaderDelegate, SearchViewControllerDelegate, EntranceMemberPromoteHeaderDelegate>
 
 @property (nonatomic, weak) IBOutlet UITableView *tableViewEntrance;
 @property (nonatomic, strong) NSMutableDictionary *dictionaryData;

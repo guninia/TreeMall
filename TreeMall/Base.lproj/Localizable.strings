@@ -178,3 +178,8 @@
 "ExchangeRecommended"="Exchange";
 "CouponRecommended"="Coupon";
 "PreferentialNotification"="Preferential";
+"GoodMorning"="Good morning! ";
+"GoodNoon"="Good noon! ";
+"GoodAfternoon"="Good afternoon! ";
+"GoodEvening"="Good evening! ";
+

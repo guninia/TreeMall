@@ -814,11 +814,11 @@ static NSUInteger SearchKeywordNumberMax = 8;
         self.userEpoint = nil;
         self.userEcoupon = nil;
     }
-    if (identifier)
+    if (identifier && [identifier isEqual:[NSNull null]] == NO)
     {
         self.userIdentifier = identifier;
     }
-    if (name)
+    if (name && [name isEqual:[NSNull null]] == NO && [name length] > 0)
     {
         self.userName = name;
     }
@@ -841,11 +841,11 @@ static NSUInteger SearchKeywordNumberMax = 8;
     {
         self.userGender = TMGenderUnknown;
     }
-    if (epoint)
+    if (epoint && [epoint isEqual:[NSNull null]] == NO)
     {
         self.userEpoint = epoint;
     }
-    if (ecoupon)
+    if (ecoupon && [ecoupon isEqual:[NSNull null]] == NO)
     {
         self.userEcoupon = ecoupon;
     }
@@ -1068,7 +1068,7 @@ static NSUInteger SearchKeywordNumberMax = 8;
     [[SHAPIAdapter sharedAdapter] sendRequestFromObject:weakSelf ToUrl:url withHeaderFields:headerFields andPostObject:[NSMutableData dataWithLength:0] inPostFormat:SHPostFormatNSData encrypted:YES decryptedReturnData:NO completion:^(id resultObject, NSError *error){
         if (error == nil)
         {
-            //            NSLog(@"resultObject[%@]:\n%@", [[resultObject class] description], [resultObject description]);
+//            NSLog(@"resultObject[%@]:\n%@", [[resultObject class] description], [resultObject description]);
             if ([resultObject isKindOfClass:[NSData class]])
             {
                 NSData *data = (NSData *)resultObject;
@@ -1211,7 +1211,7 @@ static NSUInteger SearchKeywordNumberMax = 8;
         id result = nil;
         if (error == nil)
         {
-//            NSLog(@"retrievePointDataFromObject - resultObject[%@]:\n%@", [[resultObject class] description], [resultObject description]);
+//            NSLog(@"retrieveCouponDataFromObject - resultObject[%@]:\n%@", [[resultObject class] description], [resultObject description]);
             if ([resultObject isKindOfClass:[NSData class]])
             {
                 NSData *data = (NSData *)resultObject;
@@ -1220,7 +1220,7 @@ static NSUInteger SearchKeywordNumberMax = 8;
         }
         else
         {
-            NSLog(@"retrievePointDataFromObject - error:\n%@", [error description]);
+            NSLog(@"retrieveCouponDataFromObject - error:\n%@", [error description]);
         }
         if (object != nil && block != nil)
         {
@@ -1250,6 +1250,7 @@ static NSUInteger SearchKeywordNumberMax = 8;
     _userPointAdText = nil;
     _userPointAdUrl = nil;
     _userEcoupon = nil;
+    _userCouponAmount = nil;
     _userAuthStatus = nil;
     _userBirth = nil;
     _userEmailMasked = nil;
@@ -1286,7 +1287,7 @@ static NSUInteger SearchKeywordNumberMax = 8;
     [[SHAPIAdapter sharedAdapter] sendRequestFromObject:weakSelf ToUrl:url withHeaderFields:headerFields andPostObject:options inPostFormat:SHPostFormatJson encrypted:YES decryptedReturnData:YES completion:^(id resultObject, NSError *error){
         if (error == nil)
         {
-            //            NSLog(@"retrieveUserInformation - resultObject[%@]:\n%@", [[resultObject class] description], [resultObject description]);
+//            NSLog(@"retrieveUserInformation - resultObject[%@]:\n%@", [[resultObject class] description], [resultObject description]);
             if ([resultObject isKindOfClass:[NSData class]])
             {
                 NSData *data = (NSData *)resultObject;
@@ -1440,6 +1441,11 @@ static NSUInteger SearchKeywordNumberMax = 8;
             if (quantity)
             {
                 self.userEcoupon = quantity;
+            }
+            NSNumber *amount = [dictionary objectForKey:SymphoxAPIParam_amount];
+            if (amount)
+            {
+                self.userCouponAmount = amount;
             }
             resultObject = dictionary;
             [[NSNotificationCenter defaultCenter] postNotificationName:PostNotificationName_UserCouponUpdated object:self];

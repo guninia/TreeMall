@@ -37,6 +37,7 @@ static NSString *SymphoxAPI_emailAuth = @"http://tomcat8.mdevelop.com/TreeMall/a
 static NSString *SymphoxAPI_changePassword = @"http://tomcat8.mdevelop.com/TreeMall/api/portal/app/member/password/update";
 static NSString *SymphoxAPI_newsletter = @"http://tomcat8.mdevelop.com/TreeMall/api/portal/app/member/edm";
 static NSString *SymphoxAPI_subscribeNewsletter = @"http://tomcat8.mdevelop.com/TreeMall/api/portal/app/member/edm/update";
+static NSString *SymphoxAPI_orderNumberOfStatus = @"http://tomcat8.mdevelop.com/TreeMall/api/portal/app/member/order/status";
 
 #else
 static NSString *SymphoxAPI_token = @"https://api.symphox.com.tw/portal/app/token";

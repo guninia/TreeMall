@@ -181,5 +181,9 @@
 + (NSString *)ExchangeRecommended;
 + (NSString *)CouponRecommended;
 + (NSString *)PreferentialNotification;
++ (NSString *)GoodMorning;
++ (NSString *)GoodNoon;
++ (NSString *)GoodAfternoon;
++ (NSString *)GoodEvening;
 
 @end
