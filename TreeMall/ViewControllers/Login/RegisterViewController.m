@@ -430,7 +430,7 @@
         if ([jsonObject isKindOfClass:[NSDictionary class]])
         {
             NSDictionary *dictionary = (NSDictionary *)jsonObject;
-            [[TMInfoManager sharedManager] updateUserInformationFromInfoDictionary:dictionary];
+            [[TMInfoManager sharedManager] updateUserInformationFromInfoDictionary:dictionary afterLoadingArchive:YES];
             success = YES;
         }
     }

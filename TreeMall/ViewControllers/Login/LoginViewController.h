@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "TextHorizontalSeparator.h"
 #import <GoogleSignIn/GoogleSignIn.h>
+#import "FullScreenLoadingView.h"
 
 @interface LoginViewController : UIViewController <UITextFieldDelegate, GIDSignInDelegate, GIDSignInUIDelegate>
 
@@ -25,5 +26,6 @@
 @property (nonatomic, strong) UIView *separatorVertical;
 @property (nonatomic, strong) UIButton *buttonForgetpassword;
 @property (nonatomic, strong) UIButton *buttonClose;
+@property (nonatomic, strong) FullScreenLoadingView *viewLoading;
 
 @end

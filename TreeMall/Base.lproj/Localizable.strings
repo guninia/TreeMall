@@ -182,4 +182,8 @@
 "GoodNoon"="Good noon! ";
 "GoodAfternoon"="Good afternoon! ";
 "GoodEvening"="Good evening! ";
-
+"SoldOut"="Sold out";
+"CartError"="Cart error";
+"NotEnoughInStock"="Not enough in stock";
+"MultipleProductsUnacceptable"="Multiple product";
+"ProductsRemovedFromCart"="The following products will be removed from cart";

@@ -28,8 +28,9 @@
         self.backgroundColorInvalid = [UIColor lightGrayColor];
         [self setBackgroundColor:self.backgorundColorValid];
         [self addSubview:self.buttonFavorite];
+        [self addSubview:self.buttonAddToCart];
+        [self addSubview:self.buttonPurchase];
         [self addSubview:self.separator];
-        
         [self addSubview:self.labelInvalid];
     }
     return self;
@@ -79,6 +80,12 @@
         CGRect frame = CGRectMake(originX, originY, maxButtonWidth, self.frame.size.height);
         self.buttonPurchase.frame = frame;
         originX = self.buttonPurchase.frame.origin.x + self.buttonPurchase.frame.size.width;
+    }
+    if (self.labelInvalid && [self.labelInvalid isHidden] == NO)
+    {
+        CGFloat labelOriginX = CGRectGetMaxX(self.buttonFavorite.frame);
+        CGRect frame = CGRectMake(labelOriginX, 0.0, self.frame.size.width - labelOriginX, self.frame.size.height);
+        self.labelInvalid.frame = frame;
     }
 }
 
@@ -152,7 +159,10 @@
     {
         _labelInvalid = [[UILabel alloc] initWithFrame:CGRectZero];
         [_labelInvalid setTextColor:[UIColor whiteColor]];
+        [_labelInvalid setBackgroundColor:[UIColor grayColor]];
         [_labelInvalid setAdjustsFontSizeToFitWidth:YES];
+        [_labelInvalid setText:[LocalizedString SoldOut]];
+        [_labelInvalid setHidden:YES];
     }
     return _labelInvalid;
 }

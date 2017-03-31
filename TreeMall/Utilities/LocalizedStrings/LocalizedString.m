@@ -1761,4 +1761,54 @@
     return GoodEvening;
 }
 
++ (NSString *)SoldOut
+{
+    static NSString *SoldOut = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        SoldOut = NSLocalizedString(@"SoldOut", nil);
+    });
+    return SoldOut;
+}
+
++ (NSString *)CartError
+{
+    static NSString *CartError = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        CartError = NSLocalizedString(@"CartError", nil);
+    });
+    return CartError;
+}
+
++ (NSString *)NotEnoughInStock
+{
+    static NSString *NotEnoughInStock = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        NotEnoughInStock = NSLocalizedString(@"NotEnoughInStock", nil);
+    });
+    return NotEnoughInStock;
+}
+
++ (NSString *)MultipleProductsUnacceptable
+{
+    static NSString *MultipleProductsUnacceptable = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        MultipleProductsUnacceptable = NSLocalizedString(@"MultipleProductsUnacceptable", nil);
+    });
+    return MultipleProductsUnacceptable;
+}
+
++ (NSString *)ProductsRemovedFromCart
+{
+    static NSString *ProductsRemovedFromCart = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        ProductsRemovedFromCart = NSLocalizedString(@"ProductsRemovedFromCart", nil);
+    });
+    return ProductsRemovedFromCart;
+}
+
 @end

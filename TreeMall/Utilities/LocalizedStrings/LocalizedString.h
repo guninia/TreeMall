@@ -185,5 +185,10 @@
 + (NSString *)GoodNoon;
 + (NSString *)GoodAfternoon;
 + (NSString *)GoodEvening;
++ (NSString *)SoldOut;
++ (NSString *)CartError;
++ (NSString *)NotEnoughInStock;
++ (NSString *)MultipleProductsUnacceptable;
++ (NSString *)ProductsRemovedFromCart;
 
 @end

@@ -134,12 +134,12 @@ typedef enum : NSUInteger {
 - (void)retrieveMainCategoryData
 {
     // Check local cache first.
-    NSArray *categories = [[TMInfoManager sharedManager] subcategoriesForIdentifier:nil atLayer:[NSNumber numberWithInteger:0]];
-    if (categories)
-    {
-        [self setMainCategoryFromCategories:categories];
-        return;
-    }
+//    NSArray *categories = [[TMInfoManager sharedManager] subcategoriesForIdentifier:nil atLayer:[NSNumber numberWithInteger:0]];
+//    if (categories)
+//    {
+//        [self setMainCategoryFromCategories:categories];
+//        return;
+//    }
     
     NSString *apiKey = [CryptoModule sharedModule].apiKey;
     NSString *token = [SHAPIAdapter sharedAdapter].token;

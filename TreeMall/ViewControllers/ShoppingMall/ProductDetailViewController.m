@@ -24,6 +24,10 @@
 - (NSAttributedString *)attributedStringFromHtmlString:(NSString *)html;
 - (void)retrieveTermsForType:(TermType)type;
 - (BOOL)processTermsData:(id)data;
+- (void)showCartTypeSheet;
+- (void)addProduct:(NSDictionary *)dictionaryProduct toCartForType:(CartType)type;
+
+
 - (void)buttonLinkPressed:(id)sender;
 - (void)linkLongPressed:(UILongPressGestureRecognizer *)gestureRecognizer;
 
@@ -484,6 +488,15 @@
     return _labelShippingAndWarrenty;
 }
 
+- (NSMutableArray *)arrayCartType
+{
+    if (_arrayCartType == nil)
+    {
+        _arrayCartType = [NSMutableArray arrayWithCapacity:0];
+    }
+    return _arrayCartType;
+}
+
 #pragma mark - Private Methods
 
 - (void)retrieveDataForIdentifer:(NSNumber *)identifier
@@ -506,8 +519,8 @@
             if ([resultObject isKindOfClass:[NSData class]])
             {
                 NSData *data = (NSData *)resultObject;
-                NSString *string = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-                NSLog(@"retrieveDataForIdentifer:\n%@", string);
+//                NSString *string = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+//                NSLog(@"retrieveDataForIdentifer:\n%@", string);
                 if ([weakSelf processProductData:data])
                 {
                     dispatch_async(dispatch_get_main_queue(), ^{
@@ -1123,6 +1136,63 @@
         [self.viewRemarkTitle setHidden:!shouldShow];
         [self.labelRemark setHidden:!shouldShow];
     }
+    
+    if (self.bottomBar)
+    {
+        BOOL isInvalid = NO;
+        NSString *textSoldOut = [LocalizedString SoldOut];
+        NSString *textPurchase = [LocalizedString Purchase];
+        NSArray *arrayShopping = [self.dictionaryDetail objectForKey:SymphoxAPIParam_shopping];
+        if (arrayShopping && [arrayShopping isEqual:[NSNull null]] == NO)
+        {
+            for (NSDictionary *dictionary in arrayShopping)
+            {
+                NSNumber *numberType = [dictionary objectForKey:SymphoxAPIParam_type];
+                if (numberType && [numberType isEqual:[NSNull null]] == NO)
+                {
+                    switch ([numberType integerValue]) {
+                        case (-1):
+                        {
+                            // Sold out
+                            NSString *text = [dictionary objectForKey:SymphoxAPIParam_text];
+                            if (text && [text isEqual:[NSNull null]] == NO && [text length] > 0)
+                            {
+                                textSoldOut = text;
+                            }
+                            isInvalid = YES;
+                        }
+                            break;
+                        case 3:
+                        {
+                            // Directly purchase
+                            NSString *text = [dictionary objectForKey:SymphoxAPIParam_text];
+                            if (text && [text isEqual:[NSNull null]] == NO && [text length] > 0)
+                            {
+                                textPurchase = text;
+                            }
+                        }
+                            break;
+                        default:
+                        {
+                            [self.arrayCartType addObject:dictionary];
+                        }
+                            break;
+                    }
+                }
+            }
+        }
+        if ([self.arrayCartType count] == 0)
+        {
+            [self.bottomBar.buttonAddToCart setBackgroundColor:[UIColor grayColor]];
+        }
+        else
+        {
+            [self.bottomBar.buttonAddToCart setBackgroundColor:[UIColor clearColor]];
+        }
+        [self.bottomBar.labelInvalid setHidden:!isInvalid];
+        [self.bottomBar.labelInvalid setText:textSoldOut];
+        [self.bottomBar.buttonPurchase setTitle:textPurchase forState:UIControlStateNormal];
+    }
 }
 
 - (NSAttributedString *)attributedStringFromHtmlString:(NSString *)html
@@ -1224,6 +1294,64 @@
     return success;
 }
 
+- (void)showCartTypeSheet
+{
+    if ([self.arrayCartType count] == 0)
+    {
+        return;
+    }
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:[LocalizedString AddToCart] message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+    for (NSDictionary *dictionary in self.arrayCartType)
+    {
+        CartType type = CartTypeTotal;
+        NSNumber *numberType = [dictionary objectForKey:SymphoxAPIParam_type];
+        NSString *title = nil;
+        switch ([numberType integerValue]) {
+            case 0:
+            {
+                // Common delivery
+                title = [LocalizedString CommonDelivery];
+                type = CartTypeCommonDelivery;
+            }
+                break;
+            case 1:
+            {
+                // Convenience Store
+                title = [LocalizedString StorePickUp];
+                type = CartTypeStorePickup;
+            }
+                break;
+            case 2:
+            {
+                // Fast delivery
+                title = [LocalizedString FastDelivery];
+                type = CartTypeFastDelivery;
+            }
+                break;
+            default:
+                break;
+        }
+        NSString *text = [dictionary objectForKey:SymphoxAPIParam_text];
+        if (text && [text isEqual:[NSNull null]] == NO && [text length] > 0)
+        {
+            title = text;
+        }
+        __weak ProductDetailViewController *weakSelf = self;
+        UIAlertAction *action = [UIAlertAction actionWithTitle:title style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
+            [weakSelf addProduct:weakSelf.dictionaryDetail toCartForType:type];
+        }];
+        [alertController addAction:action];
+    }
+    UIAlertAction *actionCancel = [UIAlertAction actionWithTitle:[LocalizedString Cancel] style:UIAlertActionStyleCancel handler:nil];
+    [alertController addAction:actionCancel];
+    [self presentViewController:alertController animated:YES completion:nil];
+}
+
+- (void)addProduct:(NSDictionary *)dictionaryProduct toCartForType:(CartType)type
+{
+    [[TMInfoManager sharedManager] addProduct:dictionaryProduct toCartForType:type];
+}
+
 #pragma mark - Actions
 
 - (void)buttonLinkPressed:(id)sender
@@ -1281,7 +1409,7 @@
 
 - (void)productDetailBottomBar:(ProductDetailBottomBar *)bar didSelectAddToCartBySender:(id)sender
 {
-    
+    [self showCartTypeSheet];
 }
 
 - (void)productDetailBottomBar:(ProductDetailBottomBar *)bar didSelectPurchaseBySender:(id)sender

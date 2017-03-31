@@ -172,6 +172,8 @@
         }
     }
     
+    [self.navigationController.tabBarController.view addSubview:self.viewLoading];
+    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(facebookTokenDidChangeNotification:) name:FBSDKAccessTokenDidChangeNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(facebookProfileDidChangeNotification:) name:FBSDKProfileDidChangeNotification object:nil];
 }
@@ -350,6 +352,13 @@
         CGSize size = CGSizeMake(40.0, 40.0);
         [_buttonClose setFrame:CGRectMake(0.0, 0.0, size.width, size.height)];
     }
+    
+    if (self.viewLoading)
+    {
+        self.viewLoading.frame = self.navigationController.tabBarController.view.bounds;
+        self.viewLoading.indicatorCenter = self.viewLoading.center;
+        [self.viewLoading setNeedsLayout];
+    }
 }
 
 - (void)didReceiveMemoryWarning {
@@ -372,19 +381,74 @@
     return YES;
 }
 
+#pragma mark - Override
+
+- (FullScreenLoadingView *)viewLoading
+{
+    if (_viewLoading == nil)
+    {
+        _viewLoading = [[FullScreenLoadingView alloc] initWithFrame:CGRectZero];
+        [_viewLoading setBackgroundColor:[UIColor colorWithWhite:0.0 alpha:0.3]];
+        _viewLoading.alpha = 0.0;
+    }
+    return _viewLoading;
+}
+
 #pragma mark - Private Methods
+
+- (void)showLoadingViewAnimated:(BOOL)animated
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.viewLoading.activityIndicator startAnimating];
+        if (animated)
+        {
+            [UIView animateWithDuration:0.3 delay:0.0 options:(UIViewAnimationOptionCurveEaseInOut|UIViewAnimationOptionBeginFromCurrentState) animations:^{
+                [self.viewLoading setAlpha:1.0];
+            } completion:nil];
+        }
+        else
+        {
+            [self.viewLoading setAlpha:1.0];
+        }
+    });
+}
+
+- (void)hideLoadingViewAnimated:(BOOL)animated
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.viewLoading.activityIndicator stopAnimating];
+        if (animated)
+        {
+            [UIView animateWithDuration:0.3 delay:0.0 options:(UIViewAnimationOptionCurveEaseInOut|UIViewAnimationOptionBeginFromCurrentState) animations:^{
+                [self.viewLoading setAlpha:0.0];
+            } completion:nil];
+        }
+        else
+        {
+            [self.viewLoading setAlpha:0.0];
+        }
+    });
+}
 
 - (void)loginFacebook
 {
+    [self showLoadingViewAnimated:YES];
+    __weak LoginViewController *weakSelf = self;
     FBSDKLoginManager *login = [[FBSDKLoginManager alloc] init];
     [login logInWithReadPermissions:[NSArray arrayWithObjects:@"public_profile", @"email", nil] fromViewController:self handler:^(FBSDKLoginManagerLoginResult *result, NSError *error){
         if (error)
         {
             NSLog(@"Facebook login error:\n%@", error.description);
+            [weakSelf hideLoadingViewAnimated:YES];
+            UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:error.localizedDescription preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertAction *action = [UIAlertAction actionWithTitle:[LocalizedString Confirm] style:UIAlertActionStyleDefault handler:nil];
+            [alertController addAction:action];
+            [weakSelf presentViewController:alertController animated:YES completion:nil];
         }
         else if (result.isCancelled)
         {
             NSLog(@"Facebook login canceled.");
+            [weakSelf hideLoadingViewAnimated:YES];
         }
         else
         {
@@ -402,12 +466,29 @@
         FBSDKGraphRequest *request = [[FBSDKGraphRequest alloc] initWithGraphPath:@"me" parameters:[NSDictionary dictionaryWithObjectsAndKeys:@"gender, picture, email", @"fields", nil] HTTPMethod:@"GET"];
         [request startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error){
             NSLog(@"result:\n%@", [result description]);
+            if (error)
+            {
+                UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:error.localizedDescription preferredStyle:UIAlertControllerStyleAlert];
+                UIAlertAction *action = [UIAlertAction actionWithTitle:[LocalizedString Confirm] style:UIAlertActionStyleDefault handler:nil];
+                [alertController addAction:action];
+                [weakSelf presentViewController:alertController animated:YES completion:nil];
+                [weakSelf hideLoadingViewAnimated:YES];
+                return;
+            }
             NSString *email = [result objectForKey:@"email"];
             NSString *ipAddress = [Utility ipAddressPreferIPv6:YES];
             if (email != nil && ipAddress != nil)
             {
                 NSDictionary *dictionary = [NSDictionary dictionaryWithObjectsAndKeys:email, SymphoxAPIParam_account, ipAddress, SymphoxAPIParam_ip, nil];
                 [weakSelf registerWithOptions:dictionary andType:@"facebook"];
+            }
+            else
+            {
+                UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:[LocalizedString CannotLoadData] preferredStyle:UIAlertControllerStyleAlert];
+                UIAlertAction *action = [UIAlertAction actionWithTitle:[LocalizedString Confirm] style:UIAlertActionStyleDefault handler:nil];
+                [alertController addAction:action];
+                [weakSelf presentViewController:alertController animated:YES completion:nil];
+                [weakSelf hideLoadingViewAnimated:YES];
             }
         }];
     }
@@ -427,7 +508,9 @@
     NSURL *url = [[NSURL URLWithString:SymphoxAPI_register] URLByAppendingPathComponent:type];
     NSLog(@"register url [%@]", [url absoluteString]);
     NSDictionary *headerFields = [NSDictionary dictionaryWithObjectsAndKeys:apiKey, SymphoxAPIParam_key, token, SymphoxAPIParam_token, nil];
+    [self showLoadingViewAnimated:YES];
     [[SHAPIAdapter sharedAdapter] sendRequestFromObject:weakSelf ToUrl:url withHeaderFields:headerFields andPostObject:options inPostFormat:SHPostFormatJson encrypted:YES decryptedReturnData:YES completion:^(id resultObject, NSError *error){
+        NSString *errorMessage = nil;
         if (error == nil)
         {
 //            NSLog(@"resultObject[%@]:\n%@", [[resultObject class] description], [resultObject description]);
@@ -444,17 +527,28 @@
                 else
                 {
                     NSLog(@"Cannot process register data.");
+                    errorMessage = [LocalizedString CannotLoadData];
                 }
             }
             else
             {
                 NSLog(@"Unexpected data format.");
+                errorMessage = [LocalizedString CannotLoadData];
             }
         }
         else
         {
             NSLog(@"error:\n%@", [error description]);
+            errorMessage = error.localizedDescription;
         }
+        if (errorMessage)
+        {
+            UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:errorMessage preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertAction *action = [UIAlertAction actionWithTitle:[LocalizedString Confirm] style:UIAlertActionStyleDefault handler:nil];
+            [alertController addAction:action];
+            [weakSelf presentViewController:alertController animated:YES completion:nil];
+        }
+        [weakSelf hideLoadingViewAnimated:YES];
     }];
 }
 
@@ -468,7 +562,7 @@
         if ([jsonObject isKindOfClass:[NSDictionary class]])
         {
             NSDictionary *dictionary = (NSDictionary *)jsonObject;
-            [[TMInfoManager sharedManager] updateUserInformationFromInfoDictionary:dictionary];
+            [[TMInfoManager sharedManager] updateUserInformationFromInfoDictionary:dictionary afterLoadingArchive:YES];
             success = YES;
         }
     }
@@ -533,6 +627,7 @@
     NSURL *url = [NSURL URLWithString:SymphoxAPI_login];
     NSLog(@"login url [%@]", [url absoluteString]);
     NSDictionary *headerFields = [NSDictionary dictionaryWithObjectsAndKeys:apiKey, SymphoxAPIParam_key, token, SymphoxAPIParam_token, nil];
+    [self showLoadingViewAnimated:YES];
     [[SHAPIAdapter sharedAdapter] sendRequestFromObject:weakSelf ToUrl:url withHeaderFields:headerFields andPostObject:options inPostFormat:SHPostFormatJson encrypted:YES decryptedReturnData:YES completion:^(id resultObject, NSError *error){
         NSString *errorDescription = nil;
         if (error == nil)
@@ -580,6 +675,7 @@
             [alertController addAction:cancelAction];
             [weakSelf presentViewController:alertController animated:YES completion:nil];
         }
+        [weakSelf hideLoadingViewAnimated:YES];
     }];
 }
 
@@ -596,7 +692,7 @@
     if ([jsonObject isKindOfClass:[NSDictionary class]])
     {
         NSDictionary *dictionary = (NSDictionary *)jsonObject;
-        [[TMInfoManager sharedManager] updateUserInformationFromInfoDictionary:dictionary];
+        [[TMInfoManager sharedManager] updateUserInformationFromInfoDictionary:dictionary afterLoadingArchive:YES];
     }
     
     return success;

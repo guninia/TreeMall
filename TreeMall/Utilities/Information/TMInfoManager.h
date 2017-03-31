@@ -41,6 +41,14 @@ typedef enum : NSUInteger {
     OrderStateTotal
 } OrderState;
 
+typedef enum : NSUInteger {
+    CartTypeStart,
+    CartTypeCommonDelivery = CartTypeStart,
+    CartTypeFastDelivery,
+    CartTypeStorePickup,
+    CartTypeTotal
+} CartType;
+
 @interface TMInfoManager : NSObject
 {
     NSMutableDictionary *_dictionaryUserInfo;
@@ -49,7 +57,6 @@ typedef enum : NSUInteger {
     dispatch_queue_t archiveQueue;
 }
 
-@property (nonatomic, strong) NSMutableOrderedSet *orderedSetPromotionRead;
 @property (nonatomic, strong) NSNumber *userIdentifier;
 @property (nonatomic, strong) NSString *userName;
 @property (nonatomic, strong) NSString *userEmail;
@@ -85,8 +92,15 @@ typedef enum : NSUInteger {
 @property (nonatomic, strong) NSMutableDictionary *dictionaryMainCategoryNameMapping;
 @property (nonatomic, strong) NSMutableOrderedSet *orderedSetKeyword;
 @property (nonatomic, strong) NSMutableOrderedSet *orderedSetFavoriteId;
+@property (nonatomic, strong) NSMutableOrderedSet *orderedSetPromotionRead;
 @property (nonatomic, strong) NSMutableArray *arrayFavorite;
 @property (nonatomic, strong) NSMutableDictionary *dictionaryFavoriteDetail;
+@property (nonatomic, strong) NSMutableArray *arrayCartCommon;
+@property (nonatomic, strong) NSMutableDictionary *dictionaryProductPurchaseInfoInCartCommon;
+@property (nonatomic, strong) NSMutableArray *arrayCartStorePickUp;
+@property (nonatomic, strong) NSMutableDictionary *dictionaryProductPurchaseInfoInCartStorePickUp;
+@property (nonatomic, strong) NSMutableArray *arrayCartFast;
+@property (nonatomic, strong) NSMutableDictionary *dictionaryProductPurchaseInfoInCartFast;
 
 + (instancetype)sharedManager;
 
@@ -95,7 +109,7 @@ typedef enum : NSUInteger {
 
 - (void)readPromotionForIdentifier:(NSString *)identifier;
 - (BOOL)alreadyReadPromotionForIdentifier:(NSString *)identifier;
-- (void)updateUserInformationFromInfoDictionary:(NSDictionary *)infoDictionary;
+- (void)updateUserInformationFromInfoDictionary:(NSDictionary *)infoDictionary afterLoadingArchive:(BOOL)shouldLoadArchive;
 - (void)setSubcategories:(NSArray *)subcategories forIdentifier:(NSString *)identifier atLayer:(NSNumber *)layer;
 - (NSArray *)subcategoriesForIdentifier:(NSString *)identifier atLayer:(NSNumber *)layer;
 - (NSDictionary *)cachedDictionaries;
@@ -113,5 +127,12 @@ typedef enum : NSUInteger {
 - (void)retrieveCouponDataFromObject:(id)object forPageIndex:(NSInteger)pageIndex couponState:(CouponState)state sortFactor:(NSString *)factor withSortOrder:(NSString *)order withCompletion:(void (^)(id result, NSError *error))block;
 - (void)logoutUser;
 - (void)retrieveUserInformation;
+
+- (NSMutableArray *)productArrayForCartType:(CartType)type;
+- (NSMutableDictionary *)purchaseInfoForCartType:(CartType)type;
+- (void)addProduct:(NSDictionary *)product toCartForType:(CartType)type;
+- (void)setPurchaseQuantity:(NSNumber *)quantity forProduct:(NSNumber *)productId inCart:(CartType)cartType;
+- (NSString *)nameOfRemovedProductId:(NSNumber *)productIdToRemove inCart:(CartType)type;
+
 
 @end

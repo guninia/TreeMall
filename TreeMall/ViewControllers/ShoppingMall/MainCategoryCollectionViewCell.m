@@ -73,7 +73,7 @@
 
 - (void)setSelected:(BOOL)selected
 {
-    NSLog(@"Cell[%li] Selected[%@]", (long)self.tag, selected?@"YES":@"NO");
+//    NSLog(@"Cell[%li] Selected[%@]", (long)self.tag, selected?@"YES":@"NO");
     [super setSelected:selected];
     [_textLabel setTextColor:[self isSelected]?[UIColor cyanColor]:[UIColor darkTextColor]];
 }

@@ -51,5 +51,6 @@
 @property (nonatomic, assign) CGSize sizeTextViewSpec;
 @property (nonatomic, strong) ProductDetailBottomBar *bottomBar;
 @property (nonatomic, strong) NSMutableArray *arrayViewNotice;
+@property (nonatomic, strong) NSMutableArray *arrayCartType;
 
 @end

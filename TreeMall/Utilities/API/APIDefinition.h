@@ -38,6 +38,9 @@ static NSString *SymphoxAPI_changePassword = @"http://tomcat8.mdevelop.com/TreeM
 static NSString *SymphoxAPI_newsletter = @"http://tomcat8.mdevelop.com/TreeMall/api/portal/app/member/edm";
 static NSString *SymphoxAPI_subscribeNewsletter = @"http://tomcat8.mdevelop.com/TreeMall/api/portal/app/member/edm/update";
 static NSString *SymphoxAPI_orderNumberOfStatus = @"http://tomcat8.mdevelop.com/TreeMall/api/portal/app/member/order/status";
+static NSString *SymphoxAPI_checkProductAvailable = @"http://tomcat8.mdevelop.com/TreeMall/api/eiffel/appShoppingCart/addToCart";
+static NSString *SymphoxAPI_renewProductConditions = @"http://tomcat8.mdevelop.com/TreeMall/api/eiffel/appShoppingCart/goToCart";
+
 
 #else
 static NSString *SymphoxAPI_token = @"https://api.symphox.com.tw/portal/app/token";
@@ -221,7 +224,9 @@ static NSString *SymphoxAPIParam_item = @"item";
 static NSString *SymphoxAPIParam_old_pwd = @"old_pwd";
 static NSString *SymphoxAPIParam_subscribe = @"subscribe";
 static NSString *SymphoxAPIParam_edm_id = @"edm_id";
-
+static NSString *SymphoxAPIParam_cart_item_order = @"cart_item_order";
+static NSString *SymphoxAPIParam_cart_type = @"cart_type";
+static NSString *SymphoxAPIParam_payment_mode = @"payment_mode";
 static NSString *SymphoxAPIError_E301 = @"E301";
 
 typedef enum : NSUInteger {

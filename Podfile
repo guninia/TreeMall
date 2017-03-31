@@ -20,4 +20,5 @@ pod 'DTCoreText', '~> 1.6.19'
 pod 'SDWebImage', '~> 4.0.0-beta2'
 pod 'NMRangeSlider', '~> 1.2.1'
 pod 'TTTAttributedLabel', '~> 2.0.0'
+pod 'SAMKeychain', '~> 1.5.2'
 end

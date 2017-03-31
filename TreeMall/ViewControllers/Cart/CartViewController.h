@@ -7,7 +7,16 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "SemiCircleEndsSegmentedView.h"
+#import "LabelButtonView.h"
+#import "CartProductTableViewCell.h"
+#import "TMInfoManager.h"
 
-@interface CartViewController : UIViewController
+@interface CartViewController : UIViewController <SemiCircleEndsSegmentedViewDelegate>
 
+@property (nonatomic, strong) SemiCircleEndsSegmentedView *segmentedView;
+@property (nonatomic, strong) UITableView *tableView;
+@property (nonatomic, strong) LabelButtonView *bottomBar;
+@property (nonatomic, assign) CartType currentType;
+@property (nonatomic, strong) NSMutableDictionary *dictionaryConditions;
 @end

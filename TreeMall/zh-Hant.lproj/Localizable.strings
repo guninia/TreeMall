@@ -181,3 +181,8 @@
 "GoodNoon"="午安！";
 "GoodAfternoon"="午安！";
 "GoodEvening"="晚安！";
+"SoldOut"="已售完";
+"CartError"="購物車錯誤";
+"NotEnoughInStock"="庫存量不足";
+"MultipleProductsUnacceptable"="不可有多項商品";
+"ProductsRemovedFromCart"="下列商品將從購物車移除";

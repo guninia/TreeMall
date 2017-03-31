@@ -11,6 +11,7 @@
 #import "APIDefinition.h"
 #import "SHAPIAdapter.h"
 #import "Definition.h"
+#import <SAMKeychain.h>
 
 static NSString *TMInfoArchiveKey_PromotionRead = @"PromotionRead";
 static NSString *TMInfoArchiveKey_UserInformation = @"UserInformation";
@@ -47,6 +48,15 @@ static NSString *TMInfoArchiveKey_OrderSetFavoriteId = @"OrderSetFavoriteId";
 static NSString *TMInfoArchiveKey_Favorites = @"Favorites";
 static NSString *TMInfoArchiveKey_FavoritesDetail = @"FavoritesDetail";
 
+static NSString *TMInfoArchiveKey_CartCommon = @"CartCommon";
+static NSString *TMInfoArchiveKey_CartStorePickUp = @"CartStorePickUp";
+static NSString *TMInfoArchiveKey_CartFast = @"CartFast";
+static NSString *TMInfoArchiveKey_PurchaseInfoInCartCommon = @"PurchaseInfoInCartCommon";
+static NSString *TMInfoArchiveKey_PurchaseInfoInCartStorePickUp = @"PurchaseInfoInCartStorePickUp";
+static NSString *TMInfoArchiveKey_PurchaseInfoInCartFast = @"PurchaseInfoInCartFast";
+
+static NSString *TMIdentifier = @"TMID";
+
 static NSString *SeparatorBetweenIdAndLayer = @"_";
 
 static TMInfoManager *gTMInfoManager = nil;
@@ -58,7 +68,9 @@ static NSUInteger SearchKeywordNumberMax = 8;
 
 - (NSURL *)urlForInfoDirectory;
 - (NSURL *)urlForInfoArchive;
+- (void)applyDataFromArchivedDictionary:(NSDictionary *)dictionaryArchive;
 - (void)deleteArchive;
+- (void)resetData;
 - (NSString *)keyForCategoryIdentifier:(NSString *)identifier withLayer:(NSNumber *)layer;
 - (void)processUserInformation:(NSData *)data;
 - (void)processUserPoint:(NSData *)data;
@@ -110,105 +122,10 @@ static NSUInteger SearchKeywordNumberMax = 8;
     self = [super init];
     if (self)
     {
-        _orderedSetPromotionRead = [[NSMutableOrderedSet alloc] initWithCapacity:0];
-        _dictionaryUserInfo = [[NSMutableDictionary alloc] initWithCapacity:0];
-        _dictionaryCachedCategories = [[NSMutableDictionary alloc] initWithCapacity:0];
-        _dictionaryInitialFilter = [[NSMutableDictionary alloc] initWithCapacity:0];
-        _dictionaryMainCategoryNameMapping = [[NSMutableDictionary alloc] initWithCapacity:0];
-        _orderedSetKeyword = [[NSMutableOrderedSet alloc] initWithCapacity:0];
-        _arrayFavorite = [[NSMutableArray alloc] initWithCapacity:0];
-        _dictionaryFavoriteDetail = [[NSMutableDictionary alloc] initWithCapacity:0];
-        _orderedSetFavoriteId = [[NSMutableOrderedSet alloc] initWithCapacity:0];
-        _numberArchiveTimestamp = nil;
-        _userIdentifier = nil;
-        _userName = nil;
-        _userEmail = nil;
-        _userGender = TMGenderTotal;
-        _userEpoint = nil;
-        _userPointTotal = nil;
-        _userPointDividend = nil;
-        _userPointExpired = nil;
-        _userPointAdText = nil;
-        _userPointAdUrl = nil;
-        _userEcoupon = nil;
-        _userAuthStatus = nil;
-        _userBirth = nil;
-        _userEmailMasked = nil;
-        _userIsEmailMember = NO;
-        _userEmailAuth = NO;
-        _userInvoiceTitle =  nil;
-        _userInvoiceType = nil;
-        _userMobileMasked = nil;
-        _userIsNewMember = NO;
-        _userOcbStatus = OCBStatusTotal;
-        _userOcbUrl = nil;
-        _userHasPassword = NO;
-        _userTaxId = nil;
-        _userTelephoneAreaCode = nil;
-        _userTelephoneExtension = nil;
-        _userTelephone = nil;
-        _userIDCardNumber = nil;
-        _userZipCode = nil;
-        _userAddress = nil;
-        
+        [self resetData];
         archiveQueue = dispatch_queue_create("ArchiveQueue", DISPATCH_QUEUE_SERIAL);
         
-        NSDictionary *dictionaryArchive = [self loadFromArchive];
-        if (dictionaryArchive)
-        {
-            NSArray *arrayPromotionRead = [dictionaryArchive objectForKey:TMInfoArchiveKey_PromotionRead];
-            if (arrayPromotionRead)
-            {
-                [_orderedSetPromotionRead addObjectsFromArray:arrayPromotionRead];
-            }
-            NSDictionary *dictionaryUserInfo = [dictionaryArchive objectForKey:TMInfoArchiveKey_UserInformation];
-            if (dictionaryUserInfo)
-            {
-                [_dictionaryUserInfo setDictionary:dictionaryUserInfo];
-            }
-            NSArray *arrayKeyword = [dictionaryArchive objectForKey:TMInfoArchiveKey_OrderSetKeyword];
-            if (arrayKeyword)
-            {
-                [_orderedSetKeyword addObjectsFromArray:arrayKeyword];
-            }
-            NSArray *arrayFavorites = [dictionaryArchive objectForKey:TMInfoArchiveKey_Favorites];
-            if (arrayFavorites)
-            {
-//                NSLog(@"arrayFavorites:\n%@", [arrayFavorites description]);
-                [_arrayFavorite addObjectsFromArray:arrayFavorites];
-            }
-            NSDictionary *dictionaryFavoriteDetail = [dictionaryArchive objectForKey:TMInfoArchiveKey_FavoritesDetail];
-            if (dictionaryFavoriteDetail)
-            {
-                [_dictionaryFavoriteDetail setDictionary:dictionaryFavoriteDetail];
-            }
-            NSArray *arrayFavoriteId = [dictionaryArchive objectForKey:TMInfoArchiveKey_OrderSetFavoriteId];
-            if (arrayFavoriteId)
-            {
-                [_orderedSetFavoriteId addObjectsFromArray:arrayFavoriteId];
-            }
-            BOOL shouldUpdateCachedData = YES;
-            NSNumber *numberTimestamp = [dictionaryArchive objectForKey:TMInfoArchiveKey_ArchiveTimestamp];
-            if (numberTimestamp)
-            {
-                _numberArchiveTimestamp = numberTimestamp;
-                NSTimeInterval archiveTime = [_numberArchiveTimestamp doubleValue];
-                NSTimeInterval currentTime = [[NSDate date] timeIntervalSince1970];
-                NSTimeInterval cachedAvail = 60.0 * 60.0 * 12;
-                if (fabs((currentTime - archiveTime)) < cachedAvail)
-                {
-                    shouldUpdateCachedData = NO;
-                }
-            }
-            if (shouldUpdateCachedData == NO)
-            {
-                NSDictionary *dictionaryCategories = [dictionaryArchive objectForKey:TMInfoArchiveKey_CachedCategories];
-                if (dictionaryCategories)
-                {
-                    [_dictionaryCachedCategories setDictionary:dictionaryCategories];
-                }
-            }
-        }
+        [self applyDataFromArchivedDictionary:[self loadFromArchive]];
     }
     return self;
 }
@@ -680,6 +597,123 @@ static NSUInteger SearchKeywordNumberMax = 8;
     return _userAddress;
 }
 
+- (NSMutableDictionary *)dictionaryInitialFilter
+{
+    if (_dictionaryInitialFilter == nil)
+    {
+        _dictionaryInitialFilter = [[NSMutableDictionary alloc] initWithCapacity:0];
+    }
+    return _dictionaryInitialFilter;
+}
+
+- (NSMutableDictionary *)dictionaryMainCategoryNameMapping
+{
+    if (_dictionaryMainCategoryNameMapping == nil)
+    {
+        _dictionaryMainCategoryNameMapping = [[NSMutableDictionary alloc] initWithCapacity:0];
+    }
+    return _dictionaryMainCategoryNameMapping;
+}
+
+- (NSMutableOrderedSet *)orderedSetKeyword
+{
+    if (_orderedSetKeyword == nil)
+    {
+        _orderedSetKeyword = [[NSMutableOrderedSet alloc] initWithCapacity:0];
+    }
+    return _orderedSetKeyword;
+}
+
+- (NSMutableOrderedSet *)orderedSetFavoriteId
+{
+    if (_orderedSetFavoriteId == nil)
+    {
+        _orderedSetFavoriteId = [[NSMutableOrderedSet alloc] initWithCapacity:0];
+    }
+    return _orderedSetFavoriteId;
+}
+
+- (NSMutableOrderedSet *)orderedSetPromotionRead
+{
+    if (_orderedSetPromotionRead == nil)
+    {
+        _orderedSetPromotionRead = [[NSMutableOrderedSet alloc] initWithCapacity:0];
+    }
+    return _orderedSetPromotionRead;
+}
+
+- (NSMutableArray *)arrayFavorite
+{
+    if (_arrayFavorite == nil)
+    {
+        _arrayFavorite = [[NSMutableArray alloc] initWithCapacity:0];
+    }
+    return _arrayFavorite;
+}
+
+- (NSMutableDictionary *)dictionaryFavoriteDetail
+{
+    if (_dictionaryFavoriteDetail == nil)
+    {
+        _dictionaryFavoriteDetail = [[NSMutableDictionary alloc] initWithCapacity:0];
+    }
+    return _dictionaryFavoriteDetail;
+}
+
+- (NSMutableArray *)arrayCartCommon
+{
+    if (_arrayCartCommon == nil)
+    {
+        _arrayCartCommon = [[NSMutableArray alloc] initWithCapacity:0];
+    }
+    return _arrayCartCommon;
+}
+
+- (NSMutableDictionary *)dictionaryProductPurchaseInfoInCartCommon
+{
+    if (_dictionaryProductPurchaseInfoInCartCommon == nil)
+    {
+        _dictionaryProductPurchaseInfoInCartCommon = [[NSMutableDictionary alloc] initWithCapacity:0];
+    }
+    return _dictionaryProductPurchaseInfoInCartCommon;
+}
+
+- (NSMutableArray *)arrayCartStorePickUp
+{
+    if (_arrayCartStorePickUp == nil)
+    {
+        _arrayCartStorePickUp = [[NSMutableArray alloc] initWithCapacity:0];
+    }
+    return _arrayCartStorePickUp;
+}
+
+- (NSMutableDictionary *)dictionaryProductPurchaseInfoInCartStorePickUp
+{
+    if (_dictionaryProductPurchaseInfoInCartStorePickUp == nil)
+    {
+        _dictionaryProductPurchaseInfoInCartStorePickUp = [[NSMutableDictionary alloc] initWithCapacity:0];
+    }
+    return _dictionaryProductPurchaseInfoInCartStorePickUp;
+}
+
+- (NSMutableArray *)arrayCartFast
+{
+    if (_arrayCartFast == nil)
+    {
+        _arrayCartFast = [[NSMutableArray alloc] initWithCapacity:0];
+    }
+    return _arrayCartFast;
+}
+
+- (NSMutableDictionary *)dictionaryProductPurchaseInfoInCartFast
+{
+    if (_dictionaryProductPurchaseInfoInCartFast == nil)
+    {
+        _dictionaryProductPurchaseInfoInCartFast = [[NSMutableDictionary alloc] initWithCapacity:0];
+    }
+    return _dictionaryProductPurchaseInfoInCartFast;
+}
+
 #pragma mark - Public Methods
 
 - (void)readPromotionForIdentifier:(NSString *)identifier
@@ -714,17 +748,24 @@ static NSUInteger SearchKeywordNumberMax = 8;
     __weak TMInfoManager *weakSelf = self;
     dispatch_async(archiveQueue, ^{
         NSMutableDictionary *dictionaryArchive = [NSMutableDictionary dictionary];
-        [dictionaryArchive setObject:[_orderedSetPromotionRead array] forKey:TMInfoArchiveKey_PromotionRead];
+        [dictionaryArchive setObject:[weakSelf.orderedSetPromotionRead array] forKey:TMInfoArchiveKey_PromotionRead];
         [dictionaryArchive setObject:_dictionaryUserInfo forKey:TMInfoArchiveKey_UserInformation];
         [dictionaryArchive setObject:_dictionaryCachedCategories forKey:TMInfoArchiveKey_CachedCategories];
-        [dictionaryArchive setObject:[_orderedSetKeyword array] forKey:TMInfoArchiveKey_OrderSetKeyword];
-        [dictionaryArchive setObject:[_orderedSetFavoriteId array] forKey:TMInfoArchiveKey_OrderSetFavoriteId];
-        [dictionaryArchive setObject:_arrayFavorite forKey:TMInfoArchiveKey_Favorites];
-        [dictionaryArchive setObject:_dictionaryFavoriteDetail forKey:TMInfoArchiveKey_FavoritesDetail];
+        [dictionaryArchive setObject:[weakSelf.orderedSetKeyword array] forKey:TMInfoArchiveKey_OrderSetKeyword];
+        [dictionaryArchive setObject:[weakSelf.orderedSetFavoriteId array] forKey:TMInfoArchiveKey_OrderSetFavoriteId];
+        [dictionaryArchive setObject:weakSelf.arrayFavorite forKey:TMInfoArchiveKey_Favorites];
+        [dictionaryArchive setObject:weakSelf.dictionaryFavoriteDetail forKey:TMInfoArchiveKey_FavoritesDetail];
         if (_numberArchiveTimestamp)
         {
             [dictionaryArchive setObject:_numberArchiveTimestamp forKey:TMInfoArchiveKey_ArchiveTimestamp];
         }
+        [dictionaryArchive setObject:weakSelf.arrayCartCommon forKey:TMInfoArchiveKey_CartCommon];
+        [dictionaryArchive setObject:weakSelf.dictionaryProductPurchaseInfoInCartCommon forKey:TMInfoArchiveKey_PurchaseInfoInCartCommon];
+        [dictionaryArchive setObject:weakSelf.arrayCartStorePickUp forKey:TMInfoArchiveKey_CartStorePickUp];
+        [dictionaryArchive setObject:weakSelf.dictionaryProductPurchaseInfoInCartStorePickUp forKey:TMInfoArchiveKey_PurchaseInfoInCartStorePickUp];
+        [dictionaryArchive setObject:weakSelf.arrayCartFast forKey:TMInfoArchiveKey_CartFast];
+        [dictionaryArchive setObject:weakSelf.dictionaryProductPurchaseInfoInCartFast forKey:TMInfoArchiveKey_PurchaseInfoInCartFast];
+        
         NSMutableData *archiveData = [[NSMutableData alloc] initWithCapacity:0];
         NSKeyedArchiver *archiver = [[NSKeyedArchiver alloc] initForWritingWithMutableData:archiveData];
         [archiver encodeObject:dictionaryArchive forKey:[CryptoModule sharedModule].apiKey];
@@ -742,6 +783,16 @@ static NSUInteger SearchKeywordNumberMax = 8;
 
 - (NSDictionary *)loadFromArchive
 {
+    if (self.userIdentifier == nil)
+    {
+        NSString *stringId = [SAMKeychain passwordForService:[[NSBundle mainBundle] bundleIdentifier] account:TMIdentifier];
+        if (stringId)
+        {
+            NSNumber *identifier = [NSNumber numberWithInteger:[stringId integerValue]];
+            self.userIdentifier = identifier;
+        }
+    }
+    
     NSDictionary *dictionary = nil;
     NSURL *url = [self urlForInfoArchive];
     NSError *error = nil;
@@ -773,14 +824,29 @@ static NSUInteger SearchKeywordNumberMax = 8;
     return dictionary;
 }
 
-- (void)updateUserInformationFromInfoDictionary:(NSDictionary *)infoDictionary
+- (void)updateUserInformationFromInfoDictionary:(NSDictionary *)infoDictionary afterLoadingArchive:(BOOL)shouldLoadArchive
 {
-    
     //
     //  Need to do modification for data incoming.
     //
     
     NSNumber *identifier = [infoDictionary objectForKey:SymphoxAPIParam_user_num];
+    if (identifier && [identifier isEqual:[NSNull null]] == NO)
+    {
+        self.userIdentifier = identifier;
+        NSError *error = nil;
+        [SAMKeychain setPassword:[self.userIdentifier stringValue] forService:[[NSBundle mainBundle] bundleIdentifier] account:TMIdentifier error:&error];
+        if (error)
+        {
+            NSLog(@"store to keychain error:\n%@", [error description]);
+        }
+    }
+    
+    if (shouldLoadArchive)
+    {
+        [self applyDataFromArchivedDictionary:[self loadFromArchive]];
+    }
+    
     NSString *name = [infoDictionary objectForKey:SymphoxAPIParam_name];
     NSString *gender = [infoDictionary objectForKey:SymphoxAPIParam_sex];
     NSNumber *epoint = [infoDictionary objectForKey:SymphoxAPIParam_epoint];
@@ -813,10 +879,6 @@ static NSUInteger SearchKeywordNumberMax = 8;
         self.userGender = TMGenderTotal;
         self.userEpoint = nil;
         self.userEcoupon = nil;
-    }
-    if (identifier && [identifier isEqual:[NSNull null]] == NO)
-    {
-        self.userIdentifier = identifier;
     }
     if (name && [name isEqual:[NSNull null]] == NO && [name length] > 0)
     {
@@ -1231,13 +1293,365 @@ static NSUInteger SearchKeywordNumberMax = 8;
 
 - (void)logoutUser
 {
-    [_orderedSetPromotionRead removeAllObjects];
-    [_dictionaryUserInfo removeAllObjects];
-    [_dictionaryInitialFilter removeAllObjects];
-    [_orderedSetKeyword removeAllObjects];
-    [_arrayFavorite removeAllObjects];
-    [_dictionaryFavoriteDetail removeAllObjects];
-    [_orderedSetFavoriteId removeAllObjects];
+    [self resetData];
+    [self deleteArchive];
+    [[NSNotificationCenter defaultCenter] postNotificationName:PostNotificationName_UserLogout object:self];
+}
+
+- (void)retrieveUserInformation
+{
+    __weak TMInfoManager *weakSelf = self;
+    NSString *apiKey = [CryptoModule sharedModule].apiKey;
+    NSString *token = [SHAPIAdapter sharedAdapter].token;
+    NSURL *url = [NSURL URLWithString:SymphoxAPI_memberInformation];
+//    NSLog(@"retrieveUserInformation - [%@]", [url absoluteString]);
+    NSDictionary *headerFields = [NSDictionary dictionaryWithObjectsAndKeys:apiKey, SymphoxAPIParam_key, token, SymphoxAPIParam_token, nil];
+    NSDictionary *options = [NSDictionary dictionaryWithObjectsAndKeys:self.userIdentifier, SymphoxAPIParam_user_num, nil];
+    [[SHAPIAdapter sharedAdapter] sendRequestFromObject:weakSelf ToUrl:url withHeaderFields:headerFields andPostObject:options inPostFormat:SHPostFormatJson encrypted:YES decryptedReturnData:YES completion:^(id resultObject, NSError *error){
+        if (error == nil)
+        {
+//            NSLog(@"retrieveUserInformation - resultObject[%@]:\n%@", [[resultObject class] description], [resultObject description]);
+            if ([resultObject isKindOfClass:[NSData class]])
+            {
+                NSData *data = (NSData *)resultObject;
+                [weakSelf processUserInformation:data];
+            }
+        }
+        else
+        {
+            NSLog(@"retrieveUserInformation - error:\n%@", [error description]);
+        }
+    }];
+}
+
+- (NSMutableArray *)productArrayForCartType:(CartType)type
+{
+    NSMutableArray *array = nil;
+    switch (type) {
+        case CartTypeCommonDelivery:
+        {
+            array = self.arrayCartCommon;
+        }
+            break;
+        case CartTypeStorePickup:
+        {
+            array = self.arrayCartStorePickUp;
+        }
+            break;
+        case CartTypeFastDelivery:
+        {
+            array = self.arrayCartFast;
+        }
+            break;
+        default:
+            break;
+    }
+    return array;
+}
+
+- (NSMutableDictionary *)purchaseInfoForCartType:(CartType)type
+{
+    NSMutableDictionary *dictionaryPurchaseInfo = nil;
+    switch (type) {
+        case CartTypeCommonDelivery:
+        {
+            dictionaryPurchaseInfo = self.dictionaryProductPurchaseInfoInCartCommon;
+        }
+            break;
+        case CartTypeStorePickup:
+        {
+            dictionaryPurchaseInfo = self.dictionaryProductPurchaseInfoInCartStorePickUp;
+        }
+            break;
+        case CartTypeFastDelivery:
+        {
+            dictionaryPurchaseInfo = self.dictionaryProductPurchaseInfoInCartFast;
+        }
+            break;
+        default:
+            break;
+    }
+    return dictionaryPurchaseInfo;
+}
+
+- (void)addProduct:(NSDictionary *)product toCartForType:(CartType)type
+{
+    if (product == nil)
+        return;
+    NSNumber *currentProductId = [product objectForKey:SymphoxAPIParam_cpdt_num];
+    if (currentProductId == nil || [currentProductId isEqual:[NSNull null]])
+        return;
+    
+    NSMutableArray *array = [self productArrayForCartType:type];
+//    NSLog(@"Current Cart content:\nCommon[%li]\nStorePickUp[%li]\nFast[%li]", (long)[self.arrayCartCommon count], (long)[self.arrayCartStorePickUp count], (long)[self.arrayCartFast count]);
+    if (array == nil)
+        return;
+    
+    __block BOOL alreadyInCart = NO;
+    [array enumerateObjectsUsingBlock:^(id _Nonnull object, NSUInteger idx, BOOL *stop){
+        NSDictionary *product = (NSDictionary *)object;
+        NSNumber *productId = [product objectForKey:SymphoxAPIParam_cpdt_num];
+        if (productId && [productId isEqual:[NSNull null]] == NO)
+        {
+            if ([currentProductId isEqualToNumber:productId])
+            {
+                alreadyInCart = YES;
+                *stop = YES;
+            }
+        }
+    }];
+    if (alreadyInCart)
+    {
+        return;
+    }
+    [self setPurchaseQuantity:[NSNumber numberWithInteger:1] forProduct:currentProductId inCart:type];
+    NSDictionary *dictionaryMode = [NSDictionary dictionaryWithObjectsAndKeys:@"0", SymphoxAPIParam_payment_type, [NSNumber numberWithInteger:0], SymphoxAPIParam_price, nil];
+    [self setPurchasePaymentMode:dictionaryMode forProduct:currentProductId inCart:type];
+    [array addObject:product];
+    [self saveToArchive];
+//    NSLog(@"Current Cart content:\nCommon[%li]\nStorePickUp[%li]\nFast[%li]", (long)[self.arrayCartCommon count], (long)[self.arrayCartStorePickUp count], (long)[self.arrayCartFast count]);
+//    NSLog(@"Current Cart Status:\nCommon:\n%@\nStorePickUp:\n%@\nFast:\n%@\n", [self.arrayCartCommon description], [self.arrayCartStorePickUp description], [self.arrayCartFast description]);
+}
+
+- (void)setPurchaseQuantity:(NSNumber *)quantity forProduct:(NSNumber *)productId inCart:(CartType)cartType
+{
+    NSMutableDictionary *dictionaryPurchaseInfo = [self purchaseInfoForCartType:cartType];
+    if (dictionaryPurchaseInfo == nil)
+        return;
+    NSMutableDictionary *dictionary = [[dictionaryPurchaseInfo objectForKey:productId] mutableCopy];
+    if (dictionary == nil)
+    {
+        dictionary = [NSMutableDictionary dictionary];
+    }
+    [dictionary setObject:quantity forKey:SymphoxAPIParam_qty];
+    
+    [dictionaryPurchaseInfo setObject:dictionary forKey:productId];
+    [self saveToArchive];
+}
+
+- (void)setPurchasePaymentMode:(NSDictionary *)dictionaryPaymentMode forProduct:(NSNumber *)productId inCart:(NSInteger)cartType
+{
+    if (dictionaryPaymentMode == nil)
+        return;
+    
+    NSMutableDictionary *dictionaryPurchaseInfo = [self purchaseInfoForCartType:cartType];
+    if (dictionaryPurchaseInfo == nil)
+        return;
+    
+    NSMutableDictionary *dictionary = [[dictionaryPurchaseInfo objectForKey:productId] mutableCopy];
+    if (dictionary == nil)
+    {
+        dictionary = [NSMutableDictionary dictionary];
+    }
+    [dictionary setObject:dictionaryPaymentMode forKey:SymphoxAPIParam_payment_mode];
+    
+    [dictionaryPurchaseInfo setObject:dictionary forKey:productId];
+    [self saveToArchive];
+}
+
+- (NSString *)nameOfRemovedProductId:(NSNumber *)productIdToRemove inCart:(CartType)type
+{
+    if (productIdToRemove == nil)
+        return nil;
+    NSMutableArray *array = [self productArrayForCartType:type];
+    if (array == nil)
+        return nil;
+    NSMutableDictionary *purchaseInfo = [self purchaseInfoForCartType:type];
+    
+    __block NSInteger index = NSNotFound;
+    __block NSString *name = nil;
+    [array enumerateObjectsUsingBlock:^(id _Nonnull object, NSUInteger idx, BOOL *stop){
+        NSDictionary *product = (NSDictionary *)object;
+        NSNumber *productId = [product objectForKey:SymphoxAPIParam_cpdt_num];
+        if (productId && [productId isEqual:[NSNull null]] == NO)
+        {
+            if ([productIdToRemove isEqualToNumber:productId])
+            {
+                name = [product objectForKey:SymphoxAPIParam_name];
+                index = idx;
+                *stop = YES;
+            }
+        }
+    }];
+    if (index == NSNotFound)
+        return nil;
+    if (index < [array count])
+    {
+        [array removeObjectAtIndex:index];
+    }
+    if (purchaseInfo)
+    {
+        [purchaseInfo removeObjectForKey:productIdToRemove];
+    }
+    [self saveToArchive];
+    
+    NSString *productName = [NSString stringWithString:name];
+    return productName;
+}
+
+#pragma mark - Private Methods
+
+- (NSURL *)urlForInfoDirectory
+{
+    NSURL *url = [[[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] firstObject] URLByAppendingPathComponent:@"TMInfo"];
+    NSError *error = nil;
+    if ([[NSFileManager defaultManager] createDirectoryAtURL:url withIntermediateDirectories:YES attributes:nil error:&error])
+    {
+        [url setResourceValue:[NSNumber numberWithBool:YES] forKey:NSURLIsExcludedFromBackupKey error:&error];
+        if (error)
+        {
+            NSLog(@"applicationDocumentsDirectory - url setResourceValue Failed:\n%@", [error description]);
+        }
+        //        NSLog(@"_storagePathUrl.path[%@]", [_storagePathUrl path]);
+    }
+    else
+    {
+        NSLog(@"createDirectoryAtURL[%@] failed:\n%@", url, [error description]);
+    }
+    return url;
+}
+
+- (NSURL *)urlForInfoArchive
+{
+    NSString *name = @"archive";
+    if (self.userIdentifier)
+    {
+        name = [self.userIdentifier stringValue];
+    }
+    NSURL *url = [[[self urlForInfoDirectory] URLByAppendingPathComponent:name] URLByAppendingPathExtension:@"dat"];
+    return url;
+}
+
+- (void)applyDataFromArchivedDictionary:(NSDictionary *)dictionaryArchive
+{
+    if (dictionaryArchive == nil)
+        return;
+    NSArray *arrayPromotionRead = [dictionaryArchive objectForKey:TMInfoArchiveKey_PromotionRead];
+    if (arrayPromotionRead)
+    {
+        [_orderedSetPromotionRead addObjectsFromArray:arrayPromotionRead];
+    }
+    NSDictionary *dictionaryUserInfo = [dictionaryArchive objectForKey:TMInfoArchiveKey_UserInformation];
+    if (dictionaryUserInfo)
+    {
+        [_dictionaryUserInfo setDictionary:dictionaryUserInfo];
+    }
+    NSArray *arrayKeyword = [dictionaryArchive objectForKey:TMInfoArchiveKey_OrderSetKeyword];
+    if (arrayKeyword)
+    {
+        [_orderedSetKeyword addObjectsFromArray:arrayKeyword];
+    }
+    NSArray *arrayFavorites = [dictionaryArchive objectForKey:TMInfoArchiveKey_Favorites];
+    if (arrayFavorites)
+    {
+        [_arrayFavorite addObjectsFromArray:arrayFavorites];
+    }
+    NSDictionary *dictionaryFavoriteDetail = [dictionaryArchive objectForKey:TMInfoArchiveKey_FavoritesDetail];
+    if (dictionaryFavoriteDetail)
+    {
+        [_dictionaryFavoriteDetail setDictionary:dictionaryFavoriteDetail];
+    }
+    NSArray *arrayFavoriteId = [dictionaryArchive objectForKey:TMInfoArchiveKey_OrderSetFavoriteId];
+    if (arrayFavoriteId)
+    {
+        [_orderedSetFavoriteId addObjectsFromArray:arrayFavoriteId];
+    }
+    BOOL shouldUpdateCachedData = YES;
+    NSNumber *numberTimestamp = [dictionaryArchive objectForKey:TMInfoArchiveKey_ArchiveTimestamp];
+    if (numberTimestamp)
+    {
+        _numberArchiveTimestamp = numberTimestamp;
+        NSTimeInterval archiveTime = [_numberArchiveTimestamp doubleValue];
+        NSTimeInterval currentTime = [[NSDate date] timeIntervalSince1970];
+        NSTimeInterval cachedAvail = 60.0 * 60.0 * 12;
+        if (fabs((currentTime - archiveTime)) < cachedAvail)
+        {
+            shouldUpdateCachedData = NO;
+        }
+    }
+    if (shouldUpdateCachedData == NO)
+    {
+        NSDictionary *dictionaryCategories = [dictionaryArchive objectForKey:TMInfoArchiveKey_CachedCategories];
+        if (dictionaryCategories)
+        {
+            [_dictionaryCachedCategories setDictionary:dictionaryCategories];
+        }
+    }
+    NSArray *arrayCartCommon = [dictionaryArchive objectForKey:TMInfoArchiveKey_CartCommon];
+    if (arrayCartCommon)
+    {
+        [self.arrayCartCommon setArray:arrayCartCommon];
+    }
+    NSDictionary *dictionaryCartCommon = [dictionaryArchive objectForKey:TMInfoArchiveKey_PurchaseInfoInCartCommon];
+    if (dictionaryCartCommon)
+    {
+        [self.dictionaryProductPurchaseInfoInCartCommon setDictionary:dictionaryCartCommon];
+    }
+    NSArray *arrayCartStorePickUp = [dictionaryArchive objectForKey:TMInfoArchiveKey_CartStorePickUp];
+    if (arrayCartStorePickUp)
+    {
+        [self.arrayCartStorePickUp setArray:arrayCartStorePickUp];
+    }
+    NSDictionary *dictionaryCartStorePickUp = [dictionaryArchive objectForKey:TMInfoArchiveKey_PurchaseInfoInCartStorePickUp];
+    if (dictionaryCartStorePickUp)
+    {
+        [self.dictionaryProductPurchaseInfoInCartStorePickUp setDictionary:dictionaryCartStorePickUp];
+    }
+    NSArray *arrayCartFast = [dictionaryArchive objectForKey:TMInfoArchiveKey_CartFast];
+    if (arrayCartFast)
+    {
+        [self.arrayCartFast setArray:arrayCartFast];
+    }
+    NSDictionary *dictionaryCartFast = [dictionaryArchive objectForKey:TMInfoArchiveKey_PurchaseInfoInCartFast];
+    if (dictionaryCartFast)
+    {
+        [self.dictionaryProductPurchaseInfoInCartFast setDictionary:dictionaryCartFast];
+    }
+}
+
+- (void)deleteArchive
+{
+    NSURL *url = [self urlForInfoArchive];
+    if ([[NSFileManager defaultManager] fileExistsAtPath:[url path]])
+    {
+        NSError *error = nil;
+        [[NSFileManager defaultManager] removeItemAtURL:url error:&error];
+        if (error)
+        {
+            NSLog(@"Cannot remove archive. Error:\n%@", [error description]);
+        }
+    }
+}
+
+- (void)resetData
+{
+    if (_dictionaryCachedCategories == nil)
+    {
+        _dictionaryCachedCategories = [[NSMutableDictionary alloc] initWithCapacity:0];
+    }
+    
+    if (_dictionaryUserInfo == nil)
+    {
+        _dictionaryUserInfo = [[NSMutableDictionary alloc] initWithCapacity:0];
+    }
+    else
+    {
+        [_dictionaryUserInfo removeAllObjects];
+    }
+    
+    [self.orderedSetPromotionRead removeAllObjects];
+    [self.dictionaryInitialFilter removeAllObjects];
+    [self.orderedSetKeyword removeAllObjects];
+    [self.arrayFavorite removeAllObjects];
+    [self.dictionaryFavoriteDetail removeAllObjects];
+    [self.orderedSetFavoriteId removeAllObjects];
+    [self.arrayCartCommon removeAllObjects];
+    [self.dictionaryProductPurchaseInfoInCartCommon removeAllObjects];
+    [self.arrayCartStorePickUp removeAllObjects];
+    [self.dictionaryProductPurchaseInfoInCartStorePickUp removeAllObjects];
+    [self.arrayCartFast removeAllObjects];
+    [self.dictionaryProductPurchaseInfoInCartFast removeAllObjects];
+    
     _numberArchiveTimestamp = nil;
     _userIdentifier = nil;
     _userName = nil;
@@ -1270,77 +1684,6 @@ static NSUInteger SearchKeywordNumberMax = 8;
     _userIDCardNumber = nil;
     _userZipCode = nil;
     _userAddress = nil;
-    
-    [self deleteArchive];
-    [[NSNotificationCenter defaultCenter] postNotificationName:PostNotificationName_UserLogout object:self];
-}
-
-- (void)retrieveUserInformation
-{
-    __weak TMInfoManager *weakSelf = self;
-    NSString *apiKey = [CryptoModule sharedModule].apiKey;
-    NSString *token = [SHAPIAdapter sharedAdapter].token;
-    NSURL *url = [NSURL URLWithString:SymphoxAPI_memberInformation];
-//    NSLog(@"retrieveUserInformation - [%@]", [url absoluteString]);
-    NSDictionary *headerFields = [NSDictionary dictionaryWithObjectsAndKeys:apiKey, SymphoxAPIParam_key, token, SymphoxAPIParam_token, nil];
-    NSDictionary *options = [NSDictionary dictionaryWithObjectsAndKeys:self.userIdentifier, SymphoxAPIParam_user_num, nil];
-    [[SHAPIAdapter sharedAdapter] sendRequestFromObject:weakSelf ToUrl:url withHeaderFields:headerFields andPostObject:options inPostFormat:SHPostFormatJson encrypted:YES decryptedReturnData:YES completion:^(id resultObject, NSError *error){
-        if (error == nil)
-        {
-//            NSLog(@"retrieveUserInformation - resultObject[%@]:\n%@", [[resultObject class] description], [resultObject description]);
-            if ([resultObject isKindOfClass:[NSData class]])
-            {
-                NSData *data = (NSData *)resultObject;
-                [weakSelf processUserInformation:data];
-            }
-        }
-        else
-        {
-            NSLog(@"retrieveUserInformation - error:\n%@", [error description]);
-        }
-    }];
-}
-
-#pragma mark - Private Methods
-
-- (NSURL *)urlForInfoDirectory
-{
-    NSURL *url = [[[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] firstObject] URLByAppendingPathComponent:@"TMInfo"];
-    NSError *error = nil;
-    if ([[NSFileManager defaultManager] createDirectoryAtURL:url withIntermediateDirectories:YES attributes:nil error:&error])
-    {
-        [url setResourceValue:[NSNumber numberWithBool:YES] forKey:NSURLIsExcludedFromBackupKey error:&error];
-        if (error)
-        {
-            NSLog(@"applicationDocumentsDirectory - url setResourceValue Failed:\n%@", [error description]);
-        }
-        //        NSLog(@"_storagePathUrl.path[%@]", [_storagePathUrl path]);
-    }
-    else
-    {
-        NSLog(@"createDirectoryAtURL[%@] failed:\n%@", url, [error description]);
-    }
-    return url;
-}
-
-- (NSURL *)urlForInfoArchive
-{
-    NSURL *url = [[[self urlForInfoDirectory] URLByAppendingPathComponent:@"archive"] URLByAppendingPathExtension:@"dat"];
-    return url;
-}
-
-- (void)deleteArchive
-{
-    NSURL *url = [self urlForInfoArchive];
-    if ([[NSFileManager defaultManager] fileExistsAtPath:[url path]])
-    {
-        NSError *error = nil;
-        [[NSFileManager defaultManager] removeItemAtURL:url error:&error];
-        if (error)
-        {
-            NSLog(@"Cannot remove archive. Error:\n%@", [error description]);
-        }
-    }
 }
 
 - (NSString *)keyForCategoryIdentifier:(NSString *)identifier withLayer:(NSNumber *)layer
@@ -1369,7 +1712,7 @@ static NSUInteger SearchKeywordNumberMax = 8;
 //        NSLog(@"processUserInfomation - jsonObject:\n%@", jsonObject);
         if ([jsonObject isKindOfClass:[NSDictionary class]])
         {
-            [self updateUserInformationFromInfoDictionary:jsonObject];
+            [self updateUserInformationFromInfoDictionary:jsonObject afterLoadingArchive:NO];
             [[NSNotificationCenter defaultCenter] postNotificationName:PostNotificationName_UserInformationUpdated object:self];
         }
     }
