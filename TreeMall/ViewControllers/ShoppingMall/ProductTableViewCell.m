@@ -471,14 +471,18 @@ static NSInteger MaxTagsNumber = 4;
 
 - (void)setDiscount:(NSNumber *)discount
 {
-    if (discount == nil || [discount isEqual:[NSNull null]] || [discount doubleValue] == 0)
+    if ([discount isEqual:[NSNull null]])
+    {
+        discount = nil;
+    }
+    if (discount == nil || [discount doubleValue] == 0)
     {
         [self.viewDiscount setHidden:YES];
     }
     else
     {
         [self.viewDiscount setHidden:NO];
-        if (_discount == nil || ([_discount doubleValue] != [discount doubleValue]))
+        if ([discount isKindOfClass:[NSNumber class]] && ([_discount doubleValue] != [discount doubleValue]))
         {
             NSString *discountString = [NSString stringWithFormat:[LocalizedString F_PercentOff], [discount doubleValue] * 100];
             self.viewDiscount.text = discountString;

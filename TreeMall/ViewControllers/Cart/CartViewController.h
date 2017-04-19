@@ -18,5 +18,6 @@
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) LabelButtonView *bottomBar;
 @property (nonatomic, assign) CartType currentType;
-@property (nonatomic, strong) NSMutableDictionary *dictionaryConditions;
+@property (nonatomic, strong) NSMutableArray *arrayProducts;
+@property (nonatomic, strong) NSMutableDictionary *dictionaryTotal;
 @end

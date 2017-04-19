@@ -1293,6 +1293,7 @@ static NSUInteger SearchKeywordNumberMax = 8;
 
 - (void)logoutUser
 {
+    [SAMKeychain deletePasswordForService:[[NSBundle mainBundle] bundleIdentifier] account:TMIdentifier];
     [self resetData];
     [self deleteArchive];
     [[NSNotificationCenter defaultCenter] postNotificationName:PostNotificationName_UserLogout object:self];

@@ -23,6 +23,8 @@ static NSString *SymphoxAPI_mobileVerification = @"http://tomcat8.mdevelop.com/T
 static NSString *SymphoxAPI_authenticationCreditCard = @"http://tomcat8.mdevelop.com/TreeMall/authId/bank.do";
 static NSString *SymphoxAPI_authenticationEmployee = @"http://tomcat8.mdevelop.com/TreeMall/authId/employee.do";
 static NSString *SymphoxAPI_authenticationCathayCustomer = @"http://tomcat8.mdevelop.com/TreeMall/authId/cathay.do";
+static NSString *SymphoxAPI_editContacts = @"http://tomcat8.mdevelop.com/TreeMall/contacts/edit.do";
+static NSString *SymphoxAPI_editBasicInfo = @"http://tomcat8.mdevelop.com/TreeMall/memberInfo/edit.do";
 static NSString *SymphoxAPI_MainCategories = @"http://tomcat8.mdevelop.com/TreeMall/api/onlineService.do";
 static NSString *SymphoxAPI_Subcategories = @"http://tomcat8.mdevelop.com/TreeMall/api/portal/app/mall/hall";
 static NSString *SymphoxAPI_Search = @"http://tomcat8.mdevelop.com/TreeMall/api/eiffel/search/treemall";
@@ -228,6 +230,8 @@ static NSString *SymphoxAPIParam_cart_item_order = @"cart_item_order";
 static NSString *SymphoxAPIParam_cart_type = @"cart_type";
 static NSString *SymphoxAPIParam_payment_mode = @"payment_mode";
 static NSString *SymphoxAPIError_E301 = @"E301";
+static NSString *SymphoxAPIParam_cart_item = @"cart_item";
+static NSString *SymphoxAPIParam_account_result = @"account_result";
 
 typedef enum : NSUInteger {
     TermTypeMemberTerms,

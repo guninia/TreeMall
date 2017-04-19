@@ -51,6 +51,10 @@ typedef enum : NSUInteger {
 - (void)startToChangePasswordFromOld:(NSString *)passwordOld toNew:(NSString *)passwordNew confirmBy:(NSString *)passwordCon;
 - (void)postPasswordChangeSuccessProcess;
 - (void)presentNewsletterSubscribeView;
+- (void)presentActionSheetForAuthenticateType;
+- (void)startAuthenticateWithUrlString:(NSString *)urlString;
+- (void)presentInfoModificationView;
+- (void)presentContactsModificationView;
 
 - (void)textDidChangedInTextField:(id)sender;
 - (void)handlerOfUserInformationUpdatedNotification:(NSNotification *)notification;
@@ -594,6 +598,54 @@ typedef enum : NSUInteger {
     [self presentWebViewForUrl:url];
 }
 
+- (void)presentContactsModificationView
+{
+    NSNumber *userIndentifier = [TMInfoManager sharedManager].userIdentifier;
+    NSString *ipAddress = [Utility ipAddressPreferIPv6:YES];
+    if (userIndentifier == nil || ipAddress == nil)
+    {
+        NSLog(@"presentActionSheetForAuthenticateType - Missing necessary information.");
+        return;
+    }
+    NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:[userIndentifier stringValue], SymphoxAPIParam_user_num, ipAddress, SymphoxAPIParam_ip, nil];
+    NSString *encodedUrlString = [self encodedUrlStringForUrlString:SymphoxAPI_editContacts withParameters:parameters];
+    if (encodedUrlString == nil)
+    {
+        NSLog(@"presentActionSheetForAuthenticateType - Cannot encode url string");
+        return;
+    }
+    NSURL *url = [NSURL URLWithString:encodedUrlString];
+    if (url == nil)
+    {
+        NSLog(@"presentActionSheetForAuthenticateType - Invalid url from string");
+    }
+    [self presentWebViewForUrl:url];
+}
+
+- (void)presentInfoModificationView
+{
+    NSNumber *userIndentifier = [TMInfoManager sharedManager].userIdentifier;
+    NSString *ipAddress = [Utility ipAddressPreferIPv6:YES];
+    if (userIndentifier == nil || ipAddress == nil)
+    {
+        NSLog(@"presentActionSheetForAuthenticateType - Missing necessary information.");
+        return;
+    }
+    NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:[userIndentifier stringValue], SymphoxAPIParam_user_num, ipAddress, SymphoxAPIParam_ip, nil];
+    NSString *encodedUrlString = [self encodedUrlStringForUrlString:SymphoxAPI_editBasicInfo withParameters:parameters];
+    if (encodedUrlString == nil)
+    {
+        NSLog(@"presentActionSheetForAuthenticateType - Cannot encode url string");
+        return;
+    }
+    NSURL *url = [NSURL URLWithString:encodedUrlString];
+    if (url == nil)
+    {
+        NSLog(@"presentActionSheetForAuthenticateType - Invalid url from string");
+    }
+    [self presentWebViewForUrl:url];
+}
+
 - (NSString *)encodedUrlStringForUrlString:(NSString *)urlString withParameters:(NSDictionary *)parameters
 {
     if (parameters == nil)
@@ -772,12 +824,12 @@ typedef enum : NSUInteger {
             break;
         case MemberSettingOptionInfoModify:
         {
-            
+            [self presentInfoModificationView];
         }
             break;
         case MemberSettingOptionContacts:
         {
-            
+            [self presentContactsModificationView];
         }
             break;
         case MemberSettingOptionPassword:

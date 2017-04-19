@@ -164,14 +164,31 @@
     return _bottomBar;
 }
 
+- (NSMutableArray *)arrayProducts
+{
+    if (_arrayProducts == nil)
+    {
+        _arrayProducts = [[NSMutableArray alloc] initWithCapacity:0];
+    }
+    return _arrayProducts;
+}
+
+- (NSMutableDictionary *)dictionaryTotal
+{
+    if (_dictionaryTotal == nil)
+    {
+        _dictionaryTotal = [[NSMutableDictionary alloc] initWithCapacity:0];
+    }
+    return _dictionaryTotal;
+}
+
 #pragma mark - Private Methods
 
 - (void)checkCartForType:(CartType)type
 {
     NSArray *array = [[TMInfoManager sharedManager] productArrayForCartType:type];
-    if (array == nil)
+    if (array == nil || [array count] == 0)
         return;
-    
     NSDictionary *dictionary = [[TMInfoManager sharedManager] purchaseInfoForCartType:type];
     NSMutableArray *arrayCheck = [NSMutableArray array];
     for (NSDictionary *product in array)
@@ -221,7 +238,7 @@
                 if ([weakSelf processCheckingResult:data inCart:type])
                 {
                     // Should start calculate product promotion according to quantity
-                    
+                    [weakSelf renewConditionsForCartType:type];
                 }
                 else
                 {
@@ -261,75 +278,80 @@
         return success;
     NSError *error = nil;
     id jsonObject = [NSJSONSerialization JSONObjectWithData:result options:0 error:&error];
-    if ([jsonObject isKindOfClass:[NSArray class]])
+    if ([jsonObject isKindOfClass:[NSDictionary class]])
     {
-        NSArray *array = (NSArray *)jsonObject;
-        NSMutableString *notifyString = [NSMutableString string];
-        for (NSDictionary *dictionary in array)
+        NSDictionary *resultDictionary = (NSDictionary *)jsonObject;
+        NSArray *array = [resultDictionary objectForKey:SymphoxAPIParam_cart_item];
+        if (array)
         {
-            NSString *stringError = nil;
-            NSNumber *numberStatus = [dictionary objectForKey:SymphoxAPIParam_status];
-            if (numberStatus && [numberStatus isEqual:[NSNull null]] == NO)
+            NSMutableString *notifyString = [NSMutableString string];
+            for (NSDictionary *dictionary in array)
             {
-                switch ([numberStatus integerValue]) {
-                    case 0:
-                    {
-                        // Failed
-                        stringError = [LocalizedString UnknownError];
-                    }
-                        break;
-                    case 1:
-                    {
-                        // Success
-                        
-                    }
-                        break;
-                    case 2:
-                    {
-                        // Cart error
-                        stringError = [LocalizedString CartError];
-                    }
-                        break;
-                    case 3:
-                    {
-                        // Quantity not enough
-                        stringError = [LocalizedString NotEnoughInStock];
-                    }
-                        break;
-                    case 4:
-                    {
-                        // No multiple products available
-                        stringError = [LocalizedString MultipleProductsUnacceptable];
-                    }
-                        break;
-                    default:
-                    {
-                        stringError = [LocalizedString UnknownError];
-                    }
-                        break;
-                }
-            }
-            if (stringError)
-            {
-                NSNumber *productId = [dictionary objectForKey:SymphoxAPIParam_cpdt_num];
-                NSString *name = [[TMInfoManager sharedManager] nameOfRemovedProductId:productId inCart:type];
-                if (name)
+                NSString *stringError = nil;
+                NSNumber *numberStatus = [dictionary objectForKey:SymphoxAPIParam_status];
+                BOOL shouldRemove = YES;
+                if (numberStatus && [numberStatus isEqual:[NSNull null]] == NO)
                 {
-                    NSString *totalString = [NSString stringWithFormat:@"「%@」：%@\n", name, stringError];
-                    [notifyString appendString:totalString];
+                    switch ([numberStatus integerValue]) {
+                        case 0:
+                        {
+                            // Failed
+                            stringError = [LocalizedString UnknownError];
+                        }
+                            break;
+                        case 1:
+                        {
+                            // Success
+                            shouldRemove = NO;
+                        }
+                            break;
+                        case 2:
+                        {
+                            // Cart error
+                            stringError = [LocalizedString CartError];
+                        }
+                            break;
+                        case 3:
+                        {
+                            // Quantity not enough
+                            stringError = [LocalizedString NotEnoughInStock];
+                        }
+                            break;
+                        case 4:
+                        {
+                            // No multiple products available
+                            stringError = [LocalizedString MultipleProductsUnacceptable];
+                        }
+                            break;
+                        default:
+                        {
+                            stringError = [LocalizedString UnknownError];
+                        }
+                            break;
+                    }
+                }
+                if (stringError)
+                {
+                    NSNumber *productId = [dictionary objectForKey:SymphoxAPIParam_cpdt_num];
+                    NSString *name = [[TMInfoManager sharedManager] nameOfRemovedProductId:productId inCart:type];
+                    if (name)
+                    {
+                        NSString *totalString = [NSString stringWithFormat:@"「%@」：%@\n", name, stringError];
+                        [notifyString appendString:totalString];
+                    }
                 }
             }
+            if ([notifyString length] > 0)
+            {
+                UIAlertController *alertController = [UIAlertController alertControllerWithTitle:[LocalizedString ProductsRemovedFromCart] message:nil preferredStyle:UIAlertControllerStyleAlert];
+                UIAlertAction *actionConfirm = [UIAlertAction actionWithTitle:[LocalizedString Confirm] style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
+                    
+                }];
+                [alertController addAction:actionConfirm];
+                [self presentViewController:alertController animated:YES completion:nil];
+            }
+            success = YES;
         }
-        if ([notifyString length] > 0)
-        {
-            UIAlertController *alertController = [UIAlertController alertControllerWithTitle:[LocalizedString ProductsRemovedFromCart] message:nil preferredStyle:UIAlertControllerStyleAlert];
-            UIAlertAction *actionConfirm = [UIAlertAction actionWithTitle:[LocalizedString Confirm] style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
-                
-            }];
-            [alertController addAction:actionConfirm];
-            [self presentViewController:alertController animated:YES completion:nil];
-        }
-        success = YES;
     }
     return success;
 }
@@ -372,11 +394,14 @@
         [dictionaryCheck setObject:dictionaryMode forKey:SymphoxAPIParam_payment_mode];
         [arrayCheck addObject:dictionaryCheck];
     }
-    
+    [self requestResultForRenewConditionsOfProducts:arrayCheck ofCartType:type];
 }
 
 - (void)requestResultForRenewConditionsOfProducts:(NSArray *)productConditions ofCartType:(CartType)type
 {
+    NSNumber *userIdentifier = [TMInfoManager sharedManager].userIdentifier;
+    if (userIdentifier == nil)
+        return;
     __weak CartViewController *weakSelf = self;
     NSString *apiKey = [CryptoModule sharedModule].apiKey;
     NSString *token = [SHAPIAdapter sharedAdapter].token;
@@ -384,7 +409,7 @@
     //    NSLog(@"retrieveSubcategoryDataForIdentifier - url [%@]", [url absoluteString]);
     NSDictionary *headerFields = [NSDictionary dictionaryWithObjectsAndKeys:apiKey, SymphoxAPIParam_key, token, SymphoxAPIParam_token, nil];
     NSString *stringCartType = [[NSNumber numberWithInteger:type] stringValue];
-    NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:productConditions, SymphoxAPIParam_cart_item_order, stringCartType, SymphoxAPIParam_cart_type, nil];
+    NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:userIdentifier, SymphoxAPIParam_user_num, productConditions, SymphoxAPIParam_cart_item_order, stringCartType, SymphoxAPIParam_cart_type, nil];
     [[SHAPIAdapter sharedAdapter] sendRequestFromObject:weakSelf ToUrl:url withHeaderFields:headerFields andPostObject:params inPostFormat:SHPostFormatJson encrypted:YES decryptedReturnData:YES completion:^(id resultObject, NSError *error){
         if (error == nil)
         {
@@ -393,20 +418,20 @@
             {
                 NSData *data = (NSData *)resultObject;
                 NSString *string = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-                NSLog(@"requestResultForCheckingProducts:\n%@", string);
+                NSLog(@"requestResultForRenewConditionsOfProducts:\n%@", string);
                 if ([weakSelf processRenewConditionsResult:data inCart:type])
                 {
                     // Should start calculate product promotion according to quantity
-                    
+                    [weakSelf.tableView reloadData];
                 }
                 else
                 {
-                    NSLog(@"requestResultForCheckingProducts - Cannot process data");
+                    NSLog(@"requestResultForRenewConditionsOfProducts - Cannot process data");
                 }
             }
             else
             {
-                NSLog(@"requestResultForCheckingProducts - Unexpected data format.");
+                NSLog(@"requestResultForRenewConditionsOfProducts - Unexpected data format.");
             }
         }
         else
@@ -421,7 +446,7 @@
                     errorMessage = serverMessage;
                 }
             }
-            NSLog(@"requestResultForCheckingProducts - error:\n%@", [error description]);
+            NSLog(@"requestResultForRenewConditionsOfProducts - error:\n%@", [error description]);
             UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:errorMessage preferredStyle:UIAlertControllerStyleAlert];
             UIAlertAction *actionConfirm = [UIAlertAction actionWithTitle:[LocalizedString Confirm] style:UIAlertActionStyleDefault handler:nil];
             [alertController addAction:actionConfirm];
@@ -441,6 +466,19 @@
     if ([jsonObject isKindOfClass:[NSDictionary class]])
     {
         NSLog(@"jsonObject:\n%@", [jsonObject description]);
+        NSDictionary *resultDictionary = (NSDictionary *)jsonObject;
+        [self.dictionaryTotal removeAllObjects];
+        [self.arrayProducts removeAllObjects];
+        NSDictionary *summary = [resultDictionary objectForKey:SymphoxAPIParam_account_result];
+        if (summary)
+        {
+            [self.dictionaryTotal setDictionary:summary];
+        }
+        NSArray *array = [resultDictionary objectForKey:SymphoxAPIParam_cart_item];
+        if (array)
+        {
+            [self.arrayProducts setArray:array];
+        }
         success = YES;
     }
     
