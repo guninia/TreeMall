@@ -12,6 +12,7 @@
 #import "ProductListTitleView.h"
 #import "ProductFilterViewController.h"
 #import "SearchViewController.h"
+#import "ProductTableViewCell.h"
 
 
 typedef enum : NSUInteger {
@@ -23,7 +24,7 @@ typedef enum : NSUInteger {
     SortOptionTotal
 } SortOption;
 
-@interface ProductListViewController : UIViewController <ProductSubcategoryViewDelegate, ProductListToolViewDelegate, UITableViewDataSource, UITableViewDelegate, ProductListTitleViewDelegate, ProductFilterViewControllerDelegate, SearchViewControllerDelegate>
+@interface ProductListViewController : UIViewController <ProductSubcategoryViewDelegate, ProductListToolViewDelegate, UITableViewDataSource, UITableViewDelegate, ProductListTitleViewDelegate, ProductFilterViewControllerDelegate, SearchViewControllerDelegate, ProductTableViewCellDelegate>
 
 @property (nonatomic, strong) ProductListTitleView *viewTitle;
 @property (nonatomic, strong) ProductSubcategoryView *viewSubcategory;

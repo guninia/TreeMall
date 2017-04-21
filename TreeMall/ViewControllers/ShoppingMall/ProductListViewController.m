@@ -7,7 +7,6 @@
 //
 
 #import "ProductListViewController.h"
-#import "ProductTableViewCell.h"
 #import "CryptoModule.h"
 #import "SHAPIAdapter.h"
 #import "APIDefinition.h"
@@ -26,6 +25,7 @@
 - (BOOL)processProductsData:(id)data byRefreshing:(BOOL)refresh;
 - (void)prepareSortOption;
 - (void)refreshAllContentForHallId:(NSString *)hallId andLayer:(NSNumber *)layer withName:(NSString *)name;
+- (void)showCartTypeSheetForProduct:(NSDictionary *)product;
 
 - (void)buttonItemSearchPressed:(id)sender;
 
@@ -281,7 +281,7 @@
         }
         else
         {
-            NSString *errorMessage = [LocalizedString CannotLoadData];
+            NSString *errorMessage = [LocalizedString NoMatchingProduct];
             NSDictionary *userInfo = error.userInfo;
             BOOL errorProductNotFound = NO;
             if (userInfo)
@@ -577,6 +577,38 @@
     }
 }
 
+- (void)showCartTypeSheetForProduct:(NSDictionary *)product
+{
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:[LocalizedString AddToCart] message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+    NSNumber *normal_cart = [product objectForKey:SymphoxAPIParam_normal_cart];
+    if (normal_cart && [normal_cart isEqual:[NSNull null]] == NO && [normal_cart boolValue] == YES)
+    {
+        UIAlertAction *action = [UIAlertAction actionWithTitle:[LocalizedString CommonDelivery] style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
+            [[TMInfoManager sharedManager] addProduct:product toCartForType:CartTypeCommonDelivery];
+        }];
+        [alertController addAction:action];
+    }
+    NSNumber *to_store_cart = [product objectForKey:SymphoxAPIParam_to_store_cart];
+    if (to_store_cart && [to_store_cart isEqual:[NSNull null]] == NO && [to_store_cart boolValue] == YES)
+    {
+        UIAlertAction *action = [UIAlertAction actionWithTitle:[LocalizedString CommonDelivery] style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
+            [[TMInfoManager sharedManager] addProduct:product toCartForType:CartTypeStorePickup];
+        }];
+        [alertController addAction:action];
+    }
+    NSNumber *fast_delivery_cart = [product objectForKey:SymphoxAPIParam_fast_delivery_cart];
+    if (fast_delivery_cart && [fast_delivery_cart isEqual:[NSNull null]] == NO && [fast_delivery_cart boolValue] == YES)
+    {
+        UIAlertAction *action = [UIAlertAction actionWithTitle:[LocalizedString FastDelivery] style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
+            [[TMInfoManager sharedManager] addProduct:product toCartForType:CartTypeFastDelivery];
+        }];
+        [alertController addAction:action];
+    }
+    UIAlertAction *actionCancel = [UIAlertAction actionWithTitle:[LocalizedString Cancel] style:UIAlertActionStyleCancel handler:nil];
+    [alertController addAction:actionCancel];
+    [self presentViewController:alertController animated:YES completion:nil];
+}
+
 #pragma mark - Public Methods
 
 - (void)addKeywordToConditions:(NSString *)keyword
@@ -624,6 +656,11 @@
 {
     ProductTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:ProductTableViewCellIdentifier forIndexPath:indexPath];
     [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
+    cell.tag = indexPath.row;
+    if (cell.delegate == nil)
+    {
+        cell.delegate = self;
+    }
 //    NSLog(@"cellForRowAtIndexPath[%li][%li]", (long)indexPath.section, (long)indexPath.row);
     if (indexPath.row < [_arrayProducts count])
     {
@@ -656,7 +693,7 @@
             }
         }
         NSNumber *freePoint = [dictionary objectForKey:SymphoxAPIParam_freepoint];
-        if (freePoint && [freePoint integerValue] > 0)
+        if (freePoint && ([freePoint isEqual:[NSNull null]] == NO) && [freePoint integerValue] > 0)
         {
             NSString *freePointString = [NSString stringWithFormat:[LocalizedString Free_S_Point], (long)[freePoint integerValue]];
             NSDictionary *dictionary = [NSDictionary dictionaryWithObjectsAndKeys:freePointString, ProductTableViewCellTagText, [UIColor lightGrayColor], NSForegroundColorAttributeName, nil];
@@ -739,6 +776,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     ProductDetailViewController *viewController = [[ProductDetailViewController alloc] initWithNibName:@"ProductDetailViewController" bundle:[NSBundle mainBundle]];
+    [viewController setHidesBottomBarWhenPushed:YES];
     NSDictionary *dictionary = [self.arrayProducts objectAtIndex:indexPath.row];
     viewController.dictionaryCommon = dictionary;
     [self.navigationController pushViewController:viewController animated:YES];
@@ -923,6 +961,16 @@
     listViewController.layer = nil;
     listViewController.name = nil;
     [self.navigationController pushViewController:listViewController animated:YES];
+}
+
+#pragma mark - ProductTableViewCellDelegate
+
+- (void)productTableViewCell:(ProductTableViewCell *)cell didSelectToAddToCartBySender:(id)sender
+{
+    if (cell.tag >= [self.arrayProducts count])
+        return;
+    NSDictionary *product = [self.arrayProducts objectAtIndex:cell.tag];
+    [self showCartTypeSheetForProduct:product];
 }
 
 @end

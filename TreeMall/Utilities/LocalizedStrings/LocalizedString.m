@@ -1811,4 +1811,134 @@
     return ProductsRemovedFromCart;
 }
 
++ (NSString *)ChooseQuantityAndDiscount
+{
+    static NSString *ChooseQuantityAndDiscount = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        ChooseQuantityAndDiscount = NSLocalizedString(@"ChooseQuantityAndDiscount", nil);
+    });
+    return ChooseQuantityAndDiscount;
+}
+
++ (NSString *)Total_C
+{
+    static NSString *Total_C = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        Total_C = NSLocalizedString(@"Total_C", nil);
+    });
+    return Total_C;
+}
+
++ (NSString *)Quantity
+{
+    static NSString *Quantity = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        Quantity = NSLocalizedString(@"Quantity", nil);
+    });
+    return Quantity;
+}
+
++ (NSString *)GoingToDeleteProduct_S_
+{
+    static NSString *GoingToDeleteProduct_S_ = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        GoingToDeleteProduct_S_ = NSLocalizedString(@"GoingToDeleteProduct_S_", nil);
+    });
+    return GoingToDeleteProduct_S_;
+}
+
++ (NSString *)ThisProduct
+{
+    static NSString *ThisProduct = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        ThisProduct = NSLocalizedString(@"ThisProduct", nil);
+    });
+    return ThisProduct;
+}
+
++ (NSString *)_Q_
+{
+    static NSString *_Q_ = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        _Q_ = NSLocalizedString(@"_Q_", nil);
+    });
+    return _Q_;
+}
+
++ (NSString *)PleaseLogin
+{
+    static NSString *PleaseLogin = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        PleaseLogin = NSLocalizedString(@"PleaseLogin", nil);
+    });
+    return PleaseLogin;
+}
+
++ (NSString *)GoingToRemoveLatestSearchList
+{
+    static NSString *GoingToRemoveLatestSearchList = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        GoingToRemoveLatestSearchList = NSLocalizedString(@"GoingToRemoveLatestSearchList", nil);
+    });
+    return GoingToRemoveLatestSearchList;
+}
+
++ (NSString *)CannotFindProductId
+{
+    static NSString *CannotFindProductId = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        CannotFindProductId = NSLocalizedString(@"CannotFindProductId", nil);
+    });
+    return CannotFindProductId;
+}
+
++ (NSString *)AlreadyInFavorite
+{
+    static NSString *AlreadyInFavorite = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        AlreadyInFavorite = NSLocalizedString(@"AlreadyInFavorite", nil);
+    });
+    return AlreadyInFavorite;
+}
+
++ (NSString *)AddToFavoriteSuccess
+{
+    static NSString *AddToFavoriteSuccess = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        AddToFavoriteSuccess = NSLocalizedString(@"AddToFavoriteSuccess", nil);
+    });
+    return AddToFavoriteSuccess;
+}
+
++ (NSString *)NoMatchingProduct
+{
+    static NSString *NoMatchingProduct = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        NoMatchingProduct = NSLocalizedString(@"NoMatchingProduct", nil);
+    });
+    return NoMatchingProduct;
+}
+
++ (NSString *)ChangePasswordSuccess
+{
+    static NSString *ChangePasswordSuccess = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        ChangePasswordSuccess = NSLocalizedString(@"ChangePasswordSuccess", nil);
+    });
+    return ChangePasswordSuccess;
+}
+
 @end

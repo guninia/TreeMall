@@ -217,7 +217,7 @@
         [_labelPointTitle setBackgroundColor:[UIColor clearColor]];
         [_labelPointTitle setTextColor:[UIColor whiteColor]];
         [_labelPointTitle setTextAlignment:NSTextAlignmentCenter];
-        UIFont *font = [UIFont systemFontOfSize:12.0];
+        UIFont *font = [UIFont systemFontOfSize:16.0];
         [_labelPointTitle setFont:font];
         [_labelPointTitle setText:[LocalizedString MyPoints]];
     }
@@ -247,7 +247,7 @@
         [_labelCouponTitle setBackgroundColor:[UIColor clearColor]];
         [_labelCouponTitle setTextColor:[UIColor whiteColor]];
         [_labelCouponTitle setTextAlignment:NSTextAlignmentCenter];
-        UIFont *font = [UIFont systemFontOfSize:12.0];
+        UIFont *font = [UIFont systemFontOfSize:16.0];
         [_labelCouponTitle setFont:font];
         [_labelCouponTitle setText:[LocalizedString MyCoupon]];
     }
@@ -318,9 +318,9 @@
     _numberTotalPoint = numberTotalPoint;
     if (_numberTotalPoint == nil)
     {
-        self.labelPointValue.text = @"－－";
-        self.labelPointTitle.hidden = YES;
-        self.labelPointValue.hidden = YES;
+        self.labelPointValue.text = [LocalizedString PleaseLogin];
+        self.labelPointTitle.hidden = NO;
+        self.labelPointValue.hidden = NO;
     }
     else
     {
@@ -336,9 +336,9 @@
     _numberCouponValue = numberCouponValue;
     if (_numberCouponValue == nil)
     {
-        self.labelCouponValue.text = @"－－";
-        self.labelCouponTitle.hidden = YES;
-        self.labelCouponValue.hidden = YES;
+        self.labelCouponValue.text = [LocalizedString PleaseLogin];
+        self.labelCouponTitle.hidden = NO;
+        self.labelCouponValue.hidden = NO;
     }
     else
     {

@@ -66,7 +66,7 @@
         [_textLabel setBackgroundColor:[UIColor clearColor]];
         [_textLabel setFont:[UIFont systemFontOfSize:14.0]];
         [_textLabel setTextAlignment:NSTextAlignmentCenter];
-        [_textLabel setTextColor:[self isSelected]?[UIColor cyanColor]:[UIColor darkTextColor]];
+        [_textLabel setTextColor:[UIColor darkTextColor]];
     }
     return _textLabel;
 }
@@ -75,7 +75,7 @@
 {
 //    NSLog(@"Cell[%li] Selected[%@]", (long)self.tag, selected?@"YES":@"NO");
     [super setSelected:selected];
-    [_textLabel setTextColor:[self isSelected]?[UIColor cyanColor]:[UIColor darkTextColor]];
+//    [_textLabel setTextColor:[self isSelected]?[UIColor cyanColor]:[UIColor darkTextColor]];
 }
 
 @end

@@ -12,7 +12,7 @@
 #import "CartProductTableViewCell.h"
 #import "TMInfoManager.h"
 
-@interface CartViewController : UIViewController <SemiCircleEndsSegmentedViewDelegate>
+@interface CartViewController : UIViewController <SemiCircleEndsSegmentedViewDelegate, UITableViewDataSource, UITableViewDelegate, CartProductTableViewCellDelegate>
 
 @property (nonatomic, strong) SemiCircleEndsSegmentedView *segmentedView;
 @property (nonatomic, strong) UITableView *tableView;
@@ -20,4 +20,5 @@
 @property (nonatomic, assign) CartType currentType;
 @property (nonatomic, strong) NSMutableArray *arrayProducts;
 @property (nonatomic, strong) NSMutableDictionary *dictionaryTotal;
+@property (nonatomic, strong) NSNumberFormatter *numberFormatter;
 @end

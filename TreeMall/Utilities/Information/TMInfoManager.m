@@ -12,6 +12,7 @@
 #import "SHAPIAdapter.h"
 #import "Definition.h"
 #import <SAMKeychain.h>
+#import "LocalizedString.h"
 
 static NSString *TMInfoArchiveKey_PromotionRead = @"PromotionRead";
 static NSString *TMInfoArchiveKey_UserInformation = @"UserInformation";
@@ -1203,30 +1204,43 @@ static NSUInteger SearchKeywordNumberMax = 8;
     }
 }
 
-- (BOOL)addProductToFavorite:(NSDictionary *)product
+- (NSString *)addProductToFavorite:(NSDictionary *)product
 {
     NSLog(@"product:\n%@", product);
+    NSString *resultString = nil;
     NSNumber *productId = [product objectForKey:SymphoxAPIParam_cpdt_num];
     if (productId == nil || [productId isEqual:[NSNull null]])
     {
         NSLog(@"addProductToFavorite - Cannot find product identifier");
-        return NO;
+        resultString = [LocalizedString CannotFindProductId];
+        return resultString;
     }
     if ([self.orderedSetFavoriteId containsObject:productId])
     {
         NSLog(@"addProductToFavorite - Already in the favorite list.");
-        return NO;
+        resultString = [LocalizedString AlreadyInFavorite];
+        return resultString;
     }
     [self.orderedSetFavoriteId addObject:productId];
     [self.arrayFavorite addObject:product];
+    [self saveToArchive];
     NSLog(@"orderedSetFavoriteId[%li] arrayFavorite[%li]", (long)self.orderedSetFavoriteId.count, (long)self.arrayFavorite.count);
-    return YES;
+    resultString = [LocalizedString AddToFavoriteSuccess];
+    return resultString;
 }
 
 - (NSArray *)favorites
 {
     NSArray *favorites = self.arrayFavorite;
     return favorites;
+}
+
+- (void)removeProductFromFavorite:(NSInteger)productIndex
+{
+    if (productIndex < [self.arrayFavorite count])
+    {
+        [self.arrayFavorite removeObjectAtIndex:productIndex];
+    }
 }
 
 - (void)retrievePointDataFromObject:(id)object withCompletion:(void (^)(id, NSError *))block

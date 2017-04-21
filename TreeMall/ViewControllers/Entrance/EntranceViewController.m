@@ -142,6 +142,8 @@ typedef enum : NSUInteger {
         
         if (error == nil)
         {
+//            NSString *string = [[NSString alloc] initWithData:resultObject encoding:NSUTF8StringEncoding];
+//            NSLog(@"retrieveData:\n%@", string);
             if ([self processData:resultObject])
             {
                 [_tableViewEntrance reloadData];
@@ -417,7 +419,7 @@ typedef enum : NSUInteger {
         {
             UIImage *image = [UIImage imageNamed:@"bg_ind_up"];
             CGFloat referenceHeightDiffRatio = [Utility sizeRatioAccordingTo320x480].height - 1;
-            heightForHeader = ceil(200.0 + image.size.height * referenceHeightDiffRatio);
+            heightForHeader = ceil(190.0 + image.size.height * referenceHeightDiffRatio);
         }
             break;
         case TableViewSectionProductPromotion:
@@ -438,7 +440,35 @@ typedef enum : NSUInteger {
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    NSDictionary *dictionary = [self dictionaryForProductAtIndex:indexPath.row];
+    NSString *stringSize = [dictionary objectForKey:SymphoxAPIParam_size];
     CGFloat heightForRow = tableView.frame.size.width * 0.4;
+    if (stringSize)
+    {
+        switch ([stringSize integerValue]) {
+            case 0:
+            {
+                // 900 X 360
+                heightForRow = tableView.frame.size.width * 360 / 900;
+            }
+                break;
+            case 1:
+            {
+                // 900 X 240
+                heightForRow = tableView.frame.size.width * 240 / 900;
+            }
+                break;
+            case 2:
+            {
+                // 900 X 120
+                heightForRow = tableView.frame.size.width * 120 / 900;
+            }
+                break;
+            default:
+                break;
+        }
+    }
+    
     return heightForRow;
 }
 

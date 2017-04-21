@@ -539,7 +539,10 @@ typedef enum : NSUInteger {
 
 - (void)postPasswordChangeSuccessProcess
 {
-    
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:[LocalizedString ChangePasswordSuccess] preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *action = [UIAlertAction actionWithTitle:[LocalizedString Confirm] style:UIAlertActionStyleDefault handler:nil];
+    [alertController addAction:action];
+    [self presentViewController:alertController animated:YES completion:nil];
 }
 
 - (void)presentNewsletterSubscribeView

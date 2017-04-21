@@ -12,6 +12,7 @@
 #import "APIDefinition.h"
 #import "CryptoModule.h"
 #import "SHAPIAdapter.h"
+#import "TMInfoManager.h"
 
 @interface CartViewController ()
 
@@ -21,6 +22,8 @@
 - (void)renewConditionsForCartType:(CartType)type;
 - (void)requestResultForRenewConditionsOfProducts:(NSArray *)productConditions ofCartType:(CartType)type;
 - (BOOL)processRenewConditionsResult:(id)result inCart:(CartType)type;
+- (void)refreshContent;
+- (void)refreshBottomBar;
 
 @end
 
@@ -102,7 +105,7 @@
     
     if (self.tableView)
     {
-        CGRect frame = CGRectMake(0.0, originY, self.view.frame.size.height, CGRectGetMinY(self.bottomBar.frame) - originY);
+        CGRect frame = CGRectMake(0.0, originY, self.view.frame.size.width, CGRectGetMinY(self.bottomBar.frame) - originY);
         self.tableView.frame = frame;
     }
 }
@@ -151,6 +154,8 @@
         [_tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
         [_tableView setShowsVerticalScrollIndicator:NO];
         [_tableView setShowsHorizontalScrollIndicator:NO];
+        [_tableView setDataSource:self];
+        [_tableView setDelegate:self];
     }
     return _tableView;
 }
@@ -182,13 +187,27 @@
     return _dictionaryTotal;
 }
 
+- (NSNumberFormatter *)numberFormatter
+{
+    if (_numberFormatter == nil)
+    {
+        _numberFormatter = [[NSNumberFormatter alloc] init];
+        [_numberFormatter setNumberStyle:NSNumberFormatterDecimalStyle];
+    }
+    return _numberFormatter;
+}
+
 #pragma mark - Private Methods
 
 - (void)checkCartForType:(CartType)type
 {
     NSArray *array = [[TMInfoManager sharedManager] productArrayForCartType:type];
     if (array == nil || [array count] == 0)
+    {
+        [self.arrayProducts removeAllObjects];
+        [self.tableView reloadData];
         return;
+    }
     NSDictionary *dictionary = [[TMInfoManager sharedManager] purchaseInfoForCartType:type];
     NSMutableArray *arrayCheck = [NSMutableArray array];
     for (NSDictionary *product in array)
@@ -242,7 +261,7 @@
                 }
                 else
                 {
-                    NSLog(@"requestResultForCheckingProducts - Cannot process data");
+                    NSLog(@"requestResultForCheckingProducts - get some error");
                 }
             }
             else
@@ -303,6 +322,7 @@
                         {
                             // Success
                             shouldRemove = NO;
+                            success = YES;
                         }
                             break;
                         case 2:
@@ -343,14 +363,15 @@
             }
             if ([notifyString length] > 0)
             {
+                __weak CartViewController *weakSelf = self;
                 UIAlertController *alertController = [UIAlertController alertControllerWithTitle:[LocalizedString ProductsRemovedFromCart] message:nil preferredStyle:UIAlertControllerStyleAlert];
                 UIAlertAction *actionConfirm = [UIAlertAction actionWithTitle:[LocalizedString Confirm] style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
-                    
+                    [weakSelf renewConditionsForCartType:type];
                 }];
                 [alertController addAction:actionConfirm];
                 [self presentViewController:alertController animated:YES completion:nil];
             }
-            success = YES;
+            
         }
     }
     return success;
@@ -422,7 +443,7 @@
                 if ([weakSelf processRenewConditionsResult:data inCart:type])
                 {
                     // Should start calculate product promotion according to quantity
-                    [weakSelf.tableView reloadData];
+                    [weakSelf refreshContent];
                 }
                 else
                 {
@@ -485,12 +506,248 @@
     return success;
 }
 
+- (void)refreshContent
+{
+    [self.tableView reloadData];
+    
+    [self refreshBottomBar];
+}
+
+- (void)refreshBottomBar
+{
+    NSNumber *totalPoint = [self.dictionaryTotal objectForKey:SymphoxAPIParam_total_Point];
+    if ([totalPoint isEqual:[NSNull null]])
+    {
+        totalPoint = nil;
+    }
+    NSNumber *totalCash = [self.dictionaryTotal objectForKey:SymphoxAPIParam_total_cash];
+    if ([totalCash isEqual:[NSNull null]])
+    {
+        totalCash = nil;
+    }
+    NSNumber *totalCathayCash = [self.dictionaryTotal objectForKey:SymphoxAPIParam_total_cathay_cash];
+    if ([totalCathayCash isEqual:[NSNull null]])
+    {
+        totalCathayCash = nil;
+    }
+    NSNumber *totalEpoint = [self.dictionaryTotal objectForKey:SymphoxAPIParam_total_ePoint];
+    if ([totalEpoint isEqual:[NSNull null]])
+    {
+        totalEpoint = nil;
+    }
+    NSDictionary *attributeGray = [NSDictionary dictionaryWithObjectsAndKeys:[UIColor grayColor], NSForegroundColorAttributeName, nil];
+    NSDictionary *attributeOrange = [NSDictionary dictionaryWithObjectsAndKeys:[UIColor orangeColor], NSForegroundColorAttributeName, nil];
+    NSMutableAttributedString *totalString = [[NSMutableAttributedString alloc] initWithString:[LocalizedString Total_C] attributes:attributeGray];
+    NSAttributedString *plusString = [[NSAttributedString alloc] initWithString:@"＋" attributes:attributeGray];
+    NSInteger originLength = [totalString length];
+    if (totalCash != nil && [totalCash integerValue] > 0)
+    {
+        NSString *stringTotal = [self.numberFormatter stringFromNumber:totalCash];
+        NSString *string = [NSString stringWithFormat:@"＄%@", stringTotal];
+        NSAttributedString *attrString = [[NSAttributedString alloc] initWithString:string attributes:attributeOrange];
+        [totalString appendAttributedString:attrString];
+    }
+    if (totalEpoint != nil && [totalEpoint integerValue] > 0)
+    {
+        if ([totalString length] > originLength)
+        {
+            [totalString appendAttributedString:plusString];
+        }
+        NSString *stringTotal = [self.numberFormatter stringFromNumber:totalEpoint];
+        NSString *string = [NSString stringWithFormat:@"%@%@", stringTotal, [LocalizedString Point]];
+        NSAttributedString *attrString = [[NSAttributedString alloc] initWithString:string attributes:attributeOrange];
+        [totalString appendAttributedString:attrString];
+    }
+    if ([totalString length] == originLength)
+    {
+        NSString *stringTotal = [self.numberFormatter stringFromNumber:[NSNumber numberWithInteger:0]];
+        NSString *string = [NSString stringWithFormat:@"＄%@", stringTotal];
+        NSAttributedString *attrString = [[NSAttributedString alloc] initWithString:string attributes:attributeOrange];
+        [totalString appendAttributedString:attrString];
+    }
+    [self.bottomBar.label setAttributedText:totalString];
+}
+
 #pragma mark - SemiCircleEndsSegmentedViewDelegate
 
 - (void)semiCircleEndsSegmentedView:(SemiCircleEndsSegmentedView *)view didChangeToIndex:(NSInteger)index
 {
     self.currentType = index;
     [self checkCartForType:self.currentType];
+}
+
+#pragma mark - UITableViewDataSource
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    NSInteger numberOfRows = [self.arrayProducts count];
+    return numberOfRows;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    CartProductTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CartProductTableViewCellIdentifier forIndexPath:indexPath];
+    [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
+    cell.tag = indexPath.row;
+    if (cell.delegate == nil)
+    {
+        cell.delegate = self;
+    }
+    
+    if (indexPath.row < [self.arrayProducts count])
+    {
+        NSDictionary *dictionary = [self.arrayProducts objectAtIndex:indexPath.row];
+        
+        NSNumber *numberCash = [dictionary objectForKey:SymphoxAPIParam_ori_cash];
+        if ([numberCash isEqual:[NSNull null]])
+        {
+            numberCash = nil;
+        }
+        NSNumber *numberPoint = [dictionary objectForKey:SymphoxAPIParam_ori_point];
+        if ([numberPoint isEqual:[NSNull null]])
+        {
+            numberPoint = nil;
+        }
+        
+        NSMutableAttributedString *totalCostString = [[NSMutableAttributedString alloc] init];
+        NSInteger originLength = [totalCostString length];
+        NSDictionary *attributeGray = [NSDictionary dictionaryWithObjectsAndKeys:[UIColor grayColor], NSForegroundColorAttributeName, nil];
+        NSDictionary *attributeRed = [NSDictionary dictionaryWithObjectsAndKeys:[UIColor redColor], NSForegroundColorAttributeName, nil];
+        NSAttributedString *plusString = [[NSAttributedString alloc] initWithString:@"＋" attributes:attributeGray];
+        if (numberCash != nil && [numberCash integerValue] > 0)
+        {
+            NSString *stringTotal = [self.numberFormatter stringFromNumber:numberCash];
+            NSString *string = [NSString stringWithFormat:@"＄%@", stringTotal];
+            NSAttributedString *attrString = [[NSAttributedString alloc] initWithString:string attributes:attributeRed];
+            [totalCostString appendAttributedString:attrString];
+        }
+        if (numberPoint != nil && [numberPoint integerValue] > 0)
+        {
+            if ([totalCostString length] > originLength)
+            {
+                [totalCostString appendAttributedString:plusString];
+            }
+            NSString *stringTotal = [self.numberFormatter stringFromNumber:numberPoint];
+            NSString *string = [NSString stringWithFormat:@"%@%@", stringTotal, [LocalizedString Point]];
+            NSAttributedString *attrString = [[NSAttributedString alloc] initWithString:string attributes:attributeGray];
+            [totalCostString appendAttributedString:attrString];
+        }
+        if ([totalCostString length] == originLength)
+        {
+            NSString *stringTotal = [self.numberFormatter stringFromNumber:[NSNumber numberWithInteger:0]];
+            NSString *string = [NSString stringWithFormat:@"＄%@", stringTotal];
+            NSAttributedString *attrString = [[NSAttributedString alloc] initWithString:string attributes:attributeRed];
+            [totalCostString appendAttributedString:attrString];
+        }
+        
+        [cell.labelPrice setAttributedText:totalCostString];
+        
+        NSString *name = [dictionary objectForKey:SymphoxAPIParam_name];
+        if (name != nil && ([name isEqual:[NSNull null]] == NO) && [name length] > 0)
+        {
+            cell.labelName.text = name;
+            cell.labelName.hidden = NO;
+        }
+        else
+        {
+            cell.labelName.hidden = YES;
+        }
+        
+        NSString *remark = [dictionary objectForKey:SymphoxAPIParam_remark];
+        if (remark != nil && ([remark isEqual:[NSNull null]] == NO) && [remark length] > 0)
+        {
+            cell.labelDetail.text = remark;
+            cell.labelDetail.hidden = NO;
+        }
+        else
+        {
+            cell.labelDetail.hidden = YES;
+        }
+        
+        NSString *imagePath = [dictionary objectForKey:SymphoxAPIParam_img_url];
+        if (imagePath != nil && ([imagePath isEqual:[NSNull null]] == NO) && [imagePath length] > 0)
+        {
+            NSURL *url = [NSURL URLWithString:imagePath];
+            cell.imageUrl = url;
+        }
+        
+        NSNumber *quantity = [dictionary objectForKey:SymphoxAPIParam_qty];
+        if (quantity == nil || [quantity isEqual:[NSNull null]])
+        {
+            quantity = [NSNumber numberWithInteger:0];
+        }
+        NSString *quantityString = [NSString stringWithFormat:@"%@%li", [LocalizedString Quantity], (long)[quantity integerValue]];
+        cell.labelQuantity.text = quantityString;
+        
+        NSNumber *productIdentifier = [dictionary objectForKey:SymphoxAPIParam_cpdt_num];
+        NSString *paymentDiscription = nil;
+        if (productIdentifier != nil && ([productIdentifier isEqual:[NSNull null]] == NO))
+        {
+            NSDictionary *purchaseInfos = [[TMInfoManager sharedManager] purchaseInfoForCartType:self.currentType];
+            NSDictionary *purchaseInfo = [purchaseInfos objectForKey:productIdentifier];
+            paymentDiscription = [purchaseInfo objectForKey:SymphoxAPIParam_discount_detail_desc];
+        }
+        if (paymentDiscription != nil && ([paymentDiscription isEqual:[NSNull null]] == NO))
+        {
+            cell.labelPayment.text = paymentDiscription;
+        }
+        else
+        {
+            cell.labelPayment.text = @"";
+        }
+    }
+    
+    return cell;
+}
+
+#pragma mark - UITableViewDelegate
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    CGFloat heightForRow = 150.0;
+    return heightForRow;
+}
+
+#pragma mark - CartProductTableViewCellDelegate
+
+- (void)cartProductTableViewCell:(CartProductTableViewCell *)cell didPressedConditionBySender:(id)sender
+{
+    
+}
+
+- (void)cartProductTableViewCell:(CartProductTableViewCell *)cell didPressedDeleteBySender:(id)sender
+{
+    if (cell.tag >= [self.arrayProducts count])
+        return;
+    NSDictionary *dictionary = [self.arrayProducts objectAtIndex:cell.tag];
+    NSNumber *productId = [dictionary objectForKey:SymphoxAPIParam_cpdt_num];
+    if (productId == nil)
+        return;
+    NSString *name = [dictionary objectForKey:SymphoxAPIParam_name];
+    NSString *nameQuote = nil;
+    if (name == nil || [name isEqual:[NSNull null]] || [name length] == 0)
+    {
+        nameQuote = [LocalizedString ThisProduct];
+    }
+    else
+    {
+        nameQuote = [NSString stringWithFormat:[LocalizedString _Q_], name];
+    }
+    NSString *message = [NSString stringWithFormat:[LocalizedString GoingToDeleteProduct_S_], nameQuote];
+    
+    __weak CartViewController *weakSelf = self;
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:[LocalizedString Notice] message:message preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *actionCancel = [UIAlertAction actionWithTitle:[LocalizedString Cancel] style:UIAlertActionStyleCancel handler:nil];
+    UIAlertAction *actionConfirm = [UIAlertAction actionWithTitle:[LocalizedString Confirm] style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
+        NSString *name = [[TMInfoManager sharedManager] nameOfRemovedProductId:productId inCart:weakSelf.currentType];
+        if (name)
+        {
+            [self checkCartForType:weakSelf.currentType];
+        }
+    }];
+    [alertController addAction:actionCancel];
+    [alertController addAction:actionConfirm];
+    [self presentViewController:alertController animated:YES completion:nil];
 }
 
 @end

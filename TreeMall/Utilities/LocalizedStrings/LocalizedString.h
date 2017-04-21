@@ -190,5 +190,18 @@
 + (NSString *)NotEnoughInStock;
 + (NSString *)MultipleProductsUnacceptable;
 + (NSString *)ProductsRemovedFromCart;
++ (NSString *)ChooseQuantityAndDiscount;
++ (NSString *)Total_C;
++ (NSString *)Quantity;
++ (NSString *)GoingToDeleteProduct_S_;
++ (NSString *)ThisProduct;
++ (NSString *)_Q_;
++ (NSString *)PleaseLogin;
++ (NSString *)GoingToRemoveLatestSearchList;
++ (NSString *)CannotFindProductId;
++ (NSString *)AlreadyInFavorite;
++ (NSString *)AddToFavoriteSuccess;
++ (NSString *)NoMatchingProduct;
++ (NSString *)ChangePasswordSuccess;
 
 @end

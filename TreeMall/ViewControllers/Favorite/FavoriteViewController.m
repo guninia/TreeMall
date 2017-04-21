@@ -14,6 +14,9 @@
 
 @interface FavoriteViewController ()
 
+- (void)refreshData;
+- (void)buttonEditPressed:(id)sender;
+
 @end
 
 @implementation FavoriteViewController
@@ -31,13 +34,15 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
+    UIBarButtonItem *rightItem = [[UIBarButtonItem alloc] initWithCustomView:self.buttonEdit];
+    [self.navigationItem setRightBarButtonItem:rightItem];
+    
     [self.view addSubview:self.tableViewFavorites];
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
-    self.arrayFavorites = [[TMInfoManager sharedManager] favorites];
-    NSLog(@"self.arrayFavorites[%li]:\n%@", (long)self.arrayFavorites.count, [self.arrayFavorites description]);
+    [self refreshData];
     if (self.arrayFavorites != nil)
     {
         _shouldShowLoadingFooter = NO;
@@ -72,6 +77,29 @@
     }
 }
 
+- (UIButton *)buttonEdit
+{
+    if (_buttonEdit == nil)
+    {
+        _buttonEdit = [[UIButton alloc] initWithFrame:CGRectZero];;
+        UIImage *image = [UIImage imageNamed:@"ico_trash_off"];
+        CGSize size = CGSizeMake(30.0, 30.0);
+        if (image)
+        {
+            size = image.size;
+            [_buttonEdit setImage:image forState:UIControlStateNormal];
+        }
+        _buttonEdit.frame = CGRectMake(0.0, 0.0, size.width, size.height);
+        UIImage *imageSelected = [UIImage imageNamed:@"ico_trash_on"];
+        if (imageSelected)
+        {
+            [_buttonEdit setImage:imageSelected forState:UIControlStateSelected];
+        }
+        [_buttonEdit addTarget:self action:@selector(buttonEditPressed:) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _buttonEdit;
+}
+
 - (UITableView *)tableViewFavorites
 {
     if (_tableViewFavorites == nil)
@@ -87,6 +115,24 @@
         [_tableViewFavorites registerClass:[LoadingFooterView class] forHeaderFooterViewReuseIdentifier:LoadingFooterViewIdentifier];
     }
     return _tableViewFavorites;
+}
+
+#pragma mark - Private Methods
+
+- (void)refreshData
+{
+    self.arrayFavorites = [[TMInfoManager sharedManager] favorites];
+    NSLog(@"self.arrayFavorites[%li]:\n%@", (long)self.arrayFavorites.count, [self.arrayFavorites description]);
+    
+}
+
+#pragma mark - Actions
+
+- (void)buttonEditPressed:(id)sender
+{
+    [self.buttonEdit setSelected:![self.buttonEdit isSelected]];
+    
+    [self.tableViewFavorites setEditing:[self.buttonEdit isSelected] animated:YES];
 }
 
 #pragma mark - UITableViewDataSource
@@ -233,6 +279,22 @@
     NSDictionary *dictionary = [self.arrayFavorites objectAtIndex:indexPath.row];
     viewController.dictionaryCommon = dictionary;
     [self.navigationController pushViewController:viewController animated:YES];
+}
+
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    switch (editingStyle) {
+        case UITableViewCellEditingStyleDelete:
+        {
+            [[TMInfoManager sharedManager] removeProductFromFavorite:indexPath.row];
+            [self refreshData];
+            [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
+        }
+            break;
+            
+        default:
+            break;
+    }
 }
 
 @end

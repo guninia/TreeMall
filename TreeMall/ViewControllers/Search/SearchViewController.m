@@ -498,8 +498,16 @@ typedef enum : NSUInteger {
     switch (view.tag) {
         case CollectionViewSectionSearchLatest:
         {
-            [[TMInfoManager sharedManager] removeAllKeywords];
-            [self retrieveLatestSearchData];
+            __weak SearchViewController *weakSelf = self;
+            UIAlertController *alertController = [UIAlertController alertControllerWithTitle:[LocalizedString Notice] message:[LocalizedString GoingToRemoveLatestSearchList] preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertAction *actionCancel = [UIAlertAction actionWithTitle:[LocalizedString Cancel] style:UIAlertActionStyleCancel handler:nil];
+            UIAlertAction *actionConfirm = [UIAlertAction actionWithTitle:[LocalizedString Confirm] style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
+                [[TMInfoManager sharedManager] removeAllKeywords];
+                [weakSelf retrieveLatestSearchData];
+            }];
+            [alertController addAction:actionCancel];
+            [alertController addAction:actionConfirm];
+            [self presentViewController:alertController animated:YES completion:nil];
         }
             break;
             

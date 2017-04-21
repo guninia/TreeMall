@@ -100,6 +100,11 @@ typedef enum : NSUInteger {
     [_tableViewExtraSubcategory registerClass:[LoadingFooterView class] forHeaderFooterViewReuseIdentifier:LoadingFooterViewIdentifier];
     [_tableViewExtraSubcategory setTag:ViewTagTableViewExtraSubcategory];
     
+    [self.view addSubview:self.imageViewLeftArrow];
+    [self.view addSubview:self.imageViewRightArrow];
+    self.imageViewLeftArrow.hidden = YES;
+    self.imageViewRightArrow.hidden = YES;
+    
     [self retrieveMainCategoryData];
 }
 
@@ -129,6 +134,55 @@ typedef enum : NSUInteger {
 }
 */
 
+#pragma mark - Override
+
+- (void)viewDidLayoutSubviews
+{
+    [super viewDidLayoutSubviews];
+    
+    CGFloat marginH = 5.0;
+    if (self.imageViewLeftArrow)
+    {
+        CGSize size = self.imageViewLeftArrow.image.size;
+        CGRect frame = CGRectMake(marginH, self.collectionViewCategory.frame.origin.y + (self.collectionViewCategory.frame.size.height - size.height)/2, size.width, size.height);
+        self.imageViewLeftArrow.frame = frame;
+    }
+    if (self.imageViewRightArrow)
+    {
+        CGSize size = self.imageViewRightArrow.image.size;
+        CGRect frame = CGRectMake(self.view.frame.size.width - size.width - marginH, self.collectionViewCategory.frame.origin.y + (self.collectionViewCategory.frame.size.height - size.height)/2, size.width, size.height);
+        self.imageViewRightArrow.frame = frame;
+    }
+}
+
+- (UIImageView *)imageViewLeftArrow
+{
+    if (_imageViewLeftArrow == nil)
+    {
+        _imageViewLeftArrow = [[UIImageView alloc] initWithFrame:CGRectZero];
+        UIImage *image = [UIImage imageNamed:@"ico_menu_arrow_l"];
+        if (image)
+        {
+            [_imageViewLeftArrow setImage:image];
+        }
+    }
+    return _imageViewLeftArrow;
+}
+
+- (UIImageView *)imageViewRightArrow
+{
+    if (_imageViewRightArrow == nil)
+    {
+        _imageViewRightArrow = [[UIImageView alloc] initWithFrame:CGRectZero];
+        UIImage *image = [UIImage imageNamed:@"ico_menu_arrow_r"];
+        if (image)
+        {
+            [_imageViewRightArrow setImage:image];
+        }
+    }
+    return _imageViewRightArrow;
+}
+
 #pragma mark - Private Methods
 
 - (void)retrieveMainCategoryData
@@ -140,7 +194,6 @@ typedef enum : NSUInteger {
 //        [self setMainCategoryFromCategories:categories];
 //        return;
 //    }
-    
     NSString *apiKey = [CryptoModule sharedModule].apiKey;
     NSString *token = [SHAPIAdapter sharedAdapter].token;
     if (apiKey == nil || token == nil)
@@ -209,7 +262,17 @@ typedef enum : NSUInteger {
 {
     [_arrayMainCategory setArray:categories];
     [_collectionViewCategory reloadData];
-    
+    NSLog(@"contentWidth[%4.2f] frame.width[%4.2f]", self.collectionViewCategory.contentSize.width, self.collectionViewCategory.frame.size.width);
+    if (self.collectionViewCategory.contentSize.width <= self.collectionViewCategory.frame.size.width)
+    {
+        self.imageViewRightArrow.hidden = YES;
+        self.imageViewLeftArrow.hidden = YES;
+    }
+    else
+    {
+        self.imageViewRightArrow.hidden = NO;
+        self.imageViewLeftArrow.hidden = YES;
+    }
     NSIndexPath *firstIndexPath = [NSIndexPath indexPathForRow:0 inSection:0];
     dispatch_async(dispatch_get_main_queue(), ^{
         [_collectionViewCategory selectItemAtIndexPath:firstIndexPath animated:NO scrollPosition:UICollectionViewScrollPositionNone];
@@ -710,6 +773,31 @@ typedef enum : NSUInteger {
     listViewController.layer = nil;
     listViewController.name = nil;
     [self.navigationController pushViewController:listViewController animated:YES];
+}
+
+#pragma mark - UIScrollViewDelegate
+
+- (void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset
+{
+    if (scrollView == self.collectionViewCategory)
+    {
+        if (targetContentOffset->x > 0.0)
+        {
+            self.imageViewLeftArrow.hidden = NO;
+        }
+        else
+        {
+            self.imageViewLeftArrow.hidden = YES;
+        }
+        if (targetContentOffset->x + scrollView.frame.size.width < scrollView.contentSize.width)
+        {
+            self.imageViewRightArrow.hidden = NO;
+        }
+        else
+        {
+            self.imageViewRightArrow.hidden = YES;
+        }
+    }
 }
 
 @end

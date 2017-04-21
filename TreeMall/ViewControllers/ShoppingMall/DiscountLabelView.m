@@ -65,7 +65,7 @@
     if (_labelText == nil)
     {
         _labelText = [[UILabel alloc] initWithFrame:CGRectZero];
-        UIFont *font = [UIFont systemFontOfSize:14.0];
+        UIFont *font = [UIFont systemFontOfSize:12.0];
         [_labelText setFont:font];
         [_labelText setBackgroundColor:[UIColor clearColor]];
         [_labelText setTextColor:[UIColor whiteColor]];
@@ -75,8 +75,15 @@
 
 - (void)setText:(NSString *)text
 {
+//    NSLog(@"_text[%@] text[%@]", _text, text);
     if ([_text isEqualToString:text])
         return;
+    _text = text;
+    if (_text == nil)
+    {
+        self.labelText.text = @"";
+        return;
+    }
     self.labelText.text = _text;
 }
 

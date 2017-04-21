@@ -147,28 +147,28 @@
 
 - (void)refreshSubviews
 {
+    for (UIView *view in _arrayProgressBar)
+    {
+        if (view.superview == nil)
+            break;
+        [view removeFromSuperview];
+    }
+    for (UILabel *label in _arrayLabelStatus)
+    {
+        if (label.superview == nil)
+            break;
+        [label setText:@""];
+        [label removeFromSuperview];
+    }
+    for (UILabel *label in _arrayLabelDateTime)
+    {
+        if (label.superview == nil)
+            break;
+        [label setText:@""];
+        [label removeFromSuperview];
+    }
     if (_arrayProgress == nil || [_arrayProgress count] == 0)
     {
-        for (UIView *view in _arrayProgressBar)
-        {
-            if (view.superview == nil)
-                break;
-            [view removeFromSuperview];
-        }
-        for (UILabel *label in _arrayLabelStatus)
-        {
-            if (label.superview == nil)
-                break;
-            [label setText:@""];
-            [label removeFromSuperview];
-        }
-        for (UILabel *label in _arrayLabelDateTime)
-        {
-            if (label.superview == nil)
-                break;
-            [label setText:@""];
-            [label removeFromSuperview];
-        }
         return;
     }
     for (NSInteger index = 0; index < _stepCount; index++)

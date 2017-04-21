@@ -232,6 +232,25 @@ static NSString *SymphoxAPIParam_payment_mode = @"payment_mode";
 static NSString *SymphoxAPIError_E301 = @"E301";
 static NSString *SymphoxAPIParam_cart_item = @"cart_item";
 static NSString *SymphoxAPIParam_account_result = @"account_result";
+static NSString *SymphoxAPIParam_total_Point = @"total_Point";
+static NSString *SymphoxAPIParam_total_cash = @"total_cash";
+static NSString *SymphoxAPIParam_total_cathay_cash = @"total_cathay_cash";
+static NSString *SymphoxAPIParam_total_ePoint = @"total_ePoint";
+static NSString *SymphoxAPIParam_cathay_cash = @"cathay_cash";
+static NSString *SymphoxAPIParam_cpdt_marketing = @"cpdt_marketing";
+static NSString *SymphoxAPIParam_cpdt_owner_num = @"cpdt_owner_num";
+static NSString *SymphoxAPIParam_group_id = @"group_id";
+static NSString *SymphoxAPIParam_max_sell_qty = @"max_sell_qty";
+static NSString *SymphoxAPIParam_ori_cash = @"ori_cash";
+static NSString *SymphoxAPIParam_ori_point = @"ori_point";
+static NSString *SymphoxAPIParam_payment_mode_list = @"payment_mode_list";
+static NSString *SymphoxAPIParam_cm_id = @"cm_id";
+static NSString *SymphoxAPIParam_coupon_discount = @"coupon_discount";
+static NSString *SymphoxAPIParam_cpoint = @"cpoint";
+static NSString *SymphoxAPIParam_discount_detail_desc = @"discount_detail_desc";
+static NSString *SymphoxAPIParam_discount_type_desc = @"discount_type_desc";
+static NSString *SymphoxAPIParam_eacc_num = @"eacc_num";
+static NSString *SymphoxAPIParam_used_payment_mode = @"used_payment_mode";
 
 typedef enum : NSUInteger {
     TermTypeMemberTerms,

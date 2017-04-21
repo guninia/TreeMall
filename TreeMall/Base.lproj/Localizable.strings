@@ -187,3 +187,16 @@
 "NotEnoughInStock"="Not enough in stock";
 "MultipleProductsUnacceptable"="Multiple product";
 "ProductsRemovedFromCart"="The following products will be removed from cart";
+"ChooseQuantityAndDiscount"="Quantity/Discount";
+"Total_C"="Total:";
+"Quantity"="Quantity";
+"GoingToDeleteProduct_S_"="You're going to delete %@ from cart.";
+"ThisProduct"="This Product";
+"_Q_"="\"%@\"";
+"PleaseLogin"="PleaseLogin";
+"GoingToRemoveLatestSearchList"="Going to remove latest search list.";
+"CannotFindProductId"="Cannot find product identifier";
+"AlreadyInFavorite"="Already in My Favorite";
+"AddToFavoriteSuccess"="Added to My Favorite";
+"NoMatchingProduct"="No matching product";
+"ChangePasswordSuccess"="Change password successfully";

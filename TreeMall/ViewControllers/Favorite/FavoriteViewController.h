@@ -15,5 +15,6 @@
 @property (nonatomic, strong) UITableView *tableViewFavorites;
 @property (nonatomic, strong) NSArray *arrayFavorites;
 @property (nonatomic, assign) BOOL shouldShowLoadingFooter;
+@property (nonatomic, strong) UIButton *buttonEdit;
 
 @end

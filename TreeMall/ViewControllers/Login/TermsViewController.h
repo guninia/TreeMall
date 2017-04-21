@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <DTCoreText.h>
 
 @interface TermsViewController : UIViewController
 
@@ -14,6 +15,6 @@
 
 @property (nonatomic, strong) IBOutlet UILabel *labelTitle;
 @property (nonatomic, strong) IBOutlet UIView *separator;
-@property (nonatomic, strong) IBOutlet UITextView *textViewTerms;
+@property (nonatomic, strong) DTAttributedTextView *textViewTerms;
 
 @end

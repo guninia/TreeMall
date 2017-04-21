@@ -14,6 +14,8 @@
 @property (nonatomic, strong) IBOutlet UICollectionView *collectionViewCategory;
 @property (nonatomic, strong) IBOutlet UITableView *tableViewSubcategory;
 @property (nonatomic, strong) IBOutlet UITableView *tableViewExtraSubcategory;
+@property (nonatomic, strong) IBOutlet UIImageView *imageViewLeftArrow;
+@property (nonatomic, strong) IBOutlet UIImageView *imageViewRightArrow;
 
 @property (nonatomic, strong) NSMutableArray *arrayMainCategory;
 @property (nonatomic, assign) NSInteger selectedMainCategoryIndex;

@@ -121,8 +121,9 @@ typedef enum : NSUInteger {
 - (void)removeAllKeywords;
 
 - (void)setUserGenderByGenderText:(NSString *)genderText;
-- (BOOL)addProductToFavorite:(NSDictionary *)product;
+- (NSString *)addProductToFavorite:(NSDictionary *)product;
 - (NSArray *)favorites;
+- (void)removeProductFromFavorite:(NSInteger)productIndex;
 - (void)retrievePointDataFromObject:(id)object withCompletion:(void (^)(id result, NSError *error))block;
 - (void)retrieveCouponDataFromObject:(id)object forPageIndex:(NSInteger)pageIndex couponState:(CouponState)state sortFactor:(NSString *)factor withSortOrder:(NSString *)order withCompletion:(void (^)(id result, NSError *error))block;
 - (void)logoutUser;
@@ -132,6 +133,7 @@ typedef enum : NSUInteger {
 - (NSMutableDictionary *)purchaseInfoForCartType:(CartType)type;
 - (void)addProduct:(NSDictionary *)product toCartForType:(CartType)type;
 - (void)setPurchaseQuantity:(NSNumber *)quantity forProduct:(NSNumber *)productId inCart:(CartType)cartType;
+- (void)setPurchasePaymentMode:(NSDictionary *)dictionaryPaymentMode forProduct:(NSNumber *)productId inCart:(NSInteger)cartType;
 - (NSString *)nameOfRemovedProductId:(NSNumber *)productIdToRemove inCart:(CartType)type;
 
 

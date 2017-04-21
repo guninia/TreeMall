@@ -33,10 +33,6 @@ static NSInteger MaxTagsNumber = 4;
     {
         _arrayTagsData = nil;
         [self.contentView addSubview:self.viewContainer];
-        for (UILabel *label in self.arrayViewTags)
-        {
-            [self.viewContainer addSubview:label];
-        }
         [self.viewContainer addSubview:self.imageViewProduct];
         [self.viewContainer addSubview:self.labelMarketing];
         [self.viewContainer addSubview:self.labelProductName];
@@ -46,7 +42,12 @@ static NSInteger MaxTagsNumber = 4;
         [self.viewContainer addSubview:self.labelPoint];
         [self.viewContainer addSubview:self.buttonCart];
         [self.viewContainer addSubview:self.viewDiscount];
+        for (UILabel *label in self.arrayViewTags)
+        {
+            [self.viewContainer addSubview:label];
+        }
         self.contentView.backgroundColor = [UIColor colorWithWhite:0.9 alpha:1.0];
+        self.backgroundColor = [UIColor colorWithWhite:0.9 alpha:1.0];
     }
     return self;
 }
@@ -203,7 +204,7 @@ static NSInteger MaxTagsNumber = 4;
         {
             viewSize = self.viewDiscount.imageViewTag.image.size;
         }
-        CGRect frame = CGRectMake(self.imageViewProduct.frame.origin.x - self.viewDiscount.edgeInsets.left, self.imageViewProduct.frame.origin.y, viewSize.width, viewSize.height);
+        CGRect frame = CGRectMake(self.imageViewProduct.frame.origin.x - self.viewDiscount.edgeInsets.left - 7.0, self.imageViewProduct.frame.origin.y, viewSize.width, viewSize.height);
         self.viewDiscount.frame = frame;
     }
 //    NSLog(@"originY = %4.2f", originY);
@@ -364,7 +365,11 @@ static NSInteger MaxTagsNumber = 4;
 
 - (void)setMarketingText:(NSString *)marketingText
 {
-    if (marketingText == nil || [marketingText isEqual:[NSNull null]] || [marketingText length] == 0)
+    if ([marketingText isEqual:[NSNull null]])
+    {
+        marketingText = nil;
+    }
+    if (marketingText == nil || [marketingText length] == 0)
     {
         [self.labelMarketing setHidden:YES];
     }
@@ -383,7 +388,11 @@ static NSInteger MaxTagsNumber = 4;
 
 - (void)setProductName:(NSString *)productName
 {
-    if (productName == nil || [_marketingText isEqual:[NSNull null]] || [productName length] == 0)
+    if ([productName isEqual:[NSNull null]])
+    {
+        productName = nil;
+    }
+    if (productName == nil || [productName length] == 0)
     {
         [self.labelProductName setHidden:YES];
     }
@@ -402,7 +411,11 @@ static NSInteger MaxTagsNumber = 4;
 
 - (void)setPrice:(NSNumber *)price
 {
-    if (price == nil || [price isEqual:[NSNull null]] || [price doubleValue] == 0)
+    if ([price isEqual:[NSNull null]])
+    {
+        price = nil;
+    }
+    if (price == nil || [price doubleValue] == 0)
     {
         [self.labelPrice setHidden:YES];
     }
@@ -425,7 +438,11 @@ static NSInteger MaxTagsNumber = 4;
 
 - (void)setPoint:(NSNumber *)point
 {
-    if (point == nil || [point isEqual:[NSNull null]] || [point doubleValue] == 0)
+    if ([point isEqual:[NSNull null]])
+    {
+        point = nil;
+    }
+    if (point == nil || [point doubleValue] == 0)
     {
         [self.labelPoint setHidden:YES];
     }
@@ -482,7 +499,7 @@ static NSInteger MaxTagsNumber = 4;
     else
     {
         [self.viewDiscount setHidden:NO];
-        if ([discount isKindOfClass:[NSNumber class]] && ([_discount doubleValue] != [discount doubleValue]))
+        if ([discount isKindOfClass:[NSNumber class]])
         {
             NSString *discountString = [NSString stringWithFormat:[LocalizedString F_PercentOff], [discount doubleValue] * 100];
             self.viewDiscount.text = discountString;

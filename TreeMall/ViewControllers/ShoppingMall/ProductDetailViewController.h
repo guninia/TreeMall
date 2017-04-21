@@ -52,5 +52,7 @@
 @property (nonatomic, strong) ProductDetailBottomBar *bottomBar;
 @property (nonatomic, strong) NSMutableArray *arrayViewNotice;
 @property (nonatomic, strong) NSMutableArray *arrayCartType;
+@property (nonatomic, strong) NSMutableArray *arrayIntroImageView;
+@property (nonatomic, strong) NSMutableArray *arraySpecImageView;
 
 @end

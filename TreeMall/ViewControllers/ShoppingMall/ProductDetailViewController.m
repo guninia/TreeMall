@@ -14,6 +14,7 @@
 #import "CryptoModule.h"
 #import "SHAPIAdapter.h"
 #import "UIImageView+WebCache.h"
+#import <UIButton+WebCache.h>
 
 @interface ProductDetailViewController ()
 
@@ -26,9 +27,12 @@
 - (BOOL)processTermsData:(id)data;
 - (void)showCartTypeSheet;
 - (void)addProduct:(NSDictionary *)dictionaryProduct toCartForType:(CartType)type;
+- (NSMutableDictionary *)dictionaryCommonFromDetail:(NSDictionary *)dictionary;
 
 
 - (void)buttonLinkPressed:(id)sender;
+- (void)buttonIntroImagePressed:(id)sender;
+- (void)buttonSpecImagePressed:(id)sender;
 - (void)linkLongPressed:(UILongPressGestureRecognizer *)gestureRecognizer;
 
 @end
@@ -492,9 +496,27 @@
 {
     if (_arrayCartType == nil)
     {
-        _arrayCartType = [NSMutableArray arrayWithCapacity:0];
+        _arrayCartType = [[NSMutableArray alloc] initWithCapacity:0];
     }
     return _arrayCartType;
+}
+
+- (NSMutableArray *)arrayIntroImageView
+{
+    if (_arrayIntroImageView == nil)
+    {
+        _arrayIntroImageView = [[NSMutableArray alloc] initWithCapacity:0];
+    }
+    return _arrayIntroImageView;
+}
+
+- (NSMutableArray *)arraySpecImageView
+{
+    if (_arraySpecImageView == nil)
+    {
+        _arraySpecImageView = [[NSMutableArray alloc] initWithCapacity:0];
+    }
+    return _arraySpecImageView;
 }
 
 #pragma mark - Private Methods
@@ -519,8 +541,8 @@
             if ([resultObject isKindOfClass:[NSData class]])
             {
                 NSData *data = (NSData *)resultObject;
-//                NSString *string = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-//                NSLog(@"retrieveDataForIdentifer:\n%@", string);
+                NSString *string = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+                NSLog(@"retrieveDataForIdentifer:\n%@", string);
                 if ([weakSelf processProductData:data])
                 {
                     dispatch_async(dispatch_get_main_queue(), ^{
@@ -784,7 +806,22 @@
         CGSize size = [self.labelIntro suggestedFrameSizeToFitEntireStringConstraintedToWidth:maxWidth];
         CGRect frame = CGRectMake(originX, originY, maxWidth, ceil(size.height));
         self.labelIntro.frame = frame;
-        originY = self.labelIntro.frame.origin.y + self.labelIntro.frame.size.height + 5.0;
+        originY = self.labelIntro.frame.origin.y + self.labelIntro.frame.size.height;
+    }
+    
+    if ([self.arrayIntroImageView count] > 0)
+    {
+        CGSize size = CGSizeMake(self.scrollView.frame.size.width, self.scrollView.frame.size.width);
+        for (UIButton *button in self.arrayIntroImageView)
+        {
+            button.frame = CGRectMake(0.0, originY, size.width, size.height);
+            originY = button.frame.origin.y + button.frame.size.height;
+        }
+        originY += 5.0;
+    }
+    else
+    {
+        originY += 5.0;
     }
     
     if (self.viewSpecTitle && [self.viewSpecTitle isHidden] == NO)
@@ -801,6 +838,21 @@
         CGRect frame = CGRectMake(originX, originY, maxWidth, ceil(size.height));
         self.labelSpec.frame = frame;
         originY = self.labelSpec.frame.origin.y + self.labelSpec.frame.size.height + 5.0;
+    }
+    
+    if ([self.arraySpecImageView count] > 0)
+    {
+        CGSize size = CGSizeMake(self.scrollView.frame.size.width, self.scrollView.frame.size.width);
+        for (UIButton *button in self.arraySpecImageView)
+        {
+            button.frame = CGRectMake(0.0, originY, size.width, size.height);
+            originY = button.frame.origin.y + button.frame.size.height;
+        }
+        originY += 5.0;
+    }
+    else
+    {
+        originY += 5.0;
     }
     
     if (self.viewRemarkTitle && [self.viewRemarkTitle isHidden] == NO)
@@ -1092,6 +1144,22 @@
                     shouldShow = YES;
                 }
             }
+            NSArray *arrayImage = [dictionary objectForKey:SymphoxAPIParam_img_url];
+            if (arrayImage && [arrayImage isEqual:[NSNull null]] == NO && [arrayImage count] > 0)
+            {
+                UIImage *transparent = [UIImage imageNamed:@"transparent"];
+                for (NSInteger index = 0; index < [arrayImage count]; index++)
+                {
+                    NSString *imagePath = [arrayImage objectAtIndex:index];
+                    UIButton *button = [[UIButton alloc] initWithFrame:CGRectZero];
+                    button.tag = index;
+                    [button.imageView setContentMode:UIViewContentModeScaleAspectFill];
+                    [button sd_setImageWithURL:[NSURL URLWithString:imagePath] forState:UIControlStateNormal placeholderImage:transparent];
+                    [button addTarget:self action:@selector(buttonIntroImagePressed:) forControlEvents:UIControlEventTouchUpInside];
+                    [self.scrollView addSubview:button];
+                    [self.arrayIntroImageView addObject:button];
+                }
+            }
         }
         [self.viewIntroTitle setHidden:!shouldShow];
         [self.labelIntro setHidden:!shouldShow];
@@ -1112,6 +1180,22 @@
                 {
                     self.labelSpec.attributedString = attrString;
                     shouldShow = YES;
+                }
+            }
+            NSArray *arrayImage = [dictionary objectForKey:SymphoxAPIParam_img_url];
+            if (arrayImage && [arrayImage isEqual:[NSNull null]] == NO && [arrayImage count] > 0)
+            {
+                UIImage *transparent = [UIImage imageNamed:@"transparent"];
+                for (NSInteger index = 0; index < [arrayImage count]; index++)
+                {
+                    NSString *imagePath = [arrayImage objectAtIndex:index];
+                    UIButton *button = [[UIButton alloc] initWithFrame:CGRectZero];
+                    button.tag = index;
+                    [button.imageView setContentMode:UIViewContentModeScaleAspectFill];
+                    [button sd_setImageWithURL:[NSURL URLWithString:imagePath] forState:UIControlStateNormal placeholderImage:transparent];
+                    [button addTarget:self action:@selector(buttonSpecImagePressed:) forControlEvents:UIControlEventTouchUpInside];
+                    [self.scrollView addSubview:button];
+                    [self.arraySpecImageView addObject:button];
                 }
             }
         }
@@ -1338,7 +1422,15 @@
         }
         __weak ProductDetailViewController *weakSelf = self;
         UIAlertAction *action = [UIAlertAction actionWithTitle:title style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
-            [weakSelf addProduct:weakSelf.dictionaryDetail toCartForType:type];
+            NSDictionary *product = weakSelf.dictionaryCommon;
+            if (product == nil)
+            {
+                product = [weakSelf dictionaryCommonFromDetail:weakSelf.dictionaryDetail];
+            }
+            if (product)
+            {
+                [weakSelf addProduct:product toCartForType:type];
+            }
         }];
         [alertController addAction:action];
     }
@@ -1350,6 +1442,168 @@
 - (void)addProduct:(NSDictionary *)dictionaryProduct toCartForType:(CartType)type
 {
     [[TMInfoManager sharedManager] addProduct:dictionaryProduct toCartForType:type];
+}
+
+- (NSMutableDictionary *)dictionaryCommonFromDetail:(NSDictionary *)dictionary
+{
+    if (dictionary == nil)
+        return nil;
+    NSMutableDictionary *dictionaryCommon = [NSMutableDictionary dictionary];
+    NSNumber *cpdt_num = [dictionary objectForKey:SymphoxAPIParam_cpdt_num];
+    if (cpdt_num == nil)
+        return nil;
+    [dictionaryCommon setObject:cpdt_num forKey:SymphoxAPIParam_cpdt_num];
+    NSNumber *cpro_price = [dictionary objectForKey:SymphoxAPIParam_market_price];
+    if (cpro_price)
+    {
+        [dictionaryCommon setObject:cpro_price forKey:SymphoxAPIParam_cpro_price];
+    }
+    NSString *cpdt_name = [dictionary objectForKey:SymphoxAPIParam_name];
+    if (cpdt_name)
+    {
+        [dictionaryCommon setObject:cpdt_name forKey:SymphoxAPIParam_cpdt_name];
+    }
+    NSString *market_name = [dictionary objectForKey:SymphoxAPIParam_market_name];
+    if (market_name)
+    {
+        [dictionaryCommon setObject:market_name forKey:SymphoxAPIParam_market_name];
+    }
+    NSString *quick = [dictionary objectForKey:SymphoxAPIParam_is_quick];
+    if (quick && [quick isKindOfClass:[NSString class]])
+    {
+        NSNumber *numberQuick = [NSNumber numberWithBool:[quick boolValue]];
+        [dictionaryCommon setObject:numberQuick forKey:SymphoxAPIParam_quick];
+    }
+    
+    NSNumber *point01 = nil;
+    NSNumber *price02 = nil;
+    NSNumber *point02 = nil;
+    NSNumber *price03 = nil;
+    NSDictionary *price = [dictionary objectForKey:SymphoxAPIParam_price];
+    if (price && [price isEqual:[NSNull null]] == NO)
+    {
+        NSDictionary *purePoint = [price objectForKey:SymphoxAPIParam_01];
+        if (purePoint && [purePoint isEqual:[NSNull null]] == NO)
+        {
+            point01 = [purePoint objectForKey:SymphoxAPIParam_point];
+        }
+        NSDictionary *pointAndCash = [price objectForKey:SymphoxAPIParam_02];
+        if (pointAndCash && [pointAndCash isEqual:[NSNull null]] == NO)
+        {
+            price02 = [pointAndCash objectForKey:SymphoxAPIParam_cash];
+            point02 = [pointAndCash objectForKey:SymphoxAPIParam_point];
+        }
+        NSDictionary *pureCash = [price objectForKey:SymphoxAPIParam_03];
+        if (pureCash && [pureCash isEqual:[NSNull null]] == NO)
+        {
+            price03 = [pureCash objectForKey:SymphoxAPIParam_cash];
+        }
+    }
+    if (point01)
+    {
+        [dictionaryCommon setObject:point01 forKey:SymphoxAPIParam_point01];
+    }
+    if (price02)
+    {
+        [dictionaryCommon setObject:price02 forKey:SymphoxAPIParam_price02];
+    }
+    if (point02)
+    {
+        [dictionaryCommon setObject:point02 forKey:SymphoxAPIParam_point02];
+    }
+    if (price03)
+    {
+        [dictionaryCommon setObject:price03 forKey:SymphoxAPIParam_price03];
+    }
+    
+    NSArray *arrayImagePath = [dictionary objectForKey:SymphoxAPIParam_img_url];
+    if (arrayImagePath && [arrayImagePath isEqual:[NSNull null]] == NO && [arrayImagePath count] > 0)
+    {
+        NSString *prod_pic_url = [arrayImagePath objectAtIndex:0];
+        [dictionaryCommon setObject:prod_pic_url forKey:SymphoxAPIParam_prod_pic_url];
+    }
+    
+    NSString *is_delivery_store = [dictionary objectForKey:SymphoxAPIParam_is_store];
+    if (is_delivery_store)
+    {
+        [dictionaryCommon setObject:is_delivery_store forKey:SymphoxAPIParam_is_delivery_store];
+    }
+    
+    NSArray *shopping = [dictionary objectForKey:SymphoxAPIParam_shopping];
+    NSNumber *normal_cart = [NSNumber numberWithBool:NO];
+    NSNumber *to_store_cart = [NSNumber numberWithBool:NO];
+    NSNumber *fast_delivery_cart = [NSNumber numberWithBool:NO];
+    NSNumber *single_shopping_cart = [NSNumber numberWithBool:NO];
+    if (shopping && [shopping isKindOfClass:[NSArray class]])
+    {
+        for (NSDictionary *single in shopping)
+        {
+            NSNumber *numberType = [single objectForKey:SymphoxAPIParam_type];
+            switch ([numberType integerValue]) {
+                case 0:
+                {
+                    normal_cart = [NSNumber numberWithBool:YES];
+                }
+                    break;
+                case 1:
+                {
+                    to_store_cart = [NSNumber numberWithBool:YES];
+                }
+                    break;
+                case 2:
+                {
+                    fast_delivery_cart = [NSNumber numberWithBool:YES];
+                }
+                    break;
+                case 4:
+                {
+                    single_shopping_cart = [NSNumber numberWithBool:YES];
+                }
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+    [dictionaryCommon setObject:normal_cart forKey:SymphoxAPIParam_normal_cart];
+    [dictionaryCommon setObject:to_store_cart forKey:SymphoxAPIParam_to_store_cart];
+    [dictionaryCommon setObject:fast_delivery_cart forKey:SymphoxAPIParam_fast_delivery_cart];
+    [dictionaryCommon setObject:single_shopping_cart forKey:SymphoxAPIParam_single_shopping_cart];
+    
+    NSNumber *freepoint = [dictionary objectForKey:SymphoxAPIParam_free_point];
+    if (freepoint)
+    {
+        [dictionaryCommon setObject:freepoint forKey:SymphoxAPIParam_freepoint];
+    }
+    
+    NSMutableArray *seekInstallmentList = [NSMutableArray array];
+    NSArray *installment = [dictionary objectForKey:SymphoxAPIParam_installment];
+    if (installment && [installment isKindOfClass:[NSArray class]])
+    {
+        for (NSDictionary *single in installment)
+        {
+            NSMutableDictionary *singleInstallment = [NSMutableDictionary dictionary];
+            NSNumber *installment_num = [single objectForKey:SymphoxAPIParam_term];
+            if (installment_num)
+            {
+                [singleInstallment setObject:installment_num forKey:SymphoxAPIParam_installment_num];
+            }
+            NSNumber *installment_price = [single objectForKey:SymphoxAPIParam_price];
+            if (installment_price)
+            {
+                [singleInstallment setObject:installment_price forKey:SymphoxAPIParam_installment_price];
+            }
+            NSNumber *cathaycard_only = [single objectForKey:SymphoxAPIParam_cathay_only];
+            if (cathaycard_only)
+            {
+                [singleInstallment setObject:cathaycard_only forKey:SymphoxAPIParam_cathaycard_only];
+            }
+            [seekInstallmentList addObject:singleInstallment];
+        }
+    }
+    [dictionaryCommon setObject:seekInstallmentList forKey:SymphoxAPIParam_seekInstallmentList];
+    
+    return dictionaryCommon;
 }
 
 #pragma mark - Actions
@@ -1366,6 +1620,26 @@
     {
         [[UIApplication sharedApplication] openURL:url];
     }
+}
+
+- (void)buttonIntroImagePressed:(id)sender
+{
+    if (sender == nil)
+        return;
+    UIButton *button = (UIButton *)sender;
+    UIImage *image = [button imageForState:UIControlStateNormal];
+    if (image == nil)
+        return;
+}
+
+- (void)buttonSpecImagePressed:(id)sender
+{
+    if (sender == nil)
+        return;
+    UIButton *button = (UIButton *)sender;
+    UIImage *image = [button imageForState:UIControlStateNormal];
+    if (image == nil)
+        return;
 }
 
 - (void)linkLongPressed:(UILongPressGestureRecognizer *)gestureRecognizer
@@ -1401,9 +1675,22 @@
 
 - (void)productDetailBottomBar:(ProductDetailBottomBar *)bar didSelectFavoriteBySender:(id)sender
 {
-    if (self.dictionaryCommon)
+    NSString *message = nil;
+    NSDictionary *product = self.dictionaryCommon;
+    if (product == nil)
     {
-        [[TMInfoManager sharedManager] addProductToFavorite:self.dictionaryCommon];
+        product = [self dictionaryCommonFromDetail:self.dictionaryDetail];
+    }
+    if (product)
+    {
+        message = [[TMInfoManager sharedManager] addProductToFavorite:product];
+    }
+    if (message)
+    {
+        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:message preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction *action = [UIAlertAction actionWithTitle:[LocalizedString Confirm] style:UIAlertActionStyleDefault handler:nil];
+        [alertController addAction:action];
+        [self presentViewController:alertController animated:YES completion:nil];
     }
 }
 

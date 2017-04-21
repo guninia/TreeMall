@@ -38,7 +38,8 @@
     
     [_labelTitle setTextColor:TMMainColor];
     
-    [_textViewTerms setScrollEnabled:YES];
+    [self.view addSubview:self.textViewTerms];
+//    [_textViewTerms setScrollEnabled:YES];
     
     [self retrieveData];
 }
@@ -57,6 +58,31 @@
     // Pass the selected object to the new view controller.
 }
 */
+
+#pragma mark - Override
+
+- (void)viewDidLayoutSubviews
+{
+    [super viewDidLayoutSubviews];
+    
+    CGFloat marginH = 10.0;
+    CGFloat intervalV = 10.0;
+    CGFloat originY = CGRectGetMaxY(self.separator.frame) + intervalV;
+    if (self.textViewTerms)
+    {
+        CGRect frame = CGRectMake(marginH, originY, self.view.frame.size.width - marginH * 2, self.view.frame.size.height - originY);
+        self.textViewTerms.frame = frame;
+    }
+}
+
+- (DTAttributedTextView *)textViewTerms
+{
+    if (_textViewTerms == nil)
+    {
+        _textViewTerms = [[DTAttributedTextView alloc] initWithFrame:CGRectZero];
+    }
+    return _textViewTerms;
+}
 
 #pragma mark - Private Methods
 
@@ -84,6 +110,46 @@
     }];
 }
 
+- (NSAttributedString *)attributedStringFromHTML:(NSString *)html forSnippetUsingiOS6Attributes:(BOOL)useiOS6Attributes
+{
+    // Load HTML data
+    if (html == nil)
+        return nil;
+    NSData *data = [html dataUsingEncoding:NSUTF8StringEncoding];
+    
+    // Create attributed string from HTML
+    CGSize maxImageSize = CGSizeMake(self.view.bounds.size.width - 20.0, self.view.bounds.size.height - 20.0);
+    
+    // example for setting a willFlushCallback, that gets called before elements are written to the generated attributed string
+    void (^callBackBlock)(DTHTMLElement *element) = ^(DTHTMLElement *element) {
+        
+        // the block is being called for an entire paragraph, so we check the individual elements
+        
+        for (DTHTMLElement *oneChildElement in element.childNodes)
+        {
+            // if an element is larger than twice the font size put it in it's own block
+            if (oneChildElement.displayStyle == DTHTMLElementDisplayStyleInline && oneChildElement.textAttachment.displaySize.height > 2.0 * oneChildElement.fontDescriptor.pointSize)
+            {
+                oneChildElement.displayStyle = DTHTMLElementDisplayStyleBlock;
+                oneChildElement.paragraphStyle.minimumLineHeight = element.textAttachment.displaySize.height;
+                oneChildElement.paragraphStyle.maximumLineHeight = element.textAttachment.displaySize.height;
+            }
+        }
+    };
+    
+    NSMutableDictionary *options = [NSMutableDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithFloat:1.0], NSTextSizeMultiplierDocumentOption, [NSValue valueWithCGSize:maxImageSize], DTMaxImageSize,
+                                    @"Times New Roman", DTDefaultFontFamily,  @"purple", DTDefaultLinkColor, @"red", DTDefaultLinkHighlightColor, callBackBlock, DTWillFlushBlockCallBack, nil];
+    
+    if (useiOS6Attributes)
+    {
+        [options setObject:[NSNumber numberWithBool:YES] forKey:DTUseiOS6Attributes];
+    }
+    
+    NSAttributedString *string = [[NSAttributedString alloc] initWithHTMLData:data options:options documentAttributes:NULL];
+    
+    return string;
+}
+
 - (BOOL)processData:(id)data
 {
     BOOL success = NO;
@@ -103,7 +169,7 @@
                     NSString *content = [dictionary objectForKey:SymphoxAPIParam_content];
                     if (content)
                     {
-                        [_textViewTerms setText:content];
+                        [_textViewTerms setAttributedString:[self attributedStringFromHTML:content forSnippetUsingiOS6Attributes:NO]];
                         success = YES;
                     }
                 }
