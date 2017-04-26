@@ -44,8 +44,8 @@ typedef enum : NSUInteger {
 typedef enum : NSUInteger {
     CartTypeStart,
     CartTypeCommonDelivery = CartTypeStart,
-    CartTypeFastDelivery,
     CartTypeStorePickup,
+    CartTypeFastDelivery,
     CartTypeTotal
 } CartType;
 
@@ -134,6 +134,7 @@ typedef enum : NSUInteger {
 - (void)addProduct:(NSDictionary *)product toCartForType:(CartType)type;
 - (void)setPurchaseQuantity:(NSNumber *)quantity forProduct:(NSNumber *)productId inCart:(CartType)cartType;
 - (void)setPurchasePaymentMode:(NSDictionary *)dictionaryPaymentMode forProduct:(NSNumber *)productId inCart:(NSInteger)cartType;
+- (void)setPaymentModeDescription:(NSString *)description forProduct:(NSNumber *)productId inCart:(CartType)cartType;
 - (NSString *)nameOfRemovedProductId:(NSNumber *)productIdToRemove inCart:(CartType)type;
 
 

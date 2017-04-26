@@ -30,6 +30,7 @@
 		6819AB521E4981A900735EA3 /* DiscountLabelView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6819AB511E4981A900735EA3 /* DiscountLabelView.m */; };
 		681FC3371E5C333B00AC11CB /* ImageTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 681FC3361E5C333B00AC11CB /* ImageTextView.m */; };
 		681FC33B1E5C3A8700AC11CB /* ProductDetailSectionTitleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 681FC33A1E5C3A8700AC11CB /* ProductDetailSectionTitleView.m */; };
+		6826C0191EAF3CBC00921ADC /* ExchangeDescriptionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6826C0181EAF3CBC00921ADC /* ExchangeDescriptionViewController.m */; };
 		6826E9E51E5BE52E001E572A /* BorderedDoubleLabelView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6826E9E41E5BE52E001E572A /* BorderedDoubleLabelView.m */; };
 		6826E9EA1E5BF044001E572A /* ImageTitleButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 6826E9E91E5BF044001E572A /* ImageTitleButton.m */; };
 		685939AC1E1F49DF00351FFB /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 685939AB1E1F49DF00351FFB /* main.m */; };
@@ -55,6 +56,8 @@
 		6887999F1E5AD12B00495A77 /* ProductDetailImageCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6887999E1E5AD12B00495A77 /* ProductDetailImageCollectionViewCell.m */; };
 		688EF5F01E5D3EF20047E2DC /* MemberTitleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 688EF5EF1E5D3EF20047E2DC /* MemberTitleView.m */; };
 		688EF5F31E5D474C0047E2DC /* MemberPointView.m in Sources */ = {isa = PBXBuildFile; fileRef = 688EF5F21E5D474C0047E2DC /* MemberPointView.m */; };
+		689054D11EAEE9BB0037CED9 /* PaymentTypeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 689054CF1EAEE9BB0037CED9 /* PaymentTypeViewController.m */; };
+		689054D21EAEE9BB0037CED9 /* PaymentTypeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 689054D01EAEE9BB0037CED9 /* PaymentTypeViewController.xib */; };
 		6890650E1E23334400E5CB26 /* EntranceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6890650C1E23334400E5CB26 /* EntranceViewController.m */; };
 		6890650F1E23334400E5CB26 /* EntranceViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6890650D1E23334400E5CB26 /* EntranceViewController.xib */; };
 		689065141E23368100E5CB26 /* ShoppingMallViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 689065121E23368100E5CB26 /* ShoppingMallViewController.m */; };
@@ -84,6 +87,7 @@
 		68987D9A1E8510800077A62B /* VerticalImageTextButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 68987D991E8510800077A62B /* VerticalImageTextButton.m */; };
 		689929D01E821D96001EDA0C /* CircularSideLabelView.m in Sources */ = {isa = PBXBuildFile; fileRef = 689929CF1E821D96001EDA0C /* CircularSideLabelView.m */; };
 		689F664A1E5AC56400CC3664 /* ProductDetailBottomBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 689F66491E5AC56400CC3664 /* ProductDetailBottomBar.m */; };
+		68A1FE951EB04B670058ABED /* InstallmentDescriptionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68A1FE941EB04B670058ABED /* InstallmentDescriptionViewController.m */; };
 		68A8279A1E4D9C6F00E63552 /* FTPopMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 68A827951E4D9C6F00E63552 /* FTPopMenu.m */; };
 		68A8279B1E4D9C6F00E63552 /* FTPopTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68A827971E4D9C6F00E63552 /* FTPopTableViewController.m */; };
 		68A8279C1E4D9C6F00E63552 /* UIViewController+FTPopMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 68A827991E4D9C6F00E63552 /* UIViewController+FTPopMenu.m */; };
@@ -119,6 +123,11 @@
 		68CA36B81E23722F00A70BCC /* EntranceMemberPromoteHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 68CA36B71E23722F00A70BCC /* EntranceMemberPromoteHeader.m */; };
 		68CA36BD1E23880400A70BCC /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68CA36BB1E23880400A70BCC /* LoginViewController.m */; };
 		68CA36BE1E23880400A70BCC /* LoginViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 68CA36BC1E23880400A70BCC /* LoginViewController.xib */; };
+		68CE49851EADAD4E008F77D7 /* SHPickerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 68CE49841EADAD4E008F77D7 /* SHPickerView.m */; };
+		68CE49891EADD283008F77D7 /* DiscountViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68CE49871EADD283008F77D7 /* DiscountViewController.m */; };
+		68CE498A1EADD283008F77D7 /* DiscountViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 68CE49881EADD283008F77D7 /* DiscountViewController.xib */; };
+		68CE498D1EADD41B008F77D7 /* DiscountTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 68CE498C1EADD41B008F77D7 /* DiscountTableViewCell.m */; };
+		68CE49901EADD471008F77D7 /* DiscountHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 68CE498F1EADD471008F77D7 /* DiscountHeaderView.m */; };
 		68CF5E601E38ABF400341EF1 /* SubcategoryTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 68CF5E5F1E38ABF400341EF1 /* SubcategoryTableViewCell.m */; };
 		68CF5E631E38AC5900341EF1 /* ExtraSubcategoryTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 68CF5E621E38AC5900341EF1 /* ExtraSubcategoryTableViewCell.m */; };
 		68D7518B1E80E03F00487088 /* OrderDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68D751891E80E03F00487088 /* OrderDetailViewController.m */; };
@@ -195,6 +204,8 @@
 		681FC3361E5C333B00AC11CB /* ImageTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ImageTextView.m; path = Component/ImageTextView/ImageTextView.m; sourceTree = "<group>"; };
 		681FC3391E5C3A8700AC11CB /* ProductDetailSectionTitleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ProductDetailSectionTitleView.h; path = ViewControllers/ShoppingMall/ProductDetailSectionTitleView.h; sourceTree = "<group>"; };
 		681FC33A1E5C3A8700AC11CB /* ProductDetailSectionTitleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ProductDetailSectionTitleView.m; path = ViewControllers/ShoppingMall/ProductDetailSectionTitleView.m; sourceTree = "<group>"; };
+		6826C0171EAF3CBC00921ADC /* ExchangeDescriptionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ExchangeDescriptionViewController.h; path = ViewControllers/ShoppingMall/ExchangeDescriptionViewController.h; sourceTree = "<group>"; };
+		6826C0181EAF3CBC00921ADC /* ExchangeDescriptionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ExchangeDescriptionViewController.m; path = ViewControllers/ShoppingMall/ExchangeDescriptionViewController.m; sourceTree = "<group>"; };
 		6826E9E31E5BE52E001E572A /* BorderedDoubleLabelView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BorderedDoubleLabelView.h; path = Component/BorderedDoubleLabelView/BorderedDoubleLabelView.h; sourceTree = "<group>"; };
 		6826E9E41E5BE52E001E572A /* BorderedDoubleLabelView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BorderedDoubleLabelView.m; path = Component/BorderedDoubleLabelView/BorderedDoubleLabelView.m; sourceTree = "<group>"; };
 		6826E9E81E5BF044001E572A /* ImageTitleButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ImageTitleButton.h; path = Component/ImageTitleButton/ImageTitleButton.h; sourceTree = "<group>"; };
@@ -244,6 +255,9 @@
 		688EF5EF1E5D3EF20047E2DC /* MemberTitleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MemberTitleView.m; path = ViewControllers/Member/MemberTitleView.m; sourceTree = "<group>"; };
 		688EF5F11E5D474C0047E2DC /* MemberPointView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MemberPointView.h; path = ViewControllers/Member/MemberPointView.h; sourceTree = "<group>"; };
 		688EF5F21E5D474C0047E2DC /* MemberPointView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MemberPointView.m; path = ViewControllers/Member/MemberPointView.m; sourceTree = "<group>"; };
+		689054CE1EAEE9BB0037CED9 /* PaymentTypeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PaymentTypeViewController.h; path = ViewControllers/Cart/PaymentTypeViewController.h; sourceTree = "<group>"; };
+		689054CF1EAEE9BB0037CED9 /* PaymentTypeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PaymentTypeViewController.m; path = ViewControllers/Cart/PaymentTypeViewController.m; sourceTree = "<group>"; };
+		689054D01EAEE9BB0037CED9 /* PaymentTypeViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = PaymentTypeViewController.xib; path = ViewControllers/Cart/PaymentTypeViewController.xib; sourceTree = "<group>"; };
 		6890650B1E23334400E5CB26 /* EntranceViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EntranceViewController.h; path = ViewControllers/Entrance/EntranceViewController.h; sourceTree = "<group>"; };
 		6890650C1E23334400E5CB26 /* EntranceViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EntranceViewController.m; path = ViewControllers/Entrance/EntranceViewController.m; sourceTree = "<group>"; };
 		6890650D1E23334400E5CB26 /* EntranceViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = EntranceViewController.xib; path = ViewControllers/Entrance/EntranceViewController.xib; sourceTree = "<group>"; };
@@ -292,6 +306,8 @@
 		689929CF1E821D96001EDA0C /* CircularSideLabelView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CircularSideLabelView.m; path = Component/CircularSideLabelView/CircularSideLabelView.m; sourceTree = "<group>"; };
 		689F66481E5AC56400CC3664 /* ProductDetailBottomBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ProductDetailBottomBar.h; path = ViewControllers/ShoppingMall/ProductDetailBottomBar.h; sourceTree = "<group>"; };
 		689F66491E5AC56400CC3664 /* ProductDetailBottomBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ProductDetailBottomBar.m; path = ViewControllers/ShoppingMall/ProductDetailBottomBar.m; sourceTree = "<group>"; };
+		68A1FE931EB04B670058ABED /* InstallmentDescriptionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = InstallmentDescriptionViewController.h; path = ViewControllers/ShoppingMall/InstallmentDescriptionViewController.h; sourceTree = "<group>"; };
+		68A1FE941EB04B670058ABED /* InstallmentDescriptionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = InstallmentDescriptionViewController.m; path = ViewControllers/ShoppingMall/InstallmentDescriptionViewController.m; sourceTree = "<group>"; };
 		68A827941E4D9C6F00E63552 /* FTPopMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FTPopMenu.h; sourceTree = "<group>"; };
 		68A827951E4D9C6F00E63552 /* FTPopMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FTPopMenu.m; sourceTree = "<group>"; };
 		68A827961E4D9C6F00E63552 /* FTPopTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FTPopTableViewController.h; sourceTree = "<group>"; };
@@ -359,6 +375,15 @@
 		68CA36BA1E23880400A70BCC /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LoginViewController.h; path = ViewControllers/Login/LoginViewController.h; sourceTree = "<group>"; };
 		68CA36BB1E23880400A70BCC /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LoginViewController.m; path = ViewControllers/Login/LoginViewController.m; sourceTree = "<group>"; };
 		68CA36BC1E23880400A70BCC /* LoginViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = LoginViewController.xib; path = ViewControllers/Login/LoginViewController.xib; sourceTree = "<group>"; };
+		68CE49831EADAD4E008F77D7 /* SHPickerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SHPickerView.h; path = Component/SHPickerView/SHPickerView.h; sourceTree = "<group>"; };
+		68CE49841EADAD4E008F77D7 /* SHPickerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SHPickerView.m; path = Component/SHPickerView/SHPickerView.m; sourceTree = "<group>"; };
+		68CE49861EADD283008F77D7 /* DiscountViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DiscountViewController.h; path = ViewControllers/Cart/DiscountViewController.h; sourceTree = "<group>"; };
+		68CE49871EADD283008F77D7 /* DiscountViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DiscountViewController.m; path = ViewControllers/Cart/DiscountViewController.m; sourceTree = "<group>"; };
+		68CE49881EADD283008F77D7 /* DiscountViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = DiscountViewController.xib; path = ViewControllers/Cart/DiscountViewController.xib; sourceTree = "<group>"; };
+		68CE498B1EADD41B008F77D7 /* DiscountTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DiscountTableViewCell.h; path = ViewControllers/Cart/DiscountTableViewCell.h; sourceTree = "<group>"; };
+		68CE498C1EADD41B008F77D7 /* DiscountTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DiscountTableViewCell.m; path = ViewControllers/Cart/DiscountTableViewCell.m; sourceTree = "<group>"; };
+		68CE498E1EADD471008F77D7 /* DiscountHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DiscountHeaderView.h; path = ViewControllers/Cart/DiscountHeaderView.h; sourceTree = "<group>"; };
+		68CE498F1EADD471008F77D7 /* DiscountHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DiscountHeaderView.m; path = ViewControllers/Cart/DiscountHeaderView.m; sourceTree = "<group>"; };
 		68CF5E5E1E38ABF400341EF1 /* SubcategoryTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SubcategoryTableViewCell.h; path = ViewControllers/ShoppingMall/SubcategoryTableViewCell.h; sourceTree = "<group>"; };
 		68CF5E5F1E38ABF400341EF1 /* SubcategoryTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SubcategoryTableViewCell.m; path = ViewControllers/ShoppingMall/SubcategoryTableViewCell.m; sourceTree = "<group>"; };
 		68CF5E611E38AC5900341EF1 /* ExtraSubcategoryTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ExtraSubcategoryTableViewCell.h; path = ViewControllers/ShoppingMall/ExtraSubcategoryTableViewCell.h; sourceTree = "<group>"; };
@@ -725,6 +750,10 @@
 				6887999E1E5AD12B00495A77 /* ProductDetailImageCollectionViewCell.m */,
 				681FC3391E5C3A8700AC11CB /* ProductDetailSectionTitleView.h */,
 				681FC33A1E5C3A8700AC11CB /* ProductDetailSectionTitleView.m */,
+				6826C0171EAF3CBC00921ADC /* ExchangeDescriptionViewController.h */,
+				6826C0181EAF3CBC00921ADC /* ExchangeDescriptionViewController.m */,
+				68A1FE931EB04B670058ABED /* InstallmentDescriptionViewController.h */,
+				68A1FE941EB04B670058ABED /* InstallmentDescriptionViewController.m */,
 			);
 			name = ShoppingMall;
 			sourceTree = "<group>";
@@ -739,6 +768,16 @@
 				689678AE1E8BB73A00669A22 /* LabelButtonView.m */,
 				689678B01E8BBC1500669A22 /* CartProductTableViewCell.h */,
 				689678B11E8BBC1500669A22 /* CartProductTableViewCell.m */,
+				68CE49861EADD283008F77D7 /* DiscountViewController.h */,
+				68CE49871EADD283008F77D7 /* DiscountViewController.m */,
+				68CE49881EADD283008F77D7 /* DiscountViewController.xib */,
+				68CE498B1EADD41B008F77D7 /* DiscountTableViewCell.h */,
+				68CE498C1EADD41B008F77D7 /* DiscountTableViewCell.m */,
+				68CE498E1EADD471008F77D7 /* DiscountHeaderView.h */,
+				68CE498F1EADD471008F77D7 /* DiscountHeaderView.m */,
+				689054CE1EAEE9BB0037CED9 /* PaymentTypeViewController.h */,
+				689054CF1EAEE9BB0037CED9 /* PaymentTypeViewController.m */,
+				689054D01EAEE9BB0037CED9 /* PaymentTypeViewController.xib */,
 			);
 			name = Cart;
 			sourceTree = "<group>";
@@ -896,6 +935,7 @@
 		68B68FF01E2483D600DCCF29 /* Component */ = {
 			isa = PBXGroup;
 			children = (
+				68CE49821EADAD1E008F77D7 /* SHPickerView */,
 				68987D9B1E8510870077A62B /* VerticalImageTextButton */,
 				68B0FDE01E837EB700BE273F /* PureTextTableHeaderFooterView */,
 				689929CD1E821D47001EDA0C /* CircularSideLabelView */,
@@ -972,6 +1012,15 @@
 				689546431E35DFB400D5CD1E /* AuthenticateViewController.xib */,
 			);
 			name = Login;
+			sourceTree = "<group>";
+		};
+		68CE49821EADAD1E008F77D7 /* SHPickerView */ = {
+			isa = PBXGroup;
+			children = (
+				68CE49831EADAD4E008F77D7 /* SHPickerView.h */,
+				68CE49841EADAD4E008F77D7 /* SHPickerView.m */,
+			);
+			name = SHPickerView;
 			sourceTree = "<group>";
 		};
 		68D55E4A1E25D938005D1BB7 /* ThirdParty */ = {
@@ -1136,10 +1185,12 @@
 				685939B51E1F49DF00351FFB /* Main.storyboard in Resources */,
 				689065211E23387200E5CB26 /* NotificationViewController.xib in Resources */,
 				68D7518C1E80E03F00487088 /* OrderDetailViewController.xib in Resources */,
+				689054D21EAEE9BB0037CED9 /* PaymentTypeViewController.xib in Resources */,
 				6890652D1E23470E00E5CB26 /* FavoriteViewController.xib in Resources */,
 				68B26FBA1E31CB5F00B6D757 /* RegisterViewController.xib in Resources */,
 				68A827A61E4DB62D00E63552 /* ProductDetailViewController.xib in Resources */,
 				6863A1DD1E5EBD3D0036E0A8 /* OrderListViewController.xib in Resources */,
+				68CE498A1EADD283008F77D7 /* DiscountViewController.xib in Resources */,
 				68164D931E39D11F00006398 /* ProductListViewController.xib in Resources */,
 				6811BC751E27757100626A4A /* GoogleService-Info.plist in Resources */,
 			);
@@ -1311,16 +1362,20 @@
 				680957751E43195F00DA2BEA /* ProductListToolView.m in Sources */,
 				68164D921E39D11F00006398 /* ProductListViewController.m in Sources */,
 				6863A1D71E5E7C550036E0A8 /* IconLabelView.m in Sources */,
+				68CE49901EADD471008F77D7 /* DiscountHeaderView.m in Sources */,
 				68E401361E30B09900BFF66B /* ForgetPasswordViewController.m in Sources */,
+				68CE498D1EADD41B008F77D7 /* DiscountTableViewCell.m in Sources */,
 				685939B21E1F49DF00351FFB /* ViewController.m in Sources */,
 				68A8279B1E4D9C6F00E63552 /* FTPopTableViewController.m in Sources */,
 				68164D8E1E39B26300006398 /* ExtraSubcategoryHeaderView.m in Sources */,
 				68A827A51E4DB62D00E63552 /* ProductDetailViewController.m in Sources */,
 				687B0E681E69191A00E04D81 /* CouponTableViewCell.m in Sources */,
+				68CE49851EADAD4E008F77D7 /* SHPickerView.m in Sources */,
 				68B68FFD1E24C45600DCCF29 /* PromotionTableViewCell.m in Sources */,
 				6890650E1E23334400E5CB26 /* EntranceViewController.m in Sources */,
 				689678AF1E8BB73A00669A22 /* LabelButtonView.m in Sources */,
 				68164D961E39E44400006398 /* ExtraSubcategorySeeAllTableViewCell.m in Sources */,
+				68CE49891EADD283008F77D7 /* DiscountViewController.m in Sources */,
 				685939E51E1F4E1700351FFB /* SHAPIAdapter.m in Sources */,
 				681FC33B1E5C3A8700AC11CB /* ProductDetailSectionTitleView.m in Sources */,
 				68E470301E72A06A0040213B /* OrderHeaderReusableView.m in Sources */,
@@ -1353,6 +1408,7 @@
 				689130141E6811E700CE834A /* SemiCircleEndsSegmentedView.m in Sources */,
 				68CA36B21E23709400A70BCC /* EntranceTableViewCell.m in Sources */,
 				685939AC1E1F49DF00351FFB /* main.m in Sources */,
+				68A1FE951EB04B670058ABED /* InstallmentDescriptionViewController.m in Sources */,
 				68BE095A1E583DC00046B477 /* ProductDetailPromotionLabelView.m in Sources */,
 				68A8279C1E4D9C6F00E63552 /* UIViewController+FTPopMenu.m in Sources */,
 				687B0E6C1E6970D500E04D81 /* CouponDetailViewController.m in Sources */,
@@ -1365,6 +1421,7 @@
 				6887999F1E5AD12B00495A77 /* ProductDetailImageCollectionViewCell.m in Sources */,
 				68CF5E601E38ABF400341EF1 /* SubcategoryTableViewCell.m in Sources */,
 				68AC12141E42D0BB0080183F /* ProductSubcategoryView.m in Sources */,
+				689054D11EAEE9BB0037CED9 /* PaymentTypeViewController.m in Sources */,
 				689546441E35DFB400D5CD1E /* AuthenticateViewController.m in Sources */,
 				688EF5F01E5D3EF20047E2DC /* MemberTitleView.m in Sources */,
 				685939B81E1F49DF00351FFB /* TreeMall.xcdatamodeld in Sources */,
@@ -1385,6 +1442,7 @@
 				68E470331E72A0990040213B /* OrderListCollectionViewCell.m in Sources */,
 				6891300F1E68097C00CE834A /* CouponListViewController.m in Sources */,
 				68ACE8901E56DA2000A821DA /* SearchCollectionViewCell.m in Sources */,
+				6826C0191EAF3CBC00921ADC /* ExchangeDescriptionViewController.m in Sources */,
 				688EF5F31E5D474C0047E2DC /* MemberPointView.m in Sources */,
 				6884DD821E6D191000DAF859 /* TopSeparatedTitleCollectionReusableView.m in Sources */,
 				68A827A01E4DB56400E63552 /* ProductFilterViewController.m in Sources */,

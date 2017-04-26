@@ -15,6 +15,8 @@
 #import "SHAPIAdapter.h"
 #import "UIImageView+WebCache.h"
 #import <UIButton+WebCache.h>
+#import "ExchangeDescriptionViewController.h"
+#import "InstallmentDescriptionViewController.h"
 
 @interface ProductDetailViewController ()
 
@@ -29,7 +31,8 @@
 - (void)addProduct:(NSDictionary *)dictionaryProduct toCartForType:(CartType)type;
 - (NSMutableDictionary *)dictionaryCommonFromDetail:(NSDictionary *)dictionary;
 
-
+- (void)buttonExchangeDescPressed:(id)sender;
+- (void)buttonInstallmentCalPressed:(id)sender;
 - (void)buttonLinkPressed:(id)sender;
 - (void)buttonIntroImagePressed:(id)sender;
 - (void)buttonSpecImagePressed:(id)sender;
@@ -333,6 +336,7 @@
             [_buttonExchangeDesc.imageViewIcon setImage:image];
         }
         [_buttonExchangeDesc.labelText setText:[LocalizedString ExchangeDescription]];
+        [_buttonExchangeDesc addTarget:self action:@selector(buttonExchangeDescPressed:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _buttonExchangeDesc;
 }
@@ -349,6 +353,7 @@
             [_buttonInstallmentCal.imageViewIcon setImage:image];
         }
         [_buttonInstallmentCal.labelText setText:[LocalizedString InstallmentsCalculation]];
+        [_buttonInstallmentCal addTarget:self action:@selector(buttonInstallmentCalPressed:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _buttonInstallmentCal;
 }
@@ -1391,21 +1396,21 @@
         NSNumber *numberType = [dictionary objectForKey:SymphoxAPIParam_type];
         NSString *title = nil;
         switch ([numberType integerValue]) {
-            case 0:
+            case CartTypeCommonDelivery:
             {
                 // Common delivery
                 title = [LocalizedString CommonDelivery];
                 type = CartTypeCommonDelivery;
             }
                 break;
-            case 1:
+            case CartTypeStorePickup:
             {
                 // Convenience Store
                 title = [LocalizedString StorePickUp];
                 type = CartTypeStorePickup;
             }
                 break;
-            case 2:
+            case CartTypeFastDelivery:
             {
                 // Fast delivery
                 title = [LocalizedString FastDelivery];
@@ -1608,6 +1613,36 @@
 
 #pragma mark - Actions
 
+- (void)buttonExchangeDescPressed:(id)sender
+{
+    ExchangeDescriptionViewController *viewController = [[ExchangeDescriptionViewController alloc] initWithNibName:nil bundle:nil];
+    viewController.preferredContentSize = CGSizeMake(280.0, 300.0);
+    viewController.modalPresentationStyle = UIModalPresentationPopover;
+    UIPopoverPresentationController *presentationController = viewController.popoverPresentationController;
+    presentationController.sourceView = self.view;
+    presentationController.sourceRect = CGRectMake((self.view.frame.size.width - viewController.preferredContentSize.width - 20)/2, (self.view.frame.size.height)/2, 1.0, 1.0);
+    presentationController.permittedArrowDirections = UIPopoverArrowDirectionLeft;
+    presentationController.delegate = self;
+    [self presentViewController:viewController animated:YES completion:nil];
+}
+
+- (void)buttonInstallmentCalPressed:(id)sender
+{
+    NSArray *arrayInstallment = [self.dictionaryDetail objectForKey:SymphoxAPIParam_installment];
+    if (arrayInstallment == nil || [arrayInstallment isEqual:[NSNull null]] || [arrayInstallment count] == 0)
+        return;
+    InstallmentDescriptionViewController *viewController = [[InstallmentDescriptionViewController alloc] initWithNibName:nil bundle:nil];
+    viewController.arrayInstallment = arrayInstallment;
+    viewController.preferredContentSize = CGSizeMake(280.0, 320.0);
+    viewController.modalPresentationStyle = UIModalPresentationPopover;
+    UIPopoverPresentationController *presentationController = viewController.popoverPresentationController;
+    presentationController.sourceView = self.view;
+    presentationController.sourceRect = CGRectMake((self.view.frame.size.width - viewController.preferredContentSize.width - 20)/2, (self.view.frame.size.height)/2, 1.0, 1.0);
+    presentationController.permittedArrowDirections = UIPopoverArrowDirectionLeft;
+    presentationController.delegate = self;
+    [self presentViewController:viewController animated:YES completion:nil];
+}
+
 - (void)buttonLinkPressed:(id)sender
 {
     if ([sender isKindOfClass:[DTLinkButton class]] == NO)
@@ -1800,6 +1835,13 @@
     [button addGestureRecognizer:longPress];
     
     return button;
+}
+
+#pragma mark - UIPopoverPresentationControllerDelegate
+
+- (UIModalPresentationStyle)adaptivePresentationStyleForPresentationController:(UIPresentationController *)controller
+{
+    return UIModalPresentationNone;
 }
 
 @end

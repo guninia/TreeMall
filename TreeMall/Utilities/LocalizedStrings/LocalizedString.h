@@ -203,5 +203,17 @@
 + (NSString *)AddToFavoriteSuccess;
 + (NSString *)NoMatchingProduct;
 + (NSString *)ChangePasswordSuccess;
++ (NSString *)PleaseSelectQuantity;
++ (NSString *)PleaseChooseDiscount;
++ (NSString *)PurchaseFastDeliveryFor_I_Dollars;
++ (NSString *)PurchaseFastDeliveryFor_I_Points;
++ (NSString *)ContinueToShopping;
++ (NSString *)CheckOutDirectly;
++ (NSString *)TodayFocus;
++ (NSString *)SpecialService;
++ (NSString *)Dollars;
++ (NSString *)CathayCardOnly;
++ (NSString *)NoInterestInstallment;
++ (NSString *)InstallmentAvailableBank;
 
 @end

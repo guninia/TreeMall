@@ -17,6 +17,8 @@ static NSString *EntranceMemberPromoteHeaderIdentifier = @"EntranceMemberPromote
 
 - (void)entranceMemberPromoteHeader:(EntranceMemberPromoteHeader *)header didPressedPromotionBySender:(id)sender;
 - (void)entranceMemberPromoteHeader:(EntranceMemberPromoteHeader *)header didPressedMarketingBySender:(id)sender;
+- (void)entranceMemberPromoteHeader:(EntranceMemberPromoteHeader *)header didPressedCouponBySender:(id)sender;
+- (void)entranceMemberPromoteHeader:(EntranceMemberPromoteHeader *)header didPressedPointBySender:(id)sender;
 
 @end
 
@@ -37,5 +39,7 @@ static NSString *EntranceMemberPromoteHeaderIdentifier = @"EntranceMemberPromote
 @property (nonatomic, strong) NSNumber *numberTotalPoint;
 @property (nonatomic, strong) NSNumber *numberCouponValue;
 @property (nonatomic, strong) NSString *promotionImageUrlPath;
+@property (nonatomic, strong) UIButton *buttonPoint;
+@property (nonatomic, strong) UIButton *buttonCoupon;
 
 @end

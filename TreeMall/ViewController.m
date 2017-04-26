@@ -18,16 +18,20 @@
 #import "Definition.h"
 #import "TMInfoManager.h"
 #import "CryptoTool.h"
+#import "CouponListViewController.h"
 
 @interface ViewController ()
 
 - (void)showLaunchScreenLoadingViewAnimated:(BOOL)animated;
 - (void)hideLaunchScreenLoadingViewAnimated:(BOOL)animated;
 - (void)postUserLogoutProcedure;
+- (void)JumpToTab:(NSInteger)tabIndex;
 
 - (void)handlerOfNoInitialTokenNotification:(NSNotification *)notification;
 - (void)handlerOfEntranceDataPreparedNotification:(NSNotification *)notification;
 - (void)handlerOfUserLogoutNotification:(NSNotification *)notification;
+- (void)handlerOfJumpingToMemberTabNotification:(NSNotification *)notification;
+- (void)handlerOfJumpingToMemberTabAndPresentCouponNotification:(NSNotification *)notification;
 
 @end
 
@@ -174,6 +178,8 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handlerOfNoInitialTokenNotification:) name:PostNotificationName_NoInitialToken object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handlerOfEntranceDataPreparedNotification:) name:PostNotificationName_EntranceDataPrepared object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handlerOfUserLogoutNotification:) name:PostNotificationName_UserLogout object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handlerOfJumpingToMemberTabNotification:) name:PostNotificationName_JumpToMemberTab object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handlerOfJumpingToMemberTabAndPresentCouponNotification:) name:PostNotificationName_JumpToMemberTabAndPresentCoupon object:nil];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -195,6 +201,8 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self name:PostNotificationName_NoInitialToken object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:PostNotificationName_EntranceDataPrepared object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:PostNotificationName_UserLogout object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:PostNotificationName_JumpToMemberTab object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:PostNotificationName_JumpToMemberTabAndPresentCoupon object:nil];
 }
 
 #pragma mark - Override
@@ -275,8 +283,15 @@
 
 - (void)postUserLogoutProcedure
 {
+    [self JumpToTab:0];
+}
+
+- (void)JumpToTab:(NSInteger)tabIndex
+{
+    if (tabIndex == self.tbControllerMain.selectedIndex)
+        return;
     dispatch_async(dispatch_get_main_queue(), ^{
-        [self.tbControllerMain setSelectedIndex:0];
+        [self.tbControllerMain setSelectedIndex:tabIndex];
     });
 }
 
@@ -301,6 +316,23 @@
 - (void)handlerOfUserLogoutNotification:(NSNotification *)notification
 {
     [self postUserLogoutProcedure];
+}
+
+- (void)handlerOfJumpingToMemberTabNotification:(NSNotification *)notification
+{
+    [self JumpToTab:4];
+}
+
+- (void)handlerOfJumpingToMemberTabAndPresentCouponNotification:(NSNotification *)notification
+{
+    [self JumpToTab:4];
+    UINavigationController *navigationController = [[self.tbControllerMain viewControllers] objectAtIndex:4];
+    if ([navigationController.topViewController isKindOfClass:[MemberViewController class]] == NO)
+    {
+        [navigationController popToRootViewControllerAnimated:NO];
+    }
+    CouponListViewController *viewController = [[CouponListViewController alloc] initWithNibName:@"CouponListViewController" bundle:[NSBundle mainBundle]];
+    [navigationController pushViewController:viewController animated:YES];
 }
 
 #pragma mark - UITabBarControllerDelegate

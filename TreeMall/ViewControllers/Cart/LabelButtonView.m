@@ -88,6 +88,7 @@
         [_button setTitle:[LocalizedString NextStep] forState:UIControlStateNormal];
         [_button.titleLabel setFont:[UIFont systemFontOfSize:14.0]];
         [_button.layer setCornerRadius:5.0];
+        [_button addTarget:self action:@selector(buttonPressed:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _button;
 }

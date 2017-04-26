@@ -42,6 +42,8 @@ static NSString *SymphoxAPI_subscribeNewsletter = @"http://tomcat8.mdevelop.com/
 static NSString *SymphoxAPI_orderNumberOfStatus = @"http://tomcat8.mdevelop.com/TreeMall/api/portal/app/member/order/status";
 static NSString *SymphoxAPI_checkProductAvailable = @"http://tomcat8.mdevelop.com/TreeMall/api/eiffel/appShoppingCart/addToCart";
 static NSString *SymphoxAPI_renewProductConditions = @"http://tomcat8.mdevelop.com/TreeMall/api/eiffel/appShoppingCart/goToCart";
+static NSString *SymphoxAPI_checkAdditionalPurchase = @"http://tomcat8.mdevelop.com/TreeMall/api/eiffel/appShoppingCart/additionalPurchase";
+static NSString *SymphoxAPI_finalCheckProductsInCart = @"http://tomcat8.mdevelop.com/TreeMall/api/eiffel/appShoppingCart/checkCart";
 
 
 #else
@@ -251,6 +253,8 @@ static NSString *SymphoxAPIParam_discount_detail_desc = @"discount_detail_desc";
 static NSString *SymphoxAPIParam_discount_type_desc = @"discount_type_desc";
 static NSString *SymphoxAPIParam_eacc_num = @"eacc_num";
 static NSString *SymphoxAPIParam_used_payment_mode = @"used_payment_mode";
+static NSString *SymphoxAPIParam_total_point = @"total_point";
+static NSString *SymphoxAPIParam_additional_purchase = @"additional_purchase";
 
 typedef enum : NSUInteger {
     TermTypeMemberTerms,

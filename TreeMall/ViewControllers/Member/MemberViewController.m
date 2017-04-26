@@ -351,7 +351,7 @@ typedef enum : NSUInteger {
     {
         stringValue = [_numberOrderShipping stringValue];
     }
-    NSString *string = [NSString stringWithFormat:[LocalizedString Shipped_BRA_S_BRA], @"0"];
+    NSString *string = [NSString stringWithFormat:[LocalizedString Shipped_BRA_S_BRA], stringValue];
     _viewShipped.label.text = string;
 }
 
@@ -367,7 +367,7 @@ typedef enum : NSUInteger {
     {
         stringValue = [_numberOrderReturnReplace stringValue];
     }
-    NSString *string = [NSString stringWithFormat:[LocalizedString ReturnReplace_BRA_S_BRA], @"0"];
+    NSString *string = [NSString stringWithFormat:[LocalizedString ReturnReplace_BRA_S_BRA], stringValue];
     _viewReturnReplace.label.text = string;
 }
 

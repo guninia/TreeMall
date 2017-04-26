@@ -200,3 +200,15 @@
 "AddToFavoriteSuccess"="Added to My Favorite";
 "NoMatchingProduct"="No matching product";
 "ChangePasswordSuccess"="Change password successfully";
+"PleaseSelectQuantity"="Please select quantity";
+"PleaseChooseDiscount"="Please choose discount";
+"PurchaseFastDeliveryFor_I_Dollars"="Puchase fast delivery for %li dollars";
+"PurchaseFastDeliveryFor_I_Points"="Purchase fast delivery for %li points";
+"ContinueToShopping"="Continue to shopping";
+"CheckOutDirectly"="Check out";
+"TodayFocus"="Today Focus";
+"SpecialService"="Special";
+"Dollars"="Dollars";
+"CathayCardOnly"="Cathay card only";
+"NoInterestInstallment"="No Interest Installment";
+"InstallmentAvailableBank"="Installment available bank";

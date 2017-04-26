@@ -11,8 +11,9 @@
 #import "LabelButtonView.h"
 #import "CartProductTableViewCell.h"
 #import "TMInfoManager.h"
+#import "SHPickerView.h"
 
-@interface CartViewController : UIViewController <SemiCircleEndsSegmentedViewDelegate, UITableViewDataSource, UITableViewDelegate, CartProductTableViewCellDelegate>
+@interface CartViewController : UIViewController <SemiCircleEndsSegmentedViewDelegate, UITableViewDataSource, UITableViewDelegate, CartProductTableViewCellDelegate, UIPickerViewDataSource, UIPickerViewDelegate, LabelButtonViewDelegate>
 
 @property (nonatomic, strong) SemiCircleEndsSegmentedView *segmentedView;
 @property (nonatomic, strong) UITableView *tableView;

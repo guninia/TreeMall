@@ -199,3 +199,15 @@
 "AddToFavoriteSuccess"="已加入我的最愛";
 "NoMatchingProduct"="查無符合商品資料";
 "ChangePasswordSuccess"="修改密碼成功";
+"PleaseSelectQuantity"="請選擇數量";
+"PleaseChooseDiscount"="請選擇適用優惠";
+"PurchaseFastDeliveryFor_I_Dollars"="%li元加購快捷服務";
+"PurchaseFastDeliveryFor_I_Points"="%li點加購快捷服務";
+"ContinueToShopping"="繼續購物";
+"CheckOutDirectly"="不加購直接結帳";
+"TodayFocus"="今日焦點";
+"SpecialService"="優惠訊息";
+"Dollars"="元";
+"CathayCardOnly"="限國泰世華信用卡";
+"NoInterestInstallment"="分期０利率";
+"InstallmentAvailableBank"="可分期銀行";

@@ -1461,6 +1461,30 @@ static NSUInteger SearchKeywordNumberMax = 8;
     [dictionary setObject:dictionaryPaymentMode forKey:SymphoxAPIParam_payment_mode];
     
     [dictionaryPurchaseInfo setObject:dictionary forKey:productId];
+    NSLog(@"dictionaryProductPurchaseInfoInCartCommon:\n%@", [self.dictionaryProductPurchaseInfoInCartCommon description]);
+    NSLog(@"dictionaryProductPurchaseInfoInCartFast:\n%@", [self.dictionaryProductPurchaseInfoInCartFast description]);
+    NSLog(@"dictionaryProductPurchaseInfoInCartStorePickUp:\n%@", [self.dictionaryProductPurchaseInfoInCartStorePickUp description]);
+    [self saveToArchive];
+}
+
+- (void)setPaymentModeDescription:(NSString *)description forProduct:(NSNumber *)productId inCart:(CartType)cartType
+{
+    if (description == nil)
+        return;
+    
+    NSMutableDictionary *dictionaryPurchaseInfo = [self purchaseInfoForCartType:cartType];
+    if (dictionaryPurchaseInfo == nil)
+        return;
+    
+    NSMutableDictionary *dictionary = [[dictionaryPurchaseInfo objectForKey:productId] mutableCopy];
+    if (dictionary == nil)
+    {
+        dictionary = [NSMutableDictionary dictionary];
+    }
+    [dictionary setObject:description forKey:SymphoxAPIParam_discount_detail_desc];
+    
+    [dictionaryPurchaseInfo setObject:dictionary forKey:productId];
+    
     [self saveToArchive];
 }
 
@@ -1483,6 +1507,10 @@ static NSUInteger SearchKeywordNumberMax = 8;
             if ([productIdToRemove isEqualToNumber:productId])
             {
                 name = [product objectForKey:SymphoxAPIParam_name];
+                if (name == nil)
+                {
+                    name = [product objectForKey:SymphoxAPIParam_cpdt_name];
+                }
                 index = idx;
                 *stop = YES;
             }
@@ -1500,6 +1528,8 @@ static NSUInteger SearchKeywordNumberMax = 8;
     }
     [self saveToArchive];
     
+    if (name == nil)
+        return nil;
     NSString *productName = [NSString stringWithString:name];
     return productName;
 }

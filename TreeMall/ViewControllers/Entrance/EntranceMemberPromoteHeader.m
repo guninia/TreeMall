@@ -15,6 +15,8 @@
 
 - (void)buttonPromotionPressed:(id)sender;
 - (void)buttonMarketingPressed:(id)sender;
+- (void)buttonPointPressed:(id)sender;
+- (void)buttonCouponPressed:(id)sender;
 
 @end
 
@@ -38,6 +40,8 @@
         [self.contentView addSubview:self.labelCouponValue];
         [self.contentView addSubview:self.buttonMarketing];
         [self.contentView addSubview:self.buttonMarketingArrow];
+        [self.contentView addSubview:self.buttonPoint];
+        [self.contentView addSubview:self.buttonCoupon];
     }
     return self;
 }
@@ -155,6 +159,24 @@
         CGFloat originY = self.labelCouponValue.frame.origin.y - intervalV - labelTitleHeight;
         CGRect frame = CGRectMake(labelROriginX, originY, labelLengthR, labelTitleHeight);
         self.labelCouponTitle.frame = frame;
+    }
+    if (self.buttonPoint)
+    {
+        CGFloat originX = CGRectGetMinX(self.labelPointTitle.frame);
+        CGFloat originY = CGRectGetMinY(self.labelPointTitle.frame);
+        CGFloat width = CGRectGetMaxX(self.labelPointTitle.frame) - originX;
+        CGFloat height = CGRectGetMaxY(self.labelPointValue.frame) - originY;
+        CGRect frame = CGRectMake(originX, originY, width, height);
+        self.buttonPoint.frame = frame;
+    }
+    if (self.buttonCoupon)
+    {
+        CGFloat originX = CGRectGetMinX(self.labelCouponTitle.frame);
+        CGFloat originY = CGRectGetMinY(self.labelCouponTitle.frame);
+        CGFloat width = CGRectGetMaxX(self.labelCouponTitle.frame) - originX;
+        CGFloat height = CGRectGetMaxY(self.labelCouponValue.frame) - originY;
+        CGRect frame = CGRectMake(originX, originY, width, height);
+        self.buttonCoupon.frame = frame;
     }
 }
 
@@ -373,6 +395,28 @@
     }
 }
 
+- (UIButton *)buttonPoint
+{
+    if (_buttonPoint == nil)
+    {
+        _buttonPoint = [[UIButton alloc] initWithFrame:CGRectZero];
+        [_buttonPoint setBackgroundColor:[UIColor clearColor]];
+        [_buttonPoint addTarget:self action:@selector(buttonPointPressed:) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _buttonPoint;
+}
+
+- (UIButton *)buttonCoupon
+{
+    if (_buttonCoupon == nil)
+    {
+        _buttonCoupon = [[UIButton alloc] initWithFrame:CGRectZero];
+        [_buttonCoupon setBackgroundColor:[UIColor clearColor]];
+        [_buttonCoupon addTarget:self action:@selector(buttonCouponPressed:) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _buttonCoupon;
+}
+
 #pragma mark - Actions
 
 - (void)buttonPromotionPressed:(id)sender
@@ -388,6 +432,22 @@
     if (_delegate && [_delegate respondsToSelector:@selector(entranceMemberPromoteHeader:didPressedMarketingBySender:)])
     {
         [_delegate entranceMemberPromoteHeader:self didPressedMarketingBySender:sender];
+    }
+}
+
+- (void)buttonPointPressed:(id)sender
+{
+    if (_delegate && [_delegate respondsToSelector:@selector(entranceMemberPromoteHeader:didPressedPointBySender:)])
+    {
+        [_delegate entranceMemberPromoteHeader:self didPressedPointBySender:sender];
+    }
+}
+
+- (void)buttonCouponPressed:(id)sender
+{
+    if (_delegate && [_delegate respondsToSelector:@selector(entranceMemberPromoteHeader:didPressedCouponBySender:)])
+    {
+        [_delegate entranceMemberPromoteHeader:self didPressedCouponBySender:sender];
     }
 }
 

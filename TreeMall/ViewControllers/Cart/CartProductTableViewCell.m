@@ -66,10 +66,10 @@
         NSLog(@"self.contentView[%4.2f,%4.2f]", self.contentView.frame.size.width, self.contentView.frame.size.height);
         NSLog(@"self.viewContent[%4.2f,%4.2f,%4.2f,%4.2f]", self.viewContent.frame.origin.x, self.viewContent.frame.origin.y, self.viewContent.frame.size.width, self.viewContent.frame.size.height);
     }
-    CGFloat marginH = 3.0;
-    CGFloat marginV = 3.0;
-    CGFloat intervalV = 3.0;
-    CGFloat intervalH = 3.0;
+    CGFloat marginH = 5.0;
+    CGFloat marginV = 5.0;
+    CGFloat intervalV = 5.0;
+    CGFloat intervalH = 5.0;
     CGFloat originX = marginH;
     CGFloat originY = marginV;
     if (self.imageViewProduct)
@@ -257,7 +257,7 @@
     {
         _labelPayment = [[UILabel alloc] initWithFrame:CGRectZero];
         [_labelPayment setTextColor:[UIColor darkGrayColor]];
-        UIFont *font = [UIFont systemFontOfSize:12.0];
+        UIFont *font = [UIFont systemFontOfSize:14.0];
         [_labelPayment setFont:font];
     }
     return _labelPayment;
@@ -269,7 +269,7 @@
     {
         _labelQuantity = [[UILabel alloc] initWithFrame:CGRectZero];
         [_labelQuantity setTextColor:[UIColor orangeColor]];
-        UIFont *font = [UIFont systemFontOfSize:12.0];
+        UIFont *font = [UIFont systemFontOfSize:14.0];
         [_labelQuantity setFont:font];
     }
     return _labelQuantity;

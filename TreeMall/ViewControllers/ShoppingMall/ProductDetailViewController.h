@@ -16,7 +16,7 @@
 #import "ProductDetailSectionTitleView.h"
 #import <DTCoreText.h>
 
-@interface ProductDetailViewController : UIViewController <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, ProductDetailBottomBarDelegate, BorderedDoubleViewDelegate, DTAttributedTextContentViewDelegate>
+@interface ProductDetailViewController : UIViewController <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, ProductDetailBottomBarDelegate, BorderedDoubleViewDelegate, DTAttributedTextContentViewDelegate, UIPopoverPresentationControllerDelegate>
 
 @property (nonatomic, strong) NSDictionary *dictionaryCommon;
 @property (nonatomic, strong) NSDictionary *dictionaryDetail;

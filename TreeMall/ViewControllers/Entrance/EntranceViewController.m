@@ -18,6 +18,9 @@
 #import "TMInfoManager.h"
 #import "LocalizedString.h"
 #import "Utility.h"
+#import "LoginViewController.h"
+#import "WebViewViewController.h"
+#import "ProductDetailViewController.h"
 
 typedef enum : NSUInteger {
     TableViewSectionMemberPromotion,
@@ -524,12 +527,36 @@ typedef enum : NSUInteger {
             switch ([type integerValue]) {
                 case 0:
                 {
-                    // App page
+                    // Hot sale
                 }
                     break;
                 case 1:
                 {
-                    // Hyperlink
+                    // Product detail
+                    if (stringLink != nil && [stringLink length] > 0)
+                    {
+                        ProductDetailViewController *viewController = [[ProductDetailViewController alloc] initWithNibName:@"ProductDetailViewController" bundle:[NSBundle mainBundle]];
+                        NSNumber *productId = [NSNumber numberWithInteger:[stringLink integerValue]];
+                        viewController.productIdentifier = productId;
+                        [self.navigationController pushViewController:viewController animated:YES];
+                    }
+                }
+                    break;
+                case 2:
+                {
+                    // Sub category. Currently impossible since there is no layer information.
+                }
+                    break;
+                case 3:
+                {
+                    // Web page
+                    if (stringLink != nil && [stringLink length] > 0)
+                    {
+                        WebViewViewController *viewController = [[WebViewViewController alloc] initWithNibName:@"WebViewViewController" bundle:[NSBundle mainBundle]];
+                        viewController.title = [LocalizedString TodayFocus];
+                        viewController.urlString = stringLink;
+                        [self.navigationController pushViewController:viewController animated:YES];
+                    }
                 }
                     break;
                 default:
@@ -551,18 +578,74 @@ typedef enum : NSUInteger {
             switch ([type integerValue]) {
                 case 0:
                 {
-                    // App page
+                    // Hot sale
                 }
                     break;
                 case 1:
                 {
-                    // Hyperlink
+                    // Product detail
+                    if (stringLink != nil && [stringLink length] > 0)
+                    {
+                        ProductDetailViewController *viewController = [[ProductDetailViewController alloc] initWithNibName:@"ProductDetailViewController" bundle:[NSBundle mainBundle]];
+                        NSNumber *productId = [NSNumber numberWithInteger:[stringLink integerValue]];
+                        viewController.productIdentifier = productId;
+                        [self.navigationController pushViewController:viewController animated:YES];
+                    }
+                }
+                    break;
+                case 2:
+                {
+                    // Sub category. Currently impossible since there is no layer information.
+                }
+                    break;
+                case 3:
+                {
+                    // Web page
+                    if (stringLink != nil && [stringLink length] > 0)
+                    {
+                        WebViewViewController *viewController = [[WebViewViewController alloc] initWithNibName:@"WebViewViewController" bundle:[NSBundle mainBundle]];
+                        viewController.title = [LocalizedString SpecialService];
+                        viewController.urlString = stringLink;
+                        [self.navigationController pushViewController:viewController animated:YES];
+                    }
                 }
                     break;
                 default:
                     break;
             }
         }
+    }
+}
+
+- (void)entranceMemberPromoteHeader:(EntranceMemberPromoteHeader *)header didPressedPointBySender:(id)sender
+{
+    NSLog(@"entranceMemberPromoteHeader - didPressedPointBySender");
+    if ([TMInfoManager sharedManager].userIdentifier == nil)
+    {
+        // Should pop up login view
+        LoginViewController *viewControllerLogin = [[LoginViewController alloc] initWithNibName:@"LoginViewController" bundle:[NSBundle mainBundle]];
+        UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:viewControllerLogin];
+        [self presentViewController:navigationController animated:YES completion:nil];
+    }
+    else
+    {
+        [[NSNotificationCenter defaultCenter] postNotificationName:PostNotificationName_JumpToMemberTab object:self];
+    }
+}
+
+- (void)entranceMemberPromoteHeader:(EntranceMemberPromoteHeader *)header didPressedCouponBySender:(id)sender
+{
+    NSLog(@"entranceMemberPromoteHeader - didPressedCouponBySender");
+    if ([TMInfoManager sharedManager].userIdentifier == nil)
+    {
+        // Should pop up login view
+        LoginViewController *viewControllerLogin = [[LoginViewController alloc] initWithNibName:@"LoginViewController" bundle:[NSBundle mainBundle]];
+        UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:viewControllerLogin];
+        [self presentViewController:navigationController animated:YES completion:nil];
+    }
+    else
+    {
+        [[NSNotificationCenter defaultCenter] postNotificationName:PostNotificationName_JumpToMemberTabAndPresentCoupon object:self];
     }
 }
 

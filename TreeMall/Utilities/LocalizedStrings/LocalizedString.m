@@ -1941,4 +1941,124 @@
     return ChangePasswordSuccess;
 }
 
++ (NSString *)PleaseSelectQuantity
+{
+    static NSString *PleaseSelectQuantity = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        PleaseSelectQuantity = NSLocalizedString(@"PleaseSelectQuantity", nil);
+    });
+    return PleaseSelectQuantity;
+}
+
++ (NSString *)PleaseChooseDiscount
+{
+    static NSString *PleaseChooseDiscount = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        PleaseChooseDiscount = NSLocalizedString(@"PleaseChooseDiscount", nil);
+    });
+    return PleaseChooseDiscount;
+}
+
++ (NSString *)PurchaseFastDeliveryFor_I_Dollars
+{
+    static NSString *PurchaseFastDeliveryFor_I_Dollars = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        PurchaseFastDeliveryFor_I_Dollars = NSLocalizedString(@"PurchaseFastDeliveryFor_I_Dollars", nil);
+    });
+    return PurchaseFastDeliveryFor_I_Dollars;
+}
+
++ (NSString *)PurchaseFastDeliveryFor_I_Points
+{
+    static NSString *PurchaseFastDeliveryFor_I_Points = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        PurchaseFastDeliveryFor_I_Points = NSLocalizedString(@"PurchaseFastDeliveryFor_I_Points", nil);
+    });
+    return PurchaseFastDeliveryFor_I_Points;
+}
+
++ (NSString *)ContinueToShopping
+{
+    static NSString *ContinueToShopping = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        ContinueToShopping = NSLocalizedString(@"ContinueToShopping", nil);
+    });
+    return ContinueToShopping;
+}
+
++ (NSString *)CheckOutDirectly
+{
+    static NSString *CheckOutDirectly = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        CheckOutDirectly = NSLocalizedString(@"CheckOutDirectly", nil);
+    });
+    return CheckOutDirectly;
+}
+
++ (NSString *)TodayFocus
+{
+    static NSString *TodayFocus = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        TodayFocus = NSLocalizedString(@"TodayFocus", nil);
+    });
+    return TodayFocus;
+}
+
++ (NSString *)SpecialService
+{
+    static NSString *SpecialService = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        SpecialService = NSLocalizedString(@"SpecialService", nil);
+    });
+    return SpecialService;
+}
+
++ (NSString *)Dollars
+{
+    static NSString *Dollars = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        Dollars = NSLocalizedString(@"Dollars", nil);
+    });
+    return Dollars;
+}
+
++ (NSString *)CathayCardOnly
+{
+    static NSString *CathayCardOnly = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        CathayCardOnly = NSLocalizedString(@"CathayCardOnly", nil);
+    });
+    return CathayCardOnly;
+}
+
++ (NSString *)NoInterestInstallment
+{
+    static NSString *NoInterestInstallment = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        NoInterestInstallment = NSLocalizedString(@"NoInterestInstallment", nil);
+    });
+    return NoInterestInstallment;
+}
+
++ (NSString *)InstallmentAvailableBank
+{
+    static NSString *InstallmentAvailableBank = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        InstallmentAvailableBank = NSLocalizedString(@"InstallmentAvailableBank", nil);
+    });
+    return InstallmentAvailableBank;
+}
+
 @end
