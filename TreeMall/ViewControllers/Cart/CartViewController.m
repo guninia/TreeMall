@@ -15,9 +15,12 @@
 #import "TMInfoManager.h"
 #import "DiscountViewController.h"
 #import "PaymentTypeViewController.h"
+#import "AdditionalPurchaseViewController.h"
 
 @interface CartViewController ()
 
+- (void)showLoadingViewAnimated:(BOOL)animated;
+- (void)hideLoadingViewAnimated:(BOOL)animated;
 - (void)checkCartForType:(CartType)type shouldShowPaymentForProductId:(NSNumber *)productId;
 - (void)requestResultForCheckingProducts:(NSArray *)products ofCartType:(CartType)type shouldShowPaymentForProductId:(NSNumber *)productId;
 - (BOOL)processCheckingResult:(id)result inCart:(CartType)type shouldShowPaymentForProductId:(NSNumber *)productId;
@@ -57,6 +60,7 @@
     [self.view addSubview:self.tableView];
     [self.view addSubview:self.bottomBar];
     
+    [self.navigationController.tabBarController.view addSubview:self.viewLoading];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -68,6 +72,7 @@
         self.currentType = CartTypeCommonDelivery;
         [self.segmentedView.segmentedControl setSelectedSegmentIndex:CartTypeCommonDelivery];
     }
+    
     [self checkCartForType:self.currentType shouldShowPaymentForProductId:nil];
 }
 
@@ -116,6 +121,17 @@
     {
         CGRect frame = CGRectMake(0.0, originY, self.view.frame.size.width, CGRectGetMinY(self.bottomBar.frame) - originY);
         self.tableView.frame = frame;
+        if (self.labelNoContent)
+        {
+            CGRect frame = CGRectMake(0.0, self.tableView.frame.size.height * 2 / 3, self.tableView.frame.size.width, 30.0);
+            self.labelNoContent.frame = frame;
+        }
+    }
+    if (self.viewLoading)
+    {
+        self.viewLoading.frame = self.navigationController.tabBarController.view.bounds;
+        self.viewLoading.indicatorCenter = self.viewLoading.center;
+        [self.viewLoading setNeedsLayout];
     }
 }
 
@@ -207,7 +223,82 @@
     return _numberFormatter;
 }
 
+- (UIImageView *)tableBackgroundView
+{
+    if (_tableBackgroundView == nil)
+    {
+        _tableBackgroundView = [[UIImageView alloc] initWithFrame:CGRectZero];
+        [_tableBackgroundView setBackgroundColor:[UIColor colorWithWhite:0.93 alpha:1.0]];
+        [_tableBackgroundView setContentMode:UIViewContentModeCenter];
+        UIImage *image = [UIImage imageNamed:@"ico_default"];
+        if (image)
+        {
+            [_tableBackgroundView setImage:image];
+        }
+        [_tableBackgroundView addSubview:self.labelNoContent];
+    }
+    return _tableBackgroundView;
+}
+
+- (UILabel *)labelNoContent
+{
+    if (_labelNoContent == nil)
+    {
+        _labelNoContent = [[UILabel alloc] initWithFrame:CGRectZero];
+        [_labelNoContent setBackgroundColor:[UIColor clearColor]];
+        [_labelNoContent setTextColor:[UIColor colorWithWhite:0.82 alpha:1.0]];
+        [_labelNoContent setText:[LocalizedString NoProductInCart]];
+        [_labelNoContent setTextAlignment:NSTextAlignmentCenter];
+    }
+    return _labelNoContent;
+}
+
+- (FullScreenLoadingView *)viewLoading
+{
+    if (_viewLoading == nil)
+    {
+        _viewLoading = [[FullScreenLoadingView alloc] initWithFrame:CGRectZero];
+        [_viewLoading setBackgroundColor:[UIColor colorWithWhite:0.0 alpha:0.3]];
+        _viewLoading.alpha = 0.0;
+    }
+    return _viewLoading;
+}
+
 #pragma mark - Private Methods
+
+- (void)showLoadingViewAnimated:(BOOL)animated
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.viewLoading.activityIndicator startAnimating];
+        if (animated)
+        {
+            [UIView animateWithDuration:0.3 delay:0.0 options:(UIViewAnimationOptionCurveEaseInOut|UIViewAnimationOptionBeginFromCurrentState) animations:^{
+                [self.viewLoading setAlpha:1.0];
+            } completion:nil];
+        }
+        else
+        {
+            [self.viewLoading setAlpha:1.0];
+        }
+    });
+}
+
+- (void)hideLoadingViewAnimated:(BOOL)animated
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.viewLoading.activityIndicator stopAnimating];
+        if (animated)
+        {
+            [UIView animateWithDuration:0.3 delay:0.0 options:(UIViewAnimationOptionCurveEaseInOut|UIViewAnimationOptionBeginFromCurrentState) animations:^{
+                [self.viewLoading setAlpha:0.0];
+            } completion:nil];
+        }
+        else
+        {
+            [self.viewLoading setAlpha:0.0];
+        }
+    });
+}
 
 - (void)checkCartForType:(CartType)type shouldShowPaymentForProductId:(NSNumber *)productId
 {
@@ -215,9 +306,11 @@
     if (array == nil || [array count] == 0)
     {
         [self.arrayProducts removeAllObjects];
+        [self.tableView setBackgroundView:self.tableBackgroundView];
         [self.tableView reloadData];
         return;
     }
+    [self.tableView setBackgroundView:nil];
     NSDictionary *dictionary = [[TMInfoManager sharedManager] purchaseInfoForCartType:type];
     NSMutableArray *arrayCheck = [NSMutableArray array];
     for (NSDictionary *product in array)
@@ -255,7 +348,9 @@
     NSDictionary *headerFields = [NSDictionary dictionaryWithObjectsAndKeys:apiKey, SymphoxAPIParam_key, token, SymphoxAPIParam_token, nil];
     NSString *stringCartType = [[NSNumber numberWithInteger:type] stringValue];
     NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:products, SymphoxAPIParam_cart_item_order, stringCartType, SymphoxAPIParam_cart_type, nil];
+    [self showLoadingViewAnimated:NO];
     [[SHAPIAdapter sharedAdapter] sendRequestFromObject:weakSelf ToUrl:url withHeaderFields:headerFields andPostObject:params inPostFormat:SHPostFormatJson encrypted:YES decryptedReturnData:YES completion:^(id resultObject, NSError *error){
+        BOOL shouldHideLoadingView = YES;
         if (error == nil)
         {
 //            NSLog(@"resultObject[%@]:\n%@", [[resultObject class] description], [resultObject description]);
@@ -267,6 +362,7 @@
                 if ([weakSelf processCheckingResult:data inCart:type shouldShowPaymentForProductId:productId])
                 {
                     [weakSelf renewConditionsForCartType:type shouldShowPaymentForProductId:productId];
+                    shouldHideLoadingView = NO;
                 }
                 else
                 {
@@ -295,6 +391,10 @@
             UIAlertAction *actionConfirm = [UIAlertAction actionWithTitle:[LocalizedString Confirm] style:UIAlertActionStyleDefault handler:nil];
             [alertController addAction:actionConfirm];
             [weakSelf presentViewController:alertController animated:YES completion:nil];
+        }
+        if (shouldHideLoadingView)
+        {
+            [weakSelf hideLoadingViewAnimated:NO];
         }
     }];
 }
@@ -367,6 +467,10 @@
                     {
                         NSString *totalString = [NSString stringWithFormat:@"「%@」：%@\n", name, stringError];
                         [notifyString appendString:totalString];
+                    }
+                    else
+                    {
+                        [notifyString setString:[LocalizedString AlreadyRemoveSomeProduct]];
                     }
                 }
             }
@@ -487,6 +591,7 @@
             [alertController addAction:actionConfirm];
             [weakSelf presentViewController:alertController animated:YES completion:nil];
         }
+        [weakSelf hideLoadingViewAnimated:NO];
     }];
 }
 
@@ -564,8 +669,10 @@
     NSDictionary *headerFields = [NSDictionary dictionaryWithObjectsAndKeys:apiKey, SymphoxAPIParam_key, token, SymphoxAPIParam_token, nil];
     NSString *stringCartType = [[NSNumber numberWithInteger:type] stringValue];
     NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:[TMInfoManager sharedManager].userIdentifier, SymphoxAPIParam_user_num, products, SymphoxAPIParam_cart_item_order, stringCartType, SymphoxAPIParam_cart_type, nil];
+    [self showLoadingViewAnimated:NO];
     [[SHAPIAdapter sharedAdapter] sendRequestFromObject:weakSelf ToUrl:url withHeaderFields:headerFields andPostObject:params inPostFormat:SHPostFormatJson encrypted:YES decryptedReturnData:YES completion:^(id resultObject, NSError *error){
         NSArray *array = nil;
+        BOOL shouldHideLoadingView = YES;
         if (error == nil)
         {
 //            NSLog(@"resultObject[%@]:\n%@", [[resultObject class] description], [resultObject description]);
@@ -578,7 +685,7 @@
             }
             else
             {
-                NSLog(@"requestResultForCheckingProducts - Unexpected data format.");
+                NSLog(@"requestResultForCheckingAdditionalPurchaseForProducts - Unexpected data format.");
             }
         }
         else
@@ -588,12 +695,20 @@
         if (array && [array isEqual:[NSNull null]] == NO && [array count] > 0)
         {
             // Should show additional purchase page
+            AdditionalPurchaseViewController *viewController = [[AdditionalPurchaseViewController alloc] initWithNibName:@"AdditionalPurchaseViewController" bundle:[NSBundle mainBundle]];
+            viewController.arrayProducts = array;
+            [weakSelf.navigationController pushViewController:viewController animated:YES];
         }
         else
         {
             // If cart type is CartTypeFastDelivery, should check if the condition is matched to use Fast Delivery.
             // Otherwise, present payment type.
             [weakSelf finalCheckCartContentForCartType:type canPurchaseFastDelivery:YES];
+            shouldHideLoadingView = NO;
+        }
+        if (shouldHideLoadingView)
+        {
+            [weakSelf hideLoadingViewAnimated:NO];
         }
     }];
 }
@@ -759,11 +874,20 @@
             [alertController addAction:actionConfirm];
             [weakSelf presentViewController:alertController animated:YES completion:nil];
         }
+        [weakSelf hideLoadingViewAnimated:NO];
     }];
 }
 
 - (void)refreshContent
 {
+    if ([self.arrayProducts count] == 0)
+    {
+        self.tableView.backgroundView = self.tableBackgroundView;
+    }
+    else
+    {
+        self.tableView.backgroundView = nil;
+    }
     [self.tableView reloadData];
     
     [self refreshBottomBar];
@@ -863,6 +987,8 @@
 {
     self.currentType = index;
     [self resetBottomBar];
+    [self.arrayProducts removeAllObjects];
+    [self.tableView reloadData];
     [self checkCartForType:self.currentType shouldShowPaymentForProductId:nil];
 }
 
@@ -1008,10 +1134,28 @@
     NSNumber *maxSellQty = [product objectForKey:SymphoxAPIParam_max_sell_qty];
     if (maxSellQty == nil)
         return;
-    
+    NSNumber *productId = [product objectForKey:SymphoxAPIParam_cpdt_num];
+    NSDictionary *purchaseInfos = [[TMInfoManager sharedManager] purchaseInfoForCartType:self.currentType];
+    NSNumber *quantity = nil;
+    if (productId && [productId isEqual:[NSNull null]] == NO)
+    {
+        NSDictionary *purchaseInfo = [purchaseInfos objectForKey:productId];
+        if (purchaseInfo)
+        {
+            quantity = [purchaseInfo objectForKey:SymphoxAPIParam_qty];
+        }
+    }
     __weak CartViewController *weakSelf = self;
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:[LocalizedString PleaseSelectQuantity] preferredStyle:UIAlertControllerStyleAlert];
     [alertController addTextFieldWithConfigurationHandler:^(UITextField *textField){
+        if (quantity)
+        {
+            [textField setText:[quantity stringValue]];
+        }
+        else
+        {
+            [textField setText:@"1"];
+        }
         SHPickerView *pickerView = [[SHPickerView alloc] init];
         pickerView.tag = cell.tag;
         pickerView.dataSource = weakSelf;
@@ -1052,6 +1196,10 @@
     if (productId == nil)
         return;
     NSString *name = [dictionary objectForKey:SymphoxAPIParam_name];
+    if (name == nil)
+    {
+        name = [dictionary objectForKey:SymphoxAPIParam_cpdt_name];
+    }
     NSString *nameQuote = nil;
     if (name == nil || [name isEqual:[NSNull null]] || [name length] == 0)
     {

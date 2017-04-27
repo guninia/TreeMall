@@ -145,8 +145,8 @@ typedef enum : NSUInteger {
         
         if (error == nil)
         {
-//            NSString *string = [[NSString alloc] initWithData:resultObject encoding:NSUTF8StringEncoding];
-//            NSLog(@"retrieveData:\n%@", string);
+            NSString *string = [[NSString alloc] initWithData:resultObject encoding:NSUTF8StringEncoding];
+            NSLog(@"retrieveData:\n%@", string);
             if ([self processData:resultObject])
             {
                 [_tableViewEntrance reloadData];
@@ -490,16 +490,36 @@ typedef enum : NSUInteger {
             switch ([type integerValue]) {
                 case 0:
                 {
-                    if ([link isEqualToString:@"001"])
-                    {
-                        // Should go to Hot List page.
-                    }
+                    // Hot sale
                 }
                     break;
                 case 1:
                 {
-                    // Should go to product detail page.
-                    // "link" would be the product ID. 
+                    // Product detail
+                    if (link != nil && [link length] > 0)
+                    {
+                        ProductDetailViewController *viewController = [[ProductDetailViewController alloc] initWithNibName:@"ProductDetailViewController" bundle:[NSBundle mainBundle]];
+                        NSNumber *productId = [NSNumber numberWithInteger:[link integerValue]];
+                        viewController.productIdentifier = productId;
+                        [self.navigationController pushViewController:viewController animated:YES];
+                    }
+                }
+                    break;
+                case 2:
+                {
+                    // Sub category. Currently impossible since there is no layer information.
+                }
+                    break;
+                case 3:
+                {
+                    // Web page
+                    if (link != nil && [link length] > 0)
+                    {
+                        WebViewViewController *viewController = [[WebViewViewController alloc] initWithNibName:@"WebViewViewController" bundle:[NSBundle mainBundle]];
+                        viewController.title = [LocalizedString TodayFocus];
+                        viewController.urlString = link;
+                        [self.navigationController pushViewController:viewController animated:YES];
+                    }
                 }
                     break;
                 default:

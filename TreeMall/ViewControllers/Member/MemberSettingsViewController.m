@@ -55,6 +55,7 @@ typedef enum : NSUInteger {
 - (void)startAuthenticateWithUrlString:(NSString *)urlString;
 - (void)presentInfoModificationView;
 - (void)presentContactsModificationView;
+- (void)presentWebViewForUrl:(NSURL *)url forType:(WebViewType)type;
 
 - (void)textDidChangedInTextField:(id)sender;
 - (void)handlerOfUserInformationUpdatedNotification:(NSNotification *)notification;
@@ -598,7 +599,7 @@ typedef enum : NSUInteger {
     {
         NSLog(@"presentActionSheetForAuthenticateType - Invalid url from string");
     }
-    [self presentWebViewForUrl:url];
+    [self presentWebViewForUrl:url forType:WebViewTypeAuth];
 }
 
 - (void)presentContactsModificationView
@@ -622,7 +623,7 @@ typedef enum : NSUInteger {
     {
         NSLog(@"presentActionSheetForAuthenticateType - Invalid url from string");
     }
-    [self presentWebViewForUrl:url];
+    [self presentWebViewForUrl:url forType:WebViewTypeContactEdit];
 }
 
 - (void)presentInfoModificationView
@@ -646,7 +647,7 @@ typedef enum : NSUInteger {
     {
         NSLog(@"presentActionSheetForAuthenticateType - Invalid url from string");
     }
-    [self presentWebViewForUrl:url];
+    [self presentWebViewForUrl:url forType:WebViewTypeInfoEdit];
 }
 
 - (NSString *)encodedUrlStringForUrlString:(NSString *)urlString withParameters:(NSDictionary *)parameters
@@ -681,11 +682,12 @@ typedef enum : NSUInteger {
     return encodedUrlString;
 }
 
-- (void)presentWebViewForUrl:(NSURL *)url
+- (void)presentWebViewForUrl:(NSURL *)url forType:(WebViewType)type
 {
     if (url == nil)
         return;
     WebViewViewController *viewController = [[WebViewViewController alloc] initWithNibName:@"WebViewViewController" bundle:[NSBundle mainBundle]];
+    viewController.type = type;
     viewController.url = url;
     if (self.navigationController)
     {

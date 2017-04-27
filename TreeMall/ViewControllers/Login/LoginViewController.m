@@ -65,7 +65,7 @@
     
     _textFieldAccount = [[UITextField alloc] initWithFrame:CGRectZero];
     [_textFieldAccount setBorderStyle:UITextBorderStyleRoundedRect];
-    [_textFieldAccount setPlaceholder:[LocalizedString Account]];
+    [_textFieldAccount setPlaceholder:[LocalizedString PleaseInputEmailOrIdNumber]];
     [_textFieldAccount setKeyboardType:UIKeyboardTypeEmailAddress];
     [_textFieldAccount setReturnKeyType:UIReturnKeyDone];
     [_textFieldAccount setAutocapitalizationType:UITextAutocapitalizationTypeNone];

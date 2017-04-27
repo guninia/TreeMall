@@ -40,7 +40,8 @@
         [_label setTextColor:[UIColor grayColor]];
         UIFont *font = [UIFont systemFontOfSize:14.0];
         [_label setFont:font];
-        [_label setAdjustsFontSizeToFitWidth:YES];
+//        [_label setAdjustsFontSizeToFitWidth:YES];
+        [_label setLineBreakMode:NSLineBreakByTruncatingTail];
         [_label setTextAlignment:NSTextAlignmentCenter];
     }
     return _label;

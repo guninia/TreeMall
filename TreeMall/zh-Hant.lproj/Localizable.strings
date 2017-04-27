@@ -211,3 +211,11 @@
 "CathayCardOnly"="限國泰世華信用卡";
 "NoInterestInstallment"="分期０利率";
 "InstallmentAvailableBank"="可分期銀行";
+"ModifySuccess"="修改成功";
+"ModifyFailed"="修改失敗";
+"PleaseInputEmailOrIdNumber"="請輸入 Email 或身分證字號";
+"NoMatchProduct"="查無符合商品";
+"NoProductInCart"="目前購物車沒有任何商品";
+"NoCollections"="目前您沒有任何收藏";
+"AlreadyRemoveSomeProduct"="已移除部分商品";
+"ActionLink"="活動連結";

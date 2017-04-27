@@ -2061,4 +2061,84 @@
     return InstallmentAvailableBank;
 }
 
++ (NSString *)ModifySuccess
+{
+    static NSString *ModifySuccess = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        ModifySuccess = NSLocalizedString(@"ModifySuccess", nil);
+    });
+    return ModifySuccess;
+}
+
++ (NSString *)ModifyFailed
+{
+    static NSString *ModifyFailed = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        ModifyFailed = NSLocalizedString(@"ModifyFailed", nil);
+    });
+    return ModifyFailed;
+}
+
++ (NSString *)PleaseInputEmailOrIdNumber
+{
+    static NSString *PleaseInputEmailOrIdNumber = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        PleaseInputEmailOrIdNumber = NSLocalizedString(@"PleaseInputEmailOrIdNumber", nil);
+    });
+    return PleaseInputEmailOrIdNumber;
+}
+
++ (NSString *)NoMatchProduct
+{
+    static NSString *NoMatchProduct = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        NoMatchProduct = NSLocalizedString(@"NoMatchProduct", nil);
+    });
+    return NoMatchProduct;
+}
+
++ (NSString *)NoProductInCart
+{
+    static NSString *NoProductInCart = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        NoProductInCart = NSLocalizedString(@"NoProductInCart", nil);
+    });
+    return NoProductInCart;
+}
+
++ (NSString *)NoCollections
+{
+    static NSString *NoCollections = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        NoCollections = NSLocalizedString(@"NoCollections", nil);
+    });
+    return NoCollections;
+}
+
++ (NSString *)AlreadyRemoveSomeProduct
+{
+    static NSString *AlreadyRemoveSomeProduct = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        AlreadyRemoveSomeProduct = NSLocalizedString(@"AlreadyRemoveSomeProduct", nil);
+    });
+    return AlreadyRemoveSomeProduct;
+}
+
++ (NSString *)ActionLink
+{
+    static NSString *ActionLink = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        ActionLink = NSLocalizedString(@"ActionLink", nil);
+    });
+    return ActionLink;
+}
+
 @end

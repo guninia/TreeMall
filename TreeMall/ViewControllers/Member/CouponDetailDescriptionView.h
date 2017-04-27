@@ -29,6 +29,7 @@
 @property (nonatomic, strong) UILabel *labelDateGoodThru;
 @property (nonatomic, strong) UIImageView *imageViewCoupon;
 @property (nonatomic, strong) UILabel *labelValue;
+@property (nonatomic, strong) UILabel *labelOrderId;
 @property (nonatomic, strong) UIButton *buttonAction;
 @property (nonatomic, strong) NSDictionary *attributesTitle;
 @property (nonatomic, strong) NSDictionary *attributesCondition;

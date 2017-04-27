@@ -86,8 +86,13 @@
 		68981FAA1E55991E00A2707A /* SearchViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 68981FA81E55991E00A2707A /* SearchViewController.xib */; };
 		68987D9A1E8510800077A62B /* VerticalImageTextButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 68987D991E8510800077A62B /* VerticalImageTextButton.m */; };
 		689929D01E821D96001EDA0C /* CircularSideLabelView.m in Sources */ = {isa = PBXBuildFile; fileRef = 689929CF1E821D96001EDA0C /* CircularSideLabelView.m */; };
+		689A7A251EB1F14B00B7D281 /* PromotionDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 689A7A231EB1F14B00B7D281 /* PromotionDetailViewController.m */; };
+		689A7A261EB1F14B00B7D281 /* PromotionDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 689A7A241EB1F14B00B7D281 /* PromotionDetailViewController.xib */; };
 		689F664A1E5AC56400CC3664 /* ProductDetailBottomBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 689F66491E5AC56400CC3664 /* ProductDetailBottomBar.m */; };
 		68A1FE951EB04B670058ABED /* InstallmentDescriptionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68A1FE941EB04B670058ABED /* InstallmentDescriptionViewController.m */; };
+		68A1FE991EB0858D0058ABED /* AdditionalPurchaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68A1FE971EB0858D0058ABED /* AdditionalPurchaseViewController.m */; };
+		68A1FE9A1EB0858D0058ABED /* AdditionalPurchaseViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 68A1FE981EB0858D0058ABED /* AdditionalPurchaseViewController.xib */; };
+		68A1FE9D1EB086070058ABED /* AdditionalProductCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 68A1FE9C1EB086070058ABED /* AdditionalProductCollectionViewCell.m */; };
 		68A8279A1E4D9C6F00E63552 /* FTPopMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 68A827951E4D9C6F00E63552 /* FTPopMenu.m */; };
 		68A8279B1E4D9C6F00E63552 /* FTPopTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68A827971E4D9C6F00E63552 /* FTPopTableViewController.m */; };
 		68A8279C1E4D9C6F00E63552 /* UIViewController+FTPopMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 68A827991E4D9C6F00E63552 /* UIViewController+FTPopMenu.m */; };
@@ -304,10 +309,18 @@
 		68987D991E8510800077A62B /* VerticalImageTextButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = VerticalImageTextButton.m; path = Component/VerticalImageTextButton/VerticalImageTextButton.m; sourceTree = "<group>"; };
 		689929CE1E821D96001EDA0C /* CircularSideLabelView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CircularSideLabelView.h; path = Component/CircularSideLabelView/CircularSideLabelView.h; sourceTree = "<group>"; };
 		689929CF1E821D96001EDA0C /* CircularSideLabelView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CircularSideLabelView.m; path = Component/CircularSideLabelView/CircularSideLabelView.m; sourceTree = "<group>"; };
+		689A7A221EB1F14B00B7D281 /* PromotionDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PromotionDetailViewController.h; path = ViewControllers/Promotion/PromotionDetailViewController.h; sourceTree = "<group>"; };
+		689A7A231EB1F14B00B7D281 /* PromotionDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PromotionDetailViewController.m; path = ViewControllers/Promotion/PromotionDetailViewController.m; sourceTree = "<group>"; };
+		689A7A241EB1F14B00B7D281 /* PromotionDetailViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = PromotionDetailViewController.xib; path = ViewControllers/Promotion/PromotionDetailViewController.xib; sourceTree = "<group>"; };
 		689F66481E5AC56400CC3664 /* ProductDetailBottomBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ProductDetailBottomBar.h; path = ViewControllers/ShoppingMall/ProductDetailBottomBar.h; sourceTree = "<group>"; };
 		689F66491E5AC56400CC3664 /* ProductDetailBottomBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ProductDetailBottomBar.m; path = ViewControllers/ShoppingMall/ProductDetailBottomBar.m; sourceTree = "<group>"; };
 		68A1FE931EB04B670058ABED /* InstallmentDescriptionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = InstallmentDescriptionViewController.h; path = ViewControllers/ShoppingMall/InstallmentDescriptionViewController.h; sourceTree = "<group>"; };
 		68A1FE941EB04B670058ABED /* InstallmentDescriptionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = InstallmentDescriptionViewController.m; path = ViewControllers/ShoppingMall/InstallmentDescriptionViewController.m; sourceTree = "<group>"; };
+		68A1FE961EB0858D0058ABED /* AdditionalPurchaseViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AdditionalPurchaseViewController.h; path = ViewControllers/Cart/AdditionalPurchaseViewController.h; sourceTree = "<group>"; };
+		68A1FE971EB0858D0058ABED /* AdditionalPurchaseViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AdditionalPurchaseViewController.m; path = ViewControllers/Cart/AdditionalPurchaseViewController.m; sourceTree = "<group>"; };
+		68A1FE981EB0858D0058ABED /* AdditionalPurchaseViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = AdditionalPurchaseViewController.xib; path = ViewControllers/Cart/AdditionalPurchaseViewController.xib; sourceTree = "<group>"; };
+		68A1FE9B1EB086070058ABED /* AdditionalProductCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AdditionalProductCollectionViewCell.h; path = ViewControllers/Cart/AdditionalProductCollectionViewCell.h; sourceTree = "<group>"; };
+		68A1FE9C1EB086070058ABED /* AdditionalProductCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AdditionalProductCollectionViewCell.m; path = ViewControllers/Cart/AdditionalProductCollectionViewCell.m; sourceTree = "<group>"; };
 		68A827941E4D9C6F00E63552 /* FTPopMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FTPopMenu.h; sourceTree = "<group>"; };
 		68A827951E4D9C6F00E63552 /* FTPopMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FTPopMenu.m; sourceTree = "<group>"; };
 		68A827961E4D9C6F00E63552 /* FTPopTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FTPopTableViewController.h; sourceTree = "<group>"; };
@@ -778,6 +791,11 @@
 				689054CE1EAEE9BB0037CED9 /* PaymentTypeViewController.h */,
 				689054CF1EAEE9BB0037CED9 /* PaymentTypeViewController.m */,
 				689054D01EAEE9BB0037CED9 /* PaymentTypeViewController.xib */,
+				68A1FE961EB0858D0058ABED /* AdditionalPurchaseViewController.h */,
+				68A1FE971EB0858D0058ABED /* AdditionalPurchaseViewController.m */,
+				68A1FE981EB0858D0058ABED /* AdditionalPurchaseViewController.xib */,
+				68A1FE9B1EB086070058ABED /* AdditionalProductCollectionViewCell.h */,
+				68A1FE9C1EB086070058ABED /* AdditionalProductCollectionViewCell.m */,
 			);
 			name = Cart;
 			sourceTree = "<group>";
@@ -969,6 +987,9 @@
 				68B68FF81E24C30700DCCF29 /* PromotionViewController.xib */,
 				68B68FFB1E24C45600DCCF29 /* PromotionTableViewCell.h */,
 				68B68FFC1E24C45600DCCF29 /* PromotionTableViewCell.m */,
+				689A7A221EB1F14B00B7D281 /* PromotionDetailViewController.h */,
+				689A7A231EB1F14B00B7D281 /* PromotionDetailViewController.m */,
+				689A7A241EB1F14B00B7D281 /* PromotionDetailViewController.xib */,
 			);
 			name = Promotion;
 			sourceTree = "<group>";
@@ -1170,6 +1191,7 @@
 				68E401371E30B09900BFF66B /* ForgetPasswordViewController.xib in Resources */,
 				68E401321E309B7700BFF66B /* TermsViewController.xib in Resources */,
 				687B0E6D1E6970D500E04D81 /* CouponDetailViewController.xib in Resources */,
+				68A1FE9A1EB0858D0058ABED /* AdditionalPurchaseViewController.xib in Resources */,
 				685939BD1E1F49DF00351FFB /* LaunchScreen.storyboard in Resources */,
 				689546451E35DFB400D5CD1E /* AuthenticateViewController.xib in Resources */,
 				685939BA1E1F49DF00351FFB /* Assets.xcassets in Resources */,
@@ -1184,6 +1206,7 @@
 				6890651B1E2337F900E5CB26 /* CartViewController.xib in Resources */,
 				685939B51E1F49DF00351FFB /* Main.storyboard in Resources */,
 				689065211E23387200E5CB26 /* NotificationViewController.xib in Resources */,
+				689A7A261EB1F14B00B7D281 /* PromotionDetailViewController.xib in Resources */,
 				68D7518C1E80E03F00487088 /* OrderDetailViewController.xib in Resources */,
 				689054D21EAEE9BB0037CED9 /* PaymentTypeViewController.xib in Resources */,
 				6890652D1E23470E00E5CB26 /* FavoriteViewController.xib in Resources */,
@@ -1356,6 +1379,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				68B68FF91E24C30700DCCF29 /* PromotionViewController.m in Sources */,
+				689A7A251EB1F14B00B7D281 /* PromotionDetailViewController.m in Sources */,
+				68A1FE9D1EB086070058ABED /* AdditionalProductCollectionViewCell.m in Sources */,
+				68A1FE991EB0858D0058ABED /* AdditionalPurchaseViewController.m in Sources */,
 				6826E9EA1E5BF044001E572A /* ImageTitleButton.m in Sources */,
 				685939E91E1F518700351FFB /* CryptoTool.m in Sources */,
 				6895464D1E3608E500D5CD1E /* WebViewViewController.m in Sources */,

@@ -55,12 +55,12 @@
         [_subtitleLabel setTextColor:[UIColor blackColor]];
         [_containerView addSubview:_subtitleLabel];
         
-        _contentLabel = [[TTTAttributedLabel alloc] initWithFrame:CGRectZero];
-        [_contentLabel setBackgroundColor:[UIColor clearColor]];
-        [_contentLabel setTextColor:[UIColor grayColor]];
-        [_contentLabel setNumberOfLines:0];
-        [_contentLabel setFont:[UIFont systemFontOfSize:12.0]];
-        [_containerView addSubview:_contentLabel];
+//        _contentLabel = [[TTTAttributedLabel alloc] initWithFrame:CGRectZero];
+//        [_contentLabel setBackgroundColor:[UIColor clearColor]];
+//        [_contentLabel setTextColor:[UIColor grayColor]];
+//        [_contentLabel setNumberOfLines:0];
+//        [_contentLabel setFont:[UIFont systemFontOfSize:12.0]];
+//        [_containerView addSubview:_contentLabel];
         
         [self.detailTextLabel setBackgroundColor:[UIColor clearColor]];
         [self.detailTextLabel setTextColor:[UIColor blackColor]];
@@ -71,7 +71,7 @@
         [_viewMask setHidden:!_shouldShowMask];
         [_containerView addSubview:_viewMask];
         
-        titleAttributes = [NSDictionary dictionaryWithObjectsAndKeys:[UIFont boldSystemFontOfSize:14.0], NSFontAttributeName, titleStyle, NSParagraphStyleAttributeName, _titleLabel.textColor, NSForegroundColorAttributeName, nil];
+        titleAttributes = [NSDictionary dictionaryWithObjectsAndKeys:[UIFont boldSystemFontOfSize:16.0], NSFontAttributeName, titleStyle, NSParagraphStyleAttributeName, _titleLabel.textColor, NSForegroundColorAttributeName, nil];
         selectedTitleAttributes = [NSDictionary dictionaryWithObjectsAndKeys:[UIFont systemFontOfSize:14], NSFontAttributeName, titleStyle, NSParagraphStyleAttributeName, [UIColor grayColor], NSForegroundColorAttributeName, nil];
         subtitleAttributes = [NSDictionary dictionaryWithObjectsAndKeys:[UIFont boldSystemFontOfSize:14.0], NSFontAttributeName, _subtitleLabel.textColor, NSForegroundColorAttributeName, nil];
         selectedSubtitleAttributes = [NSDictionary dictionaryWithObjectsAndKeys:[UIFont systemFontOfSize:14.0], NSFontAttributeName, [UIColor grayColor], NSForegroundColorAttributeName, nil];
@@ -127,7 +127,7 @@
     
     if ([_title length] > 0)
     {
-        CGRect titleRect = [defaultTowLineString boundingRectWithSize:CGSizeMake(labelMaxWidth, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin attributes:titleAttributes context:nil];
+        CGRect titleRect = [defaultOneLineString boundingRectWithSize:CGSizeMake(labelMaxWidth, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin attributes:titleAttributes context:nil];
         // Use the calculated height only.
         CGSize titleSize = CGSizeMake(labelMaxWidth, ceil(titleRect.size.height));
         CGRect titleFrame = CGRectMake(originX, originY, labelMaxWidth, titleSize.height);

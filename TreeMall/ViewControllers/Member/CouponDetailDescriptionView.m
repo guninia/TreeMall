@@ -30,6 +30,7 @@
         [self addSubview:self.labelCondition];
         [self addSubview:self.labelDateStart];
         [self addSubview:self.labelDateGoodThru];
+        [self addSubview:self.labelOrderId];
         [self addSubview:self.buttonAction];
     }
     return self;
@@ -135,6 +136,19 @@
         [_labelValue setAdjustsFontSizeToFitWidth:YES];
     }
     return _labelValue;
+}
+
+- (UILabel *)labelOrderId
+{
+    if (_labelOrderId == nil)
+    {
+        _labelOrderId = [[UILabel alloc] initWithFrame:CGRectZero];
+        UIFont *font = [UIFont systemFontOfSize:12.0];
+        [_labelOrderId setFont:font];
+        [_labelOrderId setBackgroundColor:[UIColor clearColor]];
+        [_labelOrderId setTextColor:[UIColor grayColor]];
+    }
+    return _labelOrderId;
 }
 
 - (UIButton *)buttonAction
@@ -250,6 +264,16 @@
         CGRect frame = CGRectMake(originX, originY, positionRightEnd - originX, sizeLabel.height);
         self.labelDateGoodThru.frame = frame;
         originY = self.labelDateGoodThru.frame.origin.y + self.labelDateGoodThru.frame.size.height + intervalV;
+    }
+    if (self.labelOrderId && [self.labelOrderId isHidden] == NO)
+    {
+        NSString *defaultString = @"XXXXXXXXX";
+        NSDictionary *attributes = [NSDictionary dictionaryWithObjectsAndKeys:self.labelOrderId.font, NSFontAttributeName, nil];
+        CGSize sizeText = [defaultString sizeWithAttributes:attributes];
+        CGSize sizeLabel = CGSizeMake(ceil(sizeText.width), ceil(sizeText.height));
+        CGRect frame = CGRectMake(originX, originY, positionRightEnd - originX, sizeLabel.height);
+        self.labelOrderId.frame = frame;
+        originY = self.labelOrderId.frame.origin.y + self.labelOrderId.frame.size.height + intervalV;
     }
     bottomLeft = originY + intervalV;
     

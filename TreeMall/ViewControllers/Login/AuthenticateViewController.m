@@ -131,6 +131,7 @@
         return;
     WebViewViewController *viewController = [[WebViewViewController alloc] initWithNibName:@"WebViewViewController" bundle:[NSBundle mainBundle]];
     viewController.url = url;
+    viewController.type = WebViewTypeAuth;
     if (self.navigationController)
     {
         [self.navigationController pushViewController:viewController animated:YES];

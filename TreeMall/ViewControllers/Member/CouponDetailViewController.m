@@ -149,6 +149,16 @@ typedef enum : NSUInteger {
     {
         [self.viewDescription.buttonAction setHidden:NO];
     }
+    NSString *order_id = [dictionaryData objectForKey:SymphoxAPIParam_order_id];
+    if (order_id && [order_id isEqual:[NSNull null]] == NO && [order_id length] > 0)
+    {
+        [self.viewDescription.labelOrderId setHidden:NO];
+        [self.viewDescription.labelOrderId setText:order_id];
+    }
+    else
+    {
+        [self.viewDescription.labelOrderId setHidden:YES];
+    }
 }
 
 - (CouponDetailDescriptionView *)viewDescription

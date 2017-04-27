@@ -550,9 +550,42 @@
                 NSLog(@"retrieveDataForIdentifer:\n%@", string);
                 if ([weakSelf processProductData:data])
                 {
+                    // If the message exist, then pop message first.
+                    NSString *message = [self.dictionaryDetail objectForKey:SymphoxAPIParam_message];
+                    if (message && [message isEqual:[NSNull null]] == NO && [message length] > 0)
+                    {
+                        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:message preferredStyle:UIAlertControllerStyleAlert];
+                        UIAlertAction *action = nil;
+                        NSNumber *cpdt_num = [self.dictionaryDetail objectForKey:SymphoxAPIParam_cpdt_num];
+                        if (cpdt_num && [cpdt_num isEqual:[NSNull null]] == NO && [cpdt_num integerValue] > 0)
+                        {
+                            action = [UIAlertAction actionWithTitle:[LocalizedString Confirm] style:UIAlertActionStyleDefault handler:nil];
+                        }
+                        else
+                        {
+                            action = [UIAlertAction actionWithTitle:[LocalizedString GoBack] style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
+                                if (weakSelf.navigationController)
+                                {
+                                    [weakSelf.navigationController popViewControllerAnimated:YES];
+                                }
+                                else if (weakSelf.presentingViewController)
+                                {
+                                    [weakSelf.presentingViewController dismissViewControllerAnimated:YES completion:nil];
+                                }
+                            }];
+                        }
+                        if (action)
+                        {
+                            [alertController addAction:action];
+                        }
+                        [weakSelf presentViewController:alertController animated:YES completion:nil];
+                    }
+                    
+                    // Also layout subviews.
                     dispatch_async(dispatch_get_main_queue(), ^{
                         [weakSelf layoutCustomSubviews];
                     });
+                    
                 }
                 else
                 {
@@ -716,7 +749,7 @@
     if (self.labelOriginPrice && [self.labelOriginPrice isHidden] == NO)
     {
         CGSize size = [self.labelOriginPrice referenceSize];
-        priceOriginX -= size.width;
+        priceOriginX = marginL;
         if (originY + size.height > priceBottomY)
         {
             priceBottomY = originY + size.height;
@@ -771,7 +804,7 @@
         originY = self.buttonInstallmentCal.frame.origin.y + self.buttonInstallmentCal.frame.size.height + 5.0;
     }
     originX = marginL;
-    if (self.viewChooseSpec)
+    if (self.viewChooseSpec && [self.viewChooseSpec isHidden] == NO)
     {
         CGRect frame = CGRectMake(originX, originY, columnWidth, columnHeight);
         self.viewChooseSpec.frame = frame;
@@ -1081,6 +1114,7 @@
     NSArray *arraySpec = [self.dictionaryDetail objectForKey:SymphoxAPIParam_standard];
     if (arraySpec && [arraySpec isEqual:[NSNull null]] == NO && [arraySpec count] > 0)
     {
+        self.viewChooseSpec.hidden = NO;
         for (NSInteger index = 0; index < [arraySpec count]; index++)
         {
             NSDictionary *dictionary = [arraySpec objectAtIndex:index];
@@ -1091,6 +1125,10 @@
                 break;
             }
         }
+    }
+    else
+    {
+        self.viewChooseSpec.hidden = YES;
     }
     
 //    NSArray *arrayNotice = [self.dictionaryDetail objectForKey:SymphoxAPIParam_attention];
@@ -1427,13 +1465,28 @@
         }
         __weak ProductDetailViewController *weakSelf = self;
         UIAlertAction *action = [UIAlertAction actionWithTitle:title style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
-            NSDictionary *product = weakSelf.dictionaryCommon;
+            NSNumber *specificSpecId = nil;
+            NSArray *arraySpec = [weakSelf.dictionaryDetail objectForKey:SymphoxAPIParam_standard];
+            if (arraySpec && [arraySpec isEqual:[NSNull null]] == NO && weakSelf.specIndex > 0 && weakSelf.specIndex < arraySpec.count)
+            {
+                NSDictionary *dictionarySpec = [arraySpec objectAtIndex:weakSelf.specIndex];
+                NSNumber *cpdt_num = [dictionarySpec objectForKey:SymphoxAPIParam_cpdt_num];
+                if (cpdt_num && [cpdt_num isEqual:[NSNull null]] == NO)
+                {
+                    specificSpecId = cpdt_num;
+                }
+            }
+            NSMutableDictionary *product = [weakSelf.dictionaryCommon mutableCopy];
             if (product == nil)
             {
                 product = [weakSelf dictionaryCommonFromDetail:weakSelf.dictionaryDetail];
             }
             if (product)
             {
+                if (specificSpecId)
+                {
+                    [product setObject:specificSpecId forKey:SymphoxAPIParam_cpdt_num];
+                }
                 [weakSelf addProduct:product toCartForType:type];
             }
         }];
@@ -1801,7 +1854,28 @@
 
 - (void)didTouchUpInsideBorderedDoubleView:(BorderedDoubleLabelView *)view
 {
-    
+    if (view == self.viewChooseSpec)
+    {
+        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:[LocalizedString ChooseSpec] message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+        NSArray *arraySpec = [_dictionaryDetail objectForKey:SymphoxAPIParam_standard];
+        if (arraySpec == nil || [arraySpec isEqual:[NSNull null]] || [arraySpec count] == 0)
+            return;
+        __weak ProductDetailViewController *weakSelf = self;
+        for (NSInteger index = 0; index < arraySpec.count; index++)
+        {
+            NSDictionary *dictionary = [arraySpec objectAtIndex:index];
+            NSString *name = [dictionary objectForKey:SymphoxAPIParam_name];
+            if (name == nil || [name isEqual:[NSNull null]])
+            {
+                name = @"";
+            }
+            UIAlertAction *action = [UIAlertAction actionWithTitle:name style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
+                weakSelf.specIndex = index;
+            }];
+            [alertController addAction:action];
+        }
+        [self presentViewController:alertController animated:YES completion:nil];
+    }
 }
 
 #pragma mark - DTAttributedTextContentViewDelegate

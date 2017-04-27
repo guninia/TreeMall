@@ -46,8 +46,8 @@ static NSInteger MaxTagsNumber = 4;
         {
             [self.viewContainer addSubview:label];
         }
-        self.contentView.backgroundColor = [UIColor colorWithWhite:0.9 alpha:1.0];
-        self.backgroundColor = [UIColor colorWithWhite:0.9 alpha:1.0];
+        self.contentView.backgroundColor = [UIColor colorWithWhite:0.93 alpha:1.0];
+        self.backgroundColor = [UIColor colorWithWhite:0.93 alpha:1.0];
     }
     return self;
 }

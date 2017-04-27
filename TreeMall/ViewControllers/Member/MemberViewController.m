@@ -17,6 +17,7 @@
 #import "CryptoModule.h"
 #import "SHAPIAdapter.h"
 #import "APIDefinition.h"
+#import "WebViewViewController.h"
 
 typedef enum : NSUInteger {
     SectionTitleTagCoupon = 1000,
@@ -563,7 +564,9 @@ typedef enum : NSUInteger {
 
 - (void)buttonItemQAPressed:(id)sender
 {
-    
+    WebViewViewController *viewController = [[WebViewViewController alloc] initWithNibName:@"WebViewViewController" bundle:[NSBundle mainBundle]];
+    viewController.urlString = @"https://www.treemall.com.tw/iMember/service/serviceLogin.jsp";
+    [self.navigationController pushViewController:viewController animated:YES];
 }
 
 #pragma mark - ProductDetailSectionTitleViewDelegate

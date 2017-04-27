@@ -115,6 +115,12 @@
         CGFloat originY = self.viewTool.frame.origin.y + self.viewTool.frame.size.height;
         CGRect frame = CGRectMake(0.0, originY, self.view.frame.size.width, self.view.frame.size.height - originY);
         self.tableViewProduct.frame = frame;
+        
+        if (self.labelNoContent)
+        {
+            CGRect frame = CGRectMake(0.0, self.tableViewProduct.frame.size.height * 2 / 3, self.tableViewProduct.frame.size.width, 30.0);
+            self.labelNoContent.frame = frame;
+        }
     }
 }
 
@@ -144,7 +150,7 @@
     if (_tableViewProduct == nil)
     {
         _tableViewProduct = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
-        [_tableViewProduct setBackgroundColor:[UIColor colorWithWhite:0.9 alpha:1.0]];
+        [_tableViewProduct setBackgroundColor:[UIColor colorWithWhite:0.93 alpha:1.0]];
         [_tableViewProduct setSeparatorStyle:UITableViewCellSeparatorStyleNone];
         [_tableViewProduct setShowsVerticalScrollIndicator:NO];
         [_tableViewProduct setShowsHorizontalScrollIndicator:NO];
@@ -154,6 +160,36 @@
         [_tableViewProduct registerClass:[LoadingFooterView class] forHeaderFooterViewReuseIdentifier:LoadingFooterViewIdentifier];
     }
     return _tableViewProduct;
+}
+
+- (UIImageView *)tableBackgroundView
+{
+    if (_tableBackgroundView == nil)
+    {
+        _tableBackgroundView = [[UIImageView alloc] initWithFrame:CGRectZero];
+        [_tableBackgroundView setBackgroundColor:[UIColor colorWithWhite:0.93 alpha:1.0]];
+        [_tableBackgroundView setContentMode:UIViewContentModeCenter];
+        UIImage *image = [UIImage imageNamed:@"ico_default"];
+        if (image)
+        {
+            [_tableBackgroundView setImage:image];
+        }
+        [_tableBackgroundView addSubview:self.labelNoContent];
+    }
+    return _tableBackgroundView;
+}
+
+- (UILabel *)labelNoContent
+{
+    if (_labelNoContent == nil)
+    {
+        _labelNoContent = [[UILabel alloc] initWithFrame:CGRectZero];
+        [_labelNoContent setBackgroundColor:[UIColor clearColor]];
+        [_labelNoContent setTextColor:[UIColor colorWithWhite:0.82 alpha:1.0]];
+        [_labelNoContent setText:[LocalizedString NoMatchProduct]];
+        [_labelNoContent setTextAlignment:NSTextAlignmentCenter];
+    }
+    return _labelNoContent;
 }
 
 #pragma mark - Private Methods
@@ -250,6 +286,7 @@
     {
         [self.arrayProducts removeAllObjects];
         self.shouldShowLoadingFooter = YES;
+        [self.tableViewProduct setBackgroundView:nil];
         [self.tableViewProduct reloadData];
     }
     self.isLoading = YES;
@@ -261,6 +298,7 @@
     NSLog(@"retrieveProductsForConditions - conditions:\n%@", [conditions description]);
     NSDictionary *headerFields = [NSDictionary dictionaryWithObjectsAndKeys:apiKey, SymphoxAPIParam_key, token, SymphoxAPIParam_token, nil];
     [[SHAPIAdapter sharedAdapter] sendRequestFromObject:weakSelf ToUrl:url withHeaderFields:headerFields andPostObject:conditions inPostFormat:SHPostFormatJson encrypted:YES decryptedReturnData:YES completion:^(id resultObject, NSError *error){
+        weakSelf.shouldShowLoadingFooter = NO;
         if (error == nil)
         {
 //            NSLog(@"resultObject[%@]:\n%@", [[resultObject class] description], [resultObject description]);
@@ -271,11 +309,13 @@
 //                NSLog(@"retrieveProductsForConditions:\n%@", string);
                 if ([weakSelf processProductsData:data byRefreshing:refresh] == NO)
                 {
+                    weakSelf.tableViewProduct.backgroundView = self.tableBackgroundView;
                     NSLog(@"retrieveProductsForConditions - Cannot process data");
                 }
             }
             else
             {
+                weakSelf.tableViewProduct.backgroundView = self.tableBackgroundView;
                 NSLog(@"retrieveProductsForConditions - Unexpected data format.");
             }
         }
@@ -302,18 +342,8 @@
             }
             NSLog(@"retrieveProductsForConditions - error:\n%@", [error description]);
             UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:errorMessage preferredStyle:UIAlertControllerStyleAlert];
-            UIAlertAction *backAction = [UIAlertAction actionWithTitle:[LocalizedString GoBack] style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
-                if (weakSelf.navigationController)
-                {
-                    [weakSelf.navigationController popViewControllerAnimated:YES];
-                    return;
-                }
-                if (weakSelf.presentingViewController)
-                {
-                    [weakSelf.presentingViewController dismissViewControllerAnimated:YES completion:nil];
-                }
-            }];
-            [alertController addAction:backAction];
+            UIAlertAction *action = [UIAlertAction actionWithTitle:[LocalizedString Confirm] style:UIAlertActionStyleDefault handler:nil];
+            [alertController addAction:action];
             if (errorProductNotFound == NO)
             {
                 UIAlertAction *reloadAction = [UIAlertAction actionWithTitle:[LocalizedString Reload] style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
@@ -322,7 +352,9 @@
                 [alertController addAction:reloadAction];
             }
             [weakSelf presentViewController:alertController animated:YES completion:nil];
+            weakSelf.tableViewProduct.backgroundView = self.tableBackgroundView;
         }
+        [self.tableViewProduct reloadData];
         weakSelf.isLoading = NO;
     }];
 }
@@ -361,12 +393,13 @@
                 {
                     self.shouldShowLoadingFooter = NO;
                 }
-                else
-                {
-                    self.shouldShowLoadingFooter = YES;
-                }
+                
+                self.tableViewProduct.backgroundView = nil;
             }
-            [self.tableViewProduct reloadData];
+            else
+            {
+                self.tableViewProduct.backgroundView = self.tableBackgroundView;
+            }
             
             if ([[TMInfoManager sharedManager].dictionaryInitialFilter count] == 0)
             {
@@ -722,7 +755,7 @@
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
 {
     LoadingFooterView *footerView = [tableView dequeueReusableHeaderFooterViewWithIdentifier:LoadingFooterViewIdentifier];
-    footerView.viewBackground.backgroundColor = tableView.backgroundColor;
+    footerView.viewBackground.backgroundColor = self.tableBackgroundView.backgroundColor;
     return footerView;
 }
 

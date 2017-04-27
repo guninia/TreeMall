@@ -9,6 +9,13 @@
 #import <UIKit/UIKit.h>
 #import <WebKit/WebKit.h>
 
+typedef enum : NSUInteger {
+    WebViewTypeAuth,
+    WebViewTypeInfoEdit,
+    WebViewTypeContactEdit,
+    WebViewTypeTotal
+} WebViewType;
+
 @interface WebViewViewController : UIViewController <WKUIDelegate, WKNavigationDelegate>
 
 @property (nonatomic, strong) WKWebView *webView;
@@ -18,5 +25,7 @@
 @property (nonatomic, strong) NSURL *url;
 
 @property (nonatomic, strong) UIActivityIndicatorView *activityIndicator;
+
+@property (nonatomic, assign) WebViewType type;
 
 @end

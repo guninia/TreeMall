@@ -12,6 +12,7 @@
 #import "CartProductTableViewCell.h"
 #import "TMInfoManager.h"
 #import "SHPickerView.h"
+#import "FullScreenLoadingView.h"
 
 @interface CartViewController : UIViewController <SemiCircleEndsSegmentedViewDelegate, UITableViewDataSource, UITableViewDelegate, CartProductTableViewCellDelegate, UIPickerViewDataSource, UIPickerViewDelegate, LabelButtonViewDelegate>
 
@@ -22,4 +23,7 @@
 @property (nonatomic, strong) NSMutableArray *arrayProducts;
 @property (nonatomic, strong) NSMutableDictionary *dictionaryTotal;
 @property (nonatomic, strong) NSNumberFormatter *numberFormatter;
+@property (nonatomic, strong) UIImageView *tableBackgroundView;
+@property (nonatomic, strong) UILabel *labelNoContent;
+@property (nonatomic, strong) FullScreenLoadingView *viewLoading;
 @end

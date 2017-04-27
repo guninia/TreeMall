@@ -1511,6 +1511,7 @@ static NSUInteger SearchKeywordNumberMax = 8;
                 {
                     name = [product objectForKey:SymphoxAPIParam_cpdt_name];
                 }
+                NSLog(@"nameOfRemovedProductId[%@]", name);
                 index = idx;
                 *stop = YES;
             }
@@ -1520,6 +1521,10 @@ static NSUInteger SearchKeywordNumberMax = 8;
         return nil;
     if (index < [array count])
     {
+        NSDictionary *product = [array objectAtIndex:index];
+        NSString *productName = [product objectForKey:SymphoxAPIParam_cpdt_name];
+        NSLog(@"nameOfRemovedProductId - product[%@]:\n%@", productName, [product description]);
+        
         [array removeObjectAtIndex:index];
     }
     if (purchaseInfo)

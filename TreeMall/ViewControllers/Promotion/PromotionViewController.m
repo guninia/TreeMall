@@ -15,6 +15,7 @@
 #import "Utility.h"
 #import "LocalizedString.h"
 #import "TMInfoManager.h"
+#import "PromotionDetailViewController.h"
 
 @interface PromotionViewController ()
 
@@ -159,18 +160,35 @@
     [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
     if (indexPath.row < [_arrayPromotion count])
     {
-        cell.imageView.backgroundColor = [UIColor redColor];
+        cell.imageView.backgroundColor = [UIColor clearColor];
+        UIImage *image = [UIImage imageNamed:@"ico_info_gift"];
+        if (image)
+        {
+            cell.imageView.image = image;
+        }
         NSDictionary *dictionary = [_arrayPromotion objectAtIndex:indexPath.row];
         NSString *title = [dictionary objectForKey:SymphoxAPIParam_name];
-        NSString *subtitle = [dictionary objectForKey:SymphoxAPIParam_tips];
-        NSString *content = [dictionary objectForKey:SymphoxAPIParam_content];
+        NSString *beginTime = [dictionary objectForKey:SymphoxAPIParam_begin_time];
+        NSString *endTime = [dictionary objectForKey:SymphoxAPIParam_end_time];
+//        NSString *content = [dictionary objectForKey:SymphoxAPIParam_content];
 //        NSString *type = [dictionary objectForKey:SymphoxAPIParam_type];
         NSString *identifier = [dictionary objectForKey:SymphoxAPIParam_id];
+        
+        NSMutableString *subtitle = [NSMutableString string];
+        if (beginTime)
+        {
+            [subtitle appendString:beginTime];
+        }
+        [subtitle appendString:@"～"];
+        if (endTime)
+        {
+            [subtitle appendString:endTime];
+        }
         
         cell.shouldShowMask = [[TMInfoManager sharedManager] alreadyReadPromotionForIdentifier:identifier];
         cell.title = (title == nil)?@"":title;
         cell.subtitle = (subtitle == nil)?@"":subtitle;
-        cell.content = (content == nil)?@"":content;
+//        cell.content = (content == nil)?@"":content;
     }
     return cell;
 }
@@ -179,7 +197,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    CGFloat heightForRow = 120.0;
+    CGFloat heightForRow = 60.0;
     return heightForRow;
 }
 
@@ -191,6 +209,9 @@
         NSString *identifier = [dictionary objectForKey:SymphoxAPIParam_id];
         [[TMInfoManager sharedManager] readPromotionForIdentifier:identifier];
         [tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationNone];
+        PromotionDetailViewController *viewController = [[PromotionDetailViewController alloc] initWithNibName:@"PromotionDetailViewController" bundle:[NSBundle mainBundle]];
+        viewController.dictionaryData = dictionary;
+        [self.navigationController pushViewController:viewController animated:YES];
     }
 }
 

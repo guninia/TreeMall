@@ -18,6 +18,16 @@
 
 @implementation WebViewViewController
 
+- (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+{
+    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    if (self)
+    {
+        self.type = WebViewTypeTotal;
+    }
+    return self;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
@@ -138,36 +148,84 @@
     UIAlertAction *confirmAction = nil;
     NSString *alertTitle = nil;
     NSString *alertMessage = nil;
+    BOOL success = NO;
     if ([message compare:@"success" options:NSCaseInsensitiveSearch] == NSOrderedSame)
     {
-        alertTitle = nil;
-        alertMessage = [LocalizedString AuthenticateSuccess];
-        __weak WebViewViewController *weakSelf = self;
-        confirmAction = [UIAlertAction actionWithTitle:[LocalizedString Confirm] style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
-            completionHandler();
-            if (weakSelf.navigationController.presentingViewController)
-            {
-                [weakSelf.navigationController.presentingViewController dismissViewControllerAnimated:YES completion:nil];
-            }
-            else if (weakSelf.presentingViewController)
-            {
-                [weakSelf.presentingViewController dismissViewControllerAnimated:YES completion:nil];
-            }
-            [[NSNotificationCenter defaultCenter] postNotificationName:PostNotificationName_UserAuthenticated object:self];
-        }];
+        success = YES;
     }
     else
     {
-        alertTitle = [LocalizedString AuthenticateFailed];
         if ([message length] > 0)
         {
             alertMessage = message;
         }
-        
-        confirmAction = [UIAlertAction actionWithTitle:[LocalizedString Confirm] style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
-            completionHandler();
-        }];
     }
+    
+    switch (self.type) {
+        case WebViewTypeAuth:
+        {
+            if (success)
+            {
+                alertMessage = [LocalizedString AuthenticateSuccess];
+                __weak WebViewViewController *weakSelf = self;
+                confirmAction = [UIAlertAction actionWithTitle:[LocalizedString Confirm] style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
+                    completionHandler();
+                    if (weakSelf.navigationController.presentingViewController)
+                    {
+                        [weakSelf.navigationController.presentingViewController dismissViewControllerAnimated:YES completion:nil];
+                    }
+                    else if (weakSelf.presentingViewController)
+                    {
+                        [weakSelf.presentingViewController dismissViewControllerAnimated:YES completion:nil];
+                    }
+                    [[NSNotificationCenter defaultCenter] postNotificationName:PostNotificationName_UserAuthenticated object:self];
+                }];
+            }
+            else
+            {
+                alertTitle = [LocalizedString AuthenticateFailed];
+                confirmAction = [UIAlertAction actionWithTitle:[LocalizedString Confirm] style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
+                    completionHandler();
+                }];
+            }
+        }
+            break;
+        case WebViewTypeInfoEdit:
+        case WebViewTypeContactEdit:
+        {
+            if (success)
+            {
+                alertMessage = [LocalizedString ModifySuccess];
+                __weak WebViewViewController *weakSelf = self;
+                confirmAction = [UIAlertAction actionWithTitle:[LocalizedString Confirm] style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
+                    completionHandler();
+                    if (weakSelf.navigationController.presentingViewController)
+                    {
+                        [weakSelf.navigationController.presentingViewController dismissViewControllerAnimated:YES completion:nil];
+                    }
+                    else if (weakSelf.presentingViewController)
+                    {
+                        [weakSelf.presentingViewController dismissViewControllerAnimated:YES completion:nil];
+                    }
+                }];
+            }
+            else
+            {
+                alertTitle = [LocalizedString ModifyFailed];
+                confirmAction = [UIAlertAction actionWithTitle:[LocalizedString Confirm] style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
+                    completionHandler();
+                }];
+            }
+        }
+            break;
+        default:
+        {
+            confirmAction = [UIAlertAction actionWithTitle:[LocalizedString Confirm] style:UIAlertActionStyleDefault handler:nil];
+        }
+            break;
+    }
+    
+    
     if ((alertTitle || alertMessage) && confirmAction)
     {
         UIAlertController *alertController = [UIAlertController alertControllerWithTitle:alertTitle message:alertMessage preferredStyle:UIAlertControllerStyleAlert];

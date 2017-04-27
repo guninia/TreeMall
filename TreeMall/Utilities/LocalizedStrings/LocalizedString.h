@@ -215,5 +215,13 @@
 + (NSString *)CathayCardOnly;
 + (NSString *)NoInterestInstallment;
 + (NSString *)InstallmentAvailableBank;
++ (NSString *)ModifySuccess;
++ (NSString *)ModifyFailed;
++ (NSString *)PleaseInputEmailOrIdNumber;
++ (NSString *)NoMatchProduct;
++ (NSString *)NoProductInCart;
++ (NSString *)NoCollections;
++ (NSString *)AlreadyRemoveSomeProduct;
++ (NSString *)ActionLink;
 
 @end

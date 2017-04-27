@@ -212,3 +212,11 @@
 "CathayCardOnly"="Cathay card only";
 "NoInterestInstallment"="No Interest Installment";
 "InstallmentAvailableBank"="Installment available bank";
+"ModifySuccess"="Modify Successfully";
+"ModifyFailed"="Modify failed";
+"PleaseInputEmailOrIdNumber"="Please input email or ID number";
+"NoMatchProduct"="No Matched Product";
+"NoProductInCart"="No Product In Cart";
+"NoCollections"="No Collections";
+"AlreadyRemoveSomeProduct"="Already Remove Some Products";
+"ActionLink"="Action Link";

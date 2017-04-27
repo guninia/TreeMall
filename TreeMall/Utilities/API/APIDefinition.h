@@ -255,6 +255,8 @@ static NSString *SymphoxAPIParam_eacc_num = @"eacc_num";
 static NSString *SymphoxAPIParam_used_payment_mode = @"used_payment_mode";
 static NSString *SymphoxAPIParam_total_point = @"total_point";
 static NSString *SymphoxAPIParam_additional_purchase = @"additional_purchase";
+static NSString *SymphoxAPIParam_begin_time = @"begin_time";
+static NSString *SymphoxAPIParam_end_time = @"end_time";
 
 typedef enum : NSUInteger {
     TermTypeMemberTerms,

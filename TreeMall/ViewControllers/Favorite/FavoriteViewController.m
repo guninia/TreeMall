@@ -74,6 +74,11 @@
     if (self.tableViewFavorites)
     {
         [self.tableViewFavorites setFrame:self.view.bounds];
+        if (self.labelNoContent)
+        {
+            CGRect frame = CGRectMake(0.0, self.tableViewFavorites.frame.size.height * 2 / 3, self.tableViewFavorites.frame.size.width, 30.0);
+            self.labelNoContent.frame = frame;
+        }
     }
 }
 
@@ -117,6 +122,36 @@
     return _tableViewFavorites;
 }
 
+- (UIImageView *)tableBackgroundView
+{
+    if (_tableBackgroundView == nil)
+    {
+        _tableBackgroundView = [[UIImageView alloc] initWithFrame:CGRectZero];
+        [_tableBackgroundView setBackgroundColor:[UIColor colorWithWhite:0.93 alpha:1.0]];
+        [_tableBackgroundView setContentMode:UIViewContentModeCenter];
+        UIImage *image = [UIImage imageNamed:@"ico_default"];
+        if (image)
+        {
+            [_tableBackgroundView setImage:image];
+        }
+        [_tableBackgroundView addSubview:self.labelNoContent];
+    }
+    return _tableBackgroundView;
+}
+
+- (UILabel *)labelNoContent
+{
+    if (_labelNoContent == nil)
+    {
+        _labelNoContent = [[UILabel alloc] initWithFrame:CGRectZero];
+        [_labelNoContent setBackgroundColor:[UIColor clearColor]];
+        [_labelNoContent setTextColor:[UIColor colorWithWhite:0.82 alpha:1.0]];
+        [_labelNoContent setText:[LocalizedString NoCollections]];
+        [_labelNoContent setTextAlignment:NSTextAlignmentCenter];
+    }
+    return _labelNoContent;
+}
+
 #pragma mark - Private Methods
 
 - (void)refreshData
@@ -156,6 +191,14 @@
     }
     
     //    NSLog(@"numberOfRows[%li]", (long)numberOfRows);
+    if (numberOfRows == 0)
+    {
+        tableView.backgroundView = self.tableBackgroundView;
+    }
+    else
+    {
+        tableView.backgroundView = nil;
+    }
     return numberOfRows;
 }
 
