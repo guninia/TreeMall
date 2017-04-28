@@ -2141,4 +2141,24 @@
     return ActionLink;
 }
 
++ (NSString *)HotSaleRanking
+{
+    static NSString *HotSaleRanking = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        HotSaleRanking = NSLocalizedString(@"HotSaleRanking", nil);
+    });
+    return HotSaleRanking;
+}
+
++ (NSString *)ProductInfo
+{
+    static NSString *ProductInfo = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        ProductInfo = NSLocalizedString(@"ProductInfo", nil);
+    });
+    return ProductInfo;
+}
+
 @end

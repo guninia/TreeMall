@@ -14,6 +14,7 @@
 #ifdef DEBUG
 static NSString *SymphoxAPI_token = @"http://tomcat8.mdevelop.com/TreeMall/api/portal/app/token";
 static NSString *SymphoxAPI_homepage = @"http://tomcat8.mdevelop.com/TreeMall/api/onlineService.do";
+static NSString *SymphoxAPI_getHotSaleProducts = @"http://tomcat8.mdevelop.com/TreeMall/api/eiffel/amway/default";
 static NSString *SymphoxAPI_promotion = @"http://tomcat8.mdevelop.com/TreeMall/api/onlineService.do";
 static NSString *SymphoxAPI_register = @"http://tomcat8.mdevelop.com/TreeMall/api/portal/app/member/register";
 static NSString *SymphoxAPI_login = @"http://tomcat8.mdevelop.com/TreeMall/api/portal/app/member/identify";
@@ -257,6 +258,9 @@ static NSString *SymphoxAPIParam_total_point = @"total_point";
 static NSString *SymphoxAPIParam_additional_purchase = @"additional_purchase";
 static NSString *SymphoxAPIParam_begin_time = @"begin_time";
 static NSString *SymphoxAPIParam_end_time = @"end_time";
+static NSString *SymphoxAPIParam_rank = @"rank";
+static NSString *SymphoxAPIParam_pic_link = @"pic_link";
+static NSString *SymphoxAPIParam_cpdt_price = @"cpdt_price";
 
 typedef enum : NSUInteger {
     TermTypeMemberTerms,

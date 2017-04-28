@@ -223,5 +223,7 @@
 + (NSString *)NoCollections;
 + (NSString *)AlreadyRemoveSomeProduct;
 + (NSString *)ActionLink;
++ (NSString *)HotSaleRanking;
++ (NSString *)ProductInfo;
 
 @end

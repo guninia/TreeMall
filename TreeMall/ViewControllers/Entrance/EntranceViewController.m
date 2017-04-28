@@ -21,6 +21,7 @@
 #import "LoginViewController.h"
 #import "WebViewViewController.h"
 #import "ProductDetailViewController.h"
+#import "HotSaleViewController.h"
 
 typedef enum : NSUInteger {
     TableViewSectionMemberPromotion,
@@ -452,19 +453,19 @@ typedef enum : NSUInteger {
             case 0:
             {
                 // 900 X 360
-                heightForRow = tableView.frame.size.width * 360 / 900;
+                heightForRow = tableView.frame.size.width * 432 / 888;
             }
                 break;
             case 1:
             {
                 // 900 X 240
-                heightForRow = tableView.frame.size.width * 240 / 900;
+                heightForRow = tableView.frame.size.width * 288 / 888;
             }
                 break;
             case 2:
             {
                 // 900 X 120
-                heightForRow = tableView.frame.size.width * 120 / 900;
+                heightForRow = tableView.frame.size.width * 144 / 888;
             }
                 break;
             default:
@@ -491,6 +492,15 @@ typedef enum : NSUInteger {
                 case 0:
                 {
                     // Hot sale
+                    if (link != nil && [link length] > 0)
+                    {
+                        NSInteger type = [link integerValue];
+                        HotSaleViewController *viewController = [[HotSaleViewController alloc] initWithNibName:@"HotSaleViewController" bundle:[NSBundle mainBundle]];
+                        viewController.type = type;
+                        viewController.title = [LocalizedString HotSaleRanking];
+                        UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:viewController];
+                        [self presentViewController:navigationController animated:YES completion:nil];
+                    }
                 }
                     break;
                 case 1:
@@ -548,6 +558,12 @@ typedef enum : NSUInteger {
                 case 0:
                 {
                     // Hot sale
+                    NSInteger type = [stringLink integerValue];
+                    HotSaleViewController *viewController = [[HotSaleViewController alloc] initWithNibName:@"HotSaleViewController" bundle:[NSBundle mainBundle]];
+                    viewController.type = type;
+                    viewController.title = [LocalizedString HotSaleRanking];
+                    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:viewController];
+                    [self presentViewController:navigationController animated:YES completion:nil];
                 }
                     break;
                 case 1:
@@ -599,6 +615,12 @@ typedef enum : NSUInteger {
                 case 0:
                 {
                     // Hot sale
+                    NSInteger type = [stringLink integerValue];
+                    HotSaleViewController *viewController = [[HotSaleViewController alloc] initWithNibName:@"HotSaleViewController" bundle:[NSBundle mainBundle]];
+                    viewController.type = type;
+                    viewController.title = [LocalizedString HotSaleRanking];
+                    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:viewController];
+                    [self presentViewController:navigationController animated:YES completion:nil];
                 }
                     break;
                 case 1:
@@ -676,12 +698,20 @@ typedef enum : NSUInteger {
     switch (function) {
         case EntranceFunctionExchange:
         {
-            
+            HotSaleViewController *viewController = [[HotSaleViewController alloc] initWithNibName:@"HotSaleViewController" bundle:[NSBundle mainBundle]];
+            viewController.type = HotSaleTypePoint;
+            viewController.title = [LocalizedString HotSaleRanking];
+            UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:viewController];
+            [self presentViewController:navigationController animated:YES completion:nil];
         }
             break;
         case EntranceFunctionCoupon:
         {
-            
+            HotSaleViewController *viewController = [[HotSaleViewController alloc] initWithNibName:@"HotSaleViewController" bundle:[NSBundle mainBundle]];
+            viewController.type = HotSaleTypeCoupon;
+            viewController.title = [LocalizedString HotSaleRanking];
+            UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:viewController];
+            [self presentViewController:navigationController animated:YES completion:nil];
         }
             break;
         case EntranceFunctionPromotion:

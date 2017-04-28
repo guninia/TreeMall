@@ -33,6 +33,9 @@
 		6826C0191EAF3CBC00921ADC /* ExchangeDescriptionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6826C0181EAF3CBC00921ADC /* ExchangeDescriptionViewController.m */; };
 		6826E9E51E5BE52E001E572A /* BorderedDoubleLabelView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6826E9E41E5BE52E001E572A /* BorderedDoubleLabelView.m */; };
 		6826E9EA1E5BF044001E572A /* ImageTitleButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 6826E9E91E5BF044001E572A /* ImageTitleButton.m */; };
+		683C17D31EB2D9200051519A /* HotSaleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 683C17D11EB2D9200051519A /* HotSaleViewController.m */; };
+		683C17D41EB2D9200051519A /* HotSaleViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 683C17D21EB2D9200051519A /* HotSaleViewController.xib */; };
+		683C17D71EB2D9E70051519A /* HotSaleTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 683C17D61EB2D9E70051519A /* HotSaleTableViewCell.m */; };
 		685939AC1E1F49DF00351FFB /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 685939AB1E1F49DF00351FFB /* main.m */; };
 		685939AF1E1F49DF00351FFB /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 685939AE1E1F49DF00351FFB /* AppDelegate.m */; };
 		685939B21E1F49DF00351FFB /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 685939B11E1F49DF00351FFB /* ViewController.m */; };
@@ -215,6 +218,11 @@
 		6826E9E41E5BE52E001E572A /* BorderedDoubleLabelView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BorderedDoubleLabelView.m; path = Component/BorderedDoubleLabelView/BorderedDoubleLabelView.m; sourceTree = "<group>"; };
 		6826E9E81E5BF044001E572A /* ImageTitleButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ImageTitleButton.h; path = Component/ImageTitleButton/ImageTitleButton.h; sourceTree = "<group>"; };
 		6826E9E91E5BF044001E572A /* ImageTitleButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ImageTitleButton.m; path = Component/ImageTitleButton/ImageTitleButton.m; sourceTree = "<group>"; };
+		683C17D01EB2D9200051519A /* HotSaleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HotSaleViewController.h; path = ViewControllers/Entrance/HotSaleViewController.h; sourceTree = "<group>"; };
+		683C17D11EB2D9200051519A /* HotSaleViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HotSaleViewController.m; path = ViewControllers/Entrance/HotSaleViewController.m; sourceTree = "<group>"; };
+		683C17D21EB2D9200051519A /* HotSaleViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = HotSaleViewController.xib; path = ViewControllers/Entrance/HotSaleViewController.xib; sourceTree = "<group>"; };
+		683C17D51EB2D9E70051519A /* HotSaleTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HotSaleTableViewCell.h; path = ViewControllers/Entrance/HotSaleTableViewCell.h; sourceTree = "<group>"; };
+		683C17D61EB2D9E70051519A /* HotSaleTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HotSaleTableViewCell.m; path = ViewControllers/Entrance/HotSaleTableViewCell.m; sourceTree = "<group>"; };
 		685939A71E1F49DF00351FFB /* TreeMall.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TreeMall.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		685939AB1E1F49DF00351FFB /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		685939AD1E1F49DF00351FFB /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -706,6 +714,11 @@
 				68CA36B41E23712700A70BCC /* EntranceFunctionSectionHeader.m */,
 				68CA36B01E23709400A70BCC /* EntranceTableViewCell.h */,
 				68CA36B11E23709400A70BCC /* EntranceTableViewCell.m */,
+				683C17D01EB2D9200051519A /* HotSaleViewController.h */,
+				683C17D11EB2D9200051519A /* HotSaleViewController.m */,
+				683C17D21EB2D9200051519A /* HotSaleViewController.xib */,
+				683C17D51EB2D9E70051519A /* HotSaleTableViewCell.h */,
+				683C17D61EB2D9E70051519A /* HotSaleTableViewCell.m */,
 			);
 			name = Entrance;
 			sourceTree = "<group>";
@@ -1186,6 +1199,7 @@
 				6811BC711E2774B500626A4A /* GoogleSignIn.bundle in Resources */,
 				689130101E68097C00CE834A /* CouponListViewController.xib in Resources */,
 				689065271E2338C400E5CB26 /* MemberViewController.xib in Resources */,
+				683C17D41EB2D9200051519A /* HotSaleViewController.xib in Resources */,
 				689065151E23368100E5CB26 /* ShoppingMallViewController.xib in Resources */,
 				68CA36BE1E23880400A70BCC /* LoginViewController.xib in Resources */,
 				68E401371E30B09900BFF66B /* ForgetPasswordViewController.xib in Resources */,
@@ -1387,6 +1401,7 @@
 				6895464D1E3608E500D5CD1E /* WebViewViewController.m in Sources */,
 				680957751E43195F00DA2BEA /* ProductListToolView.m in Sources */,
 				68164D921E39D11F00006398 /* ProductListViewController.m in Sources */,
+				683C17D71EB2D9E70051519A /* HotSaleTableViewCell.m in Sources */,
 				6863A1D71E5E7C550036E0A8 /* IconLabelView.m in Sources */,
 				68CE49901EADD471008F77D7 /* DiscountHeaderView.m in Sources */,
 				68E401361E30B09900BFF66B /* ForgetPasswordViewController.m in Sources */,
@@ -1469,6 +1484,7 @@
 				6891300F1E68097C00CE834A /* CouponListViewController.m in Sources */,
 				68ACE8901E56DA2000A821DA /* SearchCollectionViewCell.m in Sources */,
 				6826C0191EAF3CBC00921ADC /* ExchangeDescriptionViewController.m in Sources */,
+				683C17D31EB2D9200051519A /* HotSaleViewController.m in Sources */,
 				688EF5F31E5D474C0047E2DC /* MemberPointView.m in Sources */,
 				6884DD821E6D191000DAF859 /* TopSeparatedTitleCollectionReusableView.m in Sources */,
 				68A827A01E4DB56400E63552 /* ProductFilterViewController.m in Sources */,

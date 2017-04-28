@@ -60,6 +60,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
+    self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
     [self.view setBackgroundColor:[UIColor whiteColor]];
     [self.view addSubview:self.scrollView];
     [self.scrollView addSubview:self.collectionViewImage];
