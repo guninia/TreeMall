@@ -166,17 +166,38 @@
         [paymentMode setObject:cm_id forKey:SymphoxAPIParam_cm_id];
     }
     
-    [[TMInfoManager sharedManager] setPurchasePaymentMode:paymentMode forProduct:self.productId inCart:self.type];
+    if (self.isAddition)
+    {
+        [[TMInfoManager sharedManager] setPurchasePaymentMode:paymentMode forProduct:self.productId inAdditionalCart:self.type];
+    }
+    else
+    {
+        [[TMInfoManager sharedManager] setPurchasePaymentMode:paymentMode forProduct:self.productId inCart:self.type];
+    }
     
+    id discount_type_desc = [paymentModeSelected objectForKey:SymphoxAPIParam_discount_type_desc];
     id discount_detail_desc = [paymentModeSelected objectForKey:SymphoxAPIParam_discount_detail_desc];
     if ([discount_detail_desc isKindOfClass:[NSString class]])
     {
-        [[TMInfoManager sharedManager] setPaymentModeDescription:discount_detail_desc forProduct:self.productId inCart:self.type];
+        if (self.isAddition)
+        {
+            [[TMInfoManager sharedManager] setDiscountTypeDescription:discount_type_desc forProduct:self.productId inAdditionalCart:self.type];
+            [[TMInfoManager sharedManager] setDiscountDetailDescription:discount_detail_desc forProduct:self.productId inAdditionalCart:self.type];
+        }
+        else
+        {
+            [[TMInfoManager sharedManager] setDiscountTypeDescription:discount_type_desc forProduct:self.productId inCart:self.type];
+            [[TMInfoManager sharedManager] setDiscountDetailDescription:discount_detail_desc forProduct:self.productId inCart:self.type];
+        }
     }
     
     if (self.navigationController.presentingViewController)
     {
         [self.navigationController.presentingViewController dismissViewControllerAnimated:YES completion:nil];
+        if (self.delegate && [self.delegate respondsToSelector:@selector(didDismissDiscountViewController:)])
+        {
+            [self.delegate didDismissDiscountViewController:self];
+        }
     }
 }
 

@@ -143,10 +143,12 @@
     if (_labelOrderId == nil)
     {
         _labelOrderId = [[UILabel alloc] initWithFrame:CGRectZero];
-        UIFont *font = [UIFont systemFontOfSize:12.0];
+        UIFont *font = [UIFont systemFontOfSize:10.0];
         [_labelOrderId setFont:font];
         [_labelOrderId setBackgroundColor:[UIColor clearColor]];
-        [_labelOrderId setTextColor:[UIColor grayColor]];
+        [_labelOrderId setTextColor:[UIColor blackColor]];
+        [_labelOrderId setNumberOfLines:0];
+        [_labelOrderId setLineBreakMode:NSLineBreakByWordWrapping];
     }
     return _labelOrderId;
 }
@@ -220,8 +222,27 @@
     if (self.imageViewCoupon)
     {
         sizeImage = CGSizeMake(ceil(self.imageViewCoupon.image.size.width), ceil(self.imageViewCoupon.image.size.height));
+        CGRect frame = CGRectMake(positionRightEnd - sizeImage.width, originY, sizeImage.width, sizeImage.height);
+        self.imageViewCoupon.frame  = frame;
+        if (self.labelValue && [self.labelValue isHidden] == NO)
+        {
+            CGRect frame = CGRectMake(self.imageViewCoupon.frame.origin.x + 25.0, self.imageViewCoupon.frame.origin.y, 65.0, self.imageViewCoupon.frame.size.height);
+            self.labelValue.frame = frame;
+        }
         positionRightEnd = positionRightEnd - sizeImage.width - intervalH;
         originY = originY + sizeImage.height + intervalV;
+    }
+    if (self.labelOrderId && [self.labelOrderId isHidden] == NO)
+    {
+        CGFloat originX = CGRectGetMinX(self.imageViewCoupon.frame);
+        CGFloat labelWidth = width - marginR - originX;
+        NSString *defaultString = @"XXXXXXXXX\nXXXXXX";
+        NSDictionary *attributes = [NSDictionary dictionaryWithObjectsAndKeys:self.labelOrderId.font, NSFontAttributeName, nil];
+        CGSize sizeText = [defaultString boundingRectWithSize:CGSizeMake(labelWidth, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin attributes:attributes context:nil].size;
+        CGSize sizeLabel = CGSizeMake(ceil(sizeText.width), ceil(sizeText.height));
+        CGRect frame = CGRectMake(originX, originY, labelWidth, sizeLabel.height);
+        self.labelOrderId.frame = frame;
+        originY = self.labelOrderId.frame.origin.y + self.labelOrderId.frame.size.height + intervalV;
     }
     bottomRight = originY + intervalV;
     
@@ -265,32 +286,24 @@
         self.labelDateGoodThru.frame = frame;
         originY = self.labelDateGoodThru.frame.origin.y + self.labelDateGoodThru.frame.size.height + intervalV;
     }
-    if (self.labelOrderId && [self.labelOrderId isHidden] == NO)
-    {
-        NSString *defaultString = @"XXXXXXXXX";
-        NSDictionary *attributes = [NSDictionary dictionaryWithObjectsAndKeys:self.labelOrderId.font, NSFontAttributeName, nil];
-        CGSize sizeText = [defaultString sizeWithAttributes:attributes];
-        CGSize sizeLabel = CGSizeMake(ceil(sizeText.width), ceil(sizeText.height));
-        CGRect frame = CGRectMake(originX, originY, positionRightEnd - originX, sizeLabel.height);
-        self.labelOrderId.frame = frame;
-        originY = self.labelOrderId.frame.origin.y + self.labelOrderId.frame.size.height + intervalV;
-    }
+    
     bottomLeft = originY + intervalV;
     
     originY = MAX(bottomLeft, bottomRight);
     
     // Move the imageView
-    if (self.imageViewCoupon)
-    {
-        CGFloat imageViewOriginX = positionRightEnd + intervalH;
-        CGRect frame = CGRectMake(imageViewOriginX, (originY - sizeImage.height)/2, sizeImage.width, sizeImage.height);
-        self.imageViewCoupon.frame = frame;
-        if (self.labelValue && [self.labelValue isHidden] == NO)
-        {
-            CGRect frame = CGRectMake(self.imageViewCoupon.frame.origin.x + 25.0, self.imageViewCoupon.frame.origin.y, 65.0, self.imageViewCoupon.frame.size.height);
-            self.labelValue.frame = frame;
-        }
-    }
+//    if (self.imageViewCoupon)
+//    {
+//        CGFloat imageViewOriginX = positionRightEnd + intervalH;
+//        CGRect frame = CGRectMake(imageViewOriginX, (originY - sizeImage.height)/2, sizeImage.width, sizeImage.height);
+//        self.imageViewCoupon.frame = frame;
+//        if (self.labelValue && [self.labelValue isHidden] == NO)
+//        {
+//            CGRect frame = CGRectMake(self.imageViewCoupon.frame.origin.x + 25.0, self.imageViewCoupon.frame.origin.y, 65.0, self.imageViewCoupon.frame.size.height);
+//            self.labelValue.frame = frame;
+//        }
+//    }
+    
     
     NSLog(@"referenceHeightForFixedWidth[%4.2f] - originY[%4.2f] --- 1", width, originY);
     if (self.buttonAction && [self.buttonAction isHidden] == NO)

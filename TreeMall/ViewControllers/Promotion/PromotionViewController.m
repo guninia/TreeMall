@@ -41,6 +41,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
+    self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
     self.title = [LocalizedString PromotionNotification];
     
     [_tableViewPromotion registerClass:[PromotionTableViewCell class] forCellReuseIdentifier:PromotionTableViewCellIdentifier];
@@ -211,6 +212,7 @@
         [tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationNone];
         PromotionDetailViewController *viewController = [[PromotionDetailViewController alloc] initWithNibName:@"PromotionDetailViewController" bundle:[NSBundle mainBundle]];
         viewController.dictionaryData = dictionary;
+        viewController.title = [LocalizedString PromotionNotification];
         [self.navigationController pushViewController:viewController animated:YES];
     }
 }

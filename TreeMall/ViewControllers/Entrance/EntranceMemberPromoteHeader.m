@@ -199,7 +199,7 @@
     if (_labelGreetings == nil)
     {
         _labelGreetings = [[UILabel alloc] initWithFrame:CGRectZero];
-        UIFont *font = [UIFont systemFontOfSize:12.0];
+        UIFont *font = [UIFont systemFontOfSize:18.0];
         [_labelGreetings setFont:font];
         [_labelGreetings setTextColor:[UIColor grayColor]];
         [_labelGreetings setBackgroundColor:[UIColor clearColor]];
@@ -302,7 +302,7 @@
         {
             [_buttonMarketing.imageViewIcon setImage:image];
         }
-        [_buttonMarketing.labelText setTextAlignment:NSTextAlignmentLeft];
+        [_buttonMarketing.labelText setTextAlignment:NSTextAlignmentCenter];
         [_buttonMarketing.layer setCornerRadius:0.0];
         [_buttonMarketing addTarget:self action:@selector(buttonMarketingPressed:) forControlEvents:UIControlEventTouchUpInside];
     }

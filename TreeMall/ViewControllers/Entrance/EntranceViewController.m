@@ -61,10 +61,7 @@ typedef enum : NSUInteger {
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
-    [self.navigationController.navigationBar setBarTintColor:[UIColor whiteColor]];
-    [self.navigationController.navigationBar setTintColor:[UIColor colorWithRed:(100.0/255.0) green:(170.0/255.0) blue:(80.0/255.0) alpha:1.0]];
-    [self.navigationController.navigationBar setBackgroundImage:[[UIImage alloc] init] forBarMetrics:UIBarMetricsDefault];
-    [self.navigationController.navigationBar setShadowImage:[[UIImage alloc] init]];
+    
     if (self.navigationItem)
     {
         UIImage *image = [[UIImage imageNamed:@"ind_logo"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
@@ -98,7 +95,19 @@ typedef enum : NSUInteger {
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    [self.navigationController.navigationBar setBarTintColor:[UIColor whiteColor]];
+    [self.navigationController.navigationBar setTintColor:[UIColor colorWithRed:(100.0/255.0) green:(170.0/255.0) blue:(80.0/255.0) alpha:1.0]];
+    [self.navigationController.navigationBar setBackgroundImage:[[UIImage alloc] init] forBarMetrics:UIBarMetricsDefault];
+    [self.navigationController.navigationBar setShadowImage:[[UIImage alloc] init]];
     [self.tableViewEntrance reloadData];
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    [self.navigationController.navigationBar setBarTintColor:TMMainColor];
+    [self.navigationController.navigationBar setTintColor:[UIColor whiteColor]];
+    [self.navigationController.navigationBar setTranslucent:NO];
 }
 
 - (void)viewDidLayoutSubviews
@@ -146,8 +155,8 @@ typedef enum : NSUInteger {
         
         if (error == nil)
         {
-            NSString *string = [[NSString alloc] initWithData:resultObject encoding:NSUTF8StringEncoding];
-            NSLog(@"retrieveData:\n%@", string);
+//            NSString *string = [[NSString alloc] initWithData:resultObject encoding:NSUTF8StringEncoding];
+//            NSLog(@"retrieveData:\n%@", string);
             if ([self processData:resultObject])
             {
                 [_tableViewEntrance reloadData];
@@ -409,7 +418,27 @@ typedef enum : NSUInteger {
                 return;
             }];
         }
+        NSString *size = [dictionary objectForKey:SymphoxAPIParam_size];
+        if (size)
+        {
+            EntranceTableViewCell *entranceCell = (EntranceTableViewCell *)cell;
+            switch ([size integerValue]) {
+                case 0:
+                {
+                    entranceCell.frameRatio = kEntranceTableViewCellImageFrameRatio0;
+                }
+                    break;
+                case 1:
+                {
+                    entranceCell.frameRatio = kEntranceTableViewCellImageFrameRatio1;
+                }
+                    break;
+                default:
+                    break;
+            }
+        }
     }
+    
     return cell;
 }
 
@@ -447,25 +476,20 @@ typedef enum : NSUInteger {
     NSDictionary *dictionary = [self dictionaryForProductAtIndex:indexPath.row];
     NSString *stringSize = [dictionary objectForKey:SymphoxAPIParam_size];
     CGFloat heightForRow = tableView.frame.size.width * 0.4;
+    CGFloat separatorHeight = 5.0;
     if (stringSize)
     {
         switch ([stringSize integerValue]) {
             case 0:
             {
-                // 900 X 360
-                heightForRow = tableView.frame.size.width * 432 / 888;
+                // 888 x 360
+                heightForRow = ceil(tableView.frame.size.width * kEntranceTableViewCellImageFrameRatio0) + separatorHeight;
             }
                 break;
             case 1:
             {
-                // 900 X 240
-                heightForRow = tableView.frame.size.width * 288 / 888;
-            }
-                break;
-            case 2:
-            {
-                // 900 X 120
-                heightForRow = tableView.frame.size.width * 144 / 888;
+                // 888 X 144
+                heightForRow = ceil(tableView.frame.size.width * kEntranceTableViewCellImageFrameRatio1) + separatorHeight;
             }
                 break;
             default:
@@ -511,6 +535,7 @@ typedef enum : NSUInteger {
                         ProductDetailViewController *viewController = [[ProductDetailViewController alloc] initWithNibName:@"ProductDetailViewController" bundle:[NSBundle mainBundle]];
                         NSNumber *productId = [NSNumber numberWithInteger:[link integerValue]];
                         viewController.productIdentifier = productId;
+                        viewController.title = [LocalizedString ProductInfo];
                         [self.navigationController pushViewController:viewController animated:YES];
                     }
                 }
@@ -552,6 +577,7 @@ typedef enum : NSUInteger {
     {
         NSString *type = [dictionaryFocus objectForKey:SymphoxAPIParam_type];
         NSString *stringLink = [dictionaryFocus objectForKey:SymphoxAPIParam_link];
+        NSString *name = [dictionaryFocus objectForKey:SymphoxAPIParam_name];
         if (stringLink && [stringLink isEqual:[NSNull null]] == NO && [stringLink length] > 0)
         {
             switch ([type integerValue]) {
@@ -574,6 +600,7 @@ typedef enum : NSUInteger {
                         ProductDetailViewController *viewController = [[ProductDetailViewController alloc] initWithNibName:@"ProductDetailViewController" bundle:[NSBundle mainBundle]];
                         NSNumber *productId = [NSNumber numberWithInteger:[stringLink integerValue]];
                         viewController.productIdentifier = productId;
+                        viewController.title = [LocalizedString ProductInfo];
                         [self.navigationController pushViewController:viewController animated:YES];
                     }
                 }
@@ -589,7 +616,8 @@ typedef enum : NSUInteger {
                     if (stringLink != nil && [stringLink length] > 0)
                     {
                         WebViewViewController *viewController = [[WebViewViewController alloc] initWithNibName:@"WebViewViewController" bundle:[NSBundle mainBundle]];
-                        viewController.title = [LocalizedString TodayFocus];
+                        NSString *title = (name == nil)?[LocalizedString TodayFocus]:name;
+                        viewController.title = title;
                         viewController.urlString = stringLink;
                         [self.navigationController pushViewController:viewController animated:YES];
                     }
@@ -618,7 +646,7 @@ typedef enum : NSUInteger {
                     NSInteger type = [stringLink integerValue];
                     HotSaleViewController *viewController = [[HotSaleViewController alloc] initWithNibName:@"HotSaleViewController" bundle:[NSBundle mainBundle]];
                     viewController.type = type;
-                    viewController.title = [LocalizedString HotSaleRanking];
+                    viewController.title = [LocalizedString Promotions];
                     UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:viewController];
                     [self presentViewController:navigationController animated:YES completion:nil];
                 }
@@ -631,6 +659,7 @@ typedef enum : NSUInteger {
                         ProductDetailViewController *viewController = [[ProductDetailViewController alloc] initWithNibName:@"ProductDetailViewController" bundle:[NSBundle mainBundle]];
                         NSNumber *productId = [NSNumber numberWithInteger:[stringLink integerValue]];
                         viewController.productIdentifier = productId;
+                        viewController.title = [LocalizedString ProductInfo];
                         [self.navigationController pushViewController:viewController animated:YES];
                     }
                 }
@@ -648,6 +677,7 @@ typedef enum : NSUInteger {
                         WebViewViewController *viewController = [[WebViewViewController alloc] initWithNibName:@"WebViewViewController" bundle:[NSBundle mainBundle]];
                         viewController.title = [LocalizedString SpecialService];
                         viewController.urlString = stringLink;
+                        viewController.title = [LocalizedString Promotions];
                         [self.navigationController pushViewController:viewController animated:YES];
                     }
                 }

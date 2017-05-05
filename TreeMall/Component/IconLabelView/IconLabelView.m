@@ -10,6 +10,12 @@
 
 static CGFloat intervalV = 5.0;
 
+@interface IconLabelView ()
+
+- (void)buttonPressed:(id)sender;
+
+@end
+
 @implementation IconLabelView
 
 - (instancetype)initWithFrame:(CGRect)frame
@@ -19,6 +25,7 @@ static CGFloat intervalV = 5.0;
     {
         [self addSubview:self.imageView];
         [self addSubview:self.label];
+        [self addSubview:self.button];
     }
     return self;
 }
@@ -49,6 +56,10 @@ static CGFloat intervalV = 5.0;
         CGRect frame = CGRectMake(0.0, originY, self.frame.size.width, self.frame.size.height - originY);
         self.label.frame = frame;
     }
+    if (self.button)
+    {
+        self.button.frame = self.bounds;
+    }
 }
 
 - (UIImageView *)imageView
@@ -74,6 +85,17 @@ static CGFloat intervalV = 5.0;
     return _label;
 }
 
+- (UIButton *)button
+{
+    if (_button == nil)
+    {
+        _button = [[UIButton alloc] initWithFrame:CGRectZero];
+        [_button setBackgroundColor:[UIColor clearColor]];
+        [_button addTarget:self action:@selector(buttonPressed:) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _button;
+}
+
 #pragma mark - Public Methods
 
 - (CGSize)referenceSizeForMaxWidth:(CGFloat)maxWidth
@@ -97,6 +119,16 @@ static CGFloat intervalV = 5.0;
     CGFloat width = (sizeImageView.width > sizeLabel.width)?sizeImageView.width:sizeLabel.width;
     CGSize viewSize = CGSizeMake(width, totalHeight);
     return viewSize;
+}
+
+#pragma mark - Actions
+
+- (void)buttonPressed:(id)sender
+{
+    if (_delegate && [_delegate respondsToSelector:@selector(iconLabelView:didPressedBySender:)])
+    {
+        [_delegate iconLabelView:self didPressedBySender:sender];
+    }
 }
 
 @end

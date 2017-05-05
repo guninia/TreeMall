@@ -19,4 +19,6 @@
 @property (nonatomic, strong) NSMutableArray *arrayLabels;
 @property (nonatomic, strong) NSArray *arrayInstallment;
 
+@property (nonatomic, strong) UIButton *buttonClose;
+
 @end

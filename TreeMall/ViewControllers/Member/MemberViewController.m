@@ -267,6 +267,7 @@ typedef enum : NSUInteger {
     if (_viewProcessing == nil)
     {
         _viewProcessing = [[IconLabelView alloc] initWithFrame:CGRectZero];
+        _viewProcessing.delegate = self;
         UIImage *image = [UIImage imageNamed:@"men_my_ord_icon2"];
         if (image)
         {
@@ -274,6 +275,7 @@ typedef enum : NSUInteger {
         }
         NSString *stringDefault = [NSString stringWithFormat:[LocalizedString Processing_BRA_S_BRA], @"0"];
         _viewProcessing.label.text = stringDefault;
+        _viewProcessing.tag = OrderStateProcessing;
     }
     return _viewProcessing;
 }
@@ -283,6 +285,7 @@ typedef enum : NSUInteger {
     if (_viewShipped == nil)
     {
         _viewShipped = [[IconLabelView alloc] initWithFrame:CGRectZero];
+        _viewShipped.delegate = self;
         UIImage *image = [UIImage imageNamed:@"men_my_ord_icon1"];
         if (image)
         {
@@ -290,6 +293,7 @@ typedef enum : NSUInteger {
         }
         NSString *stringDefault = [NSString stringWithFormat:[LocalizedString Shipped_BRA_S_BRA], @"0"];
         _viewShipped.label.text = stringDefault;
+        _viewShipped.tag = OrderStateShipping;
     }
     return _viewShipped;
 }
@@ -299,6 +303,7 @@ typedef enum : NSUInteger {
     if (_viewReturnReplace == nil)
     {
         _viewReturnReplace = [[IconLabelView alloc] initWithFrame:CGRectZero];
+        _viewReturnReplace.delegate = self;
         UIImage *image = [UIImage imageNamed:@"men_my_ord_icon3"];
         if (image)
         {
@@ -306,6 +311,7 @@ typedef enum : NSUInteger {
         }
         NSString *stringDefault = [NSString stringWithFormat:[LocalizedString ReturnReplace_BRA_S_BRA], @"0"];
         _viewReturnReplace.label.text = stringDefault;
+        _viewReturnReplace.tag = OrderStateReturnOrReplace;
     }
     return _viewReturnReplace;
 }
@@ -598,6 +604,15 @@ typedef enum : NSUInteger {
 - (void)memberTitleView:(MemberTitleView *)view didSelectToModifyPersonalInformationBySender:(id)sender
 {
     MemberSettingsViewController *viewController = [[MemberSettingsViewController alloc] initWithNibName:@"MemberSettingsViewController" bundle:[NSBundle mainBundle]];
+    [self.navigationController pushViewController:viewController animated:YES];
+}
+
+#pragma mark - IconLabelViewDelegate
+
+- (void)iconLabelView:(IconLabelView *)view didPressedBySender:(id)sender
+{
+    OrderListViewController *viewController = [[OrderListViewController alloc] initWithNibName:@"OrderListViewController" bundle:[NSBundle mainBundle]];
+    viewController.orderState = view.tag;
     [self.navigationController pushViewController:viewController animated:YES];
 }
 

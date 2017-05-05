@@ -17,6 +17,7 @@
 #import <UIButton+WebCache.h>
 #import "ExchangeDescriptionViewController.h"
 #import "InstallmentDescriptionViewController.h"
+#import "SingleMediaDetailViewController.h"
 
 @interface ProductDetailViewController ()
 
@@ -28,8 +29,10 @@
 - (void)retrieveTermsForType:(TermType)type;
 - (BOOL)processTermsData:(id)data;
 - (void)showCartTypeSheet;
+- (void)addToCart:(CartType)type;
 - (void)addProduct:(NSDictionary *)dictionaryProduct toCartForType:(CartType)type;
 - (NSMutableDictionary *)dictionaryCommonFromDetail:(NSDictionary *)dictionary;
+
 
 - (void)buttonExchangeDescPressed:(id)sender;
 - (void)buttonInstallmentCalPressed:(id)sender;
@@ -53,6 +56,7 @@
         _productIdentifier = nil;
         _specIndex = NSNotFound;
         _arrayViewNotice = [[NSMutableArray alloc] initWithCapacity:0];
+        self.title = [LocalizedString ProductInfo];
     }
     return self;
 }
@@ -96,14 +100,6 @@
             if (productIdentifier && ([productIdentifier isEqual:[NSNull null]] == NO))
             {
                 self.productIdentifier = productIdentifier;
-            }
-        }
-        if (self.title == nil)
-        {
-            NSString *name = [self.dictionaryCommon objectForKey:SymphoxAPIParam_cpdt_name];
-            if (name && [name isEqual:[NSNull null]] == NO && [name length] > 0)
-            {
-                self.title = name;
             }
         }
     }
@@ -1466,36 +1462,66 @@
         }
         __weak ProductDetailViewController *weakSelf = self;
         UIAlertAction *action = [UIAlertAction actionWithTitle:title style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
-            NSNumber *specificSpecId = nil;
-            NSArray *arraySpec = [weakSelf.dictionaryDetail objectForKey:SymphoxAPIParam_standard];
-            if (arraySpec && [arraySpec isEqual:[NSNull null]] == NO && weakSelf.specIndex > 0 && weakSelf.specIndex < arraySpec.count)
-            {
-                NSDictionary *dictionarySpec = [arraySpec objectAtIndex:weakSelf.specIndex];
-                NSNumber *cpdt_num = [dictionarySpec objectForKey:SymphoxAPIParam_cpdt_num];
-                if (cpdt_num && [cpdt_num isEqual:[NSNull null]] == NO)
-                {
-                    specificSpecId = cpdt_num;
-                }
-            }
-            NSMutableDictionary *product = [weakSelf.dictionaryCommon mutableCopy];
-            if (product == nil)
-            {
-                product = [weakSelf dictionaryCommonFromDetail:weakSelf.dictionaryDetail];
-            }
-            if (product)
-            {
-                if (specificSpecId)
-                {
-                    [product setObject:specificSpecId forKey:SymphoxAPIParam_cpdt_num];
-                }
-                [weakSelf addProduct:product toCartForType:type];
-            }
+            [weakSelf addToCart:type];
         }];
         [alertController addAction:action];
     }
     UIAlertAction *actionCancel = [UIAlertAction actionWithTitle:[LocalizedString Cancel] style:UIAlertActionStyleCancel handler:nil];
     [alertController addAction:actionCancel];
     [self presentViewController:alertController animated:YES completion:nil];
+}
+
+- (void)addToCart:(CartType)type
+{
+    NSString *title = @"";
+    switch (type) {
+        case CartTypeCommonDelivery:
+        {
+            title = [LocalizedString CommonDelivery];
+        }
+            break;
+        case CartTypeStorePickup:
+        {
+            title = [LocalizedString StorePickUp];
+        }
+            break;
+        case CartTypeFastDelivery:
+        {
+            title = [LocalizedString FastDelivery];
+        }
+            break;
+        default:
+            break;
+    }
+    NSNumber *specificSpecId = nil;
+    NSArray *arraySpec = [self.dictionaryDetail objectForKey:SymphoxAPIParam_standard];
+    if (arraySpec && [arraySpec isEqual:[NSNull null]] == NO && self.specIndex > 0 && self.specIndex < arraySpec.count)
+    {
+        NSDictionary *dictionarySpec = [arraySpec objectAtIndex:self.specIndex];
+        NSNumber *cpdt_num = [dictionarySpec objectForKey:SymphoxAPIParam_cpdt_num];
+        if (cpdt_num && [cpdt_num isEqual:[NSNull null]] == NO)
+        {
+            specificSpecId = cpdt_num;
+        }
+    }
+    NSMutableDictionary *product = [self.dictionaryCommon mutableCopy];
+    if (product == nil)
+    {
+        product = [self dictionaryCommonFromDetail:self.dictionaryDetail];
+    }
+    if (product)
+    {
+        if (specificSpecId)
+        {
+            [product setObject:specificSpecId forKey:SymphoxAPIParam_cpdt_num];
+        }
+        [self addProduct:product toCartForType:type];
+        NSString *message = [NSString stringWithFormat:[LocalizedString AddedTo_S_], title];
+        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:message preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction *action = [UIAlertAction actionWithTitle:[LocalizedString Confirm] style:UIAlertActionStyleDefault handler:nil];
+        [alertController addAction:action];
+        [self presentViewController:alertController animated:YES completion:nil];
+    }
 }
 
 - (void)addProduct:(NSDictionary *)dictionaryProduct toCartForType:(CartType)type
@@ -1716,9 +1742,23 @@
     if (sender == nil)
         return;
     UIButton *button = (UIButton *)sender;
-    UIImage *image = [button imageForState:UIControlStateNormal];
-    if (image == nil)
-        return;
+    NSInteger imageIndex = button.tag;
+    NSDictionary *dictionary = [self.dictionaryDetail objectForKey:SymphoxAPIParam_description];
+    if (dictionary && [dictionary isEqual:[NSNull null]] == NO && [dictionary count] > 0)
+    {
+        NSArray *arrayImage = [dictionary objectForKey:SymphoxAPIParam_img_url];
+        if (arrayImage && [arrayImage isEqual:[NSNull null]] == NO && [arrayImage count] > 0)
+        {
+            SingleMediaDetailViewController *viewController = [[SingleMediaDetailViewController alloc] initWithNibName:@"SingleMediaDetailViewController" bundle:[NSBundle mainBundle]];
+            viewController.aryData = [NSMutableArray arrayWithArray:arrayImage];
+            [viewController setModalTransitionStyle:UIModalTransitionStyleCrossDissolve];
+            if (imageIndex < [arrayImage count])
+            {
+                viewController.idxStart = imageIndex;
+            }
+            [self presentViewController:viewController animated:YES completion:nil];
+        }
+    }
 }
 
 - (void)buttonSpecImagePressed:(id)sender
@@ -1726,9 +1766,23 @@
     if (sender == nil)
         return;
     UIButton *button = (UIButton *)sender;
-    UIImage *image = [button imageForState:UIControlStateNormal];
-    if (image == nil)
-        return;
+    NSInteger imageIndex = button.tag;
+    NSDictionary *dictionary = [self.dictionaryDetail objectForKey:SymphoxAPIParam_specification];
+    if (dictionary && [dictionary isEqual:[NSNull null]] == NO && [dictionary count] > 0)
+    {
+        NSArray *arrayImage = [dictionary objectForKey:SymphoxAPIParam_img_url];
+        if (arrayImage && [arrayImage isEqual:[NSNull null]] == NO && [arrayImage count] > 0)
+        {
+            SingleMediaDetailViewController *viewController = [[SingleMediaDetailViewController alloc] initWithNibName:@"SingleMediaDetailViewController" bundle:[NSBundle mainBundle]];
+            viewController.aryData = [NSMutableArray arrayWithArray:arrayImage];
+            [viewController setModalTransitionStyle:UIModalTransitionStyleCrossDissolve];
+            if (imageIndex < [arrayImage count])
+            {
+                viewController.idxStart = imageIndex;
+            }
+            [self presentViewController:viewController animated:YES completion:nil];
+        }
+    }
 }
 
 - (void)linkLongPressed:(UILongPressGestureRecognizer *)gestureRecognizer
@@ -1785,7 +1839,51 @@
 
 - (void)productDetailBottomBar:(ProductDetailBottomBar *)bar didSelectAddToCartBySender:(id)sender
 {
-    [self showCartTypeSheet];
+    NSMutableArray *arrayCarts = [NSMutableArray array];
+    for (NSDictionary *dictionary in self.arrayCartType)
+    {
+        CartType type = CartTypeTotal;
+        NSNumber *numberType = [dictionary objectForKey:SymphoxAPIParam_type];
+        NSString *title = nil;
+        switch ([numberType integerValue]) {
+            case CartTypeCommonDelivery:
+            {
+                // Common delivery
+                title = [LocalizedString CommonDelivery];
+                type = CartTypeCommonDelivery;
+                [arrayCarts addObject:numberType];
+            }
+                break;
+            case CartTypeStorePickup:
+            {
+                // Convenience Store
+                title = [LocalizedString StorePickUp];
+                type = CartTypeStorePickup;
+                [arrayCarts addObject:numberType];
+            }
+                break;
+            case CartTypeFastDelivery:
+            {
+                // Fast delivery
+                title = [LocalizedString FastDelivery];
+                type = CartTypeFastDelivery;
+                [arrayCarts addObject:numberType];
+            }
+                break;
+            default:
+                break;
+        }
+    }
+    if ([arrayCarts count] == 1)
+    {
+        NSNumber *numberType = [arrayCarts objectAtIndex:0];
+        NSInteger type = [numberType integerValue];
+        [self addToCart:type];
+    }
+    else
+    {
+        [self showCartTypeSheet];
+    }
 }
 
 - (void)productDetailBottomBar:(ProductDetailBottomBar *)bar didSelectPurchaseBySender:(id)sender

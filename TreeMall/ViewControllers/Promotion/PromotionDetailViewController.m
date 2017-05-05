@@ -67,7 +67,7 @@
     
     if (self.imageView && [self.imageView isHidden] == NO)
     {
-        CGRect frame = CGRectMake(marginH, originY, maxWidth, maxWidth);
+        CGRect frame = CGRectMake(marginH, originY, maxWidth, ceil(maxWidth * 480 / 888));
         self.imageView.frame = frame;
         originY = self.imageView.frame.origin.y + self.imageView.frame.size.height + intervalV;
     }

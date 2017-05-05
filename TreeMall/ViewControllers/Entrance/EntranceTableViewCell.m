@@ -17,6 +17,7 @@
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self)
     {
+        _frameRatio = kEntranceTableViewCellImageFrameRatio0;
         self.imageView.contentMode = UIViewContentModeScaleToFill;
         [self.imageView.layer setMasksToBounds:YES];
     }
@@ -38,7 +39,7 @@
     imageFrame.origin.x = 0.0;
     imageFrame.origin.y = 0.0;
     imageFrame.size.width = self.contentView.frame.size.width;
-    imageFrame.size.height = self.contentView.frame.size.height;
+    imageFrame.size.height = ceil(imageFrame.size.width * self.frameRatio);
     self.imageView.frame = imageFrame;
 }
 

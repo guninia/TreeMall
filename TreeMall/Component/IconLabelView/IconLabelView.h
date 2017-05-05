@@ -8,10 +8,20 @@
 
 #import <UIKit/UIKit.h>
 
+@class IconLabelView;
+
+@protocol IconLabelViewDelegate <NSObject>
+
+- (void)iconLabelView:(IconLabelView *)view didPressedBySender:(id)sender;
+
+@end
+
 @interface IconLabelView : UIView
 
+@property (nonatomic, weak) id <IconLabelViewDelegate> delegate;
 @property (nonatomic, strong) UIImageView *imageView;
 @property (nonatomic, strong) UILabel *label;
+@property (nonatomic, strong) UIButton *button;
 
 - (CGSize)referenceSizeForMaxWidth:(CGFloat)maxWidth;
 

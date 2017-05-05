@@ -30,7 +30,7 @@
         [self addSubview:self.buttonFavorite];
         [self addSubview:self.buttonAddToCart];
         [self addSubview:self.buttonPurchase];
-        [self addSubview:self.separator];
+//        [self addSubview:self.separator];
         [self addSubview:self.labelInvalid];
     }
     return self;
@@ -61,14 +61,14 @@
         self.buttonFavorite.frame = frame;
         originX = self.buttonFavorite.frame.origin.x + self.buttonFavorite.frame.size.width;
     }
-    CGFloat maxButtonWidth = ceil((self.frame.size.width - originX - separatorWidth)/2);
+    CGFloat maxButtonWidth = ceil((self.frame.size.width - originX)/2);
     if (self.buttonAddToCart)
     {
         CGRect frame = CGRectMake(originX, originY, maxButtonWidth, self.frame.size.height);
         self.buttonAddToCart.frame = frame;
         originX = self.buttonAddToCart.frame.origin.x + self.buttonAddToCart.frame.size.width;
     }
-    if (self.separator)
+    if (self.separator && [self.separator isHidden] == NO)
     {
         CGSize size = CGSizeMake(separatorWidth, ceil(self.frame.size.height * 3 / 5));
         CGRect frame = CGRectMake(originX, (self.frame.size.height - size.height)/2, size.width, size.height);
@@ -130,6 +130,7 @@
     {
         _separator = [[UIView alloc] initWithFrame:CGRectZero];
         [_separator setBackgroundColor:[UIColor whiteColor]];
+        _separator.hidden == YES;
     }
     return _separator;
 }

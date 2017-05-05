@@ -54,6 +54,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
+    self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
     [self.view setBackgroundColor:[UIColor colorWithWhite:0.9 alpha:1.0]];
     
     [self.view addSubview:self.segmentedView];
@@ -308,6 +309,7 @@
         [self.arrayProducts removeAllObjects];
         [self.tableView setBackgroundView:self.tableBackgroundView];
         [self.tableView reloadData];
+        [self resetBottomBar];
         return;
     }
     [self.tableView setBackgroundView:nil];
@@ -462,10 +464,12 @@
                 if (stringError)
                 {
                     NSNumber *productId = [dictionary objectForKey:SymphoxAPIParam_cpdt_num];
+                    NSLog(@"arrayCartFast:\n%@", [[TMInfoManager sharedManager].arrayCartFast description]);
+                    NSLog(@"dictionaryProductPurchaseInfoInCartFast:\n%@", [[TMInfoManager sharedManager].dictionaryProductPurchaseInfoInCartFast description]);
                     NSString *name = [[TMInfoManager sharedManager] nameOfRemovedProductId:productId inCart:type];
                     if (name)
                     {
-                        NSString *totalString = [NSString stringWithFormat:@"「%@」：%@\n", name, stringError];
+                        NSString *totalString = [NSString stringWithFormat:@"%@：%@\n", name, stringError];
                         [notifyString appendString:totalString];
                     }
                     else
@@ -477,7 +481,7 @@
             if ([notifyString length] > 0)
             {
                 __weak CartViewController *weakSelf = self;
-                UIAlertController *alertController = [UIAlertController alertControllerWithTitle:[LocalizedString ProductsRemovedFromCart] message:nil preferredStyle:UIAlertControllerStyleAlert];
+                UIAlertController *alertController = [UIAlertController alertControllerWithTitle:[LocalizedString ProductsRemovedFromCart] message:notifyString preferredStyle:UIAlertControllerStyleAlert];
                 UIAlertAction *actionConfirm = [UIAlertAction actionWithTitle:[LocalizedString Confirm] style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
                     [weakSelf renewConditionsForCartType:type shouldShowPaymentForProductId:productId];
                 }];
@@ -493,8 +497,14 @@
 - (void)renewConditionsForCartType:(CartType)type shouldShowPaymentForProductId:(NSNumber *)productId
 {
     NSArray *array = [[TMInfoManager sharedManager] productArrayForCartType:type];
-    if (array == nil)
+    if (array == nil || [array count] == 0)
+    {
+        [self.arrayProducts removeAllObjects];
+        [self.tableView setBackgroundView:self.tableBackgroundView];
+        [self.tableView reloadData];
+        [self resetBottomBar];
         return;
+    }
     
     NSDictionary *dictionary = [[TMInfoManager sharedManager] purchaseInfoForCartType:type];
     
@@ -579,6 +589,18 @@
             NSDictionary *userInfo = error.userInfo;
             if (userInfo)
             {
+                NSString *errorCode = [userInfo objectForKey:SymphoxAPIParam_id];
+                if ([errorCode isEqualToString:@"E217"])
+                {
+                    for (NSDictionary *product in productConditions)
+                    {
+                        NSNumber *productId = [product objectForKey:SymphoxAPIParam_cpdt_num];
+                        if (productId && [productId isEqual:[NSNull null]] == NO)
+                        {
+                            [[TMInfoManager sharedManager] nameOfRemovedProductId:productId inCart:type];
+                        }
+                    }
+                }
                 NSString *serverMessage = [userInfo objectForKey:SymphoxAPIParam_status_desc];
                 if (serverMessage)
                 {
@@ -590,6 +612,7 @@
             UIAlertAction *actionConfirm = [UIAlertAction actionWithTitle:[LocalizedString Confirm] style:UIAlertActionStyleDefault handler:nil];
             [alertController addAction:actionConfirm];
             [weakSelf presentViewController:alertController animated:YES completion:nil];
+            [weakSelf refreshContent];
         }
         [weakSelf hideLoadingViewAnimated:NO];
     }];
@@ -697,6 +720,8 @@
             // Should show additional purchase page
             AdditionalPurchaseViewController *viewController = [[AdditionalPurchaseViewController alloc] initWithNibName:@"AdditionalPurchaseViewController" bundle:[NSBundle mainBundle]];
             viewController.arrayProducts = array;
+            viewController.bottomBar.label.attributedText = weakSelf.bottomBar.label.attributedText;
+            viewController.currentType = weakSelf.currentType;
             [weakSelf.navigationController pushViewController:viewController animated:YES];
         }
         else
@@ -835,6 +860,7 @@
                     UIAlertAction *actionCheckout = [UIAlertAction actionWithTitle:[LocalizedString CheckOutDirectly] style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
                         PaymentTypeViewController *viewController = [[PaymentTypeViewController alloc] initWithNibName:@"PaymentTypeViewController" bundle:[NSBundle mainBundle]];
                         viewController.dictionaryData = resultDictionary;
+                        viewController.type = self.currentType;
                         [self.navigationController pushViewController:viewController animated:YES];
                     }];
                     [alertController addAction:actionFastByCash];
@@ -848,6 +874,7 @@
                 {
                     PaymentTypeViewController *viewController = [[PaymentTypeViewController alloc] initWithNibName:@"PaymentTypeViewController" bundle:[NSBundle mainBundle]];
                     viewController.dictionaryData = resultDictionary;
+                    viewController.type = self.currentType;
                     [self.navigationController pushViewController:viewController animated:YES];
                 }
             }

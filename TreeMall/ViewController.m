@@ -26,12 +26,14 @@
 - (void)hideLaunchScreenLoadingViewAnimated:(BOOL)animated;
 - (void)postUserLogoutProcedure;
 - (void)JumpToTab:(NSInteger)tabIndex;
+- (void)updateCartBadge;
 
 - (void)handlerOfNoInitialTokenNotification:(NSNotification *)notification;
 - (void)handlerOfEntranceDataPreparedNotification:(NSNotification *)notification;
 - (void)handlerOfUserLogoutNotification:(NSNotification *)notification;
 - (void)handlerOfJumpingToMemberTabNotification:(NSNotification *)notification;
 - (void)handlerOfJumpingToMemberTabAndPresentCouponNotification:(NSNotification *)notification;
+- (void)handlerOfCartContentChangedNotification:(NSNotification *)notification;
 
 @end
 
@@ -167,7 +169,7 @@
             item.selectedImage = selectedImage;
         }
     }
-    
+    [self updateCartBadge];
     
     [self addChildViewController:_tbControllerMain];
     [self.view addSubview:_tbControllerMain.view];
@@ -180,6 +182,7 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handlerOfUserLogoutNotification:) name:PostNotificationName_UserLogout object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handlerOfJumpingToMemberTabNotification:) name:PostNotificationName_JumpToMemberTab object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handlerOfJumpingToMemberTabAndPresentCouponNotification:) name:PostNotificationName_JumpToMemberTabAndPresentCoupon object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handlerOfCartContentChangedNotification:) name:PostNotificationName_CartContentChanged object:nil];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -203,6 +206,7 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self name:PostNotificationName_UserLogout object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:PostNotificationName_JumpToMemberTab object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:PostNotificationName_JumpToMemberTabAndPresentCoupon object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:PostNotificationName_CartContentChanged object:nil];
 }
 
 #pragma mark - Override
@@ -295,6 +299,23 @@
     });
 }
 
+- (void)updateCartBadge
+{
+    for (UINavigationController *navigationViewController in self.tbControllerMain.viewControllers)
+    {
+        UIViewController *viewController = [[navigationViewController viewControllers] objectAtIndex:0];
+        if ([viewController isKindOfClass:[CartViewController class]])
+        {
+            NSInteger totalCount = [[TMInfoManager sharedManager] numberOfProductsInCart:CartTypeTotal];
+            if (totalCount > 0)
+            {
+                NSString *stringValue = [NSString stringWithFormat:@"%li", (long)totalCount];
+                [navigationViewController.tabBarItem setBadgeValue:stringValue];
+            }
+        }
+    }
+}
+
 #pragma mark - NSNotification Handler
 
 - (void)handlerOfNoInitialTokenNotification:(NSNotification *)notification
@@ -333,6 +354,11 @@
     }
     CouponListViewController *viewController = [[CouponListViewController alloc] initWithNibName:@"CouponListViewController" bundle:[NSBundle mainBundle]];
     [navigationController pushViewController:viewController animated:YES];
+}
+
+- (void)handlerOfProdctAddedToCartNotification:(NSNotification *)notification
+{
+    [self updateCartBadge];
 }
 
 #pragma mark - UITabBarControllerDelegate

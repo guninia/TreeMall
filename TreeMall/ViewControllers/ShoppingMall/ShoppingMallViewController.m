@@ -576,7 +576,11 @@ typedef enum : NSUInteger {
     switch (tableView.tag) {
         case ViewTagTableViewSubcategory:
         {
-            numberOfRows = [_arraySubcategory count];
+            if (section == 0)
+            {
+                numberOfRows = [_arraySubcategory count];
+                NSLog(@"numberOfRows - subcategory[%li]:\n%@", [self.arraySubcategory count], [self.arraySubcategory description]);
+            }
         }
             break;
         case ViewTagTableViewExtraSubcategory:

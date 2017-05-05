@@ -49,6 +49,13 @@ typedef enum : NSUInteger {
     CartTypeTotal
 } CartType;
 
+typedef enum : NSUInteger {
+    AdditionalCartTypeCommonDelivery,
+    AdditionalCartTypeStorePickup,
+    AdditionalCartTypeFastDelivery,
+    AdditionalCartTypeTotal
+} AdditionalCartType;
+
 @interface TMInfoManager : NSObject
 {
     NSMutableDictionary *_dictionaryUserInfo;
@@ -101,6 +108,12 @@ typedef enum : NSUInteger {
 @property (nonatomic, strong) NSMutableDictionary *dictionaryProductPurchaseInfoInCartStorePickUp;
 @property (nonatomic, strong) NSMutableArray *arrayCartFast;
 @property (nonatomic, strong) NSMutableDictionary *dictionaryProductPurchaseInfoInCartFast;
+@property (nonatomic, strong) NSMutableArray *arrayCartCommonAddition;
+@property (nonatomic, strong) NSMutableDictionary *dictionaryProductPurchaseInfoInCartCommonAddition;
+@property (nonatomic, strong) NSMutableArray *arrayCartStorePickUpAddition;
+@property (nonatomic, strong) NSMutableDictionary *dictionaryProductPurchaseInfoInCartStorePickUpAddition;
+@property (nonatomic, strong) NSMutableArray *arrayCartFastAddition;
+@property (nonatomic, strong) NSMutableDictionary *dictionaryProductPurchaseInfoInCartFastAddition;
 
 + (instancetype)sharedManager;
 
@@ -133,9 +146,20 @@ typedef enum : NSUInteger {
 - (NSMutableDictionary *)purchaseInfoForCartType:(CartType)type;
 - (void)addProduct:(NSDictionary *)product toCartForType:(CartType)type;
 - (void)setPurchaseQuantity:(NSNumber *)quantity forProduct:(NSNumber *)productId inCart:(CartType)cartType;
-- (void)setPurchasePaymentMode:(NSDictionary *)dictionaryPaymentMode forProduct:(NSNumber *)productId inCart:(NSInteger)cartType;
-- (void)setPaymentModeDescription:(NSString *)description forProduct:(NSNumber *)productId inCart:(CartType)cartType;
+- (void)setPurchasePaymentMode:(NSDictionary *)dictionaryPaymentMode forProduct:(NSNumber *)productId inCart:(CartType)cartType;
+- (void)setDiscountTypeDescription:(NSString *)description forProduct:(NSNumber *)productId inCart:(CartType)cartType;
+- (void)setDiscountDetailDescription:(NSString *)description forProduct:(NSNumber *)productId inCart:(CartType)cartType;
 - (NSString *)nameOfRemovedProductId:(NSNumber *)productIdToRemove inCart:(CartType)type;
 
+- (NSMutableArray *)productArrayForAdditionalCartType:(CartType)type;
+- (NSMutableDictionary *)purchaseInfoForAdditionalCartType:(CartType)type;
+- (void)addProduct:(NSDictionary *)product toAdditionalCartForType:(CartType)type;
+- (void)setPurchaseQuantity:(NSNumber *)quantity forProduct:(NSNumber *)productId inAdditionalCart:(CartType)cartType;
+- (void)setPurchasePaymentMode:(NSDictionary *)dictionaryPaymentMode forProduct:(NSNumber *)productId inAdditionalCart:(CartType)cartType;
+- (void)setDiscountTypeDescription:(NSString *)description forProduct:(NSNumber *)productId inAdditionalCart:(CartType)cartType;
+- (void)setDiscountDetailDescription:(NSString *)description forProduct:(NSNumber *)productId inAdditionalCart:(CartType)cartType;
+- (NSString *)nameOfRemovedProductId:(NSNumber *)productIdToRemove inAdditionalCart:(CartType)type;
+
+- (NSInteger)numberOfProductsInCart:(CartType)type;
 
 @end

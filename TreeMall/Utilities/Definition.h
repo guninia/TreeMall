@@ -23,6 +23,7 @@ static NSString *PostNotificationName_UserCouponUpdated = @"UserCouponUpdated";
 static NSString *PostNotificationName_UserLogout = @"UserLogout";
 static NSString *PostNotificationName_JumpToMemberTab = @"JumpToMemberTab";
 static NSString *PostNotificationName_JumpToMemberTabAndPresentCoupon = @"JumpToMemberTabAndPresentCoupon";
+static NSString *PostNotificationName_CartContentChanged = @"CartContentChanged";
 
 #define TMMainColor [UIColor colorWithRed:(90.0/255.0) green:(190.0/255.0) blue:(40.0/255.0) alpha:1.0]
 

@@ -26,6 +26,7 @@
 - (void)prepareSortOption;
 - (void)refreshAllContentForHallId:(NSString *)hallId andLayer:(NSNumber *)layer withName:(NSString *)name;
 - (void)showCartTypeSheetForProduct:(NSDictionary *)product;
+- (void)addProduct:(NSDictionary *)product toCart:(CartType)cartType;
 
 - (void)buttonItemSearchPressed:(id)sender;
 
@@ -612,33 +613,68 @@
 
 - (void)showCartTypeSheetForProduct:(NSDictionary *)product
 {
-    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:[LocalizedString AddToCart] message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+    NSMutableArray *arrayCartType = [NSMutableArray array];
+    
     NSNumber *normal_cart = [product objectForKey:SymphoxAPIParam_normal_cart];
     if (normal_cart && [normal_cart isEqual:[NSNull null]] == NO && [normal_cart boolValue] == YES)
     {
-        UIAlertAction *action = [UIAlertAction actionWithTitle:[LocalizedString CommonDelivery] style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
-            [[TMInfoManager sharedManager] addProduct:product toCartForType:CartTypeCommonDelivery];
-        }];
-        [alertController addAction:action];
+        NSMutableDictionary *dictionary = [NSMutableDictionary dictionary];
+        [dictionary setObject:[NSNumber numberWithInteger:CartTypeCommonDelivery] forKey:SymphoxAPIParam_cart_type];
+        [dictionary setObject:[LocalizedString CommonDelivery] forKey:SymphoxAPIParam_name];
+        [arrayCartType addObject:dictionary];
+        
     }
     NSNumber *to_store_cart = [product objectForKey:SymphoxAPIParam_to_store_cart];
     if (to_store_cart && [to_store_cart isEqual:[NSNull null]] == NO && [to_store_cart boolValue] == YES)
     {
-        UIAlertAction *action = [UIAlertAction actionWithTitle:[LocalizedString CommonDelivery] style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
-            [[TMInfoManager sharedManager] addProduct:product toCartForType:CartTypeStorePickup];
-        }];
-        [alertController addAction:action];
+        NSMutableDictionary *dictionary = [NSMutableDictionary dictionary];
+        [dictionary setObject:[NSNumber numberWithInteger:CartTypeStorePickup] forKey:SymphoxAPIParam_cart_type];
+        [dictionary setObject:[LocalizedString StorePickUp] forKey:SymphoxAPIParam_name];
+        [arrayCartType addObject:dictionary];
     }
     NSNumber *fast_delivery_cart = [product objectForKey:SymphoxAPIParam_fast_delivery_cart];
     if (fast_delivery_cart && [fast_delivery_cart isEqual:[NSNull null]] == NO && [fast_delivery_cart boolValue] == YES)
     {
-        UIAlertAction *action = [UIAlertAction actionWithTitle:[LocalizedString FastDelivery] style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
-            [[TMInfoManager sharedManager] addProduct:product toCartForType:CartTypeFastDelivery];
-        }];
-        [alertController addAction:action];
+        NSMutableDictionary *dictionary = [NSMutableDictionary dictionary];
+        [dictionary setObject:[NSNumber numberWithInteger:CartTypeFastDelivery] forKey:SymphoxAPIParam_cart_type];
+        [dictionary setObject:[LocalizedString FastDelivery] forKey:SymphoxAPIParam_name];
+        [arrayCartType addObject:dictionary];
     }
-    UIAlertAction *actionCancel = [UIAlertAction actionWithTitle:[LocalizedString Cancel] style:UIAlertActionStyleCancel handler:nil];
-    [alertController addAction:actionCancel];
+    
+    __weak ProductListViewController *weakSelf = self;
+    if ([arrayCartType count] > 1)
+    {
+        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:[LocalizedString AddToCart] message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+        for (NSDictionary *dictionary in arrayCartType)
+        {
+            NSString *name = [dictionary objectForKey:SymphoxAPIParam_name];
+            NSNumber *cartType = [dictionary objectForKey:SymphoxAPIParam_cart_type];
+            UIAlertAction *action = [UIAlertAction actionWithTitle:name style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
+                [weakSelf addProduct:product toCart:[cartType integerValue]];
+            }];
+            [alertController addAction:action];
+        }
+        UIAlertAction *actionCancel = [UIAlertAction actionWithTitle:[LocalizedString Cancel] style:UIAlertActionStyleCancel handler:nil];
+        [alertController addAction:actionCancel];
+        [self presentViewController:alertController animated:YES completion:nil];
+    }
+    else if ([arrayCartType count] > 0)
+    {
+        NSDictionary *dictionary = [arrayCartType objectAtIndex:0];
+        NSNumber *numberCartType = [dictionary objectForKey:SymphoxAPIParam_cart_type];
+        [self addProduct:product toCart:[numberCartType integerValue]];
+    }
+    
+    
+}
+
+- (void)addProduct:(NSDictionary *)product toCart:(CartType)cartType
+{
+    [[TMInfoManager sharedManager] addProduct:product toCartForType:cartType];
+    NSString *message = [NSString stringWithFormat:[LocalizedString AddedTo_S_], @""];
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:message preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *action = [UIAlertAction actionWithTitle:[LocalizedString Confirm] style:UIAlertActionStyleDefault handler:nil];
+    [alertController addAction:action];
     [self presentViewController:alertController animated:YES completion:nil];
 }
 
@@ -812,6 +848,7 @@
     [viewController setHidesBottomBarWhenPushed:YES];
     NSDictionary *dictionary = [self.arrayProducts objectAtIndex:indexPath.row];
     viewController.dictionaryCommon = dictionary;
+    viewController.title = [LocalizedString ProductInfo];
     [self.navigationController pushViewController:viewController animated:YES];
 }
 

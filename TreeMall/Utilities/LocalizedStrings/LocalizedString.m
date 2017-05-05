@@ -2161,4 +2161,464 @@
     return ProductInfo;
 }
 
++ (NSString *)AdditionalPurchaseProduct
+{
+    static NSString *AdditionalPurchaseProduct = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        AdditionalPurchaseProduct = NSLocalizedString(@"AdditionalPurchaseProduct", nil);
+    });
+    return AdditionalPurchaseProduct;
+}
+
++ (NSString *)AlreadyPurchase_I_Piece
+{
+    static NSString *AlreadyPurchase_I_Piece = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        AlreadyPurchase_I_Piece = NSLocalizedString(@"AlreadyPurchase_I_Piece", nil);
+    });
+    return AlreadyPurchase_I_Piece;
+}
+
++ (NSString *)Order
+{
+    static NSString *Order = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        Order = NSLocalizedString(@"Order", nil);
+    });
+    return Order;
+}
+
++ (NSString *)Total_I_ProductAnd_I_Pieces
+{
+    static NSString *Total_I_ProductAnd_I_Pieces = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        Total_I_ProductAnd_I_Pieces = NSLocalizedString(@"Total_I_ProductAnd_I_Pieces", nil);
+    });
+    return Total_I_ProductAnd_I_Pieces;
+}
+
++ (NSString *)BonusPoint
+{
+    static NSString *BonusPoint = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        BonusPoint = NSLocalizedString(@"BonusPoint", nil);
+    });
+    return BonusPoint;
+}
+
++ (NSString *)CathayCash
+{
+    static NSString *CathayCash = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        CathayCash = NSLocalizedString(@"CathayCash", nil);
+    });
+    return CathayCash;
+}
+
++ (NSString *)DiscountChosen
+{
+    static NSString *DiscountChosen = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        DiscountChosen = NSLocalizedString(@"DiscountChosen", nil);
+    });
+    return DiscountChosen;
+}
+
++ (NSString *)PaymentType
+{
+    static NSString *PaymentType = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        PaymentType = NSLocalizedString(@"PaymentType", nil);
+    });
+    return PaymentType;
+}
+
++ (NSString *)CreditCard
+{
+    static NSString *CreditCard = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        CreditCard = NSLocalizedString(@"CreditCard", nil);
+    });
+    return CreditCard;
+}
+
++ (NSString *)OneTimePayment
+{
+    static NSString *OneTimePayment = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        OneTimePayment = NSLocalizedString(@"OneTimePayment", nil);
+    });
+    return OneTimePayment;
+}
+
++ (NSString *)CreditCardInstallment
+{
+    static NSString *CreditCardInstallment = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        CreditCardInstallment = NSLocalizedString(@"CreditCardInstallment", nil);
+    });
+    return CreditCardInstallment;
+}
+
++ (NSString *)BuyNow
+{
+    static NSString *BuyNow = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        BuyNow = NSLocalizedString(@"BuyNow", nil);
+    });
+    return BuyNow;
+}
+
++ (NSString *)Activate
+{
+    static NSString *Activate = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        Activate = NSLocalizedString(@"Activate", nil);
+    });
+    return Activate;
+}
+
++ (NSString *)BuyNowInstallment
+{
+    static NSString *BuyNowInstallment = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        BuyNowInstallment = NSLocalizedString(@"BuyNowInstallment", nil);
+    });
+    return BuyNowInstallment;
+}
+
++ (NSString *)PointAsDollarCreditCardInstallment
+{
+    static NSString *PointAsDollarCreditCardInstallment = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        PointAsDollarCreditCardInstallment = NSLocalizedString(@"PointAsDollarCreditCardInstallment", nil);
+    });
+    return PointAsDollarCreditCardInstallment;
+}
+
++ (NSString *)PayAfterDelivery
+{
+    static NSString *PayAfterDelivery = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        PayAfterDelivery = NSLocalizedString(@"PayAfterDelivery", nil);
+    });
+    return PayAfterDelivery;
+}
+
++ (NSString *)InstallmentTerm
+{
+    static NSString *InstallmentTerm = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        InstallmentTerm = NSLocalizedString(@"InstallmentTerm", nil);
+    });
+    return InstallmentTerm;
+}
+
++ (NSString *)AgreeTreeMallBusinessTerm
+{
+    static NSString *AgreeTreeMallBusinessTerm = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        AgreeTreeMallBusinessTerm = NSLocalizedString(@"AgreeTreeMallBusinessTerm", nil);
+    });
+    return AgreeTreeMallBusinessTerm;
+}
+
++ (NSString *)TermsDetail
+{
+    static NSString *TermsDetail = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        TermsDetail = NSLocalizedString(@"TermsDetail", nil);
+    });
+    return TermsDetail;
+}
+
++ (NSString *)AcceptTheTermsFirst
+{
+    static NSString *AcceptTheTermsFirst = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        AcceptTheTermsFirst = NSLocalizedString(@"AcceptTheTermsFirst", nil);
+    });
+    return AcceptTheTermsFirst;
+}
+
++ (NSString *)PleaseChoosePaymentType
+{
+    static NSString *PleaseChoosePaymentType = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        PleaseChoosePaymentType = NSLocalizedString(@"PleaseChoosePaymentType", nil);
+    });
+    return PleaseChoosePaymentType;
+}
+
++ (NSString *)ReceiverInfo
+{
+    static NSString *ReceiverInfo = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        ReceiverInfo = NSLocalizedString(@"ReceiverInfo", nil);
+    });
+    return ReceiverInfo;
+}
+
++ (NSString *)Receiver
+{
+    static NSString *Receiver = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        Receiver = NSLocalizedString(@"Receiver", nil);
+    });
+    return Receiver;
+}
+
++ (NSString *)PleaseInputName
+{
+    static NSString *PleaseInputName = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        PleaseInputName = NSLocalizedString(@"PleaseInputName", nil);
+    });
+    return PleaseInputName;
+}
+
++ (NSString *)CellPhone
+{
+    static NSString *CellPhone = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        CellPhone = NSLocalizedString(@"CellPhone", nil);
+    });
+    return CellPhone;
+}
+
++ (NSString *)PleaseInputCellPhoneNumber
+{
+    static NSString *PleaseInputCellPhoneNumber = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        PleaseInputCellPhoneNumber = NSLocalizedString(@"PleaseInputCellPhoneNumber", nil);
+    });
+    return PleaseInputCellPhoneNumber;
+}
+
++ (NSString *)DayPhone
+{
+    static NSString *DayPhone = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        DayPhone = NSLocalizedString(@"DayPhone", nil);
+    });
+    return DayPhone;
+}
+
++ (NSString *)PleaseInputPhoneNumber
+{
+    static NSString *PleaseInputPhoneNumber = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        PleaseInputPhoneNumber = NSLocalizedString(@"PleaseInputPhoneNumber", nil);
+    });
+    return PleaseInputPhoneNumber;
+}
+
++ (NSString *)NightPhone
+{
+    static NSString *NightPhone = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        NightPhone = NSLocalizedString(@"NightPhone", nil);
+    });
+    return NightPhone;
+}
+
++ (NSString *)ReceiverAddress
+{
+    static NSString *ReceiverAddress = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        ReceiverAddress = NSLocalizedString(@"ReceiverAddress", nil);
+    });
+    return ReceiverAddress;
+}
+
++ (NSString *)DeliveryCity
+{
+    static NSString *DeliveryCity = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        DeliveryCity = NSLocalizedString(@"DeliveryCity", nil);
+    });
+    return DeliveryCity;
+}
+
++ (NSString *)DeliveryRegion
+{
+    static NSString *DeliveryRegion = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        DeliveryRegion = NSLocalizedString(@"DeliveryRegion", nil);
+    });
+    return DeliveryRegion;
+}
+
++ (NSString *)Address
+{
+    static NSString *Address = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        Address = NSLocalizedString(@"Address", nil);
+    });
+    return Address;
+}
+
++ (NSString *)DeliveryTime
+{
+    static NSString *DeliveryTime = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        DeliveryTime = NSLocalizedString(@"DeliveryTime", nil);
+    });
+    return DeliveryTime;
+}
+
++ (NSString *)Note
+{
+    static NSString *Note = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        Note = NSLocalizedString(@"Note", nil);
+    });
+    return Note;
+}
+
++ (NSString *)PleaseSelectCity
+{
+    static NSString *PleaseSelectCity = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        PleaseSelectCity = NSLocalizedString(@"PleaseSelectCity", nil);
+    });
+    return PleaseSelectCity;
+}
+
++ (NSString *)PleaseSelectRegion
+{
+    static NSString *PleaseSelectRegion = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        PleaseSelectRegion = NSLocalizedString(@"PleaseSelectRegion", nil);
+    });
+    return PleaseSelectRegion;
+}
+
++ (NSString *)PleaseInputAddress
+{
+    static NSString *PleaseInputAddress = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        PleaseInputAddress = NSLocalizedString(@"PleaseInputAddress", nil);
+    });
+    return PleaseInputAddress;
+}
+
++ (NSString *)PleaseSelectDeliveryTime
+{
+    static NSString *PleaseSelectDeliveryTime = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        PleaseSelectDeliveryTime = NSLocalizedString(@"PleaseSelectDeliveryTime", nil);
+    });
+    return PleaseSelectDeliveryTime;
+}
+
++ (NSString *)PleaseInputNote
+{
+    static NSString *PleaseInputNote = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        PleaseInputNote = NSLocalizedString(@"PleaseInputNote", nil);
+    });
+    return PleaseInputNote;
+}
+
++ (NSString *)SameAsCellPhone
+{
+    static NSString *SameAsCellPhone = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        SameAsCellPhone = NSLocalizedString(@"SameAsCellPhone", nil);
+    });
+    return SameAsCellPhone;
+}
+
++ (NSString *)Nine_Twelve_InTheMorning
+{
+    static NSString *Nine_Twelve_InTheMorning = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        Nine_Twelve_InTheMorning = NSLocalizedString(@"Nine_Twelve_InTheMorning", nil);
+    });
+    return Nine_Twelve_InTheMorning;
+}
+
++ (NSString *)Twelve_Seventeen_InTheAfternoon
+{
+    static NSString *Twelve_Seventeen_InTheAfternoon = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        Twelve_Seventeen_InTheAfternoon = NSLocalizedString(@"Twelve_Seventeen_InTheAfternoon", nil);
+    });
+    return Twelve_Seventeen_InTheAfternoon;
+}
+
++ (NSString *)Seventeen_Twenty_InTheEvening
+{
+    static NSString *Seventeen_Twenty_InTheEvening = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        Seventeen_Twenty_InTheEvening = NSLocalizedString(@"Seventeen_Twenty_InTheEvening", nil);
+    });
+    return Seventeen_Twenty_InTheEvening;
+}
+
++ (NSString *)NotSpecified
+{
+    static NSString *NotSpecified = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        NotSpecified = NSLocalizedString(@"NotSpecified", nil);
+    });
+    return NotSpecified;
+}
+
++ (NSString *)AddedTo_S_
+{
+    static NSString *AddedTo_S_ = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        AddedTo_S_ = NSLocalizedString(@"AddedTo_S_", nil);
+    });
+    return AddedTo_S_;
+}
+
 @end

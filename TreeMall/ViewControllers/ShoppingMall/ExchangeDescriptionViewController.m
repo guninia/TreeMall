@@ -16,11 +16,22 @@
 - (void)retrieveData;
 - (BOOL)processData:(NSData *)data;
 - (void)buttonLinkPressed:(id)sender;
+- (void)buttonClosePressed:(id)sender;
 - (void)linkLongPressed:(UILongPressGestureRecognizer *)gestureRecognizer;
 
 @end
 
 @implementation ExchangeDescriptionViewController
+
+- (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+{
+    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    if (self)
+    {
+        _type = DescriptionViewTypeExchange;
+    }
+    return self;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -28,6 +39,7 @@
     [self.view setBackgroundColor:[UIColor whiteColor]];
     [self.view addSubview:self.scrollView];
     [self.scrollView addSubview:self.label];
+    [self.view addSubview:self.buttonClose];
     [self retrieveData];
 }
 
@@ -55,12 +67,18 @@
     CGFloat marginH = 20.0;
     CGFloat marginV = 20.0;
     
-    if (self.scrollView)
+    if (self.buttonClose)
     {
-        self.scrollView.frame = CGRectMake(marginH, marginV, self.view.frame.size.width - marginH * 2, self.view.frame.size.height - marginV * 2);
+        CGSize size = CGSizeMake(40.0, 40.0);
+        CGRect frame = CGRectMake(self.view.frame.size.width - size.width, 0.0, size.width, size.height);
+        self.buttonClose.frame = frame;
     }
     
-    
+    if (self.scrollView)
+    {
+        CGFloat originY = CGRectGetMaxY(self.buttonClose.frame);
+        self.scrollView.frame = CGRectMake(marginH, originY, self.view.frame.size.width - marginH * 2, self.view.frame.size.height - marginV - originY);
+    }
     
     if (self.label && [self.label isHidden] == NO)
     {
@@ -98,13 +116,42 @@
     return _label;
 }
 
+- (UIButton *)buttonClose
+{
+    if (_buttonClose == nil)
+    {
+        _buttonClose = [[UIButton alloc] initWithFrame:CGRectZero];
+        [_buttonClose setBackgroundColor:[UIColor clearColor]];
+        UIImage *image = [UIImage imageNamed:@"car_popup_close"];
+        if (image)
+        {
+            [_buttonClose setImage:image forState:UIControlStateNormal];
+        }
+        [_buttonClose addTarget:self action:@selector(buttonClosePressed:) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _buttonClose;
+}
+
 #pragma mark - Private Methods
 
 - (void)retrieveData
 {
+    NSString *type = nil;
+    switch (self.type) {
+        case DescriptionViewTypeEcommercial:
+        {
+            type = @"4";
+        }
+            break;
+        default:
+        {
+            type = @"1";
+        }
+            break;
+    }
     __weak ExchangeDescriptionViewController *weakSelf = self;
     NSURL *url = [NSURL URLWithString:SymphoxAPI_terms];
-    NSDictionary *postDictionary = [NSDictionary dictionaryWithObjectsAndKeys:@"TM_O_03", SymphoxAPIParam_txid, @"1", SymphoxAPIParam_type, nil];
+    NSDictionary *postDictionary = [NSDictionary dictionaryWithObjectsAndKeys:@"TM_O_03", SymphoxAPIParam_txid, type, SymphoxAPIParam_type, nil];
     [[SHAPIAdapter sharedAdapter] sendRequestFromObject:weakSelf ToUrl:url withHeaderFields:nil andPostObject:postDictionary inPostFormat:SHPostFormatUrlEncoded encrypted:NO decryptedReturnData:NO completion:^(id resultObject, NSError *error){
         
         if (error == nil)
@@ -171,6 +218,14 @@
     if ([[UIApplication sharedApplication] canOpenURL:url])
     {
         [[UIApplication sharedApplication] openURL:url];
+    }
+}
+
+- (void)buttonClosePressed:(id)sender
+{
+    if (self.presentingViewController)
+    {
+        [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
     }
 }
 

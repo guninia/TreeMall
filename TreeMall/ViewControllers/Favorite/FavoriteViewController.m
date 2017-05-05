@@ -321,6 +321,7 @@
     ProductDetailViewController *viewController = [[ProductDetailViewController alloc] initWithNibName:@"ProductDetailViewController" bundle:[NSBundle mainBundle]];
     NSDictionary *dictionary = [self.arrayFavorites objectAtIndex:indexPath.row];
     viewController.dictionaryCommon = dictionary;
+    viewController.title = [LocalizedString ProductInfo];
     [self.navigationController pushViewController:viewController animated:YES];
 }
 

@@ -67,8 +67,8 @@ static SHAPIAdapter *gAPIAdapter = nil;
             case SHPostFormatJson:
             {
                 postRawData = [NSJSONSerialization dataWithJSONObject:postObject options:NSJSONWritingPrettyPrinted error:&error];
-                NSString *postString = [[NSString alloc] initWithData:postRawData encoding:NSUTF8StringEncoding];
-                NSLog(@"sendRequestFromObject - postRawData:\n%@", postString);
+//                NSString *postString = [[NSString alloc] initWithData:postRawData encoding:NSUTF8StringEncoding];
+//                NSLog(@"sendRequestFromObject - postRawData:\n%@", postString);
                 contentType = @"application/octet-stream";
             }
                 break;
@@ -177,11 +177,11 @@ static SHAPIAdapter *gAPIAdapter = nil;
     NSURLSessionDataTask *task = [_session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error){
         if (block)
         {
-            if (data)
-            {
-                NSString *string = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-                NSLog(@"URL[%@]\nresponse[%@]:\nerror:\n%@\ndata:\n%@\n\n", [url absoluteString], [response description], [error description], string);
-            }
+//            if (data)
+//            {
+//                NSString *string = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+//                NSLog(@"URL[%@]\nresponse[%@]:\nerror:\n%@\ndata:\n%@\n\n", [url absoluteString], [response description], [error description], string);
+//            }
             __block id resultObject = nil;
             NSString *originalMessageFromServer = nil;
             __block NSError *finalError = error;

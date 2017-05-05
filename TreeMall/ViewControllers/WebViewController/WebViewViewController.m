@@ -9,6 +9,7 @@
 #import "WebViewViewController.h"
 #import "LocalizedString.h"
 #import "Definition.h"
+#import "ProductDetailViewController.h"
 
 @interface WebViewViewController ()
 
@@ -138,6 +139,32 @@
 - (void)webView:(WKWebView *)webView didFinishNavigation:(WKNavigation *)navigation
 {
     [self.activityIndicator stopAnimating];
+}
+
+- (void)webView:(WKWebView *)webView decidePolicyForNavigationAction:(WKNavigationAction *)navigationAction decisionHandler:(void (^)(WKNavigationActionPolicy))decisionHandler
+{
+    WKNavigationActionPolicy policy = WKNavigationActionPolicyAllow;
+    NSURLComponents *components = [NSURLComponents componentsWithURL:navigationAction.request.URL resolvingAgainstBaseURL:NO];
+    NSString *stringProductId = nil;
+    for (NSURLQueryItem *item in components.queryItems)
+    {
+        NSLog(@"queryItem [%@][%@]", item.name, item.value);
+        if ([item.name compare:@"cpdtnum" options:NSCaseInsensitiveSearch] == NSOrderedSame)
+        {
+            stringProductId = item.value;
+        }
+    }
+    if (stringProductId != nil)
+    {
+        policy = WKNavigationActionPolicyCancel;
+        NSNumber *productId = [NSNumber numberWithInteger:[stringProductId integerValue]];
+        ProductDetailViewController *viewController = [[ProductDetailViewController alloc] initWithNibName:@"ProductDetailViewController" bundle:[NSBundle mainBundle]];
+        viewController.productIdentifier = productId;
+        viewController.title = [LocalizedString ProductInfo];
+        [viewController setHidesBottomBarWhenPushed:YES];
+        [self.navigationController pushViewController:viewController animated:YES];
+    }
+    decisionHandler(policy);
 }
 
 #pragma mark - WKUIDelegate

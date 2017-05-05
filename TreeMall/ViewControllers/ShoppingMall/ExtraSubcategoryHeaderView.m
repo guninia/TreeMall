@@ -41,10 +41,10 @@
 - (void)layoutSubviews
 {
     [super layoutSubviews];
-    NSLog(@"layoutSubviews[%4.2f,%4.2f]", self.contentView.frame.size.width, self.contentView.frame.size.height);
+//    NSLog(@"layoutSubviews[%4.2f,%4.2f]", self.contentView.frame.size.width, self.contentView.frame.size.height);
     CGRect buttonFrame = CGRectInset(self.contentView.bounds, 10.0, 5.0);
     self.button.frame = buttonFrame;
-    NSLog(@"self.button[%p].frame[%4.2f,%4.2f,%4.2f,%4.2f]", self.button, self.button.frame.origin.x, self.button.frame.origin.y, self.button.frame.size.width, self.button.frame.size.height);
+//    NSLog(@"self.button[%p].frame[%4.2f,%4.2f,%4.2f,%4.2f]", self.button, self.button.frame.origin.x, self.button.frame.origin.y, self.button.frame.size.width, self.button.frame.size.height);
 }
 
 - (UIButton *)button

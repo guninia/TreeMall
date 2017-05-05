@@ -152,8 +152,10 @@ typedef enum : NSUInteger {
     NSString *order_id = [dictionaryData objectForKey:SymphoxAPIParam_order_id];
     if (order_id && [order_id isEqual:[NSNull null]] == NO && [order_id length] > 0)
     {
+        NSString *string = [NSString stringWithFormat:@"%@\n%@", [LocalizedString OrderId], order_id];
         [self.viewDescription.labelOrderId setHidden:NO];
-        [self.viewDescription.labelOrderId setText:order_id];
+        [self.viewDescription.labelOrderId setText:string];
+        
     }
     else
     {
@@ -256,6 +258,7 @@ typedef enum : NSUInteger {
 - (void)presentProductNamed:(NSString *)name forIdentifier:(NSNumber *)productId
 {
     ProductDetailViewController *viewController = [[ProductDetailViewController alloc] initWithNibName:@"ProductDetailViewController" bundle:[NSBundle mainBundle]];
+    viewController.title = [LocalizedString ProductInfo];
     [self.navigationController pushViewController:viewController animated:YES];
 }
 

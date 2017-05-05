@@ -715,6 +715,60 @@ static NSUInteger SearchKeywordNumberMax = 8;
     return _dictionaryProductPurchaseInfoInCartFast;
 }
 
+- (NSMutableArray *)arrayCartCommonAddition
+{
+    if (_arrayCartCommonAddition == nil)
+    {
+        _arrayCartCommonAddition = [[NSMutableArray alloc] initWithCapacity:0];
+    }
+    return _arrayCartCommonAddition;
+}
+
+- (NSMutableDictionary *)dictionaryProductPurchaseInfoInCartCommonAddition
+{
+    if (_dictionaryProductPurchaseInfoInCartCommonAddition == nil)
+    {
+        _dictionaryProductPurchaseInfoInCartCommonAddition = [[NSMutableDictionary alloc] initWithCapacity:0];
+    }
+    return _dictionaryProductPurchaseInfoInCartCommonAddition;
+}
+
+- (NSMutableArray *)arrayCartStorePickUpAddition
+{
+    if (_arrayCartStorePickUpAddition == nil)
+    {
+        _arrayCartStorePickUpAddition = [[NSMutableArray alloc] initWithCapacity:0];
+    }
+    return _arrayCartStorePickUpAddition;
+}
+
+- (NSMutableDictionary *)dictionaryProductPurchaseInfoInCartStorePickUpAddition
+{
+    if (_dictionaryProductPurchaseInfoInCartStorePickUpAddition == nil)
+    {
+        _dictionaryProductPurchaseInfoInCartStorePickUpAddition = [[NSMutableDictionary alloc] initWithCapacity:0];
+    }
+    return _dictionaryProductPurchaseInfoInCartStorePickUpAddition;
+}
+
+- (NSMutableArray *)arrayCartFastAddition
+{
+    if (_arrayCartFastAddition == nil)
+    {
+        _arrayCartFastAddition = [[NSMutableArray alloc] initWithCapacity:0];
+    }
+    return _arrayCartFastAddition;
+}
+
+- (NSMutableDictionary *)dictionaryProductPurchaseInfoInCartFastAddition
+{
+    if (_dictionaryProductPurchaseInfoInCartFastAddition == nil)
+    {
+        _dictionaryProductPurchaseInfoInCartFastAddition = [[NSMutableDictionary alloc] initWithCapacity:0];
+    }
+    return _dictionaryProductPurchaseInfoInCartFastAddition;
+}
+
 #pragma mark - Public Methods
 
 - (void)readPromotionForIdentifier:(NSString *)identifier
@@ -1398,7 +1452,6 @@ static NSUInteger SearchKeywordNumberMax = 8;
         return;
     
     NSMutableArray *array = [self productArrayForCartType:type];
-//    NSLog(@"Current Cart content:\nCommon[%li]\nStorePickUp[%li]\nFast[%li]", (long)[self.arrayCartCommon count], (long)[self.arrayCartStorePickUp count], (long)[self.arrayCartFast count]);
     if (array == nil)
         return;
     
@@ -1424,8 +1477,8 @@ static NSUInteger SearchKeywordNumberMax = 8;
     [self setPurchasePaymentMode:dictionaryMode forProduct:currentProductId inCart:type];
     [array addObject:product];
     [self saveToArchive];
-//    NSLog(@"Current Cart content:\nCommon[%li]\nStorePickUp[%li]\nFast[%li]", (long)[self.arrayCartCommon count], (long)[self.arrayCartStorePickUp count], (long)[self.arrayCartFast count]);
-//    NSLog(@"Current Cart Status:\nCommon:\n%@\nStorePickUp:\n%@\nFast:\n%@\n", [self.arrayCartCommon description], [self.arrayCartStorePickUp description], [self.arrayCartFast description]);
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:PostNotificationName_CartContentChanged object:self];
 }
 
 - (void)setPurchaseQuantity:(NSNumber *)quantity forProduct:(NSNumber *)productId inCart:(CartType)cartType
@@ -1444,7 +1497,7 @@ static NSUInteger SearchKeywordNumberMax = 8;
     [self saveToArchive];
 }
 
-- (void)setPurchasePaymentMode:(NSDictionary *)dictionaryPaymentMode forProduct:(NSNumber *)productId inCart:(NSInteger)cartType
+- (void)setPurchasePaymentMode:(NSDictionary *)dictionaryPaymentMode forProduct:(NSNumber *)productId inCart:(CartType)cartType
 {
     if (dictionaryPaymentMode == nil)
         return;
@@ -1467,7 +1520,28 @@ static NSUInteger SearchKeywordNumberMax = 8;
     [self saveToArchive];
 }
 
-- (void)setPaymentModeDescription:(NSString *)description forProduct:(NSNumber *)productId inCart:(CartType)cartType
+- (void)setDiscountTypeDescription:(NSString *)description forProduct:(NSNumber *)productId inCart:(CartType)cartType
+{
+    if (description == nil)
+        return;
+    
+    NSMutableDictionary *dictionaryPurchaseInfo = [self purchaseInfoForCartType:cartType];
+    if (dictionaryPurchaseInfo == nil)
+        return;
+    
+    NSMutableDictionary *dictionary = [[dictionaryPurchaseInfo objectForKey:productId] mutableCopy];
+    if (dictionary == nil)
+    {
+        dictionary = [NSMutableDictionary dictionary];
+    }
+    [dictionary setObject:description forKey:SymphoxAPIParam_discount_type_desc];
+    
+    [dictionaryPurchaseInfo setObject:dictionary forKey:productId];
+    
+    [self saveToArchive];
+}
+
+- (void)setDiscountDetailDescription:(NSString *)description forProduct:(NSNumber *)productId inCart:(CartType)cartType
 {
     if (description == nil)
         return;
@@ -1490,6 +1564,8 @@ static NSUInteger SearchKeywordNumberMax = 8;
 
 - (NSString *)nameOfRemovedProductId:(NSNumber *)productIdToRemove inCart:(CartType)type
 {
+    NSLog(@"--- 1 arrayCartFast[%li]:\n%@", (long)type, [self.arrayCartFast description]);
+    NSLog(@"--- 1 dictionaryProductPurchaseInfoInCartFast[%li]:\n%@", (long)type, [self.dictionaryProductPurchaseInfoInCartFast description]);
     if (productIdToRemove == nil)
         return nil;
     NSMutableArray *array = [self productArrayForCartType:type];
@@ -1511,7 +1587,6 @@ static NSUInteger SearchKeywordNumberMax = 8;
                 {
                     name = [product objectForKey:SymphoxAPIParam_cpdt_name];
                 }
-                NSLog(@"nameOfRemovedProductId[%@]", name);
                 index = idx;
                 *stop = YES;
             }
@@ -1521,10 +1596,223 @@ static NSUInteger SearchKeywordNumberMax = 8;
         return nil;
     if (index < [array count])
     {
-        NSDictionary *product = [array objectAtIndex:index];
-        NSString *productName = [product objectForKey:SymphoxAPIParam_cpdt_name];
-        NSLog(@"nameOfRemovedProductId - product[%@]:\n%@", productName, [product description]);
-        
+        [array removeObjectAtIndex:index];
+    }
+    NSLog(@"arrayCartFast:\n%@", [self.arrayCartFast description]);
+    if (purchaseInfo)
+    {
+        [purchaseInfo removeObjectForKey:productIdToRemove];
+    }
+    NSLog(@"dictionaryProductPurchaseInfoInCartFast:\n%@", [self.dictionaryProductPurchaseInfoInCartFast description]);
+    [self saveToArchive];
+    [[NSNotificationCenter defaultCenter] postNotificationName:PostNotificationName_CartContentChanged object:self];
+    if (name == nil)
+        return nil;
+    NSString *productName = [NSString stringWithString:name];
+    NSLog(@"--- 1 arrayCartFast[%li]:\n%@", (long)type, [self.arrayCartFast description]);
+    NSLog(@"--- 1 dictionaryProductPurchaseInfoInCartFast[%li]:\n%@", (long)type, [self.dictionaryProductPurchaseInfoInCartFast description]);
+    return productName;
+}
+
+- (NSMutableArray *)productArrayForAdditionalCartType:(CartType)type
+{
+    NSMutableArray *array = nil;
+    switch (type) {
+        case CartTypeCommonDelivery:
+        {
+            array = self.arrayCartCommonAddition;
+        }
+            break;
+        case CartTypeStorePickup:
+        {
+            array = self.arrayCartStorePickUpAddition;
+        }
+            break;
+        case CartTypeFastDelivery:
+        {
+            array = self.arrayCartFastAddition;
+        }
+            break;
+        default:
+            break;
+    }
+    return array;
+}
+
+- (NSMutableDictionary *)purchaseInfoForAdditionalCartType:(CartType)type
+{
+    NSMutableDictionary *dictionaryPurchaseInfo = nil;
+    switch (type) {
+        case CartTypeCommonDelivery:
+        {
+            dictionaryPurchaseInfo = self.dictionaryProductPurchaseInfoInCartCommonAddition;
+        }
+            break;
+        case CartTypeStorePickup:
+        {
+            dictionaryPurchaseInfo = self.dictionaryProductPurchaseInfoInCartStorePickUpAddition;
+        }
+            break;
+        case CartTypeFastDelivery:
+        {
+            dictionaryPurchaseInfo = self.dictionaryProductPurchaseInfoInCartFastAddition;
+        }
+            break;
+        default:
+            break;
+    }
+    return dictionaryPurchaseInfo;
+}
+
+- (void)addProduct:(NSDictionary *)product toAdditionalCartForType:(CartType)type
+{
+    if (product == nil)
+        return;
+    NSNumber *currentProductId = [product objectForKey:SymphoxAPIParam_cpdt_num];
+    if (currentProductId == nil || [currentProductId isEqual:[NSNull null]])
+        return;
+    
+    NSMutableArray *array = [self productArrayForAdditionalCartType:type];
+    if (array == nil)
+        return;
+    
+    __block BOOL alreadyInCart = NO;
+    [array enumerateObjectsUsingBlock:^(id _Nonnull object, NSUInteger idx, BOOL *stop){
+        NSDictionary *product = (NSDictionary *)object;
+        NSNumber *productId = [product objectForKey:SymphoxAPIParam_cpdt_num];
+        if (productId && [productId isEqual:[NSNull null]] == NO)
+        {
+            if ([currentProductId isEqualToNumber:productId])
+            {
+                alreadyInCart = YES;
+                *stop = YES;
+            }
+        }
+    }];
+    if (alreadyInCart)
+    {
+        return;
+    }
+    [self setPurchaseQuantity:[NSNumber numberWithInteger:1] forProduct:currentProductId inAdditionalCart:type];
+    NSDictionary *dictionaryMode = [NSDictionary dictionaryWithObjectsAndKeys:@"0", SymphoxAPIParam_payment_type, [NSNumber numberWithInteger:0], SymphoxAPIParam_price, nil];
+    [self setPurchasePaymentMode:dictionaryMode forProduct:currentProductId inAdditionalCart:type];
+    [array addObject:product];
+//    [self saveToArchive];
+}
+
+- (void)setPurchaseQuantity:(NSNumber *)quantity forProduct:(NSNumber *)productId inAdditionalCart:(CartType)cartType
+{
+    NSMutableDictionary *dictionaryPurchaseInfo = [self purchaseInfoForAdditionalCartType:cartType];
+    if (dictionaryPurchaseInfo == nil)
+        return;
+    NSMutableDictionary *dictionary = [[dictionaryPurchaseInfo objectForKey:productId] mutableCopy];
+    if (dictionary == nil)
+    {
+        dictionary = [NSMutableDictionary dictionary];
+    }
+    [dictionary setObject:quantity forKey:SymphoxAPIParam_qty];
+    
+    [dictionaryPurchaseInfo setObject:dictionary forKey:productId];
+//    [self saveToArchive];
+}
+
+- (void)setPurchasePaymentMode:(NSDictionary *)dictionaryPaymentMode forProduct:(NSNumber *)productId inAdditionalCart:(CartType)cartType
+{
+    if (dictionaryPaymentMode == nil)
+        return;
+    
+    NSMutableDictionary *dictionaryPurchaseInfo = [self purchaseInfoForAdditionalCartType:cartType];
+    if (dictionaryPurchaseInfo == nil)
+        return;
+    
+    NSMutableDictionary *dictionary = [[dictionaryPurchaseInfo objectForKey:productId] mutableCopy];
+    if (dictionary == nil)
+    {
+        dictionary = [NSMutableDictionary dictionary];
+    }
+    [dictionary setObject:dictionaryPaymentMode forKey:SymphoxAPIParam_payment_mode];
+    
+    [dictionaryPurchaseInfo setObject:dictionary forKey:productId];
+    NSLog(@"dictionaryProductPurchaseInfoInCartCommonAddition:\n%@", [self.dictionaryProductPurchaseInfoInCartCommonAddition description]);
+    NSLog(@"dictionaryProductPurchaseInfoInCartStorePickUpAddition:\n%@", [self.dictionaryProductPurchaseInfoInCartStorePickUpAddition description]);
+    NSLog(@"dictionaryProductPurchaseInfoInCartFastAddition:\n%@", [self.dictionaryProductPurchaseInfoInCartFastAddition description]);
+//    [self saveToArchive];
+}
+
+- (void)setDiscountTypeDescription:(NSString *)description forProduct:(NSNumber *)productId inAdditionalCart:(CartType)cartType
+{
+    if (description == nil)
+        return;
+    
+    NSMutableDictionary *dictionaryPurchaseInfo = [self purchaseInfoForAdditionalCartType:cartType];
+    if (dictionaryPurchaseInfo == nil)
+        return;
+    
+    NSMutableDictionary *dictionary = [[dictionaryPurchaseInfo objectForKey:productId] mutableCopy];
+    if (dictionary == nil)
+    {
+        dictionary = [NSMutableDictionary dictionary];
+    }
+    [dictionary setObject:description forKey:SymphoxAPIParam_discount_type_desc];
+    
+    [dictionaryPurchaseInfo setObject:dictionary forKey:productId];
+    
+    //    [self saveToArchive];
+}
+
+- (void)setDiscountDetailDescription:(NSString *)description forProduct:(NSNumber *)productId inAdditionalCart:(CartType)cartType
+{
+    if (description == nil)
+        return;
+    
+    NSMutableDictionary *dictionaryPurchaseInfo = [self purchaseInfoForAdditionalCartType:cartType];
+    if (dictionaryPurchaseInfo == nil)
+        return;
+    
+    NSMutableDictionary *dictionary = [[dictionaryPurchaseInfo objectForKey:productId] mutableCopy];
+    if (dictionary == nil)
+    {
+        dictionary = [NSMutableDictionary dictionary];
+    }
+    [dictionary setObject:description forKey:SymphoxAPIParam_discount_detail_desc];
+    
+    [dictionaryPurchaseInfo setObject:dictionary forKey:productId];
+    
+//    [self saveToArchive];
+}
+
+- (NSString *)nameOfRemovedProductId:(NSNumber *)productIdToRemove inAdditionalCart:(CartType)type
+{
+    if (productIdToRemove == nil)
+        return nil;
+    NSMutableArray *array = [self productArrayForAdditionalCartType:type];
+    if (array == nil)
+        return nil;
+    NSMutableDictionary *purchaseInfo = [self purchaseInfoForAdditionalCartType:type];
+    
+    __block NSInteger index = NSNotFound;
+    __block NSString *name = nil;
+    [array enumerateObjectsUsingBlock:^(id _Nonnull object, NSUInteger idx, BOOL *stop){
+        NSDictionary *product = (NSDictionary *)object;
+        NSNumber *productId = [product objectForKey:SymphoxAPIParam_cpdt_num];
+        if (productId && [productId isEqual:[NSNull null]] == NO)
+        {
+            if ([productIdToRemove isEqualToNumber:productId])
+            {
+                name = [product objectForKey:SymphoxAPIParam_name];
+                if (name == nil)
+                {
+                    name = [product objectForKey:SymphoxAPIParam_cpdt_name];
+                }
+                index = idx;
+                *stop = YES;
+            }
+        }
+    }];
+    if (index == NSNotFound)
+        return nil;
+    if (index < [array count])
+    {
         [array removeObjectAtIndex:index];
     }
     if (purchaseInfo)
@@ -1537,6 +1825,38 @@ static NSUInteger SearchKeywordNumberMax = 8;
         return nil;
     NSString *productName = [NSString stringWithString:name];
     return productName;
+}
+
+- (NSInteger)numberOfProductsInCart:(CartType)type
+{
+    NSInteger totalCount = 0;
+    switch (type) {
+        case CartTypeCommonDelivery:
+        {
+            totalCount += [self.arrayCartCommon count];
+        }
+            break;
+        case CartTypeStorePickup:
+        {
+            totalCount += [self.arrayCartStorePickUp count];
+        }
+            break;
+        case CartTypeFastDelivery:
+        {
+            totalCount += [self.arrayCartFast count];
+        }
+            break;
+        case CartTypeTotal:
+        {
+            totalCount += [self.arrayCartCommon count];
+            totalCount += [self.arrayCartStorePickUp count];
+            totalCount += [self.arrayCartFast count];
+        }
+            break;
+        default:
+            break;
+    }
+    return totalCount;
 }
 
 #pragma mark - Private Methods

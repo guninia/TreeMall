@@ -88,7 +88,7 @@
 - (void)startForgetPasswordProcess
 {
     NSString *account = [[_textFieldAccount text] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-    if ([Utility evaluateEmail:account] == NO)
+    if ([Utility evaluateEmail:account] == NO && [Utility evaluateIdCardNumber:account] == NO)
     {
         // Should show alert to modify account.
         NSLog(@"Account is not illegal.");

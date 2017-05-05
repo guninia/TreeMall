@@ -18,6 +18,7 @@
 - (void)retrieveData;
 - (BOOL)processData:(NSData *)data;
 - (void)buttonLinkPressed:(id)sender;
+- (void)buttonClosePressed:(id)sender;
 - (void)linkLongPressed:(UILongPressGestureRecognizer *)gestureRecognizer;
 
 @end
@@ -37,6 +38,9 @@
     [self.scrollView addSubview:self.separator];
     [self.scrollView addSubview:self.labelBankTitle];
     [self.scrollView addSubview:self.labelDescription];
+    
+    [self.view addSubview:self.buttonClose];
+    
     [self retrieveData];
 }
 
@@ -66,9 +70,17 @@
     CGFloat intervalV = 10.0;
     CGFloat originY = 0.0;
     
+    if (self.buttonClose)
+    {
+        CGSize size = CGSizeMake(40.0, 40.0);
+        CGRect frame = CGRectMake(self.view.frame.size.width - size.width, 0.0, size.width, size.height);
+        self.buttonClose.frame = frame;
+    }
+    
     if (self.scrollView)
     {
-        self.scrollView.frame = CGRectMake(marginH, marginV, self.view.frame.size.width - marginH * 2, self.view.frame.size.height - marginV * 2);
+        CGFloat originY = CGRectGetMaxY(self.buttonClose.frame);
+        self.scrollView.frame = CGRectMake(marginH, originY, self.view.frame.size.width - marginH * 2, self.view.frame.size.height - marginV - originY);
     }
     
     if (self.labelInstallmentTitle)
@@ -218,7 +230,8 @@
             continue;
         NSMutableAttributedString *attrString = [[NSMutableAttributedString alloc] initWithString:priceString attributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIColor blackColor], NSForegroundColorAttributeName, nil]];
         [attrString appendString:[LocalizedString Dollars]];
-        NSString *stringTerm = [NSString stringWithFormat:@" Ｘ%li", (long)[term integerValue]];
+        
+        NSString *stringTerm = [NSString stringWithFormat:@" Ｘ%li%@", (long)[term integerValue], [LocalizedString InstallmentTerm]];
         [attrString appendAttributedString:[[NSAttributedString alloc] initWithString:stringTerm attributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIColor redColor], NSForegroundColorAttributeName, nil]]];
         
         if ([cathayOnly boolValue])
@@ -245,6 +258,22 @@
         [_formatter setNumberStyle:NSNumberFormatterDecimalStyle];
     }
     return _formatter;
+}
+
+- (UIButton *)buttonClose
+{
+    if (_buttonClose == nil)
+    {
+        _buttonClose = [[UIButton alloc] initWithFrame:CGRectZero];
+        [_buttonClose setBackgroundColor:[UIColor clearColor]];
+        UIImage *image = [UIImage imageNamed:@"car_popup_close"];
+        if (image)
+        {
+            [_buttonClose setImage:image forState:UIControlStateNormal];
+        }
+        [_buttonClose addTarget:self action:@selector(buttonClosePressed:) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _buttonClose;
 }
 
 #pragma mark - Private Methods
@@ -320,6 +349,14 @@
     if ([[UIApplication sharedApplication] canOpenURL:url])
     {
         [[UIApplication sharedApplication] openURL:url];
+    }
+}
+
+- (void)buttonClosePressed:(id)sender
+{
+    if (self.presentingViewController)
+    {
+        [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
     }
 }
 

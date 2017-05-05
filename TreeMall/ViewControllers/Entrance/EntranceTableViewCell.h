@@ -8,8 +8,13 @@
 
 #import <UIKit/UIKit.h>
 
+#define kEntranceTableViewCellImageFrameRatio0 (360.0f / 888.0f)
+#define kEntranceTableViewCellImageFrameRatio1 (144.0f / 888.0f)
+
 static NSString *EntranceTableViewCellIdentifier = @"EntranceTableViewCell";
 
 @interface EntranceTableViewCell : UITableViewCell
+
+@property (nonatomic, assign) CGFloat frameRatio;
 
 @end
