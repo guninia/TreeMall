@@ -14,6 +14,7 @@
                 <outlet property="buttonContactList" destination="Mq8-eo-5Im" id="iQY-Yk-4MC"/>
                 <outlet property="labelDeliverTitle" destination="61x-dl-WGa" id="WWl-vV-38A"/>
                 <outlet property="labelInvoiceTitle" destination="32N-c2-JCu" id="57E-df-nH4"/>
+                <outlet property="scrollView" destination="S71-Xl-nAS" id="gGc-5o-I6B"/>
                 <outlet property="separator" destination="mGF-8I-NCa" id="c93-0o-tXe"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>

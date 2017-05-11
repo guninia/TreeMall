@@ -62,9 +62,165 @@
 		687B0E6C1E6970D500E04D81 /* CouponDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 687B0E6A1E6970D500E04D81 /* CouponDetailViewController.m */; };
 		687B0E6D1E6970D500E04D81 /* CouponDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 687B0E6B1E6970D500E04D81 /* CouponDetailViewController.xib */; };
 		6882AF021EB8870200A29E57 /* ReceiverInfoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6882AF011EB8870200A29E57 /* ReceiverInfoCell.m */; };
+		688493931EBC779A0087BC2B /* PromotionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68B68FF71E24C30700DCCF29 /* PromotionViewController.m */; };
+		688493941EBC779A0087BC2B /* PromotionDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 689A7A231EB1F14B00B7D281 /* PromotionDetailViewController.m */; };
+		688493951EBC779A0087BC2B /* AdditionalProductCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 68A1FE9C1EB086070058ABED /* AdditionalProductCollectionViewCell.m */; };
+		688493961EBC779A0087BC2B /* AdditionalPurchaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68A1FE971EB0858D0058ABED /* AdditionalPurchaseViewController.m */; };
+		688493971EBC779A0087BC2B /* ImageTitleButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 6826E9E91E5BF044001E572A /* ImageTitleButton.m */; };
+		688493981EBC779A0087BC2B /* CryptoTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 685939E81E1F518700351FFB /* CryptoTool.m */; };
+		688493991EBC779A0087BC2B /* WebViewViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6895464B1E3608E500D5CD1E /* WebViewViewController.m */; };
+		6884939A1EBC779A0087BC2B /* ProductListToolView.m in Sources */ = {isa = PBXBuildFile; fileRef = 680957741E43195F00DA2BEA /* ProductListToolView.m */; };
+		6884939B1EBC779A0087BC2B /* ProductListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68164D901E39D11F00006398 /* ProductListViewController.m */; };
+		6884939C1EBC779A0087BC2B /* HotSaleTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 683C17D61EB2D9E70051519A /* HotSaleTableViewCell.m */; };
+		6884939D1EBC779A0087BC2B /* IconLabelView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6863A1D61E5E7C550036E0A8 /* IconLabelView.m */; };
+		6884939E1EBC779A0087BC2B /* DiscountHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 68CE498F1EADD471008F77D7 /* DiscountHeaderView.m */; };
+		6884939F1EBC779A0087BC2B /* ForgetPasswordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68E401341E30B09900BFF66B /* ForgetPasswordViewController.m */; };
+		688493A01EBC779A0087BC2B /* DiscountTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 68CE498C1EADD41B008F77D7 /* DiscountTableViewCell.m */; };
+		688493A11EBC779A0087BC2B /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 685939B11E1F49DF00351FFB /* ViewController.m */; };
+		688493A21EBC779A0087BC2B /* FTPopTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68A827971E4D9C6F00E63552 /* FTPopTableViewController.m */; };
+		688493A31EBC779A0087BC2B /* ExtraSubcategoryHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 68164D8D1E39B26300006398 /* ExtraSubcategoryHeaderView.m */; };
+		688493A41EBC779A0087BC2B /* ProductDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68A827A31E4DB62D00E63552 /* ProductDetailViewController.m */; };
+		688493A51EBC779A0087BC2B /* CouponTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 687B0E671E69191A00E04D81 /* CouponTableViewCell.m */; };
+		688493A61EBC779A0087BC2B /* SHPickerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 68CE49841EADAD4E008F77D7 /* SHPickerView.m */; };
+		688493A71EBC779A0087BC2B /* ReceiverInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 681500EC1EB727F100B872E2 /* ReceiverInfoViewController.m */; };
+		688493A81EBC779A0087BC2B /* PromotionTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 68B68FFC1E24C45600DCCF29 /* PromotionTableViewCell.m */; };
+		688493A91EBC779A0087BC2B /* EntranceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6890650C1E23334400E5CB26 /* EntranceViewController.m */; };
+		688493AA1EBC779A0087BC2B /* LabelButtonView.m in Sources */ = {isa = PBXBuildFile; fileRef = 689678AE1E8BB73A00669A22 /* LabelButtonView.m */; };
+		688493AB1EBC779A0087BC2B /* ExtraSubcategorySeeAllTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 68164D951E39E44400006398 /* ExtraSubcategorySeeAllTableViewCell.m */; };
+		688493AC1EBC779A0087BC2B /* DiscountViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68CE49871EADD283008F77D7 /* DiscountViewController.m */; };
+		688493AD1EBC779A0087BC2B /* SHAPIAdapter.m in Sources */ = {isa = PBXBuildFile; fileRef = 685939E41E1F4E1700351FFB /* SHAPIAdapter.m */; };
+		688493AE1EBC779A0087BC2B /* ProductDetailSectionTitleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 681FC33A1E5C3A8700AC11CB /* ProductDetailSectionTitleView.m */; };
+		688493AF1EBC779A0087BC2B /* OrderHeaderReusableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 68E4702F1E72A06A0040213B /* OrderHeaderReusableView.m */; };
+		688493B01EBC779A0087BC2B /* PureTextTableHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 68B0FDE21E837EF300BE273F /* PureTextTableHeaderView.m */; };
+		688493B11EBC779A0087BC2B /* TextHorizontalSeparator.m in Sources */ = {isa = PBXBuildFile; fileRef = 68B68FF31E2484A600DCCF29 /* TextHorizontalSeparator.m */; };
+		688493B21EBC779A0087BC2B /* MemberViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 689065241E2338C400E5CB26 /* MemberViewController.m */; };
+		688493B31EBC779A0087BC2B /* MemberSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68D7518E1E810A5800487088 /* MemberSettingsViewController.m */; };
+		688493B41EBC779A0087BC2B /* ProductPriceLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 68BE09601E583F080046B477 /* ProductPriceLabel.m */; };
+		688493B51EBC779A0087BC2B /* CircularSideLabelView.m in Sources */ = {isa = PBXBuildFile; fileRef = 689929CF1E821D96001EDA0C /* CircularSideLabelView.m */; };
+		688493B61EBC779A0087BC2B /* DropdownListButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 680DC91A1E5ED05A00C97653 /* DropdownListButton.m */; };
+		688493B71EBC779A0087BC2B /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 685939AE1E1F49DF00351FFB /* AppDelegate.m */; };
+		688493B81EBC779A0087BC2B /* ExtraSubcategoryTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 68CF5E621E38AC5900341EF1 /* ExtraSubcategoryTableViewCell.m */; };
+		688493B91EBC779A0087BC2B /* ShoppingMallViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 689065121E23368100E5CB26 /* ShoppingMallViewController.m */; };
+		688493BA1EBC779A0087BC2B /* NewsletterSubscribeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68B0FDDC1E837B8F00BE273F /* NewsletterSubscribeViewController.m */; };
+		688493BB1EBC779A0087BC2B /* LoadingFoorterReusableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 68E470351E72A79B0040213B /* LoadingFoorterReusableView.m */; };
+		688493BC1EBC779A0087BC2B /* ProductListTitleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 68A827AB1E4DC52700E63552 /* ProductListTitleView.m */; };
+		688493BD1EBC779A0087BC2B /* ProductFilterTextCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 68968EB61E51AD6300419619 /* ProductFilterTextCollectionViewCell.m */; };
+		688493BE1EBC779A0087BC2B /* SearchHeaderCollectionReusableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 68ACE8921E56DE3000A821DA /* SearchHeaderCollectionReusableView.m */; };
+		688493BF1EBC779A0087BC2B /* EntranceMemberPromoteHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 68CA36B71E23722F00A70BCC /* EntranceMemberPromoteHeader.m */; };
+		688493C01EBC779A0087BC2B /* ProductDetailBottomBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 689F66491E5AC56400CC3664 /* ProductDetailBottomBar.m */; };
+		688493C11EBC779A0087BC2B /* ProductSubcategoryCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 680957711E43051C00DA2BEA /* ProductSubcategoryCollectionViewCell.m */; };
+		688493C21EBC779A0087BC2B /* Utility.m in Sources */ = {isa = PBXBuildFile; fileRef = 68B68FEE1E24753400DCCF29 /* Utility.m */; };
+		688493C31EBC779A0087BC2B /* LabelRangeSliderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 689613C91E52AAE800066BE7 /* LabelRangeSliderView.m */; };
+		688493C41EBC779A0087BC2B /* NotificationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6890651E1E23387200E5CB26 /* NotificationViewController.m */; };
+		688493C51EBC779A0087BC2B /* SearchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68981FA71E55991E00A2707A /* SearchViewController.m */; };
+		688493C61EBC779A0087BC2B /* CartViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 689065181E2337F900E5CB26 /* CartViewController.m */; };
+		688493C71EBC779A0087BC2B /* RegisterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68B26FB71E31CB5F00B6D757 /* RegisterViewController.m */; };
+		688493C81EBC779A0087BC2B /* ChosenDiscountTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 68C5A9261EB48C4100EEC55E /* ChosenDiscountTableViewCell.m */; };
+		688493C91EBC779A0087BC2B /* NewsletterSubscribeTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 68B0FDE81E83808F00BE273F /* NewsletterSubscribeTableViewCell.m */; };
+		688493CA1EBC779A0087BC2B /* PaymentTypeTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 68C5A9291EB48F6C00EEC55E /* PaymentTypeTableViewCell.m */; };
+		688493CB1EBC779A0087BC2B /* FullScreenLoadingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 68B5EEC81E4C69910030A2ED /* FullScreenLoadingView.m */; };
+		688493CC1EBC779A0087BC2B /* SemiCircleEndsSegmentedView.m in Sources */ = {isa = PBXBuildFile; fileRef = 689130131E6811E700CE834A /* SemiCircleEndsSegmentedView.m */; };
+		688493CD1EBC779A0087BC2B /* EntranceTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 68CA36B11E23709400A70BCC /* EntranceTableViewCell.m */; };
+		688493CE1EBC779A0087BC2B /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 685939AB1E1F49DF00351FFB /* main.m */; };
+		688493CF1EBC779A0087BC2B /* InstallmentDescriptionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68A1FE941EB04B670058ABED /* InstallmentDescriptionViewController.m */; };
+		688493D01EBC779A0087BC2B /* ProductDetailPromotionLabelView.m in Sources */ = {isa = PBXBuildFile; fileRef = 68BE09591E583DC00046B477 /* ProductDetailPromotionLabelView.m */; };
+		688493D11EBC779A0087BC2B /* UIViewController+FTPopMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 68A827991E4D9C6F00E63552 /* UIViewController+FTPopMenu.m */; };
+		688493D21EBC779A0087BC2B /* CouponDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 687B0E6A1E6970D500E04D81 /* CouponDetailViewController.m */; };
+		688493D31EBC779A0087BC2B /* PagingGridView.m in Sources */ = {isa = PBXBuildFile; fileRef = 689546471E35F38700D5CD1E /* PagingGridView.m */; };
+		688493D41EBC779A0087BC2B /* OrderDeliverProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = 68A98B931E779D760094A77F /* OrderDeliverProgressView.m */; };
+		688493D51EBC779A0087BC2B /* CryptoModule.m in Sources */ = {isa = PBXBuildFile; fileRef = 685939EC1E1F775900351FFB /* CryptoModule.m */; };
+		688493D61EBC779A0087BC2B /* BorderedDoubleLabelView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6826E9E41E5BE52E001E572A /* BorderedDoubleLabelView.m */; };
+		688493D71EBC779A0087BC2B /* PureTextTableFooterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 68B0FDE51E83804000BE273F /* PureTextTableFooterView.m */; };
+		688493D81EBC779A0087BC2B /* CouponDetailDescriptionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6884DD7E1E6D00B200DAF859 /* CouponDetailDescriptionView.m */; };
+		688493D91EBC779A0087BC2B /* ProductDetailImageCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6887999E1E5AD12B00495A77 /* ProductDetailImageCollectionViewCell.m */; };
+		688493DA1EBC779A0087BC2B /* SubcategoryTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 68CF5E5F1E38ABF400341EF1 /* SubcategoryTableViewCell.m */; };
+		688493DB1EBC779A0087BC2B /* ProductSubcategoryView.m in Sources */ = {isa = PBXBuildFile; fileRef = 68AC12131E42D0BB0080183F /* ProductSubcategoryView.m */; };
+		688493DC1EBC779A0087BC2B /* PaymentTypeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 689054CF1EAEE9BB0037CED9 /* PaymentTypeViewController.m */; };
+		688493DD1EBC779A0087BC2B /* AuthenticateViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 689546421E35DFB400D5CD1E /* AuthenticateViewController.m */; };
+		688493DE1EBC779A0087BC2B /* MemberTitleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 688EF5EF1E5D3EF20047E2DC /* MemberTitleView.m */; };
+		688493DF1EBC779A0087BC2B /* TreeMall.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 685939B61E1F49DF00351FFB /* TreeMall.xcdatamodeld */; };
+		688493E01EBC779A0087BC2B /* ImageTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 681FC3361E5C333B00AC11CB /* ImageTextView.m */; };
+		688493E11EBC779A0087BC2B /* OrderDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68D751891E80E03F00487088 /* OrderDetailViewController.m */; };
+		688493E21EBC779A0087BC2B /* TMInfoManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 68A85C7D1E2728CF004DD624 /* TMInfoManager.m */; };
+		688493E31EBC779A0087BC2B /* DiscountLabelView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6819AB511E4981A900735EA3 /* DiscountLabelView.m */; };
+		688493E41EBC779A0087BC2B /* SingleMediaDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6838E1261EB587DC007395EF /* SingleMediaDetailViewController.m */; };
+		688493E51EBC779A0087BC2B /* ReceiverInfoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6882AF011EB8870200A29E57 /* ReceiverInfoCell.m */; };
+		688493E61EBC779A0087BC2B /* PaymentTypeHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 68C5A92C1EB48FDA00EEC55E /* PaymentTypeHeaderView.m */; };
+		688493E71EBC779A0087BC2B /* OrderListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6863A1DA1E5EBD3D0036E0A8 /* OrderListViewController.m */; };
+		688493E81EBC779A0087BC2B /* ProductTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 680957771E432D4D00DA2BEA /* ProductTableViewCell.m */; };
+		688493E91EBC779A0087BC2B /* CartProductTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 689678B11E8BBC1500669A22 /* CartProductTableViewCell.m */; };
+		688493EA1EBC779A0087BC2B /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68CA36BB1E23880400A70BCC /* LoginViewController.m */; };
+		688493EB1EBC779A0087BC2B /* TermsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68E4012F1E309B7700BFF66B /* TermsViewController.m */; };
+		688493EC1EBC779A0087BC2B /* MemberSettingsTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 68D751931E812E4C00487088 /* MemberSettingsTableViewCell.m */; };
+		688493ED1EBC779A0087BC2B /* LocalizedString.m in Sources */ = {isa = PBXBuildFile; fileRef = 68CA36AE1E23679800A70BCC /* LocalizedString.m */; };
+		688493EE1EBC779A0087BC2B /* VerticalImageTextButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 68987D991E8510800077A62B /* VerticalImageTextButton.m */; };
+		688493EF1EBC779A0087BC2B /* EntranceFunctionSectionHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 68CA36B41E23712700A70BCC /* EntranceFunctionSectionHeader.m */; };
+		688493F01EBC779A0087BC2B /* MainCategoryCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 68FBDE031E3757F7007F5C13 /* MainCategoryCollectionViewCell.m */; };
+		688493F11EBC779A0087BC2B /* OrderListCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 68E470321E72A0990040213B /* OrderListCollectionViewCell.m */; };
+		688493F21EBC779A0087BC2B /* CouponListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6891300D1E68097C00CE834A /* CouponListViewController.m */; };
+		688493F31EBC779A0087BC2B /* SearchCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 68ACE88F1E56DA2000A821DA /* SearchCollectionViewCell.m */; };
+		688493F41EBC779A0087BC2B /* ExchangeDescriptionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6826C0181EAF3CBC00921ADC /* ExchangeDescriptionViewController.m */; };
+		688493F51EBC779A0087BC2B /* SingleLabelHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 686302A21EB985B500678A34 /* SingleLabelHeaderView.m */; };
+		688493F61EBC779A0087BC2B /* HotSaleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 683C17D11EB2D9200051519A /* HotSaleViewController.m */; };
+		688493F71EBC779A0087BC2B /* SingleMediaDetailSubViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6838E1231EB587DC007395EF /* SingleMediaDetailSubViewController.m */; };
+		688493F81EBC779A0087BC2B /* MemberPointView.m in Sources */ = {isa = PBXBuildFile; fileRef = 688EF5F21E5D474C0047E2DC /* MemberPointView.m */; };
+		688493F91EBC779A0087BC2B /* TopSeparatedTitleCollectionReusableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6884DD811E6D191000DAF859 /* TopSeparatedTitleCollectionReusableView.m */; };
+		688493FA1EBC779A0087BC2B /* ProductFilterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68A8279E1E4DB56400E63552 /* ProductFilterViewController.m */; };
+		688493FB1EBC779A0087BC2B /* LoadingFooterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 68DC2BAA1E487B28003573AC /* LoadingFooterView.m */; };
+		688493FC1EBC779A0087BC2B /* FavoriteViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6890652A1E23470E00E5CB26 /* FavoriteViewController.m */; };
+		688493FD1EBC779A0087BC2B /* FTPopMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 68A827951E4D9C6F00E63552 /* FTPopMenu.m */; };
+		688493FF1EBC779A0087BC2B /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6811BC781E27779500626A4A /* SystemConfiguration.framework */; };
+		688494001EBC779A0087BC2B /* SafariServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6811BC761E27778A00626A4A /* SafariServices.framework */; };
+		688494011EBC779A0087BC2B /* GoogleAppUtilities.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6811BC681E27749F00626A4A /* GoogleAppUtilities.framework */; };
+		688494021EBC779A0087BC2B /* GoogleSignIn.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6811BC691E27749F00626A4A /* GoogleSignIn.framework */; };
+		688494031EBC779A0087BC2B /* GoogleSignInDependencies.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6811BC6A1E27749F00626A4A /* GoogleSignInDependencies.framework */; };
+		688494041EBC779A0087BC2B /* GoogleSymbolUtilities.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6811BC6B1E27749F00626A4A /* GoogleSymbolUtilities.framework */; };
+		688494051EBC779A0087BC2B /* Bolts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6811BC661E27701500626A4A /* Bolts.framework */; };
+		688494061EBC779A0087BC2B /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6811BC621E275F6F00626A4A /* FBSDKCoreKit.framework */; };
+		688494071EBC779A0087BC2B /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6811BC631E275F6F00626A4A /* FBSDKLoginKit.framework */; };
+		688494081EBC779A0087BC2B /* libPods-TreeMall.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 221317FB524FF9784CE799EA /* libPods-TreeMall.a */; };
+		6884940A1EBC779A0087BC2B /* GoogleSignIn.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 6811BC701E2774B500626A4A /* GoogleSignIn.bundle */; };
+		6884940B1EBC779A0087BC2B /* ReceiverInfoViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 681500ED1EB727F100B872E2 /* ReceiverInfoViewController.xib */; };
+		6884940C1EBC779A0087BC2B /* CouponListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6891300E1E68097C00CE834A /* CouponListViewController.xib */; };
+		6884940D1EBC779A0087BC2B /* MemberViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 689065251E2338C400E5CB26 /* MemberViewController.xib */; };
+		6884940E1EBC779A0087BC2B /* HotSaleViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 683C17D21EB2D9200051519A /* HotSaleViewController.xib */; };
+		6884940F1EBC779A0087BC2B /* ShoppingMallViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 689065131E23368100E5CB26 /* ShoppingMallViewController.xib */; };
+		688494101EBC779A0087BC2B /* LoginViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 68CA36BC1E23880400A70BCC /* LoginViewController.xib */; };
+		688494111EBC779A0087BC2B /* ForgetPasswordViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 68E401351E30B09900BFF66B /* ForgetPasswordViewController.xib */; };
+		688494121EBC779A0087BC2B /* TermsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 68E401301E309B7700BFF66B /* TermsViewController.xib */; };
+		688494131EBC779A0087BC2B /* CouponDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 687B0E6B1E6970D500E04D81 /* CouponDetailViewController.xib */; };
+		688494141EBC779A0087BC2B /* AdditionalPurchaseViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 68A1FE981EB0858D0058ABED /* AdditionalPurchaseViewController.xib */; };
+		688494151EBC779A0087BC2B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 685939BB1E1F49DF00351FFB /* LaunchScreen.storyboard */; };
+		688494161EBC779A0087BC2B /* AuthenticateViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 689546431E35DFB400D5CD1E /* AuthenticateViewController.xib */; };
+		688494171EBC779A0087BC2B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 685939B91E1F49DF00351FFB /* Assets.xcassets */; };
+		688494181EBC779A0087BC2B /* EntranceViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6890650D1E23334400E5CB26 /* EntranceViewController.xib */; };
+		688494191EBC779A0087BC2B /* NewsletterSubscribeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 68B0FDDD1E837B8F00BE273F /* NewsletterSubscribeViewController.xib */; };
+		6884941A1EBC779A0087BC2B /* SearchViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 68981FA81E55991E00A2707A /* SearchViewController.xib */; };
+		6884941B1EBC779A0087BC2B /* SingleMediaDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6838E1271EB587DC007395EF /* SingleMediaDetailViewController.xib */; };
+		6884941C1EBC779A0087BC2B /* PromotionViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 68B68FF81E24C30700DCCF29 /* PromotionViewController.xib */; };
+		6884941D1EBC779A0087BC2B /* MemberSettingsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 68D7518F1E810A5800487088 /* MemberSettingsViewController.xib */; };
+		6884941E1EBC779A0087BC2B /* WebViewViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6895464C1E3608E500D5CD1E /* WebViewViewController.xib */; };
+		6884941F1EBC779A0087BC2B /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 68CA36A81E2362FF00A70BCC /* Localizable.strings */; };
+		688494201EBC779A0087BC2B /* ProductFilterViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 68A8279F1E4DB56400E63552 /* ProductFilterViewController.xib */; };
+		688494211EBC779A0087BC2B /* CartViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 689065191E2337F900E5CB26 /* CartViewController.xib */; };
+		688494221EBC779A0087BC2B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 685939B31E1F49DF00351FFB /* Main.storyboard */; };
+		688494231EBC779A0087BC2B /* NotificationViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6890651F1E23387200E5CB26 /* NotificationViewController.xib */; };
+		688494241EBC779A0087BC2B /* PromotionDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 689A7A241EB1F14B00B7D281 /* PromotionDetailViewController.xib */; };
+		688494251EBC779A0087BC2B /* OrderDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 68D7518A1E80E03F00487088 /* OrderDetailViewController.xib */; };
+		688494261EBC779A0087BC2B /* PaymentTypeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 689054D01EAEE9BB0037CED9 /* PaymentTypeViewController.xib */; };
+		688494271EBC779A0087BC2B /* FavoriteViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6890652B1E23470E00E5CB26 /* FavoriteViewController.xib */; };
+		688494281EBC779A0087BC2B /* SingleMediaDetailSubViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6838E1241EB587DC007395EF /* SingleMediaDetailSubViewController.xib */; };
+		688494291EBC779A0087BC2B /* RegisterViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 68B26FB81E31CB5F00B6D757 /* RegisterViewController.xib */; };
+		6884942A1EBC779A0087BC2B /* ProductDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 68A827A41E4DB62D00E63552 /* ProductDetailViewController.xib */; };
+		6884942B1EBC779A0087BC2B /* OrderListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6863A1DB1E5EBD3D0036E0A8 /* OrderListViewController.xib */; };
+		6884942C1EBC779A0087BC2B /* DiscountViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 68CE49881EADD283008F77D7 /* DiscountViewController.xib */; };
+		6884942D1EBC779A0087BC2B /* ProductListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 68164D911E39D11F00006398 /* ProductListViewController.xib */; };
+		6884942E1EBC779A0087BC2B /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6811BC741E27757100626A4A /* GoogleService-Info.plist */; };
 		6884DD7F1E6D00B200DAF859 /* CouponDetailDescriptionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6884DD7E1E6D00B200DAF859 /* CouponDetailDescriptionView.m */; };
 		6884DD821E6D191000DAF859 /* TopSeparatedTitleCollectionReusableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6884DD811E6D191000DAF859 /* TopSeparatedTitleCollectionReusableView.m */; };
 		6887999F1E5AD12B00495A77 /* ProductDetailImageCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6887999E1E5AD12B00495A77 /* ProductDetailImageCollectionViewCell.m */; };
+		688ED8971EC416FD003C23F7 /* IntroduceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 688ED8951EC416FD003C23F7 /* IntroduceViewController.m */; };
+		688ED8981EC416FD003C23F7 /* IntroduceViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 688ED8961EC416FD003C23F7 /* IntroduceViewController.xib */; };
 		688EF5F01E5D3EF20047E2DC /* MemberTitleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 688EF5EF1E5D3EF20047E2DC /* MemberTitleView.m */; };
 		688EF5F31E5D474C0047E2DC /* MemberPointView.m in Sources */ = {isa = PBXBuildFile; fileRef = 688EF5F21E5D474C0047E2DC /* MemberPointView.m */; };
 		689054D11EAEE9BB0037CED9 /* PaymentTypeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 689054CF1EAEE9BB0037CED9 /* PaymentTypeViewController.m */; };
@@ -99,6 +255,7 @@
 		689929D01E821D96001EDA0C /* CircularSideLabelView.m in Sources */ = {isa = PBXBuildFile; fileRef = 689929CF1E821D96001EDA0C /* CircularSideLabelView.m */; };
 		689A7A251EB1F14B00B7D281 /* PromotionDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 689A7A231EB1F14B00B7D281 /* PromotionDetailViewController.m */; };
 		689A7A261EB1F14B00B7D281 /* PromotionDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 689A7A241EB1F14B00B7D281 /* PromotionDetailViewController.xib */; };
+		689D906E1EC00A3D0052C75A /* InvoiceDescriptionFooterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 689D906D1EC00A3D0052C75A /* InvoiceDescriptionFooterView.m */; };
 		689F664A1E5AC56400CC3664 /* ProductDetailBottomBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 689F66491E5AC56400CC3664 /* ProductDetailBottomBar.m */; };
 		68A1FE951EB04B670058ABED /* InstallmentDescriptionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68A1FE941EB04B670058ABED /* InstallmentDescriptionViewController.m */; };
 		68A1FE991EB0858D0058ABED /* AdditionalPurchaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68A1FE971EB0858D0058ABED /* AdditionalPurchaseViewController.m */; };
@@ -130,6 +287,7 @@
 		68B68FF91E24C30700DCCF29 /* PromotionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68B68FF71E24C30700DCCF29 /* PromotionViewController.m */; };
 		68B68FFA1E24C30700DCCF29 /* PromotionViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 68B68FF81E24C30700DCCF29 /* PromotionViewController.xib */; };
 		68B68FFD1E24C45600DCCF29 /* PromotionTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 68B68FFC1E24C45600DCCF29 /* PromotionTableViewCell.m */; };
+		68B76A341EC1978D003E4C41 /* SampleImageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68B76A331EC1978D003E4C41 /* SampleImageViewController.m */; };
 		68BE095A1E583DC00046B477 /* ProductDetailPromotionLabelView.m in Sources */ = {isa = PBXBuildFile; fileRef = 68BE09591E583DC00046B477 /* ProductDetailPromotionLabelView.m */; };
 		68BE09611E583F080046B477 /* ProductPriceLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 68BE09601E583F080046B477 /* ProductPriceLabel.m */; };
 		68C5A9271EB48C4100EEC55E /* ChosenDiscountTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 68C5A9261EB48C4100EEC55E /* ChosenDiscountTableViewCell.m */; };
@@ -282,12 +440,17 @@
 		687B0E6B1E6970D500E04D81 /* CouponDetailViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = CouponDetailViewController.xib; path = ViewControllers/Member/CouponDetailViewController.xib; sourceTree = "<group>"; };
 		6882AF001EB8870200A29E57 /* ReceiverInfoCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ReceiverInfoCell.h; path = ViewControllers/Cart/ReceiverInfoCell.h; sourceTree = "<group>"; };
 		6882AF011EB8870200A29E57 /* ReceiverInfoCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ReceiverInfoCell.m; path = ViewControllers/Cart/ReceiverInfoCell.m; sourceTree = "<group>"; };
+		688494341EBC779A0087BC2B /* TreeMallEnt.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TreeMallEnt.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		688494351EBC779B0087BC2B /* TreeMall copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "TreeMall copy-Info.plist"; path = "/Users/stevenhuang/Documents/iOS_Projects/TreeMall/TreeMall copy-Info.plist"; sourceTree = "<absolute>"; };
 		6884DD7D1E6D00B200DAF859 /* CouponDetailDescriptionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CouponDetailDescriptionView.h; path = ViewControllers/Member/CouponDetailDescriptionView.h; sourceTree = "<group>"; };
 		6884DD7E1E6D00B200DAF859 /* CouponDetailDescriptionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CouponDetailDescriptionView.m; path = ViewControllers/Member/CouponDetailDescriptionView.m; sourceTree = "<group>"; };
 		6884DD801E6D191000DAF859 /* TopSeparatedTitleCollectionReusableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TopSeparatedTitleCollectionReusableView.h; path = ViewControllers/Member/TopSeparatedTitleCollectionReusableView.h; sourceTree = "<group>"; };
 		6884DD811E6D191000DAF859 /* TopSeparatedTitleCollectionReusableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TopSeparatedTitleCollectionReusableView.m; path = ViewControllers/Member/TopSeparatedTitleCollectionReusableView.m; sourceTree = "<group>"; };
 		6887999D1E5AD12B00495A77 /* ProductDetailImageCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ProductDetailImageCollectionViewCell.h; path = ViewControllers/ShoppingMall/ProductDetailImageCollectionViewCell.h; sourceTree = "<group>"; };
 		6887999E1E5AD12B00495A77 /* ProductDetailImageCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ProductDetailImageCollectionViewCell.m; path = ViewControllers/ShoppingMall/ProductDetailImageCollectionViewCell.m; sourceTree = "<group>"; };
+		688ED8941EC416FD003C23F7 /* IntroduceViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IntroduceViewController.h; path = ViewControllers/Introduce/IntroduceViewController.h; sourceTree = "<group>"; };
+		688ED8951EC416FD003C23F7 /* IntroduceViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = IntroduceViewController.m; path = ViewControllers/Introduce/IntroduceViewController.m; sourceTree = "<group>"; };
+		688ED8961EC416FD003C23F7 /* IntroduceViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = IntroduceViewController.xib; path = ViewControllers/Introduce/IntroduceViewController.xib; sourceTree = "<group>"; };
 		688EF5EE1E5D3EF20047E2DC /* MemberTitleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MemberTitleView.h; path = ViewControllers/Member/MemberTitleView.h; sourceTree = "<group>"; };
 		688EF5EF1E5D3EF20047E2DC /* MemberTitleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MemberTitleView.m; path = ViewControllers/Member/MemberTitleView.m; sourceTree = "<group>"; };
 		688EF5F11E5D474C0047E2DC /* MemberPointView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MemberPointView.h; path = ViewControllers/Member/MemberPointView.h; sourceTree = "<group>"; };
@@ -344,6 +507,8 @@
 		689A7A221EB1F14B00B7D281 /* PromotionDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PromotionDetailViewController.h; path = ViewControllers/Promotion/PromotionDetailViewController.h; sourceTree = "<group>"; };
 		689A7A231EB1F14B00B7D281 /* PromotionDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PromotionDetailViewController.m; path = ViewControllers/Promotion/PromotionDetailViewController.m; sourceTree = "<group>"; };
 		689A7A241EB1F14B00B7D281 /* PromotionDetailViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = PromotionDetailViewController.xib; path = ViewControllers/Promotion/PromotionDetailViewController.xib; sourceTree = "<group>"; };
+		689D906C1EC00A3D0052C75A /* InvoiceDescriptionFooterView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = InvoiceDescriptionFooterView.h; path = ViewControllers/Cart/InvoiceDescriptionFooterView.h; sourceTree = "<group>"; };
+		689D906D1EC00A3D0052C75A /* InvoiceDescriptionFooterView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = InvoiceDescriptionFooterView.m; path = ViewControllers/Cart/InvoiceDescriptionFooterView.m; sourceTree = "<group>"; };
 		689F66481E5AC56400CC3664 /* ProductDetailBottomBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ProductDetailBottomBar.h; path = ViewControllers/ShoppingMall/ProductDetailBottomBar.h; sourceTree = "<group>"; };
 		689F66491E5AC56400CC3664 /* ProductDetailBottomBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ProductDetailBottomBar.m; path = ViewControllers/ShoppingMall/ProductDetailBottomBar.m; sourceTree = "<group>"; };
 		68A1FE931EB04B670058ABED /* InstallmentDescriptionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = InstallmentDescriptionViewController.h; path = ViewControllers/ShoppingMall/InstallmentDescriptionViewController.h; sourceTree = "<group>"; };
@@ -401,6 +566,8 @@
 		68B68FFB1E24C45600DCCF29 /* PromotionTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PromotionTableViewCell.h; path = ViewControllers/Promotion/PromotionTableViewCell.h; sourceTree = "<group>"; };
 		68B68FFC1E24C45600DCCF29 /* PromotionTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PromotionTableViewCell.m; path = ViewControllers/Promotion/PromotionTableViewCell.m; sourceTree = "<group>"; };
 		68B68FFE1E24D98900DCCF29 /* Definition.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Definition.h; path = Utilities/Definition.h; sourceTree = "<group>"; };
+		68B76A321EC1978D003E4C41 /* SampleImageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SampleImageViewController.h; path = ViewControllers/Cart/SampleImageViewController.h; sourceTree = "<group>"; };
+		68B76A331EC1978D003E4C41 /* SampleImageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SampleImageViewController.m; path = ViewControllers/Cart/SampleImageViewController.m; sourceTree = "<group>"; };
 		68BE09581E583DC00046B477 /* ProductDetailPromotionLabelView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ProductDetailPromotionLabelView.h; path = ViewControllers/ShoppingMall/ProductDetailPromotionLabelView.h; sourceTree = "<group>"; };
 		68BE09591E583DC00046B477 /* ProductDetailPromotionLabelView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ProductDetailPromotionLabelView.m; path = ViewControllers/ShoppingMall/ProductDetailPromotionLabelView.m; sourceTree = "<group>"; };
 		68BE095F1E583F080046B477 /* ProductPriceLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProductPriceLabel.h; sourceTree = "<group>"; };
@@ -502,6 +669,23 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		688493FE1EBC779A0087BC2B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				688493FF1EBC779A0087BC2B /* SystemConfiguration.framework in Frameworks */,
+				688494001EBC779A0087BC2B /* SafariServices.framework in Frameworks */,
+				688494011EBC779A0087BC2B /* GoogleAppUtilities.framework in Frameworks */,
+				688494021EBC779A0087BC2B /* GoogleSignIn.framework in Frameworks */,
+				688494031EBC779A0087BC2B /* GoogleSignInDependencies.framework in Frameworks */,
+				688494041EBC779A0087BC2B /* GoogleSymbolUtilities.framework in Frameworks */,
+				688494051EBC779A0087BC2B /* Bolts.framework in Frameworks */,
+				688494061EBC779A0087BC2B /* FBSDKCoreKit.framework in Frameworks */,
+				688494071EBC779A0087BC2B /* FBSDKLoginKit.framework in Frameworks */,
+				688494081EBC779A0087BC2B /* libPods-TreeMall.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -586,6 +770,7 @@
 				685939A81E1F49DF00351FFB /* Products */,
 				6811BC611E275F6F00626A4A /* Frameworks */,
 				AE7D976A9D99372CC6477754 /* Pods */,
+				688494351EBC779B0087BC2B /* TreeMall copy-Info.plist */,
 			);
 			sourceTree = "<group>";
 		};
@@ -595,6 +780,7 @@
 				685939A71E1F49DF00351FFB /* TreeMall.app */,
 				685939C31E1F49DF00351FFB /* TreeMallTests.xctest */,
 				685939CE1E1F49DF00351FFB /* TreeMallUITests.xctest */,
+				688494341EBC779A0087BC2B /* TreeMallEnt.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -714,9 +900,20 @@
 			name = OrderList;
 			sourceTree = "<group>";
 		};
+		688ED8931EC416C6003C23F7 /* Introduce */ = {
+			isa = PBXGroup;
+			children = (
+				688ED8941EC416FD003C23F7 /* IntroduceViewController.h */,
+				688ED8951EC416FD003C23F7 /* IntroduceViewController.m */,
+				688ED8961EC416FD003C23F7 /* IntroduceViewController.xib */,
+			);
+			name = Introduce;
+			sourceTree = "<group>";
+		};
 		689065041E23321E00E5CB26 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				688ED8931EC416C6003C23F7 /* Introduce */,
 				6863A1D81E5EBD130036E0A8 /* OrderList */,
 				68981FA51E5598E600A2707A /* Search */,
 				689546491E3608C200D5CD1E /* WebView */,
@@ -858,6 +1055,10 @@
 				6882AF011EB8870200A29E57 /* ReceiverInfoCell.m */,
 				686302A11EB985B500678A34 /* SingleLabelHeaderView.h */,
 				686302A21EB985B500678A34 /* SingleLabelHeaderView.m */,
+				689D906C1EC00A3D0052C75A /* InvoiceDescriptionFooterView.h */,
+				689D906D1EC00A3D0052C75A /* InvoiceDescriptionFooterView.m */,
+				68B76A321EC1978D003E4C41 /* SampleImageViewController.h */,
+				68B76A331EC1978D003E4C41 /* SampleImageViewController.m */,
 			);
 			name = Cart;
 			sourceTree = "<group>";
@@ -1192,6 +1393,26 @@
 			productReference = 685939CE1E1F49DF00351FFB /* TreeMallUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
+		688493901EBC779A0087BC2B /* TreeMallEnt */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 688494311EBC779A0087BC2B /* Build configuration list for PBXNativeTarget "TreeMallEnt" */;
+			buildPhases = (
+				688493911EBC779A0087BC2B /* [CP] Check Pods Manifest.lock */,
+				688493921EBC779A0087BC2B /* Sources */,
+				688493FE1EBC779A0087BC2B /* Frameworks */,
+				688494091EBC779A0087BC2B /* Resources */,
+				6884942F1EBC779A0087BC2B /* [CP] Embed Pods Frameworks */,
+				688494301EBC779A0087BC2B /* [CP] Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = TreeMallEnt;
+			productName = TreeMall;
+			productReference = 688494341EBC779A0087BC2B /* TreeMallEnt.app */;
+			productType = "com.apple.product-type.application";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -1218,6 +1439,9 @@
 						ProvisioningStyle = Automatic;
 						TestTargetID = 685939A61E1F49DF00351FFB;
 					};
+					688493901EBC779A0087BC2B = {
+						DevelopmentTeam = 8YY5S6PJTJ;
+					};
 				};
 			};
 			buildConfigurationList = 685939A21E1F49DF00351FFB /* Build configuration list for PBXProject "TreeMall" */;
@@ -1234,6 +1458,7 @@
 			projectRoot = "";
 			targets = (
 				685939A61E1F49DF00351FFB /* TreeMall */,
+				688493901EBC779A0087BC2B /* TreeMallEnt */,
 				685939C21E1F49DF00351FFB /* TreeMallTests */,
 				685939CD1E1F49DF00351FFB /* TreeMallUITests */,
 			);
@@ -1273,6 +1498,7 @@
 				689065211E23387200E5CB26 /* NotificationViewController.xib in Resources */,
 				689A7A261EB1F14B00B7D281 /* PromotionDetailViewController.xib in Resources */,
 				68D7518C1E80E03F00487088 /* OrderDetailViewController.xib in Resources */,
+				688ED8981EC416FD003C23F7 /* IntroduceViewController.xib in Resources */,
 				689054D21EAEE9BB0037CED9 /* PaymentTypeViewController.xib in Resources */,
 				6890652D1E23470E00E5CB26 /* FavoriteViewController.xib in Resources */,
 				6838E1291EB587DC007395EF /* SingleMediaDetailSubViewController.xib in Resources */,
@@ -1296,6 +1522,50 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		688494091EBC779A0087BC2B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6884940A1EBC779A0087BC2B /* GoogleSignIn.bundle in Resources */,
+				6884940B1EBC779A0087BC2B /* ReceiverInfoViewController.xib in Resources */,
+				6884940C1EBC779A0087BC2B /* CouponListViewController.xib in Resources */,
+				6884940D1EBC779A0087BC2B /* MemberViewController.xib in Resources */,
+				6884940E1EBC779A0087BC2B /* HotSaleViewController.xib in Resources */,
+				6884940F1EBC779A0087BC2B /* ShoppingMallViewController.xib in Resources */,
+				688494101EBC779A0087BC2B /* LoginViewController.xib in Resources */,
+				688494111EBC779A0087BC2B /* ForgetPasswordViewController.xib in Resources */,
+				688494121EBC779A0087BC2B /* TermsViewController.xib in Resources */,
+				688494131EBC779A0087BC2B /* CouponDetailViewController.xib in Resources */,
+				688494141EBC779A0087BC2B /* AdditionalPurchaseViewController.xib in Resources */,
+				688494151EBC779A0087BC2B /* LaunchScreen.storyboard in Resources */,
+				688494161EBC779A0087BC2B /* AuthenticateViewController.xib in Resources */,
+				688494171EBC779A0087BC2B /* Assets.xcassets in Resources */,
+				688494181EBC779A0087BC2B /* EntranceViewController.xib in Resources */,
+				688494191EBC779A0087BC2B /* NewsletterSubscribeViewController.xib in Resources */,
+				6884941A1EBC779A0087BC2B /* SearchViewController.xib in Resources */,
+				6884941B1EBC779A0087BC2B /* SingleMediaDetailViewController.xib in Resources */,
+				6884941C1EBC779A0087BC2B /* PromotionViewController.xib in Resources */,
+				6884941D1EBC779A0087BC2B /* MemberSettingsViewController.xib in Resources */,
+				6884941E1EBC779A0087BC2B /* WebViewViewController.xib in Resources */,
+				6884941F1EBC779A0087BC2B /* Localizable.strings in Resources */,
+				688494201EBC779A0087BC2B /* ProductFilterViewController.xib in Resources */,
+				688494211EBC779A0087BC2B /* CartViewController.xib in Resources */,
+				688494221EBC779A0087BC2B /* Main.storyboard in Resources */,
+				688494231EBC779A0087BC2B /* NotificationViewController.xib in Resources */,
+				688494241EBC779A0087BC2B /* PromotionDetailViewController.xib in Resources */,
+				688494251EBC779A0087BC2B /* OrderDetailViewController.xib in Resources */,
+				688494261EBC779A0087BC2B /* PaymentTypeViewController.xib in Resources */,
+				688494271EBC779A0087BC2B /* FavoriteViewController.xib in Resources */,
+				688494281EBC779A0087BC2B /* SingleMediaDetailSubViewController.xib in Resources */,
+				688494291EBC779A0087BC2B /* RegisterViewController.xib in Resources */,
+				6884942A1EBC779A0087BC2B /* ProductDetailViewController.xib in Resources */,
+				6884942B1EBC779A0087BC2B /* OrderListViewController.xib in Resources */,
+				6884942C1EBC779A0087BC2B /* DiscountViewController.xib in Resources */,
+				6884942D1EBC779A0087BC2B /* ProductListViewController.xib in Resources */,
+				6884942E1EBC779A0087BC2B /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1345,6 +1615,51 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-TreeMall/Pods-TreeMall-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		688493911EBC779A0087BC2B /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		6884942F1EBC779A0087BC2B /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-TreeMall/Pods-TreeMall-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		688494301EBC779A0087BC2B /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-TreeMall/Pods-TreeMall-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		69923E03F16024D87D9C39A7 /* [CP] Copy Pods Resources */ = {
@@ -1449,6 +1764,7 @@
 				68A1FE9D1EB086070058ABED /* AdditionalProductCollectionViewCell.m in Sources */,
 				68A1FE991EB0858D0058ABED /* AdditionalPurchaseViewController.m in Sources */,
 				6826E9EA1E5BF044001E572A /* ImageTitleButton.m in Sources */,
+				68B76A341EC1978D003E4C41 /* SampleImageViewController.m in Sources */,
 				685939E91E1F518700351FFB /* CryptoTool.m in Sources */,
 				6895464D1E3608E500D5CD1E /* WebViewViewController.m in Sources */,
 				680957751E43195F00DA2BEA /* ProductListToolView.m in Sources */,
@@ -1483,6 +1799,7 @@
 				685939AF1E1F49DF00351FFB /* AppDelegate.m in Sources */,
 				68CF5E631E38AC5900341EF1 /* ExtraSubcategoryTableViewCell.m in Sources */,
 				689065141E23368100E5CB26 /* ShoppingMallViewController.m in Sources */,
+				688ED8971EC416FD003C23F7 /* IntroduceViewController.m in Sources */,
 				68B0FDDE1E837B8F00BE273F /* NewsletterSubscribeViewController.m in Sources */,
 				68E470361E72A79B0040213B /* LoadingFoorterReusableView.m in Sources */,
 				68A827AC1E4DC52700E63552 /* ProductListTitleView.m in Sources */,
@@ -1512,6 +1829,7 @@
 				68A98B941E779D760094A77F /* OrderDeliverProgressView.m in Sources */,
 				685939ED1E1F775900351FFB /* CryptoModule.m in Sources */,
 				6826E9E51E5BE52E001E572A /* BorderedDoubleLabelView.m in Sources */,
+				689D906E1EC00A3D0052C75A /* InvoiceDescriptionFooterView.m in Sources */,
 				68B0FDE61E83804000BE273F /* PureTextTableFooterView.m in Sources */,
 				6884DD7F1E6D00B200DAF859 /* CouponDetailDescriptionView.m in Sources */,
 				6887999F1E5AD12B00495A77 /* ProductDetailImageCollectionViewCell.m in Sources */,
@@ -1567,6 +1885,120 @@
 			buildActionMask = 2147483647;
 			files = (
 				685939D31E1F49DF00351FFB /* TreeMallUITests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		688493921EBC779A0087BC2B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				688493931EBC779A0087BC2B /* PromotionViewController.m in Sources */,
+				688493941EBC779A0087BC2B /* PromotionDetailViewController.m in Sources */,
+				688493951EBC779A0087BC2B /* AdditionalProductCollectionViewCell.m in Sources */,
+				688493961EBC779A0087BC2B /* AdditionalPurchaseViewController.m in Sources */,
+				688493971EBC779A0087BC2B /* ImageTitleButton.m in Sources */,
+				688493981EBC779A0087BC2B /* CryptoTool.m in Sources */,
+				688493991EBC779A0087BC2B /* WebViewViewController.m in Sources */,
+				6884939A1EBC779A0087BC2B /* ProductListToolView.m in Sources */,
+				6884939B1EBC779A0087BC2B /* ProductListViewController.m in Sources */,
+				6884939C1EBC779A0087BC2B /* HotSaleTableViewCell.m in Sources */,
+				6884939D1EBC779A0087BC2B /* IconLabelView.m in Sources */,
+				6884939E1EBC779A0087BC2B /* DiscountHeaderView.m in Sources */,
+				6884939F1EBC779A0087BC2B /* ForgetPasswordViewController.m in Sources */,
+				688493A01EBC779A0087BC2B /* DiscountTableViewCell.m in Sources */,
+				688493A11EBC779A0087BC2B /* ViewController.m in Sources */,
+				688493A21EBC779A0087BC2B /* FTPopTableViewController.m in Sources */,
+				688493A31EBC779A0087BC2B /* ExtraSubcategoryHeaderView.m in Sources */,
+				688493A41EBC779A0087BC2B /* ProductDetailViewController.m in Sources */,
+				688493A51EBC779A0087BC2B /* CouponTableViewCell.m in Sources */,
+				688493A61EBC779A0087BC2B /* SHPickerView.m in Sources */,
+				688493A71EBC779A0087BC2B /* ReceiverInfoViewController.m in Sources */,
+				688493A81EBC779A0087BC2B /* PromotionTableViewCell.m in Sources */,
+				688493A91EBC779A0087BC2B /* EntranceViewController.m in Sources */,
+				688493AA1EBC779A0087BC2B /* LabelButtonView.m in Sources */,
+				688493AB1EBC779A0087BC2B /* ExtraSubcategorySeeAllTableViewCell.m in Sources */,
+				688493AC1EBC779A0087BC2B /* DiscountViewController.m in Sources */,
+				688493AD1EBC779A0087BC2B /* SHAPIAdapter.m in Sources */,
+				688493AE1EBC779A0087BC2B /* ProductDetailSectionTitleView.m in Sources */,
+				688493AF1EBC779A0087BC2B /* OrderHeaderReusableView.m in Sources */,
+				688493B01EBC779A0087BC2B /* PureTextTableHeaderView.m in Sources */,
+				688493B11EBC779A0087BC2B /* TextHorizontalSeparator.m in Sources */,
+				688493B21EBC779A0087BC2B /* MemberViewController.m in Sources */,
+				688493B31EBC779A0087BC2B /* MemberSettingsViewController.m in Sources */,
+				688493B41EBC779A0087BC2B /* ProductPriceLabel.m in Sources */,
+				688493B51EBC779A0087BC2B /* CircularSideLabelView.m in Sources */,
+				688493B61EBC779A0087BC2B /* DropdownListButton.m in Sources */,
+				688493B71EBC779A0087BC2B /* AppDelegate.m in Sources */,
+				688493B81EBC779A0087BC2B /* ExtraSubcategoryTableViewCell.m in Sources */,
+				688493B91EBC779A0087BC2B /* ShoppingMallViewController.m in Sources */,
+				688493BA1EBC779A0087BC2B /* NewsletterSubscribeViewController.m in Sources */,
+				688493BB1EBC779A0087BC2B /* LoadingFoorterReusableView.m in Sources */,
+				688493BC1EBC779A0087BC2B /* ProductListTitleView.m in Sources */,
+				688493BD1EBC779A0087BC2B /* ProductFilterTextCollectionViewCell.m in Sources */,
+				688493BE1EBC779A0087BC2B /* SearchHeaderCollectionReusableView.m in Sources */,
+				688493BF1EBC779A0087BC2B /* EntranceMemberPromoteHeader.m in Sources */,
+				688493C01EBC779A0087BC2B /* ProductDetailBottomBar.m in Sources */,
+				688493C11EBC779A0087BC2B /* ProductSubcategoryCollectionViewCell.m in Sources */,
+				688493C21EBC779A0087BC2B /* Utility.m in Sources */,
+				688493C31EBC779A0087BC2B /* LabelRangeSliderView.m in Sources */,
+				688493C41EBC779A0087BC2B /* NotificationViewController.m in Sources */,
+				688493C51EBC779A0087BC2B /* SearchViewController.m in Sources */,
+				688493C61EBC779A0087BC2B /* CartViewController.m in Sources */,
+				688493C71EBC779A0087BC2B /* RegisterViewController.m in Sources */,
+				688493C81EBC779A0087BC2B /* ChosenDiscountTableViewCell.m in Sources */,
+				688493C91EBC779A0087BC2B /* NewsletterSubscribeTableViewCell.m in Sources */,
+				688493CA1EBC779A0087BC2B /* PaymentTypeTableViewCell.m in Sources */,
+				688493CB1EBC779A0087BC2B /* FullScreenLoadingView.m in Sources */,
+				688493CC1EBC779A0087BC2B /* SemiCircleEndsSegmentedView.m in Sources */,
+				688493CD1EBC779A0087BC2B /* EntranceTableViewCell.m in Sources */,
+				688493CE1EBC779A0087BC2B /* main.m in Sources */,
+				688493CF1EBC779A0087BC2B /* InstallmentDescriptionViewController.m in Sources */,
+				688493D01EBC779A0087BC2B /* ProductDetailPromotionLabelView.m in Sources */,
+				688493D11EBC779A0087BC2B /* UIViewController+FTPopMenu.m in Sources */,
+				688493D21EBC779A0087BC2B /* CouponDetailViewController.m in Sources */,
+				688493D31EBC779A0087BC2B /* PagingGridView.m in Sources */,
+				688493D41EBC779A0087BC2B /* OrderDeliverProgressView.m in Sources */,
+				688493D51EBC779A0087BC2B /* CryptoModule.m in Sources */,
+				688493D61EBC779A0087BC2B /* BorderedDoubleLabelView.m in Sources */,
+				688493D71EBC779A0087BC2B /* PureTextTableFooterView.m in Sources */,
+				688493D81EBC779A0087BC2B /* CouponDetailDescriptionView.m in Sources */,
+				688493D91EBC779A0087BC2B /* ProductDetailImageCollectionViewCell.m in Sources */,
+				688493DA1EBC779A0087BC2B /* SubcategoryTableViewCell.m in Sources */,
+				688493DB1EBC779A0087BC2B /* ProductSubcategoryView.m in Sources */,
+				688493DC1EBC779A0087BC2B /* PaymentTypeViewController.m in Sources */,
+				688493DD1EBC779A0087BC2B /* AuthenticateViewController.m in Sources */,
+				688493DE1EBC779A0087BC2B /* MemberTitleView.m in Sources */,
+				688493DF1EBC779A0087BC2B /* TreeMall.xcdatamodeld in Sources */,
+				688493E01EBC779A0087BC2B /* ImageTextView.m in Sources */,
+				688493E11EBC779A0087BC2B /* OrderDetailViewController.m in Sources */,
+				688493E21EBC779A0087BC2B /* TMInfoManager.m in Sources */,
+				688493E31EBC779A0087BC2B /* DiscountLabelView.m in Sources */,
+				688493E41EBC779A0087BC2B /* SingleMediaDetailViewController.m in Sources */,
+				688493E51EBC779A0087BC2B /* ReceiverInfoCell.m in Sources */,
+				688493E61EBC779A0087BC2B /* PaymentTypeHeaderView.m in Sources */,
+				688493E71EBC779A0087BC2B /* OrderListViewController.m in Sources */,
+				688493E81EBC779A0087BC2B /* ProductTableViewCell.m in Sources */,
+				688493E91EBC779A0087BC2B /* CartProductTableViewCell.m in Sources */,
+				688493EA1EBC779A0087BC2B /* LoginViewController.m in Sources */,
+				688493EB1EBC779A0087BC2B /* TermsViewController.m in Sources */,
+				688493EC1EBC779A0087BC2B /* MemberSettingsTableViewCell.m in Sources */,
+				688493ED1EBC779A0087BC2B /* LocalizedString.m in Sources */,
+				688493EE1EBC779A0087BC2B /* VerticalImageTextButton.m in Sources */,
+				688493EF1EBC779A0087BC2B /* EntranceFunctionSectionHeader.m in Sources */,
+				688493F01EBC779A0087BC2B /* MainCategoryCollectionViewCell.m in Sources */,
+				688493F11EBC779A0087BC2B /* OrderListCollectionViewCell.m in Sources */,
+				688493F21EBC779A0087BC2B /* CouponListViewController.m in Sources */,
+				688493F31EBC779A0087BC2B /* SearchCollectionViewCell.m in Sources */,
+				688493F41EBC779A0087BC2B /* ExchangeDescriptionViewController.m in Sources */,
+				688493F51EBC779A0087BC2B /* SingleLabelHeaderView.m in Sources */,
+				688493F61EBC779A0087BC2B /* HotSaleViewController.m in Sources */,
+				688493F71EBC779A0087BC2B /* SingleMediaDetailSubViewController.m in Sources */,
+				688493F81EBC779A0087BC2B /* MemberPointView.m in Sources */,
+				688493F91EBC779A0087BC2B /* TopSeparatedTitleCollectionReusableView.m in Sources */,
+				688493FA1EBC779A0087BC2B /* ProductFilterViewController.m in Sources */,
+				688493FB1EBC779A0087BC2B /* LoadingFooterView.m in Sources */,
+				688493FC1EBC779A0087BC2B /* FavoriteViewController.m in Sources */,
+				688493FD1EBC779A0087BC2B /* FTPopMenu.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1810,6 +2242,61 @@
 			};
 			name = Release;
 		};
+		688494321EBC779A0087BC2B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 26BD4F6D2153D567CF3F57CD /* Pods-TreeMall.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = 8YY5S6PJTJ;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Frameworks",
+				);
+				HEADER_SEARCH_PATHS = "$(inherited)";
+				INFOPLIST_FILE = "TreeMall/Enterprise-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+					"-lxml2",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = mbb.inhouse;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		688494331EBC779A0087BC2B /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = CD89146FF7F5CC2A03089270 /* Pods-TreeMall.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = 8YY5S6PJTJ;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Frameworks",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"COCOAPODS=1",
+					"DEBUG=1",
+				);
+				HEADER_SEARCH_PATHS = "$(inherited)";
+				INFOPLIST_FILE = "TreeMall/Enterprise-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+					"-lxml2",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = mbb.inhouse;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -1845,6 +2332,15 @@
 			buildConfigurations = (
 				685939DE1E1F49DF00351FFB /* Debug */,
 				685939DF1E1F49DF00351FFB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		688494311EBC779A0087BC2B /* Build configuration list for PBXNativeTarget "TreeMallEnt" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				688494321EBC779A0087BC2B /* Debug */,
+				688494331EBC779A0087BC2B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

@@ -1193,7 +1193,7 @@
                     NSString *imagePath = [arrayImage objectAtIndex:index];
                     UIButton *button = [[UIButton alloc] initWithFrame:CGRectZero];
                     button.tag = index;
-                    [button.imageView setContentMode:UIViewContentModeScaleAspectFill];
+                    [button.imageView setContentMode:UIViewContentModeScaleAspectFit];
                     [button sd_setImageWithURL:[NSURL URLWithString:imagePath] forState:UIControlStateNormal placeholderImage:transparent];
                     [button addTarget:self action:@selector(buttonIntroImagePressed:) forControlEvents:UIControlEventTouchUpInside];
                     [self.scrollView addSubview:button];
@@ -1231,7 +1231,7 @@
                     NSString *imagePath = [arrayImage objectAtIndex:index];
                     UIButton *button = [[UIButton alloc] initWithFrame:CGRectZero];
                     button.tag = index;
-                    [button.imageView setContentMode:UIViewContentModeScaleAspectFill];
+                    [button.imageView setContentMode:UIViewContentModeScaleAspectFit];
                     [button sd_setImageWithURL:[NSURL URLWithString:imagePath] forState:UIControlStateNormal placeholderImage:transparent];
                     [button addTarget:self action:@selector(buttonSpecImagePressed:) forControlEvents:UIControlEventTouchUpInside];
                     [self.scrollView addSubview:button];

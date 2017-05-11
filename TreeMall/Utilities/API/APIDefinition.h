@@ -51,6 +51,7 @@ static NSString *SymphoxAPI_getDeliverInfo = @"http://tomcat8.mdevelop.com/TreeM
 static NSString *SymphoxAPI_getContactInfo = @"http://tomcat8.mdevelop.com/TreeMall/api/portal/app/member/contact";
 static NSString *SymphoxAPI_getDistrictInfo = @"http://tomcat8.mdevelop.com/TreeMall/api/eiffel/treemall/zipInfo";
 static NSString *SymphoxAPI_getCarrierInfo = @"http://tomcat8.mdevelop.com/TreeMall/api/eiffel/goods/typeInfo";
+static NSString *SymphoxAPI_getOneClickBuyContactInfo = @"http://tomcat8.mdevelop.com/TreeMall/api/eiffel/appOrder/oneClickBuyDelivery";
 
 #else
 static NSString *SymphoxAPI_token = @"https://api.symphox.com.tw/portal/app/token";

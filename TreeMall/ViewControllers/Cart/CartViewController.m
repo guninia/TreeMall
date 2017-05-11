@@ -231,7 +231,7 @@
         _tableBackgroundView = [[UIImageView alloc] initWithFrame:CGRectZero];
         [_tableBackgroundView setBackgroundColor:[UIColor colorWithWhite:0.93 alpha:1.0]];
         [_tableBackgroundView setContentMode:UIViewContentModeCenter];
-        UIImage *image = [UIImage imageNamed:@"ico_default"];
+        UIImage *image = [UIImage imageNamed:@"men_ico_logo"];
         if (image)
         {
             [_tableBackgroundView setImage:image];

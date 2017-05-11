@@ -870,9 +870,8 @@
         {
             dictionaryMode = [NSMutableDictionary dictionaryWithObjectsAndKeys:@"0", SymphoxAPIParam_payment_type, [NSNumber numberWithInteger:0], SymphoxAPIParam_price, nil];
         }
-        NSNumber *paymentType = [dictionaryMode objectForKey:SymphoxAPIParam_payment_type];
-        NSString *stringPaymentType = [paymentType stringValue];
-        [dictionaryMode setObject:stringPaymentType forKey:SymphoxAPIParam_payment_type];
+        NSString *paymentType = [dictionaryMode objectForKey:SymphoxAPIParam_payment_type];
+        [dictionaryMode setObject:paymentType forKey:SymphoxAPIParam_payment_type];
         [dictionaryMode setObject:productId forKey:SymphoxAPIParam_cpdt_num];
         
         NSNumber *groupId = [purchaseInfo objectForKey:SymphoxAPIParam_group_id];
@@ -977,6 +976,11 @@
             {
                 viewController.dictionaryInstallment = weakSelf.selectedInstallment;
             }
+            NSString *trade_id = [params objectForKey:SymphoxAPIParam_trade_id];
+            if (trade_id)
+            {
+                viewController.tradeId = trade_id;
+            }
             [weakSelf.navigationController pushViewController:viewController animated:YES];
         }
         else
@@ -1026,7 +1030,7 @@
         [self presentViewController:alertController animated:YES completion:nil];
         return;
     }
-//    [self startToCheckPayment];
+    [self startToCheckPayment];
 }
 
 #pragma mark - UITableViewDataSource

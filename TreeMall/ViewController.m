@@ -19,6 +19,7 @@
 #import "TMInfoManager.h"
 #import "CryptoTool.h"
 #import "CouponListViewController.h"
+#import "IntroduceViewController.h"
 
 @interface ViewController ()
 
@@ -34,6 +35,7 @@
 - (void)handlerOfJumpingToMemberTabNotification:(NSNotification *)notification;
 - (void)handlerOfJumpingToMemberTabAndPresentCouponNotification:(NSNotification *)notification;
 - (void)handlerOfCartContentChangedNotification:(NSNotification *)notification;
+- (void)handlerOfApplicationDidBecomeActiveNotification:(NSNotification *)notification;
 
 @end
 
@@ -183,6 +185,7 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handlerOfJumpingToMemberTabNotification:) name:PostNotificationName_JumpToMemberTab object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handlerOfJumpingToMemberTabAndPresentCouponNotification:) name:PostNotificationName_JumpToMemberTabAndPresentCoupon object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handlerOfCartContentChangedNotification:) name:PostNotificationName_CartContentChanged object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handlerOfApplicationDidBecomeActiveNotification:) name:UIApplicationDidBecomeActiveNotification object:nil];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -192,6 +195,13 @@
     {
         [self showLaunchScreenLoadingViewAnimated:NO];
     }
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    
+    [self checkToShowIntroduce];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -316,6 +326,25 @@
     }
 }
 
+#pragma mark - Public Methods
+
+- (void)checkToShowIntroduce
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if ([TMInfoManager sharedManager].userIdentifier == nil)
+        {
+            NSNumber *numberBool = [[NSUserDefaults standardUserDefaults] objectForKey:UserDefault_IntroduceShown];
+            if (numberBool == nil || [numberBool boolValue] == NO)
+            {
+                IntroduceViewController *viewController = [[IntroduceViewController alloc] initWithNibName:@"IntroduceViewController" bundle:[NSBundle mainBundle]];
+                [self presentViewController:viewController animated:NO completion:nil];
+                [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithBool:YES] forKey:UserDefault_IntroduceShown];
+                [[NSUserDefaults standardUserDefaults] synchronize];
+            }
+        }
+    });
+}
+
 #pragma mark - NSNotification Handler
 
 - (void)handlerOfNoInitialTokenNotification:(NSNotification *)notification
@@ -356,9 +385,14 @@
     [navigationController pushViewController:viewController animated:YES];
 }
 
-- (void)handlerOfProdctAddedToCartNotification:(NSNotification *)notification
+- (void)handlerOfCartContentChangedNotification:(NSNotification *)notification
 {
     [self updateCartBadge];
+}
+
+- (void)handlerOfApplicationDidBecomeActiveNotification:(NSNotification *)notification
+{
+    [self checkToShowIntroduce];
 }
 
 #pragma mark - UITabBarControllerDelegate

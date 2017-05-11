@@ -2621,4 +2621,294 @@
     return AddedTo_S_;
 }
 
++ (NSString *)InvoiceDeliverAddress
+{
+    static NSString *InvoiceDeliverAddress = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        InvoiceDeliverAddress = NSLocalizedString(@"InvoiceDeliverAddress", nil);
+    });
+    return InvoiceDeliverAddress;
+}
+
++ (NSString *)InvoiceType
+{
+    static NSString *InvoiceType = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        InvoiceType = NSLocalizedString(@"InvoiceType", nil);
+    });
+    return InvoiceType;
+}
+
++ (NSString *)PleaseSelect
+{
+    static NSString *PleaseSelect = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        PleaseSelect = NSLocalizedString(@"PleaseSelect", nil);
+    });
+    return PleaseSelect;
+}
+
++ (NSString *)ElectronicInvoiceCarrier
+{
+    static NSString *ElectronicInvoiceCarrier = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        ElectronicInvoiceCarrier = NSLocalizedString(@"ElectronicInvoiceCarrier", nil);
+    });
+    return ElectronicInvoiceCarrier;
+}
+
++ (NSString *)InvoiceDonation
+{
+    static NSString *InvoiceDonation = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        InvoiceDonation = NSLocalizedString(@"InvoiceDonation", nil);
+    });
+    return InvoiceDonation;
+}
+
++ (NSString *)CertificateID
+{
+    static NSString *CertificateID = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        CertificateID = NSLocalizedString(@"CertificateID", nil);
+    });
+    return CertificateID;
+}
+
++ (NSString *)CellphoneBarcode
+{
+    static NSString *CellphoneBarcode = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        CellphoneBarcode = NSLocalizedString(@"CellphoneBarcode", nil);
+    });
+    return CellphoneBarcode;
+}
+
++ (NSString *)PleaseInput
+{
+    static NSString *PleaseInput = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        PleaseInput = NSLocalizedString(@"PleaseInput", nil);
+    });
+    return PleaseInput;
+}
+
++ (NSString *)HeartCode
+{
+    static NSString *HeartCode = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        HeartCode = NSLocalizedString(@"HeartCode", nil);
+    });
+    return HeartCode;
+}
+
++ (NSString *)InvoiceTitle
+{
+    static NSString *InvoiceTitle = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        InvoiceTitle = NSLocalizedString(@"InvoiceTitle", nil);
+    });
+    return InvoiceTitle;
+}
+
++ (NSString *)UnifiedNumber
+{
+    static NSString *UnifiedNumber = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        UnifiedNumber = NSLocalizedString(@"UnifiedNumber", nil);
+    });
+    return UnifiedNumber;
+}
+
++ (NSString *)InvoiceReceiver
+{
+    static NSString *InvoiceReceiver = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        InvoiceReceiver = NSLocalizedString(@"InvoiceReceiver", nil);
+    });
+    return InvoiceReceiver;
+}
+
++ (NSString *)ElectronicInvoice
+{
+    static NSString *ElectronicInvoice = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        ElectronicInvoice = NSLocalizedString(@"ElectronicInvoice", nil);
+    });
+    return ElectronicInvoice;
+}
+
++ (NSString *)InvoiceDonate
+{
+    static NSString *InvoiceDonate = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        InvoiceDonate = NSLocalizedString(@"InvoiceDonate", nil);
+    });
+    return InvoiceDonate;
+}
+
++ (NSString *)TriplicateUniformInvoice
+{
+    static NSString *TriplicateUniformInvoice = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        TriplicateUniformInvoice = NSLocalizedString(@"TriplicateUniformInvoice", nil);
+    });
+    return TriplicateUniformInvoice;
+}
+
++ (NSString *)CarrierMember
+{
+    static NSString *CarrierMember = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        CarrierMember = NSLocalizedString(@"CarrierMember", nil);
+    });
+    return CarrierMember;
+}
+
++ (NSString *)CarrierNaturalPerson
+{
+    static NSString *CarrierNaturalPerson = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        CarrierNaturalPerson = NSLocalizedString(@"CarrierNaturalPerson", nil);
+    });
+    return CarrierNaturalPerson;
+}
+
++ (NSString *)CarrierCellPhoneBarcode
+{
+    static NSString *CarrierCellPhoneBarcode = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        CarrierCellPhoneBarcode = NSLocalizedString(@"CarrierCellPhoneBarcode", nil);
+    });
+    return CarrierCellPhoneBarcode;
+}
+
++ (NSString *)SampleImage
+{
+    static NSString *SampleImage = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        SampleImage = NSLocalizedString(@"SampleImage", nil);
+    });
+    return SampleImage;
+}
+
++ (NSString *)DonateTarget1
+{
+    static NSString *DonateTarget1 = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        DonateTarget1 = NSLocalizedString(@"DonateTarget1", nil);
+    });
+    return DonateTarget1;
+}
+
++ (NSString *)DonateTarget2
+{
+    static NSString *DonateTarget2 = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        DonateTarget2 = NSLocalizedString(@"DonateTarget2", nil);
+    });
+    return DonateTarget2;
+}
+
++ (NSString *)DonateTarget3
+{
+    static NSString *DonateTarget3 = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        DonateTarget3 = NSLocalizedString(@"DonateTarget3", nil);
+    });
+    return DonateTarget3;
+}
+
++ (NSString *)DonateTargetOther
+{
+    static NSString *DonateTargetOther = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        DonateTargetOther = NSLocalizedString(@"DonateTargetOther", nil);
+    });
+    return DonateTargetOther;
+}
+
++ (NSString *)DonateTarget
+{
+    static NSString *DonateTarget = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        DonateTarget = NSLocalizedString(@"DonateTarget", nil);
+    });
+    return DonateTarget;
+}
+
++ (NSString *)SameAsReceiver
+{
+    static NSString *SameAsReceiver = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        SameAsReceiver = NSLocalizedString(@"SameAsReceiver", nil);
+    });
+    return SameAsReceiver;
+}
+
++ (NSString *)SelectReceiver
+{
+    static NSString *SelectReceiver = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        SelectReceiver = NSLocalizedString(@"SelectReceiver", nil);
+    });
+    return SelectReceiver;
+}
+
++ (NSString *)PleaseInputRegionNumber
+{
+    static NSString *PleaseInputRegionNumber = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        PleaseInputRegionNumber = NSLocalizedString(@"PleaseInputRegionNumber", nil);
+    });
+    return PleaseInputRegionNumber;
+}
+
++ (NSString *)PleaseInputSpecificNumber
+{
+    static NSString *PleaseInputSpecificNumber = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        PleaseInputSpecificNumber = NSLocalizedString(@"PleaseInputSpecificNumber", nil);
+    });
+    return PleaseInputSpecificNumber;
+}
+
++ (NSString *)FastArrive
+{
+    static NSString *FastArrive = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        FastArrive = NSLocalizedString(@"FastArrive", nil);
+    });
+    return FastArrive;
+}
+
 @end

@@ -26,5 +26,7 @@ static NSString *ReceiverInfoCellIdentifier = @"ReceiverInfoCell";
 
 @property (nonatomic, strong) UIButton *button;
 @property (nonatomic, strong) NSString *accessoryTitle;
+@property (nonatomic, weak) UITableView *parentTableView;
+@property (nonatomic, strong) NSIndexPath *indexPath;
 
 @end

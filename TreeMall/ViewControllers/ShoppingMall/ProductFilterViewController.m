@@ -602,7 +602,7 @@ typedef enum : NSUInteger {
                 break;
             case DeliverTypeFast:
             {
-                [_arrayDeliverType addObject:[LocalizedString Fast]];
+                [_arrayDeliverType addObject:[LocalizedString FastArrive]];
             }
                 break;
             case DeliverTypeConvenienceStore:

@@ -144,7 +144,8 @@
 - (void)webView:(WKWebView *)webView decidePolicyForNavigationAction:(WKNavigationAction *)navigationAction decisionHandler:(void (^)(WKNavigationActionPolicy))decisionHandler
 {
     WKNavigationActionPolicy policy = WKNavigationActionPolicyAllow;
-    NSURLComponents *components = [NSURLComponents componentsWithURL:navigationAction.request.URL resolvingAgainstBaseURL:NO];
+    NSURL *url = navigationAction.request.URL;
+    NSURLComponents *components = [NSURLComponents componentsWithURL:url resolvingAgainstBaseURL:NO];
     NSString *stringProductId = nil;
     for (NSURLQueryItem *item in components.queryItems)
     {
@@ -163,6 +164,14 @@
         viewController.title = [LocalizedString ProductInfo];
         [viewController setHidesBottomBarWhenPushed:YES];
         [self.navigationController pushViewController:viewController animated:YES];
+    }
+    else if (url)
+    {
+        if ([[UIApplication sharedApplication] canOpenURL:url])
+        {
+            [[UIApplication sharedApplication] openURL:url];
+            policy = WKNavigationActionPolicyCancel;
+        }
     }
     decisionHandler(policy);
 }

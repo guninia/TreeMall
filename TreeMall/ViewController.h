@@ -16,5 +16,7 @@
 @property (nonatomic, strong) FullScreenLoadingView *viewLoading;
 @property (nonatomic, assign) BOOL initialized;
 
+- (void)checkToShowIntroduce;
+
 @end
 

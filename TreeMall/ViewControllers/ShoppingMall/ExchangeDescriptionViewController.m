@@ -39,7 +39,10 @@
     [self.view setBackgroundColor:[UIColor whiteColor]];
     [self.view addSubview:self.scrollView];
     [self.scrollView addSubview:self.label];
-    [self.view addSubview:self.buttonClose];
+    if (self.navigationController == nil)
+    {
+        [self.view addSubview:self.buttonClose];
+    }
     [self retrieveData];
 }
 

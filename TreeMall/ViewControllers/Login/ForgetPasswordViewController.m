@@ -219,7 +219,7 @@
     }
     else if (email || SMS)
     {
-        channel = (email == nil)?email:SMS;
+        channel = (email == nil)?SMS:email;
     }
     else
     {

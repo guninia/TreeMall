@@ -13,7 +13,7 @@
 #import "TMInfoManager.h"
 #import <DTCoreText.h>
 
-@interface ReceiverInfoViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, ReceiverInfoCellDelegate, DTAttributedTextContentViewDelegate>
+@interface ReceiverInfoViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, ReceiverInfoCellDelegate, DTAttributedTextContentViewDelegate, UIPopoverPresentationControllerDelegate, SingleLabelHeaderViewDelegate>
 
 @property (nonatomic, weak) IBOutlet UIScrollView *scrollView;
 @property (nonatomic, weak) IBOutlet UILabel *labelDeliverTitle;
@@ -36,15 +36,23 @@
 @property (nonatomic, strong) NSMutableDictionary *dictionaryRegionForZip;
 @property (nonatomic, strong) NSMutableArray *arrayDeliverTime;
 @property (nonatomic, strong) NSMutableArray *arraySectionContent;
+@property (nonatomic, strong) NSMutableDictionary *dictionaryInvoiceTemp;
 @property (nonatomic, strong) NSMutableArray *arrayInvoiceSection;
+@property (nonatomic, strong) NSMutableArray *arrayInvoiceTypeTitle;
+@property (nonatomic, strong) NSMutableArray *arrayElectronicSubTypeTitle;
+@property (nonatomic, strong) NSMutableArray *arrayInvoiceDonateTitle;
 
 @property (nonatomic, assign) CartType type;
 @property (nonatomic, assign) BOOL canSelectDeliverTime;
 @property (nonatomic, strong) NSString *currentCity;
 @property (nonatomic, strong) NSString *currentRegion;
+@property (nonatomic, strong) NSString *currentInvoiceCity;
+@property (nonatomic, strong) NSString *currentInvoiceRegion;
 @property (nonatomic, assign) NSInteger selectedDeliverTimeIndex;
 @property (nonatomic, strong) NSDictionary *dictionaryInstallment;
 @property (nonatomic, strong) NSString *invoiceDescription;
-@property (nonatomic, strong) DTAttributedLabel *labelInvoiceDescription;
+@property (nonatomic, strong) NSAttributedString *attrStringInvoiceDesc;
+@property (nonatomic, strong) NSCache *cellCache;
+@property (nonatomic, strong) NSString *tradeId;
 
 @end

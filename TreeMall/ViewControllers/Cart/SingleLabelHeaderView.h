@@ -10,8 +10,19 @@
 
 static NSString *SingleLabelHeaderViewIdentifier = @"SingleLabelHeaderView";
 
+@class SingleLabelHeaderView;
+
+@protocol SingleLabelHeaderViewDelegate <NSObject>
+
+- (void)singleLabelHeaderView:(SingleLabelHeaderView *)headerView didPressButton:(id)sender;
+
+@end
+
 @interface SingleLabelHeaderView : UITableViewHeaderFooterView
 
+@property (nonatomic, weak) id <SingleLabelHeaderViewDelegate> delegate;
 @property (nonatomic, strong) UILabel *label;
+@property (nonatomic, strong) UIButton *button;
+@property (nonatomic, strong) NSString *buttonTitle;
 
 @end

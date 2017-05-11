@@ -18,6 +18,8 @@
 + (BOOL)evaluateEmail:(NSString *)text;
 + (BOOL)evaluatePassword:(NSString *)text;
 + (BOOL)evaluatePhoneNumber:(NSString *)text;
++ (BOOL)evaluateLocalPhoneNumber:(NSString *)text;
++ (BOOL)evaluateCellPhoneNumber:(NSString *)text;
 + (BOOL)evaluateIdCardNumber:(NSString *)text;
 + (UIImage *)colorizeImage:(UIImage *)image withColor:(UIColor *)color;
 

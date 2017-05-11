@@ -206,7 +206,7 @@
 {
     [super viewDidLayoutSubviews];
     CGSize sizeRatio = [Utility sizeRatioAccordingTo320x480];
-    CGSize logoSize = CGSizeMake(210.0 * sizeRatio.height, 80.0 * sizeRatio.height);
+    CGSize logoSize = CGSizeMake(105.0 * sizeRatio.height, 40.0 * sizeRatio.height);
     CGSize columnSize = CGSizeMake(280.0, 40.0);
     CGFloat columnOriginX = ceil((self.view.frame.size.width - columnSize.width)/2);
     CGFloat vInterval = 10.0 * sizeRatio.height;

@@ -271,5 +271,34 @@
 + (NSString *)Seventeen_Twenty_InTheEvening;
 + (NSString *)NotSpecified;
 + (NSString *)AddedTo_S_;
++ (NSString *)InvoiceDeliverAddress;
++ (NSString *)InvoiceType;
++ (NSString *)PleaseSelect;
++ (NSString *)ElectronicInvoiceCarrier;
++ (NSString *)InvoiceDonation;
++ (NSString *)CertificateID;
++ (NSString *)CellphoneBarcode;
++ (NSString *)PleaseInput;
++ (NSString *)HeartCode;
++ (NSString *)InvoiceTitle;
++ (NSString *)UnifiedNumber;
++ (NSString *)InvoiceReceiver;
++ (NSString *)ElectronicInvoice;
++ (NSString *)InvoiceDonate;
++ (NSString *)TriplicateUniformInvoice;
++ (NSString *)CarrierMember;
++ (NSString *)CarrierNaturalPerson;
++ (NSString *)CarrierCellPhoneBarcode;
++ (NSString *)SampleImage;
++ (NSString *)DonateTarget1;
++ (NSString *)DonateTarget2;
++ (NSString *)DonateTarget3;
++ (NSString *)DonateTargetOther;
++ (NSString *)DonateTarget;
++ (NSString *)SameAsReceiver;
++ (NSString *)SelectReceiver;
++ (NSString *)PleaseInputRegionNumber;
++ (NSString *)PleaseInputSpecificNumber;
++ (NSString *)FastArrive;
 
 @end

@@ -172,6 +172,22 @@
     return available;
 }
 
++ (BOOL)evaluateLocalPhoneNumber:(NSString *)text
+{
+    NSString *regularExpression = @"^(0\\d{1,3}-)?\\d{5,8}(-\\d{1,5})?$";
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", regularExpression];
+    BOOL available = [predicate evaluateWithObject:text];
+    return available;
+}
+
++ (BOOL)evaluateCellPhoneNumber:(NSString *)text
+{
+    NSString *regularExpression = @"^09\\d{8}$";
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", regularExpression];
+    BOOL available = [predicate evaluateWithObject:text];
+    return available;
+}
+
 + (BOOL)evaluateIdCardNumber:(NSString *)text
 {
     NSString *regularExpression = @"^[a-zA-Z]{1}[1-2]{1}\\d{8}$";
