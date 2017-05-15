@@ -511,6 +511,7 @@ typedef enum : NSUInteger {
             NSDictionary *dictionary = [self dictionaryForProductAtIndex:indexPath.row];
             NSString *type = [dictionary objectForKey:SymphoxAPIParam_type];
             NSString *link = [dictionary objectForKey:SymphoxAPIParam_link];
+            NSString *name = [dictionary objectForKey:SymphoxAPIParam_name];
             if (type == nil)
             {
                 break;
@@ -546,6 +547,12 @@ typedef enum : NSUInteger {
                 case 2:
                 {
                     // Sub category. Currently impossible since there is no layer information.
+                    NSString *hallId = [dictionary objectForKey:SymphoxAPIParam_hallId];
+                    NSNumber *layer = [dictionary objectForKey:SymphoxAPIParam_layer];
+                    if (hallId && layer)
+                    {
+                        [[NSNotificationCenter defaultCenter] postNotificationName:PostNotificationName_JumpToShoppingMallAndPresentHall object:self userInfo:dictionary];
+                    }
                 }
                     break;
                 case 3:
@@ -554,7 +561,7 @@ typedef enum : NSUInteger {
                     if (link != nil && [link length] > 0)
                     {
                         WebViewViewController *viewController = [[WebViewViewController alloc] initWithNibName:@"WebViewViewController" bundle:[NSBundle mainBundle]];
-                        viewController.title = [LocalizedString TodayFocus];
+                        viewController.title = (name == nil)?[LocalizedString TodayFocus]:name;
                         viewController.urlString = link;
                         [self.navigationController pushViewController:viewController animated:YES];
                     }

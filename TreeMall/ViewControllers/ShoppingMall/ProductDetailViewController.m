@@ -1308,10 +1308,14 @@
         if ([self.arrayCartType count] == 0)
         {
             [self.bottomBar.buttonAddToCart setBackgroundColor:[UIColor grayColor]];
+            [self.bottomBar.buttonAddToCart setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
+            self.bottomBar.separator.hidden = YES;
         }
         else
         {
             [self.bottomBar.buttonAddToCart setBackgroundColor:[UIColor clearColor]];
+            [self.bottomBar.buttonAddToCart setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+            self.bottomBar.separator.hidden = NO;
         }
         [self.bottomBar.labelInvalid setHidden:!isInvalid];
         [self.bottomBar.labelInvalid setText:textSoldOut];

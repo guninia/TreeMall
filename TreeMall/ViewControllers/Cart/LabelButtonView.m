@@ -72,7 +72,7 @@
         _label = [[UILabel alloc] initWithFrame:CGRectZero];
         [_label setAdjustsFontSizeToFitWidth:YES];
         [_label setTextAlignment:NSTextAlignmentLeft];
-        UIFont *font = [UIFont systemFontOfSize:12.0];
+        UIFont *font = [UIFont systemFontOfSize:16.0];
         [_label setFont:font];
     }
     return _label;

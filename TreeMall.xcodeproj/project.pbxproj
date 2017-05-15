@@ -48,7 +48,6 @@
 		685939B51E1F49DF00351FFB /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 685939B31E1F49DF00351FFB /* Main.storyboard */; };
 		685939B81E1F49DF00351FFB /* TreeMall.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 685939B61E1F49DF00351FFB /* TreeMall.xcdatamodeld */; };
 		685939BA1E1F49DF00351FFB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 685939B91E1F49DF00351FFB /* Assets.xcassets */; };
-		685939BD1E1F49DF00351FFB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 685939BB1E1F49DF00351FFB /* LaunchScreen.storyboard */; };
 		685939C81E1F49DF00351FFB /* TreeMallTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 685939C71E1F49DF00351FFB /* TreeMallTests.m */; };
 		685939D31E1F49DF00351FFB /* TreeMallUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 685939D21E1F49DF00351FFB /* TreeMallUITests.m */; };
 		685939E51E1F4E1700351FFB /* SHAPIAdapter.m in Sources */ = {isa = PBXBuildFile; fileRef = 685939E41E1F4E1700351FFB /* SHAPIAdapter.m */; };
@@ -190,7 +189,6 @@
 		688494121EBC779A0087BC2B /* TermsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 68E401301E309B7700BFF66B /* TermsViewController.xib */; };
 		688494131EBC779A0087BC2B /* CouponDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 687B0E6B1E6970D500E04D81 /* CouponDetailViewController.xib */; };
 		688494141EBC779A0087BC2B /* AdditionalPurchaseViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 68A1FE981EB0858D0058ABED /* AdditionalPurchaseViewController.xib */; };
-		688494151EBC779A0087BC2B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 685939BB1E1F49DF00351FFB /* LaunchScreen.storyboard */; };
 		688494161EBC779A0087BC2B /* AuthenticateViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 689546431E35DFB400D5CD1E /* AuthenticateViewController.xib */; };
 		688494171EBC779A0087BC2B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 685939B91E1F49DF00351FFB /* Assets.xcassets */; };
 		688494181EBC779A0087BC2B /* EntranceViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6890650D1E23334400E5CB26 /* EntranceViewController.xib */; };
@@ -318,6 +316,8 @@
 		68D7F26E1EC94CE400B13214 /* CompleteOrderViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 68D7F26A1EC94CE400B13214 /* CompleteOrderViewController.xib */; };
 		68D7F2711EC9833B00B13214 /* CompleteOrderContentTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 68D7F2701EC9833B00B13214 /* CompleteOrderContentTableViewCell.m */; };
 		68D7F2721EC9833B00B13214 /* CompleteOrderContentTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 68D7F2701EC9833B00B13214 /* CompleteOrderContentTableViewCell.m */; };
+		68D7F2761EC99DAB00B13214 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 68D7F2751EC99DAB00B13214 /* Images.xcassets */; };
+		68D7F2771EC99DAB00B13214 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 68D7F2751EC99DAB00B13214 /* Images.xcassets */; };
 		68DC2BAB1E487B28003573AC /* LoadingFooterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 68DC2BAA1E487B28003573AC /* LoadingFooterView.m */; };
 		68E401311E309B7700BFF66B /* TermsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68E4012F1E309B7700BFF66B /* TermsViewController.m */; };
 		68E401321E309B7700BFF66B /* TermsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 68E401301E309B7700BFF66B /* TermsViewController.xib */; };
@@ -416,7 +416,6 @@
 		685939B41E1F49DF00351FFB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		685939B71E1F49DF00351FFB /* TreeMall.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TreeMall.xcdatamodel; sourceTree = "<group>"; };
 		685939B91E1F49DF00351FFB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		685939BC1E1F49DF00351FFB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		685939BE1E1F49DF00351FFB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		685939C31E1F49DF00351FFB /* TreeMallTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TreeMallTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		685939C71E1F49DF00351FFB /* TreeMallTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TreeMallTests.m; sourceTree = "<group>"; };
@@ -585,7 +584,6 @@
 		68C5A92B1EB48FDA00EEC55E /* PaymentTypeHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PaymentTypeHeaderView.h; path = ViewControllers/Cart/PaymentTypeHeaderView.h; sourceTree = "<group>"; };
 		68C5A92C1EB48FDA00EEC55E /* PaymentTypeHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PaymentTypeHeaderView.m; path = ViewControllers/Cart/PaymentTypeHeaderView.m; sourceTree = "<group>"; };
 		68CA36A21E2362B600A70BCC /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/Main.strings"; sourceTree = "<group>"; };
-		68CA36A31E2362B600A70BCC /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
 		68CA36A91E23630500A70BCC /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = Base.lproj/Localizable.strings; sourceTree = "<group>"; };
 		68CA36AA1E23634A00A70BCC /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		68CA36AD1E23679800A70BCC /* LocalizedString.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LocalizedString.h; path = Utilities/LocalizedStrings/LocalizedString.h; sourceTree = "<group>"; };
@@ -625,6 +623,7 @@
 		68D7F26A1EC94CE400B13214 /* CompleteOrderViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = CompleteOrderViewController.xib; path = ViewControllers/Cart/CompleteOrderViewController.xib; sourceTree = "<group>"; };
 		68D7F26F1EC9833B00B13214 /* CompleteOrderContentTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CompleteOrderContentTableViewCell.h; path = ViewControllers/Cart/CompleteOrderContentTableViewCell.h; sourceTree = "<group>"; };
 		68D7F2701EC9833B00B13214 /* CompleteOrderContentTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CompleteOrderContentTableViewCell.m; path = ViewControllers/Cart/CompleteOrderContentTableViewCell.m; sourceTree = "<group>"; };
+		68D7F2751EC99DAB00B13214 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		68DC2BA91E487B28003573AC /* LoadingFooterView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LoadingFooterView.h; path = ViewControllers/ShoppingMall/LoadingFooterView.h; sourceTree = "<group>"; };
 		68DC2BAA1E487B28003573AC /* LoadingFooterView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LoadingFooterView.m; path = ViewControllers/ShoppingMall/LoadingFooterView.m; sourceTree = "<group>"; };
 		68E4012E1E309B7700BFF66B /* TermsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TermsViewController.h; path = ViewControllers/Login/TermsViewController.h; sourceTree = "<group>"; };
@@ -809,7 +808,7 @@
 				685939B11E1F49DF00351FFB /* ViewController.m */,
 				685939B31E1F49DF00351FFB /* Main.storyboard */,
 				685939B91E1F49DF00351FFB /* Assets.xcassets */,
-				685939BB1E1F49DF00351FFB /* LaunchScreen.storyboard */,
+				68D7F2751EC99DAB00B13214 /* Images.xcassets */,
 				685939BE1E1F49DF00351FFB /* Info.plist */,
 				685939B61E1F49DF00351FFB /* TreeMall.xcdatamodeld */,
 				685939AA1E1F49DF00351FFB /* Supporting Files */,
@@ -1489,6 +1488,7 @@
 				6811BC711E2774B500626A4A /* GoogleSignIn.bundle in Resources */,
 				681500EF1EB727F100B872E2 /* ReceiverInfoViewController.xib in Resources */,
 				689130101E68097C00CE834A /* CouponListViewController.xib in Resources */,
+				68D7F2761EC99DAB00B13214 /* Images.xcassets in Resources */,
 				689065271E2338C400E5CB26 /* MemberViewController.xib in Resources */,
 				683C17D41EB2D9200051519A /* HotSaleViewController.xib in Resources */,
 				689065151E23368100E5CB26 /* ShoppingMallViewController.xib in Resources */,
@@ -1497,7 +1497,6 @@
 				68E401321E309B7700BFF66B /* TermsViewController.xib in Resources */,
 				687B0E6D1E6970D500E04D81 /* CouponDetailViewController.xib in Resources */,
 				68A1FE9A1EB0858D0058ABED /* AdditionalPurchaseViewController.xib in Resources */,
-				685939BD1E1F49DF00351FFB /* LaunchScreen.storyboard in Resources */,
 				689546451E35DFB400D5CD1E /* AuthenticateViewController.xib in Resources */,
 				685939BA1E1F49DF00351FFB /* Assets.xcassets in Resources */,
 				6890650F1E23334400E5CB26 /* EntranceViewController.xib in Resources */,
@@ -1558,10 +1557,10 @@
 				688494121EBC779A0087BC2B /* TermsViewController.xib in Resources */,
 				688494131EBC779A0087BC2B /* CouponDetailViewController.xib in Resources */,
 				688494141EBC779A0087BC2B /* AdditionalPurchaseViewController.xib in Resources */,
-				688494151EBC779A0087BC2B /* LaunchScreen.storyboard in Resources */,
 				688494161EBC779A0087BC2B /* AuthenticateViewController.xib in Resources */,
 				688494171EBC779A0087BC2B /* Assets.xcassets in Resources */,
 				688494181EBC779A0087BC2B /* EntranceViewController.xib in Resources */,
+				68D7F2771EC99DAB00B13214 /* Images.xcassets in Resources */,
 				688494191EBC779A0087BC2B /* NewsletterSubscribeViewController.xib in Resources */,
 				6884941A1EBC779A0087BC2B /* SearchViewController.xib in Resources */,
 				6884941B1EBC779A0087BC2B /* SingleMediaDetailViewController.xib in Resources */,
@@ -2049,15 +2048,6 @@
 			name = Main.storyboard;
 			sourceTree = "<group>";
 		};
-		685939BB1E1F49DF00351FFB /* LaunchScreen.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				685939BC1E1F49DF00351FFB /* Base */,
-				68CA36A31E2362B600A70BCC /* zh-Hant */,
-			);
-			name = LaunchScreen.storyboard;
-			sourceTree = "<group>";
-		};
 		68CA36A81E2362FF00A70BCC /* Localizable.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -2165,6 +2155,7 @@
 			baseConfigurationReference = 26BD4F6D2153D567CF3F57CD /* Pods-TreeMall.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				DEVELOPMENT_TEAM = XFNW4TD8ZL;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2190,6 +2181,7 @@
 			baseConfigurationReference = CD89146FF7F5CC2A03089270 /* Pods-TreeMall.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				DEVELOPMENT_TEAM = XFNW4TD8ZL;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",

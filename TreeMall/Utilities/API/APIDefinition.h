@@ -336,6 +336,11 @@ static NSString *SymphoxAPIParam_items = @"items";
 static NSString *SymphoxAPIParam_atm_bk_code = @"atm_bk_code";
 static NSString *SymphoxAPIParam_atm_code = @"atm_code";
 static NSString *SymphoxAPIParam_atm_deadline = @"atm_deadline";
+static NSString *SymphoxAPIParam_messageUi = @"messageUi";
+static NSString *SymphoxAPIParam_timeStr = @"timeStr";
+static NSString *SymphoxAPIParam_msgType = @"msgType";
+static NSString *SymphoxAPIParam_hallId = @"hallId";
+static NSString *SymphoxAPIParam_hallName = @"hallName";
 
 typedef enum : NSUInteger {
     TermTypeMemberTerms,

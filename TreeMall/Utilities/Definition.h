@@ -24,6 +24,7 @@ static NSString *PostNotificationName_UserLogout = @"UserLogout";
 static NSString *PostNotificationName_JumpToMemberTab = @"JumpToMemberTab";
 static NSString *PostNotificationName_JumpToMemberTabAndPresentCoupon = @"JumpToMemberTabAndPresentCoupon";
 static NSString *PostNotificationName_CartContentChanged = @"CartContentChanged";
+static NSString *PostNotificationName_JumpToShoppingMallAndPresentHall = @"JumpToShoppingMallAndPresentHall";
 
 static NSString *UserDefault_IntroduceShown = @"IntroduceShown";
 

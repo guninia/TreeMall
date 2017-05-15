@@ -345,13 +345,13 @@
             UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:errorMessage preferredStyle:UIAlertControllerStyleAlert];
             UIAlertAction *action = [UIAlertAction actionWithTitle:[LocalizedString Confirm] style:UIAlertActionStyleDefault handler:nil];
             [alertController addAction:action];
-            if (errorProductNotFound == NO)
-            {
-                UIAlertAction *reloadAction = [UIAlertAction actionWithTitle:[LocalizedString Reload] style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
-                    [weakSelf retrieveProductsForConditions:conditions byRefreshing:refresh];
-                }];
-                [alertController addAction:reloadAction];
-            }
+//            if (errorProductNotFound == NO)
+//            {
+//                UIAlertAction *reloadAction = [UIAlertAction actionWithTitle:[LocalizedString Reload] style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
+//                    [weakSelf retrieveProductsForConditions:conditions byRefreshing:refresh];
+//                }];
+//                [alertController addAction:reloadAction];
+//            }
             [weakSelf presentViewController:alertController animated:YES completion:nil];
             weakSelf.tableViewProduct.backgroundView = self.tableBackgroundView;
         }
@@ -893,12 +893,12 @@
     if ([[TMInfoManager sharedManager].dictionaryInitialFilter count] == 0)
     {
         UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:[LocalizedString CannotRetrieveFilterOptions] preferredStyle:UIAlertControllerStyleAlert];
-        __weak ProductListViewController *weakSelf = self;
-        UIAlertAction *actionReload = [UIAlertAction actionWithTitle:[LocalizedString Reload] style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
-            [weakSelf refreshAllContentForHallId:weakSelf.hallId andLayer:weakSelf.layer withName:weakSelf.name];
-        }];
+//        __weak ProductListViewController *weakSelf = self;
+//        UIAlertAction *actionReload = [UIAlertAction actionWithTitle:[LocalizedString Reload] style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
+//            [weakSelf refreshAllContentForHallId:weakSelf.hallId andLayer:weakSelf.layer withName:weakSelf.name];
+//        }];
         UIAlertAction *actionConfirm = [UIAlertAction actionWithTitle:[LocalizedString Confirm] style:UIAlertActionStyleDefault handler:nil];
-        [alertController addAction:actionReload];
+//        [alertController addAction:actionReload];
         [alertController addAction:actionConfirm];
         [self presentViewController:alertController animated:YES completion:nil];
         return;

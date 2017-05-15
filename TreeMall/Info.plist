@@ -65,8 +65,6 @@
 	</dict>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>TreeMall需要使用您的相簿</string>
-	<key>UILaunchStoryboardName</key>
-	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
 	<string>Main</string>
 	<key>UIRequiredDeviceCapabilities</key>

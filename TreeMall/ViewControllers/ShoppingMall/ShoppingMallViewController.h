@@ -24,4 +24,6 @@
 @property (nonatomic, strong) NSMutableArray *arrayExtraSubcategory;
 @property (nonatomic, strong) NSMutableArray *arrayExtraSubcategorySeeAll;
 
+- (void)presentProductListViewForIdentifier:(NSString *)identifier named:(NSString *)name andLayer:(NSNumber *)layer;
+
 @end

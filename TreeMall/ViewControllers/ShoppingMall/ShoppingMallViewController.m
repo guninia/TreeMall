@@ -454,6 +454,13 @@ typedef enum : NSUInteger {
     }
 }
 
+#pragma mark - Public Methods
+
+- (void)presentProductListViewForIdentifier:(NSString *)identifier named:(NSString *)name andLayer:(NSNumber *)layer
+{
+    [self presentProductListViewForIdentifier:identifier named:name andLayer:layer withCategories:nil andSubcategories:nil];
+}
+
 #pragma mark - Actions
 
 - (void)buttonItemSearchPressed:(id)sender

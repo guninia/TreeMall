@@ -79,7 +79,7 @@
         self.labelTitle.frame = frame;
         originY = self.labelTitle.frame.origin.y + self.labelTitle.frame.size.height + intervalV;
     }
-    if (self.buttonAction)
+    if (self.buttonAction && [self.buttonAction isHidden] == NO)
     {
         CGRect frame = CGRectMake(marginH, originY, maxWidth, 40.0);
         self.buttonAction.frame = frame;

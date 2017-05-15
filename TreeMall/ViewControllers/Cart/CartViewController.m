@@ -71,7 +71,7 @@
     if (self.currentType == CartTypeTotal)
     {
         self.currentType = CartTypeCommonDelivery;
-        [self.segmentedView.segmentedControl setSelectedSegmentIndex:CartTypeCommonDelivery];
+        [self.segmentedView.segmentedControl setSelectedSegmentIndex:CartUITypeCommonDelivery];
     }
     
     [self checkCartForType:self.currentType shouldShowPaymentForProductId:nil];
@@ -141,24 +141,25 @@
     if (_segmentedView == nil)
     {
         NSMutableArray *items = [NSMutableArray array];
-        for (NSInteger index = CartTypeStart; index < CartTypeTotal; index++)
+        for (NSInteger index = CartUITypeStart; index < CartUITypeTotal; index++)
         {
             switch (index) {
-                case CartTypeCommonDelivery:
+                case CartUITypeCommonDelivery:
                 {
                     [items addObject:[LocalizedString CommonDelivery]];
                 }
                     break;
-                case CartTypeFastDelivery:
+                case CartUITypeFastDelivery:
                 {
                     [items addObject:[LocalizedString FastDelivery]];
                 }
                     break;
-                case CartTypeStorePickup:
+                case CartUITypeStorePickup:
                 {
                     [items addObject:[LocalizedString StorePickUp]];
                 }
                     break;
+                
                 default:
                     break;
             }
@@ -1012,7 +1013,20 @@
 
 - (void)semiCircleEndsSegmentedView:(SemiCircleEndsSegmentedView *)view didChangeToIndex:(NSInteger)index
 {
-    self.currentType = index;
+    NSInteger realIndex = CartTypeTotal;
+    switch (index) {
+        case CartUITypeCommonDelivery:
+            realIndex = CartTypeCommonDelivery;
+            break;
+        case CartUITypeFastDelivery:
+            realIndex = CartTypeFastDelivery;
+            break;
+        case CartUITypeStorePickup:
+            realIndex = CartTypeStorePickup;
+        default:
+            break;
+    }
+    self.currentType = realIndex;
     [self resetBottomBar];
     [self.arrayProducts removeAllObjects];
     [self.tableView reloadData];

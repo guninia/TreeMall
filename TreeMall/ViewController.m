@@ -20,6 +20,7 @@
 #import "CryptoTool.h"
 #import "CouponListViewController.h"
 #import "IntroduceViewController.h"
+#import "APIDefinition.h"
 
 @interface ViewController ()
 
@@ -36,6 +37,7 @@
 - (void)handlerOfJumpingToMemberTabAndPresentCouponNotification:(NSNotification *)notification;
 - (void)handlerOfCartContentChangedNotification:(NSNotification *)notification;
 - (void)handlerOfApplicationDidBecomeActiveNotification:(NSNotification *)notification;
+- (void)handlerOfJumpToShoppingMallAndPresentHallNotification:(NSNotification *)notification;
 
 @end
 
@@ -79,7 +81,7 @@
         {
             NSNumber *key = [NSNumber numberWithInteger:vControllerIndex];
             [itemSelectedImageDictionary setObject:selectedImage forKey:key];
-            UIImage *normalImage = [[Utility colorizeImage:selectedImage withColor:[UIColor colorWithWhite:0.8 alpha:1.0]] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+            UIImage *normalImage = [[Utility colorizeImage:selectedImage withColor:[UIColor colorWithWhite:1.0 alpha:1.0]] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
             [itemImageDictionary setObject:normalImage forKey:key];
         }
         vControllerIndex++;
@@ -96,7 +98,7 @@
         {
             NSNumber *key = [NSNumber numberWithInteger:vControllerIndex];
             [itemSelectedImageDictionary setObject:selectedImage forKey:key];
-            UIImage *normalImage = [[Utility colorizeImage:selectedImage withColor:[UIColor colorWithWhite:0.8 alpha:1.0]] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+            UIImage *normalImage = [[Utility colorizeImage:selectedImage withColor:[UIColor colorWithWhite:1.0 alpha:1.0]] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
             [itemImageDictionary setObject:normalImage forKey:key];
         }
         vControllerIndex++;
@@ -113,7 +115,7 @@
         {
             NSNumber *key = [NSNumber numberWithInteger:vControllerIndex];
             [itemSelectedImageDictionary setObject:selectedImage forKey:key];
-            UIImage *normalImage = [[Utility colorizeImage:selectedImage withColor:[UIColor colorWithWhite:0.8 alpha:1.0]] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+            UIImage *normalImage = [[Utility colorizeImage:selectedImage withColor:[UIColor colorWithWhite:1.0 alpha:1.0]] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
             [itemImageDictionary setObject:normalImage forKey:key];
         }
         vControllerIndex++;
@@ -130,7 +132,7 @@
         {
             NSNumber *key = [NSNumber numberWithInteger:vControllerIndex];
             [itemSelectedImageDictionary setObject:selectedImage forKey:key];
-            UIImage *normalImage = [[Utility colorizeImage:selectedImage withColor:[UIColor colorWithWhite:0.8 alpha:1.0]] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+            UIImage *normalImage = [[Utility colorizeImage:selectedImage withColor:[UIColor colorWithWhite:1.0 alpha:1.0]] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
             [itemImageDictionary setObject:normalImage forKey:key];
         }
         vControllerIndex++;
@@ -147,7 +149,7 @@
         {
             NSNumber *key = [NSNumber numberWithInteger:vControllerIndex];
             [itemSelectedImageDictionary setObject:selectedImage forKey:key];
-            UIImage *normalImage = [[Utility colorizeImage:selectedImage withColor:[UIColor colorWithWhite:0.8 alpha:1.0]] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+            UIImage *normalImage = [[Utility colorizeImage:selectedImage withColor:[UIColor colorWithWhite:1.0 alpha:1.0]] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
             [itemImageDictionary setObject:normalImage forKey:key];
         }
         vControllerIndex++;
@@ -186,6 +188,7 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handlerOfJumpingToMemberTabAndPresentCouponNotification:) name:PostNotificationName_JumpToMemberTabAndPresentCoupon object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handlerOfCartContentChangedNotification:) name:PostNotificationName_CartContentChanged object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handlerOfApplicationDidBecomeActiveNotification:) name:UIApplicationDidBecomeActiveNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handlerOfJumpToShoppingMallAndPresentHallNotification:) name:PostNotificationName_JumpToShoppingMallAndPresentHall object:nil];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -217,6 +220,7 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self name:PostNotificationName_JumpToMemberTab object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:PostNotificationName_JumpToMemberTabAndPresentCoupon object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:PostNotificationName_CartContentChanged object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:PostNotificationName_JumpToShoppingMallAndPresentHall object:nil];
 }
 
 #pragma mark - Override
@@ -322,6 +326,10 @@
                 NSString *stringValue = [NSString stringWithFormat:@"%li", (long)totalCount];
                 [navigationViewController.tabBarItem setBadgeValue:stringValue];
             }
+            else
+            {
+                [navigationViewController.tabBarItem setBadgeValue:nil];
+            }
         }
     }
 }
@@ -395,6 +403,23 @@
     [self checkToShowIntroduce];
 }
 
+- (void)handlerOfJumpToShoppingMallAndPresentHallNotification:(NSNotification *)notification
+{
+//    NSLog(@"notification.userInfo:\n%@", notification.userInfo);
+    NSString *hallId = [notification.userInfo objectForKey:SymphoxAPIParam_hallId];
+    NSString *hallName = [notification.userInfo objectForKey:SymphoxAPIParam_hallName];
+    NSNumber *layer = [notification.userInfo objectForKey:SymphoxAPIParam_layer];
+    NSInteger tabIndex = 1;
+    [self JumpToTab:tabIndex];
+    UINavigationController *navigationController = [self.tbControllerMain.viewControllers objectAtIndex:tabIndex];
+    if ([navigationController.topViewController isKindOfClass:[ShoppingMallViewController class]] == NO)
+    {
+        [navigationController popToRootViewControllerAnimated:NO];
+    }
+    ShoppingMallViewController *shoppingViewController = (ShoppingMallViewController *)navigationController.topViewController;
+    [shoppingViewController presentProductListViewForIdentifier:hallId named:hallName andLayer:layer];
+}
+
 #pragma mark - UITabBarControllerDelegate
 
 - (BOOL)tabBarController:(UITabBarController *)tabBarController shouldSelectViewController:(UIViewController *)viewController
@@ -404,7 +429,7 @@
     {
         UINavigationController *navigationController = (UINavigationController *)viewController;
         UIViewController *rootViewController = [[navigationController viewControllers] objectAtIndex:0];
-        if ([rootViewController isKindOfClass:[MemberViewController class]])
+        if ([rootViewController isKindOfClass:[MemberViewController class]] || [rootViewController isKindOfClass:[CartViewController class]])
         {
             // Should check user state here.
             if ([TMInfoManager sharedManager].userIdentifier == nil)

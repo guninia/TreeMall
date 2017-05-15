@@ -81,6 +81,10 @@
         self.buttonPurchase.frame = frame;
         originX = self.buttonPurchase.frame.origin.x + self.buttonPurchase.frame.size.width;
     }
+    if (self.separator && [self.separator isHidden] == NO)
+    {
+        
+    }
     if (self.labelInvalid && [self.labelInvalid isHidden] == NO)
     {
         CGFloat labelOriginX = CGRectGetMaxX(self.buttonFavorite.frame);
@@ -130,7 +134,6 @@
     {
         _separator = [[UIView alloc] initWithFrame:CGRectZero];
         [_separator setBackgroundColor:[UIColor whiteColor]];
-        _separator.hidden == YES;
     }
     return _separator;
 }

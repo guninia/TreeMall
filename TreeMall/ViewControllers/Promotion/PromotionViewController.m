@@ -119,7 +119,7 @@
             if ([result integerValue] == 0)
             {
                 // Normal status.
-                NSArray *array = [dictionary objectForKey:SymphoxAPIParam_serviceMessage];
+                NSArray *array = [dictionary objectForKey:SymphoxAPIParam_messageUi];
                 if (array)
                 {
                     [_arrayPromotion setArray:array];
@@ -162,33 +162,38 @@
     if (indexPath.row < [_arrayPromotion count])
     {
         cell.imageView.backgroundColor = [UIColor clearColor];
-        UIImage *image = [UIImage imageNamed:@"ico_info_gift"];
-        if (image)
-        {
-            cell.imageView.image = image;
-        }
+        cell.imageView.image = nil;
         NSDictionary *dictionary = [_arrayPromotion objectAtIndex:indexPath.row];
+        NSString *messageType = [dictionary objectForKey:SymphoxAPIParam_msgType];
+        NSString *imageName = nil;
+        if ([messageType integerValue] == 0)
+        {
+            imageName = @"ico_info_gift";
+        }
+        else if ([messageType integerValue] == 1)
+        {
+            imageName = @"ico_info_anno";
+        }
+        if (imageName)
+        {
+            UIImage *image = [UIImage imageNamed:imageName];
+            if (image)
+            {
+                cell.imageView.image = image;
+            }
+        }
         NSString *title = [dictionary objectForKey:SymphoxAPIParam_name];
-        NSString *beginTime = [dictionary objectForKey:SymphoxAPIParam_begin_time];
-        NSString *endTime = [dictionary objectForKey:SymphoxAPIParam_end_time];
+//        NSString *beginTime = [dictionary objectForKey:SymphoxAPIParam_begin_time];
+//        NSString *endTime = [dictionary objectForKey:SymphoxAPIParam_end_time];
 //        NSString *content = [dictionary objectForKey:SymphoxAPIParam_content];
 //        NSString *type = [dictionary objectForKey:SymphoxAPIParam_type];
         NSString *identifier = [dictionary objectForKey:SymphoxAPIParam_id];
+        NSString *timeString = [dictionary objectForKey:SymphoxAPIParam_timeStr];
         
-        NSMutableString *subtitle = [NSMutableString string];
-        if (beginTime)
-        {
-            [subtitle appendString:beginTime];
-        }
-        [subtitle appendString:@"～"];
-        if (endTime)
-        {
-            [subtitle appendString:endTime];
-        }
         
         cell.shouldShowMask = [[TMInfoManager sharedManager] alreadyReadPromotionForIdentifier:identifier];
         cell.title = (title == nil)?@"":title;
-        cell.subtitle = (subtitle == nil)?@"":subtitle;
+        cell.subtitle = (timeString == nil)?@"":timeString;
 //        cell.content = (content == nil)?@"":content;
     }
     return cell;

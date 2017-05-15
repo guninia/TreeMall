@@ -2068,6 +2068,12 @@ static NSUInteger SearchKeywordNumberMax = 8;
     [self.dictionaryProductPurchaseInfoInCartStorePickUp removeAllObjects];
     [self.arrayCartFast removeAllObjects];
     [self.dictionaryProductPurchaseInfoInCartFast removeAllObjects];
+    [self.arrayCartFastAddition removeAllObjects];
+    [self.arrayCartCommonAddition removeAllObjects];
+    [self.arrayCartStorePickUpAddition removeAllObjects];
+    [self.dictionaryProductPurchaseInfoInCartCommonAddition removeAllObjects];
+    [self.dictionaryProductPurchaseInfoInCartStorePickUpAddition removeAllObjects];
+    [self.dictionaryProductPurchaseInfoInCartFastAddition removeAllObjects];
     
     _numberArchiveTimestamp = nil;
     _userIdentifier = nil;

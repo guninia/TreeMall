@@ -50,6 +50,14 @@ typedef enum : NSUInteger {
 } CartType;
 
 typedef enum : NSUInteger {
+    CartUITypeStart,
+    CartUITypeCommonDelivery = CartUITypeStart,
+    CartUITypeFastDelivery,
+    CartUITypeStorePickup,
+    CartUITypeTotal
+} CartUIType;
+
+typedef enum : NSUInteger {
     AdditionalCartTypeCommonDelivery,
     AdditionalCartTypeStorePickup,
     AdditionalCartTypeFastDelivery,
