@@ -2911,4 +2911,54 @@
     return FastArrive;
 }
 
++ (NSString *)InvoiceDelivery
+{
+    static NSString *InvoiceDelivery = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        InvoiceDelivery = NSLocalizedString(@"InvoiceDelivery", nil);
+    });
+    return InvoiceDelivery;
+}
+
++ (NSString *)CashToPay
+{
+    static NSString *CashToPay = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        CashToPay = NSLocalizedString(@"CashToPay", nil);
+    });
+    return CashToPay;
+}
+
++ (NSString *)DiscountByEPoint
+{
+    static NSString *DiscountByEPoint = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        DiscountByEPoint = NSLocalizedString(@"DiscountByEPoint", nil);
+    });
+    return DiscountByEPoint;
+}
+
++ (NSString *)DiscountByPoint
+{
+    static NSString *DiscountByPoint = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        DiscountByPoint = NSLocalizedString(@"DiscountByPoint", nil);
+    });
+    return DiscountByPoint;
+}
+
++ (NSString *)Total_I_product
+{
+    static NSString *Total_I_product = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        Total_I_product = NSLocalizedString(@"Total_I_product", nil);
+    });
+    return Total_I_product;
+}
+
 @end

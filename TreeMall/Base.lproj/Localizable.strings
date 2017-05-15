@@ -295,3 +295,8 @@
 "PleaseInputRegionNumber"="Region number";
 "PleaseInputSpecificNumber"="Specific number";
 "FastArrive"="Fast";
+"InvoiceDelivery"="Invoice Delivery";
+"CashToPay"="Cash";
+"DiscountByEPoint"="Discount by ePoint";
+"DiscountByPoint"="Discount by point";
+"Total_I_product"="Total %li products";

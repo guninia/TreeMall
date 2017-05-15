@@ -48,11 +48,11 @@
 @property (nonatomic, strong) NSString *currentRegion;
 @property (nonatomic, strong) NSString *currentInvoiceCity;
 @property (nonatomic, strong) NSString *currentInvoiceRegion;
-@property (nonatomic, assign) NSInteger selectedDeliverTimeIndex;
-@property (nonatomic, strong) NSDictionary *dictionaryInstallment;
+@property (nonatomic, strong) NSMutableDictionary *dictionaryInstallment;
 @property (nonatomic, strong) NSString *invoiceDescription;
 @property (nonatomic, strong) NSAttributedString *attrStringInvoiceDesc;
 @property (nonatomic, strong) NSCache *cellCache;
 @property (nonatomic, strong) NSString *tradeId;
-
+@property (nonatomic, strong) NSDictionary *dictionaryTotalCost;
+@property (nonatomic, strong) NSDictionary *dictionaryOrderResultData;
 @end

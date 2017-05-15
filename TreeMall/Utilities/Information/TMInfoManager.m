@@ -13,6 +13,7 @@
 #import "Definition.h"
 #import <SAMKeychain.h>
 #import "LocalizedString.h"
+#import "Utility.h"
 
 static NSString *TMInfoArchiveKey_PromotionRead = @"PromotionRead";
 static NSString *TMInfoArchiveKey_UserInformation = @"UserInformation";
@@ -41,6 +42,8 @@ static NSString *TMInfoArchiveKey_UserTelephone = @"UserTelephone";
 static NSString *TMInfoArchiveKey_UserIdCardNumber = @"UserIdCardNumber";
 static NSString *TMInfoArchiveKey_UserZipCode = @"UserZipCode";
 static NSString *TMInfoArchiveKey_UserAddress = @"UserAddress";
+static NSString *TMInfoArchiveKey_UserLoginTime = @"UserLoginTime";
+static NSString *TMInfoArchiveKey_UserLoginIP = @"UserLoginIP";
 
 static NSString *TMInfoArchiveKey_CachedCategories = @"CachedCategories";
 static NSString *TMInfoArchiveKey_ArchiveTimestamp = @"ArchiveTimestamp";
@@ -76,6 +79,8 @@ static NSUInteger SearchKeywordNumberMax = 8;
 - (void)processUserInformation:(NSData *)data;
 - (void)processUserPoint:(NSData *)data;
 - (id)processUserCoupon:(NSData *)data;
+
+- (void)handlerOfUserLoggedInNotification:(NSNotification *)notification;
 
 @end
 
@@ -127,8 +132,15 @@ static NSUInteger SearchKeywordNumberMax = 8;
         archiveQueue = dispatch_queue_create("ArchiveQueue", DISPATCH_QUEUE_SERIAL);
         
         [self applyDataFromArchivedDictionary:[self loadFromArchive]];
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handlerOfUserLoggedInNotification:) name:PostNotificationName_UserLoggedIn object:nil];
     }
     return self;
+}
+
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:PostNotificationName_UserLoggedIn object:nil];
 }
 
 #pragma mark - Override
@@ -820,6 +832,8 @@ static NSUInteger SearchKeywordNumberMax = 8;
         [dictionaryArchive setObject:weakSelf.dictionaryProductPurchaseInfoInCartStorePickUp forKey:TMInfoArchiveKey_PurchaseInfoInCartStorePickUp];
         [dictionaryArchive setObject:weakSelf.arrayCartFast forKey:TMInfoArchiveKey_CartFast];
         [dictionaryArchive setObject:weakSelf.dictionaryProductPurchaseInfoInCartFast forKey:TMInfoArchiveKey_PurchaseInfoInCartFast];
+        [dictionaryArchive setObject:weakSelf.userLoginDate forKey:TMInfoArchiveKey_UserLoginTime];
+        [dictionaryArchive setObject:weakSelf.userLoginIP forKey:TMInfoArchiveKey_UserLoginIP];
         
         NSMutableData *archiveData = [[NSMutableData alloc] initWithCapacity:0];
         NSKeyedArchiver *archiver = [[NSKeyedArchiver alloc] initForWritingWithMutableData:archiveData];
@@ -1061,6 +1075,20 @@ static NSUInteger SearchKeywordNumberMax = 8;
     {
         self.userAddress = address;
     }
+    
+    if (self.userLoginDate == nil)
+    {
+        NSString *stringDate = [self formattedStringFromDate:[NSDate date]];
+        self.userLoginDate = stringDate;
+        NSLog(@"Login time [%@]", stringDate);
+    }
+    if (self.userLoginIP == nil)
+    {
+        NSString *ipAddress = [Utility ipAddressPreferIPv6:NO];
+        NSLog(@"Login IP [%@]", ipAddress);
+        self.userLoginIP = ipAddress;
+    }
+    
     [self saveToArchive];
     
     // Assume that userAuthStatus should always be in the user information, if it is missing, we should reload user information again.
@@ -1365,6 +1393,7 @@ static NSUInteger SearchKeywordNumberMax = 8;
     [self resetData];
     [self deleteArchive];
     [[NSNotificationCenter defaultCenter] postNotificationName:PostNotificationName_UserLogout object:self];
+    [[NSNotificationCenter defaultCenter] postNotificationName:PostNotificationName_CartContentChanged object:self];
 }
 
 - (void)retrieveUserInformation
@@ -1859,6 +1888,14 @@ static NSUInteger SearchKeywordNumberMax = 8;
     return totalCount;
 }
 
+- (NSString *)formattedStringFromDate:(NSDate *)date
+{
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"yyyy/MM/dd HH:mm:ss"];
+    NSString *stringDate = [dateFormatter stringFromDate:date];
+    return stringDate;
+}
+
 #pragma mark - Private Methods
 
 - (NSURL *)urlForInfoDirectory
@@ -1977,6 +2014,16 @@ static NSUInteger SearchKeywordNumberMax = 8;
     {
         [self.dictionaryProductPurchaseInfoInCartFast setDictionary:dictionaryCartFast];
     }
+    NSString *loginIP = [dictionaryArchive objectForKey:TMInfoArchiveKey_UserLoginIP];
+    if (loginIP)
+    {
+        self.userLoginIP = loginIP;
+    }
+    NSString *loginDate = [dictionaryArchive objectForKey:TMInfoArchiveKey_UserLoginTime];
+    if (loginDate)
+    {
+        self.userLoginDate = loginDate;
+    }
 }
 
 - (void)deleteArchive
@@ -2084,6 +2131,7 @@ static NSUInteger SearchKeywordNumberMax = 8;
         {
             [self updateUserInformationFromInfoDictionary:jsonObject afterLoadingArchive:NO];
             [[NSNotificationCenter defaultCenter] postNotificationName:PostNotificationName_UserInformationUpdated object:self];
+            [[NSNotificationCenter defaultCenter] postNotificationName:PostNotificationName_CartContentChanged object:self];
         }
     }
 }
@@ -2165,6 +2213,21 @@ static NSUInteger SearchKeywordNumberMax = 8;
         }
     }
     return resultObject;
+}
+
+#pragma mark - Notification Handler
+
+- (void)handlerOfUserLoggedInNotification:(NSNotification *)notification
+{
+    // Should record
+    NSString *stringDate = [self formattedStringFromDate:[NSDate date]];
+    self.userLoginDate = stringDate;
+    NSLog(@"Login time [%@]", stringDate);
+    NSString *ipAddress = [Utility ipAddressPreferIPv6:NO];
+    NSLog(@"Login IP [%@]", ipAddress);
+    self.userLoginIP = ipAddress;
+    
+    [self saveToArchive];
 }
 
 @end

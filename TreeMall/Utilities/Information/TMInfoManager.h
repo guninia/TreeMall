@@ -95,6 +95,9 @@ typedef enum : NSUInteger {
 @property (nonatomic, strong) NSString *userIDCardNumber;
 @property (nonatomic, strong) NSString *userZipCode;
 @property (nonatomic, strong) NSString *userAddress;
+@property (nonatomic, strong) NSString *userLoginDate;
+@property (nonatomic, strong) NSString *userLoginIP;
+@property (nonatomic, strong) NSString *userPressAgreementDate;
 @property (nonatomic, strong) NSMutableDictionary *dictionaryInitialFilter;
 @property (nonatomic, strong) NSMutableDictionary *dictionaryMainCategoryNameMapping;
 @property (nonatomic, strong) NSMutableOrderedSet *orderedSetKeyword;
@@ -161,5 +164,7 @@ typedef enum : NSUInteger {
 - (NSString *)nameOfRemovedProductId:(NSNumber *)productIdToRemove inAdditionalCart:(CartType)type;
 
 - (NSInteger)numberOfProductsInCart:(CartType)type;
+
+- (NSString *)formattedStringFromDate:(NSDate *)date;
 
 @end

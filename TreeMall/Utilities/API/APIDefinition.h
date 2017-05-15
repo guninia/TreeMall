@@ -52,6 +52,8 @@ static NSString *SymphoxAPI_getContactInfo = @"http://tomcat8.mdevelop.com/TreeM
 static NSString *SymphoxAPI_getDistrictInfo = @"http://tomcat8.mdevelop.com/TreeMall/api/eiffel/treemall/zipInfo";
 static NSString *SymphoxAPI_getCarrierInfo = @"http://tomcat8.mdevelop.com/TreeMall/api/eiffel/goods/typeInfo";
 static NSString *SymphoxAPI_getOneClickBuyContactInfo = @"http://tomcat8.mdevelop.com/TreeMall/api/eiffel/appOrder/oneClickBuyDelivery";
+static NSString *SymphoxAPI_activateOCB = @"https://www.cathaybk.com.tw/cathaybk/card/event/2012/card_news1010701.asp";
+static NSString *SymphoxAPI_buildOrder = @"http://tomcat8.mdevelop.com/TreeMall/api/eiffel/orders/createOrder";
 
 #else
 static NSString *SymphoxAPI_token = @"https://api.symphox.com.tw/portal/app/token";
@@ -295,6 +297,7 @@ static NSString *SymphoxAPIParam_contact_member_status = @"contact_member_status
 static NSString *SymphoxAPIParam_cellphone = @"cellphone";
 static NSString *SymphoxAPIParam_inv_name = @"inv_name";
 static NSString *SymphoxAPIParam_inv_tel = @"inv_tel";
+static NSString *SymphoxAPIParam_inv_zip = @"inv_zip";
 static NSString *SymphoxAPIParam_inv_address = @"inv_address";
 static NSString *SymphoxAPIParam_inv_regno = @"inv_regno";
 static NSString *SymphoxAPIParam_notes = @"notes";
@@ -317,6 +320,22 @@ static NSString *SymphoxAPIParam_zip_num = @"zip_num";
 static NSString *SymphoxAPIParam_cpro_carrier = @"cpro_carrier";
 static NSString *SymphoxAPIParam_cpdt_nums = @"cpdt_nums";
 static NSString *SymphoxAPIParam_goods = @"goods";
+static NSString *SymphoxAPIParam_shopping_delivery = @"shopping_delivery";
+static NSString *SymphoxAPIParam_auth_amount = @"auth_amount";
+static NSString *SymphoxAPIParam_card_no = @"card_no";
+static NSString *SymphoxAPIParam_card_expired_date = @"card_expired_date";
+static NSString *SymphoxAPIParam_card_cvc2 = @"card_cvc2";
+static NSString *SymphoxAPIParam_shopping_order_term = @"shopping_order_term";
+static NSString *SymphoxAPIParam_login_date = @"login_date";
+static NSString *SymphoxAPIParam_login_ip = @"login_ip";
+static NSString *SymphoxAPIParam_press_date = @"press_date";
+static NSString *SymphoxAPIParam_shopping_payment = @"shopping_payment";
+static NSString *SymphoxAPIParam_used_eacc_num = @"used_eacc_num";
+static NSString *SymphoxAPIParam_order_items = @"order_items";
+static NSString *SymphoxAPIParam_items = @"items";
+static NSString *SymphoxAPIParam_atm_bk_code = @"atm_bk_code";
+static NSString *SymphoxAPIParam_atm_code = @"atm_code";
+static NSString *SymphoxAPIParam_atm_deadline = @"atm_deadline";
 
 typedef enum : NSUInteger {
     TermTypeMemberTerms,

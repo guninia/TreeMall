@@ -542,7 +542,10 @@
                         NSMutableDictionary *option = [NSMutableDictionary dictionary];
                         NSString *string = [LocalizedString OneTimePayment];
                         [option setObject:string forKey:kPaymentOptionTitle];
-                        [option setObject:[LocalizedString Activate] forKey:kPaymentOptionActionTitle];
+                        if ([TMInfoManager sharedManager].userOcbStatus != OCBStatusActivated)
+                        {
+                            [option setObject:[LocalizedString Activate] forKey:kPaymentOptionActionTitle];
+                        }
                         [content addObject:option];
                     }
                     [section setObject:paymentId forKey:kPaymentSectionId];
@@ -552,6 +555,10 @@
                 else if ([paymentId isEqualToString:@"O2"])
                 {
                     if ([self.arrayInstallment count] == 0)
+                    {
+                        continue;
+                    }
+                    if ([TMInfoManager sharedManager].userOcbStatus != OCBStatusActivated)
                     {
                         continue;
                     }
@@ -642,7 +649,7 @@
         }
         [self.tableViewPayment reloadData];
     }
-    [self requestBuyNowDeliveryInfo];
+//    [self requestBuyNowDeliveryInfo];
     [self refreshContent];
 }
 
@@ -972,10 +979,28 @@
             // Received result representing success. Go to next step.
             ReceiverInfoViewController *viewController = [[ReceiverInfoViewController alloc] initWithNibName:@"ReceiverInfoViewController" bundle:[NSBundle mainBundle]];
             viewController.type = weakSelf.type;
+            NSMutableDictionary *dictionaryPayment = [NSMutableDictionary dictionary];
             if (weakSelf.selectedInstallment)
             {
-                viewController.dictionaryInstallment = weakSelf.selectedInstallment;
+                [dictionaryPayment setDictionary:weakSelf.selectedInstallment];
             }
+            else
+            {
+                [dictionaryPayment setObject:[NSNumber numberWithInteger:0] forKey:SymphoxAPIParam_installment_term];
+                [dictionaryPayment setObject:[NSNumber numberWithInteger:0] forKey:SymphoxAPIParam_installment_amount];
+            }
+            NSDictionary *account_result = [self.dictionaryData objectForKey:SymphoxAPIParam_account_result];
+            if (account_result && [account_result isEqual:[NSNull null]] == NO)
+            {
+                NSNumber *total_cash = [account_result objectForKey:SymphoxAPIParam_total_cash];
+                if (total_cash && [total_cash isEqual:[NSNull null]] == NO)
+                {
+                    [dictionaryPayment setObject:total_cash forKey:SymphoxAPIParam_auth_amount];
+                }
+            }
+            viewController.dictionaryTotalCost = account_result;
+            viewController.dictionaryInstallment = dictionaryPayment;
+            
             NSString *trade_id = [params objectForKey:SymphoxAPIParam_trade_id];
             if (trade_id)
             {
@@ -1030,6 +1055,10 @@
         [self presentViewController:alertController animated:YES completion:nil];
         return;
     }
+    
+    NSString *stringDate = [[TMInfoManager sharedManager] formattedStringFromDate:[NSDate date]];
+    [TMInfoManager sharedManager].userPressAgreementDate = stringDate;
+    
     [self startToCheckPayment];
 }
 
@@ -1138,7 +1167,7 @@
         if (indexPath.section < [self.arrayPaymentSections count])
         {
             NSDictionary *dictionarySection = [self.arrayPaymentSections objectAtIndex:indexPath.section];
-            NSString *sectionId = [dictionarySection objectForKey:kPaymentSectionId];
+//            NSString *sectionId = [dictionarySection objectForKey:kPaymentSectionId];
             NSArray *content = [dictionarySection objectForKey:kPaymentSectionContent];
             if (content)
             {
@@ -1153,14 +1182,8 @@
                     NSString *optionActionTitle = [option objectForKey:kPaymentOptionActionTitle];
                     if (optionActionTitle)
                     {
-                        if ([sectionId isEqualToString:@"O"] || [sectionId isEqualToString:@"O2"])
-                        {
-                            if ([TMInfoManager sharedManager].userOcbStatus != OCBStatusActivated)
-                            {
-                                actionTitle = optionActionTitle;
-                                paymentCell.accessoryView = paymentCell.buttonAction;
-                            }
-                        }
+                        actionTitle = optionActionTitle;
+                        paymentCell.accessoryView = paymentCell.buttonAction;
                     }
                 }
             }
@@ -1216,7 +1239,30 @@
 - (void)PaymentTypeTableViewCell:(PaymentTypeTableViewCell *)cell didSelectActionBySender:(id)sender
 {
     UIButton *button = (UIButton *)sender;
-    NSLog(@"didSelectActionBySender[%li][%li]", button.tag, cell.tag);
+    NSLog(@"didSelectActionBySender[%li][%li]", (long)button.tag, (long)cell.tag);
+    NSInteger section = button.tag;
+    NSDictionary *dictionarySection = [self.arrayPaymentSections objectAtIndex:section];
+    NSString *paymentId = [dictionarySection objectForKey:kPaymentSectionId];
+    if ([paymentId isEqualToString:@"O"] || [paymentId isEqualToString:@"O2"])
+    {
+        // One click buy
+        OCBStatus status = [TMInfoManager sharedManager].userOcbStatus;
+        switch (status) {
+            case OCBStatusShouldActivateInBank:
+            case OCBStatusShouldActivateInTreeMall:
+            case OCBStatusExpired:
+            {
+                NSURL *url = [NSURL URLWithString:SymphoxAPI_activateOCB];
+                if ([[UIApplication sharedApplication] canOpenURL:url])
+                {
+                    [[UIApplication sharedApplication] openURL:url];
+                }
+            }
+                break;
+            default:
+                break;
+        }
+    }
 }
 
 @end

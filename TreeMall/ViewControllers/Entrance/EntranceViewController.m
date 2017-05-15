@@ -66,6 +66,9 @@ typedef enum : NSUInteger {
     {
         UIImage *image = [[UIImage imageNamed:@"ind_logo"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         UIImageView *imageView = [[UIImageView alloc] initWithImage:image];
+        CGRect frame = imageView.frame;
+        frame = CGRectApplyAffineTransform(frame, CGAffineTransformMakeScale(1.5, 1.5));
+        imageView.frame = frame;
         [imageView setTintColor:[UIColor colorWithRed:(100.0/255.0) green:(170.0/255.0) blue:(80.0/255.0) alpha:1.0]];
         self.navigationItem.titleView = imageView;
     }

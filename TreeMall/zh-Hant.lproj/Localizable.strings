@@ -296,3 +296,8 @@
 "PleaseInputRegionNumber"="請輸入區碼";
 "PleaseInputSpecificNumber"="請輸入轉接碼";
 "FastArrive"="快速到貨";
+"InvoiceDelivery"="發票寄送";
+"CashToPay"="實付金額";
+"DiscountByEPoint"="折抵泰贈點";
+"DiscountByPoint"="折抵舞動紅利";
+"Total_I_product"="本次消費共 %li 項商品";

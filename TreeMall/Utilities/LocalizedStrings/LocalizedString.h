@@ -300,5 +300,11 @@
 + (NSString *)PleaseInputRegionNumber;
 + (NSString *)PleaseInputSpecificNumber;
 + (NSString *)FastArrive;
++ (NSString *)InvoiceDelivery;
++ (NSString *)CashToPay;
++ (NSString *)DiscountByEPoint;
++ (NSString *)DiscountByPoint;
++ (NSString *)Total_I_product;
+
 
 @end

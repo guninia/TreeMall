@@ -50,7 +50,7 @@
     [super layoutSubviews];
     CGFloat marginL = 10.0;
     CGFloat marginR = 10.0;
-    CGFloat intervalH = 5.0;
+//    CGFloat intervalH = 5.0;
     if (self.buttonAction && [self.buttonAction isHidden] == NO)
     {
         if (self.accessoryView == nil)
@@ -58,13 +58,6 @@
             // Should show accessory type
             marginR = 30.0;
         }
-        NSString *title = [self.buttonAction titleForState:UIControlStateNormal];
-        CGSize sizeText = [title sizeWithAttributes:[NSDictionary dictionaryWithObjectsAndKeys:self.buttonAction.titleLabel.font, NSFontAttributeName, nil]];
-        CGSize sizeLabel = CGSizeMake(ceil(sizeText.width), ceil(sizeText.height));
-        CGSize sizeButton = CGSizeMake(sizeLabel.width + 6.0, sizeLabel.height + 4.0);
-        CGRect frame = CGRectMake(self.contentView.frame.size.width - marginR - sizeButton.width, (self.contentView.frame.size.height - sizeButton.height)/2, sizeButton.width, sizeButton.height);
-        self.buttonAction.frame = frame;
-        marginR = intervalH + self.buttonAction.frame.size.width + marginR;
     }
     if (self.labelTitle)
     {
@@ -110,6 +103,12 @@
         return;
     }
     [self.buttonAction setTitle:_actionTitle forState:UIControlStateNormal];
+    NSString *title = [self.buttonAction titleForState:UIControlStateNormal];
+    CGSize sizeText = [title sizeWithAttributes:[NSDictionary dictionaryWithObjectsAndKeys:self.buttonAction.titleLabel.font, NSFontAttributeName, nil]];
+    CGSize sizeLabel = CGSizeMake(ceil(sizeText.width), ceil(sizeText.height));
+    CGSize sizeButton = CGSizeMake(sizeLabel.width + 12.0, sizeLabel.height + 10.0);
+    CGRect frame = CGRectMake(0.0, 0.0, sizeButton.width, sizeButton.height);
+    self.buttonAction.frame = frame;
     [self.buttonAction setHidden:NO];
 }
 

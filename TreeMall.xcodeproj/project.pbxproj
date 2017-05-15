@@ -312,6 +312,12 @@
 		68D751901E810A5800487088 /* MemberSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68D7518E1E810A5800487088 /* MemberSettingsViewController.m */; };
 		68D751911E810A5800487088 /* MemberSettingsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 68D7518F1E810A5800487088 /* MemberSettingsViewController.xib */; };
 		68D751941E812E4C00487088 /* MemberSettingsTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 68D751931E812E4C00487088 /* MemberSettingsTableViewCell.m */; };
+		68D7F26B1EC94CE400B13214 /* CompleteOrderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68D7F2691EC94CE400B13214 /* CompleteOrderViewController.m */; };
+		68D7F26C1EC94CE400B13214 /* CompleteOrderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68D7F2691EC94CE400B13214 /* CompleteOrderViewController.m */; };
+		68D7F26D1EC94CE400B13214 /* CompleteOrderViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 68D7F26A1EC94CE400B13214 /* CompleteOrderViewController.xib */; };
+		68D7F26E1EC94CE400B13214 /* CompleteOrderViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 68D7F26A1EC94CE400B13214 /* CompleteOrderViewController.xib */; };
+		68D7F2711EC9833B00B13214 /* CompleteOrderContentTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 68D7F2701EC9833B00B13214 /* CompleteOrderContentTableViewCell.m */; };
+		68D7F2721EC9833B00B13214 /* CompleteOrderContentTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 68D7F2701EC9833B00B13214 /* CompleteOrderContentTableViewCell.m */; };
 		68DC2BAB1E487B28003573AC /* LoadingFooterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 68DC2BAA1E487B28003573AC /* LoadingFooterView.m */; };
 		68E401311E309B7700BFF66B /* TermsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68E4012F1E309B7700BFF66B /* TermsViewController.m */; };
 		68E401321E309B7700BFF66B /* TermsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 68E401301E309B7700BFF66B /* TermsViewController.xib */; };
@@ -614,6 +620,11 @@
 		68D7518F1E810A5800487088 /* MemberSettingsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = MemberSettingsViewController.xib; path = ViewControllers/Member/MemberSettingsViewController.xib; sourceTree = "<group>"; };
 		68D751921E812E4C00487088 /* MemberSettingsTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MemberSettingsTableViewCell.h; path = ViewControllers/Member/MemberSettingsTableViewCell.h; sourceTree = "<group>"; };
 		68D751931E812E4C00487088 /* MemberSettingsTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MemberSettingsTableViewCell.m; path = ViewControllers/Member/MemberSettingsTableViewCell.m; sourceTree = "<group>"; };
+		68D7F2681EC94CE400B13214 /* CompleteOrderViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CompleteOrderViewController.h; path = ViewControllers/Cart/CompleteOrderViewController.h; sourceTree = "<group>"; };
+		68D7F2691EC94CE400B13214 /* CompleteOrderViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CompleteOrderViewController.m; path = ViewControllers/Cart/CompleteOrderViewController.m; sourceTree = "<group>"; };
+		68D7F26A1EC94CE400B13214 /* CompleteOrderViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = CompleteOrderViewController.xib; path = ViewControllers/Cart/CompleteOrderViewController.xib; sourceTree = "<group>"; };
+		68D7F26F1EC9833B00B13214 /* CompleteOrderContentTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CompleteOrderContentTableViewCell.h; path = ViewControllers/Cart/CompleteOrderContentTableViewCell.h; sourceTree = "<group>"; };
+		68D7F2701EC9833B00B13214 /* CompleteOrderContentTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CompleteOrderContentTableViewCell.m; path = ViewControllers/Cart/CompleteOrderContentTableViewCell.m; sourceTree = "<group>"; };
 		68DC2BA91E487B28003573AC /* LoadingFooterView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LoadingFooterView.h; path = ViewControllers/ShoppingMall/LoadingFooterView.h; sourceTree = "<group>"; };
 		68DC2BAA1E487B28003573AC /* LoadingFooterView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LoadingFooterView.m; path = ViewControllers/ShoppingMall/LoadingFooterView.m; sourceTree = "<group>"; };
 		68E4012E1E309B7700BFF66B /* TermsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TermsViewController.h; path = ViewControllers/Login/TermsViewController.h; sourceTree = "<group>"; };
@@ -1059,6 +1070,11 @@
 				689D906D1EC00A3D0052C75A /* InvoiceDescriptionFooterView.m */,
 				68B76A321EC1978D003E4C41 /* SampleImageViewController.h */,
 				68B76A331EC1978D003E4C41 /* SampleImageViewController.m */,
+				68D7F2681EC94CE400B13214 /* CompleteOrderViewController.h */,
+				68D7F2691EC94CE400B13214 /* CompleteOrderViewController.m */,
+				68D7F26A1EC94CE400B13214 /* CompleteOrderViewController.xib */,
+				68D7F26F1EC9833B00B13214 /* CompleteOrderContentTableViewCell.h */,
+				68D7F2701EC9833B00B13214 /* CompleteOrderContentTableViewCell.m */,
 			);
 			name = Cart;
 			sourceTree = "<group>";
@@ -1505,6 +1521,7 @@
 				68B26FBA1E31CB5F00B6D757 /* RegisterViewController.xib in Resources */,
 				68A827A61E4DB62D00E63552 /* ProductDetailViewController.xib in Resources */,
 				6863A1DD1E5EBD3D0036E0A8 /* OrderListViewController.xib in Resources */,
+				68D7F26D1EC94CE400B13214 /* CompleteOrderViewController.xib in Resources */,
 				68CE498A1EADD283008F77D7 /* DiscountViewController.xib in Resources */,
 				68164D931E39D11F00006398 /* ProductListViewController.xib in Resources */,
 				6811BC751E27757100626A4A /* GoogleService-Info.plist in Resources */,
@@ -1531,6 +1548,7 @@
 			files = (
 				6884940A1EBC779A0087BC2B /* GoogleSignIn.bundle in Resources */,
 				6884940B1EBC779A0087BC2B /* ReceiverInfoViewController.xib in Resources */,
+				68D7F26E1EC94CE400B13214 /* CompleteOrderViewController.xib in Resources */,
 				6884940C1EBC779A0087BC2B /* CouponListViewController.xib in Resources */,
 				6884940D1EBC779A0087BC2B /* MemberViewController.xib in Resources */,
 				6884940E1EBC779A0087BC2B /* HotSaleViewController.xib in Resources */,
@@ -1784,6 +1802,7 @@
 				68B68FFD1E24C45600DCCF29 /* PromotionTableViewCell.m in Sources */,
 				6890650E1E23334400E5CB26 /* EntranceViewController.m in Sources */,
 				689678AF1E8BB73A00669A22 /* LabelButtonView.m in Sources */,
+				68D7F2711EC9833B00B13214 /* CompleteOrderContentTableViewCell.m in Sources */,
 				68164D961E39E44400006398 /* ExtraSubcategorySeeAllTableViewCell.m in Sources */,
 				68CE49891EADD283008F77D7 /* DiscountViewController.m in Sources */,
 				685939E51E1F4E1700351FFB /* SHAPIAdapter.m in Sources */,
@@ -1805,6 +1824,7 @@
 				68A827AC1E4DC52700E63552 /* ProductListTitleView.m in Sources */,
 				68968EB71E51AD6300419619 /* ProductFilterTextCollectionViewCell.m in Sources */,
 				68ACE8931E56DE3000A821DA /* SearchHeaderCollectionReusableView.m in Sources */,
+				68D7F26B1EC94CE400B13214 /* CompleteOrderViewController.m in Sources */,
 				68CA36B81E23722F00A70BCC /* EntranceMemberPromoteHeader.m in Sources */,
 				689F664A1E5AC56400CC3664 /* ProductDetailBottomBar.m in Sources */,
 				680957721E43051C00DA2BEA /* ProductSubcategoryCollectionViewCell.m in Sources */,
@@ -1896,6 +1916,7 @@
 				688493941EBC779A0087BC2B /* PromotionDetailViewController.m in Sources */,
 				688493951EBC779A0087BC2B /* AdditionalProductCollectionViewCell.m in Sources */,
 				688493961EBC779A0087BC2B /* AdditionalPurchaseViewController.m in Sources */,
+				68D7F26C1EC94CE400B13214 /* CompleteOrderViewController.m in Sources */,
 				688493971EBC779A0087BC2B /* ImageTitleButton.m in Sources */,
 				688493981EBC779A0087BC2B /* CryptoTool.m in Sources */,
 				688493991EBC779A0087BC2B /* WebViewViewController.m in Sources */,
@@ -1980,6 +2001,7 @@
 				688493E81EBC779A0087BC2B /* ProductTableViewCell.m in Sources */,
 				688493E91EBC779A0087BC2B /* CartProductTableViewCell.m in Sources */,
 				688493EA1EBC779A0087BC2B /* LoginViewController.m in Sources */,
+				68D7F2721EC9833B00B13214 /* CompleteOrderContentTableViewCell.m in Sources */,
 				688493EB1EBC779A0087BC2B /* TermsViewController.m in Sources */,
 				688493EC1EBC779A0087BC2B /* MemberSettingsTableViewCell.m in Sources */,
 				688493ED1EBC779A0087BC2B /* LocalizedString.m in Sources */,

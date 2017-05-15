@@ -106,15 +106,12 @@
 {
     if (_label == nil)
     {
-        if (_label == nil)
-        {
-            _label = [[DTAttributedLabel alloc] initWithFrame:CGRectZero];
-            _label.layoutFrameHeightIsConstrainedByBounds = NO;
-            _label.shouldDrawLinks = YES;
-            _label.shouldDrawImages = YES;
-            _label.delegate = self;
-            _label.backgroundColor = [UIColor clearColor];
-        }
+        _label = [[DTAttributedLabel alloc] initWithFrame:CGRectZero];
+        _label.layoutFrameHeightIsConstrainedByBounds = NO;
+        _label.shouldDrawLinks = YES;
+        _label.shouldDrawImages = YES;
+        _label.delegate = self;
+        _label.backgroundColor = [UIColor clearColor];
     }
     return _label;
 }

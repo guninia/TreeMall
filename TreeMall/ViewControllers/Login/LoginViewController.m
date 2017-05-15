@@ -211,7 +211,7 @@
     CGFloat columnOriginX = ceil((self.view.frame.size.width - columnSize.width)/2);
     CGFloat vInterval = 10.0 * sizeRatio.height;
     
-    CGFloat originY = 20.0 * sizeRatio.height;
+    CGFloat originY = 80.0 * sizeRatio.height;
     if (_imageViewLogo != nil)
     {
         CGRect frame = _imageViewLogo.frame;
