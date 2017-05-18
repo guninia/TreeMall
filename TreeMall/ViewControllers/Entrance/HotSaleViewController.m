@@ -7,18 +7,24 @@
 //
 
 #import "HotSaleViewController.h"
-#import "HotSaleTableViewCell.h"
 #import "CryptoModule.h"
 #import "APIDefinition.h"
 #import "SHAPIAdapter.h"
 #import "ProductDetailViewController.h"
 #import "LocalizedString.h"
+#import "TMInfoManager.h"
 
 @interface HotSaleViewController ()
 
 - (void)retrieveDataForType:(HotSaleType)type;
 - (BOOL)processData:(id)data;
+- (NSMutableDictionary *)dictionaryCommonFromHotSale:(NSDictionary *)dictionary;
+- (void)addProduct:(NSDictionary *)product toCart:(CartType)cartType named:(NSString *)cartName;
+- (void)addFavoriteProduct:(NSDictionary *)product;
+
+- (BOOL)processData:(id)data;
 - (void)buttonItemPressed:(id)sender;
+
 @end
 
 @implementation HotSaleViewController
@@ -175,6 +181,122 @@
     return success;
 }
 
+- (NSMutableDictionary *)dictionaryCommonFromHotSale:(NSDictionary *)dictionary
+{
+    if (dictionary == nil)
+        return nil;
+    NSMutableDictionary *dictionaryCommon = [NSMutableDictionary dictionary];
+    
+    NSNumber *cpdt_num = [dictionary objectForKey:SymphoxAPIParam_cpdt_num];
+    if (cpdt_num)
+    {
+        [dictionaryCommon setObject:cpdt_num forKey:SymphoxAPIParam_cpdt_num];
+    }
+    NSString *cpdt_name = [dictionary objectForKey:SymphoxAPIParam_cpdt_name];
+    if (cpdt_name)
+    {
+        [dictionaryCommon setObject:cpdt_name forKey:SymphoxAPIParam_cpdt_name];
+    }
+    NSString *pic_link = [dictionary objectForKey:SymphoxAPIParam_pic_link];
+    if (pic_link)
+    {
+        [dictionaryCommon setObject:pic_link forKey:SymphoxAPIParam_prod_pic_url];
+    }
+    NSString *cpro_price = [dictionary objectForKey:SymphoxAPIParam_cpro_price];
+    if (cpro_price)
+    {
+        [dictionaryCommon setObject:cpro_price forKey:SymphoxAPIParam_cpro_price];
+    }
+    NSNumber *pure_price = [dictionary objectForKey:SymphoxAPIParam_pure_price];
+    if (pure_price)
+    {
+        [dictionaryCommon setObject:pure_price forKey:SymphoxAPIParam_price03];
+    }
+    NSNumber *pure_point = [dictionary objectForKey:SymphoxAPIParam_pure_point];
+    if (pure_point)
+    {
+        [dictionaryCommon setObject:pure_point forKey:SymphoxAPIParam_point01];
+    }
+    NSNumber *mix_price = [dictionary objectForKey:SymphoxAPIParam_mix_price];
+    if (mix_price)
+    {
+        [dictionaryCommon setObject:mix_price forKey:SymphoxAPIParam_price02];
+    }
+    NSNumber *mix_point = [dictionary objectForKey:SymphoxAPIParam_mix_point];
+    if (mix_point)
+    {
+        [dictionaryCommon setObject:mix_point forKey:SymphoxAPIParam_point02];
+    }
+    
+    BOOL common = NO;
+    BOOL store = NO;
+    BOOL fast = NO;
+    BOOL direct = NO;
+    NSArray *can_used_cart = [dictionary objectForKey:SymphoxAPIParam_can_used_cart];
+    if (can_used_cart && [can_used_cart isEqual:[NSNull null]] == NO)
+    {
+        for (NSString *type in can_used_cart)
+        {
+            switch ([type integerValue]) {
+                case CartTypeCommonDelivery:
+                {
+                    common = YES;
+                }
+                    break;
+                case CartTypeStorePickup:
+                {
+                    store = YES;
+                }
+                    break;
+                case CartTypeFastDelivery:
+                {
+                    fast = YES;
+                }
+                    break;
+                case CartTypeDirectlyPurchase:
+                {
+                    direct = YES;
+                }
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+    NSNumber *numberCommon = [NSNumber numberWithBool:common];
+    NSNumber *numberStore = [NSNumber numberWithBool:store];
+    NSNumber *numberFast = [NSNumber numberWithBool:fast];
+    NSNumber *numberDirect = [NSNumber numberWithBool:direct];
+    
+    [dictionaryCommon setObject:numberCommon forKey:SymphoxAPIParam_normal_cart];
+    [dictionaryCommon setObject:numberStore forKey:SymphoxAPIParam_to_store_cart];
+    [dictionaryCommon setObject:numberFast forKey:SymphoxAPIParam_fast_delivery_cart];
+    [dictionaryCommon setObject:numberDirect forKey:SymphoxAPIParam_single_shopping_cart];
+    return dictionaryCommon;
+}
+
+- (void)addProduct:(NSDictionary *)product toCart:(CartType)cartType named:(NSString *)cartName
+{
+    NSMutableDictionary *dictionaryCommon = [self dictionaryCommonFromHotSale:product];
+    [[TMInfoManager sharedManager] addProduct:dictionaryCommon toCartForType:cartType];
+    
+    NSString *message = [NSString stringWithFormat:[LocalizedString AddedTo_S_], cartName];
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:message preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *action = [UIAlertAction actionWithTitle:[LocalizedString Confirm] style:UIAlertActionStyleDefault handler:nil];
+    [alertController addAction:action];
+    [self presentViewController:alertController animated:YES completion:nil];
+}
+
+- (void)addFavoriteProduct:(NSDictionary *)product
+{
+    NSMutableDictionary *dictionaryCommon = [self dictionaryCommonFromHotSale:product];
+    NSString *message = [[TMInfoManager sharedManager] addProductToFavorite:dictionaryCommon];
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:message preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *action = [UIAlertAction actionWithTitle:[LocalizedString Confirm] style:UIAlertActionStyleDefault handler:nil];
+    [alertController addAction:action];
+    [self presentViewController:alertController animated:YES completion:nil];
+}
+
 #pragma mark - Actions
 
 - (void)buttonItemPressed:(id)sender
@@ -205,11 +327,19 @@
 {
     HotSaleTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:HotSaleTableViewCellIdentifier forIndexPath:indexPath];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    cell.tag = indexPath.row;
+    if (cell.delegate == nil)
+    {
+        cell.delegate = self;
+    }
     
     NSString *textRank = @"";
     NSString *title = @"";
-    NSString *textPrice = @"";
     NSURL *imageUrl = nil;
+    NSNumber *price = nil;
+    NSNumber *point = nil;
+    BOOL isFavorite = NO;
+    
     if (indexPath.row < [self.arrayProducts count])
     {
         NSDictionary *dictionary = [self.arrayProducts objectAtIndex:indexPath.row];
@@ -227,15 +357,7 @@
         {
             title = cpdt_name;
         }
-        NSNumber *cpdt_price = [dictionary objectForKey:SymphoxAPIParam_cpdt_price];
-        if (cpdt_price && [cpdt_price isEqual:[NSNull null]] == NO)
-        {
-            NSString *stringPrice = [self.formatter stringFromNumber:cpdt_price];
-            if (stringPrice)
-            {
-                textPrice = [NSString stringWithFormat:@"＄%@", stringPrice];
-            }
-        }
+        
         NSString *pic_link = [dictionary objectForKey:SymphoxAPIParam_pic_link];
         if (pic_link && [pic_link isEqual:[NSNull null]] == NO && [pic_link length] > 0)
         {
@@ -245,11 +367,42 @@
                 imageUrl = url;
             }
         }
+        
+        NSNumber *pure_price = [dictionary objectForKey:SymphoxAPIParam_pure_price];
+        NSNumber *pure_point = [dictionary objectForKey:SymphoxAPIParam_pure_point];
+        NSNumber *mix_price = [dictionary objectForKey:SymphoxAPIParam_mix_price];
+        NSNumber *mix_point = [dictionary objectForKey:SymphoxAPIParam_mix_point];
+        if (pure_price && [pure_price isEqual:[NSNull null]] == NO)
+        {
+            price = pure_price;
+        }
+        else if (pure_point && [pure_point isEqual:[NSNull null]] == NO)
+        {
+            point = pure_point;
+        }
+        else
+        {
+            if (mix_price && [mix_price isEqual:[NSNull null]] == NO)
+            {
+                price = mix_price;
+            }
+            if (mix_point && [mix_point isEqual:[NSNull null]] == NO)
+            {
+                point = mix_point;
+            }
+        }
+        NSNumber *cpdt_num = [dictionary objectForKey:SymphoxAPIParam_cpdt_num];
+        if (cpdt_num && [cpdt_num isEqual:[NSNull null]] == NO)
+        {
+            isFavorite = [[TMInfoManager sharedManager] favoriteContainsProductWithIdentifier:cpdt_num];
+        }
     }
-    cell.labelTag.text = textRank;
     cell.labelTitle.text = title;
-    cell.labelPrice.text = textPrice;
+    cell.price = price;
+    cell.point = point;
+    cell.labelTag.text = textRank;
     cell.imageUrl = imageUrl;
+    cell.favorite = isFavorite;
     return cell;
 }
 
@@ -257,7 +410,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    CGFloat heightForRow = 160.0;
+    CGFloat heightForRow = 170.0;
     return heightForRow;
 }
 
@@ -275,6 +428,74 @@
             [self.navigationController pushViewController:viewController animated:YES];
         }
     }
+}
+
+#pragma mark - HotSaleTableViewCellDelegate
+
+- (void)hotSaleTableViewCell:(HotSaleTableViewCell *)cell didPressAddToCartBySender:(id)sender
+{
+    if (cell.tag >= [self.arrayProducts count])
+        return;
+    NSDictionary *dictionary = [self.arrayProducts objectAtIndex:cell.tag];
+    NSArray *carts = [dictionary objectForKey:SymphoxAPIParam_can_used_cart];
+    if (carts == nil || [carts isEqual:[NSNull null]])
+        return;
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:[LocalizedString AddToCart] message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+    for (NSString *stringType in carts)
+    {
+        CartType type = CartTypeTotal;
+        NSString *title = nil;
+        switch ([stringType integerValue]) {
+            case CartTypeCommonDelivery:
+            {
+                // Common delivery
+                title = [LocalizedString CommonDelivery];
+                type = CartTypeCommonDelivery;
+            }
+                break;
+            case CartTypeStorePickup:
+            {
+                // Convenience Store
+                title = [LocalizedString StorePickUp];
+                type = CartTypeStorePickup;
+            }
+                break;
+            case CartTypeFastDelivery:
+            {
+                // Fast delivery
+                title = [LocalizedString FastDelivery];
+                type = CartTypeFastDelivery;
+            }
+                break;
+            default:
+                break;
+        }
+        
+        __weak HotSaleViewController *weakSelf = self;
+        UIAlertAction *action = [UIAlertAction actionWithTitle:title style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
+            [weakSelf addProduct:dictionary toCart:type named:title];
+        }];
+        [alertController addAction:action];
+    }
+    UIAlertAction *actionCancel = [UIAlertAction actionWithTitle:[LocalizedString Cancel] style:UIAlertActionStyleCancel handler:nil];
+    [alertController addAction:actionCancel];
+    [self presentViewController:alertController animated:YES completion:nil];
+}
+
+- (void)hotSaleTableViewCell:(HotSaleTableViewCell *)cell didPressFavoriteBySender:(id)sender
+{
+    if (cell.tag >= [self.arrayProducts count])
+        return;
+    NSDictionary *dictionary = [self.arrayProducts objectAtIndex:cell.tag];
+    [self addFavoriteProduct:dictionary];
+    
+    BOOL isFavorite = NO;
+    NSNumber *cpdt_num = [dictionary objectForKey:SymphoxAPIParam_cpdt_num];
+    if (cpdt_num && [cpdt_num isEqual:[NSNull null]] == NO)
+    {
+        isFavorite = [[TMInfoManager sharedManager] favoriteContainsProductWithIdentifier:cpdt_num];
+    }
+    cell.favorite = isFavorite;
 }
 
 @end

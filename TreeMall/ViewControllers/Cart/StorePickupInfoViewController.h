@@ -10,8 +10,9 @@
 #import <DTCoreText.h>
 #import "TMInfoManager.h"
 #import "ReceiverInfoCell.h"
+#import "StorePickupWebViewController.h"
 
-@interface StorePickupInfoViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, DTAttributedTextContentViewDelegate, UIPopoverPresentationControllerDelegate, ReceiverInfoCellDelegate>
+@interface StorePickupInfoViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, DTAttributedTextContentViewDelegate, UIPopoverPresentationControllerDelegate, ReceiverInfoCellDelegate, StorePickupWebViewControllerDelegate>
 
 @property (nonatomic, assign) CartType type;
 @property (nonatomic, strong) NSMutableDictionary *dictionaryInstallment;

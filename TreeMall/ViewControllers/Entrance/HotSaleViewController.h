@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "HotSaleTableViewCell.h"
 
 typedef enum : NSUInteger {
     HotSaleTypeHall,
@@ -14,7 +15,7 @@ typedef enum : NSUInteger {
     HotSaleTypeCoupon,
 } HotSaleType;
 
-@interface HotSaleViewController : UIViewController <UITableViewDataSource, UITableViewDelegate>
+@interface HotSaleViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, HotSaleTableViewCellDelegate>
 
 @property (nonatomic, strong) UITableView *tableView;
 

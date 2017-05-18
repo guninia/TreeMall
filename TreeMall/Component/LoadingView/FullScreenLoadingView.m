@@ -8,6 +8,12 @@
 
 #import "FullScreenLoadingView.h"
 
+@interface FullScreenLoadingView ()
+
+@property (nonatomic, assign) UIActivityIndicatorViewStyle indicatorStyle;
+
+@end
+
 @implementation FullScreenLoadingView
 
 /*
@@ -23,6 +29,19 @@
     self = [super initWithFrame:frame];
     if (self)
     {
+        _indicatorStyle = UIActivityIndicatorViewStyleWhite;
+        _indicatorCenter = CGPointMake(CGRectGetMidX(self.bounds), CGRectGetMidY(self.bounds));
+        [self addSubview:self.activityIndicator];
+    }
+    return self;
+}
+
+- (instancetype)initWithFrame:(CGRect)frame withActivityIndicatorStyle:(UIActivityIndicatorViewStyle)style
+{
+    self = [super initWithFrame:frame];
+    if (self)
+    {
+        _indicatorStyle = style;
         _indicatorCenter = CGPointMake(CGRectGetMidX(self.bounds), CGRectGetMidY(self.bounds));
         [self addSubview:self.activityIndicator];
     }
@@ -44,7 +63,7 @@
 {
     if (_activityIndicator == nil)
     {
-        _activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
+        _activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:self.indicatorStyle];
         [_activityIndicator setHidesWhenStopped:YES];
     }
     return _activityIndicator;

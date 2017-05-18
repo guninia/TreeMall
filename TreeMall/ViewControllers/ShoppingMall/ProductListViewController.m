@@ -306,8 +306,8 @@
             if ([resultObject isKindOfClass:[NSData class]])
             {
                 NSData *data = (NSData *)resultObject;
-//                NSString *string = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-//                NSLog(@"retrieveProductsForConditions:\n%@", string);
+                NSString *string = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+                NSLog(@"retrieveProductsForConditions:\n%@", string);
                 if ([weakSelf processProductsData:data byRefreshing:refresh] == NO)
                 {
                     weakSelf.tableViewProduct.backgroundView = self.tableBackgroundView;

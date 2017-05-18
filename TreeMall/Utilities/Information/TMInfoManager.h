@@ -46,6 +46,7 @@ typedef enum : NSUInteger {
     CartTypeCommonDelivery = CartTypeStart,
     CartTypeStorePickup,
     CartTypeFastDelivery,
+    CartTypeDirectlyPurchase,
     CartTypeTotal
 } CartType;
 

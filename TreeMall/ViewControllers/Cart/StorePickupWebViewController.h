@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <WebKit/WebKit.h>
 
 typedef enum : NSUInteger {
     ConvenienceStoreGroupSevenEleven,
@@ -14,8 +15,17 @@ typedef enum : NSUInteger {
     ConvenienceStoreGroupTotal
 } ConvenienceStoreGroup;
 
-@interface StorePickupWebViewController : UIViewController <UIWebViewDelegate>
+@class StorePickupWebViewController;
 
+@protocol StorePickupWebViewControllerDelegate <NSObject>
+
+- (void)storePickupWebViewController:(StorePickupWebViewController *)viewController didSelectStoreWithDictionary:(NSDictionary *)storeDictionary;
+
+@end
+
+@interface StorePickupWebViewController : UIViewController <UIWebViewDelegate, WKUIDelegate, WKNavigationDelegate>
+
+@property (nonatomic, weak) id <StorePickupWebViewControllerDelegate> delegate;
 @property (nonatomic, assign) ConvenienceStoreGroup group;
 
 @end

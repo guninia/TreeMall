@@ -13,4 +13,6 @@
 @property (nonatomic, strong) UIActivityIndicatorView *activityIndicator;
 @property (nonatomic, assign) CGPoint indicatorCenter;
 
+- (instancetype)initWithFrame:(CGRect)frame withActivityIndicatorStyle:(UIActivityIndicatorViewStyle)style;
+
 @end

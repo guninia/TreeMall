@@ -8,6 +8,16 @@
 
 #import "HotSaleTableViewCell.h"
 #import <UIImageView+WebCache.h>
+#import "LocalizedString.h"
+
+@interface HotSaleTableViewCell ()
+
+- (void)checkPriceAndPointSeparatorState;
+
+- (void)buttonAddToCartPressed:(id)sender;
+- (void)buttonFavoritePressed:(id)sender;
+
+@end
 
 @implementation HotSaleTableViewCell
 
@@ -24,6 +34,8 @@
         [self.viewContainer addSubview:self.labelTitle];
         [self.viewContainer addSubview:self.separator];
         [self.viewContainer addSubview:self.labelPrice];
+        [self.viewContainer addSubview:self.buttonAddToCart];
+        [self.viewContainer addSubview:self.buttonFavorite];
     }
     return self;
 }
@@ -95,20 +107,66 @@
         self.separator.frame = frame;
         originY = self.separator.frame.origin.y + self.separator.frame.size.height + intervalV;
     }
-    if (self.labelPrice)
-    {
-        CGSize sizeText = [self.labelPrice.text sizeWithAttributes:[NSDictionary dictionaryWithObjectsAndKeys:self.labelPrice.font, NSFontAttributeName, nil]];
-        CGSize sizeLabel = CGSizeMake(ceil(sizeText.width), ceil(sizeText.height));
-        CGRect frame = CGRectMake(marginH, originY, self.viewContainer.frame.size.width - marginH * 2, sizeLabel.height);
-        self.labelPrice.frame = frame;
-    }
-    
     if (self.labelTitle)
     {
         CGFloat height = self.separator.frame.origin.y - intervalV - marginV;
         CGFloat width = self.viewContainer.frame.size.width - marginH - originX;
         CGRect frame = CGRectMake(originX, marginV, width, height);
         self.labelTitle.frame = frame;
+    }
+    
+    CGFloat priceBottom = originY;
+    CGFloat labelOriginX = marginH;
+    if (self.labelPrice && [self.labelPrice isHidden] == NO)
+    {
+        NSDictionary *attributes = [NSDictionary dictionaryWithObjectsAndKeys:self.labelPrice.font, NSFontAttributeName, nil];
+        CGSize textSize = [self.labelPrice.text sizeWithAttributes:attributes];
+        CGSize labelSize = CGSizeMake(ceil(textSize.width), ceil(textSize.height));
+        CGRect frame = CGRectMake(labelOriginX, originY, labelSize.width, labelSize.height);
+        self.labelPrice.frame = frame;
+        labelOriginX = self.labelPrice.frame.origin.x + self.labelPrice.frame.size.width + intervalH;
+        priceBottom = self.labelPrice.frame.origin.y + self.labelPrice.frame.size.height;
+    }
+    if (self.labelSeparator && [self.labelSeparator isHidden] == NO)
+    {
+        NSDictionary *attributes = [NSDictionary dictionaryWithObjectsAndKeys:self.labelSeparator.font, NSFontAttributeName, nil];
+        CGSize textSize = [self.labelSeparator.text sizeWithAttributes:attributes];
+        CGSize labelSize = CGSizeMake(ceil(textSize.width), ceil(textSize.height));
+        CGRect frame = CGRectMake(labelOriginX, ((priceBottom > originY)?(priceBottom - labelSize.height - 4.0):originY), labelSize.width, labelSize.height);
+        self.labelSeparator.frame = frame;
+        labelOriginX = self.labelSeparator.frame.origin.x + self.labelSeparator.frame.size.width + intervalH;
+    }
+    if (self.labelPoint && [self.labelPoint isHidden] == NO)
+    {
+        NSDictionary *attributes = [NSDictionary dictionaryWithObjectsAndKeys:self.labelPoint.font, NSFontAttributeName, nil];
+        CGSize textSize = [self.labelPoint.text sizeWithAttributes:attributes];
+        CGSize labelSize = CGSizeMake(ceil(textSize.width), ceil(textSize.height));
+        CGRect frame = CGRectMake(labelOriginX, ((priceBottom > originY)?(priceBottom - labelSize.height - 4.0):originY), labelSize.width, labelSize.height);
+        self.labelPoint.frame = frame;
+        labelOriginX = self.labelPoint.frame.origin.x + self.labelPoint.frame.size.width + intervalH;
+    }
+    
+    if (self.buttonAddToCart && [self.buttonAddToCart isHidden] == NO)
+    {
+        CGSize size = CGSizeMake(30.0, 30.0);
+        UIImage *image = [self.buttonAddToCart imageForState:UIControlStateNormal];
+        if (image)
+        {
+            size = image.size;
+        }
+        CGRect frame = CGRectMake((self.viewContainer.frame.size.width - marginH - size.width), originY, size.width, size.height);
+        self.buttonAddToCart.frame = frame;
+    }
+    if (self.buttonFavorite && [self.buttonFavorite isHidden] == NO)
+    {
+        CGSize size = CGSizeMake(30.0, 30.0);
+        UIImage *image = [self.buttonFavorite imageForState:UIControlStateNormal];
+        if (image)
+        {
+            size = image.size;
+        }
+        CGRect frame = CGRectMake((CGRectGetMinX(self.buttonAddToCart.frame) - intervalH - size.width), originY, size.width, size.height);
+        self.buttonFavorite.frame = frame;
     }
 }
 
@@ -196,10 +254,72 @@
         _labelPrice = [[UILabel alloc] initWithFrame:CGRectZero];
         [_labelPrice setBackgroundColor:[UIColor clearColor]];
         [_labelPrice setTextColor:[UIColor redColor]];
-        UIFont *font = [UIFont systemFontOfSize:18.0];
+        UIFont *font = [UIFont systemFontOfSize:22.0];
         [_labelPrice setFont:font];
     }
     return _labelPrice;
+}
+
+- (UILabel *)labelSeparator
+{
+    if (_labelSeparator == nil)
+    {
+        _labelSeparator = [[UILabel alloc] initWithFrame:CGRectZero];
+        UIFont *font = [UIFont systemFontOfSize:18.0];
+        [_labelSeparator setFont:font];
+        [_labelSeparator setTextColor:[UIColor lightGrayColor]];
+        [_labelSeparator setBackgroundColor:[UIColor clearColor]];
+        [_labelSeparator setText:@"/"];
+    }
+    return _labelSeparator;
+}
+
+- (UILabel *)labelPoint
+{
+    if (_labelPoint == nil)
+    {
+        _labelPoint = [[UILabel alloc] initWithFrame:CGRectZero];
+        UIFont *font = [UIFont systemFontOfSize:18.0];
+        [_labelPoint setFont:font];
+        [_labelPoint setTextColor:[UIColor redColor]];
+        [_labelPoint setBackgroundColor:[UIColor clearColor]];
+    }
+    return _labelPoint;
+}
+
+- (UIButton *)buttonAddToCart
+{
+    if (_buttonAddToCart == nil)
+    {
+        _buttonAddToCart = [[UIButton alloc] initWithFrame:CGRectZero];
+        UIImage *image = [UIImage imageNamed:@"sho_ico_car"];
+        if (image)
+        {
+            [_buttonAddToCart setImage:image forState:UIControlStateNormal];
+        }
+        [_buttonAddToCart addTarget:self action:@selector(buttonAddToCartPressed:) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _buttonAddToCart;
+}
+
+- (UIButton *)buttonFavorite
+{
+    if (_buttonFavorite == nil)
+    {
+        _buttonFavorite = [[UIButton alloc] initWithFrame:CGRectZero];
+        UIImage *image = [UIImage imageNamed:@"btn_heart_off"];
+        if (image)
+        {
+            [_buttonFavorite setImage:image forState:UIControlStateNormal];
+        }
+        UIImage *selectedImage = [UIImage imageNamed:@"btn_heart_on"];
+        if (selectedImage)
+        {
+            [_buttonFavorite setImage:selectedImage forState:UIControlStateSelected];
+        }
+        [_buttonFavorite addTarget:self action:@selector(buttonFavoritePressed:) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _buttonFavorite;
 }
 
 - (void)setImageUrl:(NSURL *)imageUrl
@@ -220,6 +340,100 @@
             });
         }
     }];
+}
+
+- (void)setPrice:(NSNumber *)price
+{
+    if ([price isEqual:[NSNull null]])
+    {
+        price = nil;
+    }
+    if (price == nil || [price doubleValue] == 0)
+    {
+        [self.labelPrice setHidden:YES];
+    }
+    else
+    {
+        [self.labelPrice setHidden:NO];
+        if (_price == nil || ([price integerValue] != [_price integerValue]))
+        {
+            NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
+            [formatter setNumberStyle:NSNumberFormatterDecimalStyle];
+            NSString *formattedString = [formatter stringFromNumber:price];
+            NSString *priceString = [NSString stringWithFormat:@"$%@", formattedString];
+            [self.labelPrice setText:priceString];
+        }
+    }
+    _price = price;
+    [self checkPriceAndPointSeparatorState];
+    [self setNeedsLayout];
+}
+
+- (void)setPoint:(NSNumber *)point
+{
+    if ([point isEqual:[NSNull null]])
+    {
+        point = nil;
+    }
+    if (point == nil || [point doubleValue] == 0)
+    {
+        [self.labelPoint setHidden:YES];
+    }
+    else
+    {
+        [self.labelPoint setHidden:NO];
+        if (_point == nil || ([point integerValue] != [_point integerValue]))
+        {
+            NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
+            [formatter setNumberStyle:NSNumberFormatterDecimalStyle];
+            NSString *formattedString = [formatter stringFromNumber:point];
+            NSString *pointString = [[NSString stringWithFormat:@"%@", formattedString] stringByAppendingString:[LocalizedString Point]];
+            [self.labelPoint setText:pointString];
+        }
+    }
+    _point = point;
+    [self checkPriceAndPointSeparatorState];
+    [self setNeedsLayout];
+}
+
+- (void)setFavorite:(BOOL)favorite
+{
+    _favorite = favorite;
+    
+    __weak HotSaleTableViewCell *weakSelf = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [weakSelf.buttonFavorite setSelected:_favorite];
+    });
+}
+
+#pragma mark - Private Methods
+
+- (void)checkPriceAndPointSeparatorState
+{
+    if ([self.labelPrice isHidden] == NO && [self.labelPoint isHidden] == NO)
+    {
+        [self.labelSeparator setHidden:NO];
+        return;
+    }
+    [self.labelSeparator setHidden:YES];
+}
+
+#pragma mark - Actions
+
+- (void)buttonAddToCartPressed:(id)sender
+{
+    if (_delegate && [_delegate respondsToSelector:@selector(hotSaleTableViewCell:didPressAddToCartBySender:)])
+    {
+        [_delegate hotSaleTableViewCell:self didPressAddToCartBySender:sender];
+    }
+}
+
+- (void)buttonFavoritePressed:(id)sender
+{
+    if (_delegate && [_delegate respondsToSelector:@selector(hotSaleTableViewCell:didPressFavoriteBySender:)])
+    {
+        [_delegate hotSaleTableViewCell:self didPressFavoriteBySender:sender];
+    }
 }
 
 @end

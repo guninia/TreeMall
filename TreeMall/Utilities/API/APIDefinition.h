@@ -12,52 +12,97 @@
 #import <Foundation/Foundation.h>
 
 #ifdef DEBUG
-static NSString *SymphoxAPI_token = @"http://tomcat8.mdevelop.com/TreeMall/api/portal/app/token";
-static NSString *SymphoxAPI_homepage = @"http://tomcat8.mdevelop.com/TreeMall/api/onlineService.do";
-static NSString *SymphoxAPI_getHotSaleProducts = @"http://tomcat8.mdevelop.com/TreeMall/api/eiffel/amway/default";
-static NSString *SymphoxAPI_promotion = @"http://tomcat8.mdevelop.com/TreeMall/api/onlineService.do";
-static NSString *SymphoxAPI_register = @"http://tomcat8.mdevelop.com/TreeMall/api/portal/app/member/register";
-static NSString *SymphoxAPI_login = @"http://tomcat8.mdevelop.com/TreeMall/api/portal/app/member/identify";
-static NSString *SymphoxAPI_terms = @"http://tomcat8.mdevelop.com/TreeMall/api/onlineService.do";
-static NSString *SymphoxAPI_forgetPassword = @"http://tomcat8.mdevelop.com/TreeMall/api/portal/app/member/password/forget";
-static NSString *SymphoxAPI_mobileVerification = @"http://tomcat8.mdevelop.com/TreeMall/api/portal/app/member/verify/mobile";
-static NSString *SymphoxAPI_authenticationCreditCard = @"http://tomcat8.mdevelop.com/TreeMall/authId/bank.do";
-static NSString *SymphoxAPI_authenticationEmployee = @"http://tomcat8.mdevelop.com/TreeMall/authId/employee.do";
-static NSString *SymphoxAPI_authenticationCathayCustomer = @"http://tomcat8.mdevelop.com/TreeMall/authId/cathay.do";
-static NSString *SymphoxAPI_editContacts = @"http://tomcat8.mdevelop.com/TreeMall/contacts/edit.do";
-static NSString *SymphoxAPI_editBasicInfo = @"http://tomcat8.mdevelop.com/TreeMall/memberInfo/edit.do";
-static NSString *SymphoxAPI_MainCategories = @"http://tomcat8.mdevelop.com/TreeMall/api/onlineService.do";
-static NSString *SymphoxAPI_Subcategories = @"http://tomcat8.mdevelop.com/TreeMall/api/portal/app/mall/hall";
-static NSString *SymphoxAPI_Search = @"http://tomcat8.mdevelop.com/TreeMall/api/eiffel/search/treemall";
-static NSString *SymphoxAPI_mainCategoryNameMapping = @"http://tomcat8.mdevelop.com/TreeMall/api/onlineService.do";
-static NSString *SymphoxAPI_hotKeywords = @"http://tomcat8.mdevelop.com/TreeMall/api/portal/app/mall/keyword";
-static NSString *SymphoxAPI_memberInformation = @"http://tomcat8.mdevelop.com/TreeMall/api/portal/app/member/info";
-static NSString *SymphoxAPI_memberPoint = @"http://tomcat8.mdevelop.com/TreeMall/api/portal/app/member/point";
-static NSString *SymphoxAPI_memberCoupon = @"http://tomcat8.mdevelop.com/TreeMall/api/portal/app/member/ecoupon";
-static NSString *SymphoxAPI_productDetail = @"http://tomcat8.mdevelop.com/TreeMall/api/portal/app/mall/product";
-static NSString *SymphoxAPI_memberOrder = @"http://tomcat8.mdevelop.com/TreeMall/api/portal/app/member/order";
-static NSString *SymphoxAPI_emailAuth = @"http://tomcat8.mdevelop.com/TreeMall/api/portal/app/member/verify/email";
-static NSString *SymphoxAPI_changePassword = @"http://tomcat8.mdevelop.com/TreeMall/api/portal/app/member/password/update";
-static NSString *SymphoxAPI_newsletter = @"http://tomcat8.mdevelop.com/TreeMall/api/portal/app/member/edm";
-static NSString *SymphoxAPI_subscribeNewsletter = @"http://tomcat8.mdevelop.com/TreeMall/api/portal/app/member/edm/update";
-static NSString *SymphoxAPI_orderNumberOfStatus = @"http://tomcat8.mdevelop.com/TreeMall/api/portal/app/member/order/status";
-static NSString *SymphoxAPI_checkProductAvailable = @"http://tomcat8.mdevelop.com/TreeMall/api/eiffel/appShoppingCart/addToCart";
-static NSString *SymphoxAPI_renewProductConditions = @"http://tomcat8.mdevelop.com/TreeMall/api/eiffel/appShoppingCart/goToCart";
-static NSString *SymphoxAPI_checkAdditionalPurchase = @"http://tomcat8.mdevelop.com/TreeMall/api/eiffel/appShoppingCart/additionalPurchase";
-static NSString *SymphoxAPI_finalCheckProductsInCart = @"http://tomcat8.mdevelop.com/TreeMall/api/eiffel/appShoppingCart/checkCart";
-static NSString *SymphoxAPI_getBuyNowDeliveryInfo = @"http://tomcat8.mdevelop.com/TreeMall/api/eiffel/appOrder/oneClickBuyDelivery";
-static NSString *SymphoxAPI_checkPayment = @"http://tomcat8.mdevelop.com/TreeMall/api/eiffel/appShoppingCart/checkPayment";
-static NSString *SymphoxAPI_getDeliverInfo = @"http://tomcat8.mdevelop.com/TreeMall/api/eiffel/appOrder/delivery";
-static NSString *SymphoxAPI_getContactInfo = @"http://tomcat8.mdevelop.com/TreeMall/api/portal/app/member/contact";
-static NSString *SymphoxAPI_getDistrictInfo = @"http://tomcat8.mdevelop.com/TreeMall/api/eiffel/treemall/zipInfo";
-static NSString *SymphoxAPI_getCarrierInfo = @"http://tomcat8.mdevelop.com/TreeMall/api/eiffel/goods/typeInfo";
-static NSString *SymphoxAPI_getOneClickBuyContactInfo = @"http://tomcat8.mdevelop.com/TreeMall/api/eiffel/appOrder/oneClickBuyDelivery";
-static NSString *SymphoxAPI_activateOCB = @"https://www.cathaybk.com.tw/cathaybk/card/event/2012/card_news1010701.asp";
-static NSString *SymphoxAPI_buildOrder = @"http://tomcat8.mdevelop.com/TreeMall/api/eiffel/orders/createOrder";
-
+static NSString *SymphoxAPIDomain = @"http://sapi.symphox.com.tw/treeMall/";
 #else
-static NSString *SymphoxAPI_token = @"https://api.symphox.com.tw/portal/app/token";
+static NSString *SymphoxAPIDomain = @"http://tomcat8.mdevelop.com/TreeMall/";
 #endif
+
+static NSString *SymphoxAPI__token = @"api/portal/app/token";
+static NSString *SymphoxAPI__homepage = @"api/onlineService.do";
+static NSString *SymphoxAPI__getHotSaleProducts = @"api/eiffel/amway/default";
+static NSString *SymphoxAPI__promotion = @"api/onlineService.do";
+static NSString *SymphoxAPI__register = @"api/portal/app/member/register";
+static NSString *SymphoxAPI__login = @"portal/app/member/identify";
+static NSString *SymphoxAPI__terms = @"api/onlineService.do";
+static NSString *SymphoxAPI__forgetPassword = @"api/portal/app/member/password/forget";
+static NSString *SymphoxAPI__mobileVerification = @"api/portal/app/member/verify/mobile";
+static NSString *SymphoxAPI__authenticationCreditCard = @"authId/bank.do";
+static NSString *SymphoxAPI__authenticationEmployee = @"authId/employee.do";
+static NSString *SymphoxAPI__authenticationCathayCustomer = @"authId/cathay.do";
+static NSString *SymphoxAPI__editContacts = @"contacts/edit.do";
+static NSString *SymphoxAPI__editBasicInfo = @"memberInfo/edit.do";
+static NSString *SymphoxAPI__MainCategories = @"api/onlineService.do";
+static NSString *SymphoxAPI__Subcategories = @"api/portal/app/mall/hall";
+static NSString *SymphoxAPI__Search = @"api/eiffel/search/treemall";
+static NSString *SymphoxAPI__mainCategoryNameMapping = @"api/onlineService.do";
+static NSString *SymphoxAPI__hotKeywords = @"api/portal/app/mall/keyword";
+static NSString *SymphoxAPI__memberInformation = @"api/portal/app/member/info";
+static NSString *SymphoxAPI__memberPoint = @"api/portal/app/member/point";
+static NSString *SymphoxAPI__memberCoupon = @"api/portal/app/member/ecoupon";
+static NSString *SymphoxAPI__productDetail = @"api/portal/app/mall/product";
+static NSString *SymphoxAPI__memberOrder = @"api/portal/app/member/order";
+static NSString *SymphoxAPI__emailAuth = @"api/portal/app/member/verify/email";
+static NSString *SymphoxAPI__changePassword = @"api/portal/app/member/password/update";
+static NSString *SymphoxAPI__newsletter = @"api/portal/app/member/edm";
+static NSString *SymphoxAPI__subscribeNewsletter = @"api/portal/app/member/edm/update";
+static NSString *SymphoxAPI__orderNumberOfStatus = @"api/portal/app/member/order/status";
+static NSString *SymphoxAPI__checkProductAvailable = @"api/eiffel/appShoppingCart/addToCart";
+static NSString *SymphoxAPI__renewProductConditions = @"api/eiffel/appShoppingCart/goToCart";
+static NSString *SymphoxAPI__checkAdditionalPurchase = @"api/eiffel/appShoppingCart/additionalPurchase";
+static NSString *SymphoxAPI__finalCheckProductsInCart = @"api/eiffel/appShoppingCart/checkCart";
+static NSString *SymphoxAPI__getBuyNowDeliveryInfo = @"api/eiffel/appOrder/oneClickBuyDelivery";
+static NSString *SymphoxAPI__checkPayment = @"api/eiffel/appShoppingCart/checkPayment";
+static NSString *SymphoxAPI__getDeliverInfo = @"api/eiffel/appOrder/delivery";
+static NSString *SymphoxAPI__getContactInfo = @"api/portal/app/member/contact";
+static NSString *SymphoxAPI__getDistrictInfo = @"api/eiffel/treemall/zipInfo";
+static NSString *SymphoxAPI__getCarrierInfo = @"api/eiffel/goods/typeInfo";
+static NSString *SymphoxAPI__getOneClickBuyContactInfo = @"api/eiffel/appOrder/oneClickBuyDelivery";
+static NSString *SymphoxAPI__activateOCB = @"https://www.cathaybk.com.tw/cathaybk/card/event/2012/card_news1010701.asp";
+static NSString *SymphoxAPI__buildOrder = @"api/eiffel/orders/createOrder";
+
+#define SymphoxAPI_token [NSString stringWithFormat:@"%@%@", SymphoxAPIDomain, SymphoxAPI__token]
+#define SymphoxAPI_homepage [NSString stringWithFormat:@"%@%@", SymphoxAPIDomain, SymphoxAPI__homepage]
+#define SymphoxAPI_getHotSaleProducts [NSString stringWithFormat:@"%@%@", SymphoxAPIDomain, SymphoxAPI__getHotSaleProducts]
+#define SymphoxAPI_promotion [NSString stringWithFormat:@"%@%@", SymphoxAPIDomain, SymphoxAPI__promotion]
+#define SymphoxAPI_register [NSString stringWithFormat:@"%@%@", SymphoxAPIDomain, SymphoxAPI__register]
+#define SymphoxAPI_login [NSString stringWithFormat:@"%@%@", SymphoxAPIDomain, SymphoxAPI__login]
+#define SymphoxAPI_terms [NSString stringWithFormat:@"%@%@", SymphoxAPIDomain, SymphoxAPI__terms]
+#define SymphoxAPI_forgetPassword [NSString stringWithFormat:@"%@%@", SymphoxAPIDomain, SymphoxAPI__forgetPassword]
+#define SymphoxAPI_mobileVerification [NSString stringWithFormat:@"%@%@", SymphoxAPIDomain, SymphoxAPI__mobileVerification]
+#define SymphoxAPI_authenticationCreditCard [NSString stringWithFormat:@"%@%@", SymphoxAPIDomain, SymphoxAPI__authenticationCreditCard]
+#define SymphoxAPI_authenticationEmployee [NSString stringWithFormat:@"%@%@", SymphoxAPIDomain, SymphoxAPI__authenticationEmployee]
+#define SymphoxAPI_authenticationCathayCustomer [NSString stringWithFormat:@"%@%@", SymphoxAPIDomain, SymphoxAPI__authenticationCathayCustomer]
+#define SymphoxAPI_editContacts [NSString stringWithFormat:@"%@%@", SymphoxAPIDomain, SymphoxAPI__editContacts]
+#define SymphoxAPI_editBasicInfo [NSString stringWithFormat:@"%@%@", SymphoxAPIDomain, SymphoxAPI__editBasicInfo]
+#define SymphoxAPI_MainCategories [NSString stringWithFormat:@"%@%@", SymphoxAPIDomain, SymphoxAPI__MainCategories]
+#define SymphoxAPI_Subcategories [NSString stringWithFormat:@"%@%@", SymphoxAPIDomain, SymphoxAPI__Subcategories]
+#define SymphoxAPI_Search [NSString stringWithFormat:@"%@%@", SymphoxAPIDomain, SymphoxAPI__Search]
+#define SymphoxAPI_mainCategoryNameMapping [NSString stringWithFormat:@"%@%@", SymphoxAPIDomain, SymphoxAPI__mainCategoryNameMapping]
+#define SymphoxAPI_hotKeywords [NSString stringWithFormat:@"%@%@", SymphoxAPIDomain, SymphoxAPI__hotKeywords]
+#define SymphoxAPI_memberInformation [NSString stringWithFormat:@"%@%@", SymphoxAPIDomain, SymphoxAPI__memberInformation]
+#define SymphoxAPI_memberPoint [NSString stringWithFormat:@"%@%@", SymphoxAPIDomain, SymphoxAPI__memberPoint]
+#define SymphoxAPI_memberCoupon [NSString stringWithFormat:@"%@%@", SymphoxAPIDomain, SymphoxAPI__memberCoupon]
+#define SymphoxAPI_productDetail [NSString stringWithFormat:@"%@%@", SymphoxAPIDomain, SymphoxAPI__productDetail]
+#define SymphoxAPI_memberOrder [NSString stringWithFormat:@"%@%@", SymphoxAPIDomain, SymphoxAPI__memberOrder]
+#define SymphoxAPI_emailAuth [NSString stringWithFormat:@"%@%@", SymphoxAPIDomain, SymphoxAPI__emailAuth]
+#define SymphoxAPI_changePassword [NSString stringWithFormat:@"%@%@", SymphoxAPIDomain, SymphoxAPI__changePassword]
+#define SymphoxAPI_newsletter [NSString stringWithFormat:@"%@%@", SymphoxAPIDomain, SymphoxAPI__newsletter]
+#define SymphoxAPI_subscribeNewsletter [NSString stringWithFormat:@"%@%@", SymphoxAPIDomain, SymphoxAPI__subscribeNewsletter]
+#define SymphoxAPI_orderNumberOfStatus [NSString stringWithFormat:@"%@%@", SymphoxAPIDomain, SymphoxAPI__orderNumberOfStatus]
+#define SymphoxAPI_checkProductAvailable [NSString stringWithFormat:@"%@%@", SymphoxAPIDomain, SymphoxAPI__checkProductAvailable]
+#define SymphoxAPI_renewProductConditions [NSString stringWithFormat:@"%@%@", SymphoxAPIDomain, SymphoxAPI__renewProductConditions]
+#define SymphoxAPI_checkAdditionalPurchase [NSString stringWithFormat:@"%@%@", SymphoxAPIDomain, SymphoxAPI__checkAdditionalPurchase]
+#define SymphoxAPI_finalCheckProductsInCart [NSString stringWithFormat:@"%@%@", SymphoxAPIDomain, SymphoxAPI__finalCheckProductsInCart]
+#define SymphoxAPI_getBuyNowDeliveryInfo [NSString stringWithFormat:@"%@%@", SymphoxAPIDomain, SymphoxAPI__getBuyNowDeliveryInfo]
+#define SymphoxAPI_checkPayment [NSString stringWithFormat:@"%@%@", SymphoxAPIDomain, SymphoxAPI__checkPayment]
+#define SymphoxAPI_getDeliverInfo [NSString stringWithFormat:@"%@%@", SymphoxAPIDomain, SymphoxAPI__getDeliverInfo]
+#define SymphoxAPI_getContactInfo [NSString stringWithFormat:@"%@%@", SymphoxAPIDomain, SymphoxAPI__getContactInfo]
+#define SymphoxAPI_getDistrictInfo [NSString stringWithFormat:@"%@%@", SymphoxAPIDomain, SymphoxAPI__getDistrictInfo]
+#define SymphoxAPI_getCarrierInfo [NSString stringWithFormat:@"%@%@", SymphoxAPIDomain, SymphoxAPI__getCarrierInfo]
+#define SymphoxAPI_getOneClickBuyContactInfo [NSString stringWithFormat:@"%@%@", SymphoxAPIDomain, SymphoxAPI__getOneClickBuyContactInfo]
+#define SymphoxAPI_activateOCB [NSString stringWithFormat:@"%@%@", SymphoxAPIDomain, SymphoxAPI__activateOCB]
+#define SymphoxAPI_buildOrder [NSString stringWithFormat:@"%@%@", SymphoxAPIDomain, SymphoxAPI__buildOrder]
+
 
 static NSString *SymphoxAPIParam_key = @"sym-api-key";
 static NSString *SymphoxAPIParam_token = @"sym-api-token";
@@ -347,6 +392,13 @@ static NSString *SymphoxAPIParam_timeStr = @"timeStr";
 static NSString *SymphoxAPIParam_msgType = @"msgType";
 static NSString *SymphoxAPIParam_hallId = @"hallId";
 static NSString *SymphoxAPIParam_hallName = @"hallName";
+static NSString *SymphoxAPIParam_pure_price = @"pure_price";
+static NSString *SymphoxAPIParam_pure_point = @"pure_point";
+static NSString *SymphoxAPIParam_mix_price = @"mix_price";
+static NSString *SymphoxAPIParam_mix_point = @"mix_point";
+static NSString *SymphoxAPIParam_can_used_cart = @"can_used_cart";
+static NSString *SymphoxAPIParam_storeid = @"storeid";
+static NSString *SymphoxAPIParam_storename = @"storename";
 
 typedef enum : NSUInteger {
     TermTypeMemberTerms,

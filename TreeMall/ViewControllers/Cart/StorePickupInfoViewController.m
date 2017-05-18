@@ -19,7 +19,6 @@
 #import "CreditCardViewController.h"
 #import "SeparatorLineHeaderView.h"
 #import "SampleImageViewController.h"
-#import "StorePickupWebViewController.h"
 
 static NSString *DTAttributedTextCellIdentifier = @"DTAttributedTextCell";
 
@@ -2457,6 +2456,41 @@ typedef enum : NSUInteger {
 - (UIModalPresentationStyle)adaptivePresentationStyleForPresentationController:(UIPresentationController *)controller
 {
     return UIModalPresentationNone;
+}
+
+#pragma mark - StorePickupWebViewControllerDelegate
+
+- (void)storePickupWebViewController:(StorePickupWebViewController *)viewController didSelectStoreWithDictionary:(NSDictionary *)storeDictionary
+{
+    NSString *storeid = [storeDictionary objectForKey:SymphoxAPIParam_storeid];
+    NSString *storename = [storeDictionary objectForKey:SymphoxAPIParam_storename];
+    NSString *address = [storeDictionary objectForKey:SymphoxAPIParam_address];
+    NSString *store_id = nil;
+    NSString *store_name = storename;
+    NSString *store_addr = address;
+    if (viewController.group == ConvenienceStoreGroupSevenEleven)
+    {
+        store_id = [NSString stringWithFormat:@"S%@", storeid];
+    }
+    else
+    {
+        store_id = storeid;
+    }
+    if (store_id)
+    {
+        [self.currentDeliveryTarget setObject:store_id forKey:SymphoxAPIParam_store_id];
+    }
+    if (store_name)
+    {
+        [self.currentDeliveryTarget setObject:store_name forKey:SymphoxAPIParam_store_name];
+    }
+    if (store_addr)
+    {
+        [self.currentDeliveryTarget setObject:store_addr forKey:SymphoxAPIParam_store_addr];
+    }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.tableViewInfo reloadData];
+    });
 }
 
 @end

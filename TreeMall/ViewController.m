@@ -21,6 +21,7 @@
 #import "CouponListViewController.h"
 #import "IntroduceViewController.h"
 #import "APIDefinition.h"
+#import "StorePickupWebViewController.h"
 
 @interface ViewController ()
 
@@ -187,7 +188,7 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handlerOfJumpingToMemberTabNotification:) name:PostNotificationName_JumpToMemberTab object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handlerOfJumpingToMemberTabAndPresentCouponNotification:) name:PostNotificationName_JumpToMemberTabAndPresentCoupon object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handlerOfCartContentChangedNotification:) name:PostNotificationName_CartContentChanged object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handlerOfApplicationDidBecomeActiveNotification:) name:UIApplicationDidBecomeActiveNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handlerOfApplicationDidBecomeActiveNotification:) name:UIApplicationDidFinishLaunchingNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handlerOfJumpToShoppingMallAndPresentHallNotification:) name:PostNotificationName_JumpToShoppingMallAndPresentHall object:nil];
 }
 
@@ -203,8 +204,6 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    
-    [self checkToShowIntroduce];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -245,7 +244,7 @@
     if (_imageViewLaunchScreen == nil)
     {
         _imageViewLaunchScreen = [[UIImageView alloc] initWithFrame:CGRectZero];
-        UIImage *image = [UIImage imageNamed:@"tm_open"];
+        UIImage *image = [UIImage imageNamed:@"LaunchImage"];
         if (image)
         {
             [_imageViewLaunchScreen setImage:image];
@@ -258,7 +257,7 @@
 {
     if (_viewLoading == nil)
     {
-        _viewLoading = [[FullScreenLoadingView alloc] initWithFrame:CGRectZero];
+        _viewLoading = [[FullScreenLoadingView alloc] initWithFrame:CGRectZero withActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
     }
     return _viewLoading;
 }
