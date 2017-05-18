@@ -120,7 +120,7 @@
     originX = imageViewFrame.origin.x + imageViewFrame.size.width + hInterval;
     CGFloat labelMaxWidth = _containerView.frame.size.width - originX - rightMargin;
     
-    NSString *defaultTowLineString = @"XXXXX\nXXXXX";
+//    NSString *defaultTowLineString = @"XXXXX\nXXXXX";
     NSString *defaultOneLineString = @"XXXXX";
     
     

@@ -1317,6 +1317,21 @@ static NSUInteger SearchKeywordNumberMax = 8;
     return favorites;
 }
 
+- (BOOL)favoriteContainsProductWithIdentifier:(NSNumber *)productId
+{
+    BOOL contains = NO;
+    for (NSDictionary *product in self.arrayFavorite)
+    {
+        NSNumber *cpdt_num = [product objectForKey:SymphoxAPIParam_cpdt_num];
+        if (cpdt_num && [cpdt_num isEqual:[NSNull null]] == NO && [cpdt_num isEqualToNumber:productId])
+        {
+            contains = YES;
+            break;
+        }
+    }
+    return contains;
+}
+
 - (void)removeProductFromFavorite:(NSInteger)productIndex
 {
     if (productIndex < [self.arrayFavorite count])
@@ -1886,6 +1901,22 @@ static NSUInteger SearchKeywordNumberMax = 8;
             break;
     }
     return totalCount;
+}
+
+- (void)resetCartForType:(CartType)type
+{
+    NSMutableArray *array = [self productArrayForCartType:type];
+    NSMutableArray *additionArray = [self productArrayForAdditionalCartType:type];
+    NSMutableDictionary *dictionary = [self purchaseInfoForCartType:type];
+    NSMutableDictionary *additionDictionary = [self purchaseInfoForAdditionalCartType:type];
+    
+    [array removeAllObjects];
+    [dictionary removeAllObjects];
+    [additionArray removeAllObjects];
+    [additionDictionary removeAllObjects];
+    
+    [self saveToArchive];
+    [[NSNotificationCenter defaultCenter] postNotificationName:PostNotificationName_CartContentChanged object:self];
 }
 
 - (NSString *)formattedStringFromDate:(NSDate *)date

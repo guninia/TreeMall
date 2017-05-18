@@ -31,11 +31,12 @@
 - (void)startPreloginProcess;
 - (void)loginWithOptions:(NSDictionary *)options;
 - (BOOL)processLoginData:(NSData *)data;
+- (void)presentSimpleAlertViewForMessage:(NSString *)message;
 
 - (void)actButtonLoginPressed:(id)sender;
 - (void)actButtonFacebookAccountLoginPressed:(id)sender;
 - (void)actButtonGooglePlusAccountLoginPressed:(id)sender;
-//- (void)actCheckButtonAgreementPressed:(id)sender;
+- (void)actCheckButtonAgreementPressed:(id)sender;
 - (void)actButtonAgreementContentPressed:(id)sender;
 - (void)actButtonJoinMemberPressed:(id)sender;
 - (void)actButtonForgetPasswordPressed:(id)sender;
@@ -104,17 +105,20 @@
     [_buttonFacebookLogin addTarget:self action:@selector(actButtonFacebookAccountLoginPressed:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:_buttonFacebookLogin];
     
-//    _checkButtonAgreement = [[UIButton alloc] initWithFrame:CGRectZero];
-//    [_checkButtonAgreement setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
-//    [_checkButtonAgreement setTitle:@"我什麼都同意" forState:UIControlStateNormal];
-//    [_checkButtonAgreement.titleLabel setFont:[UIFont systemFontOfSize:14.0]];
-//    [_checkButtonAgreement addTarget:self action:@selector(actCheckButtonAgreementPressed:) forControlEvents:UIControlEventTouchUpInside];
-//    [self.view addSubview:_checkButtonAgreement];
-//    
+    _switchAgreement = [[UISwitch alloc] initWithFrame:CGRectZero];
+    [self.view addSubview:_switchAgreement];
+    
+    _checkButtonAgreement = [[UIButton alloc] initWithFrame:CGRectZero];
+    [_checkButtonAgreement setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
+    [_checkButtonAgreement setTitle:@"我同意會員條款" forState:UIControlStateNormal];
+    [_checkButtonAgreement.titleLabel setFont:[UIFont systemFontOfSize:14.0]];
+    [_checkButtonAgreement addTarget:self action:@selector(actCheckButtonAgreementPressed:) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:_checkButtonAgreement];
+    
     _buttonAgreementContent = [[UIButton alloc] initWithFrame:CGRectZero];
     [_buttonAgreementContent.layer setCornerRadius:3.0];
     [_buttonAgreementContent setBackgroundColor:[UIColor grayColor]];
-    [_buttonAgreementContent setTitle:@"會員條款詳細內容" forState:UIControlStateNormal];
+    [_buttonAgreementContent setTitle:@"詳細內容" forState:UIControlStateNormal];
     [_buttonAgreementContent.titleLabel setFont:[UIFont systemFontOfSize:12.0]];
     [_buttonAgreementContent addTarget:self action:@selector(actButtonAgreementContentPressed:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:_buttonAgreementContent];
@@ -211,7 +215,7 @@
     CGFloat columnOriginX = ceil((self.view.frame.size.width - columnSize.width)/2);
     CGFloat vInterval = 10.0 * sizeRatio.height;
     
-    CGFloat originY = 80.0 * sizeRatio.height;
+    CGFloat originY = 60.0 * sizeRatio.height;
     if (_imageViewLogo != nil)
     {
         CGRect frame = _imageViewLogo.frame;
@@ -250,7 +254,7 @@
         frame.size.width = columnSize.width;
         frame.size.height = columnSize.height;
         _buttonLogin.frame = frame;
-        originY = _buttonLogin.frame.origin.y + _buttonLogin.frame.size.height + vInterval;
+        originY = _buttonLogin.frame.origin.y + _buttonLogin.frame.size.height;
     }
     if (_separatorHorizon != nil)
     {
@@ -260,7 +264,7 @@
         frame.size.width = columnSize.width;
         frame.size.height = columnSize.height;
         _separatorHorizon.frame = frame;
-        originY = _separatorHorizon.frame.origin.y + _separatorHorizon.frame.size.height + vInterval;
+        originY = _separatorHorizon.frame.origin.y + _separatorHorizon.frame.size.height;
     }
     if (_buttonFacebookLogin != nil)
     {
@@ -282,36 +286,44 @@
         _buttonGooglePlusLogin.frame = frame;
         originY = _buttonGooglePlusLogin.frame.origin.y + _buttonGooglePlusLogin.frame.size.height + vInterval;
     }
-//    if (_checkButtonAgreement != nil && _buttonAgreementContent != nil)
-//    {
-//        // Temporarily for pre-layout, should use real size later.
-//        CGSize checkButtonSize = CGSizeMake(200.0, 30.0);
-//        CGSize buttonSize = CGSizeMake(60.0, 20.0);
-//        CGFloat hInterval = 5 * sizeRatio.width;
+    
+    if (_switchAgreement != nil)
+    {
+        CGSize switchSize = CGSizeMake(40.0, 30.0);
+        CGRect frame = CGRectMake(columnOriginX, originY, switchSize.width, switchSize.height);
+        self.switchAgreement.frame = frame;
+    }
+    
+    if (_checkButtonAgreement != nil && _buttonAgreementContent != nil)
+    {
+        // Temporarily for pre-layout, should use real size later.
+        CGSize checkButtonSize = CGSizeMake(120.0, 30.0);
+        CGSize buttonSize = CGSizeMake(60.0, 20.0);
+        CGFloat hInterval = 5 * sizeRatio.width;
 //        CGFloat totalWidth = checkButtonSize.width + hInterval + buttonSize.width;
-//        CGFloat checkButtonOriginX = ceil((self.view.frame.size.width - totalWidth)/2);
-//        
-//        CGRect frame = _checkButtonAgreement.frame;
-//        frame.origin.x = checkButtonOriginX;
-//        frame.origin.y = originY;
-//        frame.size.width = checkButtonSize.width;
-//        frame.size.height = checkButtonSize.height;
-//        _checkButtonAgreement.frame = frame;
-//        
-//        frame = _buttonAgreementContent.frame;
-//        frame.origin.x = _checkButtonAgreement.frame.origin.x + _checkButtonAgreement.frame.size.width + hInterval;
-//        frame.origin.y = ceil(_checkButtonAgreement.center.y - buttonSize.height / 2);
-//        frame.size.width = buttonSize.width;
-//        frame.size.height = buttonSize.height;
-//        _buttonAgreementContent.frame = frame;
-//        
+        CGFloat checkButtonOriginX = CGRectGetMaxX(self.switchAgreement.frame) + 3.0;
+        
+        CGRect frame = _checkButtonAgreement.frame;
+        frame.origin.x = checkButtonOriginX;
+        frame.origin.y = originY;
+        frame.size.width = checkButtonSize.width;
+        frame.size.height = checkButtonSize.height;
+        _checkButtonAgreement.frame = frame;
+        
+        frame = _buttonAgreementContent.frame;
+        frame.origin.x = _checkButtonAgreement.frame.origin.x + _checkButtonAgreement.frame.size.width + hInterval;
+        frame.origin.y = ceil(_checkButtonAgreement.center.y - buttonSize.height / 2);
+        frame.size.width = buttonSize.width;
+        frame.size.height = buttonSize.height;
+        _buttonAgreementContent.frame = frame;
+        
 //        originY = _checkButtonAgreement.frame.origin.y + _checkButtonAgreement.frame.size.height + vInterval;
-//    }
+    }
     if (_buttonAgreementContent != nil)
     {
-        CGSize buttonSize = CGSizeMake(160.0, 20.0);
+        CGSize buttonSize = CGSizeMake(60.0, 30.0);
         CGRect frame = _buttonAgreementContent.frame;
-        frame.origin.x = (self.view.frame.size.width - buttonSize.width)/2;
+        frame.origin.x = CGRectGetMaxX(self.checkButtonAgreement.frame) + 3.0;
         frame.origin.y = originY;
         frame.size.width = buttonSize.width;
         frame.size.height = buttonSize.height;
@@ -698,28 +710,51 @@
     return success;
 }
 
+- (void)presentSimpleAlertViewForMessage:(NSString *)message
+{
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:message preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *action = [UIAlertAction actionWithTitle:[LocalizedString Confirm] style:UIAlertActionStyleDefault handler:nil];
+    [alertController addAction:action];
+    [self presentViewController:alertController animated:YES completion:nil];
+}
+
 #pragma mark - Actions
 
 - (void)actButtonLoginPressed:(id)sender
 {
+    if (self.switchAgreement.isOn == NO)
+    {
+        [self presentSimpleAlertViewForMessage:[LocalizedString PleaseAgreeMemberTermsFirst]];
+        return;
+    }
     [self startPreloginProcess];
 }
 
 - (void)actButtonFacebookAccountLoginPressed:(id)sender
 {
+    if (self.switchAgreement.isOn == NO)
+    {
+        [self presentSimpleAlertViewForMessage:[LocalizedString PleaseAgreeMemberTermsFirst]];
+        return;
+    }
     [self loginFacebook];
 }
 
 - (void)actButtonGooglePlusAccountLoginPressed:(id)sender
 {
+    if (self.switchAgreement.isOn == NO)
+    {
+        [self presentSimpleAlertViewForMessage:[LocalizedString PleaseAgreeMemberTermsFirst]];
+        return;
+    }
     [self signInGoogle];
 }
 
-//- (void)actCheckButtonAgreementPressed:(id)sender
-//{
-//    
-//}
-//
+- (void)actCheckButtonAgreementPressed:(id)sender
+{
+    [self.switchAgreement setOn:!self.switchAgreement.isOn animated:YES];
+}
+
 - (void)actButtonAgreementContentPressed:(id)sender
 {
     TermsViewController *viewController = [[TermsViewController alloc] initWithNibName:@"TermsViewController" bundle:[NSBundle mainBundle]];

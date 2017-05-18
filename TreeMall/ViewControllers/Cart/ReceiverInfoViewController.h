@@ -55,4 +55,6 @@
 @property (nonatomic, strong) NSString *tradeId;
 @property (nonatomic, strong) NSDictionary *dictionaryTotalCost;
 @property (nonatomic, strong) NSDictionary *dictionaryOrderResultData;
+@property (nonatomic, strong) NSString *selectedPaymentDescription;
+
 @end

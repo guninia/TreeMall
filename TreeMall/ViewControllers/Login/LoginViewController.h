@@ -20,6 +20,7 @@
 @property (nonatomic, strong) TextHorizontalSeparator *separatorHorizon;
 @property (nonatomic, strong) UIButton *buttonFacebookLogin;
 @property (nonatomic, strong) UIButton *buttonGooglePlusLogin;
+@property (nonatomic, strong) UISwitch *switchAgreement;
 @property (nonatomic, strong) UIButton *checkButtonAgreement;
 @property (nonatomic, strong) UIButton *buttonAgreementContent;
 @property (nonatomic, strong) UIButton *buttonJoinMember;

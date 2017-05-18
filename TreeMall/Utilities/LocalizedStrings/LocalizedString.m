@@ -2961,4 +2961,174 @@
     return Total_I_product;
 }
 
++ (NSString *)BankCode
+{
+    static NSString *BankCode = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        BankCode = NSLocalizedString(@"BankCode", nil);
+    });
+    return BankCode;
+}
+
++ (NSString *)BankAccountToPay
+{
+    static NSString *BankAccountToPay = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        BankAccountToPay = NSLocalizedString(@"BankAccountToPay", nil);
+    });
+    return BankAccountToPay;
+}
+
++ (NSString *)PaymentDeadline
+{
+    static NSString *PaymentDeadline = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        PaymentDeadline = NSLocalizedString(@"PaymentDeadline", nil);
+    });
+    return PaymentDeadline;
+}
+
++ (NSString *)CashShouldPay
+{
+    static NSString *CashShouldPay = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        CashShouldPay = NSLocalizedString(@"CashShouldPay", nil);
+    });
+    return CashShouldPay;
+}
+
++ (NSString *)DiscountPreferencial
+{
+    static NSString *DiscountPreferencial = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        DiscountPreferencial = NSLocalizedString(@"DiscountPreferencial", nil);
+    });
+    return DiscountPreferencial;
+}
+
++ (NSString *)PaymentInfo
+{
+    static NSString *PaymentInfo = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        PaymentInfo = NSLocalizedString(@"PaymentInfo", nil);
+    });
+    return PaymentInfo;
+}
+
++ (NSString *)AccountTransferInfo
+{
+    static NSString *AccountTransferInfo = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        AccountTransferInfo = NSLocalizedString(@"AccountTransferInfo", nil);
+    });
+    return AccountTransferInfo;
+}
+
++ (NSString *)PleaseInputValidValidDate
+{
+    static NSString *PleaseInputValidValidDate = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        PleaseInputValidValidDate = NSLocalizedString(@"PleaseInputValidValidDate", nil);
+    });
+    return PleaseInputValidValidDate;
+}
+
++ (NSString *)PleaseInputValidCardNumber
+{
+    static NSString *PleaseInputValidCardNumber = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        PleaseInputValidCardNumber = NSLocalizedString(@"PleaseInputValidCardNumber", nil);
+    });
+    return PleaseInputValidCardNumber;
+}
+
++ (NSString *)PleaseInputValidSecurityCode
+{
+    static NSString *PleaseInputValidSecurityCode = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        PleaseInputValidSecurityCode = NSLocalizedString(@"PleaseInputValidSecurityCode", nil);
+    });
+    return PleaseInputValidSecurityCode;
+}
+
++ (NSString *)ConvenienceStore
+{
+    static NSString *ConvenienceStore = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        ConvenienceStore = NSLocalizedString(@"ConvenienceStore", nil);
+    });
+    return ConvenienceStore;
+}
+
++ (NSString *)StoreNumber
+{
+    static NSString *StoreNumber = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        StoreNumber = NSLocalizedString(@"StoreNumber", nil);
+    });
+    return StoreNumber;
+}
+
++ (NSString *)StoreName
+{
+    static NSString *StoreName = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        StoreName = NSLocalizedString(@"StoreName", nil);
+    });
+    return StoreName;
+}
+
++ (NSString *)StoreAddress
+{
+    static NSString *StoreAddress = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        StoreAddress = NSLocalizedString(@"StoreAddress", nil);
+    });
+    return StoreAddress;
+}
+
++ (NSString *)ChoosePickupStore
+{
+    static NSString *ChoosePickupStore = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        ChoosePickupStore = NSLocalizedString(@"ChoosePickupStore", nil);
+    });
+    return ChoosePickupStore;
+}
+
++ (NSString *)AlreadySentEmailAuth_S_
+{
+    static NSString *AlreadySentEmailAuth_S_ = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        AlreadySentEmailAuth_S_ = NSLocalizedString(@"AlreadySentEmailAuth_S_", nil);
+    });
+    return AlreadySentEmailAuth_S_;
+}
+
++ (NSString *)PleaseAgreeMemberTermsFirst
+{
+    static NSString *PleaseAgreeMemberTermsFirst = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        PleaseAgreeMemberTermsFirst = NSLocalizedString(@"PleaseAgreeMemberTermsFirst", nil);
+    });
+    return PleaseAgreeMemberTermsFirst;
+}
+
 @end

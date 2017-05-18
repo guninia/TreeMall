@@ -46,7 +46,7 @@ typedef enum : NSUInteger {
 - (void)updateAdditionalInformation;
 - (void)presentEmailAuthAlert;
 - (void)startAuthenticationForEmail:(NSString *)email;
-- (void)postEmailAuthSuccessProcess;
+- (void)postEmailAuthSuccessProcess:(NSString *)email;
 - (void)presentPasswordChangeAlert;
 - (void)startToChangePasswordFromOld:(NSString *)passwordOld toNew:(NSString *)passwordNew confirmBy:(NSString *)passwordCon;
 - (void)postPasswordChangeSuccessProcess;
@@ -388,7 +388,7 @@ typedef enum : NSUInteger {
         if (error == nil)
         {
             // Success
-            [weakSelf postEmailAuthSuccessProcess];
+            [weakSelf postEmailAuthSuccessProcess:email];
         }
         else
         {
@@ -412,8 +412,12 @@ typedef enum : NSUInteger {
     }];
 }
 
-- (void)postEmailAuthSuccessProcess
+- (void)postEmailAuthSuccessProcess:(NSString *)email
 {
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:[LocalizedString AuthenticateSuccess] preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *action = [UIAlertAction actionWithTitle:[LocalizedString Confirm] style:UIAlertActionStyleDefault handler:nil];
+    [alertController addAction:action];
+    [self presentViewController:alertController animated:YES completion:nil];
     [self showLoadingViewAnimated:YES];
     [[TMInfoManager sharedManager] retrieveUserInformation];
 }
@@ -752,8 +756,10 @@ typedef enum : NSUInteger {
 - (void)handlerOfUserInformationUpdatedNotification:(NSNotification *)notification
 {
     [self updateAdditionalInformation];
-    [self.tableView reloadData];
-    [self hideLoadingViewAnimated:YES];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.tableView reloadData];
+        [self hideLoadingViewAnimated:YES];
+    });
 }
 
 #pragma mark - UITableViewDataSource

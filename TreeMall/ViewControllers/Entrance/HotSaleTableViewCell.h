@@ -19,6 +19,8 @@ static NSString *HotSaleTableViewCellIdentifier = @"HotSaleTableViewCell";
 @property (nonatomic, strong) UILabel *labelTitle;
 @property (nonatomic, strong) UIView *separator;
 @property (nonatomic, strong) UILabel *labelPrice;
+@property (nonatomic, strong) UIButton *buttonAddToCart;
+@property (nonatomic, strong) UIButton *buttonFavorite;
 
 @property (nonatomic, strong) NSURL *imageUrl;
 

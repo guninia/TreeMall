@@ -13,9 +13,10 @@
 #import "CryptoModule.h"
 #import "TMInfoManager.h"
 #import "Utility.h"
-#import "InvoiceDescriptionFooterView.h"
 #import "SampleImageViewController.h"
 #import "CompleteOrderViewController.h"
+#import "CreditCardViewController.h"
+#import "Definition.h"
 
 static NSString *DTAttributedTextCellIdentifier = @"DTAttributedTextCell";
 
@@ -49,55 +50,6 @@ typedef enum : NSUInteger {
     DeliverTimeOptionNoSpecific,
     DeliverTimeOptionTotal
 } DeliverTimeOption;
-
-typedef enum : NSUInteger {
-    InvoiceLayoutTypeDefault,
-    InvoiceLayoutTypeElectronicMember,
-    InvoiceLayoutTypeElectronicExtraCode,
-    InvoiceLayoutTypeDonate,
-    InvoiceLayoutTypeDonateSpecificGroup,
-    InvoiceLayoutTypeTriplicate,
-    InvoiceLayoutTypeTotal
-} InvoiceLayoutType;
-
-typedef enum : NSUInteger {
-    InvoiceCellTagChooseType,
-    InvoiceCellTagChooseElectronicType,
-    InvoiceCellTagChooseDonateTarget,
-    InvoiceCellTagElectronicCode,
-    InvoiceCellTagDonateCode,
-    InvoiceCellTagInvoiceTitle,
-    InvoiceCellTagInvoiceIdentifier,
-    InvoiceCellTagReceiver,
-    InvoiceCellTagCity,
-    InvoiceCellTagRegion,
-    InvoiceCellTagAddress,
-    InvoiceCellTagInvoiceDesc,
-    InvoiceCellTagUnknown,
-    InvoiceCellTagTotal
-} InvoiceCellTag;
-
-typedef enum : NSUInteger {
-    InvoiceTypeOptionElectronic,
-    InvoiceTypeOptionDonate,
-    InvoiceTypeOptionTriplicate,
-    InvoiceTypeOptionTotal
-} InvoiceTypeOption;
-
-typedef enum : NSUInteger {
-    InvoiceElectronicSubTypeMember,
-    InvoiceElectronicSubTypeNaturalPerson,
-    InvoiceElectronicSubTypeCellphoneBarcode,
-    InvoiceElectronicSubTypeTotal
-} InvoiceElectronicSubType;
-
-typedef enum : NSUInteger {
-    InvoiceDonateTarget1,
-    InvoiceDonateTarget2,
-    InvoiceDonateTarget3,
-    InvoiceDonateTargetOther,
-    InvoiceDonateTargetTotal
-} InvoiceDonateTarget;
 
 @interface ReceiverInfoViewController ()
 
@@ -135,7 +87,8 @@ typedef enum : NSUInteger {
 - (void)prepareOrderData;
 - (void)startToBuildOrderWithParams:(NSMutableDictionary *)params;
 - (BOOL)processBuildOrderResult:(id)result;
-- (void)presentCompleteOrderView;
+- (void)presentCompleteOrderViewWithDelivery:(NSDictionary *)delivery;
+- (void)presentCreditCardViewWithDelivery:(NSDictionary *)delivery andParams:(NSMutableDictionary *)params;
 
 - (IBAction)buttonContactListPressed:(id)sender;
 - (void)buttonNextPressed:(id)sender;
@@ -167,6 +120,7 @@ typedef enum : NSUInteger {
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
+    self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
     self.title = [LocalizedString ReceiverInfo];
     
     [self.scrollView addSubview:self.tableViewInfo];
@@ -1644,17 +1598,17 @@ typedef enum : NSUInteger {
                         switch (weakSelf.invoiceDonateTarget) {
                             case InvoiceDonateTarget1:
                             {
-                                [weakSelf.dictionaryInvoiceTemp setObject:@"51811" forKey:SymphoxAPIParam_inpoban];
+                                [weakSelf.dictionaryInvoiceTemp setObject:SymphoxAPIValue_inpoban1 forKey:SymphoxAPIParam_inpoban];
                             }
                                 break;
                             case InvoiceDonateTarget2:
                             {
-                                [weakSelf.dictionaryInvoiceTemp setObject:@"919" forKey:SymphoxAPIParam_inpoban];
+                                [weakSelf.dictionaryInvoiceTemp setObject:SymphoxAPIValue_inpoban2 forKey:SymphoxAPIParam_inpoban];
                             }
                                 break;
                             case InvoiceDonateTarget3:
                             {
-                                [weakSelf.dictionaryInvoiceTemp setObject:@"8455" forKey:SymphoxAPIParam_inpoban];
+                                [weakSelf.dictionaryInvoiceTemp setObject:SymphoxAPIValue_inpoban3 forKey:SymphoxAPIParam_inpoban];
                             }
                             case InvoiceDonateTargetOther:
                             {
@@ -1892,20 +1846,20 @@ typedef enum : NSUInteger {
     switch (self.invoiceElectronicSubType) {
         case InvoiceElectronicSubTypeMember:
         {
-            [self.dictionaryInvoiceTemp setObject:@"EG0031" forKey:SymphoxAPIParam_icarrier_type];
+            [self.dictionaryInvoiceTemp setObject:SymphoxAPIValue_icarrier_member forKey:SymphoxAPIParam_icarrier_type];
             NSString *stringUID = [[TMInfoManager sharedManager].userIdentifier stringValue];
             [self.dictionaryInvoiceTemp setObject:stringUID forKey:SymphoxAPIParam_icarrier_id];
         }
             break;
         case InvoiceElectronicSubTypeNaturalPerson:
         {
-            [self.dictionaryInvoiceTemp setObject:@"CQ0001" forKey:SymphoxAPIParam_icarrier_type];
+            [self.dictionaryInvoiceTemp setObject:SymphoxAPIValue_icarrier_naturalperson forKey:SymphoxAPIParam_icarrier_type];
             [self.dictionaryInvoiceTemp removeObjectForKey:SymphoxAPIParam_icarrier_id];
         }
             break;
         case InvoiceElectronicSubTypeCellphoneBarcode:
         {
-            [self.dictionaryInvoiceTemp setObject:@"3j0002" forKey:SymphoxAPIParam_icarrier_type];
+            [self.dictionaryInvoiceTemp setObject:SymphoxAPIValue_icarrier_cellphone_barcode forKey:SymphoxAPIParam_icarrier_type];
             [self.dictionaryInvoiceTemp removeObjectForKey:SymphoxAPIParam_icarrier_id];
         }
             break;
@@ -2118,7 +2072,7 @@ typedef enum : NSUInteger {
                     shouldContinue = NO;
                     break;
                 }
-                inv_zip = [self.dictionaryZipForRegion objectForKey:self.currentRegion];
+                inv_zip = [self.dictionaryZipForRegion objectForKey:self.currentInvoiceRegion];
             }
             if (inv_zip == nil)
             {
@@ -2149,13 +2103,13 @@ typedef enum : NSUInteger {
             }
             if (self.currentInvoiceRegion)
             {
-                [inv_address replaceOccurrencesOfString:self.currentInvoiceRegion withString:@"" options:0 range:NSMakeRange(0, [address length])];
+                [inv_address replaceOccurrencesOfString:self.currentInvoiceRegion withString:@"" options:0 range:NSMakeRange(0, [inv_address length])];
                 [inv_address insertString:self.currentInvoiceRegion atIndex:0];
             }
             
             if (self.currentInvoiceCity)
             {
-                [inv_address replaceOccurrencesOfString:self.currentInvoiceCity withString:@"" options:0 range:NSMakeRange(0, [address length])];
+                [inv_address replaceOccurrencesOfString:self.currentInvoiceCity withString:@"" options:0 range:NSMakeRange(0, [inv_address length])];
                 [inv_address insertString:self.currentInvoiceCity atIndex:0];
             }
             [shopping_delivery setObject:inv_address forKey:SymphoxAPIParam_inv_address];
@@ -2382,6 +2336,7 @@ typedef enum : NSUInteger {
     if ([self.tradeId isEqualToString:@"C"] || [self.tradeId isEqualToString:@"I"])
     {
         // Should go to CreditCardInfoViewController
+        [self presentCreditCardViewWithDelivery:shopping_delivery andParams:params];
     }
     else
     {
@@ -2405,7 +2360,8 @@ typedef enum : NSUInteger {
             NSLog(@"resultObject[%@]:\n%@", [[resultObject class] description], [resultObject description]);
             if ([weakSelf processBuildOrderResult:resultObject])
             {
-                [weakSelf presentCompleteOrderView];
+                NSDictionary *shopping_delivery = [params objectForKey:SymphoxAPIParam_shopping_delivery];
+                [weakSelf presentCompleteOrderViewWithDelivery:shopping_delivery];
             }
             else
             {
@@ -2455,12 +2411,29 @@ typedef enum : NSUInteger {
     return success;
 }
 
-- (void)presentCompleteOrderView
+- (void)presentCompleteOrderViewWithDelivery:(NSDictionary *)delivery
 {
     CompleteOrderViewController *viewController = [[CompleteOrderViewController alloc] initWithNibName:@"CompleteOrderViewController" bundle:[NSBundle mainBundle]];
     viewController.dictionaryTotalCost = self.dictionaryTotalCost;
     viewController.dictionaryOrderData = self.dictionaryOrderResultData;
     viewController.tradeId = self.tradeId;
+    viewController.type = self.type;
+    viewController.dictionaryInstallment = self.dictionaryInstallment;
+    viewController.selectedPaymentDescription = self.selectedPaymentDescription;
+    viewController.dictionaryDelivery = delivery;
+    [self.navigationController pushViewController:viewController animated:YES];
+}
+
+- (void)presentCreditCardViewWithDelivery:(NSDictionary *)delivery andParams:(NSMutableDictionary *)params
+{
+    CreditCardViewController *viewController = [[CreditCardViewController alloc] initWithNibName:@"CreditCardViewController" bundle:[NSBundle mainBundle]];
+    viewController.dictionaryTotalCost = self.dictionaryTotalCost;
+    viewController.tradeId = self.tradeId;
+    viewController.type = self.type;
+    viewController.dictionaryInstallment = self.dictionaryInstallment;
+    viewController.selectedPaymentDescription = self.selectedPaymentDescription;
+    viewController.dictionaryDelivery = delivery;
+    viewController.params = params;
     [self.navigationController pushViewController:viewController animated:YES];
 }
 
@@ -3114,7 +3087,7 @@ typedef enum : NSUInteger {
             {
                 if (self.currentInvoiceCity)
                 {
-                    NSArray *regions = [self.dictionaryRegionsForCity objectForKey:self.currentCity];
+                    NSArray *regions = [self.dictionaryRegionsForCity objectForKey:self.currentInvoiceCity];
                     if (regions && [regions count] > 0)
                     {
                         [self presentActionsheetWithMessage:[LocalizedString PleaseSelectRegion] forIndexPath:indexPath withOptions:regions fromTableView:tableView];

@@ -618,6 +618,12 @@ typedef enum : NSUInteger {
                 case 2:
                 {
                     // Sub category. Currently impossible since there is no layer information.
+                    NSString *hallId = [dictionaryFocus objectForKey:SymphoxAPIParam_hallId];
+                    NSNumber *layer = [dictionaryFocus objectForKey:SymphoxAPIParam_layer];
+                    if (hallId && layer)
+                    {
+                        [[NSNotificationCenter defaultCenter] postNotificationName:PostNotificationName_JumpToShoppingMallAndPresentHall object:self userInfo:dictionaryFocus];
+                    }
                 }
                     break;
                 case 3:
@@ -677,6 +683,12 @@ typedef enum : NSUInteger {
                 case 2:
                 {
                     // Sub category. Currently impossible since there is no layer information.
+                    NSString *hallId = [dictionaryMarketing objectForKey:SymphoxAPIParam_hallId];
+                    NSNumber *layer = [dictionaryMarketing objectForKey:SymphoxAPIParam_layer];
+                    if (hallId && layer)
+                    {
+                        [[NSNotificationCenter defaultCenter] postNotificationName:PostNotificationName_JumpToShoppingMallAndPresentHall object:self userInfo:dictionaryMarketing];
+                    }
                 }
                     break;
                 case 3:

@@ -18,6 +18,7 @@ static NSInteger MaxTagsNumber = 4;
 - (void)refreshTagsFromArray:(NSArray *)arrayTagsData;
 - (void)checkPriceAndPointSeparatorState;
 - (void)buttonCartPressed:(id)sender;
+- (void)buttonFavoritePressed:(id)sender;
 
 @end
 
@@ -41,6 +42,7 @@ static NSInteger MaxTagsNumber = 4;
         [self.viewContainer addSubview:self.labelSeparator];
         [self.viewContainer addSubview:self.labelPoint];
         [self.viewContainer addSubview:self.buttonCart];
+        [self.viewContainer addSubview:self.buttonFavorite];
         [self.viewContainer addSubview:self.viewDiscount];
         for (UILabel *label in self.arrayViewTags)
         {
@@ -196,6 +198,17 @@ static NSInteger MaxTagsNumber = 4;
         }
         CGRect frame = CGRectMake((containerFrame.size.width - containMarginH - size.width), originY, size.width, size.height);
         self.buttonCart.frame = frame;
+    }
+    if (self.buttonFavorite && [self.buttonFavorite isHidden] == NO)
+    {
+        CGSize size = CGSizeMake(30.0, 30.0);
+        UIImage *image = [self.buttonFavorite imageForState:UIControlStateNormal];
+        if (image)
+        {
+            size = image.size;
+        }
+        CGRect frame = CGRectMake((CGRectGetMinX(self.buttonCart.frame) - intervalH - size.width), originY, size.width, size.height);
+        self.buttonFavorite.frame = frame;
     }
     if (self.viewDiscount && [self.viewDiscount isHidden] == NO)
     {
@@ -362,6 +375,27 @@ static NSInteger MaxTagsNumber = 4;
     }
     return _buttonCart;
 }
+
+- (UIButton *)buttonFavorite
+{
+    if (_buttonFavorite == nil)
+    {
+        _buttonFavorite = [[UIButton alloc] initWithFrame:CGRectZero];
+        UIImage *image = [UIImage imageNamed:@"btn_heart_off"];
+        if (image)
+        {
+            [_buttonFavorite setImage:image forState:UIControlStateNormal];
+        }
+        UIImage *selectedImage = [UIImage imageNamed:@"btn_heart_on"];
+        if (selectedImage)
+        {
+            [_buttonFavorite setImage:selectedImage forState:UIControlStateSelected];
+        }
+        [_buttonFavorite addTarget:self action:@selector(buttonFavoritePressed:) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _buttonFavorite;
+}
+
 
 - (void)setMarketingText:(NSString *)marketingText
 {
@@ -537,6 +571,16 @@ static NSInteger MaxTagsNumber = 4;
     return _attributesProductName;
 }
 
+- (void)setFavorite:(BOOL)favorite
+{
+    _favorite = favorite;
+    
+    __weak ProductTableViewCell *weakSelf = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [weakSelf.buttonFavorite setSelected:_favorite];
+    });
+}
+
 #pragma mark - Private Methods
 
 - (void)refreshTagsFromArray:(NSArray *)arrayTagsData
@@ -589,6 +633,14 @@ static NSInteger MaxTagsNumber = 4;
     if (_delegate && [_delegate respondsToSelector:@selector(productTableViewCell:didSelectToAddToCartBySender:)])
     {
         [_delegate productTableViewCell:self didSelectToAddToCartBySender:sender];
+    }
+}
+
+- (void)buttonFavoritePressed:(id)sender
+{
+    if (_delegate && [_delegate respondsToSelector:@selector(productTableViewCell:didSelectToAddToCartBySender:)])
+    {
+        [_delegate productTableViewCell:self didSelectToAddToFavoriteBySender:sender];
     }
 }
 

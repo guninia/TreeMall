@@ -305,6 +305,22 @@
 + (NSString *)DiscountByEPoint;
 + (NSString *)DiscountByPoint;
 + (NSString *)Total_I_product;
-
++ (NSString *)BankCode;
++ (NSString *)BankAccountToPay;
++ (NSString *)PaymentDeadline;
++ (NSString *)CashShouldPay;
++ (NSString *)DiscountPreferencial;
++ (NSString *)PaymentInfo;
++ (NSString *)AccountTransferInfo;
++ (NSString *)PleaseInputValidValidDate;
++ (NSString *)PleaseInputValidCardNumber;
++ (NSString *)PleaseInputValidSecurityCode;
++ (NSString *)ConvenienceStore;
++ (NSString *)StoreNumber;
++ (NSString *)StoreName;
++ (NSString *)StoreAddress;
++ (NSString *)ChoosePickupStore;
++ (NSString *)AlreadySentEmailAuth_S_;
++ (NSString *)PleaseAgreeMemberTermsFirst;
 
 @end

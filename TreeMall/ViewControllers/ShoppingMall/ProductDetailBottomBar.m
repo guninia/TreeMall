@@ -30,7 +30,7 @@
         [self addSubview:self.buttonFavorite];
         [self addSubview:self.buttonAddToCart];
         [self addSubview:self.buttonPurchase];
-//        [self addSubview:self.separator];
+        [self addSubview:self.separator];
         [self addSubview:self.labelInvalid];
     }
     return self;

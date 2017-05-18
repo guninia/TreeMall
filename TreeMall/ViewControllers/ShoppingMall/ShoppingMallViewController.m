@@ -586,7 +586,7 @@ typedef enum : NSUInteger {
             if (section == 0)
             {
                 numberOfRows = [_arraySubcategory count];
-                NSLog(@"numberOfRows - subcategory[%li]:\n%@", [self.arraySubcategory count], [self.arraySubcategory description]);
+                NSLog(@"numberOfRows - subcategory[%li]:\n%@", (unsigned long)[self.arraySubcategory count], [self.arraySubcategory description]);
             }
         }
             break;

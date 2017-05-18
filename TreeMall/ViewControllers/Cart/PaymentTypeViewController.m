@@ -16,6 +16,7 @@
 #import "PaymentTypeHeaderView.h"
 #import "ExchangeDescriptionViewController.h"
 #import "ReceiverInfoViewController.h"
+#import "StorePickupInfoViewController.h"
 
 #define kPaymentSectionId @"PaymentSectionId"
 #define kPaymentSectionTitle @"PaymentSectionTitle"
@@ -824,6 +825,7 @@
     {
         NSDictionary *section = [self.arrayPaymentSections objectAtIndex:self.selectedIndexPathOfPayment.section];
         paymentId = [section objectForKey:kPaymentSectionId];
+        
         if ([paymentId isEqualToString:@"I"] || [paymentId isEqualToString:@"O2"])
         {
             if (self.selectedIndexPathOfPayment.row < [self.arrayInstallment count])
@@ -831,6 +833,35 @@
                 installment = [self.arrayInstallment objectAtIndex:self.selectedIndexPathOfPayment.row];
                 installmentTerm = [installment objectForKey:SymphoxAPIParam_installment_term];
             }
+        }
+        
+        // Prepare paymentDescription for view after creating order.
+        NSString *paymentName = [section objectForKey:kPaymentSectionTitle];
+        NSMutableString *paymentDescription = [NSMutableString string];
+        if (paymentName && [paymentName length] > 0)
+        {
+            [paymentDescription appendString:paymentName];
+        }
+        NSArray *paymentContents = [section objectForKey:kPaymentSectionContent];
+        if (paymentContents && self.selectedIndexPathOfPayment.row < [paymentContents count])
+        {
+            NSDictionary *paymentContent = [paymentContents objectAtIndex:self.selectedIndexPathOfPayment.row];
+            if (paymentContent && [paymentContent count] > 0)
+            {
+                NSString *optionTitle = [paymentContent objectForKey:kPaymentOptionTitle];
+                if ([optionTitle length] > 0)
+                {
+                    if ([paymentDescription length] > 0)
+                    {
+                        [paymentDescription appendString:@"\n"];
+                    }
+                    [paymentDescription appendString:optionTitle];
+                }
+            }
+        }
+        if ([paymentDescription length] > 0)
+        {
+            self.selectedPaymentDescription = paymentDescription;
         }
     }
     if (installment)
@@ -977,36 +1008,74 @@
                 NSLog(@"requestResultOfCheckPaymentWithParams - Unexpected data format.");
             }
             // Received result representing success. Go to next step.
-            ReceiverInfoViewController *viewController = [[ReceiverInfoViewController alloc] initWithNibName:@"ReceiverInfoViewController" bundle:[NSBundle mainBundle]];
-            viewController.type = weakSelf.type;
-            NSMutableDictionary *dictionaryPayment = [NSMutableDictionary dictionary];
-            if (weakSelf.selectedInstallment)
+            if (self.type == CartTypeStorePickup)
             {
-                [dictionaryPayment setDictionary:weakSelf.selectedInstallment];
+                StorePickupInfoViewController *viewController = [[StorePickupInfoViewController alloc] initWithNibName:@"StorePickupInfoViewController" bundle:[NSBundle mainBundle]];
+                viewController.type = weakSelf.type;
+                NSMutableDictionary *dictionaryPayment = [NSMutableDictionary dictionary];
+                if (weakSelf.selectedInstallment)
+                {
+                    [dictionaryPayment setDictionary:weakSelf.selectedInstallment];
+                }
+                else
+                {
+                    [dictionaryPayment setObject:[NSNumber numberWithInteger:0] forKey:SymphoxAPIParam_installment_term];
+                    [dictionaryPayment setObject:[NSNumber numberWithInteger:0] forKey:SymphoxAPIParam_installment_amount];
+                }
+                NSDictionary *account_result = [self.dictionaryData objectForKey:SymphoxAPIParam_account_result];
+                if (account_result && [account_result isEqual:[NSNull null]] == NO)
+                {
+                    NSNumber *total_cash = [account_result objectForKey:SymphoxAPIParam_total_cash];
+                    if (total_cash && [total_cash isEqual:[NSNull null]] == NO)
+                    {
+                        [dictionaryPayment setObject:total_cash forKey:SymphoxAPIParam_auth_amount];
+                    }
+                }
+                viewController.dictionaryTotalCost = account_result;
+                viewController.dictionaryInstallment = dictionaryPayment;
+                
+                NSString *trade_id = [params objectForKey:SymphoxAPIParam_trade_id];
+                if (trade_id)
+                {
+                    viewController.tradeId = trade_id;
+                }
+                viewController.selectedPaymentDescription = self.selectedPaymentDescription;
+                [weakSelf.navigationController pushViewController:viewController animated:YES];
             }
             else
             {
-                [dictionaryPayment setObject:[NSNumber numberWithInteger:0] forKey:SymphoxAPIParam_installment_term];
-                [dictionaryPayment setObject:[NSNumber numberWithInteger:0] forKey:SymphoxAPIParam_installment_amount];
-            }
-            NSDictionary *account_result = [self.dictionaryData objectForKey:SymphoxAPIParam_account_result];
-            if (account_result && [account_result isEqual:[NSNull null]] == NO)
-            {
-                NSNumber *total_cash = [account_result objectForKey:SymphoxAPIParam_total_cash];
-                if (total_cash && [total_cash isEqual:[NSNull null]] == NO)
+                ReceiverInfoViewController *viewController = [[ReceiverInfoViewController alloc] initWithNibName:@"ReceiverInfoViewController" bundle:[NSBundle mainBundle]];
+                viewController.type = weakSelf.type;
+                NSMutableDictionary *dictionaryPayment = [NSMutableDictionary dictionary];
+                if (weakSelf.selectedInstallment)
                 {
-                    [dictionaryPayment setObject:total_cash forKey:SymphoxAPIParam_auth_amount];
+                    [dictionaryPayment setDictionary:weakSelf.selectedInstallment];
                 }
+                else
+                {
+                    [dictionaryPayment setObject:[NSNumber numberWithInteger:0] forKey:SymphoxAPIParam_installment_term];
+                    [dictionaryPayment setObject:[NSNumber numberWithInteger:0] forKey:SymphoxAPIParam_installment_amount];
+                }
+                NSDictionary *account_result = [self.dictionaryData objectForKey:SymphoxAPIParam_account_result];
+                if (account_result && [account_result isEqual:[NSNull null]] == NO)
+                {
+                    NSNumber *total_cash = [account_result objectForKey:SymphoxAPIParam_total_cash];
+                    if (total_cash && [total_cash isEqual:[NSNull null]] == NO)
+                    {
+                        [dictionaryPayment setObject:total_cash forKey:SymphoxAPIParam_auth_amount];
+                    }
+                }
+                viewController.dictionaryTotalCost = account_result;
+                viewController.dictionaryInstallment = dictionaryPayment;
+                
+                NSString *trade_id = [params objectForKey:SymphoxAPIParam_trade_id];
+                if (trade_id)
+                {
+                    viewController.tradeId = trade_id;
+                }
+                viewController.selectedPaymentDescription = self.selectedPaymentDescription;
+                [weakSelf.navigationController pushViewController:viewController animated:YES];
             }
-            viewController.dictionaryTotalCost = account_result;
-            viewController.dictionaryInstallment = dictionaryPayment;
-            
-            NSString *trade_id = [params objectForKey:SymphoxAPIParam_trade_id];
-            if (trade_id)
-            {
-                viewController.tradeId = trade_id;
-            }
-            [weakSelf.navigationController pushViewController:viewController animated:YES];
         }
         else
         {

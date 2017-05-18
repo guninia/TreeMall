@@ -207,6 +207,8 @@
     ProductTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:ProductTableViewCellIdentifier forIndexPath:indexPath];
     [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
     //    NSLog(@"cellForRowAtIndexPath[%li][%li]", (long)indexPath.section, (long)indexPath.row);
+    cell.price = nil;
+    cell.point = nil;
     if (indexPath.row < [_arrayFavorites count])
     {
         NSDictionary *dictionary = [_arrayFavorites objectAtIndex:indexPath.row];
@@ -253,13 +255,34 @@
         cell.productName = productName;
         
         NSNumber *price = [dictionary objectForKey:SymphoxAPIParam_price03];
-        cell.price = price;
-        
         NSNumber *point = [dictionary objectForKey:SymphoxAPIParam_point01];
-        cell.point = point;
+        NSNumber *price2 = [dictionary objectForKey:SymphoxAPIParam_price02];
+        NSNumber *point2 = [dictionary objectForKey:SymphoxAPIParam_point02];
+        if (price && [price isEqual:[NSNull null]] == NO && [price integerValue] > 0)
+        {
+            cell.price = price;
+        }
+        else if (point && [point isEqual:[NSNull null]] == NO && [point integerValue] > 0)
+        {
+            cell.point = point;
+            cell.labelPoint.textColor = [UIColor lightGrayColor];
+        }
+        else
+        {
+            cell.price = price2;
+            cell.point = point2;
+            cell.labelPoint.textColor = [UIColor redColor];
+        }
         
         NSNumber *discount = [dictionary objectForKey:SymphoxAPIParam_discount_hall_percentage];
         cell.discount = discount;
+        
+        NSNumber *cpdt_num = [dictionary objectForKey:SymphoxAPIParam_cpdt_num];
+        if (cpdt_num && [cpdt_num isEqual:[NSNull null]] == NO)
+        {
+            BOOL isFavorite = [[TMInfoManager sharedManager] favoriteContainsProductWithIdentifier:cpdt_num];
+            cell.favorite = isFavorite;
+        }
     }
     return cell;
 }

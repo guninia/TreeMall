@@ -784,6 +784,13 @@
         
         NSNumber *discount = [dictionary objectForKey:SymphoxAPIParam_discount_hall_percentage];
         cell.discount = discount;
+        
+        NSNumber *cpdt_num = [dictionary objectForKey:SymphoxAPIParam_cpdt_num];
+        if (cpdt_num && [cpdt_num isEqual:[NSNull null]] == NO)
+        {
+            BOOL isFavorite = [[TMInfoManager sharedManager] favoriteContainsProductWithIdentifier:cpdt_num];
+            cell.favorite = isFavorite;
+        }
     }
     return cell;
 }
@@ -1041,6 +1048,22 @@
         return;
     NSDictionary *product = [self.arrayProducts objectAtIndex:cell.tag];
     [self showCartTypeSheetForProduct:product];
+}
+
+- (void)productTableViewCell:(ProductTableViewCell *)cell didSelectToAddToFavoriteBySender:(id)sender
+{
+    if (cell.tag >= [self.arrayProducts count])
+        return;
+    NSDictionary *product = [self.arrayProducts objectAtIndex:cell.tag];
+    NSNumber *cpdt_num = [product objectForKey:SymphoxAPIParam_cpdt_num];
+    if (cpdt_num == nil || [cpdt_num isEqual:[NSNull null]])
+        return;
+    if ([[TMInfoManager sharedManager] favoriteContainsProductWithIdentifier:cpdt_num])
+    {
+        return;
+    }
+    [[TMInfoManager sharedManager] addProductToFavorite:product];
+    cell.favorite = YES;
 }
 
 @end

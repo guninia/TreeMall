@@ -30,4 +30,53 @@ static NSString *UserDefault_IntroduceShown = @"IntroduceShown";
 
 #define TMMainColor [UIColor colorWithRed:(90.0/255.0) green:(190.0/255.0) blue:(40.0/255.0) alpha:1.0]
 
+typedef enum : NSUInteger {
+    InvoiceLayoutTypeDefault,
+    InvoiceLayoutTypeElectronicMember,
+    InvoiceLayoutTypeElectronicExtraCode,
+    InvoiceLayoutTypeDonate,
+    InvoiceLayoutTypeDonateSpecificGroup,
+    InvoiceLayoutTypeTriplicate,
+    InvoiceLayoutTypeTotal
+} InvoiceLayoutType;
+
+typedef enum : NSUInteger {
+    InvoiceCellTagChooseType,
+    InvoiceCellTagChooseElectronicType,
+    InvoiceCellTagChooseDonateTarget,
+    InvoiceCellTagElectronicCode,
+    InvoiceCellTagDonateCode,
+    InvoiceCellTagInvoiceTitle,
+    InvoiceCellTagInvoiceIdentifier,
+    InvoiceCellTagReceiver,
+    InvoiceCellTagCity,
+    InvoiceCellTagRegion,
+    InvoiceCellTagAddress,
+    InvoiceCellTagInvoiceDesc,
+    InvoiceCellTagUnknown,
+    InvoiceCellTagTotal
+} InvoiceCellTag;
+
+typedef enum : NSUInteger {
+    InvoiceTypeOptionElectronic,
+    InvoiceTypeOptionDonate,
+    InvoiceTypeOptionTriplicate,
+    InvoiceTypeOptionTotal
+} InvoiceTypeOption;
+
+typedef enum : NSUInteger {
+    InvoiceElectronicSubTypeMember,
+    InvoiceElectronicSubTypeNaturalPerson,
+    InvoiceElectronicSubTypeCellphoneBarcode,
+    InvoiceElectronicSubTypeTotal
+} InvoiceElectronicSubType;
+
+typedef enum : NSUInteger {
+    InvoiceDonateTarget1,
+    InvoiceDonateTarget2,
+    InvoiceDonateTarget3,
+    InvoiceDonateTargetOther,
+    InvoiceDonateTargetTotal
+} InvoiceDonateTarget;
+
 #endif /* Definition_h */

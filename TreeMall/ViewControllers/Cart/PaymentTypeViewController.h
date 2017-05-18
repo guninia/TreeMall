@@ -38,6 +38,7 @@
 @property (nonatomic, strong) NSArray *arrayBuyNowDelivery;
 @property (nonatomic, strong) NSNumberFormatter *formatter;
 @property (nonatomic, strong) NSIndexPath *selectedIndexPathOfPayment;
+@property (nonatomic, strong) NSString *selectedPaymentDescription;
 @property (nonatomic, strong) NSDictionary *selectedInstallment;
 
 @end

@@ -238,6 +238,16 @@
 		6891300F1E68097C00CE834A /* CouponListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6891300D1E68097C00CE834A /* CouponListViewController.m */; };
 		689130101E68097C00CE834A /* CouponListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6891300E1E68097C00CE834A /* CouponListViewController.xib */; };
 		689130141E6811E700CE834A /* SemiCircleEndsSegmentedView.m in Sources */ = {isa = PBXBuildFile; fileRef = 689130131E6811E700CE834A /* SemiCircleEndsSegmentedView.m */; };
+		6893F6711ECBFA66000DD64F /* StorePickupInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6893F66F1ECBFA66000DD64F /* StorePickupInfoViewController.m */; };
+		6893F6721ECBFA66000DD64F /* StorePickupInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6893F66F1ECBFA66000DD64F /* StorePickupInfoViewController.m */; };
+		6893F6731ECBFA66000DD64F /* StorePickupInfoViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6893F6701ECBFA66000DD64F /* StorePickupInfoViewController.xib */; };
+		6893F6741ECBFA66000DD64F /* StorePickupInfoViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6893F6701ECBFA66000DD64F /* StorePickupInfoViewController.xib */; };
+		6893F6771ECC3768000DD64F /* SeparatorLineHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6893F6761ECC3768000DD64F /* SeparatorLineHeaderView.m */; };
+		6893F6781ECC3768000DD64F /* SeparatorLineHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6893F6761ECC3768000DD64F /* SeparatorLineHeaderView.m */; };
+		6893F67C1ECC546C000DD64F /* StorePickupWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6893F67A1ECC546C000DD64F /* StorePickupWebViewController.m */; };
+		6893F67D1ECC546C000DD64F /* StorePickupWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6893F67A1ECC546C000DD64F /* StorePickupWebViewController.m */; };
+		6893F67E1ECC546C000DD64F /* StorePickupWebViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6893F67B1ECC546C000DD64F /* StorePickupWebViewController.xib */; };
+		6893F67F1ECC546C000DD64F /* StorePickupWebViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6893F67B1ECC546C000DD64F /* StorePickupWebViewController.xib */; };
 		689546441E35DFB400D5CD1E /* AuthenticateViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 689546421E35DFB400D5CD1E /* AuthenticateViewController.m */; };
 		689546451E35DFB400D5CD1E /* AuthenticateViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 689546431E35DFB400D5CD1E /* AuthenticateViewController.xib */; };
 		689546481E35F38700D5CD1E /* PagingGridView.m in Sources */ = {isa = PBXBuildFile; fileRef = 689546471E35F38700D5CD1E /* PagingGridView.m */; };
@@ -253,7 +263,6 @@
 		689929D01E821D96001EDA0C /* CircularSideLabelView.m in Sources */ = {isa = PBXBuildFile; fileRef = 689929CF1E821D96001EDA0C /* CircularSideLabelView.m */; };
 		689A7A251EB1F14B00B7D281 /* PromotionDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 689A7A231EB1F14B00B7D281 /* PromotionDetailViewController.m */; };
 		689A7A261EB1F14B00B7D281 /* PromotionDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 689A7A241EB1F14B00B7D281 /* PromotionDetailViewController.xib */; };
-		689D906E1EC00A3D0052C75A /* InvoiceDescriptionFooterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 689D906D1EC00A3D0052C75A /* InvoiceDescriptionFooterView.m */; };
 		689F664A1E5AC56400CC3664 /* ProductDetailBottomBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 689F66491E5AC56400CC3664 /* ProductDetailBottomBar.m */; };
 		68A1FE951EB04B670058ABED /* InstallmentDescriptionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68A1FE941EB04B670058ABED /* InstallmentDescriptionViewController.m */; };
 		68A1FE991EB0858D0058ABED /* AdditionalPurchaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68A1FE971EB0858D0058ABED /* AdditionalPurchaseViewController.m */; };
@@ -326,6 +335,12 @@
 		68E470301E72A06A0040213B /* OrderHeaderReusableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 68E4702F1E72A06A0040213B /* OrderHeaderReusableView.m */; };
 		68E470331E72A0990040213B /* OrderListCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 68E470321E72A0990040213B /* OrderListCollectionViewCell.m */; };
 		68E470361E72A79B0040213B /* LoadingFoorterReusableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 68E470351E72A79B0040213B /* LoadingFoorterReusableView.m */; };
+		68F345031ECAE7D7001D74DD /* ColorFooterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 68F345021ECAE7D7001D74DD /* ColorFooterView.m */; };
+		68F345041ECAE7D7001D74DD /* ColorFooterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 68F345021ECAE7D7001D74DD /* ColorFooterView.m */; };
+		68F345081ECAEED3001D74DD /* CreditCardViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68F345061ECAEED3001D74DD /* CreditCardViewController.m */; };
+		68F345091ECAEED3001D74DD /* CreditCardViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68F345061ECAEED3001D74DD /* CreditCardViewController.m */; };
+		68F3450A1ECAEED3001D74DD /* CreditCardViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 68F345071ECAEED3001D74DD /* CreditCardViewController.xib */; };
+		68F3450B1ECAEED3001D74DD /* CreditCardViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 68F345071ECAEED3001D74DD /* CreditCardViewController.xib */; };
 		68FBDE041E3757F7007F5C13 /* MainCategoryCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 68FBDE031E3757F7007F5C13 /* MainCategoryCollectionViewCell.m */; };
 		A128B366FA4FF33BE04CD945 /* libPods-TreeMallUITests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C32F365B4934E67C46D6BB84 /* libPods-TreeMallUITests.a */; };
 		D792E4AD93D9286C2D6DA1C9 /* libPods-TreeMallTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5EBE3E96350BE7006189D41E /* libPods-TreeMallTests.a */; };
@@ -486,6 +501,14 @@
 		6891300E1E68097C00CE834A /* CouponListViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = CouponListViewController.xib; path = ViewControllers/Member/CouponListViewController.xib; sourceTree = "<group>"; };
 		689130121E6811E700CE834A /* SemiCircleEndsSegmentedView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SemiCircleEndsSegmentedView.h; path = Component/SemiCircleEndsSegmentedView/SemiCircleEndsSegmentedView.h; sourceTree = "<group>"; };
 		689130131E6811E700CE834A /* SemiCircleEndsSegmentedView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SemiCircleEndsSegmentedView.m; path = Component/SemiCircleEndsSegmentedView/SemiCircleEndsSegmentedView.m; sourceTree = "<group>"; };
+		6893F66E1ECBFA66000DD64F /* StorePickupInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = StorePickupInfoViewController.h; path = ViewControllers/Cart/StorePickupInfoViewController.h; sourceTree = "<group>"; };
+		6893F66F1ECBFA66000DD64F /* StorePickupInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = StorePickupInfoViewController.m; path = ViewControllers/Cart/StorePickupInfoViewController.m; sourceTree = "<group>"; };
+		6893F6701ECBFA66000DD64F /* StorePickupInfoViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = StorePickupInfoViewController.xib; path = ViewControllers/Cart/StorePickupInfoViewController.xib; sourceTree = "<group>"; };
+		6893F6751ECC3768000DD64F /* SeparatorLineHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SeparatorLineHeaderView.h; path = ViewControllers/Cart/SeparatorLineHeaderView.h; sourceTree = "<group>"; };
+		6893F6761ECC3768000DD64F /* SeparatorLineHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SeparatorLineHeaderView.m; path = ViewControllers/Cart/SeparatorLineHeaderView.m; sourceTree = "<group>"; };
+		6893F6791ECC546C000DD64F /* StorePickupWebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = StorePickupWebViewController.h; path = ViewControllers/Cart/StorePickupWebViewController.h; sourceTree = "<group>"; };
+		6893F67A1ECC546C000DD64F /* StorePickupWebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = StorePickupWebViewController.m; path = ViewControllers/Cart/StorePickupWebViewController.m; sourceTree = "<group>"; };
+		6893F67B1ECC546C000DD64F /* StorePickupWebViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = StorePickupWebViewController.xib; path = ViewControllers/Cart/StorePickupWebViewController.xib; sourceTree = "<group>"; };
 		689546411E35DFB400D5CD1E /* AuthenticateViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AuthenticateViewController.h; path = ViewControllers/Login/AuthenticateViewController.h; sourceTree = "<group>"; };
 		689546421E35DFB400D5CD1E /* AuthenticateViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AuthenticateViewController.m; path = ViewControllers/Login/AuthenticateViewController.m; sourceTree = "<group>"; };
 		689546431E35DFB400D5CD1E /* AuthenticateViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = AuthenticateViewController.xib; path = ViewControllers/Login/AuthenticateViewController.xib; sourceTree = "<group>"; };
@@ -512,8 +535,6 @@
 		689A7A221EB1F14B00B7D281 /* PromotionDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PromotionDetailViewController.h; path = ViewControllers/Promotion/PromotionDetailViewController.h; sourceTree = "<group>"; };
 		689A7A231EB1F14B00B7D281 /* PromotionDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PromotionDetailViewController.m; path = ViewControllers/Promotion/PromotionDetailViewController.m; sourceTree = "<group>"; };
 		689A7A241EB1F14B00B7D281 /* PromotionDetailViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = PromotionDetailViewController.xib; path = ViewControllers/Promotion/PromotionDetailViewController.xib; sourceTree = "<group>"; };
-		689D906C1EC00A3D0052C75A /* InvoiceDescriptionFooterView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = InvoiceDescriptionFooterView.h; path = ViewControllers/Cart/InvoiceDescriptionFooterView.h; sourceTree = "<group>"; };
-		689D906D1EC00A3D0052C75A /* InvoiceDescriptionFooterView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = InvoiceDescriptionFooterView.m; path = ViewControllers/Cart/InvoiceDescriptionFooterView.m; sourceTree = "<group>"; };
 		689F66481E5AC56400CC3664 /* ProductDetailBottomBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ProductDetailBottomBar.h; path = ViewControllers/ShoppingMall/ProductDetailBottomBar.h; sourceTree = "<group>"; };
 		689F66491E5AC56400CC3664 /* ProductDetailBottomBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ProductDetailBottomBar.m; path = ViewControllers/ShoppingMall/ProductDetailBottomBar.m; sourceTree = "<group>"; };
 		68A1FE931EB04B670058ABED /* InstallmentDescriptionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = InstallmentDescriptionViewController.h; path = ViewControllers/ShoppingMall/InstallmentDescriptionViewController.h; sourceTree = "<group>"; };
@@ -638,6 +659,11 @@
 		68E470321E72A0990040213B /* OrderListCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OrderListCollectionViewCell.m; path = ViewControllers/OrderList/OrderListCollectionViewCell.m; sourceTree = "<group>"; };
 		68E470341E72A79B0040213B /* LoadingFoorterReusableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LoadingFoorterReusableView.h; path = ViewControllers/OrderList/LoadingFoorterReusableView.h; sourceTree = "<group>"; };
 		68E470351E72A79B0040213B /* LoadingFoorterReusableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LoadingFoorterReusableView.m; path = ViewControllers/OrderList/LoadingFoorterReusableView.m; sourceTree = "<group>"; };
+		68F345011ECAE7D7001D74DD /* ColorFooterView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ColorFooterView.h; path = ViewControllers/Cart/ColorFooterView.h; sourceTree = "<group>"; };
+		68F345021ECAE7D7001D74DD /* ColorFooterView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ColorFooterView.m; path = ViewControllers/Cart/ColorFooterView.m; sourceTree = "<group>"; };
+		68F345051ECAEED3001D74DD /* CreditCardViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CreditCardViewController.h; path = ViewControllers/Cart/CreditCardViewController.h; sourceTree = "<group>"; };
+		68F345061ECAEED3001D74DD /* CreditCardViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CreditCardViewController.m; path = ViewControllers/Cart/CreditCardViewController.m; sourceTree = "<group>"; };
+		68F345071ECAEED3001D74DD /* CreditCardViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = CreditCardViewController.xib; path = ViewControllers/Cart/CreditCardViewController.xib; sourceTree = "<group>"; };
 		68FBDE021E3757F7007F5C13 /* MainCategoryCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MainCategoryCollectionViewCell.h; path = ViewControllers/ShoppingMall/MainCategoryCollectionViewCell.h; sourceTree = "<group>"; };
 		68FBDE031E3757F7007F5C13 /* MainCategoryCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MainCategoryCollectionViewCell.m; path = ViewControllers/ShoppingMall/MainCategoryCollectionViewCell.m; sourceTree = "<group>"; };
 		A0CB69A63798602A106E51A0 /* Pods-TreeMallUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TreeMallUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-TreeMallUITests/Pods-TreeMallUITests.release.xcconfig"; sourceTree = "<group>"; };
@@ -1061,12 +1087,18 @@
 				681500EB1EB727F100B872E2 /* ReceiverInfoViewController.h */,
 				681500EC1EB727F100B872E2 /* ReceiverInfoViewController.m */,
 				681500ED1EB727F100B872E2 /* ReceiverInfoViewController.xib */,
+				6893F66E1ECBFA66000DD64F /* StorePickupInfoViewController.h */,
+				6893F66F1ECBFA66000DD64F /* StorePickupInfoViewController.m */,
+				6893F6701ECBFA66000DD64F /* StorePickupInfoViewController.xib */,
+				6893F6791ECC546C000DD64F /* StorePickupWebViewController.h */,
+				6893F67A1ECC546C000DD64F /* StorePickupWebViewController.m */,
+				6893F67B1ECC546C000DD64F /* StorePickupWebViewController.xib */,
 				6882AF001EB8870200A29E57 /* ReceiverInfoCell.h */,
 				6882AF011EB8870200A29E57 /* ReceiverInfoCell.m */,
 				686302A11EB985B500678A34 /* SingleLabelHeaderView.h */,
 				686302A21EB985B500678A34 /* SingleLabelHeaderView.m */,
-				689D906C1EC00A3D0052C75A /* InvoiceDescriptionFooterView.h */,
-				689D906D1EC00A3D0052C75A /* InvoiceDescriptionFooterView.m */,
+				6893F6751ECC3768000DD64F /* SeparatorLineHeaderView.h */,
+				6893F6761ECC3768000DD64F /* SeparatorLineHeaderView.m */,
 				68B76A321EC1978D003E4C41 /* SampleImageViewController.h */,
 				68B76A331EC1978D003E4C41 /* SampleImageViewController.m */,
 				68D7F2681EC94CE400B13214 /* CompleteOrderViewController.h */,
@@ -1074,6 +1106,11 @@
 				68D7F26A1EC94CE400B13214 /* CompleteOrderViewController.xib */,
 				68D7F26F1EC9833B00B13214 /* CompleteOrderContentTableViewCell.h */,
 				68D7F2701EC9833B00B13214 /* CompleteOrderContentTableViewCell.m */,
+				68F345011ECAE7D7001D74DD /* ColorFooterView.h */,
+				68F345021ECAE7D7001D74DD /* ColorFooterView.m */,
+				68F345051ECAEED3001D74DD /* CreditCardViewController.h */,
+				68F345061ECAEED3001D74DD /* CreditCardViewController.m */,
+				68F345071ECAEED3001D74DD /* CreditCardViewController.xib */,
 			);
 			name = Cart;
 			sourceTree = "<group>";
@@ -1485,6 +1522,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6893F67E1ECC546C000DD64F /* StorePickupWebViewController.xib in Resources */,
 				6811BC711E2774B500626A4A /* GoogleSignIn.bundle in Resources */,
 				681500EF1EB727F100B872E2 /* ReceiverInfoViewController.xib in Resources */,
 				689130101E68097C00CE834A /* CouponListViewController.xib in Resources */,
@@ -1494,11 +1532,13 @@
 				689065151E23368100E5CB26 /* ShoppingMallViewController.xib in Resources */,
 				68CA36BE1E23880400A70BCC /* LoginViewController.xib in Resources */,
 				68E401371E30B09900BFF66B /* ForgetPasswordViewController.xib in Resources */,
+				68F3450A1ECAEED3001D74DD /* CreditCardViewController.xib in Resources */,
 				68E401321E309B7700BFF66B /* TermsViewController.xib in Resources */,
 				687B0E6D1E6970D500E04D81 /* CouponDetailViewController.xib in Resources */,
 				68A1FE9A1EB0858D0058ABED /* AdditionalPurchaseViewController.xib in Resources */,
 				689546451E35DFB400D5CD1E /* AuthenticateViewController.xib in Resources */,
 				685939BA1E1F49DF00351FFB /* Assets.xcassets in Resources */,
+				6893F6731ECBFA66000DD64F /* StorePickupInfoViewController.xib in Resources */,
 				6890650F1E23334400E5CB26 /* EntranceViewController.xib in Resources */,
 				68B0FDDF1E837B8F00BE273F /* NewsletterSubscribeViewController.xib in Resources */,
 				68981FAA1E55991E00A2707A /* SearchViewController.xib in Resources */,
@@ -1547,6 +1587,7 @@
 			files = (
 				6884940A1EBC779A0087BC2B /* GoogleSignIn.bundle in Resources */,
 				6884940B1EBC779A0087BC2B /* ReceiverInfoViewController.xib in Resources */,
+				6893F6741ECBFA66000DD64F /* StorePickupInfoViewController.xib in Resources */,
 				68D7F26E1EC94CE400B13214 /* CompleteOrderViewController.xib in Resources */,
 				6884940C1EBC779A0087BC2B /* CouponListViewController.xib in Resources */,
 				6884940D1EBC779A0087BC2B /* MemberViewController.xib in Resources */,
@@ -1567,9 +1608,11 @@
 				6884941C1EBC779A0087BC2B /* PromotionViewController.xib in Resources */,
 				6884941D1EBC779A0087BC2B /* MemberSettingsViewController.xib in Resources */,
 				6884941E1EBC779A0087BC2B /* WebViewViewController.xib in Resources */,
+				6893F67F1ECC546C000DD64F /* StorePickupWebViewController.xib in Resources */,
 				6884941F1EBC779A0087BC2B /* Localizable.strings in Resources */,
 				688494201EBC779A0087BC2B /* ProductFilterViewController.xib in Resources */,
 				688494211EBC779A0087BC2B /* CartViewController.xib in Resources */,
+				68F3450B1ECAEED3001D74DD /* CreditCardViewController.xib in Resources */,
 				688494221EBC779A0087BC2B /* Main.storyboard in Resources */,
 				688494231EBC779A0087BC2B /* NotificationViewController.xib in Resources */,
 				688494241EBC779A0087BC2B /* PromotionDetailViewController.xib in Resources */,
@@ -1831,6 +1874,7 @@
 				689613CA1E52AAE800066BE7 /* LabelRangeSliderView.m in Sources */,
 				689065201E23387200E5CB26 /* NotificationViewController.m in Sources */,
 				68981FA91E55991E00A2707A /* SearchViewController.m in Sources */,
+				68F345081ECAEED3001D74DD /* CreditCardViewController.m in Sources */,
 				6890651A1E2337F900E5CB26 /* CartViewController.m in Sources */,
 				68B26FB91E31CB5F00B6D757 /* RegisterViewController.m in Sources */,
 				68C5A9271EB48C4100EEC55E /* ChosenDiscountTableViewCell.m in Sources */,
@@ -1838,6 +1882,7 @@
 				68C5A92A1EB48F6C00EEC55E /* PaymentTypeTableViewCell.m in Sources */,
 				68B5EEC91E4C69910030A2ED /* FullScreenLoadingView.m in Sources */,
 				689130141E6811E700CE834A /* SemiCircleEndsSegmentedView.m in Sources */,
+				6893F67C1ECC546C000DD64F /* StorePickupWebViewController.m in Sources */,
 				68CA36B21E23709400A70BCC /* EntranceTableViewCell.m in Sources */,
 				685939AC1E1F49DF00351FFB /* main.m in Sources */,
 				68A1FE951EB04B670058ABED /* InstallmentDescriptionViewController.m in Sources */,
@@ -1848,8 +1893,8 @@
 				68A98B941E779D760094A77F /* OrderDeliverProgressView.m in Sources */,
 				685939ED1E1F775900351FFB /* CryptoModule.m in Sources */,
 				6826E9E51E5BE52E001E572A /* BorderedDoubleLabelView.m in Sources */,
-				689D906E1EC00A3D0052C75A /* InvoiceDescriptionFooterView.m in Sources */,
 				68B0FDE61E83804000BE273F /* PureTextTableFooterView.m in Sources */,
+				68F345031ECAE7D7001D74DD /* ColorFooterView.m in Sources */,
 				6884DD7F1E6D00B200DAF859 /* CouponDetailDescriptionView.m in Sources */,
 				6887999F1E5AD12B00495A77 /* ProductDetailImageCollectionViewCell.m in Sources */,
 				68CF5E601E38ABF400341EF1 /* SubcategoryTableViewCell.m in Sources */,
@@ -1863,6 +1908,7 @@
 				68A85C7E1E2728CF004DD624 /* TMInfoManager.m in Sources */,
 				6819AB521E4981A900735EA3 /* DiscountLabelView.m in Sources */,
 				6838E12A1EB587DC007395EF /* SingleMediaDetailViewController.m in Sources */,
+				6893F6771ECC3768000DD64F /* SeparatorLineHeaderView.m in Sources */,
 				6882AF021EB8870200A29E57 /* ReceiverInfoCell.m in Sources */,
 				68C5A92D1EB48FDA00EEC55E /* PaymentTypeHeaderView.m in Sources */,
 				6863A1DC1E5EBD3D0036E0A8 /* OrderListViewController.m in Sources */,
@@ -1881,6 +1927,7 @@
 				6826C0191EAF3CBC00921ADC /* ExchangeDescriptionViewController.m in Sources */,
 				686302A31EB985B500678A34 /* SingleLabelHeaderView.m in Sources */,
 				683C17D31EB2D9200051519A /* HotSaleViewController.m in Sources */,
+				6893F6711ECBFA66000DD64F /* StorePickupInfoViewController.m in Sources */,
 				6838E1281EB587DC007395EF /* SingleMediaDetailSubViewController.m in Sources */,
 				688EF5F31E5D474C0047E2DC /* MemberPointView.m in Sources */,
 				6884DD821E6D191000DAF859 /* TopSeparatedTitleCollectionReusableView.m in Sources */,
@@ -1962,6 +2009,7 @@
 				688493C21EBC779A0087BC2B /* Utility.m in Sources */,
 				688493C31EBC779A0087BC2B /* LabelRangeSliderView.m in Sources */,
 				688493C41EBC779A0087BC2B /* NotificationViewController.m in Sources */,
+				68F345041ECAE7D7001D74DD /* ColorFooterView.m in Sources */,
 				688493C51EBC779A0087BC2B /* SearchViewController.m in Sources */,
 				688493C61EBC779A0087BC2B /* CartViewController.m in Sources */,
 				688493C71EBC779A0087BC2B /* RegisterViewController.m in Sources */,
@@ -1988,6 +2036,8 @@
 				688493DC1EBC779A0087BC2B /* PaymentTypeViewController.m in Sources */,
 				688493DD1EBC779A0087BC2B /* AuthenticateViewController.m in Sources */,
 				688493DE1EBC779A0087BC2B /* MemberTitleView.m in Sources */,
+				6893F6721ECBFA66000DD64F /* StorePickupInfoViewController.m in Sources */,
+				6893F67D1ECC546C000DD64F /* StorePickupWebViewController.m in Sources */,
 				688493DF1EBC779A0087BC2B /* TreeMall.xcdatamodeld in Sources */,
 				688493E01EBC779A0087BC2B /* ImageTextView.m in Sources */,
 				688493E11EBC779A0087BC2B /* OrderDetailViewController.m in Sources */,
@@ -2007,6 +2057,7 @@
 				688493EE1EBC779A0087BC2B /* VerticalImageTextButton.m in Sources */,
 				688493EF1EBC779A0087BC2B /* EntranceFunctionSectionHeader.m in Sources */,
 				688493F01EBC779A0087BC2B /* MainCategoryCollectionViewCell.m in Sources */,
+				68F345091ECAEED3001D74DD /* CreditCardViewController.m in Sources */,
 				688493F11EBC779A0087BC2B /* OrderListCollectionViewCell.m in Sources */,
 				688493F21EBC779A0087BC2B /* CouponListViewController.m in Sources */,
 				688493F31EBC779A0087BC2B /* SearchCollectionViewCell.m in Sources */,
@@ -2014,6 +2065,7 @@
 				688493F51EBC779A0087BC2B /* SingleLabelHeaderView.m in Sources */,
 				688493F61EBC779A0087BC2B /* HotSaleViewController.m in Sources */,
 				688493F71EBC779A0087BC2B /* SingleMediaDetailSubViewController.m in Sources */,
+				6893F6781ECC3768000DD64F /* SeparatorLineHeaderView.m in Sources */,
 				688493F81EBC779A0087BC2B /* MemberPointView.m in Sources */,
 				688493F91EBC779A0087BC2B /* TopSeparatedTitleCollectionReusableView.m in Sources */,
 				688493FA1EBC779A0087BC2B /* ProductFilterViewController.m in Sources */,

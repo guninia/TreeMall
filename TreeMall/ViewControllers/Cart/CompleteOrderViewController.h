@@ -29,6 +29,10 @@
 
 @property (nonatomic, strong) NSDictionary *dictionaryTotalCost;
 @property (nonatomic, strong) NSDictionary *dictionaryOrderData;
+@property (nonatomic, strong) NSDictionary *dictionaryDelivery;
+@property (nonatomic, strong) NSMutableDictionary *dictionaryInstallment;
 @property (nonatomic, strong) NSString *tradeId;
+@property (nonatomic, assign) CartType type;
+@property (nonatomic, strong) NSString *selectedPaymentDescription;
 
 @end

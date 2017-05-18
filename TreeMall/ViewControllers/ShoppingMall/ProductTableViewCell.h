@@ -19,6 +19,7 @@ static NSString *ProductTableViewCellTagText = @"ProductTableViewCellText";
 @protocol ProductTableViewCellDelegate <NSObject>
 
 - (void)productTableViewCell:(ProductTableViewCell *)cell didSelectToAddToCartBySender:(id)sender;
+- (void)productTableViewCell:(ProductTableViewCell *)cell didSelectToAddToFavoriteBySender:(id)sender;
 
 @end
 
@@ -40,6 +41,7 @@ static NSString *ProductTableViewCellTagText = @"ProductTableViewCellText";
 @property (nonatomic, strong) UILabel *labelSeparator;
 @property (nonatomic, strong) UILabel *labelPoint;
 @property (nonatomic, strong) UIButton *buttonCart;
+@property (nonatomic, strong) UIButton *buttonFavorite;
 @property (nonatomic, strong) NSString *marketingText;
 @property (nonatomic, strong) NSString *productName;
 @property (nonatomic, strong) NSNumber *price;
@@ -48,5 +50,6 @@ static NSString *ProductTableViewCellTagText = @"ProductTableViewCellText";
 @property (nonatomic, strong) NSNumber *discount;
 @property (nonatomic, strong) NSDictionary *attributesMarketing;
 @property (nonatomic, strong) NSDictionary *attributesProductName;
+@property (nonatomic, assign) BOOL favorite;
 
 @end

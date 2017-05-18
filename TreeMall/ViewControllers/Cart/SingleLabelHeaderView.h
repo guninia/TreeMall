@@ -24,5 +24,6 @@ static NSString *SingleLabelHeaderViewIdentifier = @"SingleLabelHeaderView";
 @property (nonatomic, strong) UILabel *label;
 @property (nonatomic, strong) UIButton *button;
 @property (nonatomic, strong) NSString *buttonTitle;
+@property (nonatomic, assign) CGFloat marginH;
 
 @end

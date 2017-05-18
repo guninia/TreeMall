@@ -12,4 +12,7 @@ static NSString *CompleteOrderContentTableViewCellIdentifier = @"CompleteOrderCo
 
 @interface CompleteOrderContentTableViewCell : UITableViewCell
 
+@property (nonatomic, strong) UILabel *labelTitle;
+@property (nonatomic, strong) UILabel *labelContent;
+
 @end

@@ -22,6 +22,7 @@
     self = [super initWithReuseIdentifier:reuseIdentifier];
     if (self)
     {
+        _marginH = 10.0;
         self.contentView.backgroundColor = [UIColor whiteColor];
         [self addSubview:self.label];
         [self addSubview:self.button];
@@ -43,7 +44,7 @@
 {
     [super layoutSubviews];
     
-    CGFloat marginH = 10.0;
+    CGFloat marginH = self.marginH;
     
     if (self.label)
     {
