@@ -36,6 +36,8 @@
 - (void)refreshBottomBar;
 - (void)resetBottomBar;
 - (void)presentPaymentSelectionViewForProductId:(NSNumber *)productId;
+- (CartUIType)cartUITypeForCartType:(CartType)cartType;
+- (void)setSegmentedControlIndexForCartType:(CartType)type;
 
 @end
 
@@ -71,8 +73,8 @@
     if (self.currentType == CartTypeTotal)
     {
         self.currentType = CartTypeCommonDelivery;
-        [self.segmentedView.segmentedControl setSelectedSegmentIndex:CartUITypeCommonDelivery];
     }
+    [self setSegmentedControlIndexForCartType:self.currentType];
     
     [self checkCartForType:self.currentType shouldShowPaymentForProductId:nil];
 }
@@ -116,6 +118,11 @@
         CGFloat height = 50.0;
         CGRect frame = CGRectMake(0.0, self.view.frame.size.height - height, self.view.frame.size.width, height);
         self.bottomBar.frame = frame;
+    }
+    
+    if (self.currentType == CartTypeDirectlyPurchase)
+    {
+        originY = 0.0;
     }
     
     if (self.tableView)
@@ -1007,6 +1014,33 @@
     
     UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:viewController];
     [self presentViewController:navigationController animated:YES completion:nil];
+}
+
+- (CartUIType)cartUITypeForCartType:(CartType)cartType
+{
+    CartUIType uiType = CartUITypeTotal;
+    switch (cartType) {
+        case CartTypeCommonDelivery:
+            uiType = CartUITypeCommonDelivery;
+            break;
+        case CartTypeStorePickup:
+            uiType = CartUITypeStorePickup;
+            break;
+        case CartTypeFastDelivery:
+            uiType = CartUITypeFastDelivery;
+        default:
+            break;
+    }
+    return uiType;
+}
+
+- (void)setSegmentedControlIndexForCartType:(CartType)type
+{
+    CartUIType uiType = [self cartUITypeForCartType:type];
+    if (self.segmentedView.segmentedControl.selectedSegmentIndex != uiType)
+    {
+        self.segmentedView.segmentedControl.selectedSegmentIndex = uiType;
+    }
 }
 
 #pragma mark - SemiCircleEndsSegmentedViewDelegate

@@ -525,9 +525,7 @@ typedef enum : NSUInteger {
                 [dictionary setObject:stringDueOfPay forKey:kSectionContentText];
                 [self.arrayATM addObject:dictionary];
             }
-            
         }
-        
     }
     
     if (self.selectedPaymentDescription)
@@ -599,6 +597,9 @@ typedef enum : NSUInteger {
         [self.arraySections addObject:section];
     }
     [self refreshContent];
+    
+    // Already backup data here, the cached data should be removed.
+    [[TMInfoManager sharedManager] resetCartForType:self.type];
 }
 
 - (void)retrieveOrderDescription

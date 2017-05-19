@@ -727,6 +727,24 @@ static NSUInteger SearchKeywordNumberMax = 8;
     return _dictionaryProductPurchaseInfoInCartFast;
 }
 
+- (NSMutableArray *)arrayCartDirect
+{
+    if (_arrayCartDirect == nil)
+    {
+        _arrayCartDirect = [[NSMutableArray alloc] initWithCapacity:0];
+    }
+    return _arrayCartDirect;
+}
+
+- (NSMutableDictionary *)dictionaryProductPurchaseInfoInCartDirect
+{
+    if (_dictionaryProductPurchaseInfoInCartDirect == nil)
+    {
+        _dictionaryProductPurchaseInfoInCartDirect = [[NSMutableDictionary alloc] initWithCapacity:0];
+    }
+    return _dictionaryProductPurchaseInfoInCartDirect;
+}
+
 - (NSMutableArray *)arrayCartCommonAddition
 {
     if (_arrayCartCommonAddition == nil)
@@ -779,6 +797,24 @@ static NSUInteger SearchKeywordNumberMax = 8;
         _dictionaryProductPurchaseInfoInCartFastAddition = [[NSMutableDictionary alloc] initWithCapacity:0];
     }
     return _dictionaryProductPurchaseInfoInCartFastAddition;
+}
+
+- (NSMutableArray *)arrayCartDirectAddition
+{
+    if (_arrayCartDirectAddition == nil)
+    {
+        _arrayCartDirectAddition = [[NSMutableArray alloc] initWithCapacity:0];
+    }
+    return _arrayCartDirectAddition;
+}
+
+- (NSMutableDictionary *)dictionaryProductPurchaseInfoInCartDirectAddition
+{
+    if (_dictionaryProductPurchaseInfoInCartDirectAddition == nil)
+    {
+        _dictionaryProductPurchaseInfoInCartDirectAddition = [[NSMutableDictionary alloc] initWithCapacity:0];
+    }
+    return _dictionaryProductPurchaseInfoInCartDirectAddition;
 }
 
 #pragma mark - Public Methods
@@ -1456,6 +1492,11 @@ static NSUInteger SearchKeywordNumberMax = 8;
             array = self.arrayCartFast;
         }
             break;
+        case CartTypeDirectlyPurchase:
+        {
+            array = self.arrayCartDirect;
+        }
+            break;
         default:
             break;
     }
@@ -1479,6 +1520,11 @@ static NSUInteger SearchKeywordNumberMax = 8;
         case CartTypeFastDelivery:
         {
             dictionaryPurchaseInfo = self.dictionaryProductPurchaseInfoInCartFast;
+        }
+            break;
+        case CartTypeDirectlyPurchase:
+        {
+            dictionaryPurchaseInfo = self.dictionaryProductPurchaseInfoInCartDirect;
         }
             break;
         default:
@@ -1677,6 +1723,11 @@ static NSUInteger SearchKeywordNumberMax = 8;
             array = self.arrayCartFastAddition;
         }
             break;
+        case CartTypeDirectlyPurchase:
+        {
+            array = self.arrayCartDirectAddition;
+        }
+            break;
         default:
             break;
     }
@@ -1700,6 +1751,11 @@ static NSUInteger SearchKeywordNumberMax = 8;
         case CartTypeFastDelivery:
         {
             dictionaryPurchaseInfo = self.dictionaryProductPurchaseInfoInCartFastAddition;
+        }
+            break;
+        case CartTypeDirectlyPurchase:
+        {
+            dictionaryPurchaseInfo = self.dictionaryProductPurchaseInfoInCartDirectAddition;
         }
             break;
         default:

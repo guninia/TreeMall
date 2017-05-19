@@ -18,6 +18,7 @@
 #import "ExchangeDescriptionViewController.h"
 #import "InstallmentDescriptionViewController.h"
 #import "SingleMediaDetailViewController.h"
+#import "CartViewController.h"
 
 @interface ProductDetailViewController ()
 
@@ -28,10 +29,12 @@
 - (NSAttributedString *)attributedStringFromHtmlString:(NSString *)html;
 - (void)retrieveTermsForType:(TermType)type;
 - (BOOL)processTermsData:(id)data;
-- (void)showCartTypeSheet;
+- (void)showCartTypeSheetForDirectlyPurchase:(BOOL)directlyPurchase;
 - (void)addToCart:(CartType)type;
 - (void)addProduct:(NSDictionary *)dictionaryProduct toCartForType:(CartType)type;
 - (NSMutableDictionary *)dictionaryCommonFromDetail:(NSDictionary *)dictionary;
+- (NSArray *)cartsAvailableToAdd;
+- (void)presentCartViewForType:(CartType)type;
 
 
 - (void)buttonExchangeDescPressed:(id)sender;
@@ -1422,7 +1425,7 @@
     return success;
 }
 
-- (void)showCartTypeSheet
+- (void)showCartTypeSheetForDirectlyPurchase:(BOOL)directlyPurchase
 {
     if ([self.arrayCartType count] == 0)
     {
@@ -1467,6 +1470,10 @@
         __weak ProductDetailViewController *weakSelf = self;
         UIAlertAction *action = [UIAlertAction actionWithTitle:title style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
             [weakSelf addToCart:type];
+            if (directlyPurchase)
+            {
+                [weakSelf presentCartViewForType:type];
+            }
         }];
         [alertController addAction:action];
     }
@@ -1695,6 +1702,55 @@
     return dictionaryCommon;
 }
 
+- (NSArray *)cartsAvailableToAdd
+{
+    NSMutableArray *arrayCarts = [NSMutableArray array];
+    for (NSDictionary *dictionary in self.arrayCartType)
+    {
+        CartType type = CartTypeTotal;
+        NSNumber *numberType = [dictionary objectForKey:SymphoxAPIParam_type];
+        NSString *title = nil;
+        switch ([numberType integerValue]) {
+            case CartTypeCommonDelivery:
+            {
+                // Common delivery
+                title = [LocalizedString CommonDelivery];
+                type = CartTypeCommonDelivery;
+                [arrayCarts addObject:numberType];
+            }
+                break;
+            case CartTypeStorePickup:
+            {
+                // Convenience Store
+                title = [LocalizedString StorePickUp];
+                type = CartTypeStorePickup;
+                [arrayCarts addObject:numberType];
+            }
+                break;
+            case CartTypeFastDelivery:
+            {
+                // Fast delivery
+                title = [LocalizedString FastDelivery];
+                type = CartTypeFastDelivery;
+                [arrayCarts addObject:numberType];
+            }
+                break;
+            default:
+                break;
+        }
+    }
+    return arrayCarts;
+}
+
+- (void)presentCartViewForType:(CartType)type
+{
+    CartViewController *viewController = [[CartViewController alloc] initWithNibName:@"CartViewController" bundle:[NSBundle mainBundle]];
+    viewController.title = [LocalizedString ShoppingCart];
+    viewController.currentType = type;
+    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:viewController];
+    [self presentViewController:navigationController animated:YES completion:nil];
+}
+
 #pragma mark - Actions
 
 - (void)buttonExchangeDescPressed:(id)sender
@@ -1843,41 +1899,7 @@
 
 - (void)productDetailBottomBar:(ProductDetailBottomBar *)bar didSelectAddToCartBySender:(id)sender
 {
-    NSMutableArray *arrayCarts = [NSMutableArray array];
-    for (NSDictionary *dictionary in self.arrayCartType)
-    {
-        CartType type = CartTypeTotal;
-        NSNumber *numberType = [dictionary objectForKey:SymphoxAPIParam_type];
-        NSString *title = nil;
-        switch ([numberType integerValue]) {
-            case CartTypeCommonDelivery:
-            {
-                // Common delivery
-                title = [LocalizedString CommonDelivery];
-                type = CartTypeCommonDelivery;
-                [arrayCarts addObject:numberType];
-            }
-                break;
-            case CartTypeStorePickup:
-            {
-                // Convenience Store
-                title = [LocalizedString StorePickUp];
-                type = CartTypeStorePickup;
-                [arrayCarts addObject:numberType];
-            }
-                break;
-            case CartTypeFastDelivery:
-            {
-                // Fast delivery
-                title = [LocalizedString FastDelivery];
-                type = CartTypeFastDelivery;
-                [arrayCarts addObject:numberType];
-            }
-                break;
-            default:
-                break;
-        }
-    }
+    NSArray *arrayCarts = [self cartsAvailableToAdd];
     if ([arrayCarts count] == 1)
     {
         NSNumber *numberType = [arrayCarts objectAtIndex:0];
@@ -1886,13 +1908,30 @@
     }
     else
     {
-        [self showCartTypeSheet];
+        [self showCartTypeSheetForDirectlyPurchase:NO];
     }
 }
 
 - (void)productDetailBottomBar:(ProductDetailBottomBar *)bar didSelectPurchaseBySender:(id)sender
 {
-    
+    NSArray *arrayCarts = [self cartsAvailableToAdd];
+    if ([arrayCarts count] == 0)
+    {
+        [[TMInfoManager sharedManager] resetCartForType:CartTypeDirectlyPurchase];
+        [self addToCart:CartTypeDirectlyPurchase];
+        [self presentCartViewForType:CartTypeDirectlyPurchase];
+    }
+    else if ([arrayCarts count] == 1)
+    {
+        NSNumber *numberType = [arrayCarts objectAtIndex:0];
+        NSInteger type = [numberType integerValue];
+        [self addToCart:type];
+        [self presentCartViewForType:type];
+    }
+    else
+    {
+        [self showCartTypeSheetForDirectlyPurchase:YES];
+    }
 }
 
 #pragma mark - UICollectionViewDataSource

@@ -12,7 +12,7 @@
 #import <Foundation/Foundation.h>
 
 #ifdef DEBUG
-static NSString *SymphoxAPIDomain = @"http://sapi.symphox.com.tw/treeMall/";
+static NSString *SymphoxAPIDomain = @"http://tomcat8.mdevelop.com/TreeMall/";
 #else
 static NSString *SymphoxAPIDomain = @"http://tomcat8.mdevelop.com/TreeMall/";
 #endif
@@ -22,7 +22,7 @@ static NSString *SymphoxAPI__homepage = @"api/onlineService.do";
 static NSString *SymphoxAPI__getHotSaleProducts = @"api/eiffel/amway/default";
 static NSString *SymphoxAPI__promotion = @"api/onlineService.do";
 static NSString *SymphoxAPI__register = @"api/portal/app/member/register";
-static NSString *SymphoxAPI__login = @"portal/app/member/identify";
+static NSString *SymphoxAPI__login = @"api/portal/app/member/identify";
 static NSString *SymphoxAPI__terms = @"api/onlineService.do";
 static NSString *SymphoxAPI__forgetPassword = @"api/portal/app/member/password/forget";
 static NSString *SymphoxAPI__mobileVerification = @"api/portal/app/member/verify/mobile";

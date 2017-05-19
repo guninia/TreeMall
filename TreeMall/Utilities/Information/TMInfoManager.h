@@ -120,12 +120,16 @@ typedef enum : NSUInteger {
 @property (nonatomic, strong) NSMutableDictionary *dictionaryProductPurchaseInfoInCartStorePickUp;
 @property (nonatomic, strong) NSMutableArray *arrayCartFast;
 @property (nonatomic, strong) NSMutableDictionary *dictionaryProductPurchaseInfoInCartFast;
+@property (nonatomic, strong) NSMutableArray *arrayCartDirect;
+@property (nonatomic, strong) NSMutableDictionary *dictionaryProductPurchaseInfoInCartDirect;
 @property (nonatomic, strong) NSMutableArray *arrayCartCommonAddition;
 @property (nonatomic, strong) NSMutableDictionary *dictionaryProductPurchaseInfoInCartCommonAddition;
 @property (nonatomic, strong) NSMutableArray *arrayCartStorePickUpAddition;
 @property (nonatomic, strong) NSMutableDictionary *dictionaryProductPurchaseInfoInCartStorePickUpAddition;
 @property (nonatomic, strong) NSMutableArray *arrayCartFastAddition;
 @property (nonatomic, strong) NSMutableDictionary *dictionaryProductPurchaseInfoInCartFastAddition;
+@property (nonatomic, strong) NSMutableArray *arrayCartDirectAddition;
+@property (nonatomic, strong) NSMutableDictionary *dictionaryProductPurchaseInfoInCartDirectAddition;
 
 + (instancetype)sharedManager;
 
