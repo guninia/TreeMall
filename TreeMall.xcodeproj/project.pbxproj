@@ -264,6 +264,14 @@
 		689A7A251EB1F14B00B7D281 /* PromotionDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 689A7A231EB1F14B00B7D281 /* PromotionDetailViewController.m */; };
 		689A7A261EB1F14B00B7D281 /* PromotionDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 689A7A241EB1F14B00B7D281 /* PromotionDetailViewController.xib */; };
 		689F664A1E5AC56400CC3664 /* ProductDetailBottomBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 689F66491E5AC56400CC3664 /* ProductDetailBottomBar.m */; };
+		68A05C0E1ECEF1F100A379E1 /* DeliverProgressViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68A05C0C1ECEF1F100A379E1 /* DeliverProgressViewController.m */; };
+		68A05C0F1ECEF1F100A379E1 /* DeliverProgressViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68A05C0C1ECEF1F100A379E1 /* DeliverProgressViewController.m */; };
+		68A05C101ECEF1F100A379E1 /* DeliverProgressViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 68A05C0D1ECEF1F100A379E1 /* DeliverProgressViewController.xib */; };
+		68A05C111ECEF1F100A379E1 /* DeliverProgressViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 68A05C0D1ECEF1F100A379E1 /* DeliverProgressViewController.xib */; };
+		68A05C141ECEF8D900A379E1 /* DeliverProgressTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 68A05C131ECEF8D900A379E1 /* DeliverProgressTableViewCell.m */; };
+		68A05C151ECEF8D900A379E1 /* DeliverProgressTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 68A05C131ECEF8D900A379E1 /* DeliverProgressTableViewCell.m */; };
+		68A05C181ECEF8F100A379E1 /* DeliverProgressHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 68A05C171ECEF8F100A379E1 /* DeliverProgressHeaderView.m */; };
+		68A05C191ECEF8F100A379E1 /* DeliverProgressHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 68A05C171ECEF8F100A379E1 /* DeliverProgressHeaderView.m */; };
 		68A1FE951EB04B670058ABED /* InstallmentDescriptionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68A1FE941EB04B670058ABED /* InstallmentDescriptionViewController.m */; };
 		68A1FE991EB0858D0058ABED /* AdditionalPurchaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68A1FE971EB0858D0058ABED /* AdditionalPurchaseViewController.m */; };
 		68A1FE9A1EB0858D0058ABED /* AdditionalPurchaseViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 68A1FE981EB0858D0058ABED /* AdditionalPurchaseViewController.xib */; };
@@ -537,6 +545,13 @@
 		689A7A241EB1F14B00B7D281 /* PromotionDetailViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = PromotionDetailViewController.xib; path = ViewControllers/Promotion/PromotionDetailViewController.xib; sourceTree = "<group>"; };
 		689F66481E5AC56400CC3664 /* ProductDetailBottomBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ProductDetailBottomBar.h; path = ViewControllers/ShoppingMall/ProductDetailBottomBar.h; sourceTree = "<group>"; };
 		689F66491E5AC56400CC3664 /* ProductDetailBottomBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ProductDetailBottomBar.m; path = ViewControllers/ShoppingMall/ProductDetailBottomBar.m; sourceTree = "<group>"; };
+		68A05C0B1ECEF1F100A379E1 /* DeliverProgressViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DeliverProgressViewController.h; path = ViewControllers/OrderList/DeliverProgressViewController.h; sourceTree = "<group>"; };
+		68A05C0C1ECEF1F100A379E1 /* DeliverProgressViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DeliverProgressViewController.m; path = ViewControllers/OrderList/DeliverProgressViewController.m; sourceTree = "<group>"; };
+		68A05C0D1ECEF1F100A379E1 /* DeliverProgressViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = DeliverProgressViewController.xib; path = ViewControllers/OrderList/DeliverProgressViewController.xib; sourceTree = "<group>"; };
+		68A05C121ECEF8D900A379E1 /* DeliverProgressTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DeliverProgressTableViewCell.h; path = ViewControllers/OrderList/DeliverProgressTableViewCell.h; sourceTree = "<group>"; };
+		68A05C131ECEF8D900A379E1 /* DeliverProgressTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DeliverProgressTableViewCell.m; path = ViewControllers/OrderList/DeliverProgressTableViewCell.m; sourceTree = "<group>"; };
+		68A05C161ECEF8F100A379E1 /* DeliverProgressHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DeliverProgressHeaderView.h; path = ViewControllers/OrderList/DeliverProgressHeaderView.h; sourceTree = "<group>"; };
+		68A05C171ECEF8F100A379E1 /* DeliverProgressHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DeliverProgressHeaderView.m; path = ViewControllers/OrderList/DeliverProgressHeaderView.m; sourceTree = "<group>"; };
 		68A1FE931EB04B670058ABED /* InstallmentDescriptionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = InstallmentDescriptionViewController.h; path = ViewControllers/ShoppingMall/InstallmentDescriptionViewController.h; sourceTree = "<group>"; };
 		68A1FE941EB04B670058ABED /* InstallmentDescriptionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = InstallmentDescriptionViewController.m; path = ViewControllers/ShoppingMall/InstallmentDescriptionViewController.m; sourceTree = "<group>"; };
 		68A1FE961EB0858D0058ABED /* AdditionalPurchaseViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AdditionalPurchaseViewController.h; path = ViewControllers/Cart/AdditionalPurchaseViewController.h; sourceTree = "<group>"; };
@@ -932,6 +947,13 @@
 				68D751881E80E03F00487088 /* OrderDetailViewController.h */,
 				68D751891E80E03F00487088 /* OrderDetailViewController.m */,
 				68D7518A1E80E03F00487088 /* OrderDetailViewController.xib */,
+				68A05C0B1ECEF1F100A379E1 /* DeliverProgressViewController.h */,
+				68A05C0C1ECEF1F100A379E1 /* DeliverProgressViewController.m */,
+				68A05C0D1ECEF1F100A379E1 /* DeliverProgressViewController.xib */,
+				68A05C121ECEF8D900A379E1 /* DeliverProgressTableViewCell.h */,
+				68A05C131ECEF8D900A379E1 /* DeliverProgressTableViewCell.m */,
+				68A05C161ECEF8F100A379E1 /* DeliverProgressHeaderView.h */,
+				68A05C171ECEF8F100A379E1 /* DeliverProgressHeaderView.m */,
 			);
 			name = OrderList;
 			sourceTree = "<group>";
@@ -1541,6 +1563,7 @@
 				6893F6731ECBFA66000DD64F /* StorePickupInfoViewController.xib in Resources */,
 				6890650F1E23334400E5CB26 /* EntranceViewController.xib in Resources */,
 				68B0FDDF1E837B8F00BE273F /* NewsletterSubscribeViewController.xib in Resources */,
+				68A05C101ECEF1F100A379E1 /* DeliverProgressViewController.xib in Resources */,
 				68981FAA1E55991E00A2707A /* SearchViewController.xib in Resources */,
 				6838E12B1EB587DC007395EF /* SingleMediaDetailViewController.xib in Resources */,
 				68B68FFA1E24C30700DCCF29 /* PromotionViewController.xib in Resources */,
@@ -1616,6 +1639,7 @@
 				688494221EBC779A0087BC2B /* Main.storyboard in Resources */,
 				688494231EBC779A0087BC2B /* NotificationViewController.xib in Resources */,
 				688494241EBC779A0087BC2B /* PromotionDetailViewController.xib in Resources */,
+				68A05C111ECEF1F100A379E1 /* DeliverProgressViewController.xib in Resources */,
 				688494251EBC779A0087BC2B /* OrderDetailViewController.xib in Resources */,
 				688494261EBC779A0087BC2B /* PaymentTypeViewController.xib in Resources */,
 				688494271EBC779A0087BC2B /* FavoriteViewController.xib in Resources */,
@@ -1871,6 +1895,7 @@
 				689F664A1E5AC56400CC3664 /* ProductDetailBottomBar.m in Sources */,
 				680957721E43051C00DA2BEA /* ProductSubcategoryCollectionViewCell.m in Sources */,
 				68B68FEF1E24753400DCCF29 /* Utility.m in Sources */,
+				68A05C181ECEF8F100A379E1 /* DeliverProgressHeaderView.m in Sources */,
 				689613CA1E52AAE800066BE7 /* LabelRangeSliderView.m in Sources */,
 				689065201E23387200E5CB26 /* NotificationViewController.m in Sources */,
 				68981FA91E55991E00A2707A /* SearchViewController.m in Sources */,
@@ -1887,6 +1912,7 @@
 				685939AC1E1F49DF00351FFB /* main.m in Sources */,
 				68A1FE951EB04B670058ABED /* InstallmentDescriptionViewController.m in Sources */,
 				68BE095A1E583DC00046B477 /* ProductDetailPromotionLabelView.m in Sources */,
+				68A05C0E1ECEF1F100A379E1 /* DeliverProgressViewController.m in Sources */,
 				68A8279C1E4D9C6F00E63552 /* UIViewController+FTPopMenu.m in Sources */,
 				687B0E6C1E6970D500E04D81 /* CouponDetailViewController.m in Sources */,
 				689546481E35F38700D5CD1E /* PagingGridView.m in Sources */,
@@ -1894,6 +1920,7 @@
 				685939ED1E1F775900351FFB /* CryptoModule.m in Sources */,
 				6826E9E51E5BE52E001E572A /* BorderedDoubleLabelView.m in Sources */,
 				68B0FDE61E83804000BE273F /* PureTextTableFooterView.m in Sources */,
+				68A05C141ECEF8D900A379E1 /* DeliverProgressTableViewCell.m in Sources */,
 				68F345031ECAE7D7001D74DD /* ColorFooterView.m in Sources */,
 				6884DD7F1E6D00B200DAF859 /* CouponDetailDescriptionView.m in Sources */,
 				6887999F1E5AD12B00495A77 /* ProductDetailImageCollectionViewCell.m in Sources */,
@@ -1962,10 +1989,12 @@
 				688493941EBC779A0087BC2B /* PromotionDetailViewController.m in Sources */,
 				688493951EBC779A0087BC2B /* AdditionalProductCollectionViewCell.m in Sources */,
 				688493961EBC779A0087BC2B /* AdditionalPurchaseViewController.m in Sources */,
+				68A05C151ECEF8D900A379E1 /* DeliverProgressTableViewCell.m in Sources */,
 				68D7F26C1EC94CE400B13214 /* CompleteOrderViewController.m in Sources */,
 				688493971EBC779A0087BC2B /* ImageTitleButton.m in Sources */,
 				688493981EBC779A0087BC2B /* CryptoTool.m in Sources */,
 				688493991EBC779A0087BC2B /* WebViewViewController.m in Sources */,
+				68A05C191ECEF8F100A379E1 /* DeliverProgressHeaderView.m in Sources */,
 				6884939A1EBC779A0087BC2B /* ProductListToolView.m in Sources */,
 				6884939B1EBC779A0087BC2B /* ProductListViewController.m in Sources */,
 				6884939C1EBC779A0087BC2B /* HotSaleTableViewCell.m in Sources */,
@@ -2041,6 +2070,7 @@
 				688493DF1EBC779A0087BC2B /* TreeMall.xcdatamodeld in Sources */,
 				688493E01EBC779A0087BC2B /* ImageTextView.m in Sources */,
 				688493E11EBC779A0087BC2B /* OrderDetailViewController.m in Sources */,
+				68A05C0F1ECEF1F100A379E1 /* DeliverProgressViewController.m in Sources */,
 				688493E21EBC779A0087BC2B /* TMInfoManager.m in Sources */,
 				688493E31EBC779A0087BC2B /* DiscountLabelView.m in Sources */,
 				688493E41EBC779A0087BC2B /* SingleMediaDetailViewController.m in Sources */,

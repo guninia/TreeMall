@@ -59,6 +59,7 @@ static NSString *SymphoxAPI__getCarrierInfo = @"api/eiffel/goods/typeInfo";
 static NSString *SymphoxAPI__getOneClickBuyContactInfo = @"api/eiffel/appOrder/oneClickBuyDelivery";
 static NSString *SymphoxAPI__activateOCB = @"https://www.cathaybk.com.tw/cathaybk/card/event/2012/card_news1010701.asp";
 static NSString *SymphoxAPI__buildOrder = @"api/eiffel/orders/createOrder";
+static NSString *SymphoxAPI__getDeliveryProgress = @"api/portal/app/member/order/delivery";
 
 #define SymphoxAPI_token [NSString stringWithFormat:@"%@%@", SymphoxAPIDomain, SymphoxAPI__token]
 #define SymphoxAPI_homepage [NSString stringWithFormat:@"%@%@", SymphoxAPIDomain, SymphoxAPI__homepage]
@@ -102,6 +103,7 @@ static NSString *SymphoxAPI__buildOrder = @"api/eiffel/orders/createOrder";
 #define SymphoxAPI_getOneClickBuyContactInfo [NSString stringWithFormat:@"%@%@", SymphoxAPIDomain, SymphoxAPI__getOneClickBuyContactInfo]
 #define SymphoxAPI_activateOCB [NSString stringWithFormat:@"%@%@", SymphoxAPIDomain, SymphoxAPI__activateOCB]
 #define SymphoxAPI_buildOrder [NSString stringWithFormat:@"%@%@", SymphoxAPIDomain, SymphoxAPI__buildOrder]
+#define SymphoxAPI_getDeliveryProgress [NSString stringWithFormat:@"%@%@", SymphoxAPIDomain, SymphoxAPI__getDeliveryProgress]
 
 
 static NSString *SymphoxAPIParam_key = @"sym-api-key";
@@ -399,6 +401,8 @@ static NSString *SymphoxAPIParam_mix_point = @"mix_point";
 static NSString *SymphoxAPIParam_can_used_cart = @"can_used_cart";
 static NSString *SymphoxAPIParam_storeid = @"storeid";
 static NSString *SymphoxAPIParam_storename = @"storename";
+static NSString *SymphoxAPIParam_url = @"url";
+static NSString *SymphoxAPIParam_is_wh = @"is_wh";
 
 typedef enum : NSUInteger {
     TermTypeMemberTerms,

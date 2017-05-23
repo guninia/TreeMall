@@ -23,6 +23,13 @@ static CGFloat progressViewHeight = 60.0;
 static CGFloat buttonDeliverIdHeight = 40.0;
 static CGFloat buttonTotalProductsHeight = 20.0;
 
+@interface OrderListCollectionViewCell ()
+
+- (void)buttonDeliverIdPressed:(id)sender;
+- (void)buttonTotalProductsPressed:(id)sender;
+
+@end
+
 @implementation OrderListCollectionViewCell
 
 - (instancetype)initWithFrame:(CGRect)frame
@@ -57,6 +64,7 @@ static CGFloat buttonTotalProductsHeight = 20.0;
     [self.buttonDeliverId setTitle:@"" forState:UIControlStateNormal];
     self.buttonDeliverId.hidden = YES;
     [self.buttonTotalProducts setTitle:@"" forState:UIControlStateNormal];
+    self.indexPath = nil;
 }
 
 - (void)layoutSubviews
@@ -239,6 +247,7 @@ static CGFloat buttonTotalProductsHeight = 20.0;
         UIFont *font = [UIFont systemFontOfSize:12.0];
         [_buttonDeliverId.titleLabel setFont:font];
         [_buttonDeliverId.layer setCornerRadius:5.0];
+        [_buttonDeliverId addTarget:self action:@selector(buttonDeliverIdPressed:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _buttonDeliverId;
 }
@@ -252,6 +261,7 @@ static CGFloat buttonTotalProductsHeight = 20.0;
         [_buttonTotalProducts setBackgroundColor:[UIColor clearColor]];
         UIFont *font = [UIFont systemFontOfSize:12.0];
         [_buttonTotalProducts.titleLabel setFont:font];
+        [_buttonTotalProducts addTarget:self action:@selector(buttonTotalProductsPressed:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _buttonTotalProducts;
 }
@@ -317,6 +327,24 @@ static CGFloat buttonTotalProductsHeight = 20.0;
     height += marginB;
     
     return height;
+}
+
+#pragma mark - Private Methods
+
+- (void)buttonDeliverIdPressed:(id)sender
+{
+    if (_delegate && [_delegate respondsToSelector:@selector(orderListCollectionViewCell:didSelectDeliverInfoBySender:)])
+    {
+        [_delegate orderListCollectionViewCell:self didSelectDeliverInfoBySender:sender];
+    }
+}
+
+- (void)buttonTotalProductsPressed:(id)sender
+{
+    if (_delegate && [_delegate respondsToSelector:@selector(orderListCollectionViewCell:didSelectTotalProductsBySender:)])
+    {
+        [_delegate orderListCollectionViewCell:self didSelectTotalProductsBySender:sender];
+    }
 }
 
 @end

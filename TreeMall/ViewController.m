@@ -30,6 +30,7 @@
 - (void)postUserLogoutProcedure;
 - (void)JumpToTab:(NSInteger)tabIndex;
 - (void)updateCartBadge;
+- (void)updateFavoriteBadge;
 
 - (void)handlerOfNoInitialTokenNotification:(NSNotification *)notification;
 - (void)handlerOfEntranceDataPreparedNotification:(NSNotification *)notification;
@@ -39,6 +40,7 @@
 - (void)handlerOfCartContentChangedNotification:(NSNotification *)notification;
 - (void)handlerOfApplicationDidBecomeActiveNotification:(NSNotification *)notification;
 - (void)handlerOfJumpToShoppingMallAndPresentHallNotification:(NSNotification *)notification;
+- (void)handlerOfFavoriteContentChangedNotification:(NSNotification *)notification;
 
 @end
 
@@ -320,15 +322,42 @@
         if ([viewController isKindOfClass:[CartViewController class]])
         {
             NSInteger totalCount = [[TMInfoManager sharedManager] numberOfProductsInCart:CartTypeTotal];
-            if (totalCount > 0)
-            {
-                NSString *stringValue = [NSString stringWithFormat:@"%li", (long)totalCount];
-                [navigationViewController.tabBarItem setBadgeValue:stringValue];
-            }
-            else
-            {
-                [navigationViewController.tabBarItem setBadgeValue:nil];
-            }
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (totalCount > 0)
+                {
+                    NSString *stringValue = [NSString stringWithFormat:@"%li", (long)totalCount];
+                    [navigationViewController.tabBarItem setBadgeValue:stringValue];
+                }
+                else
+                {
+                    [navigationViewController.tabBarItem setBadgeValue:nil];
+                }
+            });
+            break;
+        }
+    }
+}
+
+- (void)updateFavoriteBadge
+{
+    for (UINavigationController *navigationViewController in self.tbControllerMain.viewControllers)
+    {
+        UIViewController *viewController = [[navigationViewController viewControllers] objectAtIndex:0];
+        if ([viewController isKindOfClass:[FavoriteViewController class]])
+        {
+            NSInteger totalCount = [[TMInfoManager sharedManager] numberOfProductsInFavorite];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (totalCount > 0)
+                {
+                    NSString *stringValue = [NSString stringWithFormat:@"%li", (long)totalCount];
+                    [navigationViewController.tabBarItem setBadgeValue:stringValue];
+                }
+                else
+                {
+                    [navigationViewController.tabBarItem setBadgeValue:nil];
+                }
+            });
+            break;
         }
     }
 }
@@ -373,6 +402,8 @@
 - (void)handlerOfUserLogoutNotification:(NSNotification *)notification
 {
     [self postUserLogoutProcedure];
+    [self updateCartBadge];
+    [self updateFavoriteBadge];
 }
 
 - (void)handlerOfJumpingToMemberTabNotification:(NSNotification *)notification
@@ -417,6 +448,11 @@
     }
     ShoppingMallViewController *shoppingViewController = (ShoppingMallViewController *)navigationController.topViewController;
     [shoppingViewController presentProductListViewForIdentifier:hallId named:hallName andLayer:layer];
+}
+
+- (void)handlerOfFavoriteContentChangedNotification:(NSNotification *)notification
+{
+    
 }
 
 #pragma mark - UITabBarControllerDelegate

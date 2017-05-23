@@ -12,8 +12,18 @@
 
 static NSString *OrderListCollectionViewCellIdentifier = @"OrderListCollectionViewCell";
 
+@class OrderListCollectionViewCell;
+
+@protocol OrderListCollectionViewCellDelegate <NSObject>
+
+- (void)orderListCollectionViewCell:(OrderListCollectionViewCell *)cell didSelectDeliverInfoBySender:(id)sender;
+- (void)orderListCollectionViewCell:(OrderListCollectionViewCell *)cell didSelectTotalProductsBySender:(id)sender;
+
+@end
+
 @interface OrderListCollectionViewCell : UICollectionViewCell
 
+@property (nonatomic, weak) id <OrderListCollectionViewCellDelegate> delegate;
 @property (nonatomic, strong) UIView *viewBackground;
 @property (nonatomic, strong) UIImageView *imageView;
 @property (nonatomic, strong) TTTAttributedLabel *labelTitle;
@@ -27,6 +37,7 @@ static NSString *OrderListCollectionViewCellIdentifier = @"OrderListCollectionVi
 @property (nonatomic, strong) NSDictionary *attributesTitle;
 @property (nonatomic, assign) BOOL shouldShowProgress;
 @property (nonatomic, strong) NSURL *imageUrl;
+@property (nonatomic, strong) NSIndexPath *indexPath;
 
 + (CGFloat)heightForCellWidth:(CGFloat)width andDataDictionary:(NSDictionary *)dictionary;
 

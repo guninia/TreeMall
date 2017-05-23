@@ -12,6 +12,7 @@
 #import "ProductDetailSectionTitleView.h"
 #import "TMInfoManager.h"
 #import "OrderHeaderReusableView.h"
+#import "OrderListCollectionViewCell.h"
 
 typedef enum : NSUInteger {
     OrderTimeStart,
@@ -31,7 +32,7 @@ typedef enum : NSUInteger {
     DeliverTypeTotal
 } DeliverType;
 
-@interface OrderListViewController : UIViewController <UITextFieldDelegate, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, SemiCircleEndsSegmentedViewDelegate, OrderHeaderReusableViewDelegate>
+@interface OrderListViewController : UIViewController <UITextFieldDelegate, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, SemiCircleEndsSegmentedViewDelegate, OrderHeaderReusableViewDelegate, OrderListCollectionViewCellDelegate>
 
 @property (nonatomic, strong) SemiCircleEndsSegmentedView *segmentedView;
 @property (nonatomic, strong) UIView *viewSearchBackground;

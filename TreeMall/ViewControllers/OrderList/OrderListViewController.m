@@ -9,13 +9,13 @@
 #import "OrderListViewController.h"
 #import "LocalizedString.h"
 #import "Definition.h"
-#import "OrderListCollectionViewCell.h"
 #import "LoadingFoorterReusableView.h"
 #import "APIDefinition.h"
 #import "CryptoModule.h"
 #import "SHAPIAdapter.h"
 #import "UIViewController+FTPopMenu.h"
 #import "OrderDetailViewController.h"
+#import "DeliverProgressViewController.h"
 
 @interface OrderListViewController ()
 
@@ -758,7 +758,12 @@
 {
     OrderListCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:OrderListCollectionViewCellIdentifier forIndexPath:indexPath];
     cell.backgroundColor = [UIColor whiteColor];
+    if (cell.delegate == nil)
+    {
+        cell.delegate = self;
+    }
     [cell prepareForReuse];
+    cell.indexPath = indexPath;
     NSDictionary *dictionaryOrder  =[self orderForIndex:indexPath.row inCartIndex:indexPath.section];
     if (dictionaryOrder)
     {
@@ -924,6 +929,47 @@
         viewController.dictionaryOrder = orders;
     }
     [self.navigationController pushViewController:viewController animated:YES];
+}
+
+#pragma mark - OrderListCollectionViewCellDelegate
+
+- (void)orderListCollectionViewCell:(OrderListCollectionViewCell *)cell didSelectDeliverInfoBySender:(id)sender
+{
+    NSIndexPath *indexPath = cell.indexPath;
+    if (indexPath == nil)
+        return;
+    NSDictionary *dictionaryOrder = [self orderForIndex:indexPath.row inCartIndex:indexPath.section];
+    if (dictionaryOrder == nil)
+        return;
+    NSLog(@"dictionaryOrder:\n%@", [dictionaryOrder description]);
+    NSString *orderId = [dictionaryOrder objectForKey:SymphoxAPIParam_order_id];
+    if (orderId == nil || [orderId isEqual:[NSNull null]] || [orderId length] == 0)
+        return;
+    NSDictionary *dictionaryDelivery = [dictionaryOrder objectForKey:SymphoxAPIParam_delivery];
+    if (dictionaryDelivery == nil || [dictionaryDelivery isEqual:[NSNull null]])
+        return;
+    NSString *urlString = [dictionaryDelivery objectForKey:SymphoxAPIParam_url];
+    if (urlString == nil || [urlString isEqual:[NSNull null]] || [urlString length] == 0)
+        return;
+    if ([urlString isEqualToString:orderId])
+    {
+        DeliverProgressViewController *viewController = [[DeliverProgressViewController alloc] initWithNibName:@"DeliverProgressViewController" bundle:[NSBundle mainBundle]];
+        viewController.orderId = orderId;
+        [self.navigationController pushViewController:viewController animated:YES];
+    }
+    else
+    {
+        NSURL *url = [NSURL URLWithString:urlString];
+        if ([[UIApplication sharedApplication] canOpenURL:url])
+        {
+            [[UIApplication sharedApplication] openURL:url];
+        }
+    }
+}
+
+- (void)orderListCollectionViewCell:(OrderListCollectionViewCell *)cell didSelectTotalProductsBySender:(id)sender
+{
+    
 }
 
 @end

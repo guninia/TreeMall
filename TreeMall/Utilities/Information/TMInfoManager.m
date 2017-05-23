@@ -1344,6 +1344,9 @@ static NSUInteger SearchKeywordNumberMax = 8;
     [self saveToArchive];
     NSLog(@"orderedSetFavoriteId[%li] arrayFavorite[%li]", (long)self.orderedSetFavoriteId.count, (long)self.arrayFavorite.count);
     resultString = [LocalizedString AddToFavoriteSuccess];
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:PostNotificationName_FavoriteContentChanged object:self];
+    
     return resultString;
 }
 
@@ -1374,6 +1377,13 @@ static NSUInteger SearchKeywordNumberMax = 8;
     {
         [self.arrayFavorite removeObjectAtIndex:productIndex];
     }
+    [[NSNotificationCenter defaultCenter] postNotificationName:PostNotificationName_FavoriteContentChanged object:self];
+}
+
+- (NSInteger)numberOfProductsInFavorite
+{
+    NSInteger numberOfProducts = [self.arrayFavorite count];
+    return numberOfProducts;
 }
 
 - (void)retrievePointDataFromObject:(id)object withCompletion:(void (^)(id, NSError *))block
@@ -2111,6 +2121,8 @@ static NSUInteger SearchKeywordNumberMax = 8;
     {
         self.userLoginDate = loginDate;
     }
+    [[NSNotificationCenter defaultCenter] postNotificationName:PostNotificationName_CartContentChanged object:self];
+    [[NSNotificationCenter defaultCenter] postNotificationName:PostNotificationName_FavoriteContentChanged object:self];
 }
 
 - (void)deleteArchive
@@ -2224,7 +2236,6 @@ static NSUInteger SearchKeywordNumberMax = 8;
         {
             [self updateUserInformationFromInfoDictionary:jsonObject afterLoadingArchive:NO];
             [[NSNotificationCenter defaultCenter] postNotificationName:PostNotificationName_UserInformationUpdated object:self];
-            [[NSNotificationCenter defaultCenter] postNotificationName:PostNotificationName_CartContentChanged object:self];
         }
     }
 }
