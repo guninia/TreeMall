@@ -507,7 +507,7 @@ typedef enum : NSUInteger {
         {
             NSURL *url = [NSURL URLWithString:imagePath];
             UIImage *placeHolder = [UIImage imageNamed:@"transparent"];
-            [cell.imageView sd_setImageWithURL:url placeholderImage:placeHolder completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL){
+            [cell.imageView sd_setImageWithURL:url placeholderImage:placeHolder options:SDWebImageAllowInvalidSSLCertificates completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL){
                 
             }];
         }

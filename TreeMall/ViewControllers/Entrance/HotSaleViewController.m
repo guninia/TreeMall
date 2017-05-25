@@ -22,7 +22,6 @@
 - (void)addProduct:(NSDictionary *)product toCart:(CartType)cartType named:(NSString *)cartName;
 - (void)addFavoriteProduct:(NSDictionary *)product;
 
-- (BOOL)processData:(id)data;
 - (void)buttonItemPressed:(id)sender;
 
 @end

@@ -90,6 +90,7 @@
         CGFloat labelOriginX = CGRectGetMaxX(self.buttonFavorite.frame);
         CGRect frame = CGRectMake(labelOriginX, 0.0, self.frame.size.width - labelOriginX, self.frame.size.height);
         self.labelInvalid.frame = frame;
+        NSLog(@"self.labelInvalid.frame[%4.2f,%4.2f,%4.2f,%4.2f]", self.labelInvalid.frame.origin.x, self.labelInvalid.frame.origin.y, self.labelInvalid.frame.size.width, self.labelInvalid.frame.size.height);
     }
 }
 
@@ -115,11 +116,20 @@
     {
         _buttonAddToCart = [[UIButton alloc] initWithFrame:CGRectZero];
         [_buttonAddToCart setBackgroundColor:[UIColor clearColor]];
-        UIImage *image = [UIImage imageNamed:@"sho_info_bnt_cat"];
+        [_buttonAddToCart setTintColor:[UIColor whiteColor]];
+        UIImage *image = [[UIImage imageNamed:@"sho_info_bnt_cat"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         if (image)
         {
             [_buttonAddToCart setImage:image forState:UIControlStateNormal];
         }
+        UIImage *disabledImage = [image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        if (disabledImage)
+        {
+            [_buttonAddToCart setImage:disabledImage forState:UIControlStateDisabled];
+        }
+        [_buttonAddToCart setAdjustsImageWhenDisabled:YES];
+        [_buttonAddToCart setTitleColor:[UIColor colorWithWhite:0.9 alpha:1.0] forState:UIControlStateDisabled];
+        [_buttonAddToCart setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         [_buttonAddToCart setTitle:[LocalizedString AddToCart] forState:UIControlStateNormal];
         UIFont *font = [UIFont systemFontOfSize:16.0];
         [_buttonAddToCart.titleLabel setFont:font];
@@ -163,12 +173,30 @@
     {
         _labelInvalid = [[UILabel alloc] initWithFrame:CGRectZero];
         [_labelInvalid setTextColor:[UIColor whiteColor]];
-        [_labelInvalid setBackgroundColor:[UIColor grayColor]];
+        [_labelInvalid setBackgroundColor:[UIColor lightGrayColor]];
         [_labelInvalid setAdjustsFontSizeToFitWidth:YES];
         [_labelInvalid setText:[LocalizedString SoldOut]];
+        [_labelInvalid setTextAlignment:NSTextAlignmentCenter];
         [_labelInvalid setHidden:YES];
     }
     return _labelInvalid;
+}
+
+- (void)setIsProductInvalid:(BOOL)isProductInvalid
+{
+    _isProductInvalid = isProductInvalid;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (_isProductInvalid)
+        {
+            [self bringSubviewToFront:self.labelInvalid];
+            [self.labelInvalid setHidden:NO];
+        }
+        else
+        {
+            [self.labelInvalid setHidden:YES];
+        }
+        [self setNeedsLayout];
+    });
 }
 
 #pragma mark - Actions

@@ -42,7 +42,8 @@
     [[UITabBarItem appearance] setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIColor colorWithWhite:1.0 alpha:1.0], NSForegroundColorAttributeName, [UIFont systemFontOfSize:12.0], NSFontAttributeName, nil] forState:UIControlStateNormal];
     [[UITabBarItem appearance] setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIColor colorWithWhite:1.0 alpha:1.0], NSForegroundColorAttributeName, [UIFont systemFontOfSize:12.0], NSFontAttributeName, nil] forState:UIControlStateSelected];
     
-    
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:UserDefault_IntroduceShown];
+    [[NSUserDefaults standardUserDefaults] synchronize];
     // Prepare API connection
     [[TMInfoManager sharedManager] retrieveToken];
     return YES;
@@ -79,8 +80,6 @@
 - (void)applicationWillTerminate:(UIApplication *)application {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     // Saves changes in the application's managed object context before the application terminates.
-    [[NSUserDefaults standardUserDefaults] removeObjectForKey:UserDefault_IntroduceShown];
-    [[NSUserDefaults standardUserDefaults] synchronize];
     [self saveContext];
 }
 

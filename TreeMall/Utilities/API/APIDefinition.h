@@ -12,7 +12,9 @@
 #import <Foundation/Foundation.h>
 
 #ifdef DEBUG
+
 static NSString *SymphoxAPIDomain = @"http://tomcat8.mdevelop.com/TreeMall/";
+//static NSString *SymphoxAPIDomain = @"http://sapi.symphox.com.tw/treeMall/";
 #else
 static NSString *SymphoxAPIDomain = @"http://tomcat8.mdevelop.com/TreeMall/";
 #endif

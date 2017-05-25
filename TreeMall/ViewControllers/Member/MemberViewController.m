@@ -570,9 +570,14 @@ typedef enum : NSUInteger {
 
 - (void)buttonItemQAPressed:(id)sender
 {
-    WebViewViewController *viewController = [[WebViewViewController alloc] initWithNibName:@"WebViewViewController" bundle:[NSBundle mainBundle]];
-    viewController.urlString = @"https://www.treemall.com.tw/iMember/service/serviceLogin.jsp";
-    [self.navigationController pushViewController:viewController animated:YES];
+//    WebViewViewController *viewController = [[WebViewViewController alloc] initWithNibName:@"WebViewViewController" bundle:[NSBundle mainBundle]];
+//    viewController.urlString = @"https://www.treemall.com.tw/iMember/service/serviceLogin.jsp";
+//    [self.navigationController pushViewController:viewController animated:YES];
+    NSURL *url = [NSURL URLWithString:@"https://www.treemall.com.tw/iMember/service/serviceLogin.jsp"];
+    if ([[UIApplication sharedApplication] canOpenURL:url])
+    {
+        [[UIApplication sharedApplication] openURL:url];
+    }
 }
 
 #pragma mark - ProductDetailSectionTitleViewDelegate

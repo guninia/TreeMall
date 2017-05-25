@@ -188,6 +188,7 @@ static NSInteger MaxTagsNumber = 4;
         self.labelPoint.frame = frame;
         originX = self.labelPoint.frame.origin.x + self.labelPoint.frame.size.width + intervalH;
     }
+    CGFloat buttonOriginX = containerFrame.size.width - containMarginH;
     if (self.buttonCart && [self.buttonCart isHidden] == NO)
     {
         CGSize size = CGSizeMake(30.0, 30.0);
@@ -196,8 +197,10 @@ static NSInteger MaxTagsNumber = 4;
         {
             size = image.size;
         }
-        CGRect frame = CGRectMake((containerFrame.size.width - containMarginH - size.width), originY, size.width, size.height);
+        buttonOriginX = buttonOriginX - size.width;
+        CGRect frame = CGRectMake(buttonOriginX, originY, size.width, size.height);
         self.buttonCart.frame = frame;
+        buttonOriginX = buttonOriginX - intervalH;
     }
     if (self.buttonFavorite && [self.buttonFavorite isHidden] == NO)
     {
@@ -207,8 +210,10 @@ static NSInteger MaxTagsNumber = 4;
         {
             size = image.size;
         }
-        CGRect frame = CGRectMake((CGRectGetMinX(self.buttonCart.frame) - intervalH - size.width), originY, size.width, size.height);
+        buttonOriginX = buttonOriginX - size.width;
+        CGRect frame = CGRectMake(buttonOriginX, originY, size.width, size.height);
         self.buttonFavorite.frame = frame;
+        buttonOriginX = buttonOriginX - intervalH;
     }
     if (self.viewDiscount && [self.viewDiscount isHidden] == NO)
     {
@@ -511,7 +516,7 @@ static NSInteger MaxTagsNumber = 4;
     NSURL *url = [NSURL URLWithString:imagePath];
     
     __weak ProductTableViewCell *weakSelf = self;
-    [self.imageViewProduct sd_setImageWithURL:url placeholderImage:placeholderImage options:(SDWebImageAvoidAutoSetImage) completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL){
+    [self.imageViewProduct sd_setImageWithURL:url placeholderImage:placeholderImage options:(SDWebImageAvoidAutoSetImage|SDWebImageAllowInvalidSSLCertificates) completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL){
         if ([[imageURL absoluteString] isEqualToString:_imagePath] == NO)
         {
             return;

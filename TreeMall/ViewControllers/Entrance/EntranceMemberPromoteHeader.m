@@ -385,7 +385,7 @@
         if (url)
         {
             __weak EntranceMemberPromoteHeader *weakSelf = self;
-            [[SDWebImageDownloader sharedDownloader] downloadImageWithURL:url options:0 progress:nil completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, BOOL finished){
+            [[SDWebImageDownloader sharedDownloader] downloadImageWithURL:url options:SDWebImageDownloaderAllowInvalidSSLCertificates progress:nil completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, BOOL finished){
                 if (error == nil && image)
                 {
                     [weakSelf.buttonPromotion setBackgroundImage:image forState:UIControlStateNormal];

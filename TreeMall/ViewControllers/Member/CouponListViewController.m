@@ -36,7 +36,7 @@
         _arrayCoupon = [[NSMutableArray alloc] initWithCapacity:0];
         [self prepareSortOptions];
         _sortType = CouponSortOptionValueHighToLow;
-        _stateIndex = 0;
+        _stateIndex = CouponStateTotal;
         _currentPage = 0;
         _shouldShowLoadingView = YES;
     }
@@ -55,16 +55,17 @@
     [self.view addSubview:self.tableViewCoupon];
     NSString *currentSortTypeText = [self.arraySortType objectAtIndex:0];
     self.buttonSort.label.text = currentSortTypeText;
+    [self.tableViewCoupon reloadData];
     if (_currentPage == 0)
     {
         // Set initial value
+        self.stateIndex = CouponStateNotUsed;
         [self.segmentedView.segmentedControl setSelectedSegmentIndex:0];
         
         // Initial fetch
         NSInteger nextPage = _currentPage + 1;
         [self retrieveCouponDataForState:self.stateIndex sortByType:self.sortType atPage:nextPage];
     }
-    [self.tableViewCoupon reloadData];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -118,20 +119,20 @@
     if (_segmentedView == nil)
     {
         NSMutableArray *items = [NSMutableArray array];
-        for (NSInteger index = CouponStateStart; index < CouponStateTotal; index++)
+        for (NSInteger index = CouponUIStateStart; index < CouponUIStateTotal; index++)
         {
             switch (index) {
-                case CouponStateNotUsed:
+                case CouponUIStateNotUsed:
                 {
                     [items addObject:[LocalizedString NotUsed]];
                 }
                     break;
-                case CouponStateAlreadyUsed:
+                case CouponUIStateAlreadyUsed:
                 {
                     [items addObject:[LocalizedString AlreadyUsed]];
                 }
                     break;
-                case CouponStateExpired:
+                case CouponUIStateExpired:
                 {
                     [items addObject:[LocalizedString Expired]];
                 }
@@ -452,7 +453,7 @@
     switch (section) {
         case 1:
         {
-            if (self.shouldShowLoadingView)
+            if (self.currentPage == 0 || self.shouldShowLoadingView)
             {
                 heightForFooter = 50.0;
             }
@@ -522,7 +523,27 @@
 
 - (void)semiCircleEndsSegmentedView:(SemiCircleEndsSegmentedView *)view didChangeToIndex:(NSInteger)index
 {
-    self.stateIndex = index;
+    NSInteger realIndex = CouponStateAll;
+    switch (index) {
+        case CouponUIStateNotUsed:
+        {
+            realIndex = CouponStateNotUsed;
+        }
+            break;
+        case CouponUIStateAlreadyUsed:
+        {
+            realIndex = CouponStateAlreadyUsed;
+        }
+            break;
+        case CouponUIStateExpired:
+        {
+            realIndex = CouponStateExpired;
+        }
+            break;
+        default:
+            break;
+    }
+    self.stateIndex = realIndex;
     [self retrieveCouponDataForState:self.stateIndex sortByType:self.sortType atPage:1];
 }
 

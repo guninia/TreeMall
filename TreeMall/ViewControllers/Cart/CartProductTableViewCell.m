@@ -302,7 +302,7 @@
     
     UIImage *transparent = [UIImage imageNamed:@"transparent"];
     __weak CartProductTableViewCell *weakSelf = self;
-    [self.imageViewProduct sd_setImageWithURL:_imageUrl placeholderImage:transparent options:SDWebImageAvoidAutoSetImage completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL){
+    [self.imageViewProduct sd_setImageWithURL:_imageUrl placeholderImage:transparent options:SDWebImageAvoidAutoSetImage|SDWebImageAllowInvalidSSLCertificates completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL){
         if (error == nil)
         {
             if ([[_imageUrl absoluteString] isEqualToString:[imageURL absoluteString]])

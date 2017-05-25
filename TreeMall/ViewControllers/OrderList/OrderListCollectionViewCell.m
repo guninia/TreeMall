@@ -292,7 +292,7 @@ static CGFloat buttonTotalProductsHeight = 20.0;
     }
     UIImage *placeholder = [UIImage imageNamed:@"transparent"];
     __weak OrderListCollectionViewCell *weakSelf = self;
-    [self.imageView sd_setImageWithURL:_imageUrl placeholderImage:placeholder options:(SDWebImageAvoidAutoSetImage) completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL){
+    [self.imageView sd_setImageWithURL:_imageUrl placeholderImage:placeholder options:(SDWebImageAvoidAutoSetImage|SDWebImageAllowInvalidSSLCertificates) completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL){
         if ([[_imageUrl absoluteString] isEqualToString:[imageURL absoluteString]])
         {
             weakSelf.imageView.image = image;

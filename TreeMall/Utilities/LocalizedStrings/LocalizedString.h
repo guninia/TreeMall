@@ -322,5 +322,7 @@
 + (NSString *)ChoosePickupStore;
 + (NSString *)AlreadySentEmailAuth_S_;
 + (NSString *)PleaseAgreeMemberTermsFirst;
++ (NSString *)CreditCardInfo;
++ (NSString *)Greetings;
 
 @end

@@ -30,7 +30,7 @@
 - (void)retrieveTermsForType:(TermType)type;
 - (BOOL)processTermsData:(id)data;
 - (void)showCartTypeSheetForDirectlyPurchase:(BOOL)directlyPurchase;
-- (void)addToCart:(CartType)type;
+- (void)addToCart:(CartType)type shouldShowAlert:(BOOL)shouldShowAlert;
 - (void)addProduct:(NSDictionary *)dictionaryProduct toCartForType:(CartType)type;
 - (NSMutableDictionary *)dictionaryCommonFromDetail:(NSDictionary *)dictionary;
 - (NSArray *)cartsAvailableToAdd;
@@ -1197,7 +1197,7 @@
                     UIButton *button = [[UIButton alloc] initWithFrame:CGRectZero];
                     button.tag = index;
                     [button.imageView setContentMode:UIViewContentModeScaleAspectFit];
-                    [button sd_setImageWithURL:[NSURL URLWithString:imagePath] forState:UIControlStateNormal placeholderImage:transparent];
+                    [button sd_setImageWithURL:[NSURL URLWithString:imagePath] forState:UIControlStateNormal placeholderImage:transparent options:SDWebImageAllowInvalidSSLCertificates];
                     [button addTarget:self action:@selector(buttonIntroImagePressed:) forControlEvents:UIControlEventTouchUpInside];
                     [self.scrollView addSubview:button];
                     [self.arrayIntroImageView addObject:button];
@@ -1235,7 +1235,7 @@
                     UIButton *button = [[UIButton alloc] initWithFrame:CGRectZero];
                     button.tag = index;
                     [button.imageView setContentMode:UIViewContentModeScaleAspectFit];
-                    [button sd_setImageWithURL:[NSURL URLWithString:imagePath] forState:UIControlStateNormal placeholderImage:transparent];
+                    [button sd_setImageWithURL:[NSURL URLWithString:imagePath] forState:UIControlStateNormal placeholderImage:transparent options:SDWebImageAllowInvalidSSLCertificates];
                     [button addTarget:self action:@selector(buttonSpecImagePressed:) forControlEvents:UIControlEventTouchUpInside];
                     [self.scrollView addSubview:button];
                     [self.arraySpecImageView addObject:button];
@@ -1310,18 +1310,19 @@
         }
         if ([self.arrayCartType count] == 0)
         {
-            [self.bottomBar.buttonAddToCart setBackgroundColor:[UIColor grayColor]];
-            [self.bottomBar.buttonAddToCart setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
+            [self.bottomBar.buttonAddToCart setBackgroundColor:[UIColor colorWithWhite:0.8 alpha:1.0]];
+//            [self.bottomBar.buttonAddToCart setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
+            [self.bottomBar.buttonAddToCart setEnabled:NO];
             self.bottomBar.separator.hidden = YES;
         }
         else
         {
             [self.bottomBar.buttonAddToCart setBackgroundColor:[UIColor clearColor]];
-            [self.bottomBar.buttonAddToCart setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+//            [self.bottomBar.buttonAddToCart setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+            [self.bottomBar.buttonAddToCart setEnabled:YES];
             self.bottomBar.separator.hidden = NO;
         }
-        [self.bottomBar.labelInvalid setHidden:!isInvalid];
-        [self.bottomBar.labelInvalid setText:textSoldOut];
+        [self.bottomBar setIsProductInvalid:isInvalid];
         [self.bottomBar.buttonPurchase setTitle:textPurchase forState:UIControlStateNormal];
     }
 }
@@ -1437,39 +1438,48 @@
         CartType type = CartTypeTotal;
         NSNumber *numberType = [dictionary objectForKey:SymphoxAPIParam_type];
         NSString *title = nil;
+        NSString *text = [dictionary objectForKey:SymphoxAPIParam_text];
+        if (text && [text isEqual:[NSNull null]] == NO && [text length] > 0)
+        {
+            title = text;
+        }
         switch ([numberType integerValue]) {
             case CartTypeCommonDelivery:
             {
                 // Common delivery
-                title = [LocalizedString CommonDelivery];
+                if (title == nil)
+                {
+                    title = [LocalizedString CommonDelivery];
+                }
                 type = CartTypeCommonDelivery;
             }
                 break;
             case CartTypeStorePickup:
             {
                 // Convenience Store
-                title = [LocalizedString StorePickUp];
+                if (title == nil)
+                {
+                    title = [LocalizedString StorePickUp];
+                }
                 type = CartTypeStorePickup;
             }
                 break;
             case CartTypeFastDelivery:
             {
                 // Fast delivery
-                title = [LocalizedString FastDelivery];
+                if (title == nil)
+                {
+                    title = [LocalizedString FastDelivery];
+                }
                 type = CartTypeFastDelivery;
             }
                 break;
             default:
                 break;
         }
-        NSString *text = [dictionary objectForKey:SymphoxAPIParam_text];
-        if (text && [text isEqual:[NSNull null]] == NO && [text length] > 0)
-        {
-            title = text;
-        }
         __weak ProductDetailViewController *weakSelf = self;
         UIAlertAction *action = [UIAlertAction actionWithTitle:title style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
-            [weakSelf addToCart:type];
+            [weakSelf addToCart:type shouldShowAlert:!directlyPurchase];
             if (directlyPurchase)
             {
                 [weakSelf presentCartViewForType:type];
@@ -1482,7 +1492,7 @@
     [self presentViewController:alertController animated:YES completion:nil];
 }
 
-- (void)addToCart:(CartType)type
+- (void)addToCart:(CartType)type shouldShowAlert:(BOOL)shouldShowAlert
 {
     NSString *title = @"";
     switch (type) {
@@ -1527,11 +1537,14 @@
             [product setObject:specificSpecId forKey:SymphoxAPIParam_cpdt_num];
         }
         [self addProduct:product toCartForType:type];
-        NSString *message = [NSString stringWithFormat:[LocalizedString AddedTo_S_], title];
-        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:message preferredStyle:UIAlertControllerStyleAlert];
-        UIAlertAction *action = [UIAlertAction actionWithTitle:[LocalizedString Confirm] style:UIAlertActionStyleDefault handler:nil];
-        [alertController addAction:action];
-        [self presentViewController:alertController animated:YES completion:nil];
+        if (shouldShowAlert)
+        {
+            NSString *message = [NSString stringWithFormat:[LocalizedString AddedTo_S_], title];
+            UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:message preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertAction *action = [UIAlertAction actionWithTitle:[LocalizedString Confirm] style:UIAlertActionStyleDefault handler:nil];
+            [alertController addAction:action];
+            [self presentViewController:alertController animated:YES completion:nil];
+        }
     }
 }
 
@@ -1904,7 +1917,7 @@
     {
         NSNumber *numberType = [arrayCarts objectAtIndex:0];
         NSInteger type = [numberType integerValue];
-        [self addToCart:type];
+        [self addToCart:type shouldShowAlert:YES];
     }
     else
     {
@@ -1918,14 +1931,14 @@
     if ([arrayCarts count] == 0)
     {
         [[TMInfoManager sharedManager] resetCartForType:CartTypeDirectlyPurchase];
-        [self addToCart:CartTypeDirectlyPurchase];
+        [self addToCart:CartTypeDirectlyPurchase shouldShowAlert:NO];
         [self presentCartViewForType:CartTypeDirectlyPurchase];
     }
     else if ([arrayCarts count] == 1)
     {
         NSNumber *numberType = [arrayCarts objectAtIndex:0];
         NSInteger type = [numberType integerValue];
-        [self addToCart:type];
+        [self addToCart:type shouldShowAlert:NO];
         [self presentCartViewForType:type];
     }
     else

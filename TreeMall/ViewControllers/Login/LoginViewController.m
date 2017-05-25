@@ -534,6 +534,7 @@
                 if ([self processRegisterData:data])
                 {
                     // Should go next step.
+                    [[TMInfoManager sharedManager] retrieveUserInformation];
                     [[NSNotificationCenter defaultCenter] postNotificationName:PostNotificationName_UserLoggedIn object:nil];
                 }
                 else
@@ -575,6 +576,7 @@
         {
             NSDictionary *dictionary = (NSDictionary *)jsonObject;
             [[TMInfoManager sharedManager] updateUserInformationFromInfoDictionary:dictionary afterLoadingArchive:YES];
+            [[TMInfoManager sharedManager] retrieveUserInformation];
             success = YES;
         }
     }

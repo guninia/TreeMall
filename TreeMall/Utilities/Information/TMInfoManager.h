@@ -26,11 +26,20 @@ typedef enum : NSUInteger {
 
 typedef enum : NSUInteger {
     CouponStateStart,
-    CouponStateNotUsed = CouponStateStart,
+    CouponStateAll = CouponStateStart,
+    CouponStateNotUsed,
     CouponStateAlreadyUsed,
     CouponStateExpired,
     CouponStateTotal
 } CouponState;
+
+typedef enum : NSUInteger {
+    CouponUIStateStart,
+    CouponUIStateNotUsed = CouponUIStateStart,
+    CouponUIStateAlreadyUsed,
+    CouponUIStateExpired,
+    CouponUIStateTotal
+} CouponUIState;
 
 typedef enum : NSUInteger {
     OrderStateStart,

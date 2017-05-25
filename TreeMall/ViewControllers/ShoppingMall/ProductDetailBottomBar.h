@@ -29,5 +29,5 @@
 @property (nonatomic, strong) NSArray *arrayButtonSettings;
 @property (nonatomic, strong) UIColor *backgorundColorValid;
 @property (nonatomic, strong) UIColor *backgroundColorInvalid;
-
+@property (nonatomic, assign) BOOL isProductInvalid;
 @end

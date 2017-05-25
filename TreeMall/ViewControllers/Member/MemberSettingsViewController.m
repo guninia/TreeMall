@@ -55,7 +55,7 @@ typedef enum : NSUInteger {
 - (void)startAuthenticateWithUrlString:(NSString *)urlString;
 - (void)presentInfoModificationView;
 - (void)presentContactsModificationView;
-- (void)presentWebViewForUrl:(NSURL *)url forType:(WebViewType)type;
+- (void)presentWebViewForUrl:(NSURL *)url forType:(WebViewType)type andTitle:(NSString *)title;
 
 - (void)textDidChangedInTextField:(id)sender;
 - (void)handlerOfUserInformationUpdatedNotification:(NSNotification *)notification;
@@ -603,7 +603,7 @@ typedef enum : NSUInteger {
     {
         NSLog(@"presentActionSheetForAuthenticateType - Invalid url from string");
     }
-    [self presentWebViewForUrl:url forType:WebViewTypeAuth];
+    [self presentWebViewForUrl:url forType:WebViewTypeAuth andTitle:[LocalizedString Authentication]];
 }
 
 - (void)presentContactsModificationView
@@ -627,7 +627,7 @@ typedef enum : NSUInteger {
     {
         NSLog(@"presentActionSheetForAuthenticateType - Invalid url from string");
     }
-    [self presentWebViewForUrl:url forType:WebViewTypeContactEdit];
+    [self presentWebViewForUrl:url forType:WebViewTypeContactEdit andTitle:[LocalizedString ContactsSettings]];
 }
 
 - (void)presentInfoModificationView
@@ -651,7 +651,7 @@ typedef enum : NSUInteger {
     {
         NSLog(@"presentActionSheetForAuthenticateType - Invalid url from string");
     }
-    [self presentWebViewForUrl:url forType:WebViewTypeInfoEdit];
+    [self presentWebViewForUrl:url forType:WebViewTypeInfoEdit andTitle:[LocalizedString BasicInformationModification]];
 }
 
 - (NSString *)encodedUrlStringForUrlString:(NSString *)urlString withParameters:(NSDictionary *)parameters
@@ -686,13 +686,14 @@ typedef enum : NSUInteger {
     return encodedUrlString;
 }
 
-- (void)presentWebViewForUrl:(NSURL *)url forType:(WebViewType)type
+- (void)presentWebViewForUrl:(NSURL *)url forType:(WebViewType)type andTitle:(NSString *)title
 {
     if (url == nil)
         return;
     WebViewViewController *viewController = [[WebViewViewController alloc] initWithNibName:@"WebViewViewController" bundle:[NSBundle mainBundle]];
     viewController.type = type;
     viewController.url = url;
+    viewController.title = title;
     if (self.navigationController)
     {
         [self.navigationController pushViewController:viewController animated:YES];

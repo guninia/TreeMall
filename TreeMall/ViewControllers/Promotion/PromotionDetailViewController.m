@@ -182,7 +182,8 @@
     NSString *img = [dictionaryData objectForKey:SymphoxAPIParam_img];
     if (img && [img length] > 0)
     {
-        [self.imageView sd_setImageWithURL:[NSURL URLWithString:img]];
+        UIImage *placeholder = [UIImage imageNamed:@"transparent"];
+        [self.imageView sd_setImageWithURL:[NSURL URLWithString:img] placeholderImage:placeholder options:SDWebImageAllowInvalidSSLCertificates];
     }
     else
     {
@@ -226,9 +227,14 @@
     NSLog(@"self.dictionaryData[%p] - link[%@]", self.dictionaryData, link);
     if (link && [link length] > 0)
     {
-        WebViewViewController *viewController = [[WebViewViewController alloc] initWithNibName:@"WebViewViewController" bundle:[NSBundle mainBundle]];
-        viewController.urlString = link;
-        [self.navigationController pushViewController:viewController animated:YES];
+//        WebViewViewController *viewController = [[WebViewViewController alloc] initWithNibName:@"WebViewViewController" bundle:[NSBundle mainBundle]];
+//        viewController.urlString = link;
+//        [self.navigationController pushViewController:viewController animated:YES];
+        NSURL *url = [NSURL URLWithString:link];
+        if ([[UIApplication sharedApplication] canOpenURL:url])
+        {
+            [[UIApplication sharedApplication] openURL:url];
+        }
     }
 }
 

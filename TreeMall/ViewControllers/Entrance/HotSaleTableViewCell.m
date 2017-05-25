@@ -269,7 +269,7 @@
         [_labelSeparator setFont:font];
         [_labelSeparator setTextColor:[UIColor lightGrayColor]];
         [_labelSeparator setBackgroundColor:[UIColor clearColor]];
-        [_labelSeparator setText:@"/"];
+        [_labelSeparator setText:@"＋"];
     }
     return _labelSeparator;
 }
@@ -332,7 +332,7 @@
     }
     __weak HotSaleTableViewCell *weakSelf = self;
     UIImage *image = [UIImage imageNamed:@"transparent"];
-    [self.imageViewProduct sd_setImageWithURL:_imageUrl placeholderImage:image options:SDWebImageAvoidAutoSetImage completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL){
+    [self.imageViewProduct sd_setImageWithURL:_imageUrl placeholderImage:image options:SDWebImageAvoidAutoSetImage|SDWebImageAllowInvalidSSLCertificates completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL){
         if ([[imageURL absoluteString] isEqualToString:[_imageUrl absoluteString]])
         {
             dispatch_async(dispatch_get_main_queue(), ^{

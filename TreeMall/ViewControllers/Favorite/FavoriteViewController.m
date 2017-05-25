@@ -87,7 +87,8 @@
     if (_buttonEdit == nil)
     {
         _buttonEdit = [[UIButton alloc] initWithFrame:CGRectZero];;
-        UIImage *image = [UIImage imageNamed:@"ico_trash_off"];
+        [_buttonEdit setTintColor:[UIColor whiteColor]];
+        UIImage *image = [[UIImage imageNamed:@"ico_trash_off"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         CGSize size = CGSizeMake(30.0, 30.0);
         if (image)
         {
@@ -283,6 +284,7 @@
             BOOL isFavorite = [[TMInfoManager sharedManager] favoriteContainsProductWithIdentifier:cpdt_num];
             cell.favorite = isFavorite;
         }
+        cell.buttonFavorite.hidden = YES;
     }
     return cell;
 }

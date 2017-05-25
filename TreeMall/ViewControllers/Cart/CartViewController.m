@@ -39,6 +39,8 @@
 - (CartUIType)cartUITypeForCartType:(CartType)cartType;
 - (void)setSegmentedControlIndexForCartType:(CartType)type;
 
+- (void)buttonItemClosePressed:(id)sender;
+
 @end
 
 @implementation CartViewController
@@ -57,13 +59,32 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
+    
     [self.view setBackgroundColor:[UIColor colorWithWhite:0.9 alpha:1.0]];
     
     [self.view addSubview:self.segmentedView];
     [self.view addSubview:self.tableView];
     [self.view addSubview:self.bottomBar];
     
-    [self.navigationController.tabBarController.view addSubview:self.viewLoading];
+    if (self.currentType == CartTypeDirectlyPurchase)
+    {
+        self.segmentedView.hidden = YES;
+    }
+    else
+    {
+        self.segmentedView.hidden = NO;
+    }
+    
+    
+    if (self.navigationController.tabBarController != nil)
+    {
+        [self.navigationController.tabBarController.view addSubview:self.viewLoading];
+    }
+    else if (self.navigationController.presentingViewController != nil)
+    {
+        UIImage *image = [[UIImage imageNamed:@"car_popup_close"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:image style:UIBarButtonItemStylePlain target:self action:@selector(buttonItemClosePressed:)];
+    }
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -74,7 +95,10 @@
     {
         self.currentType = CartTypeCommonDelivery;
     }
-    [self setSegmentedControlIndexForCartType:self.currentType];
+    if (self.currentType != CartTypeDirectlyPurchase)
+    {
+        [self setSegmentedControlIndexForCartType:self.currentType];
+    }
     
     [self checkCartForType:self.currentType shouldShowPaymentForProductId:nil];
 }
@@ -1040,6 +1064,16 @@
     if (self.segmentedView.segmentedControl.selectedSegmentIndex != uiType)
     {
         self.segmentedView.segmentedControl.selectedSegmentIndex = uiType;
+    }
+}
+
+#pragma mark - Actions
+
+- (void)buttonItemClosePressed:(id)sender
+{
+    if (self.navigationController.presentingViewController)
+    {
+        [self.navigationController.presentingViewController dismissViewControllerAnimated:YES completion:nil];
     }
 }
 

@@ -1617,6 +1617,7 @@ static NSUInteger SearchKeywordNumberMax = 8;
     NSLog(@"dictionaryProductPurchaseInfoInCartCommon:\n%@", [self.dictionaryProductPurchaseInfoInCartCommon description]);
     NSLog(@"dictionaryProductPurchaseInfoInCartFast:\n%@", [self.dictionaryProductPurchaseInfoInCartFast description]);
     NSLog(@"dictionaryProductPurchaseInfoInCartStorePickUp:\n%@", [self.dictionaryProductPurchaseInfoInCartStorePickUp description]);
+    NSLog(@"dictionaryProductPurchaseInfoInCartStorePickUp:\n%@", [self.dictionaryProductPurchaseInfoInCartDirect description]);
     [self saveToArchive];
 }
 

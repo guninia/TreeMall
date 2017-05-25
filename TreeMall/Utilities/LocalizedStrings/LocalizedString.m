@@ -3131,4 +3131,24 @@
     return PleaseAgreeMemberTermsFirst;
 }
 
++ (NSString *)CreditCardInfo
+{
+    static NSString *CreditCardInfo = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        CreditCardInfo = NSLocalizedString(@"CreditCardInfo", nil);
+    });
+    return CreditCardInfo;
+}
+
++ (NSString *)Greetings
+{
+    static NSString *Greetings = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        Greetings = NSLocalizedString(@"Greetings", nil);
+    });
+    return Greetings;
+}
+
 @end

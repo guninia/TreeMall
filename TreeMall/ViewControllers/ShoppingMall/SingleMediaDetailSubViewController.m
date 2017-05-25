@@ -48,7 +48,7 @@
         //[CommonTool showHUD];
         [self.imgvPhoto sd_setImageWithURL:[NSURL URLWithString:strImageUrl]
                           placeholderImage:[UIImage imageNamed:@""]
-                                   options:SDWebImageRetryFailed
+                                   options:SDWebImageRetryFailed|SDWebImageAllowInvalidSSLCertificates
                                  completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
                                      //[CommonTool hideHUD];
                                      self.imgvPhoto.frame = CGRectMake(0, 0, image.size.width, image.size.height);

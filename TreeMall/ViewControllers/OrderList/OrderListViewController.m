@@ -517,7 +517,7 @@
             {
                 NSData *data = (NSData *)resultObject;
 //                NSString *string = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-//                NSLog(@"retrieveProductsForConditions:\n%@", string);
+//                NSLog(@"requestOrder:\n%@", string);
                 if ([self processOrderData:data])
                 {
                     weakSelf.currentPage = page;
@@ -585,9 +585,9 @@
         {
             [self.arrayCarts addObjectsFromArray:array];
         }
-        if (self.totalOrder > [self.arrayCarts count])
+        if (self.totalOrder <= [self.arrayCarts count])
         {
-            self.shouldShowLoadingView = YES;
+            self.shouldShowLoadingView = NO;
         }
         success = YES;
     }

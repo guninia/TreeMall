@@ -279,8 +279,26 @@ typedef enum : NSUInteger {
         }
         stringGreetingsTime = [stringGreetingsTime stringByAppendingFormat:@"%@%@", userName, (stringGender == nil)?@"":stringGender];
     }
+    else
+    {
+        stringGreetingsTime = [stringGreetingsTime stringByAppendingString:[LocalizedString Greetings]];
+    }
     
     return stringGreetingsTime;
+}
+
+- (void)presentProductListViewForIdentifier:(NSString *)identifier named:(NSString *)name andLayer:(NSNumber *)layer withCategories:(NSArray *)categories andSubcategories:(NSArray *)subcategories
+{
+    if (identifier == nil || layer == nil)
+        return;
+    
+    ProductListViewController *viewController = [[ProductListViewController alloc] initWithNibName:@"ProductListViewController" bundle:[NSBundle mainBundle]];
+    viewController.hallId = identifier;
+    viewController.layer = layer;
+    viewController.name = name;
+    viewController.arrayCategory = categories;
+    viewController.arraySubcategory = subcategories;
+    [self.navigationController pushViewController:viewController animated:YES];
 }
 
 #pragma mark - Actions
@@ -416,7 +434,7 @@ typedef enum : NSUInteger {
             
             // This placeholder image is to force SDWebImage to show image immediately after loading.
             UIImage *placeholderImage = [UIImage imageNamed:@"transparent"];
-            [cell.imageView sd_setImageWithURL:url placeholderImage:placeholderImage options:0 completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL){
+            [cell.imageView sd_setImageWithURL:url placeholderImage:placeholderImage options:SDWebImageAllowInvalidSSLCertificates completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL){
 //                NSLog(@"image[%4.2f,%4.2f]", image.size.width, image.size.height);
                 return;
             }];
@@ -549,10 +567,11 @@ typedef enum : NSUInteger {
                     // Sub category. Currently impossible since there is no layer information.
                     NSString *hallId = [dictionary objectForKey:SymphoxAPIParam_hallId];
                     NSNumber *layer = [dictionary objectForKey:SymphoxAPIParam_layer];
-                    if (hallId && layer)
-                    {
-                        [[NSNotificationCenter defaultCenter] postNotificationName:PostNotificationName_JumpToShoppingMallAndPresentHall object:self userInfo:dictionary];
-                    }
+//                    if (hallId && layer)
+//                    {
+//                        [[NSNotificationCenter defaultCenter] postNotificationName:PostNotificationName_JumpToShoppingMallAndPresentHall object:self userInfo:dictionary];
+//                    }
+                    [self presentProductListViewForIdentifier:hallId named:nil andLayer:layer withCategories:nil andSubcategories:nil];
                 }
                     break;
                 case 3:
@@ -565,6 +584,12 @@ typedef enum : NSUInteger {
                         viewController.urlString = link;
                         [self.navigationController pushViewController:viewController animated:YES];
                     }
+                }
+                    break;
+                case 4:
+                {
+                    PromotionViewController *promotionViewController = [[PromotionViewController alloc] initWithNibName:@"PromotionViewController" bundle:[NSBundle mainBundle]];
+                    [self.navigationController pushViewController:promotionViewController animated:YES];
                 }
                     break;
                 default:
@@ -620,10 +645,11 @@ typedef enum : NSUInteger {
                     // Sub category. Currently impossible since there is no layer information.
                     NSString *hallId = [dictionaryFocus objectForKey:SymphoxAPIParam_hallId];
                     NSNumber *layer = [dictionaryFocus objectForKey:SymphoxAPIParam_layer];
-                    if (hallId && layer)
-                    {
-                        [[NSNotificationCenter defaultCenter] postNotificationName:PostNotificationName_JumpToShoppingMallAndPresentHall object:self userInfo:dictionaryFocus];
-                    }
+//                    if (hallId && layer)
+//                    {
+//                        [[NSNotificationCenter defaultCenter] postNotificationName:PostNotificationName_JumpToShoppingMallAndPresentHall object:self userInfo:dictionaryFocus];
+//                    }
+                    [self presentProductListViewForIdentifier:hallId named:nil andLayer:layer withCategories:nil andSubcategories:nil];
                 }
                     break;
                 case 3:
@@ -637,6 +663,12 @@ typedef enum : NSUInteger {
                         viewController.urlString = stringLink;
                         [self.navigationController pushViewController:viewController animated:YES];
                     }
+                }
+                    break;
+                case 4:
+                {
+                    PromotionViewController *promotionViewController = [[PromotionViewController alloc] initWithNibName:@"PromotionViewController" bundle:[NSBundle mainBundle]];
+                    [self.navigationController pushViewController:promotionViewController animated:YES];
                 }
                     break;
                 default:
@@ -685,10 +717,11 @@ typedef enum : NSUInteger {
                     // Sub category. Currently impossible since there is no layer information.
                     NSString *hallId = [dictionaryMarketing objectForKey:SymphoxAPIParam_hallId];
                     NSNumber *layer = [dictionaryMarketing objectForKey:SymphoxAPIParam_layer];
-                    if (hallId && layer)
-                    {
-                        [[NSNotificationCenter defaultCenter] postNotificationName:PostNotificationName_JumpToShoppingMallAndPresentHall object:self userInfo:dictionaryMarketing];
-                    }
+//                    if (hallId && layer)
+//                    {
+//                        [[NSNotificationCenter defaultCenter] postNotificationName:PostNotificationName_JumpToShoppingMallAndPresentHall object:self userInfo:dictionaryMarketing];
+//                    }
+                    [self presentProductListViewForIdentifier:hallId named:nil andLayer:layer withCategories:nil andSubcategories:nil];
                 }
                     break;
                 case 3:
@@ -702,6 +735,12 @@ typedef enum : NSUInteger {
                         viewController.title = [LocalizedString Promotions];
                         [self.navigationController pushViewController:viewController animated:YES];
                     }
+                }
+                    break;
+                case 4:
+                {
+                    PromotionViewController *promotionViewController = [[PromotionViewController alloc] initWithNibName:@"PromotionViewController" bundle:[NSBundle mainBundle]];
+                    [self.navigationController pushViewController:promotionViewController animated:YES];
                 }
                     break;
                 default:
@@ -752,7 +791,7 @@ typedef enum : NSUInteger {
         {
             HotSaleViewController *viewController = [[HotSaleViewController alloc] initWithNibName:@"HotSaleViewController" bundle:[NSBundle mainBundle]];
             viewController.type = HotSaleTypePoint;
-            viewController.title = [LocalizedString HotSaleRanking];
+            viewController.title = [LocalizedString ExchangeRecommended];
             UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:viewController];
             [self presentViewController:navigationController animated:YES completion:nil];
         }
@@ -761,7 +800,7 @@ typedef enum : NSUInteger {
         {
             HotSaleViewController *viewController = [[HotSaleViewController alloc] initWithNibName:@"HotSaleViewController" bundle:[NSBundle mainBundle]];
             viewController.type = HotSaleTypeCoupon;
-            viewController.title = [LocalizedString HotSaleRanking];
+            viewController.title = [LocalizedString CouponRecommended];
             UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:viewController];
             [self presentViewController:navigationController animated:YES completion:nil];
         }
