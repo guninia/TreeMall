@@ -964,6 +964,7 @@ static NSUInteger SearchKeywordNumberMax = 8;
     NSString *emailAuth = [infoDictionary objectForKey:SymphoxAPIParam_email_status];
     NSString *invoiceTitle = [infoDictionary objectForKey:SymphoxAPIParam_inv_title];
     NSString *invoiceType = [infoDictionary objectForKey:SymphoxAPIParam_inv_type];
+    NSNumber *inv_bind = [infoDictionary objectForKey:SymphoxAPIParam_inv_bind];
     NSString *mobileMasked = [infoDictionary objectForKey:SymphoxAPIParam_mobile];
     NSString *newMember = [infoDictionary objectForKey:SymphoxAPIParam_new_member];
     NSString *ocbStatus = [infoDictionary objectForKey:SymphoxAPIParam_ocb_status];
@@ -976,6 +977,7 @@ static NSUInteger SearchKeywordNumberMax = 8;
     NSString *idCardNumber = [infoDictionary objectForKey:SymphoxAPIParam_user_id];
     NSString *zipCode = [infoDictionary objectForKey:SymphoxAPIParam_zip];
     NSString *address = [infoDictionary objectForKey:SymphoxAPIParam_address];
+    
     
     if ((self.userIdentifier == nil) || ([[self.userIdentifier stringValue] isEqualToString:[identifier stringValue]] == NO))
     {
@@ -1037,6 +1039,11 @@ static NSUInteger SearchKeywordNumberMax = 8;
     {
         BOOL isEmailAuth = [emailAuth boolValue];
         self.userEmailAuth = isEmailAuth;
+    }
+    if (inv_bind && [inv_bind isEqual:[NSNull null]] == NO)
+    {
+        BOOL inv_bind_value = [inv_bind boolValue];
+        self.userInvoiceBind = inv_bind_value;
     }
     if (invoiceTitle && ([invoiceTitle isEqual:[NSNull null]] == NO) && ([invoiceTitle length] > 0))
     {
@@ -2207,6 +2214,7 @@ static NSUInteger SearchKeywordNumberMax = 8;
     _userIDCardNumber = nil;
     _userZipCode = nil;
     _userAddress = nil;
+    _userInvoiceBind = NO;
 }
 
 - (NSString *)keyForCategoryIdentifier:(NSString *)identifier withLayer:(NSNumber *)layer
@@ -2232,7 +2240,7 @@ static NSUInteger SearchKeywordNumberMax = 8;
     id jsonObject = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
     if (error == nil && jsonObject)
     {
-//        NSLog(@"processUserInfomation - jsonObject:\n%@", jsonObject);
+        NSLog(@"processUserInfomation - jsonObject:\n%@", jsonObject);
         if ([jsonObject isKindOfClass:[NSDictionary class]])
         {
             [self updateUserInformationFromInfoDictionary:jsonObject afterLoadingArchive:NO];

@@ -82,6 +82,8 @@
     }
     else if (self.navigationController.presentingViewController != nil)
     {
+        [self.navigationController.view addSubview:self.viewLoading];
+        
         UIImage *image = [[UIImage imageNamed:@"car_popup_close"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:image style:UIBarButtonItemStylePlain target:self action:@selector(buttonItemClosePressed:)];
     }
@@ -161,7 +163,14 @@
     }
     if (self.viewLoading)
     {
-        self.viewLoading.frame = self.navigationController.tabBarController.view.bounds;
+        if (self.navigationController.tabBarController != nil)
+        {
+            self.viewLoading.frame = self.navigationController.tabBarController.view.bounds;
+        }
+        else if (self.navigationController != nil)
+        {
+            self.viewLoading.frame = self.navigationController.view.bounds;
+        }
         self.viewLoading.indicatorCenter = self.viewLoading.center;
         [self.viewLoading setNeedsLayout];
     }
@@ -622,7 +631,7 @@
             if (userInfo)
             {
                 NSString *errorCode = [userInfo objectForKey:SymphoxAPIParam_id];
-                if ([errorCode isEqualToString:@"E217"])
+                if ([errorCode isEqualToString:@"E217"] || [errorCode isEqualToString:@"E403"] || [errorCode isEqualToString:@"E416"])
                 {
                     for (NSDictionary *product in productConditions)
                     {

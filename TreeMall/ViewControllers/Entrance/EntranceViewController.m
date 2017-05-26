@@ -538,15 +538,11 @@ typedef enum : NSUInteger {
                 case 0:
                 {
                     // Hot sale
-                    if (link != nil && [link length] > 0)
-                    {
-                        NSInteger type = [link integerValue];
-                        HotSaleViewController *viewController = [[HotSaleViewController alloc] initWithNibName:@"HotSaleViewController" bundle:[NSBundle mainBundle]];
-                        viewController.type = type;
-                        viewController.title = [LocalizedString HotSaleRanking];
-                        UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:viewController];
-                        [self presentViewController:navigationController animated:YES completion:nil];
-                    }
+                    HotSaleViewController *viewController = [[HotSaleViewController alloc] initWithNibName:@"HotSaleViewController" bundle:[NSBundle mainBundle]];
+                    viewController.type = HotSaleTypeHall;
+                    viewController.title = [LocalizedString HotSaleRanking];
+                    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:viewController];
+                    [self presentViewController:navigationController animated:YES completion:nil];
                 }
                     break;
                 case 1:

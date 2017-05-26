@@ -405,6 +405,7 @@ static NSString *SymphoxAPIParam_storeid = @"storeid";
 static NSString *SymphoxAPIParam_storename = @"storename";
 static NSString *SymphoxAPIParam_url = @"url";
 static NSString *SymphoxAPIParam_is_wh = @"is_wh";
+static NSString *SymphoxAPIParam_inv_bind = @"inv_bind";
 
 typedef enum : NSUInteger {
     TermTypeMemberTerms,

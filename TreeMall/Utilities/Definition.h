@@ -33,7 +33,8 @@ static NSString *UserDefault_IntroduceShown = @"IntroduceShown";
 
 typedef enum : NSUInteger {
     InvoiceLayoutTypeDefault,
-    InvoiceLayoutTypeElectronicMember,
+    InvoiceLayoutTypeElectronicMemberInvoiceBind,
+    InvoiceLayoutTypeElectronicMemberInvoiceNotBind,
     InvoiceLayoutTypeElectronicExtraCode,
     InvoiceLayoutTypeDonate,
     InvoiceLayoutTypeDonateSpecificGroup,

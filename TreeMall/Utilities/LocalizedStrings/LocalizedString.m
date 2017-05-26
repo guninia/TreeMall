@@ -3151,4 +3151,14 @@
     return Greetings;
 }
 
++ (NSString *)Contacts
+{
+    static NSString *Contacts = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        Contacts = NSLocalizedString(@"Contacts", nil);
+    });
+    return Contacts;
+}
+
 @end

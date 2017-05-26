@@ -8,7 +8,6 @@
 
 #import "StorePickupInfoViewController.h"
 #import "LocalizedString.h"
-#import "SingleLabelHeaderView.h"
 #import "Definition.h"
 #import "Utility.h"
 #import "APIDefinition.h"
@@ -55,7 +54,7 @@ typedef enum : NSUInteger {
 @property (nonatomic, strong) UITableView *tableViewInvoice;
 @property (nonatomic, strong) UIButton *buttonNext;
 @property (nonatomic, strong) FullScreenLoadingView *viewLoading;
-
+@property (nonatomic, strong) NSMutableArray *arrayDeliveryList;
 @property (nonatomic, strong) NSMutableArray *arrayCity;
 @property (nonatomic, strong) NSMutableDictionary *dictionaryRegionsForCity;
 @property (nonatomic, strong) NSMutableDictionary *dictionaryZipForRegion;
@@ -116,6 +115,22 @@ typedef enum : NSUInteger {
 
 @implementation StorePickupInfoViewController
 
+- (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+{
+    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    if (self)
+    {
+        _invoiceLayoutIndex = InvoiceLayoutTypeDefault;
+        _invoiceDonateTarget = InvoiceDonateTargetTotal;
+        _currentInvoiceType = InvoiceTypeOptionTotal;
+        _currentInvoiceCity = nil;
+        _currentInvoiceRegion = nil;
+        _invoiceElectronicSubType = InvoiceElectronicSubTypeMember;
+        [self setDataForInvoiceEletronicSubtype:self.invoiceElectronicSubType];
+    }
+    return self;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
@@ -130,7 +145,14 @@ typedef enum : NSUInteger {
     [self.scrollView addSubview:self.separator];
     [self.scrollView addSubview:self.tableViewInvoice];
     [self.scrollView addSubview:self.buttonNext];
-    [self.navigationController.tabBarController.view addSubview:self.viewLoading];
+    if (self.navigationController.tabBarController != nil)
+    {
+        [self.navigationController.tabBarController.view addSubview:self.viewLoading];
+    }
+    else if (self.navigationController != nil)
+    {
+        [self.navigationController.view addSubview:self.viewLoading];
+    }
     
     [self prepareData];
     [self retrieveDistrictInfo];
@@ -216,7 +238,14 @@ typedef enum : NSUInteger {
     
     if (self.viewLoading)
     {
-        self.viewLoading.frame = self.navigationController.tabBarController.view.bounds;
+        if (self.navigationController.tabBarController != nil)
+        {
+            self.viewLoading.frame = self.navigationController.tabBarController.view.bounds;
+        }
+        else if (self.navigationController != nil)
+        {
+            self.viewLoading.frame = self.navigationController.view.bounds;
+        }
         self.viewLoading.indicatorCenter = self.viewLoading.center;
         [self.viewLoading setNeedsLayout];
     }
@@ -277,6 +306,15 @@ typedef enum : NSUInteger {
         _viewLoading.alpha = 0.0;
     }
     return _viewLoading;
+}
+
+- (NSMutableArray *)arrayDeliveryList
+{
+    if (_arrayDeliveryList == nil)
+    {
+        _arrayDeliveryList = [[NSMutableArray alloc] initWithCapacity:0];
+    }
+    return _arrayDeliveryList;
 }
 
 - (NSMutableArray *)arrayCity
@@ -490,7 +528,7 @@ typedef enum : NSUInteger {
                 }
             }
                 break;
-            case InvoiceLayoutTypeElectronicMember:
+            case InvoiceLayoutTypeElectronicMemberInvoiceBind:
             {
                 NSInteger totalSection = 2;
                 for (NSInteger sectionIndex = 0; sectionIndex < totalSection; sectionIndex++)
@@ -506,6 +544,43 @@ typedef enum : NSUInteger {
                         case 1:
                         {
                             [section addObject:[NSNumber numberWithInteger:InvoiceCellTagInvoiceDesc]];
+                        }
+                            break;
+                        default:
+                            break;
+                    }
+                    [arraySection addObject:section];
+                }
+            }
+                break;
+            case InvoiceLayoutTypeElectronicMemberInvoiceNotBind:
+            {
+                NSInteger totalSection = 4;
+                for (NSInteger sectionIndex = 0; sectionIndex < totalSection; sectionIndex++)
+                {
+                    NSMutableArray *section = [NSMutableArray array];
+                    switch (sectionIndex) {
+                        case 0:
+                        {
+                            [section addObject:[NSNumber numberWithInteger:InvoiceCellTagChooseType]];
+                            [section addObject:[NSNumber numberWithInteger:InvoiceCellTagChooseElectronicType]];
+                        }
+                            break;
+                        case 1:
+                        {
+                            [section addObject:[NSNumber numberWithInteger:InvoiceCellTagInvoiceDesc]];
+                        }
+                            break;
+                        case 2:
+                        {
+                            [section addObject:[NSNumber numberWithInteger:InvoiceCellTagReceiver]];
+                        }
+                            break;
+                        case 3:
+                        {
+                            [section addObject:[NSNumber numberWithInteger:InvoiceCellTagCity]];
+                            [section addObject:[NSNumber numberWithInteger:InvoiceCellTagRegion]];
+                            [section addObject:[NSNumber numberWithInteger:InvoiceCellTagAddress]];
                         }
                             break;
                         default:
@@ -654,6 +729,9 @@ typedef enum : NSUInteger {
             }
                 break;
             default:
+            {
+                [self.arrayInvoiceTypeTitle addObject:[LocalizedString PleaseSelect]];
+            }
                 break;
         }
     }
@@ -809,6 +887,234 @@ typedef enum : NSUInteger {
     }
 }
 
+- (void)retrieveDeliverTargetList
+{
+    [self showLoadingViewAnimated:YES];
+    __weak StorePickupInfoViewController *weakSelf = self;
+    NSString *apiKey = [CryptoModule sharedModule].apiKey;
+    NSString *token = [SHAPIAdapter sharedAdapter].token;
+    NSURL *url = nil;
+    NSDictionary *params = nil;
+    
+    if (self.tradeId && ([self.tradeId isEqualToString:@"O"] || [self.tradeId isEqualToString:@"O2"]))
+    {
+        url = [NSURL URLWithString:SymphoxAPI_getOneClickBuyContactInfo];
+        params = [NSDictionary dictionaryWithObjectsAndKeys:[TMInfoManager sharedManager].userIdentifier, SymphoxAPIParam_user_num, nil];
+    }
+    else
+    {
+        url = [NSURL URLWithString:SymphoxAPI_getContactInfo];
+        params = [NSDictionary dictionaryWithObjectsAndKeys:[TMInfoManager sharedManager].userIdentifier, SymphoxAPIParam_user_num, @"N", SymphoxAPIParam_is_mask, nil];
+    }
+    
+    NSLog(@"login url [%@]", [url absoluteString]);
+    NSDictionary *headerFields = [NSDictionary dictionaryWithObjectsAndKeys:apiKey, SymphoxAPIParam_key, token, SymphoxAPIParam_token, nil];
+    [[SHAPIAdapter sharedAdapter] sendRequestFromObject:weakSelf ToUrl:url withHeaderFields:headerFields andPostObject:params inPostFormat:SHPostFormatJson encrypted:YES decryptedReturnData:YES completion:^(id resultObject, NSError *error){
+        NSString *errorDescription = nil;
+        if (error == nil)
+        {
+            //            NSLog(@"resultObject[%@]:\n%@", [[resultObject class] description], [resultObject description]);
+            if ([resultObject isKindOfClass:[NSData class]])
+            {
+                NSData *data = (NSData *)resultObject;
+                NSString *string = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+                NSLog(@"retrieveDeliverTargetList - string[%@]", string);
+                NSArray *array = nil;
+                BOOL isOneClickBuy = NO;
+                if (weakSelf.tradeId && ([weakSelf.tradeId isEqualToString:@"O"] || [weakSelf.tradeId isEqualToString:@"O2"]))
+                {
+                    array = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
+                    isOneClickBuy = YES;
+                }
+                else
+                {
+                    array = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
+                }
+                
+                [weakSelf processDeliveryTargetList:array fromOneClickBuy:isOneClickBuy];
+                [weakSelf refreshContent];
+            }
+            else
+            {
+                NSLog(@"Unexpected data format.");
+                errorDescription = [LocalizedString UnexpectedFormatFromNetwork];
+            }
+        }
+        else
+        {
+            NSLog(@"error:\n%@", [error description]);
+        }
+        [weakSelf hideLoadingViewAnimated:YES];
+    }];
+}
+
+- (void)processDeliveryTargetList:(NSArray *)array fromOneClickBuy:(BOOL)isOneClickBuy
+{
+    if (array == nil)
+        return;
+    NSInteger defaultIndex = NSNotFound;
+    NSMutableArray *deliveryTargets = [NSMutableArray array];
+    for (NSInteger index = 0; index < [array count]; index++)
+    {
+        NSDictionary *dictionary = [array objectAtIndex:index];
+        NSMutableDictionary *deliveryTarget = [NSMutableDictionary dictionary];
+        if (isOneClickBuy)
+        {
+            NSString *name = [dictionary objectForKey:SymphoxAPIParam_name];
+            NSString *day_area_code = [dictionary objectForKey:SymphoxAPIParam_day_area_code];
+            NSString *day_tel = [dictionary objectForKey:SymphoxAPIParam_day_tel];
+            NSString *day_extension = [dictionary objectForKey:SymphoxAPIParam_day_extension];
+            NSString *night_area_code = [dictionary objectForKey:SymphoxAPIParam_night_area_code];
+            NSString *night_tel = [dictionary objectForKey:SymphoxAPIParam_night_tel];
+            NSString *night_extension = [dictionary objectForKey:SymphoxAPIParam_night_extension];
+            NSString *zip = [dictionary objectForKey:SymphoxAPIParam_zip];
+            NSString *addr = [dictionary objectForKey:SymphoxAPIParam_addr];
+            NSString *cell_phone = [dictionary objectForKey:SymphoxAPIParam_cell_phone];
+            NSNumber *order_num = [dictionary objectForKey:SymphoxAPIParam_order_num];
+            
+            if (name && [name isEqual:[NSNull null]] == NO)
+            {
+                [deliveryTarget setObject:name forKey:SymphoxAPIParam_name];
+            }
+            NSString *dayPhone = [self totalPhoneNumberForRegion:day_area_code phoneNumber:day_tel andSpecificNumber:day_extension];
+            if (dayPhone > 0)
+            {
+                [deliveryTarget setObject:dayPhone forKey:SymphoxAPIParam_day_tel];
+            }
+            NSString *nightPhone = [self totalPhoneNumberForRegion:night_area_code phoneNumber:night_tel andSpecificNumber:night_extension];
+            if (nightPhone > 0)
+            {
+                [deliveryTarget setObject:nightPhone forKey:SymphoxAPIParam_night_tel];
+            }
+            if (cell_phone && [cell_phone isEqual:[NSNull null]] == NO && [cell_phone length] > 0)
+            {
+                [deliveryTarget setObject:cell_phone forKey:SymphoxAPIParam_cellphone];
+            }
+            if (addr && [addr isEqual:[NSNull null]] == NO && [addr length] > 0)
+            {
+                [deliveryTarget setObject:addr forKey:SymphoxAPIParam_address];
+            }
+            if (zip && [zip isEqual:[NSNull null]] == NO && [zip length] > 0)
+            {
+                [deliveryTarget setObject:zip forKey:SymphoxAPIParam_zip];
+            }
+            if (order_num && [order_num isEqual:[NSNull null]] == NO)
+            {
+                [deliveryTarget setObject:zip forKey:SymphoxAPIParam_order_num];
+            }
+        }
+        else
+        {
+            NSString *name = [dictionary objectForKey:SymphoxAPIParam_name];
+            NSString *tel_area = [dictionary objectForKey:SymphoxAPIParam_tel_area];
+            NSString *tel_num = [dictionary objectForKey:SymphoxAPIParam_tel_num];
+            NSString *tel_ex = [dictionary objectForKey:SymphoxAPIParam_tel_ex];
+            NSString *mobile = [dictionary objectForKey:SymphoxAPIParam_mobile];
+            NSString *address = [dictionary objectForKey:SymphoxAPIParam_address];
+            NSString *zip = [dictionary objectForKey:SymphoxAPIParam_zip];
+            NSString *as_shipping = [dictionary objectForKey:SymphoxAPIParam_as_shipping];
+            
+            
+            if (name && [name isEqual:[NSNull null]] == NO)
+            {
+                [deliveryTarget setObject:name forKey:SymphoxAPIParam_name];
+            }
+            
+            NSString *phone = [self totalPhoneNumberForRegion:tel_area phoneNumber:tel_num andSpecificNumber:tel_ex];
+            if ([phone length] > 0)
+            {
+                [deliveryTarget setObject:phone forKey:SymphoxAPIParam_day_tel];
+                [deliveryTarget setObject:phone forKey:SymphoxAPIParam_night_tel];
+            }
+            if (mobile && [mobile isEqual:[NSNull null]] == NO && [mobile length] > 0)
+            {
+                [deliveryTarget setObject:mobile forKey:SymphoxAPIParam_cellphone];
+            }
+            
+            if (address && [address isEqual:[NSNull null]] == NO && [address length] > 0)
+            {
+                [deliveryTarget setObject:address forKey:SymphoxAPIParam_address];
+            }
+            if (zip && [zip isEqual:[NSNull null]] == NO && [zip length] > 0)
+            {
+                [deliveryTarget setObject:zip forKey:SymphoxAPIParam_zip];
+            }
+            
+            if (as_shipping && [as_shipping isEqual:[NSNull null]] == NO && [as_shipping length] > 0)
+            {
+                if ([as_shipping boolValue])
+                {
+                    defaultIndex = index;
+                }
+            }
+        }
+        [deliveryTargets addObject:deliveryTarget];
+    }
+    
+    if (isOneClickBuy)
+    {
+        [deliveryTargets sortUsingComparator:^NSComparisonResult(id obj1, id obj2){
+            NSComparisonResult result = NSOrderedSame;
+            
+            NSNumber *orderNum1 = [obj1 objectForKey:SymphoxAPIParam_order_num];
+            NSNumber *orderNum2 = [obj2 objectForKey:SymphoxAPIParam_order_num];
+            if (orderNum1 == nil || [orderNum1 isEqual:[NSNull null]])
+            {
+                result = NSOrderedDescending;
+            }
+            else if (orderNum2 == nil || [orderNum2 isEqual:[NSNull null]])
+            {
+                result = NSOrderedAscending;
+            }
+            else if ([orderNum1 integerValue] > [orderNum2 integerValue])
+            {
+                result = NSOrderedDescending;
+            }
+            else if ([orderNum1 integerValue] < [orderNum2 integerValue])
+            {
+                result = NSOrderedAscending;
+            }
+            
+            return result;
+        }];
+    }
+    
+    NSLog(@"deliveryTargets:\n%@", [deliveryTargets description]);
+    
+    [self.arrayDeliveryList setArray:deliveryTargets];
+    
+    if (defaultIndex != NSNotFound)
+    {
+        [self setCurrentDeliveryTargetForIndex:defaultIndex];
+    }
+}
+
+- (NSString *)totalPhoneNumberForRegion:(NSString *)regionNumber phoneNumber:(NSString *)phoneNumber andSpecificNumber:(NSString *)specificNumber
+{
+    NSMutableString *totalString = [NSMutableString string];
+    if (regionNumber && [regionNumber isEqual:[NSNull null]] == NO && [regionNumber length] > 0)
+    {
+        [totalString appendString:regionNumber];
+    }
+    if (phoneNumber && [phoneNumber isEqual:[NSNull null]] == NO && [phoneNumber length] > 0)
+    {
+        if ([totalString length] > 0)
+        {
+            [totalString appendString:@"-"];
+        }
+        [totalString appendString:phoneNumber];
+    }
+    if (specificNumber && [specificNumber isEqual:[NSNull null]] == NO && [specificNumber length] > 0)
+    {
+        if ([totalString length] > 0)
+        {
+            [totalString appendString:@"-"];
+        }
+        [totalString appendString:specificNumber];
+    }
+    return totalString;
+}
+
 - (void)retrieveInvoiceDescription
 {
     [self showLoadingViewAnimated:YES];
@@ -825,6 +1131,7 @@ typedef enum : NSUInteger {
             dispatch_async(dispatch_get_main_queue(), ^{
                 [weakSelf refreshContent];
             });
+            [weakSelf retrieveDeliverTargetList];
         }
         else
         {
@@ -1106,6 +1413,90 @@ typedef enum : NSUInteger {
     });
 }
 
+- (void)presentActionSheetForDeliveryTarget:(NSArray *)arrayTarget
+{
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:[LocalizedString SelectReceiver] preferredStyle:UIAlertControllerStyleActionSheet];
+    __weak StorePickupInfoViewController *weakSelf = self;
+    for (NSInteger index = 0; index < [arrayTarget count]; index++)
+    {
+        NSDictionary *dictionary = [arrayTarget objectAtIndex:index];
+        NSString *name = [dictionary objectForKey:SymphoxAPIParam_name];
+        UIAlertAction *action = [UIAlertAction actionWithTitle:name style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
+            [weakSelf setCurrentDeliveryTargetForIndex:index];
+        }];
+        [alertController addAction:action];
+    }
+    UIAlertAction *actionCancel = [UIAlertAction actionWithTitle:[LocalizedString Cancel] style:UIAlertActionStyleCancel handler:nil];
+    [alertController addAction:actionCancel];
+    [self presentViewController:alertController animated:YES completion:nil];
+}
+
+- (void)setCurrentDeliveryTargetForIndex:(NSInteger)index
+{
+    if (index < [self.arrayDeliveryList count])
+    {
+        NSDictionary *deliveryTarget = [self.arrayDeliveryList objectAtIndex:index];
+//        [self.currentDeliveryTarget setDictionary:deliveryTarget];
+        NSString *name = [deliveryTarget objectForKey:SymphoxAPIParam_name];
+        if (name)
+        {
+            [self.dictionaryInvoiceTemp setObject:name forKey:SymphoxAPIParam_inv_name];
+        }
+        NSString *address = [deliveryTarget objectForKey:SymphoxAPIParam_address];
+        if (address)
+        {
+            [self.dictionaryInvoiceTemp setObject:address forKey:SymphoxAPIParam_inv_address];
+        }
+        NSString *inv_tel = nil;
+        NSString *cellphone = [deliveryTarget objectForKey:SymphoxAPIParam_cellphone];
+        if (cellphone)
+        {
+            inv_tel = cellphone;
+        }
+        if (inv_tel == nil)
+        {
+            NSString *day_tel = [deliveryTarget objectForKey:SymphoxAPIParam_day_tel];
+            if (day_tel)
+            {
+                inv_tel = day_tel;
+            }
+        }
+        if (inv_tel == nil)
+        {
+            NSString *night_tel = [deliveryTarget objectForKey:SymphoxAPIParam_night_tel];
+            if (night_tel)
+            {
+                inv_tel = night_tel;
+            }
+        }
+        if (inv_tel)
+        {
+            [self.dictionaryInvoiceTemp setObject:inv_tel forKey:SymphoxAPIParam_inv_tel];
+        }
+        NSString *zip = [deliveryTarget objectForKey:SymphoxAPIParam_zip];
+        if (zip)
+        {
+            NSString *city = [self.dictionaryCityForZip objectForKey:zip];
+            if (city)
+            {
+                self.currentInvoiceCity = city;
+            }
+            NSString *region = [self.dictionaryRegionForZip objectForKey:zip];
+            if (region)
+            {
+                self.currentInvoiceRegion = region;
+            }
+            [self.dictionaryInvoiceTemp setObject:zip forKey:SymphoxAPIParam_inv_zip];
+        }
+    }
+    else
+    {
+        [self.currentDeliveryTarget removeAllObjects];
+    }
+    
+    [self refreshContent];
+}
+
 - (void)presentSimpleAlertMessage:(NSString *)message
 {
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:message preferredStyle:UIAlertControllerStyleAlert];
@@ -1155,7 +1546,14 @@ typedef enum : NSUInteger {
         {
             if (self.invoiceElectronicSubType == InvoiceElectronicSubTypeMember || self.invoiceElectronicSubType == InvoiceElectronicSubTypeTotal)
             {
-                self.invoiceLayoutIndex = InvoiceLayoutTypeElectronicMember;
+                if ([TMInfoManager sharedManager].userInvoiceBind)
+                {
+                    self.invoiceLayoutIndex = InvoiceLayoutTypeElectronicMemberInvoiceBind;
+                }
+                else
+                {
+                    self.invoiceLayoutIndex = InvoiceLayoutTypeElectronicMemberInvoiceNotBind;
+                }
             }
             else
             {
@@ -1260,8 +1658,21 @@ typedef enum : NSUInteger {
         [self presentSimpleAlertMessage:message];
         return;
     }
+    NSString *inv_tel = [self.dictionaryInvoiceTemp objectForKey:SymphoxAPIParam_inv_tel];
     
     NSMutableDictionary *shopping_delivery = [NSMutableDictionary dictionary];
+    if (store_id)
+    {
+        [shopping_delivery setObject:store_id forKey:SymphoxAPIParam_store_id];
+    }
+    if (store_name)
+    {
+        [shopping_delivery setObject:store_name forKey:SymphoxAPIParam_store_name];
+    }
+    if (store_addr)
+    {
+        [shopping_delivery setObject:store_addr forKey:SymphoxAPIParam_store_addr];
+    }
     if (name)
     {
         [shopping_delivery setObject:name forKey:SymphoxAPIParam_name];
@@ -1269,7 +1680,14 @@ typedef enum : NSUInteger {
     if (cellphone)
     {
         [shopping_delivery setObject:cellphone forKey:SymphoxAPIParam_cellphone];
+        [shopping_delivery setObject:cellphone forKey:SymphoxAPIParam_day_tel];
+        [shopping_delivery setObject:cellphone forKey:SymphoxAPIParam_night_tel];
     }
+    if (inv_tel)
+    {
+        [shopping_delivery setObject:inv_tel forKey:SymphoxAPIParam_inv_tel];
+    }
+    
     
     NSLog(@"prepareOrderData - self.dictionaryInvoiceTemp:\n%@", [self.dictionaryInvoiceTemp description]);
     NSNumber *inv_type = [self.dictionaryInvoiceTemp objectForKey:SymphoxAPIParam_inv_type];
@@ -1323,6 +1741,69 @@ typedef enum : NSUInteger {
                 break;
             }
             [shopping_delivery setObject:icarrier_id forKey:SymphoxAPIParam_icarrier_id];
+            
+            if (self.invoiceElectronicSubType == InvoiceElectronicSubTypeMember && [TMInfoManager sharedManager].userInvoiceBind == NO)
+            {
+                NSString *inv_name = [self.dictionaryInvoiceTemp objectForKey:SymphoxAPIParam_inv_name];
+                if (inv_name == nil)
+                {
+                    NSString *message = [NSString stringWithFormat:@"%@%@", [LocalizedString PleaseInput], [LocalizedString InvoiceReceiver]];
+                    [self presentSimpleAlertMessage:message];
+                    shouldContinue = NO;
+                    break;
+                }
+                [shopping_delivery setObject:inv_name forKey:SymphoxAPIParam_inv_name];
+                
+                NSString *inv_zip = [self.dictionaryInvoiceTemp objectForKey:SymphoxAPIParam_inv_zip];
+                if (inv_zip == nil)
+                {
+                    if (self.currentInvoiceRegion == nil)
+                    {
+                        NSString *message = nil;
+                        if (self.currentInvoiceCity == nil)
+                        {
+                            message = [NSString stringWithFormat:@"%@%@%@", [LocalizedString PleaseSelect], [LocalizedString InvoiceDelivery], [LocalizedString DeliveryCity]];
+                        }
+                        else
+                        {
+                            message = [NSString stringWithFormat:@"%@%@%@", [LocalizedString PleaseSelect], [LocalizedString InvoiceDelivery], [LocalizedString DeliveryRegion]];
+                        }
+                        [self presentSimpleAlertMessage:message];
+                        shouldContinue = NO;
+                        break;
+                    }
+                    inv_zip = [self.dictionaryZipForRegion objectForKey:self.currentInvoiceRegion];
+                }
+                if (inv_zip == nil)
+                {
+                    NSString *message = [NSString stringWithFormat:@"%@%@\n%@\n%@", [LocalizedString PleaseSelect], [LocalizedString InvoiceDelivery], [LocalizedString DeliveryCity], [LocalizedString DeliveryRegion]];
+                    [self presentSimpleAlertMessage:message];
+                    shouldContinue = NO;
+                    break;
+                }
+                [shopping_delivery setObject:inv_zip forKey:SymphoxAPIParam_inv_zip];
+                
+                NSMutableString *inv_address = [[self.dictionaryInvoiceTemp objectForKey:SymphoxAPIParam_inv_address] mutableCopy];
+                if (inv_address == nil)
+                {
+                    NSString *message = [NSString stringWithFormat:@"%@%@", [LocalizedString PleaseInput], [LocalizedString InvoiceDeliverAddress]];
+                    [self presentSimpleAlertMessage:message];
+                    shouldContinue = NO;
+                    break;
+                }
+                if (self.currentInvoiceRegion)
+                {
+                    [inv_address replaceOccurrencesOfString:self.currentInvoiceRegion withString:@"" options:0 range:NSMakeRange(0, [inv_address length])];
+                    [inv_address insertString:self.currentInvoiceRegion atIndex:0];
+                }
+                
+                if (self.currentInvoiceCity)
+                {
+                    [inv_address replaceOccurrencesOfString:self.currentInvoiceCity withString:@"" options:0 range:NSMakeRange(0, [inv_address length])];
+                    [inv_address insertString:self.currentInvoiceCity atIndex:0];
+                }
+                [shopping_delivery setObject:inv_address forKey:SymphoxAPIParam_inv_address];
+            }
         }
             break;
         case InvoiceTypeOptionDonate:
@@ -1734,6 +2215,7 @@ typedef enum : NSUInteger {
 {
     StorePickupWebViewController *viewController = [[StorePickupWebViewController alloc] initWithNibName:@"StorePickupWebViewController" bundle:[NSBundle mainBundle]];
     viewController.group = group;
+    viewController.delegate = self;
     UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:viewController];
     [self presentViewController:navigationController animated:YES completion:nil];
 }
@@ -1853,12 +2335,19 @@ typedef enum : NSUInteger {
     else if (tableView == self.tableViewInvoice)
     {
         SingleLabelHeaderView *view = [tableView dequeueReusableHeaderFooterViewWithIdentifier:SingleLabelHeaderViewIdentifier];
-//        view.delegate = self;
+        view.delegate = self;
         view.backgroundColor = [UIColor orangeColor];
         if (section == 3)
         {
             view.label.text = [LocalizedString InvoiceDeliverAddress];
-//            view.buttonTitle = [LocalizedString SameAsReceiver];
+            if ([self.arrayDeliveryList count] > 0)
+            {
+                view.buttonTitle = [LocalizedString Contacts];
+            }
+            else
+            {
+                view.buttonTitle = nil;
+            }
         }
         headerView = view;
     }
@@ -2491,6 +2980,13 @@ typedef enum : NSUInteger {
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.tableViewInfo reloadData];
     });
+}
+
+#pragma mark - SingleLabelHeaderViewDelegate
+
+- (void)singleLabelHeaderView:(SingleLabelHeaderView *)headerView didPressButton:(id)sender
+{
+    [self presentActionSheetForDeliveryTarget:self.arrayDeliveryList];
 }
 
 @end

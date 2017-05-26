@@ -116,6 +116,7 @@ typedef enum : NSUInteger {
 @property (nonatomic, strong) NSString *userLoginDate;
 @property (nonatomic, strong) NSString *userLoginIP;
 @property (nonatomic, strong) NSString *userPressAgreementDate;
+@property (nonatomic, assign) BOOL userInvoiceBind;
 @property (nonatomic, strong) NSMutableDictionary *dictionaryInitialFilter;
 @property (nonatomic, strong) NSMutableDictionary *dictionaryMainCategoryNameMapping;
 @property (nonatomic, strong) NSMutableOrderedSet *orderedSetKeyword;

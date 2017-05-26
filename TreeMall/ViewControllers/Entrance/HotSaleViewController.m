@@ -296,6 +296,31 @@
     [self presentViewController:alertController animated:YES completion:nil];
 }
 
+- (NSString *)titleForCartType:(CartType)cartType
+{
+    NSString *title = nil;
+    switch (cartType) {
+        case CartTypeCommonDelivery:
+        {
+            title = [LocalizedString CommonDelivery];
+        }
+            break;
+        case CartTypeStorePickup:
+        {
+            title = [LocalizedString StorePickUp];
+        }
+            break;
+        case CartTypeFastDelivery:
+        {
+            title = [LocalizedString FastDelivery];
+        }
+            break;
+        default:
+            break;
+    }
+    return title;
+}
+
 #pragma mark - Actions
 
 - (void)buttonItemPressed:(id)sender
@@ -395,7 +420,17 @@
         {
             isFavorite = [[TMInfoManager sharedManager] favoriteContainsProductWithIdentifier:cpdt_num];
         }
+        NSArray *carts = [dictionary objectForKey:SymphoxAPIParam_can_used_cart];
+        if ([carts containsObject:@"0"] || [carts containsObject:@"1"] || [carts containsObject:@"2"])
+        {
+            cell.buttonAddToCart.hidden = NO;
+        }
+        else
+        {
+            cell.buttonAddToCart.hidden = YES;
+        }
     }
+    
     cell.labelTitle.text = title;
     cell.price = price;
     cell.point = point;
@@ -439,46 +474,41 @@
     NSArray *carts = [dictionary objectForKey:SymphoxAPIParam_can_used_cart];
     if (carts == nil || [carts isEqual:[NSNull null]])
         return;
-    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:[LocalizedString AddToCart] message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+    
+    NSMutableArray *arrayAvailableCarts = [NSMutableArray array];
+    
     for (NSString *stringType in carts)
     {
-        CartType type = CartTypeTotal;
-        NSString *title = nil;
-        switch ([stringType integerValue]) {
-            case CartTypeCommonDelivery:
-            {
-                // Common delivery
-                title = [LocalizedString CommonDelivery];
-                type = CartTypeCommonDelivery;
-            }
-                break;
-            case CartTypeStorePickup:
-            {
-                // Convenience Store
-                title = [LocalizedString StorePickUp];
-                type = CartTypeStorePickup;
-            }
-                break;
-            case CartTypeFastDelivery:
-            {
-                // Fast delivery
-                title = [LocalizedString FastDelivery];
-                type = CartTypeFastDelivery;
-            }
-                break;
-            default:
-                break;
+        CartType type = [stringType integerValue];
+        if (type < CartTypeDirectlyPurchase)
+        {
+            [arrayAvailableCarts addObject:[NSNumber numberWithInteger:type]];
         }
-        
-        __weak HotSaleViewController *weakSelf = self;
-        UIAlertAction *action = [UIAlertAction actionWithTitle:title style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
-            [weakSelf addProduct:dictionary toCart:type named:title];
-        }];
-        [alertController addAction:action];
     }
-    UIAlertAction *actionCancel = [UIAlertAction actionWithTitle:[LocalizedString Cancel] style:UIAlertActionStyleCancel handler:nil];
-    [alertController addAction:actionCancel];
-    [self presentViewController:alertController animated:YES completion:nil];
+    if ([arrayAvailableCarts count] > 1)
+    {
+        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:[LocalizedString AddToCart] message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+        for (NSNumber *numberCartType in arrayAvailableCarts)
+        {
+            NSInteger type = [numberCartType integerValue];
+            NSString *title = [self titleForCartType:type];
+            __weak HotSaleViewController *weakSelf = self;
+            UIAlertAction *action = [UIAlertAction actionWithTitle:title style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
+                [weakSelf addProduct:dictionary toCart:type named:title];
+            }];
+            [alertController addAction:action];
+        }
+        UIAlertAction *actionCancel = [UIAlertAction actionWithTitle:[LocalizedString Cancel] style:UIAlertActionStyleCancel handler:nil];
+        [alertController addAction:actionCancel];
+        [self presentViewController:alertController animated:YES completion:nil];
+    }
+    else if ([arrayAvailableCarts count] > 0)
+    {
+        NSNumber *numberCartType = [arrayAvailableCarts objectAtIndex:0];
+        NSInteger type = [numberCartType integerValue];
+        NSString *title = [self titleForCartType:type];
+        [self addProduct:dictionary toCart:type named:title];
+    }
 }
 
 - (void)hotSaleTableViewCell:(HotSaleTableViewCell *)cell didPressFavoriteBySender:(id)sender

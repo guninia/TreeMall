@@ -71,7 +71,14 @@ typedef enum : NSUInteger {
     [self.scrollView addSubview:self.tableViewOrderContent];
     [self.scrollView addSubview:self.buttonConfirm];
     
-    [self.navigationController.tabBarController.view addSubview:self.viewLoading];
+    if (self.navigationController.tabBarController != nil)
+    {
+        [self.navigationController.tabBarController.view addSubview:self.viewLoading];
+    }
+    else if (self.navigationController != nil)
+    {
+        [self.navigationController.view addSubview:self.viewLoading];
+    }
     [self prepareData];
     [self retrieveOrderDescription];
 }
@@ -173,7 +180,14 @@ typedef enum : NSUInteger {
     
     if (self.viewLoading)
     {
-        self.viewLoading.frame = self.navigationController.tabBarController.view.bounds;
+        if (self.navigationController.tabBarController != nil)
+        {
+            self.viewLoading.frame = self.navigationController.tabBarController.view.bounds;
+        }
+        else if (self.navigationController != nil)
+        {
+            self.viewLoading.frame = self.navigationController.view.bounds;
+        }
         self.viewLoading.indicatorCenter = self.viewLoading.center;
         [self.viewLoading setNeedsLayout];
     }
@@ -685,10 +699,16 @@ typedef enum : NSUInteger {
 
 - (void)buttonConfirmPressed:(id)sender
 {
-//     Temporarily marked for test
-//    [[TMInfoManager sharedManager] resetCartForType:self.type];
+    [[TMInfoManager sharedManager] resetCartForType:self.type];
     
-    [self.navigationController popToRootViewControllerAnimated:YES];
+    if (self.navigationController.tabBarController != nil)
+    {
+        [self.navigationController popToRootViewControllerAnimated:YES];
+    }
+    else if (self.navigationController.presentingViewController != nil)
+    {
+        [self.navigationController.presentingViewController dismissViewControllerAnimated:YES completion:nil];
+    }
 }
 
 - (void)buttonLinkPressed:(id)sender

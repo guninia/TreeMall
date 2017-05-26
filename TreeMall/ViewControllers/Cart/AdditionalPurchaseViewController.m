@@ -31,7 +31,14 @@
     self.title = [LocalizedString AdditionalPurchaseProduct];
     [self.view addSubview:self.collectionView];
     [self.view addSubview:self.bottomBar];
-    [self.navigationController.tabBarController.view addSubview:self.viewLoading];
+    if (self.navigationController.tabBarController != nil)
+    {
+        [self.navigationController.tabBarController.view addSubview:self.viewLoading];
+    }
+    else if (self.navigationController != nil)
+    {
+        [self.navigationController.view addSubview:self.viewLoading];
+    }
 }
 
 - (void)didReceiveMemoryWarning {
@@ -73,7 +80,14 @@
     
     if (self.viewLoading)
     {
-        self.viewLoading.frame = self.navigationController.tabBarController.view.bounds;
+        if (self.navigationController.tabBarController != nil)
+        {
+            self.viewLoading.frame = self.navigationController.tabBarController.view.bounds;
+        }
+        else if (self.navigationController != nil)
+        {
+            self.viewLoading.frame = self.navigationController.view.bounds;
+        }
         self.viewLoading.indicatorCenter = self.viewLoading.center;
         [self.viewLoading setNeedsLayout];
     }

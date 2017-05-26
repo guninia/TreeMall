@@ -64,7 +64,14 @@
     [self.scrollView addSubview:self.buttonAgree];
     [self.scrollView addSubview:self.buttonTermsContent];
     [self.scrollView addSubview:self.buttonNext];
-    [self.navigationController.tabBarController.view addSubview:self.viewLoading];
+    if (self.navigationController.tabBarController != nil)
+    {
+        [self.navigationController.tabBarController.view addSubview:self.viewLoading];
+    }
+    else if (self.navigationController != nil)
+    {
+        [self.navigationController.view addSubview:self.viewLoading];
+    }
     [self prepareData];
 }
 
@@ -168,7 +175,14 @@
     
     if (self.viewLoading)
     {
-        self.viewLoading.frame = self.navigationController.tabBarController.view.bounds;
+        if (self.navigationController.tabBarController != nil)
+        {
+            self.viewLoading.frame = self.navigationController.tabBarController.view.bounds;
+        }
+        else if (self.navigationController != nil)
+        {
+            self.viewLoading.frame = self.navigationController.view.bounds;
+        }
         self.viewLoading.indicatorCenter = self.viewLoading.center;
         [self.viewLoading setNeedsLayout];
     }

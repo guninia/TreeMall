@@ -324,5 +324,6 @@
 + (NSString *)PleaseAgreeMemberTermsFirst;
 + (NSString *)CreditCardInfo;
 + (NSString *)Greetings;
++ (NSString *)Contacts;
 
 @end

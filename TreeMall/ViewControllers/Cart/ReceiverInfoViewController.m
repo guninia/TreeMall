@@ -128,7 +128,14 @@ typedef enum : NSUInteger {
     [self.scrollView addSubview:self.buttonNext];
     
     [self.scrollView bringSubviewToFront:self.separator];
-    [self.navigationController.tabBarController.view addSubview:self.viewLoading];
+    if (self.navigationController.tabBarController != nil)
+    {
+        [self.navigationController.tabBarController.view addSubview:self.viewLoading];
+    }
+    else if (self.navigationController != nil)
+    {
+        [self.navigationController.view addSubview:self.viewLoading];
+    }
     
     [self.buttonContactList setHidden:YES];
     
@@ -225,7 +232,14 @@ typedef enum : NSUInteger {
     
     if (self.viewLoading)
     {
-        self.viewLoading.frame = self.navigationController.tabBarController.view.bounds;
+        if (self.navigationController.tabBarController != nil)
+        {
+            self.viewLoading.frame = self.navigationController.tabBarController.view.bounds;
+        }
+        else if (self.navigationController != nil)
+        {
+            self.viewLoading.frame = self.navigationController.view.bounds;
+        }
         self.viewLoading.indicatorCenter = self.viewLoading.center;
         [self.viewLoading setNeedsLayout];
     }
@@ -664,7 +678,7 @@ typedef enum : NSUInteger {
                 }
             }
                 break;
-            case InvoiceLayoutTypeElectronicMember:
+            case InvoiceLayoutTypeElectronicMemberInvoiceBind:
             {
                 NSInteger totalSection = 2;
                 for (NSInteger sectionIndex = 0; sectionIndex < totalSection; sectionIndex++)
@@ -680,6 +694,43 @@ typedef enum : NSUInteger {
                         case 1:
                         {
                             [section addObject:[NSNumber numberWithInteger:InvoiceCellTagInvoiceDesc]];
+                        }
+                            break;
+                        default:
+                            break;
+                    }
+                    [arraySection addObject:section];
+                }
+            }
+                break;
+            case InvoiceLayoutTypeElectronicMemberInvoiceNotBind:
+            {
+                NSInteger totalSection = 4;
+                for (NSInteger sectionIndex = 0; sectionIndex < totalSection; sectionIndex++)
+                {
+                    NSMutableArray *section = [NSMutableArray array];
+                    switch (sectionIndex) {
+                        case 0:
+                        {
+                            [section addObject:[NSNumber numberWithInteger:InvoiceCellTagChooseType]];
+                            [section addObject:[NSNumber numberWithInteger:InvoiceCellTagChooseElectronicType]];
+                        }
+                            break;
+                        case 1:
+                        {
+                            [section addObject:[NSNumber numberWithInteger:InvoiceCellTagInvoiceDesc]];
+                        }
+                            break;
+                        case 2:
+                        {
+                            [section addObject:[NSNumber numberWithInteger:InvoiceCellTagReceiver]];
+                        }
+                            break;
+                        case 3:
+                        {
+                            [section addObject:[NSNumber numberWithInteger:InvoiceCellTagCity]];
+                            [section addObject:[NSNumber numberWithInteger:InvoiceCellTagRegion]];
+                            [section addObject:[NSNumber numberWithInteger:InvoiceCellTagAddress]];
                         }
                             break;
                         default:
@@ -1708,7 +1759,14 @@ typedef enum : NSUInteger {
         {
             if (self.invoiceElectronicSubType == InvoiceElectronicSubTypeMember || self.invoiceElectronicSubType == InvoiceElectronicSubTypeTotal)
             {
-                self.invoiceLayoutIndex = InvoiceLayoutTypeElectronicMember;
+                if ([TMInfoManager sharedManager].userInvoiceBind)
+                {
+                    self.invoiceLayoutIndex = InvoiceLayoutTypeElectronicMemberInvoiceBind;
+                }
+                else
+                {
+                    self.invoiceLayoutIndex = InvoiceLayoutTypeElectronicMemberInvoiceNotBind;
+                }
             }
             else
             {
@@ -1947,17 +2005,39 @@ typedef enum : NSUInteger {
     }
     
     NSMutableDictionary *shopping_delivery = [NSMutableDictionary dictionary];
+    
+    NSString *inv_tel = nil;
     if (name)
     {
         [shopping_delivery setObject:name forKey:SymphoxAPIParam_name];
     }
+    if (cellphone)
+    {
+        [shopping_delivery setObject:cellphone forKey:SymphoxAPIParam_cellphone];
+        if (inv_tel == nil)
+        {
+            inv_tel = cellphone;
+        }
+    }
     if (day_tel)
     {
         [shopping_delivery setObject:day_tel forKey:SymphoxAPIParam_day_tel];
+        if (inv_tel == nil)
+        {
+            inv_tel = cellphone;
+        }
     }
     if (night_tel)
     {
         [shopping_delivery setObject:night_tel forKey:SymphoxAPIParam_night_tel];
+        if (inv_tel == nil)
+        {
+            inv_tel = cellphone;
+        }
+    }
+    if (inv_tel)
+    {
+        [shopping_delivery setObject:inv_tel forKey:SymphoxAPIParam_inv_tel];
     }
     if (zip)
     {
@@ -1966,10 +2046,6 @@ typedef enum : NSUInteger {
     if (address)
     {
         [shopping_delivery setObject:address forKey:SymphoxAPIParam_address];
-    }
-    if (cellphone)
-    {
-        [shopping_delivery setObject:cellphone forKey:SymphoxAPIParam_cellphone];
     }
     
     NSLog(@"prepareOrderData - self.dictionaryInvoiceTemp:\n%@", [self.dictionaryInvoiceTemp description]);
@@ -2024,6 +2100,68 @@ typedef enum : NSUInteger {
                 break;
             }
             [shopping_delivery setObject:icarrier_id forKey:SymphoxAPIParam_icarrier_id];
+            if (self.invoiceElectronicSubType == InvoiceElectronicSubTypeMember && [TMInfoManager sharedManager].userInvoiceBind == NO)
+            {
+                NSString *inv_name = [self.dictionaryInvoiceTemp objectForKey:SymphoxAPIParam_inv_name];
+                if (inv_name == nil)
+                {
+                    NSString *message = [NSString stringWithFormat:@"%@%@", [LocalizedString PleaseInput], [LocalizedString InvoiceReceiver]];
+                    [self presentSimpleAlertMessage:message];
+                    shouldContinue = NO;
+                    break;
+                }
+                [shopping_delivery setObject:inv_name forKey:SymphoxAPIParam_inv_name];
+                
+                NSString *inv_zip = [self.dictionaryInvoiceTemp objectForKey:SymphoxAPIParam_inv_zip];
+                if (inv_zip == nil)
+                {
+                    if (self.currentInvoiceRegion == nil)
+                    {
+                        NSString *message = nil;
+                        if (self.currentInvoiceCity == nil)
+                        {
+                            message = [NSString stringWithFormat:@"%@%@%@", [LocalizedString PleaseSelect], [LocalizedString InvoiceDelivery], [LocalizedString DeliveryCity]];
+                        }
+                        else
+                        {
+                            message = [NSString stringWithFormat:@"%@%@%@", [LocalizedString PleaseSelect], [LocalizedString InvoiceDelivery], [LocalizedString DeliveryRegion]];
+                        }
+                        [self presentSimpleAlertMessage:message];
+                        shouldContinue = NO;
+                        break;
+                    }
+                    inv_zip = [self.dictionaryZipForRegion objectForKey:self.currentInvoiceRegion];
+                }
+                if (inv_zip == nil)
+                {
+                    NSString *message = [NSString stringWithFormat:@"%@%@\n%@\n%@", [LocalizedString PleaseSelect], [LocalizedString InvoiceDelivery], [LocalizedString DeliveryCity], [LocalizedString DeliveryRegion]];
+                    [self presentSimpleAlertMessage:message];
+                    shouldContinue = NO;
+                    break;
+                }
+                [shopping_delivery setObject:inv_zip forKey:SymphoxAPIParam_inv_zip];
+                
+                NSMutableString *inv_address = [[self.dictionaryInvoiceTemp objectForKey:SymphoxAPIParam_inv_address] mutableCopy];
+                if (inv_address == nil)
+                {
+                    NSString *message = [NSString stringWithFormat:@"%@%@", [LocalizedString PleaseInput], [LocalizedString InvoiceDeliverAddress]];
+                    [self presentSimpleAlertMessage:message];
+                    shouldContinue = NO;
+                    break;
+                }
+                if (self.currentInvoiceRegion)
+                {
+                    [inv_address replaceOccurrencesOfString:self.currentInvoiceRegion withString:@"" options:0 range:NSMakeRange(0, [inv_address length])];
+                    [inv_address insertString:self.currentInvoiceRegion atIndex:0];
+                }
+                
+                if (self.currentInvoiceCity)
+                {
+                    [inv_address replaceOccurrencesOfString:self.currentInvoiceCity withString:@"" options:0 range:NSMakeRange(0, [inv_address length])];
+                    [inv_address insertString:self.currentInvoiceCity atIndex:0];
+                }
+                [shopping_delivery setObject:inv_address forKey:SymphoxAPIParam_inv_address];
+            }
         }
             break;
         case InvoiceTypeOptionDonate:
@@ -3283,6 +3421,11 @@ typedef enum : NSUInteger {
     if (text)
     {
         [self.dictionaryInvoiceTemp setObject:text forKey:SymphoxAPIParam_inv_address];
+    }
+    NSString *name = [self.currentDeliveryTarget objectForKey:SymphoxAPIParam_name];
+    if (name)
+    {
+        [self.dictionaryInvoiceTemp setObject:name forKey:SymphoxAPIParam_inv_name];
     }
     [self.tableViewInvoice reloadData];
 }
