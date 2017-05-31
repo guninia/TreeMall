@@ -318,7 +318,7 @@ static CGFloat buttonTotalProductsHeight = 20.0;
         height += intervalV;
     }
     NSString *message = [dictionary objectForKey:SymphoxAPIParam_message];
-    if (message && [message isEqual:[NSNull null]] == NO && [message length] > 0)
+    if (message && [message isEqual:[NSNull null]] == NO && [message length] > 0 && [message isEqualToString:@"無物流"] == NO)
     {
         height += buttonDeliverIdHeight;
         height += intervalV;

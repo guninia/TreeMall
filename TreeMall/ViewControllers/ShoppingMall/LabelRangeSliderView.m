@@ -261,7 +261,7 @@
         NSString *formattedString = [self.formatter stringFromNumber:[NSNumber numberWithFloat:self.slider.lowerValue]];
         NSString *string = [NSString stringWithFormat:@"%@%@", ((_textPrefix == nil)?@"":_textPrefix), formattedString];
         self.labelLowerValue.text = string;
-        NSLog(@"lowerCenter[%4.2f,%4.2f]", center.x, center.y);
+//        NSLog(@"lowerCenter[%4.2f,%4.2f]", center.x, center.y);
     }
     if (self.labelHigherValue && [self.labelHigherValue isHidden] == NO)
     {
@@ -274,7 +274,7 @@
         NSString *formattedString = [self.formatter stringFromNumber:[NSNumber numberWithFloat:self.slider.upperValue]];
         NSString *string = [NSString stringWithFormat:@"%@%@", ((_textPrefix == nil)?@"":_textPrefix), formattedString];
         self.labelHigherValue.text = string;
-        NSLog(@"higherCenter[%4.2f,%4.2f]", center.x, center.y);
+//        NSLog(@"higherCenter[%4.2f,%4.2f]", center.x, center.y);
     }
 }
 

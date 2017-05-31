@@ -321,3 +321,5 @@
 "CreditCardInfo"="信用卡資訊";
 "Greetings"="您好！";
 "Contacts"="常用通訊錄";
+"PleaseSelectQuantityAndPaymentForEachProduct"="請先選擇各項商品的數量及優惠";
+"NoCashPayment"="毋需支付現金";

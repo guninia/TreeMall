@@ -217,10 +217,11 @@
     {
         _buttonCondition = [[UIButton alloc] initWithFrame:CGRectZero];
         [_buttonCondition setTitle:[LocalizedString ChooseQuantityAndDiscount] forState:UIControlStateNormal];
-        [_buttonCondition setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
+        [_buttonCondition setTitleColor:[UIColor orangeColor] forState:UIControlStateNormal];
+        [_buttonCondition setTitleColor:[UIColor lightGrayColor] forState:UIControlStateSelected];
         [_buttonCondition.layer setBorderWidth:1.0];
         [_buttonCondition.layer setCornerRadius:3.0];
-        [_buttonCondition.layer setBorderColor:[UIColor lightGrayColor].CGColor];
+        [_buttonCondition.layer setBorderColor:[_buttonCondition titleColorForState:UIControlStateNormal].CGColor];
         [_buttonCondition addTarget:self action:@selector(buttonConditionPressed:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _buttonCondition;
@@ -231,10 +232,15 @@
     if (_buttonDelete == nil)
     {
         _buttonDelete = [[UIButton alloc] initWithFrame:CGRectZero];
-        UIImage *image = [UIImage imageNamed:@"car_btn_trash_out"];
+        UIImage *image = [UIImage imageNamed:@"car_btn_trash_on"];
         if (image)
         {
             [_buttonDelete setImage:image forState:UIControlStateNormal];
+        }
+        UIImage *selectedImage = [UIImage imageNamed:@"car_btn_trash_out"];
+        if (selectedImage)
+        {
+            [_buttonDelete setImage:selectedImage forState:UIControlStateSelected];
         }
         [_buttonDelete addTarget:self action:@selector(buttonDeletePressed:) forControlEvents:UIControlEventTouchUpInside];
     }
@@ -313,6 +319,18 @@
             }
         }
     }];
+}
+
+- (void)setAlreadySelectQuantityAndPayment:(BOOL)alreadySelectQuantityAndPayment
+{
+    _alreadySelectQuantityAndPayment = alreadySelectQuantityAndPayment;
+    
+    [self.buttonCondition setSelected:_alreadySelectQuantityAndPayment];
+    [self.buttonDelete setSelected:_alreadySelectQuantityAndPayment];
+    
+    UIControlState state = _alreadySelectQuantityAndPayment? UIControlStateSelected:UIControlStateNormal;
+    UIColor *color = [self.buttonCondition titleColorForState:state];
+    [self.buttonCondition.layer setBorderColor:color.CGColor];
 }
 
 #pragma mark - Actions

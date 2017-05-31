@@ -320,3 +320,5 @@
 "CreditCardInfo"="Credit Card Info";
 "Greetings"="Greetings";
 "Contacts"="Contacts";
+"PleaseSelectQuantityAndPaymentForEachProduct"="Please Select Quantity And Payment For Each Product";
+"NoCashPayment"="No Cash";

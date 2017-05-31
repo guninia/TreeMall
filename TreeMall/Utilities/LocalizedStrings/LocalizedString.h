@@ -325,5 +325,7 @@
 + (NSString *)CreditCardInfo;
 + (NSString *)Greetings;
 + (NSString *)Contacts;
++ (NSString *)PleaseSelectQuantityAndPaymentForEachProduct;
++ (NSString *)NoCashPayment;
 
 @end

@@ -38,8 +38,12 @@
 - (void)presentPaymentSelectionViewForProductId:(NSNumber *)productId;
 - (CartUIType)cartUITypeForCartType:(CartType)cartType;
 - (void)setSegmentedControlIndexForCartType:(CartType)type;
+- (BOOL)isConditionSelectedForIdentifier:(NSNumber *)productIdentifier;
+- (NSString *)paymentDetailForIdentifier:(NSNumber *)productIdentifier;
+- (NSString *)textForCartType:(CartType)cartType;
 
 - (void)buttonItemClosePressed:(id)sender;
+- (void)handlerOfCartContentChangedNotification:(NSNotification *)notification;
 
 @end
 
@@ -87,6 +91,8 @@
         UIImage *image = [[UIImage imageNamed:@"car_popup_close"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:image style:UIBarButtonItemStylePlain target:self action:@selector(buttonItemClosePressed:)];
     }
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handlerOfCartContentChangedNotification:) name:PostNotificationName_CartContentChanged object:nil];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -108,6 +114,11 @@
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:PostNotificationName_CartContentChanged object:nil];
 }
 
 /*
@@ -186,17 +197,17 @@
             switch (index) {
                 case CartUITypeCommonDelivery:
                 {
-                    [items addObject:[LocalizedString CommonDelivery]];
+                    [items addObject:[self textForCartType:CartTypeCommonDelivery]];
                 }
                     break;
                 case CartUITypeFastDelivery:
                 {
-                    [items addObject:[LocalizedString FastDelivery]];
+                    [items addObject:[self textForCartType:CartTypeFastDelivery]];
                 }
                     break;
                 case CartUITypeStorePickup:
                 {
-                    [items addObject:[LocalizedString StorePickUp]];
+                    [items addObject:[self textForCartType:CartTypeStorePickup]];
                 }
                     break;
                 
@@ -963,6 +974,16 @@
 
 - (void)refreshBottomBar
 {
+    BOOL isConditionSelectedForAtLeastOneProduct = NO;
+    for (NSDictionary *product in self.arrayProducts)
+    {
+        NSNumber *productId = [product objectForKey:SymphoxAPIParam_cpdt_num];
+        isConditionSelectedForAtLeastOneProduct = [self isConditionSelectedForIdentifier:productId];
+        if (isConditionSelectedForAtLeastOneProduct == YES)
+        {
+            break;
+        }
+    }
     NSNumber *totalPoint = [self.dictionaryTotal objectForKey:SymphoxAPIParam_total_Point];
     if ([totalPoint isEqual:[NSNull null]])
     {
@@ -988,25 +1009,35 @@
     NSMutableAttributedString *totalString = [[NSMutableAttributedString alloc] initWithString:[LocalizedString Total_C] attributes:attributeGray];
     NSAttributedString *plusString = [[NSAttributedString alloc] initWithString:@"＋" attributes:attributeGray];
     NSInteger originLength = [totalString length];
-    if (totalCash != nil && [totalCash integerValue] > 0)
+    if (isConditionSelectedForAtLeastOneProduct)
     {
-        NSString *stringTotal = [self.numberFormatter stringFromNumber:totalCash];
-        NSString *string = [NSString stringWithFormat:@"＄%@", stringTotal];
-        NSAttributedString *attrString = [[NSAttributedString alloc] initWithString:string attributes:attributeOrange];
-        [totalString appendAttributedString:attrString];
-    }
-    if (totalEpoint != nil && [totalEpoint integerValue] > 0)
-    {
-        if ([totalString length] > originLength)
+        if (totalCash != nil && [totalCash integerValue] > 0)
         {
-            [totalString appendAttributedString:plusString];
+            NSString *stringTotal = [self.numberFormatter stringFromNumber:totalCash];
+            NSString *string = [NSString stringWithFormat:@"＄%@", stringTotal];
+            NSAttributedString *attrString = [[NSAttributedString alloc] initWithString:string attributes:attributeOrange];
+            [totalString appendAttributedString:attrString];
         }
-        NSString *stringTotal = [self.numberFormatter stringFromNumber:totalEpoint];
-        NSString *string = [NSString stringWithFormat:@"%@%@", stringTotal, [LocalizedString Point]];
-        NSAttributedString *attrString = [[NSAttributedString alloc] initWithString:string attributes:attributeOrange];
-        [totalString appendAttributedString:attrString];
+        if (totalEpoint != nil && [totalEpoint integerValue] > 0)
+        {
+            if ([totalString length] > originLength)
+            {
+                [totalString appendAttributedString:plusString];
+            }
+            NSString *stringTotal = [self.numberFormatter stringFromNumber:totalEpoint];
+            NSString *string = [NSString stringWithFormat:@"%@%@", stringTotal, [LocalizedString Point]];
+            NSAttributedString *attrString = [[NSAttributedString alloc] initWithString:string attributes:attributeOrange];
+            [totalString appendAttributedString:attrString];
+        }
+        if ([totalString length] == originLength)
+        {
+            NSString *stringTotal = [self.numberFormatter stringFromNumber:[NSNumber numberWithInteger:0]];
+            NSString *string = [NSString stringWithFormat:@"＄%@", stringTotal];
+            NSAttributedString *attrString = [[NSAttributedString alloc] initWithString:string attributes:attributeOrange];
+            [totalString appendAttributedString:attrString];
+        }
     }
-    if ([totalString length] == originLength)
+    else
     {
         NSString *stringTotal = [self.numberFormatter stringFromNumber:[NSNumber numberWithInteger:0]];
         NSString *string = [NSString stringWithFormat:@"＄%@", stringTotal];
@@ -1076,6 +1107,64 @@
     }
 }
 
+- (BOOL)isConditionSelectedForIdentifier:(NSNumber *)productIdentifier
+{
+    BOOL selected = NO;
+    NSString *paymentDiscription = [self paymentDetailForIdentifier:productIdentifier];
+    if (paymentDiscription != nil)
+    {
+        selected = YES;
+    }
+    return selected;
+}
+
+- (NSString *)paymentDetailForIdentifier:(NSNumber *)productIdentifier
+{
+    NSString *paymentDiscription = nil;
+    if (productIdentifier != nil && ([productIdentifier isEqual:[NSNull null]] == NO))
+    {
+        NSDictionary *purchaseInfos = [[TMInfoManager sharedManager] purchaseInfoForCartType:self.currentType];
+        NSDictionary *purchaseInfo = [purchaseInfos objectForKey:productIdentifier];
+        paymentDiscription = [purchaseInfo objectForKey:SymphoxAPIParam_discount_detail_desc];
+    }
+    if ([paymentDiscription isEqual:[NSNull null]])
+    {
+        paymentDiscription = nil;
+    }
+    return paymentDiscription;
+}
+
+- (NSString *)textForCartType:(CartType)cartType
+{
+    NSArray *array = [[TMInfoManager sharedManager] productArrayForCartType:cartType];
+    NSInteger productCount = [array count];
+    NSMutableString *text = [NSMutableString string];
+    switch (cartType) {
+        case CartTypeCommonDelivery:
+        {
+            [text appendString:[LocalizedString CommonDelivery]];
+        }
+            break;
+        case CartTypeFastDelivery:
+        {
+            [text appendString:[LocalizedString FastDelivery]];
+        }
+            break;
+        case CartTypeStorePickup:
+        {
+            [text appendString:[LocalizedString StorePickUp]];
+        }
+            break;
+        default:
+            break;
+    }
+    if (productCount > 0)
+    {
+        [text appendFormat:@"(%li)", (long)productCount];
+    }
+    return text;
+}
+
 #pragma mark - Actions
 
 - (void)buttonItemClosePressed:(id)sender
@@ -1083,6 +1172,39 @@
     if (self.navigationController.presentingViewController)
     {
         [self.navigationController.presentingViewController dismissViewControllerAnimated:YES completion:nil];
+    }
+}
+
+#pragma mark - Notification Handler
+
+- (void)handlerOfCartContentChangedNotification:(NSNotification *)notification
+{
+    for (CartUIType type = CartUITypeStart; type < CartUITypeTotal; type++)
+    {
+        NSString *text = nil;
+        switch (type) {
+            case CartUITypeCommonDelivery:
+            {
+                text = [self textForCartType:CartTypeCommonDelivery];
+            }
+                break;
+            case CartUITypeFastDelivery:
+            {
+                text = [self textForCartType:CartTypeFastDelivery];
+            }
+                break;
+            case CartUITypeStorePickup:
+            {
+                text = [self textForCartType:CartTypeStorePickup];
+            }
+                break;
+            default:
+                break;
+        }
+        if (text)
+        {
+            [self.segmentedView.segmentedControl setTitle:text forSegmentAtIndex:type];
+        }
     }
 }
 
@@ -1214,23 +1336,18 @@
         cell.labelQuantity.text = quantityString;
         
         NSNumber *productIdentifier = [dictionary objectForKey:SymphoxAPIParam_cpdt_num];
-        NSString *paymentDiscription = nil;
-        if (productIdentifier != nil && ([productIdentifier isEqual:[NSNull null]] == NO))
-        {
-            NSDictionary *purchaseInfos = [[TMInfoManager sharedManager] purchaseInfoForCartType:self.currentType];
-            NSDictionary *purchaseInfo = [purchaseInfos objectForKey:productIdentifier];
-            paymentDiscription = [purchaseInfo objectForKey:SymphoxAPIParam_discount_detail_desc];
-        }
+        NSString *paymentDiscription = [self paymentDetailForIdentifier:productIdentifier];
         if (paymentDiscription != nil && ([paymentDiscription isEqual:[NSNull null]] == NO))
         {
             cell.labelPayment.text = paymentDiscription;
+            cell.alreadySelectQuantityAndPayment = YES;
         }
         else
         {
             cell.labelPayment.text = @"";
+            cell.alreadySelectQuantityAndPayment = NO;
         }
     }
-    
     return cell;
 }
 
@@ -1390,6 +1507,28 @@
 
 - (void)labelButtonView:(LabelButtonView *)view didPressButton:(id)sender
 {
+    BOOL canProceed = YES;
+    for (NSDictionary *product in self.arrayProducts)
+    {
+        NSNumber *productId = [product objectForKey:SymphoxAPIParam_cpdt_num];
+        BOOL isConditionSelected = [self isConditionSelectedForIdentifier:productId];
+        if (isConditionSelected == NO)
+        {
+            canProceed = NO;
+            break;
+        }
+    }
+    if (canProceed == NO)
+    {
+        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:[LocalizedString PleaseSelectQuantityAndPaymentForEachProduct] preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction *action = [UIAlertAction actionWithTitle:[LocalizedString Confirm] style:UIAlertActionStyleDefault handler:nil];
+        [alertController addAction:action];
+        __weak CartViewController *weakSelf = self;
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [weakSelf presentViewController:alertController animated:YES completion:nil];
+        });
+        return;
+    }
     [self checkAdditionalPurchaseForType:self.currentType];
 }
 

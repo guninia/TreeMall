@@ -835,6 +835,8 @@
     NSString *paymentId = nil;
     NSNumber *installmentTerm = nil;
     NSDictionary *installment = nil;
+    NSDictionary *account_result = [self.dictionaryData objectForKey:SymphoxAPIParam_account_result];
+    NSNumber *total_cash = [self.dictionaryData objectForKey:SymphoxAPIParam_total_cash];
     if (self.selectedIndexPathOfPayment && self.selectedIndexPathOfPayment.section < [self.arrayPaymentSections count])
     {
         NSDictionary *section = [self.arrayPaymentSections objectAtIndex:self.selectedIndexPathOfPayment.section];
@@ -877,6 +879,19 @@
         {
             self.selectedPaymentDescription = paymentDescription;
         }
+    }
+    else if (total_cash == nil || [total_cash isEqual:[NSNull null]] || [total_cash integerValue] == 0)
+    {
+        NSArray *trade_ids = [account_result objectForKey:SymphoxAPIParam_trade_id];
+        if ([trade_ids count] == 1)
+        {
+            paymentId = [trade_ids objectAtIndex:0];
+        }
+        else
+        {
+            paymentId = @"OP";
+        }
+        self.selectedPaymentDescription = [LocalizedString NoCashPayment];
     }
     if (installment)
     {

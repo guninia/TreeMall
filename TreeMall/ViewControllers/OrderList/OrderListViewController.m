@@ -780,7 +780,7 @@
 //            NSLog(@"cellForItemAtIndexPath[%li][%li] - cell.progressView [%@]", (long)indexPath.section, (long)indexPath.row, [cell.progressView isHidden]?@"hidden":@"shown");
             NSString *message = [dictionaryDelivery objectForKey:SymphoxAPIParam_message];
 //            NSLog(@"cellForItemAtIndexPath - message[%@]", message);
-            if (message && [message isEqual:[NSNull null]] == NO && [message length] > 0)
+            if (message && [message isEqual:[NSNull null]] == NO && [message length] > 0 && [message isEqualToString:@"無物流"] == NO)
             {
                 NSString *totalString = [NSString stringWithFormat:@"%@ %@", [LocalizedString T_CatId], message];
                 [cell.buttonDeliverId setTitle:totalString forState:UIControlStateNormal];

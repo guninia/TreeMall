@@ -177,6 +177,7 @@
         }
     }
     [self updateCartBadge];
+    [self updateFavoriteBadge];
     
     [self addChildViewController:_tbControllerMain];
     [self.view addSubview:_tbControllerMain.view];
@@ -192,6 +193,7 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handlerOfCartContentChangedNotification:) name:PostNotificationName_CartContentChanged object:nil];
 //    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handlerOfApplicationDidBecomeActiveNotification:) name:UIApplicationDidFinishLaunchingNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handlerOfJumpToShoppingMallAndPresentHallNotification:) name:PostNotificationName_JumpToShoppingMallAndPresentHall object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handlerOfFavoriteContentChangedNotification:) name:PostNotificationName_FavoriteContentChanged object:nil];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -240,6 +242,11 @@
         self.viewLoading.indicatorCenter = CGPointMake(self.imageViewLaunchScreen.center.x, 300.0 * ratio.height);
         self.viewLoading.frame = self.view.bounds;
     }
+    if (self.tbControllerMain)
+    {
+        [self.tbControllerMain.view setFrame:self.view.bounds];
+        [self.tbControllerMain.view setNeedsLayout];
+    }
 }
 
 - (UIImageView *)imageViewLaunchScreen
@@ -247,6 +254,7 @@
     if (_imageViewLaunchScreen == nil)
     {
         _imageViewLaunchScreen = [[UIImageView alloc] initWithFrame:CGRectZero];
+        [_imageViewLaunchScreen setContentMode:UIViewContentModeScaleAspectFit];
         UIImage *image = [UIImage imageNamed:@"LaunchImage"];
         if (image)
         {
@@ -453,7 +461,7 @@
 
 - (void)handlerOfFavoriteContentChangedNotification:(NSNotification *)notification
 {
-    
+    [self updateFavoriteBadge];
 }
 
 #pragma mark - UITabBarControllerDelegate

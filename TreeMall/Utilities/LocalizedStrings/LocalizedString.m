@@ -3161,4 +3161,24 @@
     return Contacts;
 }
 
++ (NSString *)PleaseSelectQuantityAndPaymentForEachProduct
+{
+    static NSString *PleaseSelectQuantityAndPaymentForEachProduct = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        PleaseSelectQuantityAndPaymentForEachProduct = NSLocalizedString(@"PleaseSelectQuantityAndPaymentForEachProduct", nil);
+    });
+    return PleaseSelectQuantityAndPaymentForEachProduct;
+}
+
++ (NSString *)NoCashPayment
+{
+    static NSString *NoCashPayment = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        NoCashPayment = NSLocalizedString(@"NoCashPayment", nil);
+    });
+    return NoCashPayment;
+}
+
 @end

@@ -71,9 +71,9 @@ static NSUInteger SearchKeywordNumberMax = 8;
 @interface TMInfoManager ()
 
 - (NSURL *)urlForInfoDirectory;
-- (NSURL *)urlForInfoArchive;
+- (NSURL *)urlForInfoArchiveWithIdentifier:(NSString *)identifier;
 - (void)applyDataFromArchivedDictionary:(NSDictionary *)dictionaryArchive;
-- (void)deleteArchive;
+- (void)deleteArchiveForIdentifier:(NSNumber *)identifier;
 - (void)resetData;
 - (NSString *)keyForCategoryIdentifier:(NSString *)identifier withLayer:(NSNumber *)layer;
 - (void)processUserInformation:(NSData *)data;
@@ -868,15 +868,26 @@ static NSUInteger SearchKeywordNumberMax = 8;
         [dictionaryArchive setObject:weakSelf.dictionaryProductPurchaseInfoInCartStorePickUp forKey:TMInfoArchiveKey_PurchaseInfoInCartStorePickUp];
         [dictionaryArchive setObject:weakSelf.arrayCartFast forKey:TMInfoArchiveKey_CartFast];
         [dictionaryArchive setObject:weakSelf.dictionaryProductPurchaseInfoInCartFast forKey:TMInfoArchiveKey_PurchaseInfoInCartFast];
-        [dictionaryArchive setObject:weakSelf.userLoginDate forKey:TMInfoArchiveKey_UserLoginTime];
-        [dictionaryArchive setObject:weakSelf.userLoginIP forKey:TMInfoArchiveKey_UserLoginIP];
+        if (weakSelf.userLoginDate)
+        {
+            [dictionaryArchive setObject:weakSelf.userLoginDate forKey:TMInfoArchiveKey_UserLoginTime];
+        }
+        if (weakSelf.userLoginIP)
+        {
+            [dictionaryArchive setObject:weakSelf.userLoginIP forKey:TMInfoArchiveKey_UserLoginIP];
+        }
         
         NSMutableData *archiveData = [[NSMutableData alloc] initWithCapacity:0];
         NSKeyedArchiver *archiver = [[NSKeyedArchiver alloc] initForWritingWithMutableData:archiveData];
         [archiver encodeObject:dictionaryArchive forKey:[CryptoModule sharedModule].apiKey];
         [archiver finishEncoding];
         
-        NSURL *url = [weakSelf urlForInfoArchive];
+        NSString *identifier = nil;
+        if (self.userIdentifier)
+        {
+            identifier = [self.userIdentifier stringValue];
+        }
+        NSURL *url = [weakSelf urlForInfoArchiveWithIdentifier:identifier];
 //        NSLog(@"urlString[%@]", [url path]);
         NSError *error = nil;
         if ([archiveData writeToURL:url options:0 error:&error] == NO)
@@ -898,8 +909,14 @@ static NSUInteger SearchKeywordNumberMax = 8;
         }
     }
     
+    NSString *identifier = nil;
+    if (self.userIdentifier)
+    {
+        identifier = [self.userIdentifier stringValue];
+    }
+    
     NSDictionary *dictionary = nil;
-    NSURL *url = [self urlForInfoArchive];
+    NSURL *url = [self urlForInfoArchiveWithIdentifier:identifier];
     NSError *error = nil;
     if ([[NSFileManager defaultManager] fileExistsAtPath:[url path]])
     {
@@ -1458,8 +1475,10 @@ static NSUInteger SearchKeywordNumberMax = 8;
 - (void)logoutUser
 {
     [SAMKeychain deletePasswordForService:[[NSBundle mainBundle] bundleIdentifier] account:TMIdentifier];
+    NSNumber *userId = [self.userIdentifier copy];
     [self resetData];
-    [self deleteArchive];
+    [self deleteArchiveForIdentifier:userId];
+    userId = nil;
     [[NSNotificationCenter defaultCenter] postNotificationName:PostNotificationName_UserLogout object:self];
     [[NSNotificationCenter defaultCenter] postNotificationName:PostNotificationName_CartContentChanged object:self];
 }
@@ -1579,8 +1598,27 @@ static NSUInteger SearchKeywordNumberMax = 8;
     {
         return;
     }
+    
+    NSNumber *point01 = [product objectForKey:SymphoxAPIParam_point01];
+    NSNumber *price02 = [product objectForKey:SymphoxAPIParam_price02];
+    NSNumber *point02 = [product objectForKey:SymphoxAPIParam_point02];
+    NSNumber *price03 = [product objectForKey:SymphoxAPIParam_price03];
+    
+    NSString *paymentType = @"0";
+    if (price03 == nil || [price03 isEqual:[NSNull null]] || [price03 integerValue] == 0)
+    {
+        if (point01 && [point01 isEqual:[NSNull null]] == NO && [point01 integerValue] > 0)
+        {
+            paymentType = @"1";
+        }
+        else if ((price02 && [price02 isEqual:[NSNull null]] == NO && [price02 integerValue] > 0) || (point02 && [point02 isEqual:[NSNull null]] == NO && [point02 integerValue] > 0))
+        {
+            paymentType = @"3";
+        }
+    }
+    
     [self setPurchaseQuantity:[NSNumber numberWithInteger:1] forProduct:currentProductId inCart:type];
-    NSDictionary *dictionaryMode = [NSDictionary dictionaryWithObjectsAndKeys:@"0", SymphoxAPIParam_payment_type, [NSNumber numberWithInteger:0], SymphoxAPIParam_price, nil];
+    NSDictionary *dictionaryMode = [NSDictionary dictionaryWithObjectsAndKeys:paymentType, SymphoxAPIParam_payment_type, [NSNumber numberWithInteger:0], SymphoxAPIParam_price, nil];
     [self setPurchasePaymentMode:dictionaryMode forProduct:currentProductId inCart:type];
     [array addObject:product];
     [self saveToArchive];
@@ -2023,12 +2061,12 @@ static NSUInteger SearchKeywordNumberMax = 8;
     return url;
 }
 
-- (NSURL *)urlForInfoArchive
+- (NSURL *)urlForInfoArchiveWithIdentifier:(NSString *)identifier
 {
     NSString *name = @"archive";
-    if (self.userIdentifier)
+    if (identifier)
     {
-        name = [self.userIdentifier stringValue];
+        name = identifier;
     }
     NSURL *url = [[[self urlForInfoDirectory] URLByAppendingPathComponent:name] URLByAppendingPathExtension:@"dat"];
     return url;
@@ -2133,9 +2171,22 @@ static NSUInteger SearchKeywordNumberMax = 8;
     [[NSNotificationCenter defaultCenter] postNotificationName:PostNotificationName_FavoriteContentChanged object:self];
 }
 
-- (void)deleteArchive
+- (void)deleteArchiveForIdentifier:(NSNumber *)identifier
 {
-    NSURL *url = [self urlForInfoArchive];
+    NSString *stringIdentifier = nil;
+    if (identifier == nil)
+    {
+        if (self.userIdentifier)
+        {
+            stringIdentifier = [self.userIdentifier stringValue];
+        }
+    }
+    else
+    {
+        stringIdentifier = [identifier stringValue];
+    }
+    
+    NSURL *url = [self urlForInfoArchiveWithIdentifier:stringIdentifier];
     if ([[NSFileManager defaultManager] fileExistsAtPath:[url path]])
     {
         NSError *error = nil;

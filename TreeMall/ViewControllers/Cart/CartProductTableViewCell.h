@@ -36,5 +36,6 @@ static NSString *CartProductTableViewCellIdentifier = @"CartProductTableViewCell
 
 @property (nonatomic, strong) NSDictionary *attributesProductName;
 @property (nonatomic, strong) NSURL *imageUrl;
+@property (nonatomic, assign) BOOL alreadySelectQuantityAndPayment;
 
 @end

@@ -122,7 +122,7 @@
         {
             [_buttonAddToCart setImage:image forState:UIControlStateNormal];
         }
-        UIImage *disabledImage = [image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        UIImage *disabledImage = [UIImage imageNamed:@"ico_foot_money"];
         if (disabledImage)
         {
             [_buttonAddToCart setImage:disabledImage forState:UIControlStateDisabled];

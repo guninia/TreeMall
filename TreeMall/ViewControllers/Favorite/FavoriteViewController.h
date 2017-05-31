@@ -10,7 +10,7 @@
 #import "ProductTableViewCell.h"
 #import "LoadingFooterView.h"
 
-@interface FavoriteViewController : UIViewController <UITableViewDataSource, UITableViewDelegate>
+@interface FavoriteViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, ProductTableViewCellDelegate>
 
 @property (nonatomic, strong) UITableView *tableViewFavorites;
 @property (nonatomic, strong) NSArray *arrayFavorites;

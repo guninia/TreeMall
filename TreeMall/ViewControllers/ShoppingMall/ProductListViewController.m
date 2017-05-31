@@ -506,8 +506,22 @@
 
 - (void)refreshAllContentForHallId:(NSString *)hallId andLayer:(NSNumber *)layer withName:(NSString *)name
 {
-    self.hallId = hallId;
-    self.layer = layer;
+    if (hallId == nil)
+    {
+        if (self.hallId != nil)
+        {
+            hallId = self.hallId;
+        }
+        if (self.layer != nil)
+        {
+            layer = self.layer;
+        }
+    }
+    else
+    {
+        self.hallId = hallId;
+        self.layer = layer;
+    }
     self.name = name;
     self.currentProductPage = 0;
     self.arraySubcategory = nil;
@@ -639,8 +653,6 @@
         NSNumber *numberCartType = [dictionary objectForKey:SymphoxAPIParam_cart_type];
         [self addProduct:product toCart:[numberCartType integerValue]];
     }
-    
-    
 }
 
 - (void)addProduct:(NSDictionary *)product toCart:(CartType)cartType
