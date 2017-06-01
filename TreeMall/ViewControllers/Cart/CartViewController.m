@@ -41,6 +41,7 @@
 - (BOOL)isConditionSelectedForIdentifier:(NSNumber *)productIdentifier;
 - (NSString *)paymentDetailForIdentifier:(NSNumber *)productIdentifier;
 - (NSString *)textForCartType:(CartType)cartType;
+- (void)showQuantityInputViewWithDefaultValue:(NSUInteger)defaultValue;
 
 - (void)buttonItemClosePressed:(id)sender;
 - (void)handlerOfCartContentChangedNotification:(NSNotification *)notification;
@@ -83,10 +84,12 @@
     if (self.navigationController.tabBarController != nil)
     {
         [self.navigationController.tabBarController.view addSubview:self.viewLoading];
+        [self.navigationController.tabBarController.view addSubview:self.viewQuantityInput];
     }
     else if (self.navigationController.presentingViewController != nil)
     {
         [self.navigationController.view addSubview:self.viewLoading];
+        [self.navigationController.view addSubview:self.viewQuantityInput];
         
         UIImage *image = [[UIImage imageNamed:@"car_popup_close"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:image style:UIBarButtonItemStylePlain target:self action:@selector(buttonItemClosePressed:)];
@@ -177,13 +180,17 @@
         if (self.navigationController.tabBarController != nil)
         {
             self.viewLoading.frame = self.navigationController.tabBarController.view.bounds;
+            self.viewQuantityInput.frame = self.navigationController.tabBarController.view.bounds;
         }
         else if (self.navigationController != nil)
         {
             self.viewLoading.frame = self.navigationController.view.bounds;
+            self.viewQuantityInput.frame = self.navigationController.view.bounds;
         }
         self.viewLoading.indicatorCenter = self.viewLoading.center;
         [self.viewLoading setNeedsLayout];
+        
+        [self.viewQuantityInput setNeedsLayout];
     }
 }
 
@@ -315,6 +322,18 @@
         _viewLoading.alpha = 0.0;
     }
     return _viewLoading;
+}
+
+- (FullScreenSelectNumberView *)viewQuantityInput
+{
+    if (_viewQuantityInput == nil)
+    {
+        _viewQuantityInput = [[FullScreenSelectNumberView alloc] initWithFrame:CGRectZero];
+        _viewQuantityInput.delegate = self;
+        [_viewQuantityInput setBackgroundColor:[UIColor colorWithWhite:0.0 alpha:0.3]];
+        _viewQuantityInput.alpha = 0.0;
+    }
+    return _viewQuantityInput;
 }
 
 #pragma mark - Private Methods
@@ -1165,6 +1184,11 @@
     return text;
 }
 
+- (void)showQuantityInputViewWithDefaultValue:(NSUInteger)defaultValue
+{
+    
+}
+
 #pragma mark - Actions
 
 - (void)buttonItemClosePressed:(id)sender
@@ -1367,8 +1391,7 @@
         return;
     NSDictionary *product = [self.arrayProducts objectAtIndex:cell.tag];
     NSNumber *maxSellQty = [product objectForKey:SymphoxAPIParam_max_sell_qty];
-    if (maxSellQty == nil)
-        return;
+    
     NSNumber *productId = [product objectForKey:SymphoxAPIParam_cpdt_num];
     NSDictionary *purchaseInfos = [[TMInfoManager sharedManager] purchaseInfoForCartType:self.currentType];
     NSNumber *quantity = nil;
@@ -1380,46 +1403,56 @@
             quantity = [purchaseInfo objectForKey:SymphoxAPIParam_qty];
         }
     }
-    __weak CartViewController *weakSelf = self;
-    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:[LocalizedString PleaseSelectQuantity] preferredStyle:UIAlertControllerStyleAlert];
-    [alertController addTextFieldWithConfigurationHandler:^(UITextField *textField){
-        if (quantity)
-        {
-            [textField setText:[quantity stringValue]];
-        }
-        else
-        {
-            [textField setText:@"1"];
-        }
-        SHPickerView *pickerView = [[SHPickerView alloc] init];
-        pickerView.tag = cell.tag;
-        pickerView.dataSource = weakSelf;
-        pickerView.delegate = weakSelf;
-        pickerView.owner = textField;
-        [textField setInputView:pickerView];
-    }];
-    
-    UIAlertAction *actionCancel = [UIAlertAction actionWithTitle:[LocalizedString Cancel] style:UIAlertActionStyleCancel handler:nil];
-    UIAlertAction *actionConfirm = [UIAlertAction actionWithTitle:[LocalizedString Confirm] style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
-        if ([alertController.textFields count] == 0)
-            return;
-        UITextField *textField = [alertController.textFields objectAtIndex:0];
-        NSString *text = textField.text;
-        if (text == nil || [text length] == 0 || [text integerValue] == 0)
-        {
-            text = @"1";
-        }
-        NSNumber *quantity = [NSNumber numberWithInteger:[text integerValue]];
-        NSNumber *productId = [product objectForKey:SymphoxAPIParam_cpdt_num];
-        if (productId && quantity)
-        {
-            [[TMInfoManager sharedManager] setPurchaseQuantity:quantity forProduct:productId inCart:weakSelf.currentType];
-        }
-        [weakSelf checkCartForType:weakSelf.currentType shouldShowPaymentForProductId:productId];
-    }];
-    [alertController addAction:actionCancel];
-    [alertController addAction:actionConfirm];
-    [self presentViewController:alertController animated:YES completion:nil];
+    if (quantity && [quantity unsignedShortValue] > 0)
+    {
+        self.viewQuantityInput.currentValue = [quantity unsignedIntegerValue];
+    }
+    if (maxSellQty && [maxSellQty isEqual:[NSNull null]] == NO)
+    {
+        self.viewQuantityInput.maxValue = [maxSellQty unsignedIntegerValue];
+    }
+    self.viewQuantityInput.tag = cell.tag;
+    [self.viewQuantityInput show];
+//    __weak CartViewController *weakSelf = self;
+//    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:[LocalizedString PleaseSelectQuantity] preferredStyle:UIAlertControllerStyleAlert];
+//    [alertController addTextFieldWithConfigurationHandler:^(UITextField *textField){
+//        if (quantity)
+//        {
+//            [textField setText:[quantity stringValue]];
+//        }
+//        else
+//        {
+//            [textField setText:@"1"];
+//        }
+//        SHPickerView *pickerView = [[SHPickerView alloc] init];
+//        pickerView.tag = cell.tag;
+//        pickerView.dataSource = weakSelf;
+//        pickerView.delegate = weakSelf;
+//        pickerView.owner = textField;
+//        [textField setInputView:pickerView];
+//    }];
+//    
+//    UIAlertAction *actionCancel = [UIAlertAction actionWithTitle:[LocalizedString Cancel] style:UIAlertActionStyleCancel handler:nil];
+//    UIAlertAction *actionConfirm = [UIAlertAction actionWithTitle:[LocalizedString Confirm] style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
+//        if ([alertController.textFields count] == 0)
+//            return;
+//        UITextField *textField = [alertController.textFields objectAtIndex:0];
+//        NSString *text = textField.text;
+//        if (text == nil || [text length] == 0 || [text integerValue] == 0)
+//        {
+//            text = @"1";
+//        }
+//        NSNumber *quantity = [NSNumber numberWithInteger:[text integerValue]];
+//        NSNumber *productId = [product objectForKey:SymphoxAPIParam_cpdt_num];
+//        if (productId && quantity)
+//        {
+//            [[TMInfoManager sharedManager] setPurchaseQuantity:quantity forProduct:productId inCart:weakSelf.currentType];
+//        }
+//        [weakSelf checkCartForType:weakSelf.currentType shouldShowPaymentForProductId:productId];
+//    }];
+//    [alertController addAction:actionCancel];
+//    [alertController addAction:actionConfirm];
+//    [self presentViewController:alertController animated:YES completion:nil];
 }
 
 - (void)cartProductTableViewCell:(CartProductTableViewCell *)cell didPressedDeleteBySender:(id)sender
@@ -1530,6 +1563,25 @@
         return;
     }
     [self checkAdditionalPurchaseForType:self.currentType];
+}
+
+#pragma mark - FullScreenSelectNumberViewDelegate
+
+- (void)fullScreenSelectNumberView:(FullScreenSelectNumberView *)view didSelectNumberAsString:(NSString *)stringNumber
+{
+    NSDictionary *product = [self.arrayProducts objectAtIndex:view.tag];
+    NSString *text = stringNumber;
+    if (text == nil || [text length] == 0 || [text integerValue] == 0)
+    {
+        text = @"1";
+    }
+    NSNumber *quantity = [NSNumber numberWithInteger:[text integerValue]];
+    NSNumber *productId = [product objectForKey:SymphoxAPIParam_cpdt_num];
+    if (productId && quantity)
+    {
+        [[TMInfoManager sharedManager] setPurchaseQuantity:quantity forProduct:productId inCart:self.currentType];
+    }
+    [self checkCartForType:self.currentType shouldShowPaymentForProductId:productId];
 }
 
 @end

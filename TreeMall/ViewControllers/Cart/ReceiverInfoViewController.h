@@ -41,6 +41,7 @@
 @property (nonatomic, strong) NSMutableArray *arrayInvoiceTypeTitle;
 @property (nonatomic, strong) NSMutableArray *arrayElectronicSubTypeTitle;
 @property (nonatomic, strong) NSMutableArray *arrayInvoiceDonateTitle;
+@property (nonatomic, strong) NSMutableArray *arrayCarrierForProducts;
 
 @property (nonatomic, assign) CartType type;
 @property (nonatomic, assign) BOOL canSelectDeliverTime;

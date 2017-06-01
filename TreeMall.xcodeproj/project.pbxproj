@@ -335,6 +335,8 @@
 		68D7F2721EC9833B00B13214 /* CompleteOrderContentTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 68D7F2701EC9833B00B13214 /* CompleteOrderContentTableViewCell.m */; };
 		68D7F2761EC99DAB00B13214 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 68D7F2751EC99DAB00B13214 /* Images.xcassets */; };
 		68D7F2771EC99DAB00B13214 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 68D7F2751EC99DAB00B13214 /* Images.xcassets */; };
+		68D926B91EDFCB78007CB2FD /* FullScreenSelectNumberView.m in Sources */ = {isa = PBXBuildFile; fileRef = 68D926B81EDFCB78007CB2FD /* FullScreenSelectNumberView.m */; };
+		68D926BA1EDFCB78007CB2FD /* FullScreenSelectNumberView.m in Sources */ = {isa = PBXBuildFile; fileRef = 68D926B81EDFCB78007CB2FD /* FullScreenSelectNumberView.m */; };
 		68DC2BAB1E487B28003573AC /* LoadingFooterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 68DC2BAA1E487B28003573AC /* LoadingFooterView.m */; };
 		68E401311E309B7700BFF66B /* TermsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68E4012F1E309B7700BFF66B /* TermsViewController.m */; };
 		68E401321E309B7700BFF66B /* TermsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 68E401301E309B7700BFF66B /* TermsViewController.xib */; };
@@ -660,6 +662,8 @@
 		68D7F26F1EC9833B00B13214 /* CompleteOrderContentTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CompleteOrderContentTableViewCell.h; path = ViewControllers/Cart/CompleteOrderContentTableViewCell.h; sourceTree = "<group>"; };
 		68D7F2701EC9833B00B13214 /* CompleteOrderContentTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CompleteOrderContentTableViewCell.m; path = ViewControllers/Cart/CompleteOrderContentTableViewCell.m; sourceTree = "<group>"; };
 		68D7F2751EC99DAB00B13214 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		68D926B71EDFCB78007CB2FD /* FullScreenSelectNumberView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FullScreenSelectNumberView.h; path = Component/FullScreenSelectNumberView/FullScreenSelectNumberView.h; sourceTree = "<group>"; };
+		68D926B81EDFCB78007CB2FD /* FullScreenSelectNumberView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FullScreenSelectNumberView.m; path = Component/FullScreenSelectNumberView/FullScreenSelectNumberView.m; sourceTree = "<group>"; };
 		68DC2BA91E487B28003573AC /* LoadingFooterView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LoadingFooterView.h; path = ViewControllers/ShoppingMall/LoadingFooterView.h; sourceTree = "<group>"; };
 		68DC2BAA1E487B28003573AC /* LoadingFooterView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LoadingFooterView.m; path = ViewControllers/ShoppingMall/LoadingFooterView.m; sourceTree = "<group>"; };
 		68E4012E1E309B7700BFF66B /* TermsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TermsViewController.h; path = ViewControllers/Login/TermsViewController.h; sourceTree = "<group>"; };
@@ -1290,6 +1294,7 @@
 		68B68FF01E2483D600DCCF29 /* Component */ = {
 			isa = PBXGroup;
 			children = (
+				68D926B61EDFCB28007CB2FD /* FullScreenSelectNumberView */,
 				68CE49821EADAD1E008F77D7 /* SHPickerView */,
 				68987D9B1E8510870077A62B /* VerticalImageTextButton */,
 				68B0FDE01E837EB700BE273F /* PureTextTableHeaderFooterView */,
@@ -1387,6 +1392,15 @@
 				68A827931E4D9C6F00E63552 /* FTPopMenu */,
 			);
 			path = ThirdParty;
+			sourceTree = "<group>";
+		};
+		68D926B61EDFCB28007CB2FD /* FullScreenSelectNumberView */ = {
+			isa = PBXGroup;
+			children = (
+				68D926B71EDFCB78007CB2FD /* FullScreenSelectNumberView.h */,
+				68D926B81EDFCB78007CB2FD /* FullScreenSelectNumberView.m */,
+			);
+			name = FullScreenSelectNumberView;
 			sourceTree = "<group>";
 		};
 		AE7D976A9D99372CC6477754 /* Pods */ = {
@@ -1961,6 +1975,7 @@
 				68A827A01E4DB56400E63552 /* ProductFilterViewController.m in Sources */,
 				68DC2BAB1E487B28003573AC /* LoadingFooterView.m in Sources */,
 				6890652C1E23470E00E5CB26 /* FavoriteViewController.m in Sources */,
+				68D926B91EDFCB78007CB2FD /* FullScreenSelectNumberView.m in Sources */,
 				68A8279A1E4D9C6F00E63552 /* FTPopMenu.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2043,6 +2058,7 @@
 				688493C61EBC779A0087BC2B /* CartViewController.m in Sources */,
 				688493C71EBC779A0087BC2B /* RegisterViewController.m in Sources */,
 				688493C81EBC779A0087BC2B /* ChosenDiscountTableViewCell.m in Sources */,
+				68D926BA1EDFCB78007CB2FD /* FullScreenSelectNumberView.m in Sources */,
 				688493C91EBC779A0087BC2B /* NewsletterSubscribeTableViewCell.m in Sources */,
 				688493CA1EBC779A0087BC2B /* PaymentTypeTableViewCell.m in Sources */,
 				688493CB1EBC779A0087BC2B /* FullScreenLoadingView.m in Sources */,

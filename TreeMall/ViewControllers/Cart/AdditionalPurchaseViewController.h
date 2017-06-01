@@ -12,8 +12,9 @@
 #import "TMInfoManager.h"
 #import "FullScreenLoadingView.h"
 #import "DiscountViewController.h"
+#import "FullScreenSelectNumberView.h"
 
-@interface AdditionalPurchaseViewController : UIViewController <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, AdditionalProductCollectionViewCellDelegate, LabelButtonViewDelegate, UIPickerViewDataSource, UIPickerViewDelegate, DiscountViewControllerDelegate>
+@interface AdditionalPurchaseViewController : UIViewController <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, AdditionalProductCollectionViewCellDelegate, LabelButtonViewDelegate, UIPickerViewDataSource, UIPickerViewDelegate, DiscountViewControllerDelegate, FullScreenSelectNumberViewDelegate>
 
 @property (nonatomic, strong) UICollectionView *collectionView;
 @property (nonatomic, strong) LabelButtonView *bottomBar;
@@ -24,5 +25,6 @@
 @property (nonatomic, strong) NSMutableDictionary *dictionaryTotal;
 @property (nonatomic, strong) NSMutableArray *arrayAllProducts;
 @property (nonatomic, strong) NSNumberFormatter *numberFormatter;
+@property (nonatomic, strong) FullScreenSelectNumberView *viewQuantityInput;
 
 @end

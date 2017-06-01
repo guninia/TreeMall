@@ -13,8 +13,8 @@
 
 #ifdef DEBUG
 
-static NSString *SymphoxAPIDomain = @"http://tomcat8.mdevelop.com/TreeMall/";
-//static NSString *SymphoxAPIDomain = @"http://sapi.symphox.com.tw/treeMall/";
+//static NSString *SymphoxAPIDomain = @"http://tomcat8.mdevelop.com/TreeMall/";
+static NSString *SymphoxAPIDomain = @"http://sapi.symphox.com.tw/treeMall/";
 #else
 static NSString *SymphoxAPIDomain = @"http://tomcat8.mdevelop.com/TreeMall/";
 #endif
@@ -62,6 +62,7 @@ static NSString *SymphoxAPI__getOneClickBuyContactInfo = @"api/eiffel/appOrder/o
 static NSString *SymphoxAPI__activateOCB = @"https://www.cathaybk.com.tw/cathaybk/card/event/2012/card_news1010701.asp";
 static NSString *SymphoxAPI__buildOrder = @"api/eiffel/orders/createOrder";
 static NSString *SymphoxAPI__getDeliveryProgress = @"api/portal/app/member/order/delivery";
+static NSString *SymphoxAPI__checkDelivery = @"api/eiffel/appOrder/checkDelivery";
 
 #define SymphoxAPI_token [NSString stringWithFormat:@"%@%@", SymphoxAPIDomain, SymphoxAPI__token]
 #define SymphoxAPI_homepage [NSString stringWithFormat:@"%@%@", SymphoxAPIDomain, SymphoxAPI__homepage]
@@ -106,6 +107,7 @@ static NSString *SymphoxAPI__getDeliveryProgress = @"api/portal/app/member/order
 #define SymphoxAPI_activateOCB [NSString stringWithFormat:@"%@%@", SymphoxAPIDomain, SymphoxAPI__activateOCB]
 #define SymphoxAPI_buildOrder [NSString stringWithFormat:@"%@%@", SymphoxAPIDomain, SymphoxAPI__buildOrder]
 #define SymphoxAPI_getDeliveryProgress [NSString stringWithFormat:@"%@%@", SymphoxAPIDomain, SymphoxAPI__getDeliveryProgress]
+#define SymphoxAPI_checkDelivery [NSString stringWithFormat:@"%@%@", SymphoxAPIDomain, SymphoxAPI__checkDelivery]
 
 
 static NSString *SymphoxAPIParam_key = @"sym-api-key";

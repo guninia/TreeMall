@@ -89,6 +89,7 @@ typedef enum : NSUInteger {
 - (BOOL)processBuildOrderResult:(id)result;
 - (void)presentCompleteOrderViewWithDelivery:(NSDictionary *)delivery;
 - (void)presentCreditCardViewWithDelivery:(NSDictionary *)delivery andParams:(NSMutableDictionary *)params;
+- (void)checkDeliveryInfo:(NSDictionary *)deliveryInfo withOrderInfo:(NSMutableDictionary *)orderInfo;
 
 - (IBAction)buttonContactListPressed:(id)sender;
 - (void)buttonNextPressed:(id)sender;
@@ -139,15 +140,16 @@ typedef enum : NSUInteger {
     
     [self.buttonContactList setHidden:YES];
     
-    if (self.type == CartTypeFastDelivery)
-    {
-        [self startToGetCarrierInfo];
-    }
-    else
-    {
-        [self prepareData];
-        [self retrieveDistrictInfo];
-    }
+//    if (self.type == CartTypeFastDelivery)
+//    {
+//        [self startToGetCarrierInfo];
+//    }
+//    else
+//    {
+//        [self prepareData];
+//        [self retrieveDistrictInfo];
+//    }
+    [self startToGetCarrierInfo];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -428,6 +430,15 @@ typedef enum : NSUInteger {
     return _arrayInvoiceDonateTitle;
 }
 
+- (NSMutableArray *)arrayCarrierForProducts
+{
+    if (_arrayCarrierForProducts == nil)
+    {
+        _arrayCarrierForProducts = [[NSMutableArray alloc] initWithCapacity:0];
+    }
+    return _arrayCarrierForProducts;
+}
+
 - (NSCache *)cellCache
 {
     if (_cellCache == nil)
@@ -556,10 +567,16 @@ typedef enum : NSUInteger {
             for (NSDictionary *product in array)
             {
                 NSString *carrier = [product objectForKey:SymphoxAPIParam_cpro_carrier];
-                if (carrier && [carrier isEqual:[NSNull null]] == NO && [carrier integerValue] == 8)
+                if (carrier && [carrier isEqual:[NSNull null]] == NO)
                 {
-                    self.canSelectDeliverTime = YES;
-                    break;
+                    if ([carrier integerValue] == 8)
+                    {
+                        self.canSelectDeliverTime = YES;
+                    }
+                    if ([self.arrayCarrierForProducts containsObject:carrier] == NO)
+                    {
+                        [self.arrayCarrierForProducts addObject:carrier];
+                    }
                 }
             }
         }
@@ -2471,16 +2488,8 @@ typedef enum : NSUInteger {
     [params setObject:shopping_order_term forKey:SymphoxAPIParam_shopping_order_term];
     [params setObject:arrayCheck forKey:SymphoxAPIParam_order_items];
     
-    if ([self.tradeId isEqualToString:@"C"] || [self.tradeId isEqualToString:@"I"])
-    {
-        // Should go to CreditCardInfoViewController
-        [self presentCreditCardViewWithDelivery:shopping_delivery andParams:params];
-    }
-    else
-    {
-        // Should start build order
-        [self startToBuildOrderWithParams:params];
-    }
+    // Should check delivery info first
+    [self checkDeliveryInfo:shopping_delivery withOrderInfo:params];
 }
 
 - (void)startToBuildOrderWithParams:(NSMutableDictionary *)params
@@ -2573,6 +2582,72 @@ typedef enum : NSUInteger {
     viewController.dictionaryDelivery = delivery;
     viewController.params = params;
     [self.navigationController pushViewController:viewController animated:YES];
+}
+
+- (void)checkDeliveryInfo:(NSDictionary *)deliveryInfo withOrderInfo:(NSMutableDictionary *)orderInfo
+{
+    NSMutableDictionary *params = [deliveryInfo mutableCopy];
+    NSNumber *identifier = [TMInfoManager sharedManager].userIdentifier;
+    [params setObject:identifier forKey:SymphoxAPIParam_user_num];
+    NSNumber *number_total_cash = [self.dictionaryTotalCost objectForKey:SymphoxAPIParam_total_cash];
+    NSNumber *is_invoice_order = [NSNumber numberWithBool:([number_total_cash integerValue] > 0)?YES:NO];
+    [params setObject:is_invoice_order forKey:SymphoxAPIParam_is_invoice_order];
+    NSString *carrier = nil;
+    if (self.canSelectDeliverTime)
+    {
+        carrier = @"8";
+    }
+    else if ([self.arrayCarrierForProducts containsObject:@"0"])
+    {
+        carrier = @"0";
+    }
+    else
+    {
+        carrier = @"2";
+    }
+    [params setObject:carrier forKey:SymphoxAPIParam_carrier];
+    
+    __weak ReceiverInfoViewController *weakSelf = self;
+    NSString *apiKey = [CryptoModule sharedModule].apiKey;
+    NSString *token = [SHAPIAdapter sharedAdapter].token;
+    NSURL *url = [NSURL URLWithString:SymphoxAPI_checkDelivery];
+    //    NSLog(@"startToBuildOrderWithParams - url [%@]", [url absoluteString]);
+    NSDictionary *headerFields = [NSDictionary dictionaryWithObjectsAndKeys:apiKey, SymphoxAPIParam_key, token, SymphoxAPIParam_token, nil];
+    [self showLoadingViewAnimated:YES];
+    [[SHAPIAdapter sharedAdapter] sendRequestFromObject:weakSelf ToUrl:url withHeaderFields:headerFields andPostObject:params inPostFormat:SHPostFormatJson encrypted:YES decryptedReturnData:YES completion:^(id resultObject, NSError *error){
+        [weakSelf hideLoadingViewAnimated:NO];
+        if (error == nil)
+        {
+            if ([self.tradeId isEqualToString:@"C"] || [self.tradeId isEqualToString:@"I"])
+            {
+                // Should go to CreditCardInfoViewController
+                [self presentCreditCardViewWithDelivery:deliveryInfo andParams:orderInfo];
+            }
+            else
+            {
+                // Should start build order
+                [self startToBuildOrderWithParams:params];
+            }
+        }
+        else
+        {
+            NSString *errorMessage = [LocalizedString CannotLoadData];
+            NSDictionary *userInfo = error.userInfo;
+            if (userInfo)
+            {
+                NSString *serverMessage = [userInfo objectForKey:SymphoxAPIParam_status_desc];
+                if (serverMessage)
+                {
+                    errorMessage = serverMessage;
+                }
+            }
+            NSLog(@"checkDeliveryInfo - error:\n%@", [error description]);
+            UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:errorMessage preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertAction *actionConfirm = [UIAlertAction actionWithTitle:[LocalizedString Confirm] style:UIAlertActionStyleDefault handler:nil];
+            [alertController addAction:actionConfirm];
+            [weakSelf presentViewController:alertController animated:YES completion:nil];
+        }
+    }];
 }
 
 #pragma mark - UITableViewDataSource

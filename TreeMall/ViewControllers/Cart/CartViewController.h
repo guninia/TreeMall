@@ -13,8 +13,9 @@
 #import "TMInfoManager.h"
 #import "SHPickerView.h"
 #import "FullScreenLoadingView.h"
+#import "FullScreenSelectNumberView.h"
 
-@interface CartViewController : UIViewController <SemiCircleEndsSegmentedViewDelegate, UITableViewDataSource, UITableViewDelegate, CartProductTableViewCellDelegate, UIPickerViewDataSource, UIPickerViewDelegate, LabelButtonViewDelegate>
+@interface CartViewController : UIViewController <SemiCircleEndsSegmentedViewDelegate, UITableViewDataSource, UITableViewDelegate, CartProductTableViewCellDelegate, UIPickerViewDataSource, UIPickerViewDelegate, LabelButtonViewDelegate, FullScreenSelectNumberViewDelegate>
 
 @property (nonatomic, strong) SemiCircleEndsSegmentedView *segmentedView;
 @property (nonatomic, strong) UITableView *tableView;
@@ -26,4 +27,6 @@
 @property (nonatomic, strong) UIImageView *tableBackgroundView;
 @property (nonatomic, strong) UILabel *labelNoContent;
 @property (nonatomic, strong) FullScreenLoadingView *viewLoading;
+@property (nonatomic, strong) FullScreenSelectNumberView *viewQuantityInput;
+
 @end
