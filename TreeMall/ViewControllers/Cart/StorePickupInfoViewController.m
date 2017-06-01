@@ -1470,6 +1470,7 @@ typedef enum : NSUInteger {
                             {
                                 [weakSelf.dictionaryInvoiceTemp setObject:SymphoxAPIValue_inpoban3 forKey:SymphoxAPIParam_inpoban];
                             }
+                                break;
                             case InvoiceDonateTargetOther:
                             {
                                 [weakSelf.dictionaryInvoiceTemp removeObjectForKey:SymphoxAPIParam_inpoban];
@@ -1789,11 +1790,6 @@ typedef enum : NSUInteger {
         [shopping_delivery setObject:cellphone forKey:SymphoxAPIParam_day_tel];
         [shopping_delivery setObject:cellphone forKey:SymphoxAPIParam_night_tel];
     }
-    if (inv_tel)
-    {
-        [shopping_delivery setObject:inv_tel forKey:SymphoxAPIParam_inv_tel];
-    }
-    
     
     NSLog(@"prepareOrderData - self.dictionaryInvoiceTemp:\n%@", [self.dictionaryInvoiceTemp description]);
     NSNumber *inv_type = [self.dictionaryInvoiceTemp objectForKey:SymphoxAPIParam_inv_type];
@@ -1909,6 +1905,10 @@ typedef enum : NSUInteger {
                     [inv_address insertString:self.currentInvoiceCity atIndex:0];
                 }
                 [shopping_delivery setObject:inv_address forKey:SymphoxAPIParam_inv_address];
+                if (inv_tel)
+                {
+                    [shopping_delivery setObject:inv_tel forKey:SymphoxAPIParam_inv_tel];
+                }
             }
         }
             break;
@@ -2013,7 +2013,11 @@ typedef enum : NSUInteger {
             NSString *inv_regno = [self.dictionaryInvoiceTemp objectForKey:SymphoxAPIParam_inv_regno];
             if (inv_regno)
             {
-                [shopping_delivery setObject:inv_title forKey:SymphoxAPIParam_inv_title];
+                [shopping_delivery setObject:inv_regno forKey:SymphoxAPIParam_inv_regno];
+            }
+            if (inv_tel)
+            {
+                [shopping_delivery setObject:inv_tel forKey:SymphoxAPIParam_inv_tel];
             }
         }
             break;
@@ -2314,6 +2318,7 @@ typedef enum : NSUInteger {
     StorePickupWebViewController *viewController = [[StorePickupWebViewController alloc] initWithNibName:@"StorePickupWebViewController" bundle:[NSBundle mainBundle]];
     viewController.group = group;
     viewController.delegate = self;
+    viewController.title = [LocalizedString SelectPickupStore];
     UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:viewController];
     [self presentViewController:navigationController animated:YES completion:nil];
 }
@@ -2340,6 +2345,8 @@ typedef enum : NSUInteger {
         carrier = @"2";
     }
     [params setObject:carrier forKey:SymphoxAPIParam_carrier];
+    NSString *cart_type = [NSString stringWithFormat:@"%li", (long)self.type];
+    [params setObject:cart_type forKey:SymphoxAPIParam_cart_type];
     
     __weak StorePickupInfoViewController *weakSelf = self;
     NSString *apiKey = [CryptoModule sharedModule].apiKey;
@@ -2360,7 +2367,7 @@ typedef enum : NSUInteger {
             else
             {
                 // Should start build order
-                [self startToBuildOrderWithParams:params];
+                [self startToBuildOrderWithParams:orderInfo];
             }
         }
         else

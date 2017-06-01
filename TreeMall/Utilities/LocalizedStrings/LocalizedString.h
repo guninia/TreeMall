@@ -327,5 +327,7 @@
 + (NSString *)Contacts;
 + (NSString *)PleaseSelectQuantityAndPaymentForEachProduct;
 + (NSString *)NoCashPayment;
++ (NSString *)SelectPickupStore;
++ (NSString *)CompleteOrder;
 
 @end

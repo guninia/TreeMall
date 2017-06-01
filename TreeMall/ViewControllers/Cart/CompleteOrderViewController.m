@@ -58,6 +58,8 @@ typedef enum : NSUInteger {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
+    [self.navigationItem setHidesBackButton:YES];
+    self.title = [LocalizedString CompleteOrder];
     [self.viewLabelBackground.layer setBorderWidth:1.0];
     [self.viewLabelBackground.layer setBorderColor:TMMainColor.CGColor];
     [self.labelTotalItem setTextColor:TMMainColor];
@@ -565,7 +567,8 @@ typedef enum : NSUInteger {
         {
             NSMutableDictionary *dictionary = [NSMutableDictionary dictionary];
             [dictionary setObject:[LocalizedString DayPhone] forKey:kSectionContentTitle];
-            [dictionary setObject:day_tel forKey:kSectionContentText];
+            NSString *trimmed_tel = [day_tel stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"-"]];
+            [dictionary setObject:trimmed_tel forKey:kSectionContentText];
             [self.arrayReceiver addObject:dictionary];
         }
         NSString *cellphone = [self.dictionaryDelivery objectForKey:SymphoxAPIParam_cellphone];

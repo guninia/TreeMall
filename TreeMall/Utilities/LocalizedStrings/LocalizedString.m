@@ -3181,4 +3181,24 @@
     return NoCashPayment;
 }
 
++ (NSString *)SelectPickupStore
+{
+    static NSString *SelectPickupStore = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        SelectPickupStore = NSLocalizedString(@"SelectPickupStore", nil);
+    });
+    return SelectPickupStore;
+}
+
++ (NSString *)CompleteOrder
+{
+    static NSString *CompleteOrder = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        CompleteOrder = NSLocalizedString(@"CompleteOrder", nil);
+    });
+    return CompleteOrder;
+}
+
 @end

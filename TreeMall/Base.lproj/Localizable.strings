@@ -322,3 +322,5 @@
 "Contacts"="Contacts";
 "PleaseSelectQuantityAndPaymentForEachProduct"="Please Select Quantity And Payment For Each Product";
 "NoCashPayment"="No Cash";
+"SelectPickupStore"="Select Store";
+"CompleteOrder"="Complete Order";

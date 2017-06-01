@@ -1678,6 +1678,7 @@ typedef enum : NSUInteger {
                             {
                                 [weakSelf.dictionaryInvoiceTemp setObject:SymphoxAPIValue_inpoban3 forKey:SymphoxAPIParam_inpoban];
                             }
+                                break;
                             case InvoiceDonateTargetOther:
                             {
                                 [weakSelf.dictionaryInvoiceTemp removeObjectForKey:SymphoxAPIParam_inpoban];
@@ -1859,20 +1860,14 @@ typedef enum : NSUInteger {
     {
         [totalString appendString:regionNumber];
     }
+    [totalString appendString:@"-"];
     if (phoneNumber && [phoneNumber isEqual:[NSNull null]] == NO && [phoneNumber length] > 0)
     {
-        if ([totalString length] > 0)
-        {
-            [totalString appendString:@"-"];
-        }
         [totalString appendString:phoneNumber];
     }
+    [totalString appendString:@"-"];
     if (specificNumber && [specificNumber isEqual:[NSNull null]] == NO && [specificNumber length] > 0)
     {
-        if ([totalString length] > 0)
-        {
-            [totalString appendString:@"-"];
-        }
         [totalString appendString:specificNumber];
     }
     return totalString;
@@ -2052,10 +2047,6 @@ typedef enum : NSUInteger {
             inv_tel = cellphone;
         }
     }
-    if (inv_tel)
-    {
-        [shopping_delivery setObject:inv_tel forKey:SymphoxAPIParam_inv_tel];
-    }
     if (zip)
     {
         [shopping_delivery setObject:zip forKey:SymphoxAPIParam_zip];
@@ -2178,6 +2169,10 @@ typedef enum : NSUInteger {
                     [inv_address insertString:self.currentInvoiceCity atIndex:0];
                 }
                 [shopping_delivery setObject:inv_address forKey:SymphoxAPIParam_inv_address];
+                if (inv_tel)
+                {
+                    [shopping_delivery setObject:inv_tel forKey:SymphoxAPIParam_inv_tel];
+                }
             }
         }
             break;
@@ -2282,7 +2277,11 @@ typedef enum : NSUInteger {
             NSString *inv_regno = [self.dictionaryInvoiceTemp objectForKey:SymphoxAPIParam_inv_regno];
             if (inv_regno)
             {
-                [shopping_delivery setObject:inv_title forKey:SymphoxAPIParam_inv_title];
+                [shopping_delivery setObject:inv_regno forKey:SymphoxAPIParam_inv_regno];
+            }
+            if (inv_tel)
+            {
+                [shopping_delivery setObject:inv_tel forKey:SymphoxAPIParam_inv_tel];
             }
         }
             break;
@@ -2606,12 +2605,14 @@ typedef enum : NSUInteger {
         carrier = @"2";
     }
     [params setObject:carrier forKey:SymphoxAPIParam_carrier];
+    NSString *cart_type = [NSString stringWithFormat:@"%li", (long)self.type];
+    [params setObject:cart_type forKey:SymphoxAPIParam_cart_type];
     
     __weak ReceiverInfoViewController *weakSelf = self;
     NSString *apiKey = [CryptoModule sharedModule].apiKey;
     NSString *token = [SHAPIAdapter sharedAdapter].token;
     NSURL *url = [NSURL URLWithString:SymphoxAPI_checkDelivery];
-    //    NSLog(@"startToBuildOrderWithParams - url [%@]", [url absoluteString]);
+    NSLog(@"checkDeliveryInfo - url [%@]", [url absoluteString]);
     NSDictionary *headerFields = [NSDictionary dictionaryWithObjectsAndKeys:apiKey, SymphoxAPIParam_key, token, SymphoxAPIParam_token, nil];
     [self showLoadingViewAnimated:YES];
     [[SHAPIAdapter sharedAdapter] sendRequestFromObject:weakSelf ToUrl:url withHeaderFields:headerFields andPostObject:params inPostFormat:SHPostFormatJson encrypted:YES decryptedReturnData:YES completion:^(id resultObject, NSError *error){
@@ -2626,7 +2627,7 @@ typedef enum : NSUInteger {
             else
             {
                 // Should start build order
-                [self startToBuildOrderWithParams:params];
+                [self startToBuildOrderWithParams:orderInfo];
             }
         }
         else
@@ -2787,7 +2788,8 @@ typedef enum : NSUInteger {
                         }
                         else
                         {
-                            infoCell.labelContent.text = text;
+                            NSString *trimmedText = [text stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"-"]];
+                            infoCell.labelContent.text = trimmedText;
                         }
                         infoCell.accessoryTitle = [LocalizedString SameAsCellPhone];
                     }
@@ -2802,7 +2804,8 @@ typedef enum : NSUInteger {
                         }
                         else
                         {
-                            infoCell.labelContent.text = text;
+                            NSString *trimmedText = [text stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"-"]];
+                            infoCell.labelContent.text = trimmedText;
                         }
                         infoCell.accessoryTitle = [LocalizedString SameAsCellPhone];
                     }
@@ -3385,9 +3388,10 @@ typedef enum : NSUInteger {
             case InfoCellTagDayPhone:
             {
                 NSString *text = [self.currentDeliveryTarget objectForKey:SymphoxAPIParam_cellphone];
-                if (text != nil)
+                NSString *totalString = [self totalPhoneNumberForRegion:nil phoneNumber:text andSpecificNumber:nil];
+                if (totalString != nil)
                 {
-                    [self.currentDeliveryTarget setObject:text forKey:SymphoxAPIParam_day_tel];
+                    [self.currentDeliveryTarget setObject:totalString forKey:SymphoxAPIParam_day_tel];
                 }
                 [self.tableViewInfo reloadData];
             }
@@ -3395,9 +3399,10 @@ typedef enum : NSUInteger {
             case InfoCellTagNightPhone:
             {
                 NSString *text = [self.currentDeliveryTarget objectForKey:SymphoxAPIParam_cellphone];
-                if (text != nil)
+                NSString *totalString = [self totalPhoneNumberForRegion:nil phoneNumber:text andSpecificNumber:nil];
+                if (totalString != nil)
                 {
-                    [self.currentDeliveryTarget setObject:text forKey:SymphoxAPIParam_night_tel];
+                    [self.currentDeliveryTarget setObject:totalString forKey:SymphoxAPIParam_night_tel];
                 }
                 [self.tableViewInfo reloadData];
             }
