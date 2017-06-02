@@ -133,6 +133,7 @@
         _viewContainer = [[UIView alloc] initWithFrame:CGRectZero];
         [_viewContainer setBackgroundColor:[UIColor whiteColor]];
         [_viewContainer.layer setCornerRadius:8.0];
+        [_viewContainer.layer setMasksToBounds:YES];
     }
     return _viewContainer;
 }

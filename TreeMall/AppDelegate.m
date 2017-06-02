@@ -44,6 +44,15 @@
     
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:UserDefault_IntroduceShown];
     [[NSUserDefaults standardUserDefaults] synchronize];
+    
+    UIUserNotificationType userNotificationTypes = (UIUserNotificationTypeAlert |
+                                                    UIUserNotificationTypeBadge |
+                                                    UIUserNotificationTypeSound);
+    UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:userNotificationTypes
+                                                                             categories:nil];
+    [application registerUserNotificationSettings:settings];
+    [application registerForRemoteNotifications];
+    
     // Prepare API connection
     [[TMInfoManager sharedManager] retrieveToken];
     return YES;
@@ -83,6 +92,32 @@
     [self saveContext];
 }
 
+#pragma mark - Push Notification
+
+- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
+{
+    const char *data = [deviceToken bytes];
+    NSMutableString *token = [NSMutableString string];
+    
+    for (int i = 0; i < [deviceToken length]; i++)
+    {
+        [token appendFormat:@"%02.2hhX", data[i]];
+    }
+    [[TMInfoManager sharedManager] sendPushToken:token];
+}
+
+- (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(nonnull NSError *)error
+{
+    if (error.code == 3010)
+    {
+        NSLog(@"Push notifications are not supported in the iOS Simulator.");
+    }
+    else
+    {
+        // show some alert or otherwise handle the failure to register.
+        NSLog(@"application:didFailToRegisterForRemoteNotificationsWithError: %@", error);
+    }
+}
 
 #pragma mark - URL Delegate
 

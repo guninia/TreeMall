@@ -13,8 +13,8 @@
 
 #ifdef DEBUG
 
-//static NSString *SymphoxAPIDomain = @"http://tomcat8.mdevelop.com/TreeMall/";
-static NSString *SymphoxAPIDomain = @"http://sapi.symphox.com.tw/treeMall/";
+static NSString *SymphoxAPIDomain = @"http://tomcat8.mdevelop.com/TreeMall/";
+//static NSString *SymphoxAPIDomain = @"http://sapi.symphox.com.tw/treeMall/";
 #else
 static NSString *SymphoxAPIDomain = @"http://tomcat8.mdevelop.com/TreeMall/";
 #endif
@@ -63,6 +63,7 @@ static NSString *SymphoxAPI__activateOCB = @"https://www.cathaybk.com.tw/cathayb
 static NSString *SymphoxAPI__buildOrder = @"api/eiffel/orders/createOrder";
 static NSString *SymphoxAPI__getDeliveryProgress = @"api/portal/app/member/order/delivery";
 static NSString *SymphoxAPI__checkDelivery = @"api/eiffel/appOrder/checkDelivery";
+static NSString *SymphoxAPI__sendPushInfo = @"api/onlineService.do";
 
 #define SymphoxAPI_token [NSString stringWithFormat:@"%@%@", SymphoxAPIDomain, SymphoxAPI__token]
 #define SymphoxAPI_homepage [NSString stringWithFormat:@"%@%@", SymphoxAPIDomain, SymphoxAPI__homepage]
@@ -108,6 +109,7 @@ static NSString *SymphoxAPI__checkDelivery = @"api/eiffel/appOrder/checkDelivery
 #define SymphoxAPI_buildOrder [NSString stringWithFormat:@"%@%@", SymphoxAPIDomain, SymphoxAPI__buildOrder]
 #define SymphoxAPI_getDeliveryProgress [NSString stringWithFormat:@"%@%@", SymphoxAPIDomain, SymphoxAPI__getDeliveryProgress]
 #define SymphoxAPI_checkDelivery [NSString stringWithFormat:@"%@%@", SymphoxAPIDomain, SymphoxAPI__checkDelivery]
+#define SymphoxAPI_sendPushInfo [NSString stringWithFormat:@"%@%@", SymphoxAPIDomain, SymphoxAPI__sendPushInfo]
 
 
 static NSString *SymphoxAPIParam_key = @"sym-api-key";
@@ -408,6 +410,16 @@ static NSString *SymphoxAPIParam_storename = @"storename";
 static NSString *SymphoxAPIParam_url = @"url";
 static NSString *SymphoxAPIParam_is_wh = @"is_wh";
 static NSString *SymphoxAPIParam_inv_bind = @"inv_bind";
+static NSString *SymphoxAPIParam_device_id = @"device_id";
+static NSString *SymphoxAPIParam_device_token = @"device_token";
+static NSString *SymphoxAPIParam_user_sn = @"user_sn";
+static NSString *SymphoxAPIParam_device_type = @"device_type";
+static NSString *SymphoxAPIParam_keyWord = @"keyWord";
+static NSString *SymphoxAPIParam_discount_cash_desc = @"discount_cash_desc";
+static NSString *SymphoxAPIParam_tot_dis_coupon_qty = @"tot_dis_coupon_qty";
+static NSString *SymphoxAPIParam_tot_dis_coupon_worth = @"tot_dis_coupon_worth";
+static NSString *SymphoxAPIParam_tot_dis_other_cash = @"tot_dis_other_cash";
+static NSString *SymphoxAPIParam_tot_dis_cash = @"tot_dis_cash";
 
 typedef enum : NSUInteger {
     TermTypeMemberTerms,

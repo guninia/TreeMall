@@ -12,7 +12,6 @@ static NSString *ChosenDiscountTableViewCellIdentifier = @"ChosenDiscountTableVi
 
 @interface ChosenDiscountTableViewCell : UITableViewCell
 
-@property (nonatomic, strong) UIView *viewTitle;
 @property (nonatomic, strong) UILabel *labelTitle;
 @property (nonatomic, strong) UILabel *labelDetail;
 

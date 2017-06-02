@@ -17,7 +17,15 @@
 #import "ExchangeDescriptionViewController.h"
 #import "ReceiverInfoViewController.h"
 #import "StorePickupInfoViewController.h"
+#import "DiscountHeaderView.h"
+#import "DiscountFooterView.h"
 
+#define kDiscountSectionTitle @"DiscountSectionTitle"
+#define kDiscountSectionContent @"DiscountSectionContent"
+#define kDiscountSectionContentDesc @"DiscountSectionContentText"
+#define kDiscountSectionContentValue @"DiscountSectionContentValue"
+#define kDiscountSectionFooterDesc @"DiscountSectionFooterDesc"
+#define kDiscountSectionFooterValue @"DiscountSectionFooterValue"
 #define kPaymentSectionId @"PaymentSectionId"
 #define kPaymentSectionTitle @"PaymentSectionTitle"
 #define kPaymentSectionContent @"PaymentSectionContent"
@@ -92,27 +100,54 @@
 
 #pragma mark - Override
 
-- (void)viewWillLayoutSubviews
+- (void)viewDidLayoutSubviews
 {
-    [super viewWillLayoutSubviews];
+    [super viewDidLayoutSubviews];
     
     CGFloat marginH = 10.0;
     CGFloat marginV = 10.0;
     CGFloat intervalV = 10.0;
-    CGFloat originY = CGRectGetMaxY(self.labelDiscountTitle.frame) + intervalV;
-    if (self.tableViewDiscount)
+    CGFloat originY = 0.0;
+    if (self.labelDiscountTitle && [self.labelDiscountTitle isHidden] == NO)
     {
-        CGRect sectionRect = [self.tableViewDiscount rectForSection:0];
-        CGRect frame = CGRectMake(0.0, originY, self.view.frame.size.width, sectionRect.size.height);
+        CGRect frame = self.labelDiscountTitle.frame;
+        frame.origin.y = originY;
+        self.labelDiscountTitle.frame = frame;
+        originY = CGRectGetMaxY(self.labelDiscountTitle.frame) + intervalV;
+    }
+    if (self.tableViewDiscount && [self.tableViewDiscount isHidden] == NO)
+    {
+        CGFloat tableViewHeight = 0.0;
+        NSInteger totalSections = [self numberOfSectionsInTableView:self.tableViewDiscount];
+        for (NSInteger section = 0; section < totalSections; section++)
+        {
+            CGRect sectionRect = [self.tableViewDiscount rectForSection:section];
+            tableViewHeight += sectionRect.size.height;
+        }
+        CGRect frame = CGRectMake(0.0, originY, self.view.frame.size.width, tableViewHeight);
         self.tableViewDiscount.frame = frame;
         originY = self.tableViewDiscount.frame.origin.y + self.tableViewDiscount.frame.size.height + intervalV;
     }
-    if (self.separator)
+    if (self.separator1 && [self.separator1 isHidden] == NO)
     {
-        CGRect frame = self.separator.frame;
+        CGRect frame = self.separator1.frame;
         frame.origin.y = originY;
-        self.separator.frame = frame;
-        originY = self.separator.frame.origin.y + self.separator.frame.size.height + intervalV;
+        self.separator1.frame = frame;
+        originY = CGRectGetMaxY(self.separator1.frame) + intervalV;
+    }
+    if (self.viewTotalCost)
+    {
+        CGRect frame = self.viewTotalCost.frame;
+        frame.origin.y = originY;
+        self.viewTotalCost.frame = frame;
+        originY = CGRectGetMaxY(self.viewTotalCost.frame) + intervalV;
+    }
+    if (self.separator2)
+    {
+        CGRect frame = self.separator2.frame;
+        frame.origin.y = originY;
+        self.separator2.frame = frame;
+        originY = self.separator2.frame.origin.y + self.separator2.frame.size.height + intervalV;
     }
     if (self.labelPaymentTitle)
     {
@@ -206,6 +241,8 @@
         [_tableViewDiscount setDataSource:self];
         [_tableViewDiscount setDelegate:self];
         [_tableViewDiscount registerClass:[ChosenDiscountTableViewCell class] forCellReuseIdentifier:ChosenDiscountTableViewCellIdentifier];
+        [_tableViewDiscount registerClass:[DiscountHeaderView class] forHeaderFooterViewReuseIdentifier:DiscountHeaderViewIdentifier];
+        [_tableViewDiscount registerClass:[DiscountFooterView class] forHeaderFooterViewReuseIdentifier:DiscountFooterViewIdentifier];
         [_tableViewDiscount setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     }
     return _tableViewDiscount;
@@ -367,70 +404,89 @@
     if (self.dictionaryData == nil)
         return;
     
-    NSArray *productArray = [[TMInfoManager sharedManager] productArrayForCartType:self.type];
-    NSDictionary *dictionaryPurchaseInfo = [[TMInfoManager sharedManager] purchaseInfoForCartType:self.type];
-    
-    for (NSDictionary *product in productArray)
-    {
-        NSNumber *productId = [product objectForKey:SymphoxAPIParam_cpdt_num];
-        if (productId == nil || [productId isEqual:[NSNull null]])
-            continue;
-        NSDictionary *purchaseInfo = [dictionaryPurchaseInfo objectForKey:productId];
-        if (purchaseInfo == nil)
-            continue;
-        NSString *discount_type = [purchaseInfo objectForKey:SymphoxAPIParam_discount_type_desc];
-        NSString *discount_detail = [purchaseInfo objectForKey:SymphoxAPIParam_discount_detail_desc];
-        if (discount_type || discount_detail)
-        {
-            NSMutableDictionary *dictionary = [NSMutableDictionary dictionary];
-            if (discount_type)
-            {
-                [dictionary setObject:discount_type forKey:SymphoxAPIParam_discount_type_desc];
-            }
-            if (discount_detail)
-            {
-                [dictionary setObject:discount_detail forKey:SymphoxAPIParam_discount_detail_desc];
-            }
-            [self.arrayDiscount addObject:dictionary];
-        }
-    }
-    
-    
-    NSArray *additionProductArray = [[TMInfoManager sharedManager] productArrayForAdditionalCartType:self.type];
-    NSDictionary *dictionaryAdditionPurchaseInfo = [[TMInfoManager sharedManager] purchaseInfoForAdditionalCartType:self.type];
-    
-    for (NSDictionary *product in additionProductArray)
-    {
-        NSNumber *productId = [product objectForKey:SymphoxAPIParam_cpdt_num];
-        if (productId == nil || [productId isEqual:[NSNull null]])
-            continue;
-        NSDictionary *purchaseInfo = [dictionaryAdditionPurchaseInfo objectForKey:productId];
-        if (purchaseInfo == nil)
-            continue;
-        NSString *discount_type = [purchaseInfo objectForKey:SymphoxAPIParam_discount_type_desc];
-        NSString *discount_detail = [purchaseInfo objectForKey:SymphoxAPIParam_discount_detail_desc];
-        if (discount_type || discount_detail)
-        {
-            NSMutableDictionary *dictionary = [NSMutableDictionary dictionary];
-            if (discount_type)
-            {
-                [dictionary setObject:discount_type forKey:SymphoxAPIParam_discount_type_desc];
-            }
-            if (discount_detail)
-            {
-                [dictionary setObject:discount_detail forKey:SymphoxAPIParam_discount_detail_desc];
-            }
-            [self.arrayDiscount addObject:dictionary];
-        }
-    }
-    
-    [self.tableViewDiscount reloadData];
-    
-    NSLog(@"purchaseInfoForCartType:\n%@", [dictionaryPurchaseInfo description]);
-    
     NSDictionary *account_result = [self.dictionaryData objectForKey:SymphoxAPIParam_account_result];
+    
     if (account_result && [account_result isEqual:[NSNull null]] == NO)
     {
+        NSNumber *totalCouponUsed = [account_result objectForKey:SymphoxAPIParam_tot_dis_coupon_qty];
+        if (totalCouponUsed && [totalCouponUsed isEqual:[NSNull null]] == NO && [totalCouponUsed integerValue] > 0)
+        {
+            NSMutableDictionary *sectionCoupon = [NSMutableDictionary dictionary];
+            NSString *sectionTitle = [LocalizedString Coupon];
+            [sectionCoupon setObject:sectionTitle forKey:kDiscountSectionTitle];
+            
+            NSMutableDictionary *dictionary = [NSMutableDictionary dictionary];
+            NSString *stringQuantity = [NSString stringWithFormat:@"%li%@", (long)[totalCouponUsed integerValue], [LocalizedString Pieces]];
+            [dictionary setObject:stringQuantity forKey:kDiscountSectionContentDesc];
+            
+            NSNumber *totalCouponValue = [account_result objectForKey:SymphoxAPIParam_tot_dis_coupon_worth];
+            if (totalCouponValue && [totalCouponValue isEqual:[NSNull null]] == NO && [totalCouponValue integerValue] > 0)
+            {
+                NSString *couponValue = [self.formatter stringFromNumber:totalCouponValue];
+                if (couponValue)
+                {
+                    NSString *stringValue = [NSString stringWithFormat:@"(-$%@)", couponValue];
+                    [dictionary setObject:stringValue forKey:kDiscountSectionContentValue];
+                }
+            }
+            
+            NSArray *arrayCoupon = [NSArray arrayWithObject:dictionary];
+            [sectionCoupon setObject:arrayCoupon forKey:kDiscountSectionContent];
+            [self.arrayDiscount addObject:sectionCoupon];
+        }
+        NSNumber *totalOtherDiscount = [account_result objectForKey:SymphoxAPIParam_tot_dis_other_cash];
+        NSMutableDictionary *sectionOtherDiscount = [NSMutableDictionary dictionary];
+        if (totalOtherDiscount && [totalOtherDiscount isEqual:[NSNull null]] == NO && [totalOtherDiscount integerValue] > 0)
+        {
+            NSString *sectionTitle = [LocalizedString OtherDiscount];
+            [sectionOtherDiscount setObject:sectionTitle forKey:kDiscountSectionTitle];
+            
+            NSMutableDictionary *dictionary = [NSMutableDictionary dictionary];
+            NSString *stringContent = [LocalizedString OtherDiscountContent];
+            [dictionary setObject:stringContent forKey:kDiscountSectionContentDesc];
+            
+            NSString *otherDiscount = [self.formatter stringFromNumber:totalOtherDiscount];
+            if (otherDiscount)
+            {
+                NSString *stringValue = [NSString stringWithFormat:@"(-$%@)", otherDiscount];
+                [dictionary setObject:stringValue forKey:kDiscountSectionContentValue];
+            }
+            
+            NSArray *array = [NSArray arrayWithObject:dictionary];
+            [sectionOtherDiscount setObject:array forKey:kDiscountSectionContent];
+            [self.arrayDiscount addObject:sectionOtherDiscount];
+        }
+        
+        if ([self.arrayDiscount count] > 0)
+        {
+            NSMutableDictionary *dictionarySection = [[self.arrayDiscount lastObject] mutableCopy];
+            NSNumber *totalDiscount = [account_result objectForKey:SymphoxAPIParam_tot_dis_cash];
+            if (totalDiscount && [totalDiscount isEqual:[NSNull null]] == NO && [totalDiscount integerValue] > 0)
+            {
+                NSString *stringDesc = [LocalizedString CheckPromotionTotalDiscount];
+                [dictionarySection setObject:stringDesc forKey:kDiscountSectionFooterDesc];
+                
+                NSString *discount = [self.formatter stringFromNumber:totalDiscount];
+                if (discount)
+                {
+                    NSString *stringValue = [NSString stringWithFormat:@"-$%@%@", discount, [LocalizedString Dollars]];
+                    [dictionarySection setObject:stringValue forKey:kDiscountSectionFooterValue];
+                }
+            }
+            [self.arrayDiscount replaceObjectAtIndex:([self.arrayDiscount count] - 1) withObject:dictionarySection];
+            self.tableViewDiscount.hidden = NO;
+            self.labelDiscountTitle.hidden = NO;
+            self.separator1.hidden = NO;
+        }
+        else
+        {
+            self.tableViewDiscount.hidden = YES;
+            self.labelDiscountTitle.hidden = YES;
+            self.separator1.hidden = YES;
+        }
+        [self.tableViewDiscount reloadData];
+        
+        
         NSDictionary *installmentMap = [account_result objectForKey:SymphoxAPIParam_installment_map];
         if (installmentMap && [installmentMap isEqual:[NSNull null]] == NO)
         {
@@ -731,7 +787,7 @@
         default:
             break;
     }
-    self.labelOrderTitle.text = orderTitle;
+    self.labelOrderTitle.text = [LocalizedString CheckoutInfo];
     
     NSArray *cartItems = [self.dictionaryData objectForKey:SymphoxAPIParam_cart_item];
     NSInteger totalPieces = 0;
@@ -750,14 +806,14 @@
     
     NSString *orderTotal = [NSString stringWithFormat:[LocalizedString Total_I_ProductAnd_I_Pieces], (long)totalProducts, (long)totalPieces];
     self.labelOrderTotal.text = orderTotal;
-    self.labelTotalTitle.text = [LocalizedString TotalCount];
+    self.labelTotalTitle.text = [LocalizedString PaymentTotalCount];
     NSDictionary *account_result = [self.dictionaryData objectForKey:SymphoxAPIParam_account_result];
     NSMutableAttributedString *stringCash = nil;
     NSMutableAttributedString *stringEPoint = nil;
     NSMutableAttributedString *stringPoint = nil;
     NSMutableAttributedString *stringCathayCash = nil;
-    NSDictionary *attributesOrange = [NSDictionary dictionaryWithObjectsAndKeys:[UIColor orangeColor], NSForegroundColorAttributeName, nil];
-    NSDictionary *attributesBlack = [NSDictionary dictionaryWithObjectsAndKeys:[UIColor blackColor], NSForegroundColorAttributeName, nil];
+    NSDictionary *attributesOrange = [NSDictionary dictionaryWithObjectsAndKeys:[UIColor redColor], NSForegroundColorAttributeName, nil];
+    NSDictionary *attributesBlack = [NSDictionary dictionaryWithObjectsAndKeys:[UIColor redColor], NSForegroundColorAttributeName, nil];
     if (account_result && [account_result isEqual:[NSNull null]] == NO)
     {
         NSNumber *total_cash = [account_result objectForKey:SymphoxAPIParam_total_cash];
@@ -1167,7 +1223,7 @@
     NSInteger numberOfSections = 0;
     if (tableView == self.tableViewDiscount)
     {
-        numberOfSections = 1;
+        numberOfSections = [self.arrayDiscount count];
     }
     else if (tableView == self.tableViewPayment)
     {
@@ -1181,7 +1237,15 @@
     NSInteger numberOfRows = 0;
     if (tableView == self.tableViewDiscount)
     {
-        numberOfRows = [self.arrayDiscount count];
+        if (section < [self.arrayDiscount count])
+        {
+            NSDictionary *dictionarySection = [self.arrayDiscount objectAtIndex:section];
+            NSArray *array = [dictionarySection objectForKey:kDiscountSectionContent];
+            if (array)
+            {
+                numberOfRows = [array count];
+            }
+        }
         NSLog(@"self.arrayDiscount[%li]", (long)self.arrayDiscount.count);
     }
     else if (tableView == self.tableViewPayment)
@@ -1202,7 +1266,26 @@
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
     UIView *headerView = nil;
-    if (tableView == self.tableViewPayment)
+    if (tableView == self.tableViewDiscount)
+    {
+        DiscountHeaderView *view = [tableView dequeueReusableHeaderFooterViewWithIdentifier:DiscountHeaderViewIdentifier];
+        if (view == nil)
+        {
+            view = [[DiscountHeaderView alloc] initWithReuseIdentifier:DiscountHeaderViewIdentifier];
+        }
+        [view.contentView setBackgroundColor:[UIColor whiteColor]];
+        if (section < [self.arrayDiscount count])
+        {
+            NSDictionary *dictionarySection = [self.arrayDiscount objectAtIndex:section];
+            NSString *title = [dictionarySection objectForKey:kDiscountSectionTitle];
+            if (title)
+            {
+                view.labelTitle.text = title;
+            }
+        }
+        headerView = view;
+    }
+    else if (tableView == self.tableViewPayment)
     {
         PaymentTypeHeaderView *view = [tableView dequeueReusableHeaderFooterViewWithIdentifier:PaymentTypeHeaderViewIdentifier];
         if (view == nil)
@@ -1224,6 +1307,35 @@
     return headerView;
 }
 
+- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
+{
+    UIView *footerView = nil;
+    if (tableView == self.tableViewDiscount)
+    {
+        DiscountFooterView *view = [tableView dequeueReusableHeaderFooterViewWithIdentifier:DiscountFooterViewIdentifier];
+        if (view == nil)
+        {
+            view = [[DiscountFooterView alloc] initWithReuseIdentifier:DiscountFooterViewIdentifier];
+        }
+        if (section < [self.arrayDiscount count])
+        {
+            NSDictionary *dictionarySection = [self.arrayDiscount objectAtIndex:section];
+            NSString *title = [dictionarySection objectForKey:kDiscountSectionFooterDesc];
+            if (title)
+            {
+                view.labelTitle.text = title;
+            }
+            NSString *value = [dictionarySection objectForKey:kDiscountSectionFooterValue];
+            if (value)
+            {
+                view.labelDiscountValue.text = value;
+            }
+        }
+        footerView = view;
+    }
+    return footerView;
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     UITableViewCell *cell = nil;
@@ -1232,19 +1344,23 @@
         cell = [tableView dequeueReusableCellWithIdentifier:ChosenDiscountTableViewCellIdentifier forIndexPath:indexPath];
         NSString *type = @"";
         NSString *detail = @"";
-        if (indexPath.row < [self.arrayDiscount count])
+        if (indexPath.section < [self.arrayDiscount count])
         {
-            NSDictionary *discount = [self.arrayDiscount objectAtIndex:indexPath.row];
-            NSLog(@"discount:\n%@", [discount description]);
-            NSString *discount_type = [discount objectForKey:SymphoxAPIParam_discount_type_desc];
-            if (discount_type)
+            NSDictionary *dictionarySection = [self.arrayDiscount objectAtIndex:indexPath.section];
+            NSArray *array = [dictionarySection objectForKey:kDiscountSectionContent];
+            if (array && indexPath.row < [array count])
             {
-                type = discount_type;
-            }
-            NSString *discount_detail = [discount objectForKey:SymphoxAPIParam_discount_detail_desc];
-            if (discount_detail)
-            {
-                detail = discount_detail;
+                NSDictionary *dictionaryContent = [array objectAtIndex:indexPath.row];
+                NSString *desc = [dictionaryContent objectForKey:kDiscountSectionContentDesc];
+                if (desc)
+                {
+                    type = desc;
+                }
+                NSString *value = [dictionaryContent objectForKey:kDiscountSectionContentValue];
+                if (value)
+                {
+                    detail = value;
+                }
             }
         }
         ChosenDiscountTableViewCell *discountCell = (ChosenDiscountTableViewCell *)cell;
@@ -1302,7 +1418,11 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
     CGFloat heightForHeader = 0.0;
-    if (tableView == self.tableViewPayment)
+    if (tableView == self.tableViewDiscount)
+    {
+        heightForHeader = 30.0;
+    }
+    else if (tableView == self.tableViewPayment)
     {
         heightForHeader = 30.0;
     }
@@ -1314,13 +1434,31 @@
     CGFloat heightForRow = 0.0;
     if (tableView == self.tableViewDiscount)
     {
-        heightForRow = 50.0;
+        heightForRow = 30.0;
     }
     else if (tableView == self.tableViewPayment)
     {
         heightForRow = 40.0;
     }
     return heightForRow;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+{
+    CGFloat heightForFooter = 0.0;
+    if (tableView == self.tableViewDiscount)
+    {
+        if (section < [self.arrayDiscount count])
+        {
+            NSDictionary *dictionarySection = [self.arrayDiscount objectAtIndex:section];
+            NSString *footerValue = [dictionarySection objectForKey:kDiscountSectionFooterValue];
+            if (footerValue)
+            {
+                heightForFooter = 30.0;
+            }
+        }
+    }
+    return heightForFooter;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath

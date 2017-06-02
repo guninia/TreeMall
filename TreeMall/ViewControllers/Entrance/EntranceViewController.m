@@ -199,6 +199,11 @@ typedef enum : NSUInteger {
                 [_dictionaryData setDictionary:dictionary];
                 canProcess = YES;
             }
+            NSArray *keywords = [dictionary objectForKey:SymphoxAPIParam_keyWord];
+            if (keywords)
+            {
+                [[TMInfoManager sharedManager].arrayKeywords setArray:keywords];
+            }
         }
     }
     else

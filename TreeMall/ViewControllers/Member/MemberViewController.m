@@ -517,7 +517,7 @@ typedef enum : NSUInteger {
     NSURL *url = [NSURL URLWithString:SymphoxAPI_orderNumberOfStatus];
     NSDictionary *headerFields = [NSDictionary dictionaryWithObjectsAndKeys:apiKey, SymphoxAPIParam_key, token, SymphoxAPIParam_token, nil];
     NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:identifier, SymphoxAPIParam_user_num, nil];
-    NSLog(@"retrieveOrderNumberOfStatus - params:\n%@", [params description]);
+//    NSLog(@"retrieveOrderNumberOfStatus - params:\n%@", [params description]);
     [[SHAPIAdapter sharedAdapter] sendRequestFromObject:weakSelf ToUrl:url withHeaderFields:headerFields andPostObject:params inPostFormat:SHPostFormatJson encrypted:YES decryptedReturnData:YES completion:^(id resultObject, NSError *error){
         if (error == nil)
         {
@@ -551,7 +551,7 @@ typedef enum : NSUInteger {
     id jsonObject = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
     if (error == nil && jsonObject)
     {
-        NSLog(@"processOrderNumberOfStatusData - jsonObject:\n%@", [jsonObject description]);
+//        NSLog(@"processOrderNumberOfStatusData - jsonObject:\n%@", [jsonObject description]);
         if ([jsonObject isKindOfClass:[NSArray class]])
         {
             self.arrayOfOrderNumberOfStatus = (NSArray *)jsonObject;

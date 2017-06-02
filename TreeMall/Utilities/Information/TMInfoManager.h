@@ -117,11 +117,13 @@ typedef enum : NSUInteger {
 @property (nonatomic, strong) NSString *userLoginIP;
 @property (nonatomic, strong) NSString *userPressAgreementDate;
 @property (nonatomic, assign) BOOL userInvoiceBind;
+@property (nonatomic, strong) NSString *deviceIdentifier;
 @property (nonatomic, strong) NSMutableDictionary *dictionaryInitialFilter;
 @property (nonatomic, strong) NSMutableDictionary *dictionaryMainCategoryNameMapping;
 @property (nonatomic, strong) NSMutableOrderedSet *orderedSetKeyword;
 @property (nonatomic, strong) NSMutableOrderedSet *orderedSetFavoriteId;
 @property (nonatomic, strong) NSMutableOrderedSet *orderedSetPromotionRead;
+@property (nonatomic, strong) NSMutableArray *arrayKeywords;
 @property (nonatomic, strong) NSMutableArray *arrayFavorite;
 @property (nonatomic, strong) NSMutableDictionary *dictionaryFavoriteDetail;
 @property (nonatomic, strong) NSMutableArray *arrayCartCommon;
@@ -193,5 +195,7 @@ typedef enum : NSUInteger {
 - (void)resetCartForType:(CartType)type;
 
 - (NSString *)formattedStringFromDate:(NSDate *)date;
+
+- (void)sendPushToken:(NSString *)token;
 
 @end

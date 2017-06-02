@@ -262,7 +262,7 @@ typedef enum : NSUInteger {
 {
     [_arrayMainCategory setArray:categories];
     [_collectionViewCategory reloadData];
-    NSLog(@"contentWidth[%4.2f] frame.width[%4.2f]", self.collectionViewCategory.contentSize.width, self.collectionViewCategory.frame.size.width);
+//    NSLog(@"contentWidth[%4.2f] frame.width[%4.2f]", self.collectionViewCategory.contentSize.width, self.collectionViewCategory.frame.size.width);
     if (self.collectionViewCategory.contentSize.width <= self.collectionViewCategory.frame.size.width)
     {
         self.imageViewRightArrow.hidden = YES;
@@ -586,7 +586,7 @@ typedef enum : NSUInteger {
             if (section == 0)
             {
                 numberOfRows = [_arraySubcategory count];
-                NSLog(@"numberOfRows - subcategory[%li]:\n%@", (unsigned long)[self.arraySubcategory count], [self.arraySubcategory description]);
+//                NSLog(@"numberOfRows - subcategory[%li]:\n%@", (unsigned long)[self.arraySubcategory count], [self.arraySubcategory description]);
             }
         }
             break;

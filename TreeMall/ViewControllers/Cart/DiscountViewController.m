@@ -221,6 +221,7 @@
     {
         NSDictionary *paymentMode = [self.arrayPaymentMode objectAtIndex:section];
         NSString *discount_type_desc = [paymentMode objectForKey:SymphoxAPIParam_discount_type_desc];
+        NSString *discount_cash_desc = [paymentMode objectForKey:SymphoxAPIParam_discount_cash_desc];
         if (discount_type_desc && [discount_type_desc isEqual:[NSNull null]] == NO)
         {
             headerView.labelTitle.text = discount_type_desc;
@@ -228,6 +229,14 @@
         else
         {
             headerView.labelTitle.text = @"";
+        }
+        if (discount_cash_desc && [discount_cash_desc isEqual:[NSNull null]] == NO)
+        {
+            headerView.labelDiscountValue.text = discount_cash_desc;
+        }
+        else
+        {
+            headerView.labelDiscountValue.text = @"";
         }
     }
     return headerView;

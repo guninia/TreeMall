@@ -325,3 +325,8 @@
 "NoCashPayment"="毋需支付現金";
 "SelectPickupStore"="選擇取貨門市";
 "CompleteOrder"="完成訂購";
+"OtherDiscount"="其他折扣";
+"OtherDiscountContent"="贈點＋活動優惠折抵";
+"CheckPromotionTotalDiscount"="結帳優惠合計折抵";
+"PaymentTotalCount"="付款合計";
+"CheckoutInfo"="結帳資訊";

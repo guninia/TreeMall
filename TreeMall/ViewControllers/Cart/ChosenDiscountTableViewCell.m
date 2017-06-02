@@ -15,8 +15,7 @@
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self)
     {
-        [self.contentView addSubview:self.viewTitle];
-        [self.viewTitle addSubview:self.labelTitle];
+        [self.contentView addSubview:self.labelTitle];
         [self.contentView addSubview:self.labelDetail];
     }
     return self;
@@ -38,51 +37,23 @@
 - (void)layoutSubviews
 {
     [super layoutSubviews];
-    CGFloat marginV = 5.0;
-    CGFloat marginH = 10.0;
-    CGFloat intervalV = 5.0;
     
-    CGFloat originY = marginV;
-    
-    if (self.viewTitle)
+    CGFloat marginH = 20.0;
+    CGFloat intervalH = 5.0;
+    CGFloat originX = marginH;
+    if (self.labelTitle)
     {
-        CGFloat textHeight = 20.0;
-        if ([self.labelTitle.text length] > 0)
-        {
-            CGSize sizeText = [self.labelTitle.text sizeWithAttributes:[NSDictionary dictionaryWithObjectsAndKeys:self.labelTitle.font, NSFontAttributeName, nil]];
-            CGSize sizeLabel = CGSizeMake(ceil(sizeText.width), ceil(sizeText.height));
-            textHeight = sizeLabel.height;
-        }
-        CGFloat indentH = 5.0;
-        CGFloat indentV = 3.0;
-        CGFloat viewHeight = textHeight + indentV * 2;
-        CGRect frame = CGRectMake(marginH, originY, self.contentView.frame.size.width - marginH * 2, viewHeight);
-        self.viewTitle.frame = frame;
-        if (self.labelTitle)
-        {
-            CGRect frameLabel = CGRectMake(indentH, indentV, self.viewTitle.frame.size.width - indentH * 2, self.viewTitle.frame.size.height - indentV * 2);
-            self.labelTitle.frame = frameLabel;
-        }
-        originY = self.viewTitle.frame.origin.y + self.viewTitle.frame.size.height + intervalV;
+        CGSize sizeText = [self.labelTitle.text sizeWithAttributes:[NSDictionary dictionaryWithObjectsAndKeys:self.labelTitle.font, NSFontAttributeName, nil]];
+        CGSize sizeLabel = CGSizeMake(ceil(sizeText.width), ceil(sizeText.height));
+        CGRect frame = CGRectMake(originX, 0.0, sizeLabel.width, self.contentView.frame.size.height);
+        self.labelTitle.frame = frame;
+        originX = CGRectGetMaxX(self.labelTitle.frame) + intervalH;
     }
     if (self.labelDetail)
     {
-        NSString *defaultString = @"XXXXX";
-        CGSize sizeText = [defaultString sizeWithAttributes:[NSDictionary dictionaryWithObjectsAndKeys:self.labelDetail.font, NSFontAttributeName, nil]];
-        CGSize sizeLabel = CGSizeMake(ceil(sizeText.width), ceil(sizeText.height));
-        CGRect frame = CGRectMake(marginH, originY, self.contentView.frame.size.width - marginH * 2, sizeLabel.height);
+        CGRect frame = CGRectMake(originX, 0.0, self.contentView.frame.size.width - originX, self.contentView.frame.size.height);
         self.labelDetail.frame = frame;
     }
-}
-
-- (UIView *)viewTitle
-{
-    if (_viewTitle == nil)
-    {
-        _viewTitle = [[UIView alloc] initWithFrame:CGRectZero];
-        [_viewTitle setBackgroundColor:[UIColor colorWithWhite:0.9 alpha:1.0]];
-    }
-    return _viewTitle;
 }
 
 - (UILabel *)labelTitle
@@ -90,9 +61,9 @@
     if (_labelTitle == nil)
     {
         _labelTitle = [[UILabel alloc] initWithFrame:CGRectZero];
-        [_labelTitle setTextColor:[UIColor orangeColor]];
+        [_labelTitle setTextColor:[UIColor blackColor]];
         [_labelTitle setBackgroundColor:[UIColor clearColor]];
-        UIFont *font = [UIFont systemFontOfSize:14.0];
+        UIFont *font = [UIFont systemFontOfSize:16.0];
         [_labelTitle setFont:font];
     }
     return _labelTitle;
@@ -103,9 +74,9 @@
     if (_labelDetail == nil)
     {
         _labelDetail = [[UILabel alloc] initWithFrame:CGRectZero];
-        [_labelDetail setTextColor:[UIColor colorWithRed:(176.0/255.0) green:(206.0/255.0) blue:(106.0/255.0) alpha:1.0]];
+        [_labelDetail setTextColor:[UIColor redColor]];
         [_labelDetail setBackgroundColor:[UIColor clearColor]];
-        UIFont *font = [UIFont systemFontOfSize:12.0];
+        UIFont *font = [UIFont systemFontOfSize:16.0];
         [_labelDetail setFont:font];
     }
     return _labelDetail;

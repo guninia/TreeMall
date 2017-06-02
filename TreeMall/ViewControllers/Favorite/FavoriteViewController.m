@@ -158,7 +158,7 @@
 - (void)refreshData
 {
     self.arrayFavorites = [[TMInfoManager sharedManager] favorites];
-    NSLog(@"self.arrayFavorites[%li]:\n%@", (long)self.arrayFavorites.count, [self.arrayFavorites description]);
+//    NSLog(@"self.arrayFavorites[%li]:\n%@", (long)self.arrayFavorites.count, [self.arrayFavorites description]);
     
 }
 

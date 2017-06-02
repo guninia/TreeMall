@@ -13,5 +13,6 @@ static NSString *DiscountHeaderViewIdentifier = @"DiscountHeaderView";
 @interface DiscountHeaderView : UITableViewHeaderFooterView
 
 @property (nonatomic, strong) UILabel *labelTitle;
+@property (nonatomic, strong) UILabel *labelDiscountValue;
 
 @end

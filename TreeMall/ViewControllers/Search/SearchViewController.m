@@ -49,7 +49,15 @@ typedef enum : NSUInteger {
     [self.view addSubview:self.collectionViewKeyword];
     
     [self retrieveLatestSearchData];
-    [self retrieveHotSearchData];
+    if ([[TMInfoManager sharedManager].arrayKeywords count] > 0)
+    {
+        self.arraySearchHot = [TMInfoManager sharedManager].arrayKeywords;
+        [self.collectionViewKeyword reloadSections:[NSIndexSet indexSetWithIndex:CollectionViewSectionSearchHot]];
+    }
+    else
+    {
+        [self retrieveHotSearchData];
+    }
 }
 
 - (void)didReceiveMemoryWarning {

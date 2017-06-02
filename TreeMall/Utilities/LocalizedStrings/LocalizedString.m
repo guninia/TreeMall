@@ -3201,4 +3201,54 @@
     return CompleteOrder;
 }
 
++ (NSString *)OtherDiscount
+{
+    static NSString *OtherDiscount = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        OtherDiscount = NSLocalizedString(@"OtherDiscount", nil);
+    });
+    return OtherDiscount;
+}
+
++ (NSString *)OtherDiscountContent
+{
+    static NSString *OtherDiscountContent = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        OtherDiscountContent = NSLocalizedString(@"OtherDiscountContent", nil);
+    });
+    return OtherDiscountContent;
+}
+
++ (NSString *)CheckPromotionTotalDiscount
+{
+    static NSString *CheckPromotionTotalDiscount = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        CheckPromotionTotalDiscount = NSLocalizedString(@"CheckPromotionTotalDiscount", nil);
+    });
+    return CheckPromotionTotalDiscount;
+}
+
++ (NSString *)PaymentTotalCount
+{
+    static NSString *PaymentTotalCount = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        PaymentTotalCount = NSLocalizedString(@"PaymentTotalCount", nil);
+    });
+    return PaymentTotalCount;
+}
+
++ (NSString *)CheckoutInfo
+{
+    static NSString *CheckoutInfo = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        CheckoutInfo = NSLocalizedString(@"CheckoutInfo", nil);
+    });
+    return CheckoutInfo;
+}
+
 @end

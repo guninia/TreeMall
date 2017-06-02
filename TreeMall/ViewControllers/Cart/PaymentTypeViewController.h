@@ -20,7 +20,9 @@
 @property (nonatomic, weak) IBOutlet UIScrollView *scrollView;
 @property (nonatomic, weak) IBOutlet UILabel *labelDiscountTitle;
 @property (nonatomic, weak) IBOutlet UILabel *labelPaymentTitle;
-@property (nonatomic, weak) IBOutlet UIView *separator;
+@property (nonatomic, weak) IBOutlet UIView *separator1;
+@property (nonatomic, weak) IBOutlet UIView *separator2;
+@property (nonatomic, weak) IBOutlet UIView *viewTotalCost;
 @property (nonatomic, strong) UITableView *tableViewDiscount;
 @property (nonatomic, strong) UITableView *tableViewPayment;
 @property (nonatomic, strong) UISwitch *switchAgree;

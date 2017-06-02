@@ -324,3 +324,8 @@
 "NoCashPayment"="No Cash";
 "SelectPickupStore"="Select Store";
 "CompleteOrder"="Complete Order";
+"OtherDiscount"="Other Discount";
+"OtherDiscountContent"="Point + Promotion";
+"CheckPromotionTotalDiscount"="Total Discount";
+"PaymentTotalCount"="Total Count";
+"CheckoutInfo"="Checkout Info";

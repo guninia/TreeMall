@@ -60,6 +60,7 @@ static NSString *TMInfoArchiveKey_PurchaseInfoInCartStorePickUp = @"PurchaseInfo
 static NSString *TMInfoArchiveKey_PurchaseInfoInCartFast = @"PurchaseInfoInCartFast";
 
 static NSString *TMIdentifier = @"TMID";
+static NSString *TMDeviceIdentifier = @"TMUDID";
 
 static NSString *SeparatorBetweenIdAndLayer = @"_";
 
@@ -610,6 +611,23 @@ static NSUInteger SearchKeywordNumberMax = 8;
     return _userAddress;
 }
 
+- (NSString *)deviceIdentifier
+{
+    if (_deviceIdentifier == nil)
+    {
+        _deviceIdentifier = [Utility load:TMDeviceIdentifier];
+        if (_deviceIdentifier == nil)
+        {
+            _deviceIdentifier = [[[UIDevice currentDevice] identifierForVendor] UUIDString];
+            if (_deviceIdentifier)
+            {
+                [Utility save:TMDeviceIdentifier data:_deviceIdentifier];
+            }
+        }
+    }
+    return _deviceIdentifier;
+}
+
 - (NSMutableDictionary *)dictionaryInitialFilter
 {
     if (_dictionaryInitialFilter == nil)
@@ -653,6 +671,15 @@ static NSUInteger SearchKeywordNumberMax = 8;
         _orderedSetPromotionRead = [[NSMutableOrderedSet alloc] initWithCapacity:0];
     }
     return _orderedSetPromotionRead;
+}
+
+- (NSMutableArray *)arrayKeywords
+{
+    if (_arrayKeywords == nil)
+    {
+        _arrayKeywords = [[NSMutableArray alloc] initWithCapacity:0];
+    }
+    return _arrayKeywords;
 }
 
 - (NSMutableArray *)arrayFavorite
@@ -2039,6 +2066,32 @@ static NSUInteger SearchKeywordNumberMax = 8;
     return stringDate;
 }
 
+- (void)sendPushToken:(NSString *)token
+{
+    __weak TMInfoManager *weakSelf = self;
+    NSURL *url = [NSURL URLWithString:SymphoxAPI_sendPushInfo];
+    NSString *udid = self.deviceIdentifier;
+    NSNumber *userId = self.userIdentifier;
+    NSString *userIdentifier = nil;
+    if (userId)
+    {
+        userIdentifier = [userId stringValue];
+    }
+    NSDictionary *postDictionary = [NSDictionary dictionaryWithObjectsAndKeys:@"TM_O_06", SymphoxAPIParam_txid, udid, SymphoxAPIParam_device_id, token, SymphoxAPIParam_device_token, userIdentifier, SymphoxAPIParam_user_sn, @"i", SymphoxAPIParam_device_type, nil];
+    [[SHAPIAdapter sharedAdapter] sendRequestFromObject:weakSelf ToUrl:url withHeaderFields:nil andPostObject:postDictionary inPostFormat:SHPostFormatUrlEncoded encrypted:NO decryptedReturnData:NO completion:^(id resultObject, NSError *error){
+        if (error == nil)
+        {
+//            NSString *string = [[NSString alloc] initWithData:resultObject encoding:NSUTF8StringEncoding];
+//            NSLog(@"retrieveData:\n%@", string);
+        }
+        else
+        {
+            NSLog(@"sendPushToken - error:\n%@", error);
+        }
+        
+    }];
+}
+
 #pragma mark - Private Methods
 
 - (NSURL *)urlForInfoDirectory
@@ -2291,7 +2344,7 @@ static NSUInteger SearchKeywordNumberMax = 8;
     id jsonObject = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
     if (error == nil && jsonObject)
     {
-        NSLog(@"processUserInfomation - jsonObject:\n%@", jsonObject);
+//        NSLog(@"processUserInfomation - jsonObject:\n%@", jsonObject);
         if ([jsonObject isKindOfClass:[NSDictionary class]])
         {
             [self updateUserInformationFromInfoDictionary:jsonObject afterLoadingArchive:NO];

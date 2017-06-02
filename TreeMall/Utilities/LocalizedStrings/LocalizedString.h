@@ -329,5 +329,10 @@
 + (NSString *)NoCashPayment;
 + (NSString *)SelectPickupStore;
 + (NSString *)CompleteOrder;
++ (NSString *)OtherDiscount;
++ (NSString *)OtherDiscountContent;
++ (NSString *)CheckPromotionTotalDiscount;
++ (NSString *)PaymentTotalCount;
++ (NSString *)CheckoutInfo;
 
 @end
