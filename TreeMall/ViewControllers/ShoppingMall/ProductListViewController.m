@@ -131,7 +131,7 @@
     if (_viewTitle == nil)
     {
         CGSize screenRatio = [Utility sizeRatioAccordingTo320x480];
-        _viewTitle = [[ProductListTitleView alloc] initWithFrame:CGRectMake(0.0, 0.0, 180.0 * screenRatio.width, 40.0)];
+        _viewTitle = [[ProductListTitleView alloc] initWithFrame:CGRectMake(0.0, 0.0, 240.0 * screenRatio.width, 40.0)];
         [_viewTitle setBackgroundColor:[UIColor clearColor]];
     }
     return _viewTitle;

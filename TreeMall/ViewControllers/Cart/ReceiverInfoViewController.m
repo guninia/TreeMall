@@ -2474,6 +2474,75 @@ typedef enum : NSUInteger {
         [arrayCheck addObject:dictionaryCheck];
     }
     
+    NSDictionary *product = [TMInfoManager sharedManager].productFastDelivery;
+    NSNumber *productId = [product objectForKey:SymphoxAPIParam_cpdt_num];
+    if (self.type == CartTypeFastDelivery && product && productId)
+    {
+        NSMutableDictionary *dictionaryCheck = [NSMutableDictionary dictionary];
+        [dictionaryCheck setObject:productId forKey:SymphoxAPIParam_cpdt_num];
+        
+        NSDictionary *purchaseInfo = [TMInfoManager sharedManager].productInfoForFastDelivery;
+        NSNumber *quantity = nil;
+        if (purchaseInfo == nil)
+        {
+            quantity = [NSNumber numberWithInteger:1];
+        }
+        else
+        {
+            quantity = [purchaseInfo objectForKey:SymphoxAPIParam_qty];
+        }
+        [dictionaryCheck setObject:quantity forKey:SymphoxAPIParam_qty];
+        
+        NSDictionary *dictionaryMode = [purchaseInfo objectForKey:SymphoxAPIParam_payment_mode];
+        if (dictionaryMode == nil)
+        {
+            dictionaryMode = [NSDictionary dictionaryWithObjectsAndKeys:@"0", SymphoxAPIParam_payment_type, [NSNumber numberWithInteger:0], SymphoxAPIParam_price, nil];
+        }
+        id payment_type = [dictionaryMode objectForKey:SymphoxAPIParam_payment_type];
+        if (payment_type)
+        {
+            if ([payment_type isKindOfClass:[NSNumber class]])
+            {
+                NSNumber *numberPaymentType = (NSNumber *)payment_type;
+                NSString *stringPaymentType = [numberPaymentType stringValue];
+                [dictionaryCheck setObject:stringPaymentType forKey:SymphoxAPIParam_payment_type];
+            }
+            else if ([payment_type isKindOfClass:[NSString class]])
+            {
+                [dictionaryCheck setObject:payment_type forKey:SymphoxAPIParam_payment_type];
+            }
+        }
+        NSNumber *price = [dictionaryMode objectForKey:SymphoxAPIParam_price];
+        if (price)
+        {
+            [dictionaryCheck setObject:price forKey:SymphoxAPIParam_cash];
+        }
+        NSNumber *point = [dictionaryMode objectForKey:SymphoxAPIParam_point];
+        if (point)
+        {
+            [dictionaryCheck setObject:point forKey:SymphoxAPIParam_point];
+        }
+        NSNumber *epoint = [dictionaryMode objectForKey:SymphoxAPIParam_epoint];
+        if (epoint)
+        {
+            [dictionaryCheck setObject:epoint forKey:SymphoxAPIParam_epoint];
+        }
+        NSNumber *cpoint = [dictionaryMode objectForKey:SymphoxAPIParam_cpoint];
+        if (cpoint)
+        {
+            [dictionaryCheck setObject:cpoint forKey:SymphoxAPIParam_cpoint];
+        }
+        NSNumber *eacc_num = [dictionaryMode objectForKey:SymphoxAPIParam_eacc_num];
+        if (eacc_num && [eacc_num integerValue] > 0)
+        {
+            [dictionaryCheck setObject:eacc_num forKey:SymphoxAPIParam_used_eacc_num];
+        }
+        
+        [dictionaryCheck setObject:quantity forKey:SymphoxAPIParam_qty];
+        
+        [arrayCheck addObject:dictionaryCheck];
+    }
+    
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
     [params setObject:[TMInfoManager sharedManager].userIdentifier forKey:SymphoxAPIParam_user_num];
     [params setObject:self.tradeId forKey:SymphoxAPIParam_trade_id];

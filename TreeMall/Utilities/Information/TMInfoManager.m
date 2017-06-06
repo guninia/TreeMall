@@ -15,6 +15,9 @@
 #import "LocalizedString.h"
 #import "Utility.h"
 
+#define TMProductFastDeliveryCash [NSNumber numberWithInteger:11354109]
+#define TMProductFastDeliveryPoint [NSNumber numberWithInteger:11354108]
+
 static NSString *TMInfoArchiveKey_PromotionRead = @"PromotionRead";
 static NSString *TMInfoArchiveKey_UserInformation = @"UserInformation";
 static NSString *TMInfoArchiveKey_UserIdentifier = @"UserIdentifier";
@@ -2054,6 +2057,11 @@ static NSUInteger SearchKeywordNumberMax = 8;
     [additionArray removeAllObjects];
     [additionDictionary removeAllObjects];
     
+    if (type == CartTypeFastDelivery)
+    {
+        [self resetProductFastDelivery];
+    }
+    
     [self saveToArchive];
     [[NSNotificationCenter defaultCenter] postNotificationName:PostNotificationName_CartContentChanged object:self];
 }
@@ -2090,6 +2098,101 @@ static NSUInteger SearchKeywordNumberMax = 8;
         }
         
     }];
+}
+
+- (NSDictionary *)productFastDeliveryWithType:(FastDeliveryProductType)productType
+{
+    NSDictionary *product = nil;
+    NSNumber *cpdt_num = nil;
+    NSNumber *payment_type = nil;
+    
+    switch (productType) {
+        case FastDeliveryProductTypeCash:
+        {
+            cpdt_num = TMProductFastDeliveryCash;
+            payment_type = [NSNumber numberWithInteger:0];
+        }
+            break;
+        case FastDeliveryProductTypePoint:
+        {
+            cpdt_num = TMProductFastDeliveryPoint;
+            payment_type = [NSNumber numberWithInteger:1];
+        }
+            break;
+        default:
+            break;
+    }
+    if (cpdt_num && payment_type)
+    {
+        NSDictionary *payment_mode = [NSDictionary dictionaryWithObjectsAndKeys:payment_type, SymphoxAPIParam_payment_type, nil];
+        product = [NSDictionary dictionaryWithObjectsAndKeys:cpdt_num, SymphoxAPIParam_cpdt_num, [NSNumber numberWithInteger:1], SymphoxAPIParam_qty, payment_mode, SymphoxAPIParam_payment_mode, nil];
+    }
+    
+    return product;
+}
+
+- (NSDictionary *)productInfoForFastDeliveryFromInfo:(NSDictionary *)originInfo
+{
+    NSMutableDictionary *productInfo = [NSMutableDictionary dictionary];
+    
+    NSMutableDictionary *used_payment_mode = [[originInfo objectForKey:SymphoxAPIParam_used_payment_mode] mutableCopy];
+    if (used_payment_mode && [used_payment_mode isEqual:[NSNull null]] == NO)
+    {
+        [used_payment_mode removeObjectForKey:SymphoxAPIParam_cpdt_num];
+        
+        NSString *description = [used_payment_mode objectForKey:SymphoxAPIParam_description];
+        if (description)
+        {
+            [used_payment_mode removeObjectForKey:SymphoxAPIParam_description];
+        }
+        NSString *discount_type_desc = [used_payment_mode objectForKey:SymphoxAPIParam_discount_type_desc];
+        if (discount_type_desc)
+        {
+            [used_payment_mode removeObjectForKey:SymphoxAPIParam_discount_type_desc];
+            if ([discount_type_desc isEqual:[NSNull null]] == NO)
+            {
+                [productInfo setObject:discount_type_desc forKey:SymphoxAPIParam_discount_type_desc];
+            }
+        }
+        NSString *discount_detail_desc = [used_payment_mode objectForKey:SymphoxAPIParam_discount_detail_desc];
+        if (discount_detail_desc)
+        {
+            [used_payment_mode removeObjectForKey:SymphoxAPIParam_discount_detail_desc];
+            if ([discount_detail_desc isEqual:[NSNull null]] == NO)
+            {
+                [productInfo setObject:discount_detail_desc forKey:SymphoxAPIParam_discount_detail_desc];
+            }
+        }
+        NSString *discount_cash_desc = [used_payment_mode objectForKey:SymphoxAPIParam_discount_cash_desc];
+        if (discount_cash_desc)
+        {
+            [used_payment_mode removeObjectForKey:SymphoxAPIParam_discount_cash_desc];
+        }
+    }
+    [productInfo setObject:used_payment_mode forKey:SymphoxAPIParam_payment_mode];
+    [productInfo setObject:[NSNumber numberWithInteger:1] forKey:SymphoxAPIParam_qty];
+    return productInfo;
+}
+
+- (void)resetProductFastDelivery
+{
+    self.productFastDelivery = nil;
+    self.productInfoForFastDelivery = nil;
+}
+
+- (void)updateProductInfoForFastDeliveryFromInfos:(NSArray *)originInfos
+{
+    if (originInfos == nil)
+        return;
+    for (NSDictionary *originInfo in originInfos)
+    {
+        NSNumber *cpdt_num = [originInfo objectForKey:SymphoxAPIParam_cpdt_num];
+        if (cpdt_num && [cpdt_num isEqual:[NSNull null]] == NO && ([cpdt_num isEqualToNumber:TMProductFastDeliveryCash] || [cpdt_num isEqualToNumber:TMProductFastDeliveryPoint]))
+        {
+            self.productInfoForFastDelivery = [self productInfoForFastDeliveryFromInfo:originInfo];
+            break;
+        }
+    }
 }
 
 #pragma mark - Private Methods

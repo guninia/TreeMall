@@ -175,8 +175,18 @@
             [self.view addSubview:_buttonGooglePlusLogin];
         }
     }
-    
-    [self.navigationController.tabBarController.view addSubview:self.viewLoading];
+    if (self.navigationController.tabBarController != nil)
+    {
+        [self.navigationController.tabBarController.view addSubview:self.viewLoading];
+    }
+    else if (self.navigationController != nil)
+    {
+        [self.navigationController.view addSubview:self.viewLoading];
+    }
+    else
+    {
+        [self.view addSubview:self.viewLoading];
+    }
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(facebookTokenDidChangeNotification:) name:FBSDKAccessTokenDidChangeNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(facebookProfileDidChangeNotification:) name:FBSDKProfileDidChangeNotification object:nil];
@@ -367,7 +377,18 @@
     
     if (self.viewLoading)
     {
-        self.viewLoading.frame = self.navigationController.tabBarController.view.bounds;
+        if (self.navigationController.tabBarController != nil)
+        {
+            self.viewLoading.frame = self.navigationController.tabBarController.view.bounds;
+        }
+        else if (self.navigationController != nil)
+        {
+            self.viewLoading.frame = self.navigationController.view.bounds;
+        }
+        else
+        {
+            self.viewLoading.frame = self.view.bounds;
+        }
         self.viewLoading.indicatorCenter = self.viewLoading.center;
         [self.viewLoading setNeedsLayout];
     }

@@ -1371,6 +1371,7 @@
     {
         cell = [tableView dequeueReusableCellWithIdentifier:PaymentTypeTableViewCellIdentifier forIndexPath:indexPath];
         cell.tag = indexPath.row;
+        cell.tintColor = [UIColor colorWithRed:(154.0/255.0) green:(192.0/255.0) blue:(68.0/255.0) alpha:1.0];
         PaymentTypeTableViewCell *paymentCell = (PaymentTypeTableViewCell *)cell;
         if (paymentCell.delegate == nil)
         {

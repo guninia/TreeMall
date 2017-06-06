@@ -74,6 +74,12 @@ typedef enum : NSUInteger {
     AdditionalCartTypeTotal
 } AdditionalCartType;
 
+typedef enum : NSUInteger {
+    FastDeliveryProductTypeCash,
+    FastDeliveryProductTypePoint,
+    FastDeliveryProductTypeTotal
+} FastDeliveryProductType;
+
 @interface TMInfoManager : NSObject
 {
     NSMutableDictionary *_dictionaryUserInfo;
@@ -142,6 +148,8 @@ typedef enum : NSUInteger {
 @property (nonatomic, strong) NSMutableDictionary *dictionaryProductPurchaseInfoInCartFastAddition;
 @property (nonatomic, strong) NSMutableArray *arrayCartDirectAddition;
 @property (nonatomic, strong) NSMutableDictionary *dictionaryProductPurchaseInfoInCartDirectAddition;
+@property (nonatomic, strong) NSDictionary *productFastDelivery;
+@property (nonatomic, strong) NSDictionary *productInfoForFastDelivery;
 
 + (instancetype)sharedManager;
 
@@ -197,5 +205,10 @@ typedef enum : NSUInteger {
 - (NSString *)formattedStringFromDate:(NSDate *)date;
 
 - (void)sendPushToken:(NSString *)token;
+
+- (NSDictionary *)productFastDeliveryWithType:(FastDeliveryProductType)productType;
+- (NSDictionary *)productInfoForFastDeliveryFromInfo:(NSDictionary *)originInfo;
+- (void)resetProductFastDelivery;
+- (void)updateProductInfoForFastDeliveryFromInfos:(NSArray *)originInfos;
 
 @end

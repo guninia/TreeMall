@@ -41,7 +41,8 @@
 - (BOOL)isConditionSelectedForIdentifier:(NSNumber *)productIdentifier;
 - (NSString *)paymentDetailForIdentifier:(NSNumber *)productIdentifier;
 - (NSString *)textForCartType:(CartType)cartType;
-- (void)showQuantityInputViewWithDefaultValue:(NSUInteger)defaultValue;
+- (void)showQuantityInputViewForProduct:(NSDictionary *)product atIndex:(NSInteger)index;
+- (BOOL)isGiftProduct:(NSDictionary *)product;
 
 - (void)buttonItemClosePressed:(id)sender;
 - (void)handlerOfCartContentChangedNotification:(NSNotification *)notification;
@@ -101,6 +102,8 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    
+    [[TMInfoManager sharedManager] resetProductFastDelivery];
     
     if (self.currentType == CartTypeTotal)
     {
@@ -446,6 +449,7 @@
             {
                 NSLog(@"requestResultForCheckingProducts - Unexpected data format.");
             }
+            [weakSelf refreshContent];
         }
         else
         {
@@ -464,6 +468,7 @@
             UIAlertAction *actionConfirm = [UIAlertAction actionWithTitle:[LocalizedString Confirm] style:UIAlertActionStyleDefault handler:nil];
             [alertController addAction:actionConfirm];
             [weakSelf presentViewController:alertController animated:YES completion:nil];
+            [weakSelf refreshContent];
         }
         if (shouldHideLoadingView)
         {
@@ -637,8 +642,6 @@
                 if ([weakSelf processRenewConditionsResult:data inCart:type])
                 {
                     // Should start calculate product promotion according to quantity
-                    [weakSelf refreshContent];
-                    
                     if (productId != nil)
                     {
                         [weakSelf presentPaymentSelectionViewForProductId:productId];
@@ -653,6 +656,7 @@
             {
                 NSLog(@"requestResultForRenewConditionsOfProducts - Unexpected data format.");
             }
+            [weakSelf refreshContent];
         }
         else
         {
@@ -799,8 +803,50 @@
         {
             // If cart type is CartTypeFastDelivery, should check if the condition is matched to use Fast Delivery.
             // Otherwise, present payment type.
-            [weakSelf finalCheckCartContentForCartType:type canPurchaseFastDelivery:YES];
-            shouldHideLoadingView = NO;
+            NSNumber *total_cash = [self.dictionaryTotal objectForKey:SymphoxAPIParam_total_cash];
+            BOOL shouldBuyFastDelivery = NO;
+            if (type == CartTypeFastDelivery)
+            {
+                if (total_cash == nil || [total_cash isEqual:[NSNull null]] || [total_cash integerValue] < 480)
+                {
+                    shouldBuyFastDelivery = YES;
+                }
+            }
+            if (shouldBuyFastDelivery)
+            {
+                UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+                NSString *stringFastByCash = [NSString stringWithFormat:[LocalizedString PurchaseFastDeliveryFor_I_Dollars], 48];
+                UIAlertAction *actionFastByCash = [UIAlertAction actionWithTitle:stringFastByCash style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
+                    // TO DO: add a product for fast delivery by cash then call final check again.
+                    [TMInfoManager sharedManager].productFastDelivery = [[TMInfoManager sharedManager] productFastDeliveryWithType:FastDeliveryProductTypeCash];
+                    
+                    [weakSelf finalCheckCartContentForCartType:type canPurchaseFastDelivery:NO];
+                }];
+                NSString *stringFastByPoint = [NSString stringWithFormat:[LocalizedString PurchaseFastDeliveryFor_I_Points], 800];
+                UIAlertAction *actionFastByPoint = [UIAlertAction actionWithTitle:stringFastByPoint style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
+                    // TO DO: add a product for fast delivery by point then call final check again.
+                    [TMInfoManager sharedManager].productFastDelivery = [[TMInfoManager sharedManager] productFastDeliveryWithType:FastDeliveryProductTypeCash];
+                    
+                    [weakSelf finalCheckCartContentForCartType:type canPurchaseFastDelivery:NO];
+                }];
+                
+                UIAlertAction *actionShopping = [UIAlertAction actionWithTitle:[LocalizedString ContinueToShopping] style:UIAlertActionStyleDefault handler:nil];
+                
+                UIAlertAction *actionCheckout = [UIAlertAction actionWithTitle:[LocalizedString CheckOutDirectly] style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
+                    [weakSelf finalCheckCartContentForCartType:type canPurchaseFastDelivery:NO];
+                }];
+                [alertController addAction:actionFastByCash];
+                [alertController addAction:actionFastByPoint];
+                [alertController addAction:actionShopping];
+                [alertController addAction:actionCheckout];
+                
+                [self presentViewController:alertController animated:YES completion:nil];
+            }
+            else
+            {
+                [weakSelf finalCheckCartContentForCartType:type canPurchaseFastDelivery:NO];
+                shouldHideLoadingView = NO;
+            }
         }
         if (shouldHideLoadingView)
         {
@@ -868,6 +914,14 @@
         }
         [arrayCheck addObject:dictionaryCheck];
     }
+    if (type == CartTypeFastDelivery)
+    {
+        NSDictionary *productFastDelivery = [TMInfoManager sharedManager].productFastDelivery;
+        if (productFastDelivery != nil)
+        {
+            [arrayCheck addObject:productFastDelivery];
+        }
+    }
     [self requestFinalCheckProducts:arrayCheck inCart:type canPurchaseFastDelivery:canPurchaseFastDelivery];
 }
 
@@ -876,6 +930,7 @@
     NSNumber *userIdentifier = [TMInfoManager sharedManager].userIdentifier;
     if (userIdentifier == nil)
         return;
+    [self showLoadingViewAnimated:YES];
     __weak CartViewController *weakSelf = self;
     NSString *apiKey = [CryptoModule sharedModule].apiKey;
     NSString *token = [SHAPIAdapter sharedAdapter].token;
@@ -894,64 +949,30 @@
                 NSString *string = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
                 NSLog(@"requestFinalCheckProducts:\n%@", string);
                 NSDictionary *resultDictionary = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
-                BOOL shouldShowPurchaseFastDeliveryAlert = NO;
                 if (error == nil)
                 {
-                    if (type == CartTypeFastDelivery && canPurchaseFastDelivery)
+                    if (weakSelf.currentType == CartTypeFastDelivery)
                     {
-                        NSDictionary *account_result = [resultDictionary objectForKey:SymphoxAPIParam_account_result];
-                        if (account_result && [account_result isEqual:[NSNull null]] == NO)
+                        NSArray *cart_items = [resultDictionary objectForKey:SymphoxAPIParam_cart_item];
+                        if (cart_items && [cart_items isEqual:[NSNull null]] == NO)
                         {
-                            NSNumber *total_cash = [account_result objectForKey:SymphoxAPIParam_total_cash];
-                            if ([total_cash integerValue] < 480)
-                            {
-                                shouldShowPurchaseFastDeliveryAlert = YES;
-                            }
+                            [[TMInfoManager sharedManager] updateProductInfoForFastDeliveryFromInfos:cart_items];
                         }
                     }
-                }
-                if (shouldShowPurchaseFastDeliveryAlert)
-                {
-                    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
-                    NSString *stringFastByCash = [NSString stringWithFormat:[LocalizedString PurchaseFastDeliveryFor_I_Dollars], 48];
-                    UIAlertAction *actionFastByCash = [UIAlertAction actionWithTitle:stringFastByCash style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
-                        // TO DO: add a product for fast delivery by cash then call final check again.
-                        
-                        [weakSelf finalCheckCartContentForCartType:type canPurchaseFastDelivery:NO];
-                    }];
-                    NSString *stringFastByPoint = [NSString stringWithFormat:[LocalizedString PurchaseFastDeliveryFor_I_Points], 800];
-                    UIAlertAction *actionFastByPoint = [UIAlertAction actionWithTitle:stringFastByPoint style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
-                        // TO DO: add a product for fast delivery by point then call final check again.
-                        
-                        [weakSelf finalCheckCartContentForCartType:type canPurchaseFastDelivery:NO];
-                    }];
                     
-                    UIAlertAction *actionShopping = [UIAlertAction actionWithTitle:[LocalizedString ContinueToShopping] style:UIAlertActionStyleDefault handler:nil];
-                    
-                    UIAlertAction *actionCheckout = [UIAlertAction actionWithTitle:[LocalizedString CheckOutDirectly] style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
-                        PaymentTypeViewController *viewController = [[PaymentTypeViewController alloc] initWithNibName:@"PaymentTypeViewController" bundle:[NSBundle mainBundle]];
-                        viewController.dictionaryData = resultDictionary;
-                        viewController.type = self.currentType;
-                        [self.navigationController pushViewController:viewController animated:YES];
-                    }];
-                    [alertController addAction:actionFastByCash];
-                    [alertController addAction:actionFastByPoint];
-                    [alertController addAction:actionShopping];
-                    [alertController addAction:actionCheckout];
-                    
-                    [self presentViewController:alertController animated:YES completion:nil];
-                }
-                else
-                {
                     PaymentTypeViewController *viewController = [[PaymentTypeViewController alloc] initWithNibName:@"PaymentTypeViewController" bundle:[NSBundle mainBundle]];
                     viewController.dictionaryData = resultDictionary;
                     viewController.type = self.currentType;
                     [self.navigationController pushViewController:viewController animated:YES];
                 }
+                else
+                {
+                    NSLog(@"requestResultForRenewConditionsOfProducts - error:\n%@", [error description]);
+                }
             }
             else
             {
-                NSLog(@"requestResultForRenewConditionsOfProducts - Unexpected data format.");
+                NSLog(@"requestFinalCheckProducts - Unexpected data format.");
             }
         }
         else
@@ -966,7 +987,7 @@
                     errorMessage = serverMessage;
                 }
             }
-            NSLog(@"requestResultForRenewConditionsOfProducts - error:\n%@", [error description]);
+            NSLog(@"requestFinalCheckProducts - error:\n%@", [error description]);
             UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:errorMessage preferredStyle:UIAlertControllerStyleAlert];
             UIAlertAction *actionConfirm = [UIAlertAction actionWithTitle:[LocalizedString Confirm] style:UIAlertActionStyleDefault handler:nil];
             [alertController addAction:actionConfirm];
@@ -1184,9 +1205,46 @@
     return text;
 }
 
-- (void)showQuantityInputViewWithDefaultValue:(NSUInteger)defaultValue
+- (void)showQuantityInputViewForProduct:(NSDictionary *)product atIndex:(NSInteger)index
 {
+    if (product == nil)
+        return;
+    NSNumber *maxSellQty = [product objectForKey:SymphoxAPIParam_max_sell_qty];
     
+    NSNumber *productId = [product objectForKey:SymphoxAPIParam_cpdt_num];
+    NSDictionary *purchaseInfos = [[TMInfoManager sharedManager] purchaseInfoForCartType:self.currentType];
+    NSNumber *quantity = nil;
+    if (productId && [productId isEqual:[NSNull null]] == NO)
+    {
+        NSDictionary *purchaseInfo = [purchaseInfos objectForKey:productId];
+        if (purchaseInfo)
+        {
+            quantity = [purchaseInfo objectForKey:SymphoxAPIParam_qty];
+        }
+    }
+    if (quantity && [quantity unsignedShortValue] > 0)
+    {
+        self.viewQuantityInput.currentValue = [quantity unsignedIntegerValue];
+    }
+    if (maxSellQty && [maxSellQty isEqual:[NSNull null]] == NO)
+    {
+        self.viewQuantityInput.maxValue = [maxSellQty unsignedIntegerValue];
+    }
+    self.viewQuantityInput.tag = index;
+    [self.viewQuantityInput show];
+}
+
+- (BOOL)isGiftProduct:(NSDictionary *)product
+{
+    BOOL isGift = NO;
+    
+    NSString *cpdt_owner_num = [product objectForKey:SymphoxAPIParam_cpdt_owner_num];
+    if ([cpdt_owner_num integerValue] == 4)
+    {
+        isGift = YES;
+    }
+    
+    return isGift;
 }
 
 #pragma mark - Actions
@@ -1361,7 +1419,7 @@
         
         NSNumber *productIdentifier = [dictionary objectForKey:SymphoxAPIParam_cpdt_num];
         NSString *paymentDiscription = [self paymentDetailForIdentifier:productIdentifier];
-        if (paymentDiscription != nil && ([paymentDiscription isEqual:[NSNull null]] == NO))
+        if ((paymentDiscription != nil && ([paymentDiscription isEqual:[NSNull null]] == NO)) || [self isGiftProduct:dictionary])
         {
             cell.labelPayment.text = paymentDiscription;
             cell.alreadySelectQuantityAndPayment = YES;
@@ -1388,71 +1446,15 @@
 - (void)cartProductTableViewCell:(CartProductTableViewCell *)cell didPressedConditionBySender:(id)sender
 {
     if (cell.tag >= [self.arrayProducts count])
+    {
         return;
+    }
     NSDictionary *product = [self.arrayProducts objectAtIndex:cell.tag];
-    NSNumber *maxSellQty = [product objectForKey:SymphoxAPIParam_max_sell_qty];
-    
-    NSNumber *productId = [product objectForKey:SymphoxAPIParam_cpdt_num];
-    NSDictionary *purchaseInfos = [[TMInfoManager sharedManager] purchaseInfoForCartType:self.currentType];
-    NSNumber *quantity = nil;
-    if (productId && [productId isEqual:[NSNull null]] == NO)
+    if ([self isGiftProduct:product])
     {
-        NSDictionary *purchaseInfo = [purchaseInfos objectForKey:productId];
-        if (purchaseInfo)
-        {
-            quantity = [purchaseInfo objectForKey:SymphoxAPIParam_qty];
-        }
+        return;
     }
-    if (quantity && [quantity unsignedShortValue] > 0)
-    {
-        self.viewQuantityInput.currentValue = [quantity unsignedIntegerValue];
-    }
-    if (maxSellQty && [maxSellQty isEqual:[NSNull null]] == NO)
-    {
-        self.viewQuantityInput.maxValue = [maxSellQty unsignedIntegerValue];
-    }
-    self.viewQuantityInput.tag = cell.tag;
-    [self.viewQuantityInput show];
-//    __weak CartViewController *weakSelf = self;
-//    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:[LocalizedString PleaseSelectQuantity] preferredStyle:UIAlertControllerStyleAlert];
-//    [alertController addTextFieldWithConfigurationHandler:^(UITextField *textField){
-//        if (quantity)
-//        {
-//            [textField setText:[quantity stringValue]];
-//        }
-//        else
-//        {
-//            [textField setText:@"1"];
-//        }
-//        SHPickerView *pickerView = [[SHPickerView alloc] init];
-//        pickerView.tag = cell.tag;
-//        pickerView.dataSource = weakSelf;
-//        pickerView.delegate = weakSelf;
-//        pickerView.owner = textField;
-//        [textField setInputView:pickerView];
-//    }];
-//    
-//    UIAlertAction *actionCancel = [UIAlertAction actionWithTitle:[LocalizedString Cancel] style:UIAlertActionStyleCancel handler:nil];
-//    UIAlertAction *actionConfirm = [UIAlertAction actionWithTitle:[LocalizedString Confirm] style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
-//        if ([alertController.textFields count] == 0)
-//            return;
-//        UITextField *textField = [alertController.textFields objectAtIndex:0];
-//        NSString *text = textField.text;
-//        if (text == nil || [text length] == 0 || [text integerValue] == 0)
-//        {
-//            text = @"1";
-//        }
-//        NSNumber *quantity = [NSNumber numberWithInteger:[text integerValue]];
-//        NSNumber *productId = [product objectForKey:SymphoxAPIParam_cpdt_num];
-//        if (productId && quantity)
-//        {
-//            [[TMInfoManager sharedManager] setPurchaseQuantity:quantity forProduct:productId inCart:weakSelf.currentType];
-//        }
-//        [weakSelf checkCartForType:weakSelf.currentType shouldShowPaymentForProductId:productId];
-//    }];
-//    [alertController addAction:actionCancel];
-//    [alertController addAction:actionConfirm];
-//    [self presentViewController:alertController animated:YES completion:nil];
+    [self showQuantityInputViewForProduct:product atIndex:cell.tag];
 }
 
 - (void)cartProductTableViewCell:(CartProductTableViewCell *)cell didPressedDeleteBySender:(id)sender
@@ -1543,6 +1545,11 @@
     BOOL canProceed = YES;
     for (NSDictionary *product in self.arrayProducts)
     {
+        if ([self isGiftProduct:product])
+        {
+            continue;
+        }
+        
         NSNumber *productId = [product objectForKey:SymphoxAPIParam_cpdt_num];
         BOOL isConditionSelected = [self isConditionSelectedForIdentifier:productId];
         if (isConditionSelected == NO)
