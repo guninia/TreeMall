@@ -30,6 +30,7 @@ static NSString *PostNotificationName_FavoriteContentChanged = @"FavoriteContent
 static NSString *UserDefault_IntroduceShown = @"IntroduceShown";
 
 #define TMMainColor [UIColor colorWithRed:(90.0/255.0) green:(190.0/255.0) blue:(40.0/255.0) alpha:1.0]
+#define TMFastDeliveryThreshold 490
 
 typedef enum : NSUInteger {
     InvoiceLayoutTypeDefault,

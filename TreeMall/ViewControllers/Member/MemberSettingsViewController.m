@@ -247,6 +247,8 @@ typedef enum : NSUInteger {
                 break;
             case MemberSettingOptionPassword:
             {
+                if ([TMInfoManager sharedManager].userHasPassword == NO)
+                    break;
                 NSString *optionText = [LocalizedString ChangePassword];
                 [self.arrayOptions addObject:optionText];
                 UIImage *image = [UIImage imageNamed:@"men_my_info_icon5"];

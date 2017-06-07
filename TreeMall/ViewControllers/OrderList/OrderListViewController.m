@@ -26,6 +26,7 @@
 - (NSInteger)numberOfOrdersOfCartIndex:(NSInteger)index;
 - (NSDictionary *)orderForIndex:(NSInteger)orderIndex inCartIndex:(NSInteger)cartIndex;
 - (void)startSearchFromTextField:(UITextField *)textField;
+- (void)updateTitle;
 
 - (void)buttonSearchPressed:(id)sender;
 - (void)buttonOrderTimePressed:(id)sender;
@@ -186,7 +187,7 @@
                     break;
                 case OrderStateShipping:
                 {
-                    [items addObject:[LocalizedString Shipping]];
+                    [items addObject:[LocalizedString Shipped]];
                 }
                     break;
                 case OrderStateReturnOrReplace:
@@ -450,6 +451,7 @@
     }
     __weak OrderListViewController *weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
+        [weakSelf updateTitle];
         [weakSelf.collectionView reloadData];
     });
 }
@@ -521,6 +523,7 @@
                 if ([self processOrderData:data])
                 {
                     weakSelf.currentPage = page;
+                    [weakSelf updateTitle];
                 }
                 else
                 {
@@ -654,6 +657,43 @@
         [textField resignFirstResponder];
     }
     [self requestOrderOfPage:1 forOrderState:self.orderState atTime:self.orderTime deliverBy:self.deliverType];
+}
+
+- (void)updateTitle
+{
+    NSString *title = nil;
+    switch (self.orderState) {
+        case OrderStateNoSpecific:
+        {
+            title = [LocalizedString All];
+        }
+            break;
+        case OrderStateProcessing:
+        {
+            title = [LocalizedString Processing];
+        }
+            break;
+        case OrderStateShipping:
+        {
+            title = [LocalizedString Shipped];
+        }
+            break;
+        case OrderStateReturnOrReplace:
+        {
+            title = [LocalizedString Return];
+        }
+            break;
+        default:
+            break;
+    }
+    if (title)
+    {
+        title = [title stringByAppendingFormat:@" (%li)", (long)self.totalOrder];
+        __weak OrderListViewController *weakSelf = self;
+        dispatch_async(dispatch_get_main_queue(), ^{
+            weakSelf.viewTitle.viewTitle.labelText.text = title;
+        });
+    }
 }
 
 #pragma mark - Actions

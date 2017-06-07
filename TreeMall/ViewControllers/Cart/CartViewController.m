@@ -807,7 +807,7 @@
             BOOL shouldBuyFastDelivery = NO;
             if (type == CartTypeFastDelivery)
             {
-                if (total_cash == nil || [total_cash isEqual:[NSNull null]] || [total_cash integerValue] < 480)
+                if (total_cash == nil || [total_cash isEqual:[NSNull null]] || [total_cash integerValue] < TMFastDeliveryThreshold)
                 {
                     shouldBuyFastDelivery = YES;
                 }

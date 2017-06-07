@@ -334,5 +334,6 @@
 + (NSString *)CheckPromotionTotalDiscount;
 + (NSString *)PaymentTotalCount;
 + (NSString *)CheckoutInfo;
++ (NSString *)Shipped;
 
 @end

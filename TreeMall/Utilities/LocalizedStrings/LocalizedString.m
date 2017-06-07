@@ -3251,4 +3251,14 @@
     return CheckoutInfo;
 }
 
++ (NSString *)Shipped
+{
+    static NSString *Shipped = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        Shipped = NSLocalizedString(@"Shipped", nil);
+    });
+    return Shipped;
+}
+
 @end

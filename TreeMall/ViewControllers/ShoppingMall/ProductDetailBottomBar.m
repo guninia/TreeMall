@@ -190,10 +190,14 @@
         {
             [self bringSubviewToFront:self.labelInvalid];
             [self.labelInvalid setHidden:NO];
+            [self.buttonAddToCart setEnabled:NO];
+            [self.buttonPurchase setEnabled:NO];
         }
         else
         {
             [self.labelInvalid setHidden:YES];
+            [self.buttonAddToCart setEnabled:YES];
+            [self.buttonPurchase setEnabled:YES];
         }
         [self setNeedsLayout];
     });

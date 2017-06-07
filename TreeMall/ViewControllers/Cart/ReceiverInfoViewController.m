@@ -2057,69 +2057,157 @@ typedef enum : NSUInteger {
     }
     
     NSLog(@"prepareOrderData - self.dictionaryInvoiceTemp:\n%@", [self.dictionaryInvoiceTemp description]);
-    NSNumber *inv_type = [self.dictionaryInvoiceTemp objectForKey:SymphoxAPIParam_inv_type];
-    if (inv_type == nil)
-    {
-        NSString *message = [NSString stringWithFormat:@"%@%@", [LocalizedString PleaseSelect], [LocalizedString InvoiceType]];
-        [self presentSimpleAlertMessage:message];
-        return;
-    }
-    [shopping_delivery setObject:inv_type forKey:SymphoxAPIParam_inv_type];
-    
     BOOL shouldContinue = YES;
-    switch (self.currentInvoiceType) {
-        case InvoiceTypeOptionElectronic:
+    NSNumber *total_cash = [self.dictionaryTotalCost objectForKey:SymphoxAPIParam_total_cash];
+    if ([total_cash integerValue] > 0)
+    {
+        NSNumber *inv_type = [self.dictionaryInvoiceTemp objectForKey:SymphoxAPIParam_inv_type];
+        if (inv_type == nil)
         {
-            NSString *icarrier_type = [self.dictionaryInvoiceTemp objectForKey:SymphoxAPIParam_icarrier_type];
-            if (icarrier_type == nil)
+            NSString *message = [NSString stringWithFormat:@"%@%@", [LocalizedString PleaseSelect], [LocalizedString InvoiceType]];
+            [self presentSimpleAlertMessage:message];
+            return;
+        }
+        [shopping_delivery setObject:inv_type forKey:SymphoxAPIParam_inv_type];
+        
+        
+        switch (self.currentInvoiceType) {
+            case InvoiceTypeOptionElectronic:
             {
-                NSString *message = [NSString stringWithFormat:@"%@%@", [LocalizedString PleaseSelect], [LocalizedString ElectronicInvoiceCarrier]];
-                [self presentSimpleAlertMessage:message];
-                shouldContinue = NO;
-                break;
-            }
-            [shopping_delivery setObject:icarrier_type forKey:SymphoxAPIParam_icarrier_type];
-            
-            NSString *icarrier_id = [self.dictionaryInvoiceTemp objectForKey:SymphoxAPIParam_icarrier_id];
-            if (icarrier_id == nil)
-            {
-                NSString *message = nil;
-                switch (self.invoiceElectronicSubType) {
-                    case InvoiceElectronicSubTypeMember:
-                    {
-                        message = [NSString stringWithFormat:@"%@%@", [LocalizedString PleaseSelect], [LocalizedString ElectronicInvoiceCarrier]];
-                    }
-                        break;
-                    case InvoiceElectronicSubTypeNaturalPerson:
-                    {
-                        message = [NSString stringWithFormat:@"%@%@", [LocalizedString PleaseInput], [LocalizedString CertificateID]];
-                    }
-                        break;
-                    case InvoiceElectronicSubTypeCellphoneBarcode:
-                    {
-                        message = [NSString stringWithFormat:@"%@%@", [LocalizedString PleaseInput], [LocalizedString CellphoneBarcode]];
-                    }
-                        break;
-                    default:
-                        break;
-                }
-                [self presentSimpleAlertMessage:message];
-                shouldContinue = NO;
-                break;
-            }
-            [shopping_delivery setObject:icarrier_id forKey:SymphoxAPIParam_icarrier_id];
-            if (self.invoiceElectronicSubType == InvoiceElectronicSubTypeMember && [TMInfoManager sharedManager].userInvoiceBind == NO)
-            {
-                NSString *inv_name = [self.dictionaryInvoiceTemp objectForKey:SymphoxAPIParam_inv_name];
-                if (inv_name == nil)
+                NSString *icarrier_type = [self.dictionaryInvoiceTemp objectForKey:SymphoxAPIParam_icarrier_type];
+                if (icarrier_type == nil)
                 {
-                    NSString *message = [NSString stringWithFormat:@"%@%@", [LocalizedString PleaseInput], [LocalizedString InvoiceReceiver]];
+                    NSString *message = [NSString stringWithFormat:@"%@%@", [LocalizedString PleaseSelect], [LocalizedString ElectronicInvoiceCarrier]];
                     [self presentSimpleAlertMessage:message];
                     shouldContinue = NO;
                     break;
                 }
-                [shopping_delivery setObject:inv_name forKey:SymphoxAPIParam_inv_name];
+                [shopping_delivery setObject:icarrier_type forKey:SymphoxAPIParam_icarrier_type];
                 
+                NSString *icarrier_id = [self.dictionaryInvoiceTemp objectForKey:SymphoxAPIParam_icarrier_id];
+                if (icarrier_id == nil)
+                {
+                    NSString *message = nil;
+                    switch (self.invoiceElectronicSubType) {
+                        case InvoiceElectronicSubTypeMember:
+                        {
+                            message = [NSString stringWithFormat:@"%@%@", [LocalizedString PleaseSelect], [LocalizedString ElectronicInvoiceCarrier]];
+                        }
+                            break;
+                        case InvoiceElectronicSubTypeNaturalPerson:
+                        {
+                            message = [NSString stringWithFormat:@"%@%@", [LocalizedString PleaseInput], [LocalizedString CertificateID]];
+                        }
+                            break;
+                        case InvoiceElectronicSubTypeCellphoneBarcode:
+                        {
+                            message = [NSString stringWithFormat:@"%@%@", [LocalizedString PleaseInput], [LocalizedString CellphoneBarcode]];
+                        }
+                            break;
+                        default:
+                            break;
+                    }
+                    [self presentSimpleAlertMessage:message];
+                    shouldContinue = NO;
+                    break;
+                }
+                [shopping_delivery setObject:icarrier_id forKey:SymphoxAPIParam_icarrier_id];
+                if (self.invoiceElectronicSubType == InvoiceElectronicSubTypeMember && [TMInfoManager sharedManager].userInvoiceBind == NO)
+                {
+                    NSString *inv_name = [self.dictionaryInvoiceTemp objectForKey:SymphoxAPIParam_inv_name];
+                    if (inv_name == nil)
+                    {
+                        NSString *message = [NSString stringWithFormat:@"%@%@", [LocalizedString PleaseInput], [LocalizedString InvoiceReceiver]];
+                        [self presentSimpleAlertMessage:message];
+                        shouldContinue = NO;
+                        break;
+                    }
+                    [shopping_delivery setObject:inv_name forKey:SymphoxAPIParam_inv_name];
+                    
+                    NSString *inv_zip = [self.dictionaryInvoiceTemp objectForKey:SymphoxAPIParam_inv_zip];
+                    if (inv_zip == nil)
+                    {
+                        if (self.currentInvoiceRegion == nil)
+                        {
+                            NSString *message = nil;
+                            if (self.currentInvoiceCity == nil)
+                            {
+                                message = [NSString stringWithFormat:@"%@%@%@", [LocalizedString PleaseSelect], [LocalizedString InvoiceDelivery], [LocalizedString DeliveryCity]];
+                            }
+                            else
+                            {
+                                message = [NSString stringWithFormat:@"%@%@%@", [LocalizedString PleaseSelect], [LocalizedString InvoiceDelivery], [LocalizedString DeliveryRegion]];
+                            }
+                            [self presentSimpleAlertMessage:message];
+                            shouldContinue = NO;
+                            break;
+                        }
+                        inv_zip = [self.dictionaryZipForRegion objectForKey:self.currentInvoiceRegion];
+                    }
+                    if (inv_zip == nil)
+                    {
+                        NSString *message = [NSString stringWithFormat:@"%@%@\n%@\n%@", [LocalizedString PleaseSelect], [LocalizedString InvoiceDelivery], [LocalizedString DeliveryCity], [LocalizedString DeliveryRegion]];
+                        [self presentSimpleAlertMessage:message];
+                        shouldContinue = NO;
+                        break;
+                    }
+                    [shopping_delivery setObject:inv_zip forKey:SymphoxAPIParam_inv_zip];
+                    
+                    NSMutableString *inv_address = [[self.dictionaryInvoiceTemp objectForKey:SymphoxAPIParam_inv_address] mutableCopy];
+                    if (inv_address == nil)
+                    {
+                        NSString *message = [NSString stringWithFormat:@"%@%@", [LocalizedString PleaseInput], [LocalizedString InvoiceDeliverAddress]];
+                        [self presentSimpleAlertMessage:message];
+                        shouldContinue = NO;
+                        break;
+                    }
+                    if (self.currentInvoiceRegion)
+                    {
+                        [inv_address replaceOccurrencesOfString:self.currentInvoiceRegion withString:@"" options:0 range:NSMakeRange(0, [inv_address length])];
+                        [inv_address insertString:self.currentInvoiceRegion atIndex:0];
+                    }
+                    
+                    if (self.currentInvoiceCity)
+                    {
+                        [inv_address replaceOccurrencesOfString:self.currentInvoiceCity withString:@"" options:0 range:NSMakeRange(0, [inv_address length])];
+                        [inv_address insertString:self.currentInvoiceCity atIndex:0];
+                    }
+                    [shopping_delivery setObject:inv_address forKey:SymphoxAPIParam_inv_address];
+                    if (inv_tel)
+                    {
+                        [shopping_delivery setObject:inv_tel forKey:SymphoxAPIParam_inv_tel];
+                    }
+                }
+            }
+                break;
+            case InvoiceTypeOptionDonate:
+            {
+                NSString *inpoban = [self.dictionaryInvoiceTemp objectForKey:SymphoxAPIParam_inpoban];
+                if (inpoban == nil)
+                {
+                    NSString *message = nil;
+                    switch (self.invoiceDonateTarget) {
+                        case InvoiceDonateTargetOther:
+                        {
+                            message = [NSString stringWithFormat:@"%@%@", [LocalizedString PleaseInput], [LocalizedString HeartCode]];
+                        }
+                            break;
+                            
+                        default:
+                        {
+                            message = [NSString stringWithFormat:@"%@%@", [LocalizedString PleaseSelect], [LocalizedString DonateTarget]];
+                        }
+                            break;
+                    }
+                    [self presentSimpleAlertMessage:message];
+                    shouldContinue = NO;
+                    break;
+                }
+                [shopping_delivery setObject:inpoban forKey:SymphoxAPIParam_inpoban];
+            }
+                break;
+            case InvoiceTypeOptionTriplicate:
+            {
                 NSString *inv_zip = [self.dictionaryInvoiceTemp objectForKey:SymphoxAPIParam_inv_zip];
                 if (inv_zip == nil)
                 {
@@ -2149,6 +2237,16 @@ typedef enum : NSUInteger {
                 }
                 [shopping_delivery setObject:inv_zip forKey:SymphoxAPIParam_inv_zip];
                 
+                NSString *inv_name = [self.dictionaryInvoiceTemp objectForKey:SymphoxAPIParam_inv_name];
+                if (inv_name == nil)
+                {
+                    NSString *message = [NSString stringWithFormat:@"%@%@", [LocalizedString PleaseInput], [LocalizedString InvoiceReceiver]];
+                    [self presentSimpleAlertMessage:message];
+                    shouldContinue = NO;
+                    break;
+                }
+                [shopping_delivery setObject:inv_name forKey:SymphoxAPIParam_inv_name];
+                
                 NSMutableString *inv_address = [[self.dictionaryInvoiceTemp objectForKey:SymphoxAPIParam_inv_address] mutableCopy];
                 if (inv_address == nil)
                 {
@@ -2169,126 +2267,32 @@ typedef enum : NSUInteger {
                     [inv_address insertString:self.currentInvoiceCity atIndex:0];
                 }
                 [shopping_delivery setObject:inv_address forKey:SymphoxAPIParam_inv_address];
+                
+                NSString *inv_title = [self.dictionaryInvoiceTemp objectForKey:SymphoxAPIParam_inv_title];
+                if (inv_title == nil)
+                {
+                    NSString *message = [NSString stringWithFormat:@"%@%@", [LocalizedString PleaseInput], [LocalizedString InvoiceTitle]];
+                    [self presentSimpleAlertMessage:message];
+                    shouldContinue = NO;
+                    break;
+                }
+                [shopping_delivery setObject:inv_title forKey:SymphoxAPIParam_inv_title];
+                
+                NSString *inv_regno = [self.dictionaryInvoiceTemp objectForKey:SymphoxAPIParam_inv_regno];
+                if (inv_regno)
+                {
+                    [shopping_delivery setObject:inv_regno forKey:SymphoxAPIParam_inv_regno];
+                }
                 if (inv_tel)
                 {
                     [shopping_delivery setObject:inv_tel forKey:SymphoxAPIParam_inv_tel];
                 }
             }
+                break;
+            default:
+                break;
         }
-            break;
-        case InvoiceTypeOptionDonate:
-        {
-            NSString *inpoban = [self.dictionaryInvoiceTemp objectForKey:SymphoxAPIParam_inpoban];
-            if (inpoban == nil)
-            {
-                NSString *message = nil;
-                switch (self.invoiceDonateTarget) {
-                    case InvoiceDonateTargetOther:
-                    {
-                        message = [NSString stringWithFormat:@"%@%@", [LocalizedString PleaseInput], [LocalizedString HeartCode]];
-                    }
-                        break;
-                        
-                    default:
-                    {
-                        message = [NSString stringWithFormat:@"%@%@", [LocalizedString PleaseSelect], [LocalizedString DonateTarget]];
-                    }
-                        break;
-                }
-                [self presentSimpleAlertMessage:message];
-                shouldContinue = NO;
-                break;
-            }
-            [shopping_delivery setObject:inpoban forKey:SymphoxAPIParam_inpoban];
-        }
-            break;
-        case InvoiceTypeOptionTriplicate:
-        {
-            NSString *inv_zip = [self.dictionaryInvoiceTemp objectForKey:SymphoxAPIParam_inv_zip];
-            if (inv_zip == nil)
-            {
-                if (self.currentInvoiceRegion == nil)
-                {
-                    NSString *message = nil;
-                    if (self.currentInvoiceCity == nil)
-                    {
-                        message = [NSString stringWithFormat:@"%@%@%@", [LocalizedString PleaseSelect], [LocalizedString InvoiceDelivery], [LocalizedString DeliveryCity]];
-                    }
-                    else
-                    {
-                        message = [NSString stringWithFormat:@"%@%@%@", [LocalizedString PleaseSelect], [LocalizedString InvoiceDelivery], [LocalizedString DeliveryRegion]];
-                    }
-                    [self presentSimpleAlertMessage:message];
-                    shouldContinue = NO;
-                    break;
-                }
-                inv_zip = [self.dictionaryZipForRegion objectForKey:self.currentInvoiceRegion];
-            }
-            if (inv_zip == nil)
-            {
-                NSString *message = [NSString stringWithFormat:@"%@%@\n%@\n%@", [LocalizedString PleaseSelect], [LocalizedString InvoiceDelivery], [LocalizedString DeliveryCity], [LocalizedString DeliveryRegion]];
-                [self presentSimpleAlertMessage:message];
-                shouldContinue = NO;
-                break;
-            }
-            [shopping_delivery setObject:inv_zip forKey:SymphoxAPIParam_inv_zip];
-            
-            NSString *inv_name = [self.dictionaryInvoiceTemp objectForKey:SymphoxAPIParam_inv_name];
-            if (inv_name == nil)
-            {
-                NSString *message = [NSString stringWithFormat:@"%@%@", [LocalizedString PleaseInput], [LocalizedString InvoiceReceiver]];
-                [self presentSimpleAlertMessage:message];
-                shouldContinue = NO;
-                break;
-            }
-            [shopping_delivery setObject:inv_name forKey:SymphoxAPIParam_inv_name];
-            
-            NSMutableString *inv_address = [[self.dictionaryInvoiceTemp objectForKey:SymphoxAPIParam_inv_address] mutableCopy];
-            if (inv_address == nil)
-            {
-                NSString *message = [NSString stringWithFormat:@"%@%@", [LocalizedString PleaseInput], [LocalizedString InvoiceDeliverAddress]];
-                [self presentSimpleAlertMessage:message];
-                shouldContinue = NO;
-                break;
-            }
-            if (self.currentInvoiceRegion)
-            {
-                [inv_address replaceOccurrencesOfString:self.currentInvoiceRegion withString:@"" options:0 range:NSMakeRange(0, [inv_address length])];
-                [inv_address insertString:self.currentInvoiceRegion atIndex:0];
-            }
-            
-            if (self.currentInvoiceCity)
-            {
-                [inv_address replaceOccurrencesOfString:self.currentInvoiceCity withString:@"" options:0 range:NSMakeRange(0, [inv_address length])];
-                [inv_address insertString:self.currentInvoiceCity atIndex:0];
-            }
-            [shopping_delivery setObject:inv_address forKey:SymphoxAPIParam_inv_address];
-            
-            NSString *inv_title = [self.dictionaryInvoiceTemp objectForKey:SymphoxAPIParam_inv_title];
-            if (inv_title == nil)
-            {
-                NSString *message = [NSString stringWithFormat:@"%@%@", [LocalizedString PleaseInput], [LocalizedString InvoiceTitle]];
-                [self presentSimpleAlertMessage:message];
-                shouldContinue = NO;
-                break;
-            }
-            [shopping_delivery setObject:inv_title forKey:SymphoxAPIParam_inv_title];
-            
-            NSString *inv_regno = [self.dictionaryInvoiceTemp objectForKey:SymphoxAPIParam_inv_regno];
-            if (inv_regno)
-            {
-                [shopping_delivery setObject:inv_regno forKey:SymphoxAPIParam_inv_regno];
-            }
-            if (inv_tel)
-            {
-                [shopping_delivery setObject:inv_tel forKey:SymphoxAPIParam_inv_tel];
-            }
-        }
-            break;
-        default:
-            break;
     }
-    
     if (shouldContinue == NO)
     {
         return;

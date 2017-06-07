@@ -13,6 +13,7 @@
 #import "CryptoModule.h"
 #import "SHAPIAdapter.h"
 #import "PaymentTypeViewController.h"
+#import "Definition.h"
 
 @interface AdditionalPurchaseViewController ()
 
@@ -1088,7 +1089,7 @@
     BOOL shouldBuyFastDelivery = NO;
     if (self.currentType == CartTypeFastDelivery)
     {
-        if (total_cash == nil || [total_cash isEqual:[NSNull null]] || [total_cash integerValue] < 480)
+        if (total_cash == nil || [total_cash isEqual:[NSNull null]] || [total_cash integerValue] < TMFastDeliveryThreshold)
         {
             shouldBuyFastDelivery = YES;
         }

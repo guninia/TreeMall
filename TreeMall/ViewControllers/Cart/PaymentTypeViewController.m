@@ -149,14 +149,14 @@
         self.separator2.frame = frame;
         originY = self.separator2.frame.origin.y + self.separator2.frame.size.height + intervalV;
     }
-    if (self.labelPaymentTitle)
+    if (self.labelPaymentTitle && [self.labelPaymentTitle isHidden] == NO)
     {
         CGRect frame = self.labelPaymentTitle.frame;
         frame.origin.y = originY;
         self.labelPaymentTitle.frame = frame;
         originY = self.labelPaymentTitle.frame.origin.y + self.labelPaymentTitle.frame.size.height + intervalV;
     }
-    if (self.tableViewPayment)
+    if (self.tableViewPayment && [self.tableViewPayment isHidden] == NO)
     {
         CGFloat tableViewHeight = 0.0;
         NSInteger totalSections = [self numberOfSectionsInTableView:self.tableViewPayment];
@@ -522,7 +522,7 @@
         }
         NSLog(@"self.arrayInstallment:\n%@", [self.arrayInstallment description]);
         NSArray *trans_ids = [account_result objectForKey:SymphoxAPIParam_trade_id];
-        if (trans_ids && [trans_ids isEqual:[NSNull null]] == NO)
+        if (trans_ids && [trans_ids isEqual:[NSNull null]] == NO && [trans_ids count] > 0 && [[trans_ids objectAtIndex:0] isEqualToString:@"OP"] == NO)
         {
             for (NSString *paymentId in trans_ids)
             {
@@ -717,6 +717,11 @@
                 }
                 [self.arrayPaymentSections addObject:section];
             }
+        }
+        else
+        {
+            [self.labelPaymentTitle setHidden:YES];
+            [self.tableViewPayment setHidden:YES];
         }
         [self.tableViewPayment reloadData];
     }
