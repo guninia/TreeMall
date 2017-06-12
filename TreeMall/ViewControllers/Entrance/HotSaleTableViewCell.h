@@ -7,6 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "Definition.h"
+#import <TTTAttributedLabel.h>
 
 @class HotSaleTableViewCell;
 
@@ -26,7 +28,9 @@ static NSString *HotSaleTableViewCellIdentifier = @"HotSaleTableViewCell";
 @property (nonatomic, strong) UIImageView *imageViewProduct;
 @property (nonatomic, strong) UIImageView *imageViewTag;
 @property (nonatomic, strong) UILabel *labelTag;
-@property (nonatomic, strong) UILabel *labelTitle;
+@property (nonatomic, strong) TTTAttributedLabel *labelMarketing;
+@property (nonatomic, strong) TTTAttributedLabel *labelProductName;
+//@property (nonatomic, strong) UILabel *labelTitle;
 @property (nonatomic, strong) UIView *separator;
 @property (nonatomic, strong) UILabel *labelPrice;
 @property (nonatomic, strong) UILabel *labelSeparator;
@@ -35,8 +39,14 @@ static NSString *HotSaleTableViewCellIdentifier = @"HotSaleTableViewCell";
 @property (nonatomic, strong) UIButton *buttonFavorite;
 
 @property (nonatomic, strong) NSURL *imageUrl;
+@property (nonatomic, strong) NSString *marketingText;
+@property (nonatomic, strong) NSString *productName;
 @property (nonatomic, strong) NSNumber *price;
 @property (nonatomic, strong) NSNumber *point;
 @property (nonatomic, assign) BOOL favorite;
+@property (nonatomic, assign) PriceType priceType;
+@property (nonatomic, strong) NSArray *arrayTagsData;
+@property (nonatomic, strong) NSDictionary *attributesMarketing;
+@property (nonatomic, strong) NSDictionary *attributesProductName;
 
 @end

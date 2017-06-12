@@ -32,6 +32,8 @@
 #define kPaymentOptionTitle @"PaymentOptionTitle"
 #define kPaymentOptionActionTitle @"PaymentOptionActionTitle"
 
+static NSString *InstallmentBankListDescription = @"分期0利率（接受14家銀行）\n\n\n國泰世華、玉山、台北富邦、台新(需消費滿3000元)、新光、花旗、遠東商銀、大眾、第一商銀、華南、萬泰、匯豐、澳盛銀行、聯邦銀行";
+
 @interface PaymentTypeViewController ()
 
 - (void)prepareData;
@@ -39,6 +41,7 @@
 - (void)refreshContent;
 - (void)startToCheckPayment;
 - (void)requestResultOfCheckPaymentWithParams:(NSDictionary *)params;
+- (void)showInstallmentBanks;
 
 - (void)buttonAgreePressed:(id)sender;
 - (void)buttonTermsContentPressed:(id)sender;
@@ -178,7 +181,7 @@
     if (self.labelAgree)
     {
         CGFloat originX = CGRectGetMaxX(self.switchAgree.frame) + 3.0;
-        CGFloat maxWidth = self.scrollView.frame.size.width - marginH * 2;
+        CGFloat maxWidth = self.scrollView.frame.size.width - originX - marginH;
         NSString *text = self.labelAgree.text;
         NSMutableParagraphStyle *style  = [[NSMutableParagraphStyle alloc] init];
         style.lineBreakMode = self.labelAgree.lineBreakMode;
@@ -570,16 +573,20 @@
                     NSMutableArray *content = [NSMutableArray array];
                     if (content)
                     {
-                        for (NSDictionary *installment in self.arrayInstallment)
+                        for (NSInteger index = 0; index < [self.arrayInstallment count]; index++)
                         {
+                            NSDictionary *installment = [self.arrayInstallment objectAtIndex:index];
                             NSMutableDictionary *option = [NSMutableDictionary dictionary];
                             
                             NSNumber *installmentTerm = [installment objectForKey:SymphoxAPIParam_installment_term];
                             NSNumber *installmentAmount = [installment objectForKey:SymphoxAPIParam_installment_amount];
                             NSString *stringAmount = [self.formatter stringFromNumber:installmentAmount];
                             NSString *totalString = [[[[stringAmount stringByAppendingString:[LocalizedString Dollars]] stringByAppendingString:@"Ｘ"] stringByAppendingString:[installmentTerm stringValue]] stringByAppendingString:[LocalizedString InstallmentTerm]];
-                            
                             [option setObject:totalString forKey:kPaymentOptionTitle];
+                            if (index == 0)
+                            {
+                                [option setObject:[LocalizedString InstallmentAvailableBank] forKey:kPaymentOptionActionTitle];
+                            }
                             [content addObject:option];
                         }
                     }
@@ -897,7 +904,7 @@
     NSNumber *installmentTerm = nil;
     NSDictionary *installment = nil;
     NSDictionary *account_result = [self.dictionaryData objectForKey:SymphoxAPIParam_account_result];
-    NSNumber *total_cash = [self.dictionaryData objectForKey:SymphoxAPIParam_total_cash];
+    NSNumber *total_cash = [account_result objectForKey:SymphoxAPIParam_total_cash];
     if (self.selectedIndexPathOfPayment && self.selectedIndexPathOfPayment.section < [self.arrayPaymentSections count])
     {
         NSDictionary *section = [self.arrayPaymentSections objectAtIndex:self.selectedIndexPathOfPayment.section];
@@ -953,6 +960,14 @@
             paymentId = @"OP";
         }
         self.selectedPaymentDescription = [LocalizedString NoCashPayment];
+    }
+    else
+    {
+        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:[LocalizedString PleaseSelectPaymentType] preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction *action = [UIAlertAction actionWithTitle:[LocalizedString Confirm] style:UIAlertActionStyleDefault handler:nil];
+        [alertController addAction:action];
+        [self presentViewController:alertController animated:YES completion:nil];
+        return;
     }
     if (installment)
     {
@@ -1189,6 +1204,17 @@
     }];
 }
 
+- (void)showInstallmentBanks
+{
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:[LocalizedString InstallmentAvailableBank] message:InstallmentBankListDescription preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *action = [UIAlertAction actionWithTitle:[LocalizedString Confirm] style:UIAlertActionStyleDefault handler:nil];
+    [alertController addAction:action];
+    __weak PaymentTypeViewController *weakSelf = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [weakSelf presentViewController:alertController animated:YES completion:nil];
+    });
+}
+
 #pragma mark - Actions
 
 - (void)buttonAgreePressed:(id)sender
@@ -1214,7 +1240,6 @@
         [self presentViewController:alertController animated:YES completion:nil];
         return;
     }
-    
     NSString *stringDate = [[TMInfoManager sharedManager] formattedStringFromDate:[NSDate date]];
     [TMInfoManager sharedManager].userPressAgreementDate = stringDate;
     
@@ -1382,13 +1407,14 @@
         {
             paymentCell.delegate = self;
         }
+        [paymentCell.buttonCheck setHidden:NO];
         NSString *title = @"";
         NSString *actionTitle = nil;
         if (indexPath.section < [self.arrayPaymentSections count])
         {
             NSDictionary *dictionarySection = [self.arrayPaymentSections objectAtIndex:indexPath.section];
-//            NSString *sectionId = [dictionarySection objectForKey:kPaymentSectionId];
             NSArray *content = [dictionarySection objectForKey:kPaymentSectionContent];
+            NSString *paymentId = [dictionarySection objectForKey:kPaymentSectionId];
             if (content)
             {
                 if (indexPath.row < [content count])
@@ -1404,6 +1430,10 @@
                     {
                         actionTitle = optionActionTitle;
                         paymentCell.accessoryView = paymentCell.buttonAction;
+                        if ([paymentId isEqualToString:@"O"] || [paymentId isEqualToString:@"O2"])
+                        {
+                            [paymentCell.buttonCheck setHidden:YES];
+                        }
                     }
                 }
             }
@@ -1470,10 +1500,21 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-    if (cell.accessoryView == nil)
+    NSDictionary *dictionarySection = [self.arrayPaymentSections objectAtIndex:indexPath.section];
+    NSString *paymentId = [dictionarySection objectForKey:kPaymentSectionId];
+    BOOL isOCB = ([paymentId isEqualToString:@"O"] || [paymentId isEqualToString:@"O2"]);
+    if (isOCB)
+    {
+        if (cell.accessoryView == nil)
+        {
+            self.selectedIndexPathOfPayment = indexPath;
+        }
+    }
+    else
     {
         self.selectedIndexPathOfPayment = indexPath;
     }
+    
 }
 
 #pragma mark - PaymentTypeTableViewCellDelegate
@@ -1485,7 +1526,11 @@
     NSInteger section = button.tag;
     NSDictionary *dictionarySection = [self.arrayPaymentSections objectAtIndex:section];
     NSString *paymentId = [dictionarySection objectForKey:kPaymentSectionId];
-    if ([paymentId isEqualToString:@"O"] || [paymentId isEqualToString:@"O2"])
+    if ([paymentId isEqualToString:@"I"])
+    {
+        [self showInstallmentBanks];
+    }
+    else if ([paymentId isEqualToString:@"O"] || [paymentId isEqualToString:@"O2"])
     {
         // One click buy
         OCBStatus status = [TMInfoManager sharedManager].userOcbStatus;

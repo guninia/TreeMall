@@ -331,3 +331,7 @@
 "PaymentTotalCount"="付款合計";
 "CheckoutInfo"="結帳資訊";
 "Shipped"="已出貨";
+"CreditCardHint"="＊刷卡分期說明：［分期］金額若有除不盡之餘數，將於第一期帳單收取";
+"CurrentlyNoCoupon"="目前您沒有任何折價券";
+"DeliverProgress"="配送進度";
+"PleaseSelectPaymentType"="請先選擇付款方式";

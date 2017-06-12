@@ -13,6 +13,7 @@
 
 @property (nonatomic, strong) UIScrollView *scrollView;
 @property (nonatomic, strong) UILabel *labelInstallmentTitle;
+@property (nonatomic, strong) UILabel *labelCreditCardHint;
 @property (nonatomic, strong) UIView *separator;
 @property (nonatomic, strong) UILabel *labelBankTitle;
 @property (nonatomic, strong) DTAttributedLabel *labelDescription;

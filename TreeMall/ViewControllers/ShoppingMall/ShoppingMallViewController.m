@@ -691,6 +691,21 @@ typedef enum : NSUInteger {
     return heightForFooter;
 }
 
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    CGFloat heightForRow = 40.0;
+    switch (tableView.tag) {
+        case ViewTagTableViewSubcategory:
+        {
+            heightForRow = 50.0;
+        }
+            break;
+        default:
+            break;
+    }
+    return heightForRow;
+}
+
 - (void)tableView:(UITableView *)tableView willDisplayFooterView:(UIView *)view forSection:(NSInteger)section
 {
     if ([view isKindOfClass:[LoadingFooterView class]])

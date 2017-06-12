@@ -335,5 +335,9 @@
 + (NSString *)PaymentTotalCount;
 + (NSString *)CheckoutInfo;
 + (NSString *)Shipped;
++ (NSString *)CreditCardHint;
++ (NSString *)CurrentlyNoCoupon;
++ (NSString *)DeliverProgress;
++ (NSString *)PleaseSelectPaymentType;
 
 @end

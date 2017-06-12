@@ -17,9 +17,13 @@
 
 @interface CouponListViewController ()
 
+@property (nonatomic, strong) UIImageView *tableBackgroundView;
+@property (nonatomic, strong) UILabel *labelNoContent;
+
 - (void)prepareSortOptions;
 - (void)resetPreviousCouponData;
 - (void)retrieveCouponDataForState:(CouponState)state sortByType:(CouponSortOption)sortType atPage:(NSInteger)page;
+- (void)refreshContent;
 - (void)showSortOptionMenu;
 - (void)buttonSortPressed:(id)sender;
 
@@ -111,6 +115,12 @@
     {
         CGRect frame = CGRectMake(0.0, originY, self.view.frame.size.width, self.view.frame.size.height - originY);
         self.tableViewCoupon.frame = frame;
+        
+        if (self.labelNoContent)
+        {
+            CGRect frame = CGRectMake(0.0, self.tableViewCoupon.frame.size.height * 2 / 3, self.tableViewCoupon.frame.size.width, 30.0);
+            self.labelNoContent.frame = frame;
+        }
     }
 }
 
@@ -179,6 +189,36 @@
         [_tableViewCoupon registerClass:[LoadingFooterView class] forHeaderFooterViewReuseIdentifier:LoadingFooterViewIdentifier];
     }
     return _tableViewCoupon;
+}
+
+- (UIImageView *)tableBackgroundView
+{
+    if (_tableBackgroundView == nil)
+    {
+        _tableBackgroundView = [[UIImageView alloc] initWithFrame:CGRectZero];
+        [_tableBackgroundView setBackgroundColor:[UIColor colorWithWhite:0.93 alpha:1.0]];
+        [_tableBackgroundView setContentMode:UIViewContentModeCenter];
+        UIImage *image = [UIImage imageNamed:@"men_ico_logo"];
+        if (image)
+        {
+            [_tableBackgroundView setImage:image];
+        }
+        [_tableBackgroundView addSubview:self.labelNoContent];
+    }
+    return _tableBackgroundView;
+}
+
+- (UILabel *)labelNoContent
+{
+    if (_labelNoContent == nil)
+    {
+        _labelNoContent = [[UILabel alloc] initWithFrame:CGRectZero];
+        [_labelNoContent setBackgroundColor:[UIColor clearColor]];
+        [_labelNoContent setTextColor:[UIColor colorWithWhite:0.82 alpha:1.0]];
+        [_labelNoContent setText:[LocalizedString CurrentlyNoCoupon]];
+        [_labelNoContent setTextAlignment:NSTextAlignmentCenter];
+    }
+    return _labelNoContent;
 }
 
 - (void)setSortType:(CouponSortOption)sortType
@@ -303,9 +343,7 @@
                     }
                     weakSelf.currentPage = page;
                 }
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [weakSelf.tableViewCoupon reloadData];
-                });
+                [weakSelf refreshContent];
             }
             else
             {
@@ -326,6 +364,24 @@
             });
         }];
     }
+}
+
+- (void)refreshContent
+{
+    __weak CouponListViewController *weakSelf = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if ([weakSelf.arrayCoupon count] == 0)
+        {
+            [weakSelf.tableViewCoupon setBackgroundView:weakSelf.tableBackgroundView];
+            [weakSelf.tableViewCoupon setSeparatorStyle:UITableViewCellSeparatorStyleNone];
+        }
+        else
+        {
+            [weakSelf.tableViewCoupon setBackgroundView:nil];
+            [weakSelf.tableViewCoupon setSeparatorStyle:UITableViewCellSeparatorStyleSingleLine];
+        }
+        [weakSelf.tableViewCoupon reloadData];
+    });
 }
 
 - (void)showSortOptionMenu

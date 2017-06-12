@@ -103,8 +103,6 @@
 {
     [super viewWillAppear:animated];
     
-    [[TMInfoManager sharedManager] resetProductFastDelivery];
-    
     if (self.currentType == CartTypeTotal)
     {
         self.currentType = CartTypeCommonDelivery;
@@ -113,6 +111,7 @@
     {
         [self setSegmentedControlIndexForCartType:self.currentType];
     }
+    [[TMInfoManager sharedManager] initializeCartForType:self.currentType];
     
     [self checkCartForType:self.currentType shouldShowPaymentForProductId:nil];
 }
@@ -665,7 +664,7 @@
             if (userInfo)
             {
                 NSString *errorCode = [userInfo objectForKey:SymphoxAPIParam_id];
-                if ([errorCode isEqualToString:@"E217"] || [errorCode isEqualToString:@"E403"] || [errorCode isEqualToString:@"E416"])
+                if ([errorCode isEqualToString:@"E217"] || [errorCode isEqualToString:@"E403"] || [errorCode isEqualToString:@"E416"] || [errorCode isEqualToString:@"E402"])
                 {
                     for (NSDictionary *product in productConditions)
                     {
@@ -1285,7 +1284,9 @@
         }
         if (text)
         {
-            [self.segmentedView.segmentedControl setTitle:text forSegmentAtIndex:type];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.segmentedView.segmentedControl setTitle:text forSegmentAtIndex:type];
+            });
         }
     }
 }
@@ -1419,7 +1420,8 @@
         
         NSNumber *productIdentifier = [dictionary objectForKey:SymphoxAPIParam_cpdt_num];
         NSString *paymentDiscription = [self paymentDetailForIdentifier:productIdentifier];
-        if ((paymentDiscription != nil && ([paymentDiscription isEqual:[NSNull null]] == NO)) || [self isGiftProduct:dictionary])
+        BOOL isGift = [self isGiftProduct:dictionary];
+        if ((paymentDiscription != nil && ([paymentDiscription isEqual:[NSNull null]] == NO)) || isGift)
         {
             cell.labelPayment.text = paymentDiscription;
             cell.alreadySelectQuantityAndPayment = YES;
@@ -1429,6 +1431,17 @@
             cell.labelPayment.text = @"";
             cell.alreadySelectQuantityAndPayment = NO;
         }
+        if (isGift)
+        {
+            [cell.buttonDelete setEnabled:NO];
+            [cell.buttonCondition setEnabled:NO];
+        }
+        else
+        {
+            [cell.buttonCondition setEnabled:YES];
+            [cell.buttonDelete setEnabled:YES];
+        }
+        
     }
     return cell;
 }

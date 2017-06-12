@@ -21,6 +21,7 @@ static NSString *PaymentTypeTableViewCellIdentifier = @"PaymentTypeTableViewCell
 @interface PaymentTypeTableViewCell : UITableViewCell
 
 @property (nonatomic, weak) id <PaymentTypeTableViewCellDelegate> delegate;
+@property (nonatomic, strong) UIButton *buttonCheck;
 @property (nonatomic, strong) UILabel *labelTitle;
 @property (nonatomic, strong) UIButton *buttonAction;
 @property (nonatomic, strong) NSString *actionTitle;

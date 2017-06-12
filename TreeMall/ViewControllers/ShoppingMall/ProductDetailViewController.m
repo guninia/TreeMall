@@ -319,6 +319,9 @@
     if (_viewPointFeedback == nil)
     {
         _viewPointFeedback = [[BorderedDoubleLabelView alloc] initWithFrame:CGRectZero];
+        _viewPointFeedback.delegate = self;
+        _viewPointFeedback.userInteractionEnabled = YES;
+        _viewPointFeedback.backgroundColor = [UIColor clearColor];
         [_viewPointFeedback.labelR setText:[LocalizedString Detail_RA_]];
     }
     return _viewPointFeedback;
@@ -1094,7 +1097,7 @@
         }
     }
     
-    NSNumber *numberFeedbackPoint = [self.dictionaryDetail objectForKey:SymphoxAPIParam_freepoint];
+    NSNumber *numberFeedbackPoint = [self.dictionaryDetail objectForKey:SymphoxAPIParam_free_point];
     if (numberFeedbackPoint && [numberFeedbackPoint isEqual:[NSNull null]] == NO)
     {
         NSString *stringPoint = [formatter stringFromNumber:numberFeedbackPoint];
@@ -2030,6 +2033,15 @@
             [alertController addAction:action];
         }
         [self presentViewController:alertController animated:YES completion:nil];
+    }
+    else if (view == self.viewPointFeedback)
+    {
+        NSString *urlString = SymphoxAPI_feedbackPointDetailPage;
+        NSURL *url = [NSURL URLWithString:urlString];
+        if ([[UIApplication sharedApplication] canOpenURL:url])
+        {
+            [[UIApplication sharedApplication] openURL:url];
+        }
     }
 }
 

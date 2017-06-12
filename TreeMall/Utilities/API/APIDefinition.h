@@ -64,6 +64,8 @@ static NSString *SymphoxAPI__buildOrder = @"api/eiffel/orders/createOrder";
 static NSString *SymphoxAPI__getDeliveryProgress = @"api/portal/app/member/order/delivery";
 static NSString *SymphoxAPI__checkDelivery = @"api/eiffel/appOrder/checkDelivery";
 static NSString *SymphoxAPI__sendPushInfo = @"api/onlineService.do";
+static NSString *SymphoxAPI__feedbackPointDetailPage = @"http://www.treemall.com.tw/event/140310howpoint/index_2.shtml#a01";
+static NSString *SymphoxAPI__storePickupDescription = @"http://www.treemall.com.tw/event/24H_160101/160101_con_list.shtml";
 
 #define SymphoxAPI_token [NSString stringWithFormat:@"%@%@", SymphoxAPIDomain, SymphoxAPI__token]
 #define SymphoxAPI_homepage [NSString stringWithFormat:@"%@%@", SymphoxAPIDomain, SymphoxAPI__homepage]
@@ -105,11 +107,13 @@ static NSString *SymphoxAPI__sendPushInfo = @"api/onlineService.do";
 #define SymphoxAPI_getDistrictInfo [NSString stringWithFormat:@"%@%@", SymphoxAPIDomain, SymphoxAPI__getDistrictInfo]
 #define SymphoxAPI_getCarrierInfo [NSString stringWithFormat:@"%@%@", SymphoxAPIDomain, SymphoxAPI__getCarrierInfo]
 #define SymphoxAPI_getOneClickBuyContactInfo [NSString stringWithFormat:@"%@%@", SymphoxAPIDomain, SymphoxAPI__getOneClickBuyContactInfo]
-#define SymphoxAPI_activateOCB [NSString stringWithFormat:@"%@%@", SymphoxAPIDomain, SymphoxAPI__activateOCB]
+#define SymphoxAPI_activateOCB SymphoxAPI__activateOCB
 #define SymphoxAPI_buildOrder [NSString stringWithFormat:@"%@%@", SymphoxAPIDomain, SymphoxAPI__buildOrder]
 #define SymphoxAPI_getDeliveryProgress [NSString stringWithFormat:@"%@%@", SymphoxAPIDomain, SymphoxAPI__getDeliveryProgress]
 #define SymphoxAPI_checkDelivery [NSString stringWithFormat:@"%@%@", SymphoxAPIDomain, SymphoxAPI__checkDelivery]
 #define SymphoxAPI_sendPushInfo [NSString stringWithFormat:@"%@%@", SymphoxAPIDomain, SymphoxAPI__sendPushInfo]
+#define SymphoxAPI_feedbackPointDetailPage SymphoxAPI__feedbackPointDetailPage
+#define SymphoxAPI_storePickupDescription SymphoxAPI__storePickupDescription
 
 
 static NSString *SymphoxAPIParam_key = @"sym-api-key";

@@ -238,7 +238,8 @@ typedef enum : NSUInteger {
     {
         return NO;
     }
-    [_delegate searchViewController:self didSelectToSearchKeyword:text];
+    NSString *urlEncoded = [text stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    [_delegate searchViewController:self didSelectToSearchKeyword:urlEncoded];
     [self dismiss];
     return YES;
 }

@@ -13,6 +13,7 @@ typedef enum : NSUInteger {
     WebViewTypeAuth,
     WebViewTypeInfoEdit,
     WebViewTypeContactEdit,
+    WebViewTypeOthers,
     WebViewTypeTotal
 } WebViewType;
 

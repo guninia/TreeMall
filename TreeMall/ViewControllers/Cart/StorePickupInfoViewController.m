@@ -2467,7 +2467,12 @@ typedef enum : NSUInteger {
 
 - (IBAction)buttonDescriptionPressed:(id)sender
 {
-    
+    NSString *urlString = SymphoxAPI_storePickupDescription;
+    NSURL *url = [NSURL URLWithString:urlString];
+    if ([[UIApplication sharedApplication] canOpenURL:url])
+    {
+        [[UIApplication sharedApplication] openURL:url];
+    }
 }
 
 - (IBAction)buttonStore1Pressed:(id)sender

@@ -260,6 +260,7 @@
         {
             [cell.textLabel setText:@""];
         }
+        cell.accessoryView = cell.buttonCheck;
     }
     return cell;
 }

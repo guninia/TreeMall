@@ -12,6 +12,6 @@ static NSString *DiscountTableViewCellIdentifier = @"DiscountTableViewCell";
 
 @interface DiscountTableViewCell : UITableViewCell
 
-@property (nonatomic, strong) UIImageView *imageViewCheck;
+@property (nonatomic, strong) UIButton *buttonCheck;
 
 @end

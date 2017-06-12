@@ -18,6 +18,7 @@
         self.backgroundColor = [UIColor clearColor];
         self.textLabel.textColor = [UIColor darkTextColor];
         self.textLabel.font = [UIFont systemFontOfSize:14.0];
+        self.textLabel.numberOfLines = 0;
     }
     return self;
 }

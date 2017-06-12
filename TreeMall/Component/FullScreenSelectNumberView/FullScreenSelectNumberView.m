@@ -54,6 +54,9 @@
         spaceItem.width = 0.0;
         NSArray *items = [NSArray arrayWithObjects:spaceItem, titleItem, flexItem, closeItem, spaceItem, nil];
         [self.toolBar setItems:items];
+        
+        [self.layer setCornerRadius:10.0];
+        [self.layer setMasksToBounds:YES];
     }
     return self;
 }

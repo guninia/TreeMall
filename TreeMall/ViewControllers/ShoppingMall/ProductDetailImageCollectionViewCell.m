@@ -74,7 +74,7 @@
     }
     
     [self.activityIndicator startAnimating];
-    UIImage *placeholder = [UIImage imageNamed:@"transparent"];
+    UIImage *placeholder = [UIImage imageNamed:@"ico_default"];
     __weak ProductDetailImageCollectionViewCell *weakSelf = self;
     [self.imageView sd_setImageWithURL:url placeholderImage:placeholder options:(SDWebImageAvoidAutoSetImage|SDWebImageAllowInvalidSSLCertificates) completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL){
         if ([[imageURL absoluteString] isEqualToString:imagePath])

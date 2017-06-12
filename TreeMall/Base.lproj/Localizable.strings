@@ -330,3 +330,7 @@
 "PaymentTotalCount"="Total Count";
 "CheckoutInfo"="Checkout Info";
 "Shipped"="Shipped";
+"CreditCardHint"="CreditCardHint";
+"CurrentlyNoCoupon"="No Coupon";
+"DeliverProgress"="Deliver Progress";
+"PleaseSelectPaymentType"="Please select payment type";

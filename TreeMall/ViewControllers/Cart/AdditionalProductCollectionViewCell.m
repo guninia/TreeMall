@@ -187,7 +187,7 @@
         return;
     }
     __weak AdditionalProductCollectionViewCell *weakSelf = self;
-    UIImage *image = [UIImage imageNamed:@"transparent"];
+    UIImage *image = [UIImage imageNamed:@"ico_default"];
     [self.imageView sd_setImageWithURL:_imageUrl placeholderImage:image options:SDWebImageAvoidAutoSetImage|SDWebImageAllowInvalidSSLCertificates completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL){
         if (error || image == nil)
             return;

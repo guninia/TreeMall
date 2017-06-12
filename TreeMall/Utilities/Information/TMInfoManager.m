@@ -2066,6 +2066,18 @@ static NSUInteger SearchKeywordNumberMax = 8;
     [[NSNotificationCenter defaultCenter] postNotificationName:PostNotificationName_CartContentChanged object:self];
 }
 
+- (void)initializeCartForType:(CartType)type
+{
+    NSMutableArray *additionArray = [self productArrayForAdditionalCartType:type];
+    NSMutableDictionary *additionDictionary = [self purchaseInfoForAdditionalCartType:type];
+    [additionArray removeAllObjects];
+    [additionDictionary removeAllObjects];
+    if (type == CartTypeFastDelivery)
+    {
+        [self resetProductFastDelivery];
+    }
+}
+
 - (NSString *)formattedStringFromDate:(NSDate *)date
 {
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];

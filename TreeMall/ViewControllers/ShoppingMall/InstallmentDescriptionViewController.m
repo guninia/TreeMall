@@ -35,6 +35,7 @@
     {
         [self.scrollView addSubview:label];
     }
+    [self.scrollView addSubview:self.labelCreditCardHint];
     [self.scrollView addSubview:self.separator];
     [self.scrollView addSubview:self.labelBankTitle];
     [self.scrollView addSubview:self.labelDescription];
@@ -100,7 +101,15 @@
         label.frame = frame;
         originY = label.frame.origin.y + label.frame.size.height + intervalV;
     }
-    
+    if (self.labelCreditCardHint)
+    {
+        NSDictionary *attributes = [NSDictionary dictionaryWithObjectsAndKeys:self.labelCreditCardHint.font, NSFontAttributeName, nil];
+        CGSize sizeString = [self.labelCreditCardHint.text boundingRectWithSize:CGSizeMake(self.scrollView.frame.size.width, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin attributes:attributes context:nil].size;
+        CGSize sizeLabel = CGSizeMake(ceil(sizeString.width), ceil(sizeString.height));
+        CGRect frame = CGRectMake(0.0, originY, self.scrollView.frame.size.width, sizeLabel.height);
+        self.labelCreditCardHint.frame = frame;
+        originY = self.labelCreditCardHint.frame.origin.y + self.labelCreditCardHint.frame.size.height + intervalV;
+    }
     if (self.separator)
     {
         CGRect frame = CGRectMake(0.0, originY, self.scrollView.frame.size.width, 1.0);
@@ -166,6 +175,21 @@
         [_labelInstallmentTitle setText:[LocalizedString NoInterestInstallment]];
     }
     return _labelInstallmentTitle;
+}
+
+- (UILabel *)labelCreditCardHint
+{
+    if (_labelCreditCardHint == nil)
+    {
+        _labelCreditCardHint = [[UILabel alloc] initWithFrame:CGRectZero];
+        UIFont *font = [UIFont systemFontOfSize:14.0];
+        [_labelCreditCardHint setFont:font];
+        [_labelCreditCardHint setLineBreakMode:NSLineBreakByWordWrapping];
+        [_labelCreditCardHint setNumberOfLines:0];
+        [_labelCreditCardHint setTextColor:[UIColor blackColor]];
+        [_labelCreditCardHint setText:[LocalizedString CreditCardHint]];
+    }
+    return _labelCreditCardHint;
 }
 
 - (UIView *)separator

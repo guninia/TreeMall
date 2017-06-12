@@ -29,14 +29,40 @@
     [super setSelected:selected animated:animated];
 
     // Configure the view for the selected state
-    if (selected)
+//    if (selected)
+//    {
+//        self.accessoryType = UITableViewCellAccessoryCheckmark;
+//    }
+//    else
+//    {
+//        self.accessoryType = UITableViewCellAccessoryNone;
+//    }
+    [self.buttonCheck setSelected:selected];
+}
+
+#pragma mark - Override
+
+- (UIButton *)buttonCheck
+{
+    if (_buttonCheck == nil)
     {
-        self.accessoryType = UITableViewCellAccessoryCheckmark;
+        _buttonCheck = [[UIButton alloc] initWithFrame:CGRectZero];
+        CGSize buttonSize = CGSizeMake(30.0, 30.0);
+        UIImage *image = [UIImage imageNamed:@"ico_car_list_line"];
+        if (image)
+        {
+            [_buttonCheck setImage:image forState:UIControlStateNormal];
+            buttonSize = image.size;
+        }
+        UIImage *selectedImage = [UIImage imageNamed:@"ico_car_list"];
+        if (selectedImage)
+        {
+            [_buttonCheck setImage:selectedImage forState:UIControlStateSelected];
+        }
+        CGRect frame = CGRectMake(0.0, 0.0, buttonSize.width, buttonSize.height);
+        _buttonCheck.frame = frame;
     }
-    else
-    {
-        self.accessoryType = UITableViewCellAccessoryNone;
-    }
+    return _buttonCheck;
 }
 
 @end

@@ -9,10 +9,9 @@
 #import <UIKit/UIKit.h>
 #import "DiscountLabelView.h"
 #import <TTTAttributedLabel.h>
+#import "Definition.h"
 
 static NSString *ProductTableViewCellIdentifier = @"ProductTableViewCell";
-
-static NSString *ProductTableViewCellTagText = @"ProductTableViewCellText";
 
 @class ProductTableViewCell;
 
@@ -51,5 +50,6 @@ static NSString *ProductTableViewCellTagText = @"ProductTableViewCellText";
 @property (nonatomic, strong) NSDictionary *attributesMarketing;
 @property (nonatomic, strong) NSDictionary *attributesProductName;
 @property (nonatomic, assign) BOOL favorite;
+@property (nonatomic, assign) PriceType priceType;
 
 @end

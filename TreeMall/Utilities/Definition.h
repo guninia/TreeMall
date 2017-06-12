@@ -82,4 +82,14 @@ typedef enum : NSUInteger {
     InvoiceDonateTargetTotal
 } InvoiceDonateTarget;
 
+typedef enum : NSUInteger {
+    PriceTypePurePrice,
+    PriceTypePurePoint,
+    PriceTypeBothPure,
+    PriceTypeMixed,
+    PriceTypeTotal
+} PriceType;
+
+static NSString *ProductTableViewCellTagText = @"ProductTableViewCellText";
+
 #endif /* Definition_h */

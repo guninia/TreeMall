@@ -201,6 +201,7 @@ typedef enum : NSUInteger {
 - (NSInteger)numberOfProductsInCart:(CartType)type;
 
 - (void)resetCartForType:(CartType)type;
+- (void)initializeCartForType:(CartType)type;
 
 - (NSString *)formattedStringFromDate:(NSDate *)date;
 

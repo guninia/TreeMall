@@ -13,14 +13,17 @@
 #import "ProductDetailViewController.h"
 #import "LocalizedString.h"
 #import "TMInfoManager.h"
+#import "CartViewController.h"
 
 @interface HotSaleViewController ()
 
 - (void)retrieveDataForType:(HotSaleType)type;
 - (BOOL)processData:(id)data;
 - (NSMutableDictionary *)dictionaryCommonFromHotSale:(NSDictionary *)dictionary;
-- (void)addProduct:(NSDictionary *)product toCart:(CartType)cartType named:(NSString *)cartName;
+- (void)addProduct:(NSDictionary *)product toCart:(CartType)cartType named:(NSString *)cartName shouldShowAlert:(BOOL)shouldShowAlert;
 - (void)addFavoriteProduct:(NSDictionary *)product;
+- (NSString *)titleForCartType:(CartType)cartType;
+- (void)presentCartViewForType:(CartType)type;
 
 - (void)buttonItemPressed:(id)sender;
 
@@ -274,16 +277,18 @@
     return dictionaryCommon;
 }
 
-- (void)addProduct:(NSDictionary *)product toCart:(CartType)cartType named:(NSString *)cartName
+- (void)addProduct:(NSDictionary *)product toCart:(CartType)cartType named:(NSString *)cartName shouldShowAlert:(BOOL)shouldShowAlert
 {
     NSMutableDictionary *dictionaryCommon = [self dictionaryCommonFromHotSale:product];
     [[TMInfoManager sharedManager] addProduct:dictionaryCommon toCartForType:cartType];
-    
-    NSString *message = [NSString stringWithFormat:[LocalizedString AddedTo_S_], cartName];
-    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:message preferredStyle:UIAlertControllerStyleAlert];
-    UIAlertAction *action = [UIAlertAction actionWithTitle:[LocalizedString Confirm] style:UIAlertActionStyleDefault handler:nil];
-    [alertController addAction:action];
-    [self presentViewController:alertController animated:YES completion:nil];
+    if (shouldShowAlert)
+    {
+        NSString *message = [NSString stringWithFormat:[LocalizedString AddedTo_S_], cartName];
+        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:message preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction *action = [UIAlertAction actionWithTitle:[LocalizedString Confirm] style:UIAlertActionStyleDefault handler:nil];
+        [alertController addAction:action];
+        [self presentViewController:alertController animated:YES completion:nil];
+    }
 }
 
 - (void)addFavoriteProduct:(NSDictionary *)product
@@ -321,6 +326,15 @@
     return title;
 }
 
+- (void)presentCartViewForType:(CartType)type
+{
+    CartViewController *viewController = [[CartViewController alloc] initWithNibName:@"CartViewController" bundle:[NSBundle mainBundle]];
+    viewController.title = [LocalizedString ShoppingCart];
+    viewController.currentType = type;
+    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:viewController];
+    [self presentViewController:navigationController animated:YES completion:nil];
+}
+
 #pragma mark - Actions
 
 - (void)buttonItemPressed:(id)sender
@@ -356,17 +370,60 @@
     {
         cell.delegate = self;
     }
-    
+    cell.price = nil;
+    cell.point = nil;
+    cell.priceType = PriceTypeTotal;
     NSString *textRank = @"";
-    NSString *title = @"";
+//    NSString *title = @"";
     NSURL *imageUrl = nil;
-    NSNumber *price = nil;
-    NSNumber *point = nil;
     BOOL isFavorite = NO;
     
     if (indexPath.row < [self.arrayProducts count])
     {
         NSDictionary *dictionary = [self.arrayProducts objectAtIndex:indexPath.row];
+        
+        NSMutableArray *arrayTags = [NSMutableArray array];
+        NSNumber *is_delivery_store = [dictionary objectForKey:SymphoxAPIParam_is_delivery_store];
+        if (is_delivery_store && [is_delivery_store isEqual:[NSNull null]] == NO && [is_delivery_store boolValue])
+        {
+            NSDictionary *dictionary = [NSDictionary dictionaryWithObjectsAndKeys:@"超取", ProductTableViewCellTagText, [UIColor colorWithRed:(152.0/255.0) green:(194.0/255.0) blue:(67.0/255.0) alpha:1.0], NSForegroundColorAttributeName, nil];
+            [arrayTags addObject:dictionary];
+        }
+        
+        NSNumber *quick = [dictionary objectForKey:SymphoxAPIParam_quick];
+        if (quick && ([quick isEqual:[NSNull null]] == NO) && [quick boolValue])
+        {
+            NSDictionary *dictionary = [NSDictionary dictionaryWithObjectsAndKeys:@"8H", ProductTableViewCellTagText, [UIColor colorWithRed:(152.0/255.0) green:(194.0/255.0) blue:(67.0/255.0) alpha:1.0], NSForegroundColorAttributeName, nil];
+            [arrayTags addObject:dictionary];
+        }
+        
+        NSNumber *discountNow = [dictionary objectForKey:SymphoxAPIParam_chk_tactic_click];
+        if (discountNow && ([discountNow isEqual:[NSNull null]] == NO) && [discountNow boolValue])
+        {
+            NSDictionary *dictionary = [NSDictionary dictionaryWithObjectsAndKeys:[LocalizedString ClickToDiscount], ProductTableViewCellTagText, [UIColor colorWithRed:(134.0/255.0) green:(209.0/255.0) blue:(188.0/255.0) alpha:1.0], NSForegroundColorAttributeName, nil];
+            [arrayTags addObject:dictionary];
+        }
+        NSArray *installments = [dictionary objectForKey:SymphoxAPIParam_seekInstallmentList];
+        if (installments && ([installments isEqual:[NSNull null]] == NO) && [installments count] > 0)
+        {
+            NSDictionary *longestPeriodInstallment = [installments lastObject];
+            NSNumber *installmentNumber = [longestPeriodInstallment objectForKey:SymphoxAPIParam_installment_num];
+            if (installmentNumber && [installmentNumber integerValue] > 0)
+            {
+                NSString *numberString = [NSString stringWithFormat:[LocalizedString S_InstallmentNumber], (long)[installmentNumber integerValue]];
+                NSDictionary *dictionary = [NSDictionary dictionaryWithObjectsAndKeys:numberString, ProductTableViewCellTagText, [UIColor lightGrayColor], NSForegroundColorAttributeName, nil];
+                [arrayTags addObject:dictionary];
+            }
+        }
+        NSNumber *freePoint = [dictionary objectForKey:SymphoxAPIParam_freepoint];
+        if (freePoint && ([freePoint isEqual:[NSNull null]] == NO) && [freePoint integerValue] > 0)
+        {
+            NSString *freePointString = [NSString stringWithFormat:[LocalizedString Free_S_Point], (long)[freePoint integerValue]];
+            NSDictionary *dictionary = [NSDictionary dictionaryWithObjectsAndKeys:freePointString, ProductTableViewCellTagText, [UIColor lightGrayColor], NSForegroundColorAttributeName, nil];
+            [arrayTags addObject:dictionary];
+        }
+        cell.arrayTagsData = arrayTags;
+        
         NSNumber *rank = [dictionary objectForKey:SymphoxAPIParam_rank];
         if (rank && [rank isEqual:[NSNull null]] == NO)
         {
@@ -376,10 +433,14 @@
                 textRank = [NSString stringWithFormat:@"NO.%@", stringRank];
             }
         }
+        
+        NSString *marketText = [dictionary objectForKey:SymphoxAPIParam_market_name];
+        cell.marketingText = marketText;
+        
         NSString *cpdt_name = [dictionary objectForKey:SymphoxAPIParam_cpdt_name];
         if (cpdt_name && [cpdt_name isEqual:[NSNull null]] == NO && [cpdt_name length] > 0)
         {
-            title = cpdt_name;
+            cell.productName = cpdt_name;
         }
         
         NSString *pic_link = [dictionary objectForKey:SymphoxAPIParam_pic_link];
@@ -392,28 +453,39 @@
             }
         }
         
-        NSNumber *pure_price = [dictionary objectForKey:SymphoxAPIParam_pure_price];
-        NSNumber *pure_point = [dictionary objectForKey:SymphoxAPIParam_pure_point];
-        NSNumber *mix_price = [dictionary objectForKey:SymphoxAPIParam_mix_price];
-        NSNumber *mix_point = [dictionary objectForKey:SymphoxAPIParam_mix_point];
-        if (pure_price && [pure_price isEqual:[NSNull null]] == NO)
+        NSNumber *price = [dictionary objectForKey:SymphoxAPIParam_pure_price];
+        NSNumber *point = [dictionary objectForKey:SymphoxAPIParam_pure_point];
+        NSNumber *price1 = [dictionary objectForKey:SymphoxAPIParam_mix_price];
+        NSNumber *point1 = [dictionary objectForKey:SymphoxAPIParam_mix_point];
+        BOOL hasPurePrice = (price && [price isEqual:[NSNull null]] == NO && [price unsignedIntegerValue] > 0);
+        BOOL hasPurePoint = (point && [point isEqual:[NSNull null]] == NO && [point unsignedIntegerValue] > 0);
+        if (hasPurePrice && hasPurePoint)
         {
-            price = pure_price;
+            cell.price = price;
+            cell.point = point;
+            cell.priceType = PriceTypeBothPure;
         }
-        else if (pure_point && [pure_point isEqual:[NSNull null]] == NO)
+        else if (hasPurePrice)
         {
-            point = pure_point;
+            cell.price = price;
+            cell.priceType = PriceTypePurePrice;
+        }
+        else if (hasPurePoint)
+        {
+            cell.point = point;
+            cell.priceType = PriceTypePurePoint;
         }
         else
         {
-            if (mix_price && [mix_price isEqual:[NSNull null]] == NO)
+            if (price1 && [price1 isEqual:[NSNull null]] == NO)
             {
-                price = mix_price;
+                cell.price = price1;
             }
-            if (mix_point && [mix_point isEqual:[NSNull null]] == NO)
+            if (point1 && [point1 isEqual:[NSNull null]] == NO)
             {
-                point = mix_point;
+                cell.point = point1;
             }
+            cell.priceType = PriceTypeMixed;
         }
         NSNumber *cpdt_num = [dictionary objectForKey:SymphoxAPIParam_cpdt_num];
         if (cpdt_num && [cpdt_num isEqual:[NSNull null]] == NO)
@@ -421,7 +493,7 @@
             isFavorite = [[TMInfoManager sharedManager] favoriteContainsProductWithIdentifier:cpdt_num];
         }
         NSArray *carts = [dictionary objectForKey:SymphoxAPIParam_can_used_cart];
-        if ([carts containsObject:@"0"] || [carts containsObject:@"1"] || [carts containsObject:@"2"])
+        if ([carts containsObject:@"0"] || [carts containsObject:@"1"] || [carts containsObject:@"2"] || [carts containsObject:@"3"])
         {
             cell.buttonAddToCart.hidden = NO;
         }
@@ -431,9 +503,7 @@
         }
     }
     
-    cell.labelTitle.text = title;
-    cell.price = price;
-    cell.point = point;
+//    cell.labelTitle.text = title;
     cell.labelTag.text = textRank;
     cell.imageUrl = imageUrl;
     cell.favorite = isFavorite;
@@ -476,7 +546,7 @@
         return;
     
     NSMutableArray *arrayAvailableCarts = [NSMutableArray array];
-    
+    BOOL canDirectlyPurchase = [carts containsObject:@"3"];
     for (NSString *stringType in carts)
     {
         CartType type = [stringType integerValue];
@@ -494,7 +564,7 @@
             NSString *title = [self titleForCartType:type];
             __weak HotSaleViewController *weakSelf = self;
             UIAlertAction *action = [UIAlertAction actionWithTitle:title style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
-                [weakSelf addProduct:dictionary toCart:type named:title];
+                [weakSelf addProduct:dictionary toCart:type named:title shouldShowAlert:YES];
             }];
             [alertController addAction:action];
         }
@@ -507,7 +577,13 @@
         NSNumber *numberCartType = [arrayAvailableCarts objectAtIndex:0];
         NSInteger type = [numberCartType integerValue];
         NSString *title = [self titleForCartType:type];
-        [self addProduct:dictionary toCart:type named:title];
+        [self addProduct:dictionary toCart:type named:title shouldShowAlert:YES];
+    }
+    else if (canDirectlyPurchase)
+    {
+        [[TMInfoManager sharedManager] resetCartForType:CartTypeDirectlyPurchase];
+        [self addProduct:dictionary toCart:CartTypeDirectlyPurchase named:@"" shouldShowAlert:NO];
+        [self presentCartViewForType:CartTypeDirectlyPurchase];
     }
 }
 

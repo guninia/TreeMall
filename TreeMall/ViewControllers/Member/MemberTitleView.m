@@ -46,21 +46,21 @@
     CGFloat marginL = 10.0;
     CGFloat marginR = 10.0;
     
-    if (self.labelWelcome)
-    {
-        NSDictionary *attributes = [NSDictionary dictionaryWithObjectsAndKeys:self.labelWelcome.font, NSFontAttributeName, nil];
-        CGSize sizeText = [self.labelWelcome.text sizeWithAttributes:attributes];
-        CGSize sizeLabel = CGSizeMake(ceil(sizeText.width), ceil(sizeText.height));
-        CGRect frame = CGRectMake(marginL, (self.frame.size.height - sizeLabel.height)/2, sizeLabel.width, sizeLabel.height);
-        self.labelWelcome.frame = frame;
-    }
-    
     if (self.buttonModify)
     {
         CGSize sizeImage = CGSizeMake(self.frame.size.height, self.frame.size.height);
         
         CGRect frame = CGRectMake((self.frame.size.width - marginR - sizeImage.width), (self.frame.size.height - sizeImage.height)/2, sizeImage.width, sizeImage.height);
         self.buttonModify.frame = frame;
+    }
+    
+    if (self.labelWelcome)
+    {
+        NSDictionary *attributes = [NSDictionary dictionaryWithObjectsAndKeys:self.labelWelcome.font, NSFontAttributeName, nil];
+        CGSize sizeText = [self.labelWelcome.text sizeWithAttributes:attributes];
+        CGSize sizeLabel = CGSizeMake(ceil(sizeText.width), ceil(sizeText.height));
+        CGRect frame = CGRectMake(marginL, (self.frame.size.height - sizeLabel.height)/2, CGRectGetMinX(self.buttonModify.frame) - marginL, sizeLabel.height);
+        self.labelWelcome.frame = frame;
     }
 }
 

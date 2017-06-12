@@ -24,7 +24,7 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self)
     {
-        self.type = WebViewTypeTotal;
+        self.type = WebViewTypeOthers;
     }
     return self;
 }
@@ -145,35 +145,38 @@
 {
 //    NSLog(@"WKNavigationAction.type[%li]", (long)navigationAction.navigationType);
     WKNavigationActionPolicy policy = WKNavigationActionPolicyAllow;
-    if (navigationAction.navigationType == WKNavigationTypeLinkActivated)
+    if (self.type == WebViewTypeOthers)
     {
-        NSURL *url = navigationAction.request.URL;
-        NSURLComponents *components = [NSURLComponents componentsWithURL:url resolvingAgainstBaseURL:NO];
-        NSString *stringProductId = nil;
-        for (NSURLQueryItem *item in components.queryItems)
+        if (navigationAction.navigationType == WKNavigationTypeLinkActivated)
         {
-            NSLog(@"queryItem [%@][%@]", item.name, item.value);
-            if ([item.name compare:@"cpdtnum" options:NSCaseInsensitiveSearch] == NSOrderedSame)
+            NSURL *url = navigationAction.request.URL;
+            NSURLComponents *components = [NSURLComponents componentsWithURL:url resolvingAgainstBaseURL:NO];
+            NSString *stringProductId = nil;
+            for (NSURLQueryItem *item in components.queryItems)
             {
-                stringProductId = item.value;
+                NSLog(@"queryItem [%@][%@]", item.name, item.value);
+                if ([item.name compare:@"cpdtnum" options:NSCaseInsensitiveSearch] == NSOrderedSame)
+                {
+                    stringProductId = item.value;
+                }
             }
-        }
-        if (stringProductId != nil)
-        {
-            policy = WKNavigationActionPolicyCancel;
-            NSNumber *productId = [NSNumber numberWithInteger:[stringProductId integerValue]];
-            ProductDetailViewController *viewController = [[ProductDetailViewController alloc] initWithNibName:@"ProductDetailViewController" bundle:[NSBundle mainBundle]];
-            viewController.productIdentifier = productId;
-            viewController.title = [LocalizedString ProductInfo];
-            [viewController setHidesBottomBarWhenPushed:YES];
-            [self.navigationController pushViewController:viewController animated:YES];
-        }
-        else if (url)
-        {
-            if ([[UIApplication sharedApplication] canOpenURL:url])
+            if (stringProductId != nil)
             {
-                [[UIApplication sharedApplication] openURL:url];
                 policy = WKNavigationActionPolicyCancel;
+                NSNumber *productId = [NSNumber numberWithInteger:[stringProductId integerValue]];
+                ProductDetailViewController *viewController = [[ProductDetailViewController alloc] initWithNibName:@"ProductDetailViewController" bundle:[NSBundle mainBundle]];
+                viewController.productIdentifier = productId;
+                viewController.title = [LocalizedString ProductInfo];
+                [viewController setHidesBottomBarWhenPushed:YES];
+                [self.navigationController pushViewController:viewController animated:YES];
+            }
+            else if (url)
+            {
+                if ([[UIApplication sharedApplication] canOpenURL:url])
+                {
+                    [[UIApplication sharedApplication] openURL:url];
+                    policy = WKNavigationActionPolicyCancel;
+                }
             }
         }
     }

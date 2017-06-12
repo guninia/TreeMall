@@ -282,6 +282,7 @@
     {
         cell.delegate = self;
     }
+    cell.tag = indexPath.row;
     cell.price = nil;
     cell.point = nil;
     if (indexPath.row < [_arrayFavorites count])
@@ -290,6 +291,12 @@
         NSString *imagePath = [dictionary objectForKey:SymphoxAPIParam_prod_pic_url];
         cell.imagePath = imagePath;
         NSMutableArray *arrayTags = [NSMutableArray array];
+        NSNumber *is_delivery_store = [dictionary objectForKey:SymphoxAPIParam_is_delivery_store];
+        if (is_delivery_store && [is_delivery_store isEqual:[NSNull null]] == NO && [is_delivery_store boolValue])
+        {
+            NSDictionary *dictionary = [NSDictionary dictionaryWithObjectsAndKeys:@"超取", ProductTableViewCellTagText, [UIColor colorWithRed:(152.0/255.0) green:(194.0/255.0) blue:(67.0/255.0) alpha:1.0], NSForegroundColorAttributeName, nil];
+            [arrayTags addObject:dictionary];
+        }
         NSNumber *quick = [dictionary objectForKey:SymphoxAPIParam_quick];
         if (quick && ([quick isEqual:[NSNull null]] == NO) && [quick boolValue])
         {
@@ -331,22 +338,37 @@
         
         NSNumber *price = [dictionary objectForKey:SymphoxAPIParam_price03];
         NSNumber *point = [dictionary objectForKey:SymphoxAPIParam_point01];
-        NSNumber *price2 = [dictionary objectForKey:SymphoxAPIParam_price02];
-        NSNumber *point2 = [dictionary objectForKey:SymphoxAPIParam_point02];
-        if (price && [price isEqual:[NSNull null]] == NO && [price integerValue] > 0)
+        NSNumber *price1 = [dictionary objectForKey:SymphoxAPIParam_price02];
+        NSNumber *point1 = [dictionary objectForKey:SymphoxAPIParam_point02];
+        BOOL hasPurePrice = (price && [price isEqual:[NSNull null]] == NO && [price unsignedIntegerValue] > 0);
+        BOOL hasPurePoint = (point && [point isEqual:[NSNull null]] == NO && [point unsignedIntegerValue] > 0);
+        if (hasPurePrice && hasPurePoint)
         {
             cell.price = price;
+            cell.point = point;
+            cell.priceType = PriceTypeBothPure;
         }
-        else if (point && [point isEqual:[NSNull null]] == NO && [point integerValue] > 0)
+        else if (hasPurePrice)
+        {
+            cell.price = price;
+            cell.priceType = PriceTypePurePrice;
+        }
+        else if (hasPurePoint)
         {
             cell.point = point;
-            cell.labelPoint.textColor = [UIColor lightGrayColor];
+            cell.priceType = PriceTypePurePoint;
         }
         else
         {
-            cell.price = price2;
-            cell.point = point2;
-            cell.labelPoint.textColor = [UIColor redColor];
+            if (price1 && [price1 isEqual:[NSNull null]] == NO)
+            {
+                cell.price = price1;
+            }
+            if (point1 && [point1 isEqual:[NSNull null]] == NO)
+            {
+                cell.point = point1;
+            }
+            cell.priceType = PriceTypeMixed;
         }
         
         NSNumber *discount = [dictionary objectForKey:SymphoxAPIParam_discount_hall_percentage];

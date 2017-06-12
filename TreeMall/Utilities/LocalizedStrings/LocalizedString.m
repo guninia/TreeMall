@@ -3261,4 +3261,44 @@
     return Shipped;
 }
 
++ (NSString *)CreditCardHint
+{
+    static NSString *CreditCardHint = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        CreditCardHint = NSLocalizedString(@"CreditCardHint", nil);
+    });
+    return CreditCardHint;
+}
+
++ (NSString *)CurrentlyNoCoupon
+{
+    static NSString *CurrentlyNoCoupon = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        CurrentlyNoCoupon = NSLocalizedString(@"CurrentlyNoCoupon", nil);
+    });
+    return CurrentlyNoCoupon;
+}
+
++ (NSString *)DeliverProgress
+{
+    static NSString *DeliverProgress = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        DeliverProgress = NSLocalizedString(@"DeliverProgress", nil);
+    });
+    return DeliverProgress;
+}
+
++ (NSString *)PleaseSelectPaymentType
+{
+    static NSString *PleaseSelectPaymentType = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        PleaseSelectPaymentType = NSLocalizedString(@"PleaseSelectPaymentType", nil);
+    });
+    return PleaseSelectPaymentType;
+}
+
 @end
