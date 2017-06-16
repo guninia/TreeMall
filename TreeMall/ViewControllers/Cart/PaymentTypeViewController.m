@@ -1057,9 +1057,8 @@ static NSString *InstallmentBankListDescription = @"分期0利率（接受14家�
         {
             dictionaryMode = [NSMutableDictionary dictionaryWithObjectsAndKeys:@"0", SymphoxAPIParam_payment_type, [NSNumber numberWithInteger:0], SymphoxAPIParam_price, nil];
         }
-        NSNumber *paymentType = [dictionaryMode objectForKey:SymphoxAPIParam_payment_type];
-        NSString *stringPaymentType = [paymentType stringValue];
-        [dictionaryMode setObject:stringPaymentType forKey:SymphoxAPIParam_payment_type];
+        NSString *paymentType = [dictionaryMode objectForKey:SymphoxAPIParam_payment_type];
+        [dictionaryMode setObject:paymentType forKey:SymphoxAPIParam_payment_type];
         [dictionaryMode setObject:productId forKey:SymphoxAPIParam_cpdt_num];
         
         NSMutableDictionary *dictionaryCheck = [NSMutableDictionary dictionary];

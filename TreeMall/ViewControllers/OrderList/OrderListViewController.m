@@ -19,6 +19,9 @@
 
 @interface OrderListViewController ()
 
+@property (nonatomic, strong) UIImageView *tableBackgroundView;
+@property (nonatomic, strong) UILabel *labelNoContent;
+
 - (void)resetPreviousOrderData;
 - (void)requestOrderOfPage:(NSInteger)page forOrderState:(OrderState)state atTime:(OrderTime)orderTime deliverBy:(DeliverType)deliverType;
 - (BOOL)processOrderData:(id)data;
@@ -164,6 +167,12 @@
     {
         CGRect frame = CGRectMake(0.0, originY, self.view.frame.size.width, self.view.frame.size.height - originY);
         self.collectionView.frame = frame;
+        
+        if (self.labelNoContent)
+        {
+            CGRect frame = CGRectMake(0.0, self.collectionView.frame.size.height * 2 / 3, self.collectionView.frame.size.width, 30.0);
+            self.labelNoContent.frame = frame;
+        }
     }
 }
 
@@ -438,6 +447,36 @@
     return _arrayCarts;
 }
 
+- (UIImageView *)tableBackgroundView
+{
+    if (_tableBackgroundView == nil)
+    {
+        _tableBackgroundView = [[UIImageView alloc] initWithFrame:CGRectZero];
+        [_tableBackgroundView setBackgroundColor:[UIColor colorWithWhite:0.93 alpha:1.0]];
+        [_tableBackgroundView setContentMode:UIViewContentModeCenter];
+        UIImage *image = [UIImage imageNamed:@"men_ico_logo"];
+        if (image)
+        {
+            [_tableBackgroundView setImage:image];
+        }
+        [_tableBackgroundView addSubview:self.labelNoContent];
+    }
+    return _tableBackgroundView;
+}
+
+- (UILabel *)labelNoContent
+{
+    if (_labelNoContent == nil)
+    {
+        _labelNoContent = [[UILabel alloc] initWithFrame:CGRectZero];
+        [_labelNoContent setBackgroundColor:[UIColor clearColor]];
+        [_labelNoContent setTextColor:[UIColor colorWithWhite:0.82 alpha:1.0]];
+        [_labelNoContent setText:[LocalizedString CurrentlyNoOrder]];
+        [_labelNoContent setTextAlignment:NSTextAlignmentCenter];
+    }
+    return _labelNoContent;
+}
+
 #pragma mark - Private Methods
 
 - (void)resetPreviousOrderData
@@ -453,6 +492,7 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         [weakSelf updateTitle];
         [weakSelf.collectionView reloadData];
+        weakSelf.collectionView.backgroundView = nil;
     });
 }
 
@@ -557,6 +597,12 @@
                 }
             }
             NSLog(@"requestOrderOfPage - error:\n%@", [error description]);
+        }
+        if ([self.arrayCarts count] == 0)
+        {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [weakSelf.collectionView setBackgroundView:weakSelf.tableBackgroundView];
+            });
         }
         weakSelf.isLoading = NO;
     }];

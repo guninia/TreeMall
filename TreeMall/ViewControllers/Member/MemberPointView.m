@@ -76,7 +76,7 @@
     
     originX = marginL;
     CGFloat labelWidth = ceil((self.frame.size.width - (marginL + marginR + intervalV))/2);
-    CGFloat labelHeight = 80.0;
+    CGFloat labelHeight = 70.0;
     if (self.labelPoint)
     {
         CGRect frame = CGRectMake(originX, originY, labelWidth, labelHeight);
@@ -140,13 +140,13 @@
         _labelPoint = [[UILabel alloc] initWithFrame:CGRectZero];
         [_labelPoint setBackgroundColor:[UIColor clearColor]];
         [_labelPoint setTextColor:[UIColor colorWithRed:(71.0/255.0) green:(158.0/255.0) blue:(135.0/255.0) alpha:1.0]];
-        [_labelPoint.layer setBorderWidth:1.0];
+        [_labelPoint.layer setBorderWidth:2.0];
         [_labelPoint.layer setBorderColor:_labelPoint.textColor.CGColor];
-        [_labelPoint.layer setCornerRadius:3.0];
+        [_labelPoint.layer setCornerRadius:5.0];
         [_labelPoint setNumberOfLines:0];
         [_labelPoint setTextAlignment:NSTextAlignmentCenter];
         [_labelPoint setLineBreakMode:NSLineBreakByWordWrapping];
-        UIFont *font = [UIFont systemFontOfSize:18.0];
+        UIFont *font = [UIFont systemFontOfSize:16.0];
         [_labelPoint setFont:font];
     }
     return _labelPoint;
@@ -159,13 +159,13 @@
         _labelDividend = [[UILabel alloc] initWithFrame:CGRectZero];
         [_labelDividend setBackgroundColor:[UIColor clearColor]];
         [_labelDividend setTextColor:[UIColor colorWithRed:(161.0/255.0) green:(199.0/255.0) blue:(79.0/255.0) alpha:1.0]];
-        [_labelDividend.layer setBorderWidth:1.0];
+        [_labelDividend.layer setBorderWidth:2.0];
         [_labelDividend.layer setBorderColor:_labelDividend.textColor.CGColor];
-        [_labelDividend.layer setCornerRadius:3.0];
+        [_labelDividend.layer setCornerRadius:5.0];
         [_labelDividend setNumberOfLines:0];
         [_labelDividend setTextAlignment:NSTextAlignmentCenter];
         [_labelDividend setLineBreakMode:NSLineBreakByWordWrapping];
-        UIFont *font = [UIFont systemFontOfSize:18.0];
+        UIFont *font = [UIFont systemFontOfSize:16.0];
         [_labelDividend setFont:font];
     }
     return _labelDividend;

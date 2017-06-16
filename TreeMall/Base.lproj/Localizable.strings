@@ -334,3 +334,7 @@
 "CurrentlyNoCoupon"="No Coupon";
 "DeliverProgress"="Deliver Progress";
 "PleaseSelectPaymentType"="Please select payment type";
+"CurrentlyNoOrder"="Currently No Order";
+"ThisProductNoInstallment"="No Installment";
+"ChangePasswordFailed"="Change password failed";
+"EightHourDelivery"="8H Delivery";

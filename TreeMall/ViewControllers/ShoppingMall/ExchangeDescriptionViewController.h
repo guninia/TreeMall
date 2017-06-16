@@ -17,6 +17,8 @@ typedef enum : NSUInteger {
 
 @interface ExchangeDescriptionViewController : UIViewController <DTAttributedTextContentViewDelegate>
 
+@property (nonatomic, strong) UILabel *labelTitle;
+@property (nonatomic, strong) UIToolbar *toolBar;
 @property (nonatomic, strong) UIScrollView *scrollView;
 @property (nonatomic, strong) DTAttributedLabel *label;
 

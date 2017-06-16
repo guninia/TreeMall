@@ -16,6 +16,7 @@
 
 @property (nonatomic, strong) UIScrollView *scrollView;
 @property (nonatomic, strong) MemberTitleView *viewTitle;
+@property (nonatomic, strong) UIButton *buttonAdvertisement;
 @property (nonatomic, strong) MemberPointView *viewPoint;
 @property (nonatomic, strong) ProductDetailSectionTitleView *viewCouponTitle;
 @property (nonatomic, strong) BorderedDoubleLabelView *viewTotalCoupon;

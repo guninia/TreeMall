@@ -94,7 +94,7 @@
     if (_labelL == nil)
     {
         _labelL = [[UILabel alloc] initWithFrame:CGRectZero];
-        UIFont *font = [UIFont systemFontOfSize:12.0];
+        UIFont *font = [UIFont systemFontOfSize:16.0];
         [_labelL setFont:font];
         [_labelL setBackgroundColor:[UIColor clearColor]];
         [_labelL setTextAlignment:NSTextAlignmentLeft];
@@ -109,7 +109,7 @@
     {
         _labelR = [[UILabel alloc] initWithFrame:CGRectZero];
         [_labelR setBackgroundColor:[UIColor redColor]];
-        UIFont *font = [UIFont systemFontOfSize:12.0];
+        UIFont *font = [UIFont systemFontOfSize:16.0];
         [_labelR setFont:font];
         [_labelR setBackgroundColor:[UIColor clearColor]];
         [_labelR setTextAlignment:NSTextAlignmentRight];

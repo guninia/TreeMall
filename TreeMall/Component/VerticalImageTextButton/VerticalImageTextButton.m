@@ -39,7 +39,7 @@
     CGFloat marginT = 2.0;
     CGFloat marginL = 2.0;
     CGFloat marginR = 2.0;
-    CGFloat intervalV = 2.0;
+    CGFloat intervalV = 5.0;
     if (self.labelText)
     {
         NSString *defaultString = @"ＸＸＸＸ";
@@ -72,7 +72,7 @@
         _labelText = [[UILabel alloc] initWithFrame:CGRectZero];
         [_labelText setBackgroundColor:[UIColor clearColor]];
         [_labelText setTextColor:[UIColor darkGrayColor]];
-        UIFont *font = [UIFont systemFontOfSize:12.0];
+        UIFont *font = [UIFont systemFontOfSize:16.0];
         [_labelText setFont:font];
         [_labelText setTextAlignment:NSTextAlignmentCenter];
     }

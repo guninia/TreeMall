@@ -48,7 +48,7 @@
     
     if (self.buttonModify)
     {
-        CGSize sizeImage = CGSizeMake(self.frame.size.height, self.frame.size.height);
+        CGSize sizeImage = CGSizeMake(30.0, 30.0);
         
         CGRect frame = CGRectMake((self.frame.size.width - marginR - sizeImage.width), (self.frame.size.height - sizeImage.height)/2, sizeImage.width, sizeImage.height);
         self.buttonModify.frame = frame;
@@ -71,7 +71,7 @@
         _labelWelcome = [[UILabel alloc] initWithFrame:CGRectZero];
         [_labelWelcome setTextColor:[UIColor darkGrayColor]];
         [_labelWelcome setBackgroundColor:[UIColor clearColor]];
-        [_labelWelcome setFont:[UIFont systemFontOfSize:12.0]];
+        [_labelWelcome setFont:[UIFont systemFontOfSize:18.0]];
     }
     return _labelWelcome;
 }
@@ -84,7 +84,7 @@
         UIImage *image = [UIImage imageNamed:@"men_my_edit"];
         if (image)
         {
-            [_buttonModify setImage:image forState:UIControlStateNormal];
+            [_buttonModify setBackgroundImage:image forState:UIControlStateNormal];
         }
         [_buttonModify addTarget:self action:@selector(buttonModifyPressed:) forControlEvents:UIControlEventTouchUpInside];
     }

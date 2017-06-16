@@ -724,7 +724,14 @@
 - (void)presentCartViewForType:(CartType)type
 {
     CartViewController *viewController = [[CartViewController alloc] initWithNibName:@"CartViewController" bundle:[NSBundle mainBundle]];
-    viewController.title = [LocalizedString ShoppingCart];
+    if (type == CartTypeDirectlyPurchase)
+    {
+        viewController.title = [LocalizedString Purchase];
+    }
+    else
+    {
+        viewController.title = [LocalizedString ShoppingCart];
+    }
     viewController.currentType = type;
     UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:viewController];
     [self presentViewController:navigationController animated:YES completion:nil];
@@ -794,8 +801,8 @@
         cell.imagePath = imagePath;
         
         NSMutableArray *arrayTags = [NSMutableArray array];
-        NSNumber *is_delivery_store = [dictionary objectForKey:SymphoxAPIParam_is_delivery_store];
-        if (is_delivery_store && [is_delivery_store isEqual:[NSNull null]] == NO && [is_delivery_store boolValue])
+        NSNumber *to_store_cart = [dictionary objectForKey:SymphoxAPIParam_to_store_cart];
+        if (to_store_cart && [to_store_cart isEqual:[NSNull null]] == NO && [to_store_cart boolValue])
         {
             NSDictionary *dictionary = [NSDictionary dictionaryWithObjectsAndKeys:@"超取", ProductTableViewCellTagText, [UIColor colorWithRed:(152.0/255.0) green:(194.0/255.0) blue:(67.0/255.0) alpha:1.0], NSForegroundColorAttributeName, nil];
             [arrayTags addObject:dictionary];

@@ -73,7 +73,7 @@
     [super layoutSubviews];
 //    NSLog(@"EntranceFunctionSectionHeader[%4.2f,%4.2f]", self.frame.size.width, self.frame.size.height);
     
-    CGSize buttonSize = CGSizeMake(100.0, 60.0);
+    CGSize buttonSize = CGSizeMake(100.0, 80.0);
     CGFloat hInterval = ceil((self.frame.size.width - buttonSize.width * [_arrayButtons count])/([_arrayButtons count] + 1));
     for (NSInteger index = 0; index < [_arrayButtons count]; index++)
     {

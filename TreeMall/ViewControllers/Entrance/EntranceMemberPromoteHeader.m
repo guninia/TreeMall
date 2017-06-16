@@ -303,6 +303,7 @@
             [_buttonMarketing.imageViewIcon setImage:image];
         }
         [_buttonMarketing.labelText setTextAlignment:NSTextAlignmentCenter];
+        [_buttonMarketing.labelText setFont:[UIFont systemFontOfSize:16.0]];
         [_buttonMarketing.layer setCornerRadius:0.0];
         [_buttonMarketing addTarget:self action:@selector(buttonMarketingPressed:) forControlEvents:UIControlEventTouchUpInside];
     }

@@ -145,7 +145,7 @@
 "LatestHalfYear"="半年內";
 "LatestYear"="一年內";
 "CommonDelivery"="一般宅配";
-"FastDelivery"="快捷出貨";
+"FastDelivery"="快速到貨";
 "StorePickUp"="超商取貨";
 "OrderAuthrizationNumber"="訂單授權編號";
 "T_CatId"="黑貓宅配單號";
@@ -335,3 +335,7 @@
 "CurrentlyNoCoupon"="目前您沒有任何折價券";
 "DeliverProgress"="配送進度";
 "PleaseSelectPaymentType"="請先選擇付款方式";
+"CurrentlyNoOrder"="目前無訂單";
+"ThisProductNoInstallment"="此商品不提供分期";
+"ChangePasswordFailed"="變更密碼失敗";
+"EightHourDelivery"="８Ｈ速配";

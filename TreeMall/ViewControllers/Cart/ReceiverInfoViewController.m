@@ -3339,7 +3339,7 @@ typedef enum : NSUInteger {
                 {
                     message = [LocalizedString CellphoneBarcode];
                 }
-                [self presentAlertMessage:message forIndexPath:indexPath withTextFieldDefaultText:nil andKeyboardType:UIKeyboardTypeASCIICapableNumberPad fromTableView:tableView];
+                [self presentAlertMessage:message forIndexPath:indexPath withTextFieldDefaultText:nil andKeyboardType:UIKeyboardTypeASCIICapable fromTableView:tableView];
             }
                 break;
             case InvoiceCellTagChooseDonateTarget:

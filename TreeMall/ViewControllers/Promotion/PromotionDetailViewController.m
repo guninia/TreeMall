@@ -166,7 +166,7 @@
     if (_labelContent == nil)
     {
         _labelContent = [[UILabel alloc] initWithFrame:CGRectZero];
-        UIFont *font = [UIFont systemFontOfSize:12.0];
+        UIFont *font = [UIFont systemFontOfSize:16.0];
         [_labelContent setFont:font];
         [_labelContent setBackgroundColor:[UIColor clearColor]];
         [_labelContent setTextColor:[UIColor grayColor]];

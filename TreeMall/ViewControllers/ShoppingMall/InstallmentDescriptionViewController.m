@@ -10,6 +10,7 @@
 #import "APIDefinition.h"
 #import "SHAPIAdapter.h"
 #import "LocalizedString.h"
+#import "Definition.h"
 
 @interface InstallmentDescriptionViewController ()
 
@@ -28,7 +29,19 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    self.title = [LocalizedString InstallmentsCalculation];
     [self.view setBackgroundColor:[UIColor whiteColor]];
+    [self.view.layer setMasksToBounds:YES];
+    [self.view addSubview:self.toolBar];
+    
+    UIBarButtonItem *itemTitle = [[UIBarButtonItem alloc] initWithCustomView:self.labelTitle];
+    UIBarButtonItem *itemClose = [[UIBarButtonItem alloc] initWithCustomView:self.buttonClose];
+    UIBarButtonItem *fixedSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
+    fixedSpace.width = 0.0;
+    UIBarButtonItem *flexSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
+    NSArray *items = [NSArray arrayWithObjects:fixedSpace, itemTitle, flexSpace, itemClose, fixedSpace, nil];
+    [self.toolBar setItems:items];
+    
     [self.view addSubview:self.scrollView];
     [self.scrollView addSubview:self.labelInstallmentTitle];
     for (UILabel *label in self.arrayLabels)
@@ -71,11 +84,24 @@
     CGFloat intervalV = 10.0;
     CGFloat originY = 0.0;
     
-    if (self.buttonClose)
+    if (self.toolBar)
     {
-        CGSize size = CGSizeMake(40.0, 40.0);
-        CGRect frame = CGRectMake(self.view.frame.size.width - size.width, 0.0, size.width, size.height);
-        self.buttonClose.frame = frame;
+        CGRect frame = CGRectMake(0.0, originY, self.view.frame.size.width, 44.0);
+        self.toolBar.frame = frame;
+        originY = self.toolBar.frame.origin.y + self.toolBar.frame.size.height;
+        if (self.labelTitle)
+        {
+            CGSize size = CGSizeMake(200.0, 40.0);
+            CGRect frame = CGRectMake(0.0, 0.0, size.width, size.height);
+            self.labelTitle.frame = frame;
+        }
+        if (self.buttonClose)
+        {
+            CGSize size = CGSizeMake(40.0, 40.0);
+            CGRect frame = CGRectMake(0.0, 0.0, size.width, size.height);
+            self.buttonClose.frame = frame;
+        }
+        [self.toolBar setNeedsLayout];
     }
     
     if (self.scrollView)
@@ -83,7 +109,7 @@
         CGFloat originY = CGRectGetMaxY(self.buttonClose.frame);
         self.scrollView.frame = CGRectMake(marginH, originY, self.view.frame.size.width - marginH * 2, self.view.frame.size.height - marginV - originY);
     }
-    
+    originY = marginV;
     if (self.labelInstallmentTitle)
     {
         CGSize sizeString = [self.labelInstallmentTitle.text sizeWithAttributes:[NSDictionary dictionaryWithObjectsAndKeys:self.labelInstallmentTitle.font, NSFontAttributeName, nil]];
@@ -137,11 +163,34 @@
     [self.scrollView setContentSize:CGSizeMake(self.scrollView.frame.size.width, originY)];
 }
 
+- (UIToolbar *)toolBar
+{
+    if (_toolBar == nil)
+    {
+        _toolBar = [[UIToolbar alloc] initWithFrame:CGRectZero];
+        [_toolBar setBarTintColor:TMMainColor];
+    }
+    return _toolBar;
+}
+
+- (UILabel *)labelTitle
+{
+    if (_labelTitle == nil)
+    {
+        _labelTitle = [[UILabel alloc] initWithFrame:CGRectZero];
+        [_labelTitle setTextColor:[UIColor whiteColor]];
+        [_labelTitle setText:[LocalizedString InstallmentsCalculation]];
+    }
+    return _labelTitle;
+}
+
 - (UIScrollView *)scrollView
 {
     if (_scrollView == nil)
     {
         _scrollView = [[UIScrollView alloc] initWithFrame:CGRectZero];
+        [_scrollView setShowsVerticalScrollIndicator:NO];
+        [_scrollView setShowsHorizontalScrollIndicator:NO];
     }
     return _scrollView;
 }
@@ -290,11 +339,12 @@
     {
         _buttonClose = [[UIButton alloc] initWithFrame:CGRectZero];
         [_buttonClose setBackgroundColor:[UIColor clearColor]];
-        UIImage *image = [UIImage imageNamed:@"car_popup_close"];
+        UIImage *image = [[UIImage imageNamed:@"car_popup_close"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         if (image)
         {
             [_buttonClose setImage:image forState:UIControlStateNormal];
         }
+        [_buttonClose setTintColor:[UIColor whiteColor]];
         [_buttonClose addTarget:self action:@selector(buttonClosePressed:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _buttonClose;

@@ -66,6 +66,8 @@
     if (_segmentedControl == nil)
     {
         _segmentedControl = [[UISegmentedControl alloc] initWithItems:self.items];
+        NSDictionary *attributes = [NSDictionary dictionaryWithObjectsAndKeys:[UIFont boldSystemFontOfSize:16.0], NSFontAttributeName, nil];
+        [_segmentedControl setTitleTextAttributes:attributes forState:UIControlStateNormal];
         [_segmentedControl addTarget:self action:@selector(segmentedControlValueChanged:) forControlEvents:UIControlEventValueChanged];
     }
     return _segmentedControl;

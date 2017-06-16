@@ -265,6 +265,14 @@
 		689929D01E821D96001EDA0C /* CircularSideLabelView.m in Sources */ = {isa = PBXBuildFile; fileRef = 689929CF1E821D96001EDA0C /* CircularSideLabelView.m */; };
 		689A7A251EB1F14B00B7D281 /* PromotionDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 689A7A231EB1F14B00B7D281 /* PromotionDetailViewController.m */; };
 		689A7A261EB1F14B00B7D281 /* PromotionDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 689A7A241EB1F14B00B7D281 /* PromotionDetailViewController.xib */; };
+		689F0FCE1EF371FA0087F36B /* EmailAuthViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 689F0FCC1EF371FA0087F36B /* EmailAuthViewController.m */; };
+		689F0FCF1EF371FA0087F36B /* EmailAuthViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 689F0FCC1EF371FA0087F36B /* EmailAuthViewController.m */; };
+		689F0FD01EF371FA0087F36B /* EmailAuthViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 689F0FCD1EF371FA0087F36B /* EmailAuthViewController.xib */; };
+		689F0FD11EF371FB0087F36B /* EmailAuthViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 689F0FCD1EF371FA0087F36B /* EmailAuthViewController.xib */; };
+		689F0FD51EF37D2B0087F36B /* ChangePasswordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 689F0FD31EF37D2B0087F36B /* ChangePasswordViewController.m */; };
+		689F0FD61EF37D2B0087F36B /* ChangePasswordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 689F0FD31EF37D2B0087F36B /* ChangePasswordViewController.m */; };
+		689F0FD71EF37D2B0087F36B /* ChangePasswordViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 689F0FD41EF37D2B0087F36B /* ChangePasswordViewController.xib */; };
+		689F0FD81EF37D2B0087F36B /* ChangePasswordViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 689F0FD41EF37D2B0087F36B /* ChangePasswordViewController.xib */; };
 		689F664A1E5AC56400CC3664 /* ProductDetailBottomBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 689F66491E5AC56400CC3664 /* ProductDetailBottomBar.m */; };
 		68A05C0E1ECEF1F100A379E1 /* DeliverProgressViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68A05C0C1ECEF1F100A379E1 /* DeliverProgressViewController.m */; };
 		68A05C0F1ECEF1F100A379E1 /* DeliverProgressViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68A05C0C1ECEF1F100A379E1 /* DeliverProgressViewController.m */; };
@@ -549,6 +557,12 @@
 		689A7A221EB1F14B00B7D281 /* PromotionDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PromotionDetailViewController.h; path = ViewControllers/Promotion/PromotionDetailViewController.h; sourceTree = "<group>"; };
 		689A7A231EB1F14B00B7D281 /* PromotionDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PromotionDetailViewController.m; path = ViewControllers/Promotion/PromotionDetailViewController.m; sourceTree = "<group>"; };
 		689A7A241EB1F14B00B7D281 /* PromotionDetailViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = PromotionDetailViewController.xib; path = ViewControllers/Promotion/PromotionDetailViewController.xib; sourceTree = "<group>"; };
+		689F0FCB1EF371FA0087F36B /* EmailAuthViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EmailAuthViewController.h; path = ViewControllers/Member/EmailAuthViewController.h; sourceTree = "<group>"; };
+		689F0FCC1EF371FA0087F36B /* EmailAuthViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EmailAuthViewController.m; path = ViewControllers/Member/EmailAuthViewController.m; sourceTree = "<group>"; };
+		689F0FCD1EF371FA0087F36B /* EmailAuthViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = EmailAuthViewController.xib; path = ViewControllers/Member/EmailAuthViewController.xib; sourceTree = "<group>"; };
+		689F0FD21EF37D2B0087F36B /* ChangePasswordViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ChangePasswordViewController.h; path = ViewControllers/Member/ChangePasswordViewController.h; sourceTree = "<group>"; };
+		689F0FD31EF37D2B0087F36B /* ChangePasswordViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ChangePasswordViewController.m; path = ViewControllers/Member/ChangePasswordViewController.m; sourceTree = "<group>"; };
+		689F0FD41EF37D2B0087F36B /* ChangePasswordViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = ChangePasswordViewController.xib; path = ViewControllers/Member/ChangePasswordViewController.xib; sourceTree = "<group>"; };
 		689F66481E5AC56400CC3664 /* ProductDetailBottomBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ProductDetailBottomBar.h; path = ViewControllers/ShoppingMall/ProductDetailBottomBar.h; sourceTree = "<group>"; };
 		689F66491E5AC56400CC3664 /* ProductDetailBottomBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ProductDetailBottomBar.m; path = ViewControllers/ShoppingMall/ProductDetailBottomBar.m; sourceTree = "<group>"; };
 		68A05C0B1ECEF1F100A379E1 /* DeliverProgressViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DeliverProgressViewController.h; path = ViewControllers/OrderList/DeliverProgressViewController.h; sourceTree = "<group>"; };
@@ -1189,6 +1203,12 @@
 				68B0FDDD1E837B8F00BE273F /* NewsletterSubscribeViewController.xib */,
 				68B0FDE71E83808F00BE273F /* NewsletterSubscribeTableViewCell.h */,
 				68B0FDE81E83808F00BE273F /* NewsletterSubscribeTableViewCell.m */,
+				689F0FCB1EF371FA0087F36B /* EmailAuthViewController.h */,
+				689F0FCC1EF371FA0087F36B /* EmailAuthViewController.m */,
+				689F0FCD1EF371FA0087F36B /* EmailAuthViewController.xib */,
+				689F0FD21EF37D2B0087F36B /* ChangePasswordViewController.h */,
+				689F0FD31EF37D2B0087F36B /* ChangePasswordViewController.m */,
+				689F0FD41EF37D2B0087F36B /* ChangePasswordViewController.xib */,
 			);
 			name = Member;
 			sourceTree = "<group>";
@@ -1571,6 +1591,7 @@
 				68D7F2761EC99DAB00B13214 /* Images.xcassets in Resources */,
 				689065271E2338C400E5CB26 /* MemberViewController.xib in Resources */,
 				683C17D41EB2D9200051519A /* HotSaleViewController.xib in Resources */,
+				689F0FD71EF37D2B0087F36B /* ChangePasswordViewController.xib in Resources */,
 				689065151E23368100E5CB26 /* ShoppingMallViewController.xib in Resources */,
 				68CA36BE1E23880400A70BCC /* LoginViewController.xib in Resources */,
 				68E401371E30B09900BFF66B /* ForgetPasswordViewController.xib in Resources */,
@@ -1601,6 +1622,7 @@
 				6890652D1E23470E00E5CB26 /* FavoriteViewController.xib in Resources */,
 				6838E1291EB587DC007395EF /* SingleMediaDetailSubViewController.xib in Resources */,
 				68B26FBA1E31CB5F00B6D757 /* RegisterViewController.xib in Resources */,
+				689F0FD01EF371FA0087F36B /* EmailAuthViewController.xib in Resources */,
 				68A827A61E4DB62D00E63552 /* ProductDetailViewController.xib in Resources */,
 				6863A1DD1E5EBD3D0036E0A8 /* OrderListViewController.xib in Resources */,
 				68D7F26D1EC94CE400B13214 /* CompleteOrderViewController.xib in Resources */,
@@ -1642,6 +1664,7 @@
 				688494131EBC779A0087BC2B /* CouponDetailViewController.xib in Resources */,
 				688494141EBC779A0087BC2B /* AdditionalPurchaseViewController.xib in Resources */,
 				688494161EBC779A0087BC2B /* AuthenticateViewController.xib in Resources */,
+				689F0FD81EF37D2B0087F36B /* ChangePasswordViewController.xib in Resources */,
 				688494171EBC779A0087BC2B /* Assets.xcassets in Resources */,
 				688494181EBC779A0087BC2B /* EntranceViewController.xib in Resources */,
 				68D7F2771EC99DAB00B13214 /* Images.xcassets in Resources */,
@@ -1664,6 +1687,7 @@
 				688494261EBC779A0087BC2B /* PaymentTypeViewController.xib in Resources */,
 				688494271EBC779A0087BC2B /* FavoriteViewController.xib in Resources */,
 				688494281EBC779A0087BC2B /* SingleMediaDetailSubViewController.xib in Resources */,
+				689F0FD11EF371FB0087F36B /* EmailAuthViewController.xib in Resources */,
 				688494291EBC779A0087BC2B /* RegisterViewController.xib in Resources */,
 				6884942A1EBC779A0087BC2B /* ProductDetailViewController.xib in Resources */,
 				6884942B1EBC779A0087BC2B /* OrderListViewController.xib in Resources */,
@@ -1872,6 +1896,7 @@
 				685939E91E1F518700351FFB /* CryptoTool.m in Sources */,
 				6895464D1E3608E500D5CD1E /* WebViewViewController.m in Sources */,
 				687080BE1EE16573005EC439 /* DiscountFooterView.m in Sources */,
+				689F0FCE1EF371FA0087F36B /* EmailAuthViewController.m in Sources */,
 				680957751E43195F00DA2BEA /* ProductListToolView.m in Sources */,
 				68164D921E39D11F00006398 /* ProductListViewController.m in Sources */,
 				683C17D71EB2D9E70051519A /* HotSaleTableViewCell.m in Sources */,
@@ -1917,6 +1942,7 @@
 				680957721E43051C00DA2BEA /* ProductSubcategoryCollectionViewCell.m in Sources */,
 				68B68FEF1E24753400DCCF29 /* Utility.m in Sources */,
 				68A05C181ECEF8F100A379E1 /* DeliverProgressHeaderView.m in Sources */,
+				689F0FD51EF37D2B0087F36B /* ChangePasswordViewController.m in Sources */,
 				689613CA1E52AAE800066BE7 /* LabelRangeSliderView.m in Sources */,
 				689065201E23387200E5CB26 /* NotificationViewController.m in Sources */,
 				68981FA91E55991E00A2707A /* SearchViewController.m in Sources */,
@@ -2026,6 +2052,7 @@
 				688493A01EBC779A0087BC2B /* DiscountTableViewCell.m in Sources */,
 				688493A11EBC779A0087BC2B /* ViewController.m in Sources */,
 				688493A21EBC779A0087BC2B /* FTPopTableViewController.m in Sources */,
+				689F0FD61EF37D2B0087F36B /* ChangePasswordViewController.m in Sources */,
 				688493A31EBC779A0087BC2B /* ExtraSubcategoryHeaderView.m in Sources */,
 				688493A41EBC779A0087BC2B /* ProductDetailViewController.m in Sources */,
 				688493A51EBC779A0087BC2B /* CouponTableViewCell.m in Sources */,
@@ -2036,6 +2063,7 @@
 				688493AA1EBC779A0087BC2B /* LabelButtonView.m in Sources */,
 				688493AB1EBC779A0087BC2B /* ExtraSubcategorySeeAllTableViewCell.m in Sources */,
 				688493AC1EBC779A0087BC2B /* DiscountViewController.m in Sources */,
+				689F0FCF1EF371FA0087F36B /* EmailAuthViewController.m in Sources */,
 				688493AD1EBC779A0087BC2B /* SHAPIAdapter.m in Sources */,
 				688493AE1EBC779A0087BC2B /* ProductDetailSectionTitleView.m in Sources */,
 				688493AF1EBC779A0087BC2B /* OrderHeaderReusableView.m in Sources */,

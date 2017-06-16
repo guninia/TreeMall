@@ -1629,26 +1629,31 @@ static NSUInteger SearchKeywordNumberMax = 8;
         return;
     }
     
-    NSNumber *point01 = [product objectForKey:SymphoxAPIParam_point01];
-    NSNumber *price02 = [product objectForKey:SymphoxAPIParam_price02];
-    NSNumber *point02 = [product objectForKey:SymphoxAPIParam_point02];
-    NSNumber *price03 = [product objectForKey:SymphoxAPIParam_price03];
-    
-    NSString *paymentType = @"0";
-    if (price03 == nil || [price03 isEqual:[NSNull null]] || [price03 integerValue] == 0)
-    {
-        if (point01 && [point01 isEqual:[NSNull null]] == NO && [point01 integerValue] > 0)
-        {
-            paymentType = @"1";
-        }
-        else if ((price02 && [price02 isEqual:[NSNull null]] == NO && [price02 integerValue] > 0) || (point02 && [point02 isEqual:[NSNull null]] == NO && [point02 integerValue] > 0))
-        {
-            paymentType = @"3";
-        }
-    }
+//    NSNumber *point01 = [product objectForKey:SymphoxAPIParam_point01];
+//    NSNumber *price02 = [product objectForKey:SymphoxAPIParam_price02];
+//    NSNumber *point02 = [product objectForKey:SymphoxAPIParam_point02];
+//    NSNumber *price03 = [product objectForKey:SymphoxAPIParam_price03];
+//    
+//    NSString *paymentType = @"0";
+//    NSString *paymentValueKey = SymphoxAPIParam_price;
+//    NSNumber *paymentValue = nil;
+//    if (price03 && ([price03 isEqual:[NSNull null]] == NO) && [price03 integerValue] > 0)
+//    {
+//        paymentValue = price03;
+//    }
+//    else if (point01 && [point01 isEqual:[NSNull null]] == NO && [point01 integerValue] > 0)
+//    {
+//        paymentType = @"1";
+//        paymentValue = point01;
+//        paymentValueKey = SymphoxAPIParam_total_point;
+//    }
+//    else
+//    {
+//        paymentValue = [NSNumber numberWithInteger:0];
+//    }
     
     [self setPurchaseQuantity:[NSNumber numberWithInteger:1] forProduct:currentProductId inCart:type];
-    NSDictionary *dictionaryMode = [NSDictionary dictionaryWithObjectsAndKeys:paymentType, SymphoxAPIParam_payment_type, [NSNumber numberWithInteger:0], SymphoxAPIParam_price, nil];
+    NSDictionary *dictionaryMode = [NSDictionary dictionary];
     [self setPurchasePaymentMode:dictionaryMode forProduct:currentProductId inCart:type];
     [array addObject:product];
     [self saveToArchive];
@@ -2510,8 +2515,8 @@ static NSUInteger SearchKeywordNumberMax = 8;
             {
                 self.userPointAdUrl = adUrl;
             }
+            [[NSNotificationCenter defaultCenter] postNotificationName:PostNotificationName_UserPointUpdated object:self userInfo:dictionary];
         }
-        [[NSNotificationCenter defaultCenter] postNotificationName:PostNotificationName_UserPointUpdated object:self];
     }
 }
 

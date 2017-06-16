@@ -25,6 +25,8 @@
 @property (nonatomic, assign) NSInteger specIndex;
 
 @property (nonatomic, strong) UIScrollView *scrollView;
+@property (nonatomic, strong) UILabel *labelFastDelivery;
+@property (nonatomic, strong) UILabel *labelDiscount;
 @property (nonatomic, strong) UICollectionView *collectionViewImage;
 @property (nonatomic, strong) UIPageControl *pageControlImage;
 @property (nonatomic, strong) UILabel *labelMarketing;

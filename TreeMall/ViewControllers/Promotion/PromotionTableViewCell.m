@@ -48,23 +48,21 @@
         [_titleLabel setBackgroundColor:[UIColor clearColor]];
         [_titleLabel setTextColor:[UIColor blackColor]];
         [_titleLabel setNumberOfLines:0];
+        [_titleLabel setFont:[UIFont systemFontOfSize:16.0]];
         [_containerView addSubview:_titleLabel];
         
         _subtitleLabel = [[UILabel alloc] initWithFrame:CGRectZero];
         [_subtitleLabel setBackgroundColor:[UIColor clearColor]];
-        [_subtitleLabel setTextColor:[UIColor blackColor]];
+        [_subtitleLabel setTextColor:[UIColor grayColor]];
+        [_subtitleLabel setFont:[UIFont systemFontOfSize:16.0]];
         [_containerView addSubview:_subtitleLabel];
         
-//        _contentLabel = [[TTTAttributedLabel alloc] initWithFrame:CGRectZero];
-//        [_contentLabel setBackgroundColor:[UIColor clearColor]];
-//        [_contentLabel setTextColor:[UIColor grayColor]];
-//        [_contentLabel setNumberOfLines:0];
-//        [_contentLabel setFont:[UIFont systemFontOfSize:12.0]];
-//        [_containerView addSubview:_contentLabel];
-        
-        [self.detailTextLabel setBackgroundColor:[UIColor clearColor]];
-        [self.detailTextLabel setTextColor:[UIColor blackColor]];
-        [self.detailTextLabel setFont:[UIFont boldSystemFontOfSize:14.0]];
+        _contentLabel = [[TTTAttributedLabel alloc] initWithFrame:CGRectZero];
+        [_contentLabel setBackgroundColor:[UIColor clearColor]];
+        [_contentLabel setTextColor:[UIColor grayColor]];
+        [_contentLabel setNumberOfLines:0];
+        [_contentLabel setFont:[UIFont systemFontOfSize:16.0]];
+        [_containerView addSubview:_contentLabel];
         
         _viewMask = [[UIView alloc] initWithFrame:CGRectZero];
         [_viewMask setBackgroundColor:[UIColor colorWithWhite:0.8 alpha:0.5]];
@@ -72,9 +70,9 @@
         [_containerView addSubview:_viewMask];
         
         titleAttributes = [NSDictionary dictionaryWithObjectsAndKeys:[UIFont boldSystemFontOfSize:16.0], NSFontAttributeName, titleStyle, NSParagraphStyleAttributeName, _titleLabel.textColor, NSForegroundColorAttributeName, nil];
-        selectedTitleAttributes = [NSDictionary dictionaryWithObjectsAndKeys:[UIFont systemFontOfSize:14], NSFontAttributeName, titleStyle, NSParagraphStyleAttributeName, [UIColor grayColor], NSForegroundColorAttributeName, nil];
-        subtitleAttributes = [NSDictionary dictionaryWithObjectsAndKeys:[UIFont boldSystemFontOfSize:14.0], NSFontAttributeName, _subtitleLabel.textColor, NSForegroundColorAttributeName, nil];
-        selectedSubtitleAttributes = [NSDictionary dictionaryWithObjectsAndKeys:[UIFont systemFontOfSize:14.0], NSFontAttributeName, [UIColor grayColor], NSForegroundColorAttributeName, nil];
+        selectedTitleAttributes = [NSDictionary dictionaryWithObjectsAndKeys:[UIFont systemFontOfSize:16], NSFontAttributeName, titleStyle, NSParagraphStyleAttributeName, [UIColor grayColor], NSForegroundColorAttributeName, nil];
+        subtitleAttributes = [NSDictionary dictionaryWithObjectsAndKeys:[UIFont boldSystemFontOfSize:16.0], NSFontAttributeName, _subtitleLabel.textColor, NSForegroundColorAttributeName, nil];
+        selectedSubtitleAttributes = [NSDictionary dictionaryWithObjectsAndKeys:[UIFont systemFontOfSize:16.0], NSFontAttributeName, [UIColor grayColor], NSForegroundColorAttributeName, nil];
         contentAttributes = [NSDictionary dictionaryWithObjectsAndKeys:_contentLabel.font, NSFontAttributeName, contentStyle, NSParagraphStyleAttributeName, _contentLabel.textColor, NSForegroundColorAttributeName, nil];
         
         
@@ -95,35 +93,34 @@
 {
     [super layoutSubviews];
     
+    CGFloat marginV = 5.0;
+    CGFloat marginH = 10.0;
     if (_containerView != nil)
     {
-        CGFloat marginV = 5.0;
-        CGFloat marginH = 10.0;
         [_containerView setFrame:CGRectMake(marginH, marginV, self.contentView.frame.size.width - marginH * 2, self.contentView.frame.size.height - marginV * 2)];
     }
     [_viewMask setFrame:_containerView.bounds];
     
     CGFloat hInterval = 5.0;
     CGFloat vInterval = 5.0;
-    CGFloat leftMargin = 0.0;
+    CGFloat leftMargin = 10.0;
     CGFloat rightMargin = 10.0;
-    CGFloat topMargin = 5.0;
+    CGFloat topMargin = 10.0;
     CGFloat botMargin = 10.0;
     CGFloat originX = leftMargin;
     CGFloat originY = topMargin;
     
     CGSize imageViewSize = CGSizeMake(40.0, 40.0);
     CGRect imageViewFrame = self.imageView.frame;
-    imageViewFrame.origin.x = originX;
-    imageViewFrame.origin.y = ceil((_containerView.frame.size.height - imageViewSize.height)/2);
+    imageViewFrame.origin.x = marginH + originX;
+    imageViewFrame.origin.y = marginV + topMargin;
     imageViewFrame.size = imageViewSize;
+    self.imageView.frame = imageViewFrame;
     originX = imageViewFrame.origin.x + imageViewFrame.size.width + hInterval;
     CGFloat labelMaxWidth = _containerView.frame.size.width - originX - rightMargin;
     
 //    NSString *defaultTowLineString = @"XXXXX\nXXXXX";
     NSString *defaultOneLineString = @"XXXXX";
-    
-    
     
     if ([_title length] > 0)
     {
@@ -144,12 +141,15 @@
         originY = _subtitleLabel.frame.origin.y + _subtitleLabel.frame.size.height + vInterval;
     }
     
-    CGRect contentFrame = _contentLabel.frame;
-    contentFrame.origin.x = originX;
-    contentFrame.origin.y = originY;
-    contentFrame.size.width = labelMaxWidth;
-    contentFrame.size.height = _containerView.frame.size.height - originY - botMargin;
-    _contentLabel.frame = contentFrame;
+    if ([self.content length] > 0)
+    {
+        CGRect contentFrame = self.contentLabel.frame;
+        contentFrame.origin.x = originX;
+        contentFrame.origin.y = originY;
+        contentFrame.size.width = labelMaxWidth;
+        contentFrame.size.height = _containerView.frame.size.height - originY - botMargin;
+        _contentLabel.frame = contentFrame;
+    }
 }
 
 #pragma mark - Override

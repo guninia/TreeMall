@@ -674,6 +674,7 @@
                             [[TMInfoManager sharedManager] nameOfRemovedProductId:productId inCart:type];
                         }
                     }
+                    [self.arrayProducts removeAllObjects];
                 }
                 NSString *serverMessage = [userInfo objectForKey:SymphoxAPIParam_status_desc];
                 if (serverMessage)
@@ -998,17 +999,20 @@
 
 - (void)refreshContent
 {
-    if ([self.arrayProducts count] == 0)
-    {
-        self.tableView.backgroundView = self.tableBackgroundView;
-    }
-    else
-    {
-        self.tableView.backgroundView = nil;
-    }
-    [self.tableView reloadData];
-    
-    [self refreshBottomBar];
+    __weak CartViewController *weakSelf = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if ([weakSelf.arrayProducts count] == 0)
+        {
+            weakSelf.tableView.backgroundView = weakSelf.tableBackgroundView;
+        }
+        else
+        {
+            weakSelf.tableView.backgroundView = nil;
+        }
+        [weakSelf.tableView reloadData];
+        
+        [weakSelf refreshBottomBar];
+    });
 }
 
 - (void)refreshBottomBar
@@ -1368,7 +1372,7 @@
             }
             NSString *stringTotal = [self.numberFormatter stringFromNumber:numberPoint];
             NSString *string = [NSString stringWithFormat:@"%@%@", stringTotal, [LocalizedString Point]];
-            NSAttributedString *attrString = [[NSAttributedString alloc] initWithString:string attributes:attributeGray];
+            NSAttributedString *attrString = [[NSAttributedString alloc] initWithString:string attributes:attributeRed];
             [totalCostString appendAttributedString:attrString];
         }
         if ([totalCostString length] == originLength)

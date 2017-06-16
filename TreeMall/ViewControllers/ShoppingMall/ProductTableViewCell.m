@@ -203,7 +203,7 @@ static NSInteger MaxTagsNumber = 5;
         buttonOriginX = buttonOriginX - size.width;
         CGRect frame = CGRectMake(buttonOriginX, originY, size.width, size.height);
         self.buttonCart.frame = frame;
-        buttonOriginX = buttonOriginX - intervalH;
+        buttonOriginX = buttonOriginX - intervalH * 2;
     }
     if (self.buttonFavorite && [self.buttonFavorite isHidden] == NO)
     {
@@ -560,7 +560,7 @@ static NSInteger MaxTagsNumber = 5;
 {
     if (_fontPriceLarge == nil)
     {
-        _fontPriceLarge = [UIFont systemFontOfSize:24.0];
+        _fontPriceLarge = [UIFont systemFontOfSize:22.0];
     }
     return _fontPriceLarge;
 }
@@ -569,7 +569,7 @@ static NSInteger MaxTagsNumber = 5;
 {
     if (_fontPriceSmall == nil)
     {
-        _fontPriceSmall = [UIFont systemFontOfSize:18.0];
+        _fontPriceSmall = [UIFont systemFontOfSize:16.0];
     }
     return _fontPriceSmall;
 }
@@ -673,9 +673,13 @@ static NSInteger MaxTagsNumber = 5;
             {
                 [formatter setNumberStyle:NSNumberFormatterDecimalStyle];
                 NSString *formattedString = [formatter stringFromNumber:self.point];
-                NSString *pointString = [[NSString stringWithFormat:@"%@", formattedString] stringByAppendingString:[LocalizedString Point]];
-                [self.labelPoint setText:pointString];
-                [self.labelPoint setFont:self.fontPriceLarge];
+//                NSString *pointString = [[NSString stringWithFormat:@"%@", formattedString] stringByAppendingString:[LocalizedString Point]];
+                NSDictionary *attributes1 = [NSDictionary dictionaryWithObjectsAndKeys:self.fontPriceLarge, NSFontAttributeName, nil];
+                NSDictionary *attributes2 = [NSDictionary dictionaryWithObjectsAndKeys:self.fontPriceSmall, NSFontAttributeName, nil];
+                NSMutableAttributedString *finalString = [[NSMutableAttributedString alloc] initWithString:formattedString attributes:attributes1];
+                [finalString appendAttributedString:[[NSAttributedString alloc] initWithString:[LocalizedString Point] attributes:attributes2]];
+                [self.labelPoint setAttributedText:finalString];
+//                [self.labelPoint setFont:self.fontPriceLarge];
                 [self.labelPoint setTextColor:[UIColor redColor]];
             }
         }

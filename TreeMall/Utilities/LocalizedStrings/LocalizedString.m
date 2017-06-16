@@ -3301,4 +3301,44 @@
     return PleaseSelectPaymentType;
 }
 
++ (NSString *)CurrentlyNoOrder
+{
+    static NSString *CurrentlyNoOrder = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        CurrentlyNoOrder = NSLocalizedString(@"CurrentlyNoOrder", nil);
+    });
+    return CurrentlyNoOrder;
+}
+
++ (NSString *)ThisProductNoInstallment
+{
+    static NSString *ThisProductNoInstallment = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        ThisProductNoInstallment = NSLocalizedString(@"ThisProductNoInstallment", nil);
+    });
+    return ThisProductNoInstallment;
+}
+
++ (NSString *)ChangePasswordFailed
+{
+    static NSString *ChangePasswordFailed = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        ChangePasswordFailed = NSLocalizedString(@"ChangePasswordFailed", nil);
+    });
+    return ChangePasswordFailed;
+}
+
++ (NSString *)EightHourDelivery
+{
+    static NSString *EightHourDelivery = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        EightHourDelivery = NSLocalizedString(@"EightHourDelivery", nil);
+    });
+    return EightHourDelivery;
+}
+
 @end

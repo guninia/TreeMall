@@ -32,9 +32,13 @@ typedef enum : NSUInteger {
 - (void)resetAllContent;
 - (void)retrieveOrderNumberOfStatus;
 - (BOOL)processOrderNumberOfStatusData:(id)data;
+- (NSString *)greetingsMessage;
 
 - (void)buttonItemLogoutPressed:(id)sender;
 - (void)buttonItemQAPressed:(id)sender;
+- (void)buttonAdvertisementPressed:(id)sender;
+
+- (void)handlerOfUserPointUpdatedNotification:(NSNotification *)notification;
 
 @end
 
@@ -66,6 +70,7 @@ typedef enum : NSUInteger {
     [self.view setBackgroundColor:[UIColor whiteColor]];
     [self.view addSubview:self.viewTitle];
     [self.view addSubview:self.scrollView];
+    [self.scrollView addSubview:self.buttonAdvertisement];
     [self.scrollView addSubview:self.viewPoint];
     [self.scrollView addSubview:self.viewCouponTitle];
     [self.scrollView addSubview:self.viewTotalCoupon];
@@ -121,7 +126,7 @@ typedef enum : NSUInteger {
     CGFloat originY = 0.0;
     if (self.viewTitle)
     {
-        CGRect frame = CGRectMake(0.0, originY, self.view.frame.size.width, 40.0);
+        CGRect frame = CGRectMake(0.0, originY, self.view.frame.size.width, 50.0);
         self.viewTitle.frame = frame;
         originY = self.viewTitle.frame.origin.y + self.viewTitle.frame.size.height;
     }
@@ -130,10 +135,19 @@ typedef enum : NSUInteger {
         CGRect frame = CGRectMake(0.0, originY, self.view.frame.size.width, self.view.frame.size.height - originY);
         self.scrollView.frame = frame;
     }
+    CGFloat marginH = 8.0;
     originY = 0.0;
+    if (self.buttonAdvertisement && [self.buttonAdvertisement isHidden] == NO)
+    {
+        CGSize sizeText = [[self.buttonAdvertisement titleForState:UIControlStateNormal] boundingRectWithSize:CGSizeMake(self.scrollView.frame.size.width - marginH * 2, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin attributes:[NSDictionary dictionaryWithObjectsAndKeys:self.buttonAdvertisement.titleLabel.font, NSFontAttributeName, nil] context:nil].size;
+        CGSize sizeButton = CGSizeMake(ceil(sizeText.width + 4), ceil(sizeText.height + 4));
+        CGRect frame = CGRectMake(marginH, originY + 5.0, sizeButton.width, sizeButton.height);
+        self.buttonAdvertisement.frame = frame;
+        originY = self.buttonAdvertisement.frame.origin.y + self.buttonAdvertisement.frame.size.height;
+    }
     if (self.viewPoint)
     {
-        CGRect frame = CGRectMake(0.0, originY, self.scrollView.frame.size.width, 200.0);
+        CGRect frame = CGRectMake(0.0, originY, self.scrollView.frame.size.width, 180.0);
         self.viewPoint.frame = frame;
         originY = self.viewPoint.frame.origin.y + self.viewPoint.frame.size.height;
     }
@@ -145,7 +159,7 @@ typedef enum : NSUInteger {
     }
     if (self.viewTotalCoupon)
     {
-        CGRect frame = CGRectMake(0.0, originY, self.scrollView.frame.size.width, 40.0);
+        CGRect frame = CGRectMake(0.0, originY, self.scrollView.frame.size.width, 50.0);
         self.viewTotalCoupon.frame = frame;
         originY = self.viewTotalCoupon.frame.origin.y + self.viewTotalCoupon.frame.size.height;
     }
@@ -196,6 +210,22 @@ typedef enum : NSUInteger {
         _viewTitle.delegate = self;
     }
     return _viewTitle;
+}
+
+- (UIButton *)buttonAdvertisement
+{
+    if (_buttonAdvertisement == nil)
+    {
+        _buttonAdvertisement = [[UIButton alloc] initWithFrame:CGRectZero];
+        [_buttonAdvertisement setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+        [_buttonAdvertisement.titleLabel setNumberOfLines:0];
+        [_buttonAdvertisement.titleLabel setTextAlignment:NSTextAlignmentLeft];
+        [_buttonAdvertisement.titleLabel setFont:[UIFont systemFontOfSize:16.0]];
+        [_buttonAdvertisement.titleLabel setLineBreakMode:NSLineBreakByWordWrapping];
+        [_buttonAdvertisement setHidden:YES];
+        [_buttonAdvertisement addTarget:self action:@selector(buttonAdvertisementPressed:) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _buttonAdvertisement;
 }
 
 - (MemberPointView *)viewPoint
@@ -382,6 +412,12 @@ typedef enum : NSUInteger {
 
 - (void)refreshContent
 {
+    NSString *ad_text = [TMInfoManager sharedManager].userPointAdText;
+    if (ad_text)
+    {
+        [self.buttonAdvertisement setTitle:ad_text forState:UIControlStateNormal];
+        [self.buttonAdvertisement setHidden:NO];
+    }
     NSString *userName = [TMInfoManager sharedManager].userName;
     if (userName)
     {
@@ -401,8 +437,7 @@ typedef enum : NSUInteger {
             default:
                 break;
         }
-        NSString *welcomeString = [NSString stringWithFormat:[LocalizedString Welcome_S__S_], userName, genderString];
-        _viewTitle.labelWelcome.text = welcomeString;
+        _viewTitle.labelWelcome.text = [self greetingsMessage];
     }
     NSNumber *numberCoupon = [TMInfoManager sharedManager].userEcoupon;
     if (numberCoupon)
@@ -474,6 +509,7 @@ typedef enum : NSUInteger {
             }
         }
     }
+    [self.view setNeedsLayout];
 }
 
 - (void)reconfirmAndLogout
@@ -561,6 +597,63 @@ typedef enum : NSUInteger {
     return success;
 }
 
+- (NSString *)greetingsMessage
+{
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateFormat:@"hh"];
+    
+    NSString *stringGreetingsTime = nil;
+    NSDateComponents *components = [[NSCalendar currentCalendar] components:NSCalendarUnitHour fromDate:[NSDate date]];
+    NSInteger hour = components.hour;
+    if (hour >= 0 && hour < 11)
+    {
+        // Morning
+        stringGreetingsTime = [LocalizedString GoodMorning];
+    }
+    else if (hour >= 11 && hour < 13)
+    {
+        // Noon
+        stringGreetingsTime = [LocalizedString GoodNoon];
+    }
+    else if (hour >= 13 && hour < 17)
+    {
+        // Afternoon
+        stringGreetingsTime = [LocalizedString GoodAfternoon];
+    }
+    else if (hour >= 17)
+    {
+        // Evening
+        stringGreetingsTime = [LocalizedString GoodEvening];
+    }
+    
+    NSString *userName = [TMInfoManager sharedManager].userName;
+    if (userName)
+    {
+        NSString *stringGender = nil;
+        switch ([TMInfoManager sharedManager].userGender) {
+            case TMGenderMale:
+            {
+                stringGender = [LocalizedString Mister];
+            }
+                break;
+            case TMGenderFemale:
+            {
+                stringGender = [LocalizedString Miss];
+            }
+                break;
+            default:
+                break;
+        }
+        stringGreetingsTime = [stringGreetingsTime stringByAppendingFormat:@"%@%@", userName, (stringGender == nil)?@"":stringGender];
+    }
+    else
+    {
+        stringGreetingsTime = [stringGreetingsTime stringByAppendingString:[LocalizedString Greetings]];
+    }
+    
+    return stringGreetingsTime;
+}
+
 #pragma mark - Actions
 
 - (void)buttonItemLogoutPressed:(id)sender
@@ -578,6 +671,35 @@ typedef enum : NSUInteger {
     {
         [[UIApplication sharedApplication] openURL:url];
     }
+}
+
+- (void)buttonAdvertisementPressed:(id)sender
+{
+    NSString *urlString = [TMInfoManager sharedManager].userPointAdUrl;
+    if (urlString == nil)
+        return;
+    NSURL *url = [NSURL URLWithString:urlString];
+    if (url == nil || [[UIApplication sharedApplication] canOpenURL:url] == NO)
+        return;
+    [[UIApplication sharedApplication] openURL:url];
+}
+
+#pragma mark - Notification Handler
+
+- (void)handlerOfUserPointUpdatedNotification:(NSNotification *)notification
+{
+    NSDictionary *userInfo = notification.userInfo;
+    NSString *ad_text = nil;
+    if (userInfo)
+    {
+        ad_text = [userInfo objectForKey:SymphoxAPIParam_ad_text];
+    }
+    if (ad_text)
+    {
+        [self.buttonAdvertisement setTitle:ad_text forState:UIControlStateNormal];
+        [self.buttonAdvertisement setHidden:NO];
+    }
+    [self refreshContent];
 }
 
 #pragma mark - ProductDetailSectionTitleViewDelegate

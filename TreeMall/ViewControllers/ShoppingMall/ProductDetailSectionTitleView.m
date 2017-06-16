@@ -23,7 +23,7 @@
     {
         _delegate = nil;
         _topSeparatorHeight = 10.0;
-        self.backgroundColor = [UIColor lightGrayColor];
+        self.backgroundColor = [UIColor colorWithWhite:0.93 alpha:1.0];
         [self addSubview:self.viewBackground];
         [self addSubview:self.viewTitle];
         [self addSubview:self.bottomLine];

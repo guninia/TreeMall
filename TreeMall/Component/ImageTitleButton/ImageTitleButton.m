@@ -86,7 +86,7 @@
         _labelText = [[UILabel alloc] initWithFrame:CGRectZero];
         [_labelText setTextColor:[UIColor whiteColor]];
         [_labelText setBackgroundColor:[UIColor clearColor]];
-        UIFont *font = [UIFont systemFontOfSize:14.0];
+        UIFont *font = [UIFont systemFontOfSize:18.0];
         [_labelText setFont:font];
         [_labelText setTextAlignment:NSTextAlignmentRight];
     }

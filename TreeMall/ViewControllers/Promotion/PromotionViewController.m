@@ -45,7 +45,7 @@
     self.title = [LocalizedString PromotionNotification];
     
     [_tableViewPromotion registerClass:[PromotionTableViewCell class] forCellReuseIdentifier:PromotionTableViewCellIdentifier];
-    [_tableViewPromotion setBackgroundColor:[UIColor colorWithWhite:0.8 alpha:1.0]];
+    [_tableViewPromotion setBackgroundColor:[UIColor colorWithWhite:0.93 alpha:1.0]];
     [_tableViewPromotion setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notificationHandlerTokenUpdated:) name:PostNotificationName_TokenUpdated object:nil];
@@ -185,7 +185,7 @@
         NSString *title = [dictionary objectForKey:SymphoxAPIParam_name];
 //        NSString *beginTime = [dictionary objectForKey:SymphoxAPIParam_begin_time];
 //        NSString *endTime = [dictionary objectForKey:SymphoxAPIParam_end_time];
-//        NSString *content = [dictionary objectForKey:SymphoxAPIParam_content];
+        NSString *content = [dictionary objectForKey:SymphoxAPIParam_content];
 //        NSString *type = [dictionary objectForKey:SymphoxAPIParam_type];
         NSString *identifier = [dictionary objectForKey:SymphoxAPIParam_id];
         NSString *timeString = [dictionary objectForKey:SymphoxAPIParam_timeStr];
@@ -194,7 +194,7 @@
         cell.shouldShowMask = [[TMInfoManager sharedManager] alreadyReadPromotionForIdentifier:identifier];
         cell.title = (title == nil)?@"":title;
         cell.subtitle = (timeString == nil)?@"":timeString;
-//        cell.content = (content == nil)?@"":content;
+        cell.content = (content == nil)?@"":content;
     }
     return cell;
 }
@@ -203,7 +203,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    CGFloat heightForRow = 60.0;
+    CGFloat heightForRow = 120.0;
     return heightForRow;
 }
 

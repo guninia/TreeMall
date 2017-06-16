@@ -239,7 +239,7 @@ static NSInteger MaxTagsNumber = 5;
         {
             size = image.size;
         }
-        CGRect frame = CGRectMake((CGRectGetMinX(self.buttonAddToCart.frame) - intervalH - size.width), originY, size.width, size.height);
+        CGRect frame = CGRectMake((CGRectGetMinX(self.buttonAddToCart.frame) - intervalH * 2 - size.width), originY, size.width, size.height);
         self.buttonFavorite.frame = frame;
     }
 }

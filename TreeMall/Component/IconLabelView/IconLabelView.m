@@ -76,7 +76,7 @@ static CGFloat intervalV = 5.0;
     if (_label == nil)
     {
         _label = [[UILabel alloc] initWithFrame:CGRectZero];
-        UIFont *font = [UIFont systemFontOfSize:12.0];
+        UIFont *font = [UIFont systemFontOfSize:16.0];
         [_label setLineBreakMode:NSLineBreakByWordWrapping];
         [_label setTextAlignment:NSTextAlignmentCenter];
         [_label setNumberOfLines:0];

@@ -339,5 +339,9 @@
 + (NSString *)CurrentlyNoCoupon;
 + (NSString *)DeliverProgress;
 + (NSString *)PleaseSelectPaymentType;
++ (NSString *)CurrentlyNoOrder;
++ (NSString *)ThisProductNoInstallment;
++ (NSString *)ChangePasswordFailed;
++ (NSString *)EightHourDelivery;
 
 @end

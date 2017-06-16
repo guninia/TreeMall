@@ -93,6 +93,8 @@
     [self.scrollView addSubview:self.labelRemark];
     [self.scrollView addSubview:self.viewShippingAndWarrentyTitle];
     [self.scrollView addSubview:self.labelShippingAndWarrenty];
+    [self.scrollView addSubview:self.labelFastDelivery];
+    [self.scrollView addSubview:self.labelDiscount];
     [self.view addSubview:self.bottomBar];
     
     if (self.dictionaryCommon != nil)
@@ -172,6 +174,37 @@
     return _scrollView;
 }
 
+- (UILabel *)labelFastDelivery
+{
+    if (_labelFastDelivery == nil)
+    {
+        _labelFastDelivery = [[UILabel alloc] initWithFrame:CGRectZero];
+        [_labelFastDelivery setBackgroundColor:[UIColor colorWithRed:(80.0/255.0) green:(185.0/255.0) blue:(182.0/255.0) alpha:1.0]];
+        [_labelFastDelivery setTextColor:[UIColor whiteColor]];
+        [_labelFastDelivery setTextAlignment:NSTextAlignmentCenter];
+        [_labelFastDelivery setText:[LocalizedString EightHourDelivery]];
+        UIFont *font = [UIFont systemFontOfSize:20.0];
+        [_labelFastDelivery setFont:font];
+        [_labelFastDelivery setHidden:YES];
+    }
+    return _labelFastDelivery;
+}
+
+- (UILabel *)labelDiscount
+{
+    if (_labelDiscount == nil)
+    {
+        _labelDiscount = [[UILabel alloc] initWithFrame:CGRectZero];
+        [_labelDiscount setBackgroundColor:[UIColor colorWithRed:(178.0/255.0) green:(68.0/255.0) blue:(52.0/255.0) alpha:1.0]];
+        [_labelDiscount setTextColor:[UIColor whiteColor]];
+        [_labelDiscount setTextAlignment:NSTextAlignmentCenter];
+        UIFont *font = [UIFont systemFontOfSize:20.0];
+        [_labelDiscount setFont:font];
+        [_labelDiscount setHidden:YES];
+    }
+    return _labelDiscount;
+}
+
 - (UICollectionView *)collectionViewImage
 {
     if (_collectionViewImage == nil)
@@ -223,7 +256,7 @@
         _labelProductName = [[UILabel alloc] initWithFrame:CGRectZero];
         [_labelProductName setBackgroundColor:[UIColor clearColor]];
         [_labelProductName setTextColor:[UIColor blackColor]];
-        UIFont *font = [UIFont systemFontOfSize:14.0];
+        UIFont *font = [UIFont systemFontOfSize:16.0];
         [_labelProductName setFont:font];
         [_labelProductName setLineBreakMode:NSLineBreakByWordWrapping];
         [_labelProductName setTextAlignment:NSTextAlignmentLeft];
@@ -690,6 +723,22 @@
     CGFloat marginB = 10.0;
     CGFloat columnWidth = self.scrollView.frame.size.width - (marginL + marginR);
     
+    CGFloat tagOriginX = originX;
+    if (self.labelFastDelivery && [self.labelFastDelivery isHidden] == NO)
+    {
+        CGSize size = CGSizeMake(100.0, 32.0);
+        CGRect frame = CGRectMake(tagOriginX, originY, size.width, size.height);
+        self.labelFastDelivery.frame = frame;
+        tagOriginX = CGRectGetMaxX(self.labelFastDelivery.frame);
+    }
+    if (self.labelDiscount && [self.labelDiscount isHidden] == NO)
+    {
+        CGSize size = CGSizeMake(80.0, 32.0);
+        CGRect frame = CGRectMake(tagOriginX, originY, size.width, size.height);
+        self.labelDiscount.frame = frame;
+        tagOriginX = CGRectGetMaxX(self.labelDiscount.frame);
+    }
+    
     if (self.collectionViewImage && [self.collectionViewImage isHidden] == NO)
     {
         CGRect frame = CGRectMake(originX, originY, self.scrollView.frame.size.width, self.scrollView.frame.size.width);
@@ -940,6 +989,27 @@
         [view removeFromSuperview];
     }
     [self.arrayViewNotice removeAllObjects];
+    
+    NSNumber *numberIsQuick = [self.dictionaryDetail objectForKey:SymphoxAPIParam_is_quick];
+    if (numberIsQuick && [numberIsQuick isEqual:[NSNull null]] == NO && [numberIsQuick boolValue] == YES)
+    {
+        [self.labelFastDelivery setHidden:NO];
+    }
+    else
+    {
+        [self.labelFastDelivery setHidden:YES];
+    }
+    
+    NSString *hall_discount = [self.dictionaryDetail objectForKey:SymphoxAPIParam_hall_discount];
+    if (hall_discount && [hall_discount isEqual:[NSNull null]] == NO && [hall_discount length] > 0)
+    {
+        [self.labelDiscount setText:hall_discount];
+        [self.labelDiscount setHidden:NO];
+    }
+    else
+    {
+        [self.labelDiscount setHidden:YES];
+    }
     
     // Images and pageControl
     NSArray *imagePaths = [self.dictionaryDetail objectForKey:SymphoxAPIParam_img_url];
@@ -1761,7 +1831,14 @@
 - (void)presentCartViewForType:(CartType)type
 {
     CartViewController *viewController = [[CartViewController alloc] initWithNibName:@"CartViewController" bundle:[NSBundle mainBundle]];
-    viewController.title = [LocalizedString ShoppingCart];
+    if (type == CartTypeDirectlyPurchase)
+    {
+        viewController.title = [LocalizedString Purchase];
+    }
+    else
+    {
+        viewController.title = [LocalizedString ShoppingCart];
+    }
     viewController.currentType = type;
     UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:viewController];
     [self presentViewController:navigationController animated:YES completion:nil];
@@ -1786,7 +1863,13 @@
 {
     NSArray *arrayInstallment = [self.dictionaryDetail objectForKey:SymphoxAPIParam_installment];
     if (arrayInstallment == nil || [arrayInstallment isEqual:[NSNull null]] || [arrayInstallment count] == 0)
+    {
+        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:[LocalizedString ThisProductNoInstallment] preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction *action = [UIAlertAction actionWithTitle:[LocalizedString Confirm] style:UIAlertActionStyleDefault handler:nil];
+        [alertController addAction:action];
+        [self presentViewController:alertController animated:YES completion:nil];
         return;
+    }
     InstallmentDescriptionViewController *viewController = [[InstallmentDescriptionViewController alloc] initWithNibName:nil bundle:nil];
     viewController.arrayInstallment = arrayInstallment;
     viewController.preferredContentSize = CGSizeMake(280.0, 320.0);

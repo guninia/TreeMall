@@ -11,6 +11,8 @@
 
 @interface InstallmentDescriptionViewController : UIViewController <DTAttributedTextContentViewDelegate>
 
+@property (nonatomic, strong) UILabel *labelTitle;
+@property (nonatomic, strong) UIToolbar *toolBar;
 @property (nonatomic, strong) UIScrollView *scrollView;
 @property (nonatomic, strong) UILabel *labelInstallmentTitle;
 @property (nonatomic, strong) UILabel *labelCreditCardHint;

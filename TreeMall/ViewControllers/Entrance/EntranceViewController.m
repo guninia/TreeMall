@@ -483,7 +483,7 @@ typedef enum : NSUInteger {
             break;
         case TableViewSectionProductPromotion:
         {
-            heightForHeader = 80.0;
+            heightForHeader = 100.0;
         }
             break;
         default:
@@ -568,11 +568,8 @@ typedef enum : NSUInteger {
                     // Sub category. Currently impossible since there is no layer information.
                     NSString *hallId = [dictionary objectForKey:SymphoxAPIParam_hallId];
                     NSNumber *layer = [dictionary objectForKey:SymphoxAPIParam_layer];
-//                    if (hallId && layer)
-//                    {
-//                        [[NSNotificationCenter defaultCenter] postNotificationName:PostNotificationName_JumpToShoppingMallAndPresentHall object:self userInfo:dictionary];
-//                    }
-                    [self presentProductListViewForIdentifier:hallId named:nil andLayer:layer withCategories:nil andSubcategories:nil];
+                    NSString *hallName = [dictionary objectForKey:SymphoxAPIParam_hallName];
+                    [self presentProductListViewForIdentifier:hallId named:hallName andLayer:layer withCategories:nil andSubcategories:nil];
                 }
                     break;
                 case 3:
@@ -646,11 +643,8 @@ typedef enum : NSUInteger {
                     // Sub category. Currently impossible since there is no layer information.
                     NSString *hallId = [dictionaryFocus objectForKey:SymphoxAPIParam_hallId];
                     NSNumber *layer = [dictionaryFocus objectForKey:SymphoxAPIParam_layer];
-//                    if (hallId && layer)
-//                    {
-//                        [[NSNotificationCenter defaultCenter] postNotificationName:PostNotificationName_JumpToShoppingMallAndPresentHall object:self userInfo:dictionaryFocus];
-//                    }
-                    [self presentProductListViewForIdentifier:hallId named:nil andLayer:layer withCategories:nil andSubcategories:nil];
+                    NSString *hallName = [dictionaryFocus objectForKey:SymphoxAPIParam_hallName];
+                    [self presentProductListViewForIdentifier:hallId named:hallName andLayer:layer withCategories:nil andSubcategories:nil];
                 }
                     break;
                 case 3:
@@ -718,11 +712,8 @@ typedef enum : NSUInteger {
                     // Sub category. Currently impossible since there is no layer information.
                     NSString *hallId = [dictionaryMarketing objectForKey:SymphoxAPIParam_hallId];
                     NSNumber *layer = [dictionaryMarketing objectForKey:SymphoxAPIParam_layer];
-//                    if (hallId && layer)
-//                    {
-//                        [[NSNotificationCenter defaultCenter] postNotificationName:PostNotificationName_JumpToShoppingMallAndPresentHall object:self userInfo:dictionaryMarketing];
-//                    }
-                    [self presentProductListViewForIdentifier:hallId named:nil andLayer:layer withCategories:nil andSubcategories:nil];
+                    NSString *hallName = [dictionaryMarketing objectForKey:SymphoxAPIParam_hallName];
+                    [self presentProductListViewForIdentifier:hallId named:hallName andLayer:layer withCategories:nil andSubcategories:nil];
                 }
                     break;
                 case 3:
