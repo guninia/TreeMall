@@ -14,6 +14,7 @@
 #import "LocalizedString.h"
 #import "FullScreenLoadingView.h"
 #import "Definition.h"
+#import "Utility.h"
 
 @interface ChangePasswordViewController ()
 
@@ -182,6 +183,10 @@
     else if (passwordNew == nil || [passwordNew length] == 0)
     {
         errorMessage = [LocalizedString PleaseInputNewPassword];
+    }
+    else if ([Utility evaluatePassword:passwordNew] == NO)
+    {
+        errorMessage = [LocalizedString PleaseInputValidPassword];
     }
     else if (passwordCon == nil || [passwordCon length] == 0)
     {

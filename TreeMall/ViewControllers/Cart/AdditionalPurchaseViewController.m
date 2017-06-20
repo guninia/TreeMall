@@ -706,6 +706,7 @@
     viewController.productId = productId;
     viewController.arrayPaymentMode = payment_mode_list;
     viewController.type = self.currentType;
+    viewController.isAddition = YES;
     viewController.delegate = self;
     
     UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:viewController];

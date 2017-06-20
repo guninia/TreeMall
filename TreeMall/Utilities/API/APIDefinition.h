@@ -66,6 +66,7 @@ static NSString *SymphoxAPI__checkDelivery = @"api/eiffel/appOrder/checkDelivery
 static NSString *SymphoxAPI__sendPushInfo = @"api/onlineService.do";
 static NSString *SymphoxAPI__feedbackPointDetailPage = @"http://www.treemall.com.tw/event/140310howpoint/index_2.shtml#a01";
 static NSString *SymphoxAPI__storePickupDescription = @"http://www.treemall.com.tw/event/24H_160101/160101_con_list.shtml";
+static NSString *SymphoxAPI__OrderDetailWebpage = @"https://www.treemall.com.tw/member/index";
 
 #define SymphoxAPI_token [NSString stringWithFormat:@"%@%@", SymphoxAPIDomain, SymphoxAPI__token]
 #define SymphoxAPI_homepage [NSString stringWithFormat:@"%@%@", SymphoxAPIDomain, SymphoxAPI__homepage]
@@ -114,6 +115,7 @@ static NSString *SymphoxAPI__storePickupDescription = @"http://www.treemall.com.
 #define SymphoxAPI_sendPushInfo [NSString stringWithFormat:@"%@%@", SymphoxAPIDomain, SymphoxAPI__sendPushInfo]
 #define SymphoxAPI_feedbackPointDetailPage SymphoxAPI__feedbackPointDetailPage
 #define SymphoxAPI_storePickupDescription SymphoxAPI__storePickupDescription
+#define SymphoxAPI_OrderDetailWebpage SymphoxAPI__OrderDetailWebpage
 
 
 static NSString *SymphoxAPIParam_key = @"sym-api-key";

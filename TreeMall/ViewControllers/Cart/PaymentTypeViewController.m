@@ -41,6 +41,8 @@ static NSString *InstallmentBankListDescription = @"分期0利率（接受14家�
 - (void)refreshContent;
 - (void)startToCheckPayment;
 - (void)requestResultOfCheckPaymentWithParams:(NSDictionary *)params;
+- (void)retrieveInstallmentBanksData;
+- (void)processInstallmentBanksData:(id)data;
 - (void)showInstallmentBanks;
 
 - (void)buttonAgreePressed:(id)sender;
@@ -84,6 +86,7 @@ static NSString *InstallmentBankListDescription = @"分期0利率（接受14家�
         [self.navigationController.view addSubview:self.viewLoading];
     }
     [self prepareData];
+    [self retrieveInstallmentBanksData];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -1013,8 +1016,15 @@ static NSString *InstallmentBankListDescription = @"分期0利率（接受14家�
         {
             dictionaryMode = [NSMutableDictionary dictionaryWithObjectsAndKeys:@"0", SymphoxAPIParam_payment_type, [NSNumber numberWithInteger:0], SymphoxAPIParam_price, nil];
         }
-        NSString *paymentType = [dictionaryMode objectForKey:SymphoxAPIParam_payment_type];
-        [dictionaryMode setObject:paymentType forKey:SymphoxAPIParam_payment_type];
+        id paymentType = [dictionaryMode objectForKey:SymphoxAPIParam_payment_type];
+        if ([paymentType isKindOfClass:[NSString class]])
+        {
+            [dictionaryMode setObject:paymentType forKey:SymphoxAPIParam_payment_type];
+        }
+        else if ([paymentType isKindOfClass:[NSNumber class]])
+        {
+            [dictionaryMode setObject:[((NSNumber *)paymentType) stringValue] forKey:SymphoxAPIParam_payment_type];
+        }
         [dictionaryMode setObject:productId forKey:SymphoxAPIParam_cpdt_num];
         
         NSNumber *groupId = [purchaseInfo objectForKey:SymphoxAPIParam_group_id];
@@ -1057,8 +1067,15 @@ static NSString *InstallmentBankListDescription = @"分期0利率（接受14家�
         {
             dictionaryMode = [NSMutableDictionary dictionaryWithObjectsAndKeys:@"0", SymphoxAPIParam_payment_type, [NSNumber numberWithInteger:0], SymphoxAPIParam_price, nil];
         }
-        NSString *paymentType = [dictionaryMode objectForKey:SymphoxAPIParam_payment_type];
-        [dictionaryMode setObject:paymentType forKey:SymphoxAPIParam_payment_type];
+        id paymentType = [dictionaryMode objectForKey:SymphoxAPIParam_payment_type];
+        if ([paymentType isKindOfClass:[NSString class]])
+        {
+            [dictionaryMode setObject:paymentType forKey:SymphoxAPIParam_payment_type];
+        }
+        else if ([paymentType isKindOfClass:[NSNumber class]])
+        {
+            [dictionaryMode setObject:[((NSNumber *)paymentType) stringValue] forKey:SymphoxAPIParam_payment_type];
+        }
         [dictionaryMode setObject:productId forKey:SymphoxAPIParam_cpdt_num];
         
         NSMutableDictionary *dictionaryCheck = [NSMutableDictionary dictionary];
@@ -1203,9 +1220,70 @@ static NSString *InstallmentBankListDescription = @"分期0利率（接受14家�
     }];
 }
 
+- (void)retrieveInstallmentBanksData
+{
+    __weak PaymentTypeViewController *weakSelf = self;
+    NSURL *url = [NSURL URLWithString:SymphoxAPI_terms];
+    NSDictionary *postDictionary = [NSDictionary dictionaryWithObjectsAndKeys:@"TM_O_03", SymphoxAPIParam_txid, @"2", SymphoxAPIParam_type, nil];
+    [[SHAPIAdapter sharedAdapter] sendRequestFromObject:weakSelf ToUrl:url withHeaderFields:nil andPostObject:postDictionary inPostFormat:SHPostFormatUrlEncoded encrypted:NO decryptedReturnData:NO completion:^(id resultObject, NSError *error){
+        
+        if (error == nil)
+        {
+            NSString *string = [[NSString alloc] initWithData:resultObject encoding:NSUTF8StringEncoding];
+            NSLog(@"retrieveData - string:\n%@", string);
+            [self processInstallmentBanksData:resultObject];
+        }
+        else
+        {
+            NSLog(@"error:\n%@", error);
+        }
+        
+    }];
+}
+
+- (void)processInstallmentBanksData:(id)data
+{
+    if ([data isKindOfClass:[NSData class]])
+    {
+        NSData *sourceData = (NSData *)data;
+        NSError *error = nil;
+        id jsonObject = [NSJSONSerialization JSONObjectWithData:sourceData options:0 error:&error];
+        if (error == nil && jsonObject)
+        {
+            if ([jsonObject isKindOfClass:[NSDictionary class]])
+            {
+                NSDictionary *dictionary = (NSDictionary *)jsonObject;
+                NSString *result = [dictionary objectForKey:SymphoxAPIParam_result];
+                if (result && [result integerValue] == 0)
+                {
+                    NSString *content = [dictionary objectForKey:SymphoxAPIParam_content];
+                    if (content && [content isEqual:[NSNull null]] == NO && [content length] > 0)
+                    {
+                        NSData *data = [content dataUsingEncoding:NSUTF8StringEncoding];
+                        NSAttributedString *attrString = [[NSAttributedString alloc] initWithHTMLData:data documentAttributes:nil];
+                        if (attrString)
+                        {
+                            self.stringBanks = attrString;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
 - (void)showInstallmentBanks
 {
-    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:[LocalizedString InstallmentAvailableBank] message:InstallmentBankListDescription preferredStyle:UIAlertControllerStyleAlert];
+    NSString *message = nil;
+    if (self.stringBanks)
+    {
+        message = [self.stringBanks string];
+    }
+    else
+    {
+        message = [LocalizedString InstallmentAvailableBank];
+    }
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:[LocalizedString InstallmentAvailableBank] message:message preferredStyle:UIAlertControllerStyleAlert];
     UIAlertAction *action = [UIAlertAction actionWithTitle:[LocalizedString Confirm] style:UIAlertActionStyleDefault handler:nil];
     [alertController addAction:action];
     __weak PaymentTypeViewController *weakSelf = self;

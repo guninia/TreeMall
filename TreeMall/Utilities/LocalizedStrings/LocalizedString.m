@@ -3341,4 +3341,24 @@
     return EightHourDelivery;
 }
 
++ (NSString *)ThisIsGift
+{
+    static NSString *ThisIsGift = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        ThisIsGift = NSLocalizedString(@"ThisIsGift", nil);
+    });
+    return ThisIsGift;
+}
+
++ (NSString *)OrderDetailAlert
+{
+    static NSString *OrderDetailAlert = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        OrderDetailAlert = NSLocalizedString(@"OrderDetailAlert", nil);
+    });
+    return OrderDetailAlert;
+}
+
 @end

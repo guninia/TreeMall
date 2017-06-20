@@ -664,7 +664,7 @@
             if (userInfo)
             {
                 NSString *errorCode = [userInfo objectForKey:SymphoxAPIParam_id];
-                if ([errorCode isEqualToString:@"E217"] || [errorCode isEqualToString:@"E403"] || [errorCode isEqualToString:@"E416"] || [errorCode isEqualToString:@"E402"])
+                if ([errorCode isEqualToString:@"E217"] || [errorCode isEqualToString:@"E403"] || [errorCode isEqualToString:@"E416"] || [errorCode isEqualToString:@"E402"] || [errorCode isEqualToString:@"E400"])
                 {
                     for (NSDictionary *product in productConditions)
                     {
@@ -1354,9 +1354,9 @@
         
         NSMutableAttributedString *totalCostString = [[NSMutableAttributedString alloc] init];
         NSInteger originLength = [totalCostString length];
-        NSDictionary *attributeGray = [NSDictionary dictionaryWithObjectsAndKeys:[UIColor grayColor], NSForegroundColorAttributeName, nil];
+//        NSDictionary *attributeGray = [NSDictionary dictionaryWithObjectsAndKeys:[UIColor grayColor], NSForegroundColorAttributeName, nil];
         NSDictionary *attributeRed = [NSDictionary dictionaryWithObjectsAndKeys:[UIColor redColor], NSForegroundColorAttributeName, nil];
-        NSAttributedString *plusString = [[NSAttributedString alloc] initWithString:@"＋" attributes:attributeGray];
+        NSAttributedString *plusString = [[NSAttributedString alloc] initWithString:@"＋" attributes:attributeRed];
         if (numberCash != nil && [numberCash integerValue] > 0)
         {
             NSString *stringTotal = [self.numberFormatter stringFromNumber:numberCash];
@@ -1437,13 +1437,18 @@
         }
         if (isGift)
         {
-            [cell.buttonDelete setEnabled:NO];
-            [cell.buttonCondition setEnabled:NO];
+            [cell.buttonDelete setUserInteractionEnabled:NO];
+            [cell.buttonCondition setUserInteractionEnabled:NO];
+//            cell.labelPayment.text = [LocalizedString ThisIsGift];
+            [cell.buttonCondition setTitle:[LocalizedString ThisIsGift] forState:UIControlStateNormal];
+            [cell.labelPayment setTextColor:[UIColor lightGrayColor]];
         }
         else
         {
-            [cell.buttonCondition setEnabled:YES];
-            [cell.buttonDelete setEnabled:YES];
+            [cell.buttonCondition setUserInteractionEnabled:YES];
+            [cell.buttonDelete setUserInteractionEnabled:YES];
+            [cell.buttonCondition setTitle:[LocalizedString ChooseQuantityAndDiscount] forState:UIControlStateNormal];
+            [cell.labelPayment setTextColor:[UIColor darkGrayColor]];
         }
         
     }

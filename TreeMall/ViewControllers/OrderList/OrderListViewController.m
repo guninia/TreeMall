@@ -868,8 +868,9 @@
 //            NSLog(@"cellForItemAtIndexPath - message[%@]", message);
             if (message && [message isEqual:[NSNull null]] == NO && [message length] > 0 && [message isEqualToString:@"無物流"] == NO)
             {
-                NSString *totalString = [NSString stringWithFormat:@"%@ %@", [LocalizedString T_CatId], message];
-                [cell.buttonDeliverId setTitle:totalString forState:UIControlStateNormal];
+//                NSString *totalString = [NSString stringWithFormat:@"%@ %@", [LocalizedString T_CatId], message];
+//                [cell.buttonDeliverId setTitle:totalString forState:UIControlStateNormal];
+                [cell.buttonDeliverId setTitle:message forState:UIControlStateNormal];
                 cell.buttonDeliverId.hidden = NO;
             }
 //            NSLog(@"cellForItemAtIndexPath[%li][%li] - cell.buttonDeliverId [%@]", (long)indexPath.section, (long)indexPath.row, [cell.buttonDeliverId isHidden]?@"hidden":@"shown");
@@ -1003,18 +1004,32 @@
 
 - (void)orderHeaderReusableView:(OrderHeaderReusableView *)view didPressButtonBySender:(id)sender
 {
-    NSInteger section = view.tag;
-    if (section >= [self.arrayCarts count])
-        return;
-    
-    id orders = [self.arrayCarts objectAtIndex:section];
-    NSLog(@"orders:\n%@", [orders description]);
-    OrderDetailViewController *viewController = [[OrderDetailViewController alloc] initWithNibName:@"OrderDetailViewController" bundle:[NSBundle mainBundle]];
-    if ([orders isKindOfClass:[NSDictionary class]])
-    {
-        viewController.dictionaryOrder = orders;
-    }
-    [self.navigationController pushViewController:viewController animated:YES];
+//    NSInteger section = view.tag;
+//    if (section >= [self.arrayCarts count])
+//        return;
+//    
+//    id orders = [self.arrayCarts objectAtIndex:section];
+//    NSLog(@"orders:\n%@", [orders description]);
+//    OrderDetailViewController *viewController = [[OrderDetailViewController alloc] initWithNibName:@"OrderDetailViewController" bundle:[NSBundle mainBundle]];
+//    if ([orders isKindOfClass:[NSDictionary class]])
+//    {
+//        viewController.dictionaryOrder = orders;
+//    }
+//    [self.navigationController pushViewController:viewController animated:YES];
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"" message:[LocalizedString OrderDetailAlert] preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *actionCancel = [UIAlertAction actionWithTitle:[LocalizedString Cancel] style:UIAlertActionStyleCancel handler:nil];
+    UIAlertAction *actionOpen = [UIAlertAction actionWithTitle:[LocalizedString OpenInSafari] style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
+        NSString *urlString = SymphoxAPI_OrderDetailWebpage;
+        NSURL *url = [NSURL URLWithString:urlString];
+        if (url == nil)
+            return;
+        if ([[UIApplication sharedApplication] canOpenURL:url] == NO)
+            return;
+        [[UIApplication sharedApplication] openURL:url];
+    }];
+    [alertController addAction:actionCancel];
+    [alertController addAction:actionOpen];
+    [self presentViewController:alertController animated:YES completion:nil];
 }
 
 #pragma mark - OrderListCollectionViewCellDelegate

@@ -219,6 +219,7 @@
         [_buttonCondition setTitle:[LocalizedString ChooseQuantityAndDiscount] forState:UIControlStateNormal];
         [_buttonCondition setTitleColor:[UIColor orangeColor] forState:UIControlStateNormal];
         [_buttonCondition setTitleColor:[UIColor lightGrayColor] forState:UIControlStateSelected];
+        [_buttonCondition setTitleColor:[UIColor lightGrayColor] forState:UIControlStateDisabled];
         [_buttonCondition.layer setBorderWidth:1.0];
         [_buttonCondition.layer setCornerRadius:3.0];
         [_buttonCondition.layer setBorderColor:[_buttonCondition titleColorForState:UIControlStateNormal].CGColor];
@@ -241,6 +242,7 @@
         if (selectedImage)
         {
             [_buttonDelete setImage:selectedImage forState:UIControlStateSelected];
+            [_buttonDelete setImage:selectedImage forState:UIControlStateDisabled];
         }
         [_buttonDelete addTarget:self action:@selector(buttonDeletePressed:) forControlEvents:UIControlEventTouchUpInside];
     }

@@ -343,5 +343,7 @@
 + (NSString *)ThisProductNoInstallment;
 + (NSString *)ChangePasswordFailed;
 + (NSString *)EightHourDelivery;
++ (NSString *)ThisIsGift;
++ (NSString *)OrderDetailAlert;
 
 @end

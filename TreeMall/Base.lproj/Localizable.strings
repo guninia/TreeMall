@@ -338,3 +338,5 @@
 "ThisProductNoInstallment"="No Installment";
 "ChangePasswordFailed"="Change password failed";
 "EightHourDelivery"="8H Delivery";
+"ThisIsGift"="This is gift";
+"OrderDetailAlert"="Going to show order details in web page";
