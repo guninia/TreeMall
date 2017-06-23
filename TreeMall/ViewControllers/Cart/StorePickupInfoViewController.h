@@ -21,5 +21,6 @@
 @property (nonatomic, strong) NSString *tradeId;
 @property (nonatomic, strong) NSDictionary *dictionaryTotalCost;
 @property (nonatomic, strong) NSString *selectedPaymentDescription;
+@property (nonatomic, strong) NSArray *arrayProductsFromCart;
 
 @end

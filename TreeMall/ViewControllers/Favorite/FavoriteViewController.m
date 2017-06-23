@@ -11,6 +11,7 @@
 #import "APIDefinition.h"
 #import "LocalizedString.h"
 #import "ProductDetailViewController.h"
+#import "LoginViewController.h"
 
 @interface FavoriteViewController ()
 
@@ -466,6 +467,14 @@
 
 - (void)productTableViewCell:(ProductTableViewCell *)cell didSelectToAddToCartBySender:(id)sender
 {
+    if ([TMInfoManager sharedManager].userIdentifier == nil)
+    {
+        // Should login first.
+        LoginViewController *viewControllerLogin = [[LoginViewController alloc] initWithNibName:@"LoginViewController" bundle:[NSBundle mainBundle]];
+        UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:viewControllerLogin];
+        [self presentViewController:navigationController animated:YES completion:nil];
+        return;
+    }
     if (cell.tag >= [self.arrayFavorites count])
         return;
     NSDictionary *product = [self.arrayFavorites objectAtIndex:cell.tag];

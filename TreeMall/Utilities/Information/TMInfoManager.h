@@ -198,6 +198,8 @@ typedef enum : NSUInteger {
 - (void)setDiscountDetailDescription:(NSString *)description forProduct:(NSNumber *)productId inAdditionalCart:(CartType)cartType;
 - (NSString *)nameOfRemovedProductId:(NSNumber *)productIdToRemove inAdditionalCart:(CartType)type;
 
+- (void)setPurchaseInfoFromSelectedPaymentMode:(NSDictionary *)paymentModeSelected forProductId:(NSNumber *)productId inCart:(CartType)cartType asAdditional:(BOOL)isAdditional;
+
 - (NSInteger)numberOfProductsInCart:(CartType)type;
 
 - (void)resetCartForType:(CartType)type;

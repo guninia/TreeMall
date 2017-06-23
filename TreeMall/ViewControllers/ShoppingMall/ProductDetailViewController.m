@@ -19,6 +19,7 @@
 #import "InstallmentDescriptionViewController.h"
 #import "SingleMediaDetailViewController.h"
 #import "CartViewController.h"
+#import "LoginViewController.h"
 
 @interface ProductDetailViewController ()
 
@@ -1998,6 +1999,14 @@
 
 - (void)productDetailBottomBar:(ProductDetailBottomBar *)bar didSelectAddToCartBySender:(id)sender
 {
+    if ([TMInfoManager sharedManager].userIdentifier == nil)
+    {
+        // Should login first.
+        LoginViewController *viewControllerLogin = [[LoginViewController alloc] initWithNibName:@"LoginViewController" bundle:[NSBundle mainBundle]];
+        UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:viewControllerLogin];
+        [self presentViewController:navigationController animated:YES completion:nil];
+        return;
+    }
     NSArray *arrayCarts = [self cartsAvailableToAdd];
     if ([arrayCarts count] == 1)
     {
@@ -2013,6 +2022,14 @@
 
 - (void)productDetailBottomBar:(ProductDetailBottomBar *)bar didSelectPurchaseBySender:(id)sender
 {
+    if ([TMInfoManager sharedManager].userIdentifier == nil)
+    {
+        // Should login first.
+        LoginViewController *viewControllerLogin = [[LoginViewController alloc] initWithNibName:@"LoginViewController" bundle:[NSBundle mainBundle]];
+        UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:viewControllerLogin];
+        [self presentViewController:navigationController animated:YES completion:nil];
+        return;
+    }
     NSArray *arrayCarts = [self cartsAvailableToAdd];
     if ([arrayCarts count] == 0)
     {

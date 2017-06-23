@@ -1629,32 +1629,10 @@ static NSUInteger SearchKeywordNumberMax = 8;
         return;
     }
     
-//    NSNumber *point01 = [product objectForKey:SymphoxAPIParam_point01];
-//    NSNumber *price02 = [product objectForKey:SymphoxAPIParam_price02];
-//    NSNumber *point02 = [product objectForKey:SymphoxAPIParam_point02];
-//    NSNumber *price03 = [product objectForKey:SymphoxAPIParam_price03];
-//    
-//    NSString *paymentType = @"0";
-//    NSString *paymentValueKey = SymphoxAPIParam_price;
-//    NSNumber *paymentValue = nil;
-//    if (price03 && ([price03 isEqual:[NSNull null]] == NO) && [price03 integerValue] > 0)
-//    {
-//        paymentValue = price03;
-//    }
-//    else if (point01 && [point01 isEqual:[NSNull null]] == NO && [point01 integerValue] > 0)
-//    {
-//        paymentType = @"1";
-//        paymentValue = point01;
-//        paymentValueKey = SymphoxAPIParam_total_point;
-//    }
-//    else
-//    {
-//        paymentValue = [NSNumber numberWithInteger:0];
-//    }
-    
     [self setPurchaseQuantity:[NSNumber numberWithInteger:1] forProduct:currentProductId inCart:type];
     NSDictionary *dictionaryMode = [NSDictionary dictionary];
-    [self setPurchasePaymentMode:dictionaryMode forProduct:currentProductId inCart:type];
+//    [self setPurchasePaymentMode:dictionaryMode forProduct:currentProductId inCart:type];
+    [self setPurchaseInfoFromSelectedPaymentMode:dictionaryMode forProductId:currentProductId inCart:type asAdditional:NO];
     [array addObject:product];
     [self saveToArchive];
     
@@ -1697,7 +1675,7 @@ static NSUInteger SearchKeywordNumberMax = 8;
     NSLog(@"dictionaryProductPurchaseInfoInCartCommon:\n%@", [self.dictionaryProductPurchaseInfoInCartCommon description]);
     NSLog(@"dictionaryProductPurchaseInfoInCartFast:\n%@", [self.dictionaryProductPurchaseInfoInCartFast description]);
     NSLog(@"dictionaryProductPurchaseInfoInCartStorePickUp:\n%@", [self.dictionaryProductPurchaseInfoInCartStorePickUp description]);
-    NSLog(@"dictionaryProductPurchaseInfoInCartStorePickUp:\n%@", [self.dictionaryProductPurchaseInfoInCartDirect description]);
+    NSLog(@"dictionaryProductPurchaseInfoInCartDirect:\n%@", [self.dictionaryProductPurchaseInfoInCartDirect description]);
     [self saveToArchive];
 }
 
@@ -1885,8 +1863,9 @@ static NSUInteger SearchKeywordNumberMax = 8;
         return;
     }
     [self setPurchaseQuantity:[NSNumber numberWithInteger:1] forProduct:currentProductId inAdditionalCart:type];
-    NSDictionary *dictionaryMode = [NSDictionary dictionaryWithObjectsAndKeys:@"0", SymphoxAPIParam_payment_type, [NSNumber numberWithInteger:0], SymphoxAPIParam_price, nil];
-    [self setPurchasePaymentMode:dictionaryMode forProduct:currentProductId inAdditionalCart:type];
+    NSDictionary *dictionaryMode = [NSDictionary dictionary];
+//    [self setPurchasePaymentMode:dictionaryMode forProduct:currentProductId inAdditionalCart:type];
+    [self setPurchaseInfoFromSelectedPaymentMode:dictionaryMode forProductId:currentProductId inCart:type asAdditional:YES];
     [array addObject:product];
 //    [self saveToArchive];
 }
@@ -2016,6 +1995,82 @@ static NSUInteger SearchKeywordNumberMax = 8;
         return nil;
     NSString *productName = [NSString stringWithString:name];
     return productName;
+}
+
+- (void)setPurchaseInfoFromSelectedPaymentMode:(NSDictionary *)paymentModeSelected forProductId:(NSNumber *)productId inCart:(CartType)cartType asAdditional:(BOOL)isAdditional
+{
+    NSMutableDictionary *paymentMode = [NSMutableDictionary dictionary];
+    
+    id payment_type = [paymentModeSelected objectForKey:SymphoxAPIParam_payment_type];
+    if (payment_type)
+    {
+        [paymentMode setObject:payment_type forKey:SymphoxAPIParam_payment_type];
+    }
+    id price = [paymentModeSelected objectForKey:SymphoxAPIParam_price];
+    if (price)
+    {
+        [paymentMode setObject:price forKey:SymphoxAPIParam_price];
+    }
+    id total_point = [paymentModeSelected objectForKey:SymphoxAPIParam_total_point];
+    if (total_point)
+    {
+        [paymentMode setObject:total_point forKey:SymphoxAPIParam_total_point];
+    }
+    id point = [paymentModeSelected objectForKey:SymphoxAPIParam_point];
+    if (point)
+    {
+        [paymentMode setObject:point forKey:SymphoxAPIParam_point];
+    }
+    id epoint = [paymentModeSelected objectForKey:SymphoxAPIParam_epoint];
+    if (epoint)
+    {
+        [paymentMode setObject:epoint forKey:SymphoxAPIParam_epoint];
+    }
+    id cpoint = [paymentModeSelected objectForKey:SymphoxAPIParam_cpoint];
+    if (cpoint)
+    {
+        [paymentMode setObject:cpoint forKey:SymphoxAPIParam_cpoint];
+    }
+    id coupon_discount = [paymentModeSelected objectForKey:SymphoxAPIParam_coupon_discount];
+    if (coupon_discount)
+    {
+        [paymentMode setObject:coupon_discount forKey:SymphoxAPIParam_coupon_discount];
+    }
+    id eacc_num = [paymentModeSelected objectForKey:SymphoxAPIParam_eacc_num];
+    if (eacc_num)
+    {
+        [paymentMode setObject:eacc_num forKey:SymphoxAPIParam_eacc_num];
+    }
+    id cm_id = [paymentModeSelected objectForKey:SymphoxAPIParam_cm_id];
+    if (cm_id)
+    {
+        [paymentMode setObject:cm_id forKey:SymphoxAPIParam_cm_id];
+    }
+    
+    if (isAdditional)
+    {
+        [[TMInfoManager sharedManager] setPurchasePaymentMode:paymentMode forProduct:productId inAdditionalCart:cartType];
+    }
+    else
+    {
+        [[TMInfoManager sharedManager] setPurchasePaymentMode:paymentMode forProduct:productId inCart:cartType];
+    }
+    
+    id discount_type_desc = [paymentModeSelected objectForKey:SymphoxAPIParam_discount_type_desc];
+    id discount_detail_desc = [paymentModeSelected objectForKey:SymphoxAPIParam_discount_detail_desc];
+    if ([discount_detail_desc isKindOfClass:[NSString class]])
+    {
+        if (isAdditional)
+        {
+            [[TMInfoManager sharedManager] setDiscountTypeDescription:discount_type_desc forProduct:productId inAdditionalCart:cartType];
+            [[TMInfoManager sharedManager] setDiscountDetailDescription:discount_detail_desc forProduct:productId inAdditionalCart:cartType];
+        }
+        else
+        {
+            [[TMInfoManager sharedManager] setDiscountTypeDescription:discount_type_desc forProduct:productId inCart:cartType];
+            [[TMInfoManager sharedManager] setDiscountDetailDescription:discount_detail_desc forProduct:productId inCart:cartType];
+        }
+    }
 }
 
 - (NSInteger)numberOfProductsInCart:(CartType)type

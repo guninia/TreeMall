@@ -227,7 +227,11 @@
 
 - (void)checkCartForType:(CartType)type shouldShowPaymentForProductId:(NSNumber *)productId
 {
-    NSArray *array = [[TMInfoManager sharedManager] productArrayForCartType:type];
+    NSArray *array = self.arrayProductsFromCart;
+    if (array == nil || [array count] == 0)
+    {
+        array = [[TMInfoManager sharedManager] productArrayForCartType:type];
+    }
     
     NSDictionary *dictionary = [[TMInfoManager sharedManager] purchaseInfoForCartType:type];
     NSMutableArray *arrayCheck = [NSMutableArray array];
@@ -447,7 +451,11 @@
 
 - (void)renewConditionsForCartType:(CartType)type shouldShowPaymentForProductId:(NSNumber *)productId
 {
-    NSArray *array = [[TMInfoManager sharedManager] productArrayForCartType:type];
+    NSArray *array = self.arrayProductsFromCart;
+    if (array == nil || [array count] == 0)
+    {
+        array = [[TMInfoManager sharedManager] productArrayForCartType:type];
+    }
     if (array == nil)
         return;
     
@@ -613,6 +621,41 @@
         if (array)
         {
             [self.arrayAllProducts setArray:array];
+            for (NSDictionary *product in array)
+            {
+                NSString *cpdt_owner_num = [product objectForKey:SymphoxAPIParam_cpdt_owner_num];
+                BOOL isGift = (cpdt_owner_num && [cpdt_owner_num isEqual:[NSNull null]] == NO && [cpdt_owner_num integerValue] == 4);
+                if (isGift)
+                {
+                    NSNumber *cpdt_num = [product objectForKey:SymphoxAPIParam_cpdt_num];
+                    if (cpdt_num == nil || [cpdt_num isEqual:[NSNull null]])
+                        continue;
+                    NSNumber *qty = [product objectForKey:SymphoxAPIParam_qty];
+                    if (qty && [qty isEqual:[NSNull null]] == NO)
+                    {
+                        [[TMInfoManager sharedManager] setPurchaseQuantity:qty forProduct:cpdt_num inCart:type];
+                    }
+                    NSDictionary *used_payemnt_mode = [product objectForKey:SymphoxAPIParam_used_payment_mode];
+                    if (used_payemnt_mode && [used_payemnt_mode isEqual:[NSNull null]] == NO)
+                    {
+                        [[TMInfoManager sharedManager] setPurchaseInfoFromSelectedPaymentMode:used_payemnt_mode forProductId:cpdt_num inCart:type asAdditional:NO];
+                    }
+                    BOOL shouldAddProduct = YES;
+                    for (NSDictionary *productFromCart in self.arrayProductsFromCart)
+                    {
+                        NSNumber *cpdt_num_fromCart = [productFromCart objectForKey:SymphoxAPIParam_cpdt_num];
+                        if ([cpdt_num_fromCart isEqualToNumber:cpdt_num])
+                        {
+                            shouldAddProduct = NO;
+                            break;
+                        }
+                    }
+                    if (shouldAddProduct)
+                    {
+                        [self.arrayProductsFromCart addObject:product];
+                    }
+                }
+            }
         }
         success = YES;
     }
@@ -715,7 +758,11 @@
 
 - (void)finalCheckCartContentForCartType:(CartType)type canPurchaseFastDelivery:(BOOL)canPurchaseFastDelivery
 {
-    NSArray *array = [[TMInfoManager sharedManager] productArrayForCartType:type];
+    NSArray *array = self.arrayProductsFromCart;
+    if (array == nil || [array count] == 0)
+    {
+        array = [[TMInfoManager sharedManager] productArrayForCartType:type];
+    }
     if (array == nil)
         return;
     
@@ -846,6 +893,7 @@
                     
                     PaymentTypeViewController *viewController = [[PaymentTypeViewController alloc] initWithNibName:@"PaymentTypeViewController" bundle:[NSBundle mainBundle]];
                     viewController.dictionaryData = resultDictionary;
+                    viewController.arrayProductsFromCart = weakSelf.arrayProductsFromCart;
                     viewController.type = self.currentType;
                     [self.navigationController pushViewController:viewController animated:YES];
                 }

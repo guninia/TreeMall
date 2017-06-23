@@ -112,6 +112,7 @@
         [self setSegmentedControlIndexForCartType:self.currentType];
     }
     [[TMInfoManager sharedManager] initializeCartForType:self.currentType];
+    [self.arrayProducts removeAllObjects];
     
     [self checkCartForType:self.currentType shouldShowPaymentForProductId:nil];
 }
@@ -376,7 +377,11 @@
 
 - (void)checkCartForType:(CartType)type shouldShowPaymentForProductId:(NSNumber *)productId
 {
-    NSArray *array = [[TMInfoManager sharedManager] productArrayForCartType:type];
+    NSArray *array = self.arrayProducts;
+    if (array == nil || [array count] == 0)
+    {
+        array = [[TMInfoManager sharedManager] productArrayForCartType:type];
+    }
     if (array == nil || [array count] == 0)
     {
         [self.arrayProducts removeAllObjects];
@@ -448,7 +453,7 @@
             {
                 NSLog(@"requestResultForCheckingProducts - Unexpected data format.");
             }
-            [weakSelf refreshContent];
+//            [weakSelf refreshContent];
         }
         else
         {
@@ -571,7 +576,11 @@
 
 - (void)renewConditionsForCartType:(CartType)type shouldShowPaymentForProductId:(NSNumber *)productId
 {
-    NSArray *array = [[TMInfoManager sharedManager] productArrayForCartType:type];
+    NSArray *array = self.arrayProducts;
+    if (array == nil || [array count] == 0)
+    {
+        array = [[TMInfoManager sharedManager] productArrayForCartType:type];
+    }
     if (array == nil || [array count] == 0)
     {
         [self.arrayProducts removeAllObjects];
@@ -716,6 +725,27 @@
         if (array)
         {
             [self.arrayProducts setArray:array];
+            for (NSDictionary *product in array)
+            {
+                NSString *cpdt_owner_num = [product objectForKey:SymphoxAPIParam_cpdt_owner_num];
+                BOOL isGift = (cpdt_owner_num && [cpdt_owner_num isEqual:[NSNull null]] == NO && [cpdt_owner_num integerValue] == 4);
+                if (isGift)
+                {
+                    NSNumber *cpdt_num = [product objectForKey:SymphoxAPIParam_cpdt_num];
+                    if (cpdt_num == nil || [cpdt_num isEqual:[NSNull null]])
+                        continue;
+                    NSNumber *qty = [product objectForKey:SymphoxAPIParam_qty];
+                    if (qty && [qty isEqual:[NSNull null]] == NO)
+                    {
+                        [[TMInfoManager sharedManager] setPurchaseQuantity:qty forProduct:cpdt_num inCart:type];
+                    }
+                    NSDictionary *used_payemnt_mode = [product objectForKey:SymphoxAPIParam_used_payment_mode];
+                    if (used_payemnt_mode && [used_payemnt_mode isEqual:[NSNull null]] == NO)
+                    {
+                        [[TMInfoManager sharedManager] setPurchaseInfoFromSelectedPaymentMode:used_payemnt_mode forProductId:cpdt_num inCart:type asAdditional:NO];
+                    }
+                }
+            }
         }
         success = YES;
     }
@@ -725,7 +755,11 @@
 
 - (void)checkAdditionalPurchaseForType:(CartType)type
 {
-    NSArray *array = [[TMInfoManager sharedManager] productArrayForCartType:type];
+    NSArray *array = self.arrayProducts;
+    if (array == nil || [array count] == 0)
+    {
+        array = [[TMInfoManager sharedManager] productArrayForCartType:type];
+    }
     if (array == nil || [array count] == 0)
     {
         return;
@@ -795,6 +829,7 @@
             // Should show additional purchase page
             AdditionalPurchaseViewController *viewController = [[AdditionalPurchaseViewController alloc] initWithNibName:@"AdditionalPurchaseViewController" bundle:[NSBundle mainBundle]];
             viewController.arrayProducts = array;
+            viewController.arrayProductsFromCart = weakSelf.arrayProducts;
             viewController.bottomBar.label.attributedText = weakSelf.bottomBar.label.attributedText;
             viewController.currentType = weakSelf.currentType;
             [weakSelf.navigationController pushViewController:viewController animated:YES];
@@ -871,7 +906,11 @@
 
 - (void)finalCheckCartContentForCartType:(CartType)type canPurchaseFastDelivery:(BOOL)canPurchaseFastDelivery
 {
-    NSArray *array = [[TMInfoManager sharedManager] productArrayForCartType:type];
+    NSArray *array = self.arrayProducts;
+    if (array == nil || [array count] == 0)
+    {
+        array = [[TMInfoManager sharedManager] productArrayForCartType:type];
+    }
     if (array == nil)
         return;
     
@@ -962,6 +1001,7 @@
                     
                     PaymentTypeViewController *viewController = [[PaymentTypeViewController alloc] initWithNibName:@"PaymentTypeViewController" bundle:[NSBundle mainBundle]];
                     viewController.dictionaryData = resultDictionary;
+                    viewController.arrayProductsFromCart = weakSelf.arrayProducts;
                     viewController.type = self.currentType;
                     [self.navigationController pushViewController:viewController animated:YES];
                 }
@@ -1507,6 +1547,7 @@
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle:[LocalizedString Notice] message:message preferredStyle:UIAlertControllerStyleAlert];
     UIAlertAction *actionCancel = [UIAlertAction actionWithTitle:[LocalizedString Cancel] style:UIAlertActionStyleCancel handler:nil];
     UIAlertAction *actionConfirm = [UIAlertAction actionWithTitle:[LocalizedString Confirm] style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
+        [weakSelf.arrayProducts removeObjectAtIndex:cell.tag];
         NSString *name = [[TMInfoManager sharedManager] nameOfRemovedProductId:productId inCart:weakSelf.currentType];
         if (name)
         {

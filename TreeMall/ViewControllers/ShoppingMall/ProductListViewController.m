@@ -17,6 +17,7 @@
 #import "ProductDetailViewController.h"
 #import "Utility.h"
 #import "CartViewController.h"
+#import "LoginViewController.h"
 
 @interface ProductListViewController ()
 
@@ -1156,6 +1157,14 @@
 
 - (void)productTableViewCell:(ProductTableViewCell *)cell didSelectToAddToCartBySender:(id)sender
 {
+    if ([TMInfoManager sharedManager].userIdentifier == nil)
+    {
+        // Should login first.
+        LoginViewController *viewControllerLogin = [[LoginViewController alloc] initWithNibName:@"LoginViewController" bundle:[NSBundle mainBundle]];
+        UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:viewControllerLogin];
+        [self presentViewController:navigationController animated:YES completion:nil];
+        return;
+    }
     if (cell.tag >= [self.arrayProducts count])
         return;
     NSDictionary *product = [self.arrayProducts objectAtIndex:cell.tag];

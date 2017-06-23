@@ -13,6 +13,7 @@
 
 @property (nonatomic, weak) IBOutlet UIWebView *webView;
 @property (nonatomic, strong) WKWebView *wkWebView;
+@property (nonatomic, strong) UIActivityIndicatorView *activityIndicator;
 
 - (void)dismiss;
 
@@ -23,6 +24,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
+    UIBarButtonItem *buttonItemIndicator = [[UIBarButtonItem alloc] initWithCustomView:self.activityIndicator];
+    [self.navigationItem setRightBarButtonItem:buttonItemIndicator];
     [self.webView setHidden:YES];
     [self.view addSubview:self.wkWebView];
     
@@ -41,6 +44,7 @@
         NSURLRequest *request = [NSURLRequest requestWithURL:url];
 //        [self.webView loadRequest:request];
         [self.wkWebView loadRequest:request];
+        [self.activityIndicator startAnimating];
     }
 }
 
@@ -83,6 +87,16 @@
     return _wkWebView;
 }
 
+- (UIActivityIndicatorView *)activityIndicator
+{
+    if (_activityIndicator == nil)
+    {
+        _activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+        [_activityIndicator setHidesWhenStopped:YES];
+    }
+    return _activityIndicator;
+}
+
 #pragma mark - Private Methods
 
 - (void)dismiss
@@ -113,15 +127,20 @@
 
 #pragma mark - WKNavigationDelegate
 
+- (void)webView:(WKWebView *)webView didCommitNavigation:(null_unspecified WKNavigation *)navigation
+{
+    [self.activityIndicator startAnimating];
+}
+
 - (void)webView:(WKWebView *)webView didFailNavigation:(WKNavigation *)navigation withError:(NSError *)error
 {
     NSLog(@"error\n%@", [error description]);
-//    [self.activityIndicator stopAnimating];
+    [self.activityIndicator stopAnimating];
 }
 
 - (void)webView:(WKWebView *)webView didFinishNavigation:(WKNavigation *)navigation
 {
-//    [self.activityIndicator stopAnimating];
+    [self.activityIndicator stopAnimating];
 }
 
 - (void)webView:(WKWebView *)webView decidePolicyForNavigationAction:(WKNavigationAction *)navigationAction decisionHandler:(void (^)(WKNavigationActionPolicy))decisionHandler

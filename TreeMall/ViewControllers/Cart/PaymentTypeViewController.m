@@ -1129,7 +1129,7 @@ static NSString *InstallmentBankListDescription = @"分期0利率（接受14家�
                 NSLog(@"requestResultOfCheckPaymentWithParams - Unexpected data format.");
             }
             // Received result representing success. Go to next step.
-            if (self.type == CartTypeStorePickup)
+            if (weakSelf.type == CartTypeStorePickup)
             {
                 StorePickupInfoViewController *viewController = [[StorePickupInfoViewController alloc] initWithNibName:@"StorePickupInfoViewController" bundle:[NSBundle mainBundle]];
                 viewController.type = weakSelf.type;
@@ -1143,7 +1143,7 @@ static NSString *InstallmentBankListDescription = @"分期0利率（接受14家�
                     [dictionaryPayment setObject:[NSNumber numberWithInteger:0] forKey:SymphoxAPIParam_installment_term];
                     [dictionaryPayment setObject:[NSNumber numberWithInteger:0] forKey:SymphoxAPIParam_installment_amount];
                 }
-                NSDictionary *account_result = [self.dictionaryData objectForKey:SymphoxAPIParam_account_result];
+                NSDictionary *account_result = [weakSelf.dictionaryData objectForKey:SymphoxAPIParam_account_result];
                 if (account_result && [account_result isEqual:[NSNull null]] == NO)
                 {
                     NSNumber *total_cash = [account_result objectForKey:SymphoxAPIParam_total_cash];
@@ -1160,7 +1160,8 @@ static NSString *InstallmentBankListDescription = @"分期0利率（接受14家�
                 {
                     viewController.tradeId = trade_id;
                 }
-                viewController.selectedPaymentDescription = self.selectedPaymentDescription;
+                viewController.selectedPaymentDescription = weakSelf.selectedPaymentDescription;
+                viewController.arrayProductsFromCart = weakSelf.arrayProductsFromCart;
                 [weakSelf.navigationController pushViewController:viewController animated:YES];
             }
             else
@@ -1177,7 +1178,7 @@ static NSString *InstallmentBankListDescription = @"分期0利率（接受14家�
                     [dictionaryPayment setObject:[NSNumber numberWithInteger:0] forKey:SymphoxAPIParam_installment_term];
                     [dictionaryPayment setObject:[NSNumber numberWithInteger:0] forKey:SymphoxAPIParam_installment_amount];
                 }
-                NSDictionary *account_result = [self.dictionaryData objectForKey:SymphoxAPIParam_account_result];
+                NSDictionary *account_result = [weakSelf.dictionaryData objectForKey:SymphoxAPIParam_account_result];
                 if (account_result && [account_result isEqual:[NSNull null]] == NO)
                 {
                     NSNumber *total_cash = [account_result objectForKey:SymphoxAPIParam_total_cash];
@@ -1194,7 +1195,8 @@ static NSString *InstallmentBankListDescription = @"分期0利率（接受14家�
                 {
                     viewController.tradeId = trade_id;
                 }
-                viewController.selectedPaymentDescription = self.selectedPaymentDescription;
+                viewController.selectedPaymentDescription = weakSelf.selectedPaymentDescription;
+                viewController.arrayProductsFromCart = weakSelf.arrayProductsFromCart;
                 [weakSelf.navigationController pushViewController:viewController animated:YES];
             }
         }
@@ -1231,7 +1233,7 @@ static NSString *InstallmentBankListDescription = @"分期0利率（接受14家�
         {
             NSString *string = [[NSString alloc] initWithData:resultObject encoding:NSUTF8StringEncoding];
             NSLog(@"retrieveData - string:\n%@", string);
-            [self processInstallmentBanksData:resultObject];
+            [weakSelf processInstallmentBanksData:resultObject];
         }
         else
         {

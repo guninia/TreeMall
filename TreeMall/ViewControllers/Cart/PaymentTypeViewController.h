@@ -44,4 +44,6 @@
 @property (nonatomic, strong) NSDictionary *selectedInstallment;
 @property (nonatomic, strong) NSAttributedString *stringBanks;
 
+@property (nonatomic, strong) NSArray *arrayProductsFromCart;
+
 @end

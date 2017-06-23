@@ -254,6 +254,7 @@
     if (_imageViewLaunchScreen == nil)
     {
         _imageViewLaunchScreen = [[UIImageView alloc] initWithFrame:CGRectZero];
+        [_imageViewLaunchScreen setBackgroundColor:[UIColor whiteColor]];
         [_imageViewLaunchScreen setContentMode:UIViewContentModeScaleAspectFit];
         UIImage *image = [UIImage imageNamed:@"LaunchImage"];
         if (image)

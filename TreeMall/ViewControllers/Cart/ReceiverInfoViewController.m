@@ -1549,9 +1549,10 @@ typedef enum : NSUInteger {
                 {
                     [self.dictionaryRegionForZip setObject:zip_town forKey:zip_num];
                 }
-                if ([self.dictionaryZipForRegion objectForKey:zip_town] == nil)
+                NSString *key = [NSString stringWithFormat:@"%@%@", (city == nil)?@"":city, (zip_town == nil)?@"":zip_town];
+                if ([self.dictionaryZipForRegion objectForKey:key] == nil)
                 {
-                    [self.dictionaryZipForRegion setObject:zip_num forKey:zip_town];
+                    [self.dictionaryZipForRegion setObject:zip_num forKey:key];
                 }
                 if ([regions containsObject:zip_town] == NO)
                 {
@@ -1601,7 +1602,8 @@ typedef enum : NSUInteger {
                                 {
                                     weakSelf.currentRegion = region;
                                     [weakSelf.currentDeliveryTarget removeObjectForKey:SymphoxAPIParam_address];
-                                    NSString *zip = [weakSelf.dictionaryZipForRegion objectForKey:weakSelf.currentRegion];
+                                    NSString *key = [NSString stringWithFormat:@"%@%@", (weakSelf.currentCity == nil)?@"":weakSelf.currentCity, (weakSelf.currentRegion == nil)?@"":weakSelf.currentRegion];
+                                    NSString *zip = [weakSelf.dictionaryZipForRegion objectForKey:key];
                                     if (zip)
                                     {
                                         [weakSelf.currentDeliveryTarget setObject:zip forKey:SymphoxAPIParam_zip];
@@ -1702,7 +1704,8 @@ typedef enum : NSUInteger {
                     {
                         NSString *region = [options objectAtIndex:index];
                         weakSelf.currentInvoiceRegion = region;
-                        NSString *inv_zip = [weakSelf.dictionaryZipForRegion objectForKey:weakSelf.currentInvoiceRegion];
+                        NSString *key = [NSString stringWithFormat:@"%@%@", (weakSelf.currentInvoiceCity == nil)?@"":weakSelf.currentInvoiceCity, (weakSelf.currentInvoiceRegion == nil)?@"":weakSelf.currentInvoiceRegion];
+                        NSString *inv_zip = [weakSelf.dictionaryZipForRegion objectForKey:key];
                         if (inv_zip)
                         {
                             [weakSelf.dictionaryInvoiceTemp setObject:inv_zip forKey:SymphoxAPIParam_inv_zip];
@@ -1977,7 +1980,8 @@ typedef enum : NSUInteger {
             }
             return;
         }
-        zip = [self.dictionaryZipForRegion objectForKey:self.currentRegion];
+        NSString *key = [NSString stringWithFormat:@"%@%@", (self.currentCity == nil)?@"":self.currentCity, (self.currentRegion == nil)?@"":self.currentRegion];
+        zip = [self.dictionaryZipForRegion objectForKey:key];
         if (zip == nil)
         {
             NSString *message = [NSString stringWithFormat:@"%@\n%@\n%@", [LocalizedString PleaseSelect], [LocalizedString DeliveryCity], [LocalizedString DeliveryRegion]];
@@ -2142,7 +2146,8 @@ typedef enum : NSUInteger {
                             shouldContinue = NO;
                             break;
                         }
-                        inv_zip = [self.dictionaryZipForRegion objectForKey:self.currentInvoiceRegion];
+                        NSString *key = [NSString stringWithFormat:@"%@%@", (self.currentInvoiceCity == nil)?@"":self.currentInvoiceCity, (self.currentInvoiceRegion == nil)?@"":self.currentInvoiceRegion];
+                        inv_zip = [self.dictionaryZipForRegion objectForKey:key];
                     }
                     if (inv_zip == nil)
                     {
@@ -2226,7 +2231,8 @@ typedef enum : NSUInteger {
                         shouldContinue = NO;
                         break;
                     }
-                    inv_zip = [self.dictionaryZipForRegion objectForKey:self.currentInvoiceRegion];
+                    NSString *key = [NSString stringWithFormat:@"%@%@", (self.currentInvoiceCity == nil)?@"":self.currentInvoiceCity, (self.currentInvoiceRegion == nil)?@"":self.currentInvoiceRegion];
+                    inv_zip = [self.dictionaryZipForRegion objectForKey:key];
                 }
                 if (inv_zip == nil)
                 {
@@ -2334,8 +2340,11 @@ typedef enum : NSUInteger {
     }
     [shopping_order_term setObject:pressDate forKey:SymphoxAPIParam_press_date];
     
-    
-    NSArray *array = [[TMInfoManager sharedManager] productArrayForCartType:self.type];
+    NSArray *array = self.arrayProductsFromCart;
+    if (array == nil || [array count] == 0)
+    {
+        array = [[TMInfoManager sharedManager] productArrayForCartType:self.type];
+    }
     NSDictionary *dictionary = [[TMInfoManager sharedManager] purchaseInfoForCartType:self.type];
     
     NSMutableArray *arrayCheck = [NSMutableArray array];
@@ -3567,7 +3576,8 @@ typedef enum : NSUInteger {
     if (self.currentRegion)
     {
         self.currentInvoiceRegion = self.currentRegion;
-        NSString *inv_zip = [self.dictionaryZipForRegion objectForKey:self.currentInvoiceRegion];
+        NSString *key = [NSString stringWithFormat:@"%@%@", (self.currentInvoiceCity == nil)?@"":self.currentInvoiceCity, (self.currentInvoiceRegion == nil)?@"":self.currentInvoiceRegion];
+        NSString *inv_zip = [self.dictionaryZipForRegion objectForKey:key];
         [self.dictionaryInvoiceTemp setObject:inv_zip forKey:SymphoxAPIParam_inv_zip];
     }
     NSString *text = [self.currentDeliveryTarget objectForKey:SymphoxAPIParam_address];

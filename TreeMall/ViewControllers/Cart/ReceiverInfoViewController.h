@@ -58,4 +58,6 @@
 @property (nonatomic, strong) NSDictionary *dictionaryOrderResultData;
 @property (nonatomic, strong) NSString *selectedPaymentDescription;
 
+@property (nonatomic, strong) NSArray *arrayProductsFromCart;
+
 @end

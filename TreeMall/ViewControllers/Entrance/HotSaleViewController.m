@@ -14,8 +14,12 @@
 #import "LocalizedString.h"
 #import "TMInfoManager.h"
 #import "CartViewController.h"
+#import "LoginViewController.h"
+#import "LoadingFooterView.h"
 
 @interface HotSaleViewController ()
+
+@property (nonatomic, assign) BOOL shouldShowLoadingView;
 
 - (void)retrieveDataForType:(HotSaleType)type;
 - (BOOL)processData:(id)data;
@@ -33,6 +37,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    _shouldShowLoadingView = YES;
     // Do any additional setup after loading the view from its nib.
     self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
     UIImage *image = [[UIImage imageNamed:@"car_popup_close"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
@@ -40,6 +45,7 @@
     [self.navigationItem setLeftBarButtonItem:buttonItem];
     
     [self.view addSubview:self.tableView];
+    [self.tableView reloadData];
     
     [self retrieveDataForType:self.type];
 }
@@ -83,6 +89,7 @@
         [_tableView setShowsHorizontalScrollIndicator:NO];
         [_tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
         [_tableView registerClass:[HotSaleTableViewCell class] forCellReuseIdentifier:HotSaleTableViewCellIdentifier];
+        [_tableView registerClass:[LoadingFooterView class] forHeaderFooterViewReuseIdentifier:LoadingFooterViewIdentifier];
     }
     return _tableView;
 }
@@ -138,7 +145,7 @@
     NSLog(@"retrieveDataForType [%@]", [url absoluteString]);
     NSDictionary *headerFields = [NSDictionary dictionaryWithObjectsAndKeys:apiKey, SymphoxAPIParam_key, token, SymphoxAPIParam_token, nil];
     [[SHAPIAdapter sharedAdapter] sendRequestFromObject:weakSelf ToUrl:url withHeaderFields:headerFields andPostObject:nil inPostFormat:SHPostFormatNone encrypted:YES decryptedReturnData:YES completion:^(id resultObject, NSError *error){
-        
+        weakSelf.shouldShowLoadingView = NO;
         if (error == nil)
         {
             if ([resultObject isKindOfClass:[NSData class]])
@@ -510,6 +517,13 @@
     return cell;
 }
 
+- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
+{
+    LoadingFooterView *footerView = [tableView dequeueReusableHeaderFooterViewWithIdentifier:LoadingFooterViewIdentifier];
+    footerView.viewBackground.backgroundColor = tableView.backgroundColor;
+    return footerView;
+}
+
 #pragma mark - UItableViewDelegate
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -534,10 +548,55 @@
     }
 }
 
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+{
+    CGFloat heightForFooter = 0.0;
+    switch (section) {
+        case 0:
+        {
+            if (self.shouldShowLoadingView)
+            {
+                heightForFooter = 50.0;
+            }
+        }
+            break;
+            
+        default:
+            break;
+    }
+    return heightForFooter;
+}
+
+- (void)tableView:(UITableView *)tableView willDisplayFooterView:(UIView *)view forSection:(NSInteger)section
+{
+    if ([view isKindOfClass:[LoadingFooterView class]])
+    {
+        LoadingFooterView *footerView = (LoadingFooterView *)view;
+        [footerView.activityIndicator startAnimating];
+    }
+}
+
+- (void)tableView:(UITableView *)tableView didEndDisplayingFooterView:(UIView *)view forSection:(NSInteger)section
+{
+    if ([view isKindOfClass:[LoadingFooterView class]])
+    {
+        LoadingFooterView *footerView = (LoadingFooterView *)view;
+        [footerView.activityIndicator stopAnimating];
+    }
+}
+
 #pragma mark - HotSaleTableViewCellDelegate
 
 - (void)hotSaleTableViewCell:(HotSaleTableViewCell *)cell didPressAddToCartBySender:(id)sender
 {
+    if ([TMInfoManager sharedManager].userIdentifier == nil)
+    {
+        // Should login first.
+        LoginViewController *viewControllerLogin = [[LoginViewController alloc] initWithNibName:@"LoginViewController" bundle:[NSBundle mainBundle]];
+        UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:viewControllerLogin];
+        [self presentViewController:navigationController animated:YES completion:nil];
+        return;
+    }
     if (cell.tag >= [self.arrayProducts count])
         return;
     NSDictionary *dictionary = [self.arrayProducts objectAtIndex:cell.tag];

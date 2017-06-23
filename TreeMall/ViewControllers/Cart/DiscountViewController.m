@@ -16,8 +16,10 @@
 @interface DiscountViewController ()
 
 @property (nonatomic, assign) NSInteger currentSelectedIndex;
+@property (nonatomic, strong) UIButton *closeButton;
 
 - (void)buttonConfirmPressed:(id)sender;
+- (void)buttonClosePresesd:(id)sender;
 
 @end
 
@@ -39,6 +41,8 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     self.title = [LocalizedString PleaseChooseDiscount];
+    UIBarButtonItem *buttonItemClose = [[UIBarButtonItem alloc] initWithCustomView:self.closeButton];
+    [self.navigationItem setLeftBarButtonItem:buttonItemClose];
     
     [self.view addSubview:self.tableViewDiscount];
     [self.view addSubview:self.buttonConfirm];
@@ -109,6 +113,25 @@
     return _buttonConfirm;
 }
 
+- (UIButton *)closeButton
+{
+    if (_closeButton == nil)
+    {
+        _closeButton = [[UIButton alloc] initWithFrame:CGRectZero];
+        UIImage *image = [[UIImage imageNamed:@"car_popup_close"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        CGSize size = CGSizeMake(40.0, 40.0);
+        if (image)
+        {
+            [_closeButton setImage:image forState:UIControlStateNormal];
+            size = image.size;
+        }
+        CGRect frame = CGRectMake(0.0, 0.0, size.width, size.height);
+        _closeButton.frame = frame;
+        [_closeButton addTarget:self action:@selector(buttonClosePresesd:) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _closeButton;
+}
+
 #pragma mark - Actions
 
 - (void)buttonConfirmPressed:(id)sender
@@ -117,79 +140,10 @@
         return;
     NSDictionary *paymentModeSelected = [self.arrayPaymentMode objectAtIndex:self.currentSelectedIndex];
     NSLog(@"selected paymentMode:\n%@", [paymentModeSelected description]);
-    
-    NSMutableDictionary *paymentMode = [NSMutableDictionary dictionary];
-    
-    id payment_type = [paymentModeSelected objectForKey:SymphoxAPIParam_payment_type];
-    if (payment_type)
-    {
-        [paymentMode setObject:payment_type forKey:SymphoxAPIParam_payment_type];
-    }
-    id price = [paymentModeSelected objectForKey:SymphoxAPIParam_price];
-    if (price)
-    {
-        [paymentMode setObject:price forKey:SymphoxAPIParam_price];
-    }
-    id total_point = [paymentModeSelected objectForKey:SymphoxAPIParam_total_point];
-    if (total_point)
-    {
-        [paymentMode setObject:total_point forKey:SymphoxAPIParam_total_point];
-    }
-    id point = [paymentModeSelected objectForKey:SymphoxAPIParam_point];
-    if (point)
-    {
-        [paymentMode setObject:point forKey:SymphoxAPIParam_point];
-    }
-    id epoint = [paymentModeSelected objectForKey:SymphoxAPIParam_epoint];
-    if (epoint)
-    {
-        [paymentMode setObject:epoint forKey:SymphoxAPIParam_epoint];
-    }
-    id cpoint = [paymentModeSelected objectForKey:SymphoxAPIParam_cpoint];
-    if (cpoint)
-    {
-        [paymentMode setObject:cpoint forKey:SymphoxAPIParam_cpoint];
-    }
-    id coupon_discount = [paymentModeSelected objectForKey:SymphoxAPIParam_coupon_discount];
-    if (coupon_discount)
-    {
-        [paymentMode setObject:coupon_discount forKey:SymphoxAPIParam_coupon_discount];
-    }
-    id eacc_num = [paymentModeSelected objectForKey:SymphoxAPIParam_eacc_num];
-    if (eacc_num)
-    {
-        [paymentMode setObject:eacc_num forKey:SymphoxAPIParam_eacc_num];
-    }
-    id cm_id = [paymentModeSelected objectForKey:SymphoxAPIParam_cm_id];
-    if (cm_id)
-    {
-        [paymentMode setObject:cm_id forKey:SymphoxAPIParam_cm_id];
-    }
-    
-    if (self.isAddition)
-    {
-        [[TMInfoManager sharedManager] setPurchasePaymentMode:paymentMode forProduct:self.productId inAdditionalCart:self.type];
-    }
-    else
-    {
-        [[TMInfoManager sharedManager] setPurchasePaymentMode:paymentMode forProduct:self.productId inCart:self.type];
-    }
-    
-    id discount_type_desc = [paymentModeSelected objectForKey:SymphoxAPIParam_discount_type_desc];
-    id discount_detail_desc = [paymentModeSelected objectForKey:SymphoxAPIParam_discount_detail_desc];
-    if ([discount_detail_desc isKindOfClass:[NSString class]])
-    {
-        if (self.isAddition)
-        {
-            [[TMInfoManager sharedManager] setDiscountTypeDescription:discount_type_desc forProduct:self.productId inAdditionalCart:self.type];
-            [[TMInfoManager sharedManager] setDiscountDetailDescription:discount_detail_desc forProduct:self.productId inAdditionalCart:self.type];
-        }
-        else
-        {
-            [[TMInfoManager sharedManager] setDiscountTypeDescription:discount_type_desc forProduct:self.productId inCart:self.type];
-            [[TMInfoManager sharedManager] setDiscountDetailDescription:discount_detail_desc forProduct:self.productId inCart:self.type];
-        }
-    }
+    NSNumber *cpdt_num = [paymentModeSelected objectForKey:SymphoxAPIParam_cpdt_num];
+    if (cpdt_num == nil)
+        return;
+    [[TMInfoManager sharedManager] setPurchaseInfoFromSelectedPaymentMode:paymentModeSelected forProductId:cpdt_num inCart:self.type asAdditional:self.isAddition];
     
     if (self.navigationController.presentingViewController)
     {
@@ -198,6 +152,22 @@
         {
             [self.delegate didDismissDiscountViewController:self];
         }
+    }
+}
+
+- (void)buttonClosePresesd:(id)sender
+{
+    if (self.navigationController.presentingViewController)
+    {
+        [self.navigationController.presentingViewController dismissViewControllerAnimated:YES completion:nil];
+    }
+    else if (self.navigationController)
+    {
+        [self.navigationController popViewControllerAnimated:YES];
+    }
+    else if (self.presentingViewController)
+    {
+        [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
     }
 }
 
