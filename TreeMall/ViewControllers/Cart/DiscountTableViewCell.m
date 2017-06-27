@@ -61,6 +61,7 @@
         }
         CGRect frame = CGRectMake(0.0, 0.0, buttonSize.width, buttonSize.height);
         _buttonCheck.frame = frame;
+        [_buttonCheck setUserInteractionEnabled:NO];
     }
     return _buttonCheck;
 }

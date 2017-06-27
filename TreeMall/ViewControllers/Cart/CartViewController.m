@@ -728,7 +728,7 @@
             for (NSDictionary *product in array)
             {
                 NSString *cpdt_owner_num = [product objectForKey:SymphoxAPIParam_cpdt_owner_num];
-                BOOL isGift = (cpdt_owner_num && [cpdt_owner_num isEqual:[NSNull null]] == NO && [cpdt_owner_num integerValue] == 4);
+                BOOL isGift = (cpdt_owner_num && [cpdt_owner_num isEqual:[NSNull null]] == NO/* && [cpdt_owner_num integerValue] == 4*/);
                 if (isGift)
                 {
                     NSNumber *cpdt_num = [product objectForKey:SymphoxAPIParam_cpdt_num];
@@ -742,7 +742,12 @@
                     NSDictionary *used_payemnt_mode = [product objectForKey:SymphoxAPIParam_used_payment_mode];
                     if (used_payemnt_mode && [used_payemnt_mode isEqual:[NSNull null]] == NO)
                     {
-                        [[TMInfoManager sharedManager] setPurchaseInfoFromSelectedPaymentMode:used_payemnt_mode forProductId:cpdt_num inCart:type asAdditional:NO];
+                        NSNumber *real_cpdt_num = [used_payemnt_mode objectForKey:SymphoxAPIParam_real_cpdt_num];
+                        if (real_cpdt_num == nil || [real_cpdt_num isEqual:[NSNull null]])
+                        {
+                            real_cpdt_num = cpdt_num;
+                        }
+                        [[TMInfoManager sharedManager] setPurchaseInfoFromSelectedPaymentMode:used_payemnt_mode forProductId:cpdt_num withRealProductId:real_cpdt_num inCart:type asAdditional:NO];
                     }
                 }
             }
@@ -828,6 +833,7 @@
         {
             // Should show additional purchase page
             AdditionalPurchaseViewController *viewController = [[AdditionalPurchaseViewController alloc] initWithNibName:@"AdditionalPurchaseViewController" bundle:[NSBundle mainBundle]];
+            [viewController.dictionaryTotal setDictionary:weakSelf.dictionaryTotal];
             viewController.arrayProducts = array;
             viewController.arrayProductsFromCart = weakSelf.arrayProducts;
             viewController.bottomBar.label.attributedText = weakSelf.bottomBar.label.attributedText;
@@ -1395,8 +1401,8 @@
         NSMutableAttributedString *totalCostString = [[NSMutableAttributedString alloc] init];
         NSInteger originLength = [totalCostString length];
 //        NSDictionary *attributeGray = [NSDictionary dictionaryWithObjectsAndKeys:[UIColor grayColor], NSForegroundColorAttributeName, nil];
-        NSDictionary *attributeRed = [NSDictionary dictionaryWithObjectsAndKeys:[UIColor redColor], NSForegroundColorAttributeName, nil];
-        NSAttributedString *plusString = [[NSAttributedString alloc] initWithString:@"＋" attributes:attributeRed];
+        NSDictionary *attributeRed = [NSDictionary dictionaryWithObjectsAndKeys:cell.labelPrice.font, NSFontAttributeName, [UIColor redColor], NSForegroundColorAttributeName, nil];
+//        NSAttributedString *plusString = [[NSAttributedString alloc] initWithString:@"＋" attributes:attributeRed];
         if (numberCash != nil && [numberCash integerValue] > 0)
         {
             NSString *stringTotal = [self.numberFormatter stringFromNumber:numberCash];
@@ -1404,15 +1410,17 @@
             NSAttributedString *attrString = [[NSAttributedString alloc] initWithString:string attributes:attributeRed];
             [totalCostString appendAttributedString:attrString];
         }
-        if (numberPoint != nil && [numberPoint integerValue] > 0)
+        else if (numberPoint != nil && [numberPoint integerValue] > 0)
         {
-            if ([totalCostString length] > originLength)
-            {
-                [totalCostString appendAttributedString:plusString];
-            }
+//            if ([totalCostString length] > originLength)
+//            {
+//                [totalCostString appendAttributedString:plusString];
+//            }
+            NSDictionary *attributePoint = [NSDictionary dictionaryWithObjectsAndKeys:[UIFont systemFontOfSize:16.0], NSFontAttributeName, [UIColor redColor], NSForegroundColorAttributeName, nil];
             NSString *stringTotal = [self.numberFormatter stringFromNumber:numberPoint];
-            NSString *string = [NSString stringWithFormat:@"%@%@", stringTotal, [LocalizedString Point]];
-            NSAttributedString *attrString = [[NSAttributedString alloc] initWithString:string attributes:attributeRed];
+            NSMutableAttributedString *attrString = [[NSMutableAttributedString alloc] initWithString:stringTotal attributes:attributeRed];
+            NSAttributedString *attrPoint = [[NSAttributedString alloc] initWithString:[LocalizedString Point] attributes:attributePoint];
+            [attrString appendAttributedString:attrPoint];
             [totalCostString appendAttributedString:attrString];
         }
         if ([totalCostString length] == originLength)

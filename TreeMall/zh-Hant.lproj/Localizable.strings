@@ -341,3 +341,13 @@
 "EightHourDelivery"="８Ｈ速配";
 "ThisIsGift"="此為活動贈品";
 "OrderDetailAlert"="將為您開啟網頁版會員中心，訂單明細請重新登入後即可查詢";
+"NoSuchDonationCode"="很抱歉！\n查無此捐贈愛心碼";
+"SystemErrorTryLater"="系統錯誤，\n請稍後再試";
+"NotMemberYet"="很抱歉！\n您尚未成為本站會員。\n請先加入會員。";
+"CreditCardFormatError"="信用卡格式輸入錯誤，請重新操作！";
+"BonusPointUsageLimitation"="舞動紅利點限使用國泰世華卡折抵";
+"NoMatchedProduct"="很抱歉！\n查無符合商品資料";
+"NotEnoughProductInStock"="很抱歉！此商品已售完，請選購其他商品";
+"ProductNoLongerAvailable"="很抱歉！此商品已下架，請選購其他商品";
+"NoAdditionalPurchaseForTargetAmount"="您的消費金額未達滿額加購門檻，請重新確認";
+"NoAdditionalPurchase"="您的消費金額未達加購門檻，請重新確認購物車品項";

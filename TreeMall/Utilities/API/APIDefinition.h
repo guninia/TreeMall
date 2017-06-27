@@ -143,6 +143,7 @@ static NSString *SymphoxAPIParam_verify_code = @"verify_code";
 static NSString *SymphoxAPIParam_ip = @"ip";
 static NSString *SymphoxAPIParam_status_id = @"status_id";
 static NSString *SymphoxAPIParam_status_desc = @"status_desc";
+static NSString *SymphoxAPIParam_server_desc = @"server_desc";
 static NSString *SymphoxAPIParam_user_num = @"user_num";
 static NSString *SymphoxAPIParam_sex = @"sex";
 static NSString *SymphoxAPIParamValue_m = @"m";
@@ -426,6 +427,8 @@ static NSString *SymphoxAPIParam_tot_dis_coupon_qty = @"tot_dis_coupon_qty";
 static NSString *SymphoxAPIParam_tot_dis_coupon_worth = @"tot_dis_coupon_worth";
 static NSString *SymphoxAPIParam_tot_dis_other_cash = @"tot_dis_other_cash";
 static NSString *SymphoxAPIParam_tot_dis_cash = @"tot_dis_cash";
+static NSString *SymphoxAPIParam_provision = @"provision";
+static NSString *SymphoxAPIParam_real_cpdt_num = @"real_cpdt_num";
 
 typedef enum : NSUInteger {
     TermTypeMemberTerms,

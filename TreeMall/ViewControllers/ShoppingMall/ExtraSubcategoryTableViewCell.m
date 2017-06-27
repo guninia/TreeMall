@@ -33,4 +33,12 @@
     // Configure the view for the selected state
 }
 
+- (void)layoutSubviews
+{
+    [super layoutSubviews];
+    CGRect frame = self.contentView.bounds;
+    frame = CGRectInset(frame, 5.0, 0.0);
+    self.textLabel.frame = frame;
+}
+
 @end

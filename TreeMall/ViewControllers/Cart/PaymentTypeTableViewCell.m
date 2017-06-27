@@ -97,6 +97,7 @@
         {
             [_buttonCheck setImage:selectedImage forState:UIControlStateSelected];
         }
+        [_buttonCheck setUserInteractionEnabled:NO];
     }
     return _buttonCheck;
 }

@@ -41,7 +41,7 @@
 {
     [super layoutSubviews];
     
-    CGRect viewFrame = CGRectInset(self.contentView.bounds, 10.0, 5.0);
+    CGRect viewFrame = CGRectInset(self.contentView.bounds, 5.0, 5.0);
     self.labelBackgroundView.frame = viewFrame;
     CGRect labelFrame = CGRectInset(self.labelBackgroundView.frame, 3.0, 2.0);
     self.textLabel.frame = labelFrame;

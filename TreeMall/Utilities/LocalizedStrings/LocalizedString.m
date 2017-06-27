@@ -3361,4 +3361,104 @@
     return OrderDetailAlert;
 }
 
++ (NSString *)NoSuchDonationCode
+{
+    static NSString *NoSuchDonationCode = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        NoSuchDonationCode = NSLocalizedString(@"NoSuchDonationCode", nil);
+    });
+    return NoSuchDonationCode;
+}
+
++ (NSString *)SystemErrorTryLater
+{
+    static NSString *SystemErrorTryLater = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        SystemErrorTryLater = NSLocalizedString(@"SystemErrorTryLater", nil);
+    });
+    return SystemErrorTryLater;
+}
+
++ (NSString *)NotMemberYet
+{
+    static NSString *NotMemberYet = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        NotMemberYet = NSLocalizedString(@"NotMemberYet", nil);
+    });
+    return NotMemberYet;
+}
+
++ (NSString *)CreditCardFormatError
+{
+    static NSString *CreditCardFormatError = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        CreditCardFormatError = NSLocalizedString(@"CreditCardFormatError", nil);
+    });
+    return CreditCardFormatError;
+}
+
++ (NSString *)BonusPointUsageLimitation
+{
+    static NSString *BonusPointUsageLimitation = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        BonusPointUsageLimitation = NSLocalizedString(@"BonusPointUsageLimitation", nil);
+    });
+    return BonusPointUsageLimitation;
+}
+
++ (NSString *)NoMatchedProduct
+{
+    static NSString *NoMatchedProduct = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        NoMatchedProduct = NSLocalizedString(@"NoMatchedProduct", nil);
+    });
+    return NoMatchedProduct;
+}
+
++ (NSString *)NotEnoughProductInStock
+{
+    static NSString *NotEnoughProductInStock = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        NotEnoughProductInStock = NSLocalizedString(@"NotEnoughProductInStock", nil);
+    });
+    return NotEnoughProductInStock;
+}
+
++ (NSString *)ProductNoLongerAvailable
+{
+    static NSString *ProductNoLongerAvailable = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        ProductNoLongerAvailable = NSLocalizedString(@"ProductNoLongerAvailable", nil);
+    });
+    return ProductNoLongerAvailable;
+}
+
++ (NSString *)NoAdditionalPurchaseForTargetAmount
+{
+    static NSString *NoAdditionalPurchaseForTargetAmount = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        NoAdditionalPurchaseForTargetAmount = NSLocalizedString(@"NoAdditionalPurchaseForTargetAmount", nil);
+    });
+    return NoAdditionalPurchaseForTargetAmount;
+}
+
++ (NSString *)NoAdditionalPurchase
+{
+    static NSString *NoAdditionalPurchase = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        NoAdditionalPurchase = NSLocalizedString(@"NoAdditionalPurchase", nil);
+    });
+    return NoAdditionalPurchase;
+}
+
 @end

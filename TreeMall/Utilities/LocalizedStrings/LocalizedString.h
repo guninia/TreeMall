@@ -345,5 +345,15 @@
 + (NSString *)EightHourDelivery;
 + (NSString *)ThisIsGift;
 + (NSString *)OrderDetailAlert;
++ (NSString *)NoSuchDonationCode;
++ (NSString *)SystemErrorTryLater;
++ (NSString *)NotMemberYet;
++ (NSString *)CreditCardFormatError;
++ (NSString *)BonusPointUsageLimitation;
++ (NSString *)NoMatchedProduct;
++ (NSString *)NotEnoughProductInStock;
++ (NSString *)ProductNoLongerAvailable;
++ (NSString *)NoAdditionalPurchaseForTargetAmount;
++ (NSString *)NoAdditionalPurchase;
 
 @end

@@ -141,9 +141,9 @@
     NSDictionary *paymentModeSelected = [self.arrayPaymentMode objectAtIndex:self.currentSelectedIndex];
     NSLog(@"selected paymentMode:\n%@", [paymentModeSelected description]);
     NSNumber *cpdt_num = [paymentModeSelected objectForKey:SymphoxAPIParam_cpdt_num];
-    if (cpdt_num == nil)
+    if (self.productId == nil || cpdt_num == nil)
         return;
-    [[TMInfoManager sharedManager] setPurchaseInfoFromSelectedPaymentMode:paymentModeSelected forProductId:cpdt_num inCart:self.type asAdditional:self.isAddition];
+    [[TMInfoManager sharedManager] setPurchaseInfoFromSelectedPaymentMode:paymentModeSelected forProductId:self.productId withRealProductId:cpdt_num inCart:self.type asAdditional:self.isAddition];
     
     if (self.navigationController.presentingViewController)
     {

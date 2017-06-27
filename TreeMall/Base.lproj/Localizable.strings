@@ -340,3 +340,13 @@
 "EightHourDelivery"="8H Delivery";
 "ThisIsGift"="This is gift";
 "OrderDetailAlert"="Going to show order details in web page";
+"NoSuchDonationCode"="No such donation code";
+"SystemErrorTryLater"="System error,\nPlease try again later";
+"NotMemberYet"="Sorry, you are not member yet. Please join member first.";
+"CreditCardFormatError"="Credit card input format error, please try again";
+"BonusPointUsageLimitation"="Bonus point only for Cathay card";
+"NoMatchedProduct"="Sorry, no matched product.";
+"NotEnoughProductInStock"="Not enough product in stock";
+"ProductNoLongerAvailable"="Product is no longer available";
+"NoAdditionalPurchaseForTargetAmount"="No additional purchase for target amount";
+"NoAdditionalPurchase"="No additional purchase";

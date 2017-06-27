@@ -2137,6 +2137,11 @@
     else if (view == self.viewPointFeedback)
     {
         NSString *urlString = SymphoxAPI_feedbackPointDetailPage;
+        NSString *urlStringFromServer = [[TMInfoManager sharedManager].dictionaryDocuments objectForKey:@"7"];
+        if (urlStringFromServer)
+        {
+            urlString = urlStringFromServer;
+        }
         NSURL *url = [NSURL URLWithString:urlString];
         if ([[UIApplication sharedApplication] canOpenURL:url])
         {

@@ -51,7 +51,18 @@
     [self.scrollView setShowsHorizontalScrollIndicator:NO];
     [self.buttonConfirm.layer setCornerRadius:5.0];
     
-    [self.navigationController.tabBarController.view addSubview:self.viewLoading];
+    if (self.navigationController.tabBarController)
+    {
+        [self.navigationController.tabBarController.view addSubview:self.viewLoading];
+    }
+    else if (self.navigationController)
+    {
+        [self.navigationController.view addSubview:self.viewLoading];
+    }
+    else
+    {
+        [self.view addSubview:self.viewLoading];
+    }
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handlerOfTextFieldTextDidChangeNotification:) name:UITextFieldTextDidChangeNotification object:_textField1];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handlerOfTextFieldTextDidChangeNotification:) name:UITextFieldTextDidChangeNotification object:_textField2];
@@ -134,7 +145,18 @@
     
     if (self.viewLoading)
     {
-        self.viewLoading.frame = self.navigationController.tabBarController.view.bounds;
+        if (self.navigationController.tabBarController)
+        {
+            self.viewLoading.frame = self.navigationController.tabBarController.view.bounds;
+        }
+        else if (self.navigationController)
+        {
+            self.viewLoading.frame = self.navigationController.view.bounds;
+        }
+        else
+        {
+            self.viewLoading.frame = self.view.bounds;
+        }
         self.viewLoading.indicatorCenter = self.viewLoading.center;
         [self.viewLoading setNeedsLayout];
     }

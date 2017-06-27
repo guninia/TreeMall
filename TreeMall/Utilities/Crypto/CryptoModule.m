@@ -9,6 +9,7 @@
 #import "CryptoModule.h"
 #import "CryptoTool.h"
 #import "APIDefinition.h"
+#import "LocalizedString.h"
 
 static CryptoModule *gCryptoModule = nil;
 
@@ -91,35 +92,127 @@ static CryptoModule *gCryptoModule = nil;
             NSString *statusDescription = [dictionary objectForKey:SymphoxAPIParam_status_desc];
             if (statusDescription)
             {
-                [userInfo setObject:statusDescription forKey:SymphoxAPIParam_status_desc];
+                [userInfo setObject:statusDescription forKey:SymphoxAPIParam_server_desc];
             }
 //            NSLog(@"API status[%@][%@]", statusId, statusDescription);
             
             NSString *result = [dictionary objectForKey:SymphoxAPIParam_result];
-            if ([statusId compare:@"E000" options:NSCaseInsensitiveSearch] == NSOrderedSame)
+            NSString *statusCat = [statusId stringByTrimmingCharactersInSet:[NSCharacterSet decimalDigitCharacterSet]];
+            NSString *statusCode = [statusId stringByTrimmingCharactersInSet:[NSCharacterSet letterCharacterSet]];
+            NSLog(@"statusCat[%@] statusCode[%@]", statusCat, statusCode);
+            if ([statusCat compare:@"E" options:NSCaseInsensitiveSearch] == NSOrderedSame)
             {
-                if (result)
-                {
-                    NSData *resultData = [result dataUsingEncoding:NSUTF8StringEncoding];
-                    NSData *sourceData = [CryptoTool dataFromBase64EncodedData:resultData];
-                    if (sourceData)
+                switch ([statusCode integerValue]) {
+                    case 0:
                     {
-                        data = [CryptoTool decryptData:sourceData withKey:self.key andIV:nil forAlgorithm:CryptoAlgorithmAES128ECBPKCS7];
-                        if (data == nil)
+                        // Success
+                        if (result)
                         {
-                            error = [NSError errorWithDomain:NSCocoaErrorDomain code:CryptoErrorCodeDecryptAesError userInfo:userInfo];
+                            NSData *resultData = [result dataUsingEncoding:NSUTF8StringEncoding];
+                            NSData *sourceData = [CryptoTool dataFromBase64EncodedData:resultData];
+                            if (sourceData)
+                            {
+                                data = [CryptoTool decryptData:sourceData withKey:self.key andIV:nil forAlgorithm:CryptoAlgorithmAES128ECBPKCS7];
+                                if (data == nil)
+                                {
+                                    error = [NSError errorWithDomain:NSCocoaErrorDomain code:CryptoErrorCodeDecryptAesError userInfo:userInfo];
+                                }
+                            }
+                            else
+                            {
+                                error = [NSError errorWithDomain:NSCocoaErrorDomain code:CryptoErrorCodeDecodeBase64Error userInfo:userInfo];
+                            }
                         }
                     }
-                    else
+                        break;
+                    case 107:
                     {
-                        error = [NSError errorWithDomain:NSCocoaErrorDomain code:CryptoErrorCodeDecodeBase64Error userInfo:userInfo];
+                        [userInfo setObject:[LocalizedString NoSuchDonationCode] forKey:SymphoxAPIParam_status_desc];
+                        error = [NSError errorWithDomain:NSCocoaErrorDomain code:CryptoErrorCodeServerResponseError userInfo:userInfo];
                     }
+                        break;
+                    case 202:
+                    {
+                        [userInfo setObject:[LocalizedString NotMemberYet] forKey:SymphoxAPIParam_status_desc];
+                        error = [NSError errorWithDomain:NSCocoaErrorDomain code:CryptoErrorCodeServerResponseError userInfo:userInfo];
+                    }
+                        break;
+                    case 209:
+                    {
+                        [userInfo setObject:[LocalizedString CreditCardFormatError] forKey:SymphoxAPIParam_status_desc];
+                        error = [NSError errorWithDomain:NSCocoaErrorDomain code:CryptoErrorCodeServerResponseError userInfo:userInfo];
+                    }
+                        break;
+                    case 210:
+                    {
+                        [userInfo setObject:[LocalizedString BonusPointUsageLimitation] forKey:SymphoxAPIParam_status_desc];
+                        error = [NSError errorWithDomain:NSCocoaErrorDomain code:CryptoErrorCodeServerResponseError userInfo:userInfo];
+                    }
+                        break;
+                    case 301:
+                    {
+                        [userInfo setObject:[LocalizedString NoMatchedProduct] forKey:SymphoxAPIParam_status_desc];
+                        error = [NSError errorWithDomain:NSCocoaErrorDomain code:CryptoErrorCodeServerResponseError userInfo:userInfo];
+                    }
+                        break;
+                    case 403:
+                    {
+                        [userInfo setObject:[LocalizedString NotEnoughProductInStock] forKey:SymphoxAPIParam_status_desc];
+                        error = [NSError errorWithDomain:NSCocoaErrorDomain code:CryptoErrorCodeServerResponseError userInfo:userInfo];
+                    }
+                        break;
+                    case 404:
+                    {
+                        [userInfo setObject:[LocalizedString ProductNoLongerAvailable] forKey:SymphoxAPIParam_status_desc];
+                        error = [NSError errorWithDomain:NSCocoaErrorDomain code:CryptoErrorCodeServerResponseError userInfo:userInfo];
+                    }
+                        break;
+                    case 407:
+                    {
+                        [userInfo setObject:[LocalizedString NoAdditionalPurchaseForTargetAmount] forKey:SymphoxAPIParam_status_desc];
+                        error = [NSError errorWithDomain:NSCocoaErrorDomain code:CryptoErrorCodeServerResponseError userInfo:userInfo];
+                    }
+                        break;
+                    case 408:
+                    case 411:
+                    {
+                        [userInfo setObject:[LocalizedString NoAdditionalPurchase] forKey:SymphoxAPIParam_status_desc];
+                        error = [NSError errorWithDomain:NSCocoaErrorDomain code:CryptoErrorCodeServerResponseError userInfo:userInfo];
+                    }
+                        break;
+                    
+                    default:
+                    {
+                        [userInfo setObject:[LocalizedString SystemErrorTryLater] forKey:SymphoxAPIParam_status_desc];
+                        error = [NSError errorWithDomain:NSCocoaErrorDomain code:CryptoErrorCodeServerResponseError userInfo:userInfo];
+                    }
+                        break;
                 }
             }
-            else
-            {
-                error = [NSError errorWithDomain:NSCocoaErrorDomain code:CryptoErrorCodeServerResponseError userInfo:userInfo];
-            }
+//            if ([statusId compare:@"E000" options:NSCaseInsensitiveSearch] == NSOrderedSame)
+//            {
+//                if (result)
+//                {
+//                    NSData *resultData = [result dataUsingEncoding:NSUTF8StringEncoding];
+//                    NSData *sourceData = [CryptoTool dataFromBase64EncodedData:resultData];
+//                    if (sourceData)
+//                    {
+//                        data = [CryptoTool decryptData:sourceData withKey:self.key andIV:nil forAlgorithm:CryptoAlgorithmAES128ECBPKCS7];
+//                        if (data == nil)
+//                        {
+//                            error = [NSError errorWithDomain:NSCocoaErrorDomain code:CryptoErrorCodeDecryptAesError userInfo:userInfo];
+//                        }
+//                    }
+//                    else
+//                    {
+//                        error = [NSError errorWithDomain:NSCocoaErrorDomain code:CryptoErrorCodeDecodeBase64Error userInfo:userInfo];
+//                    }
+//                }
+//            }
+//            else
+//            {
+//                error = [NSError errorWithDomain:NSCocoaErrorDomain code:CryptoErrorCodeServerResponseError userInfo:userInfo];
+//            }
         }
         else
         {

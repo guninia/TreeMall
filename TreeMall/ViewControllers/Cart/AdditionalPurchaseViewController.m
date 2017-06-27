@@ -638,7 +638,12 @@
                     NSDictionary *used_payemnt_mode = [product objectForKey:SymphoxAPIParam_used_payment_mode];
                     if (used_payemnt_mode && [used_payemnt_mode isEqual:[NSNull null]] == NO)
                     {
-                        [[TMInfoManager sharedManager] setPurchaseInfoFromSelectedPaymentMode:used_payemnt_mode forProductId:cpdt_num inCart:type asAdditional:NO];
+                        NSNumber *real_cpdt_num = [used_payemnt_mode objectForKey:SymphoxAPIParam_real_cpdt_num];
+                        if (real_cpdt_num == nil || [real_cpdt_num isEqual:[NSNull null]])
+                        {
+                            real_cpdt_num = cpdt_num;
+                        }
+                        [[TMInfoManager sharedManager] setPurchaseInfoFromSelectedPaymentMode:used_payemnt_mode forProductId:cpdt_num withRealProductId:real_cpdt_num inCart:type asAdditional:NO];
                     }
                     BOOL shouldAddProduct = YES;
                     for (NSDictionary *productFromCart in self.arrayProductsFromCart)

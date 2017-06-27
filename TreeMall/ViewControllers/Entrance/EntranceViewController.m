@@ -204,6 +204,11 @@ typedef enum : NSUInteger {
             {
                 [[TMInfoManager sharedManager].arrayKeywords setArray:keywords];
             }
+            NSDictionary *provision = [dictionary objectForKey:SymphoxAPIParam_provision];
+            if (provision)
+            {
+                [TMInfoManager sharedManager].dictionaryDocuments = provision;
+            }
         }
     }
     else

@@ -986,7 +986,11 @@ static NSString *InstallmentBankListDescription = @"分期0利率（接受14家�
         return;
     }
     
-    NSArray *array = [[TMInfoManager sharedManager] productArrayForCartType:self.type];
+    NSArray *array = self.arrayProductsFromCart;
+    if (array == nil || [array count] == 0)
+    {
+        array = [[TMInfoManager sharedManager] productArrayForCartType:self.type];
+    }
     if (array == nil)
         return;
     

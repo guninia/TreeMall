@@ -150,6 +150,7 @@ typedef enum : NSUInteger {
 @property (nonatomic, strong) NSMutableDictionary *dictionaryProductPurchaseInfoInCartDirectAddition;
 @property (nonatomic, strong) NSDictionary *productFastDelivery;
 @property (nonatomic, strong) NSDictionary *productInfoForFastDelivery;
+@property (nonatomic, strong) NSDictionary *dictionaryDocuments;
 
 + (instancetype)sharedManager;
 
@@ -184,7 +185,7 @@ typedef enum : NSUInteger {
 - (NSMutableDictionary *)purchaseInfoForCartType:(CartType)type;
 - (void)addProduct:(NSDictionary *)product toCartForType:(CartType)type;
 - (void)setPurchaseQuantity:(NSNumber *)quantity forProduct:(NSNumber *)productId inCart:(CartType)cartType;
-- (void)setPurchasePaymentMode:(NSDictionary *)dictionaryPaymentMode forProduct:(NSNumber *)productId inCart:(CartType)cartType;
+- (void)setPurchasePaymentMode:(NSDictionary *)dictionaryPaymentMode forProduct:(NSNumber *)productId withRealProductId:(NSNumber *)realProductId inCart:(CartType)cartType;
 - (void)setDiscountTypeDescription:(NSString *)description forProduct:(NSNumber *)productId inCart:(CartType)cartType;
 - (void)setDiscountDetailDescription:(NSString *)description forProduct:(NSNumber *)productId inCart:(CartType)cartType;
 - (NSString *)nameOfRemovedProductId:(NSNumber *)productIdToRemove inCart:(CartType)type;
@@ -193,12 +194,12 @@ typedef enum : NSUInteger {
 - (NSMutableDictionary *)purchaseInfoForAdditionalCartType:(CartType)type;
 - (void)addProduct:(NSDictionary *)product toAdditionalCartForType:(CartType)type;
 - (void)setPurchaseQuantity:(NSNumber *)quantity forProduct:(NSNumber *)productId inAdditionalCart:(CartType)cartType;
-- (void)setPurchasePaymentMode:(NSDictionary *)dictionaryPaymentMode forProduct:(NSNumber *)productId inAdditionalCart:(CartType)cartType;
+- (void)setPurchasePaymentMode:(NSDictionary *)dictionaryPaymentMode forProduct:(NSNumber *)productId withRealProductId:(NSNumber *)realProductId inAdditionalCart:(CartType)cartType;
 - (void)setDiscountTypeDescription:(NSString *)description forProduct:(NSNumber *)productId inAdditionalCart:(CartType)cartType;
 - (void)setDiscountDetailDescription:(NSString *)description forProduct:(NSNumber *)productId inAdditionalCart:(CartType)cartType;
 - (NSString *)nameOfRemovedProductId:(NSNumber *)productIdToRemove inAdditionalCart:(CartType)type;
 
-- (void)setPurchaseInfoFromSelectedPaymentMode:(NSDictionary *)paymentModeSelected forProductId:(NSNumber *)productId inCart:(CartType)cartType asAdditional:(BOOL)isAdditional;
+- (void)setPurchaseInfoFromSelectedPaymentMode:(NSDictionary *)paymentModeSelected forProductId:(NSNumber *)productId withRealProductId:(NSNumber *)realProductId inCart:(CartType)cartType asAdditional:(BOOL)isAdditional;
 
 - (NSInteger)numberOfProductsInCart:(CartType)type;
 
