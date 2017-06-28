@@ -73,7 +73,7 @@ typedef enum : NSUInteger {
     [self.scrollView addSubview:self.buttonAdvertisement];
     [self.scrollView addSubview:self.viewPoint];
     [self.scrollView addSubview:self.viewCouponTitle];
-    [self.scrollView addSubview:self.viewTotalCoupon];
+//    [self.scrollView addSubview:self.viewTotalCoupon];
     [self.scrollView addSubview:self.viewOrderTitle];
     [self.scrollView addSubview:self.viewProcessing];
     [self.scrollView addSubview:self.viewShipped];
@@ -147,7 +147,7 @@ typedef enum : NSUInteger {
     }
     if (self.viewPoint)
     {
-        CGRect frame = CGRectMake(0.0, originY, self.scrollView.frame.size.width, 180.0);
+        CGRect frame = CGRectMake(0.0, originY, self.scrollView.frame.size.width, 230.0);
         self.viewPoint.frame = frame;
         originY = self.viewPoint.frame.origin.y + self.viewPoint.frame.size.height;
     }
@@ -157,12 +157,12 @@ typedef enum : NSUInteger {
         self.viewCouponTitle.frame = frame;
         originY = self.viewCouponTitle.frame.origin.y + self.viewCouponTitle.frame.size.height;
     }
-    if (self.viewTotalCoupon)
-    {
-        CGRect frame = CGRectMake(0.0, originY, self.scrollView.frame.size.width, 50.0);
-        self.viewTotalCoupon.frame = frame;
-        originY = self.viewTotalCoupon.frame.origin.y + self.viewTotalCoupon.frame.size.height;
-    }
+//    if (self.viewTotalCoupon)
+//    {
+//        CGRect frame = CGRectMake(0.0, originY, self.scrollView.frame.size.width, 50.0);
+//        self.viewTotalCoupon.frame = frame;
+//        originY = self.viewTotalCoupon.frame.origin.y + self.viewTotalCoupon.frame.size.height;
+//    }
     if (self.viewOrderTitle)
     {
         CGRect frame = CGRectMake(0.0, originY, self.scrollView.frame.size.width, 50.0);
@@ -233,6 +233,7 @@ typedef enum : NSUInteger {
     if (_viewPoint == nil)
     {
         _viewPoint = [[MemberPointView alloc] initWithFrame:CGRectZero];
+        _viewPoint.delegate = self;
     }
     return _viewPoint;
 }
@@ -257,20 +258,20 @@ typedef enum : NSUInteger {
     return _viewCouponTitle;
 }
 
-- (BorderedDoubleLabelView *)viewTotalCoupon
-{
-    if (_viewTotalCoupon == nil)
-    {
-        _viewTotalCoupon = [[BorderedDoubleLabelView alloc] initWithFrame:CGRectZero];
-        [_viewTotalCoupon.layer setBorderWidth:0.0];
-        [_viewTotalCoupon.labelL setText:[LocalizedString TotalCount]];
-        [_viewTotalCoupon.labelL setFont:[UIFont systemFontOfSize:18.0]];
-        [_viewTotalCoupon.labelL setTextColor:[UIColor darkGrayColor]];
-        [_viewTotalCoupon.labelR setFont:[UIFont systemFontOfSize:18.0]];
-        [_viewTotalCoupon.labelR setTextColor:[UIColor darkGrayColor]];
-    }
-    return _viewTotalCoupon;
-}
+//- (BorderedDoubleLabelView *)viewTotalCoupon
+//{
+//    if (_viewTotalCoupon == nil)
+//    {
+//        _viewTotalCoupon = [[BorderedDoubleLabelView alloc] initWithFrame:CGRectZero];
+//        [_viewTotalCoupon.layer setBorderWidth:0.0];
+//        [_viewTotalCoupon.labelL setText:[LocalizedString TotalCount]];
+//        [_viewTotalCoupon.labelL setFont:[UIFont systemFontOfSize:18.0]];
+//        [_viewTotalCoupon.labelL setTextColor:[UIColor darkGrayColor]];
+//        [_viewTotalCoupon.labelR setFont:[UIFont systemFontOfSize:18.0]];
+//        [_viewTotalCoupon.labelR setTextColor:[UIColor darkGrayColor]];
+//    }
+//    return _viewTotalCoupon;
+//}
 
 - (ProductDetailSectionTitleView *)viewOrderTitle
 {
@@ -357,7 +358,7 @@ typedef enum : NSUInteger {
     NSString *totalString = [NSString stringWithFormat:@"%@%@", string, [LocalizedString Pieces]];
     NSMutableAttributedString *attrString = [[NSMutableAttributedString alloc] initWithString:totalString];
     [attrString addAttribute:NSForegroundColorAttributeName value:[UIColor redColor] range:NSMakeRange(0, [string length])];
-    [self.viewTotalCoupon.labelR setAttributedText:attrString];
+    [self.viewCouponTitle.labelR setAttributedText:attrString];
 }
 
 - (void)setNumberOrderProcessing:(NSNumber *)numberOrderProcessing
@@ -457,6 +458,7 @@ typedef enum : NSUInteger {
     {
         [[TMInfoManager sharedManager] retrievePointDataFromObject:nil withCompletion:nil];
     }
+    [self.viewPoint.buttonBonusGame setTitle:@"玩遊戲賺點數，Go！" forState:UIControlStateNormal];
     NSNumber *pointDividend = [TMInfoManager sharedManager].userPointDividend;
     if (pointDividend)
     {
@@ -535,7 +537,7 @@ typedef enum : NSUInteger {
         weakSelf.viewPoint.viewExpired.labelR.text = @"";
         weakSelf.viewPoint.viewTotalPoint.labelR.text = @"";
         
-        weakSelf.viewTotalCoupon.labelR.text = @"";
+        weakSelf.viewCouponTitle.labelR.text = @"";
         weakSelf.viewProcessing.label.text = @"";
         weakSelf.viewShipped.label.text = @"";
         weakSelf.viewReturnReplace.label.text = @"";
@@ -740,6 +742,16 @@ typedef enum : NSUInteger {
 {
     OrderListViewController *viewController = [[OrderListViewController alloc] initWithNibName:@"OrderListViewController" bundle:[NSBundle mainBundle]];
     viewController.orderState = view.tag;
+    [self.navigationController pushViewController:viewController animated:YES];
+}
+
+#pragma mark - MemberPointViewDelegate
+
+- (void)memberPointView:(MemberPointView *)view didPressBonusGameBySender:(id)sender
+{
+    WebViewViewController *viewController = [[WebViewViewController alloc] initWithNibName:@"WebViewViewController" bundle:[NSBundle mainBundle]];
+    viewController.title = [self.viewPoint.buttonBonusGame titleForState:UIControlStateNormal];
+    viewController.urlString = @"http://www.treemall.com.tw/event/RWD/1706member/index.shtml?source=treemall&medium=AD_LOCATION&campaign=77-78-1";
     [self.navigationController pushViewController:viewController animated:YES];
 }
 

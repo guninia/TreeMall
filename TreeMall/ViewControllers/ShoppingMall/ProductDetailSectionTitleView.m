@@ -26,6 +26,7 @@
         self.backgroundColor = [UIColor colorWithWhite:0.93 alpha:1.0];
         [self addSubview:self.viewBackground];
         [self addSubview:self.viewTitle];
+        [self addSubview:self.labelR];
         [self addSubview:self.bottomLine];
         [self addSubview:self.buttonRight];
         [self addSubview:self.buttonTransparent];
@@ -58,6 +59,7 @@
     CGFloat marginT = self.topSeparatorHeight;
     CGFloat marginL = 10.0;
     CGFloat marginR = 10.0;
+    CGFloat intervalH = 2.0;
     CGFloat originY = marginT;
     CGFloat viewBottom = self.frame.size.height;
     if (self.viewBackground)
@@ -73,18 +75,23 @@
         self.bottomLine.frame = frame;
         viewBottom = self.bottomLine.frame.origin.y;
     }
+    if (self.buttonRight)
+    {
+        CGFloat buttonSideLength = self.viewTitle.frame.size.height;
+        CGRect frame = CGRectMake(self.frame.size.width - marginR - buttonSideLength, originY, buttonSideLength, buttonSideLength);
+        self.buttonRight.frame = frame;
+    }
+    if (self.labelR)
+    {
+        CGSize sizeText = [self.labelR.text sizeWithAttributes:[NSDictionary dictionaryWithObjectsAndKeys:self.labelR.font, NSFontAttributeName, nil]];
+        CGSize sizeLabel = CGSizeMake(ceil(sizeText.width), ceil(sizeText.height));
+        CGRect frame = CGRectMake(CGRectGetMinX(self.buttonRight.frame) - intervalH - sizeLabel.width, originY, sizeLabel.width, viewBottom - originY);
+        self.labelR.frame = frame;
+    }
     if (self.viewTitle)
     {
-        CGRect frame = CGRectMake(marginL, originY, self.frame.size.width - (marginL + marginR), viewBottom - originY);
+        CGRect frame = CGRectMake(marginL, originY, CGRectGetMinX(self.labelR.frame) - intervalH - marginL, viewBottom - originY);
         self.viewTitle.frame = frame;
-        
-        if (self.buttonRight)
-        {
-            CGFloat buttonSideLength = self.viewTitle.frame.size.height;
-            CGRect frame = CGRectMake(self.frame.size.width - marginR - buttonSideLength, self.viewTitle.frame.origin.y, buttonSideLength, buttonSideLength);
-            self.buttonRight.frame = frame;
-//            NSLog(@"self.buttonRight[%4.2f,%4.2f,%4.2f,%4.2f]", self.buttonRight.frame.origin.x, self.buttonRight.frame.origin.y, self.buttonRight.frame.size.width, self.buttonRight.frame.size.height);
-        }
     }
     
     if (self.buttonTransparent)
@@ -113,6 +120,18 @@
         _viewTitle.labelText.font = font;
     }
     return _viewTitle;
+}
+
+- (UILabel *)labelR
+{
+    if (_labelR == nil)
+    {
+        _labelR = [[UILabel alloc] initWithFrame:CGRectZero];
+        [_labelR setBackgroundColor:[UIColor clearColor]];
+        [_labelR setFont:[UIFont systemFontOfSize:18.0]];
+        [_labelR setText:@""];
+    }
+    return _labelR;
 }
 
 - (UIView *)bottomLine

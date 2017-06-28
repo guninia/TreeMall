@@ -355,5 +355,6 @@
 + (NSString *)ProductNoLongerAvailable;
 + (NSString *)NoAdditionalPurchaseForTargetAmount;
 + (NSString *)NoAdditionalPurchase;
++ (NSString *)FreepointDescription;
 
 @end

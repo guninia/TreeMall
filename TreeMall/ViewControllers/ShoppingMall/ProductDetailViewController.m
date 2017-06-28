@@ -20,6 +20,7 @@
 #import "SingleMediaDetailViewController.h"
 #import "CartViewController.h"
 #import "LoginViewController.h"
+#import "WebViewViewController.h"
 
 @interface ProductDetailViewController ()
 
@@ -214,6 +215,8 @@
         layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
         _collectionViewImage = [[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:layout];
         [_collectionViewImage setBackgroundColor:[UIColor whiteColor]];
+        [_collectionViewImage setShowsVerticalScrollIndicator:NO];
+        [_collectionViewImage setShowsHorizontalScrollIndicator:NO];
         [_collectionViewImage setDelegate:self];
         [_collectionViewImage setDataSource:self];
         [_collectionViewImage setPagingEnabled:YES];
@@ -2136,16 +2139,14 @@
     }
     else if (view == self.viewPointFeedback)
     {
-        NSString *urlString = SymphoxAPI_feedbackPointDetailPage;
+//        NSString *urlString = SymphoxAPI_feedbackPointDetailPage;
         NSString *urlStringFromServer = [[TMInfoManager sharedManager].dictionaryDocuments objectForKey:@"7"];
-        if (urlStringFromServer)
+        if ([urlStringFromServer length] > 0)
         {
-            urlString = urlStringFromServer;
-        }
-        NSURL *url = [NSURL URLWithString:urlString];
-        if ([[UIApplication sharedApplication] canOpenURL:url])
-        {
-            [[UIApplication sharedApplication] openURL:url];
+            WebViewViewController *viewController = [[WebViewViewController alloc] initWithNibName:@"WebViewViewController" bundle:[NSBundle mainBundle]];
+            viewController.title = [LocalizedString FreepointDescription];
+            viewController.htmlString = urlStringFromServer;
+            [self.navigationController pushViewController:viewController animated:YES];
         }
     }
 }

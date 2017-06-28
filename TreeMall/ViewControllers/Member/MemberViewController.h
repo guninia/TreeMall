@@ -12,14 +12,14 @@
 #import "ProductDetailSectionTitleView.h"
 #import "IconLabelView.h"
 
-@interface MemberViewController : UIViewController <ProductDetailSectionTitleViewDelegate, MemberTitleViewDelegate, IconLabelViewDelegate>
+@interface MemberViewController : UIViewController <ProductDetailSectionTitleViewDelegate, MemberTitleViewDelegate, IconLabelViewDelegate, MemberPointViewDelegate>
 
 @property (nonatomic, strong) UIScrollView *scrollView;
 @property (nonatomic, strong) MemberTitleView *viewTitle;
 @property (nonatomic, strong) UIButton *buttonAdvertisement;
 @property (nonatomic, strong) MemberPointView *viewPoint;
 @property (nonatomic, strong) ProductDetailSectionTitleView *viewCouponTitle;
-@property (nonatomic, strong) BorderedDoubleLabelView *viewTotalCoupon;
+//@property (nonatomic, strong) BorderedDoubleLabelView *viewTotalCoupon;
 @property (nonatomic, strong) ProductDetailSectionTitleView *viewOrderTitle;
 @property (nonatomic, strong) IconLabelView *viewProcessing;
 @property (nonatomic, strong) IconLabelView *viewShipped;

@@ -105,6 +105,18 @@
     [self loadRequestFromUrl:_url];
 }
 
+- (void)setHtmlString:(NSString *)htmlString
+{
+    _htmlString = htmlString;
+    if (_htmlString == nil)
+        return;
+    if ([self.webView isLoading])
+    {
+        [self.webView stopLoading];
+    }
+    [self.webView loadHTMLString:htmlString baseURL:nil];
+}
+
 - (UIActivityIndicatorView *)activityIndicator
 {
     if (_activityIndicator == nil)

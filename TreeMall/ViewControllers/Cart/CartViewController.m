@@ -1397,31 +1397,90 @@
         {
             numberPoint = nil;
         }
+        NSNumber *mixCash = [dictionary objectForKey:SymphoxAPIParam_cash];
+        if ([mixCash isEqual:[NSNull null]])
+        {
+            mixCash = nil;
+        }
+        NSNumber *mixPoint = [dictionary objectForKey:SymphoxAPIParam_tmp_point];
+        if ([mixPoint isEqual:[NSNull null]])
+        {
+            mixPoint = nil;
+        }
+        
+        NSString *cpdt_owner_num = [dictionary objectForKey:SymphoxAPIParam_cpdt_owner_num];
+        if ([cpdt_owner_num isEqual:[NSNull null]])
+        {
+            cpdt_owner_num = nil;
+        }
         
         NSMutableAttributedString *totalCostString = [[NSMutableAttributedString alloc] init];
         NSInteger originLength = [totalCostString length];
-//        NSDictionary *attributeGray = [NSDictionary dictionaryWithObjectsAndKeys:[UIColor grayColor], NSForegroundColorAttributeName, nil];
-        NSDictionary *attributeRed = [NSDictionary dictionaryWithObjectsAndKeys:cell.labelPrice.font, NSFontAttributeName, [UIColor redColor], NSForegroundColorAttributeName, nil];
+        NSDictionary *attributeGray = [NSDictionary dictionaryWithObjectsAndKeys:[UIFont systemFontOfSize:16.0], NSFontAttributeName, [UIColor grayColor], NSForegroundColorAttributeName, nil];
+        NSDictionary *attributeGraySmall = [NSDictionary dictionaryWithObjectsAndKeys:[UIFont systemFontOfSize:14.0], NSFontAttributeName, [UIColor grayColor], NSForegroundColorAttributeName, nil];
+        NSDictionary *attributeRed = [NSDictionary dictionaryWithObjectsAndKeys:[UIFont systemFontOfSize:18.0], NSFontAttributeName, [UIColor redColor], NSForegroundColorAttributeName, nil];
+        NSDictionary *attributeRedSmall = [NSDictionary dictionaryWithObjectsAndKeys:[UIFont systemFontOfSize:16.0], NSFontAttributeName, [UIColor redColor], NSForegroundColorAttributeName, nil];
 //        NSAttributedString *plusString = [[NSAttributedString alloc] initWithString:@"＋" attributes:attributeRed];
-        if (numberCash != nil && [numberCash integerValue] > 0)
+        BOOL hasPureCash = (numberCash != nil) && ([numberCash unsignedIntegerValue] > 0) && cpdt_owner_num && ([cpdt_owner_num integerValue] == 3);
+        BOOL hasPurePoint = (numberPoint != nil) && ([numberPoint unsignedIntegerValue] > 0) && cpdt_owner_num && ([cpdt_owner_num integerValue] == 1);
+        BOOL hasMixedPrice = (numberCash != nil) && ([numberCash unsignedIntegerValue] > 0) && (numberPoint != nil) && ([numberPoint unsignedIntegerValue] > 0) && cpdt_owner_num && ([cpdt_owner_num integerValue] == 2);
+//        if (hasPureCash && hasPurePoint)
+//        {
+//            NSString *stringCash = [self.numberFormatter stringFromNumber:numberCash];
+//            if (stringCash)
+//            {
+//                NSString *string = [NSString stringWithFormat:@"＄%@", stringCash];
+//                NSAttributedString *attrString = [[NSAttributedString alloc] initWithString:string attributes:attributeRed];
+//                [totalCostString appendAttributedString:attrString];
+//                NSAttributedString *slashString = [[NSAttributedString alloc] initWithString:@" / " attributes:attributeGray];
+//                [totalCostString appendAttributedString:slashString];
+//            }
+//            
+//            NSString *stringPoint = [self.numberFormatter stringFromNumber:numberPoint];
+//            if (stringPoint)
+//            {
+//                NSMutableAttributedString *attrString = [[NSMutableAttributedString alloc] initWithString:stringPoint attributes:attributeGray];
+//                NSAttributedString *attrPoint = [[NSAttributedString alloc] initWithString:[LocalizedString Point] attributes:attributeGraySmall];
+//                [attrString appendAttributedString:attrPoint];
+//                [totalCostString appendAttributedString:attrString];
+//            }
+//        }
+//        else
+            if (hasPureCash)
         {
             NSString *stringTotal = [self.numberFormatter stringFromNumber:numberCash];
             NSString *string = [NSString stringWithFormat:@"＄%@", stringTotal];
             NSAttributedString *attrString = [[NSAttributedString alloc] initWithString:string attributes:attributeRed];
             [totalCostString appendAttributedString:attrString];
         }
-        else if (numberPoint != nil && [numberPoint integerValue] > 0)
+        else if (hasPurePoint)
         {
-//            if ([totalCostString length] > originLength)
-//            {
-//                [totalCostString appendAttributedString:plusString];
-//            }
-            NSDictionary *attributePoint = [NSDictionary dictionaryWithObjectsAndKeys:[UIFont systemFontOfSize:16.0], NSFontAttributeName, [UIColor redColor], NSForegroundColorAttributeName, nil];
             NSString *stringTotal = [self.numberFormatter stringFromNumber:numberPoint];
             NSMutableAttributedString *attrString = [[NSMutableAttributedString alloc] initWithString:stringTotal attributes:attributeRed];
-            NSAttributedString *attrPoint = [[NSAttributedString alloc] initWithString:[LocalizedString Point] attributes:attributePoint];
+            NSAttributedString *attrPoint = [[NSAttributedString alloc] initWithString:[LocalizedString Point] attributes:attributeRedSmall];
             [attrString appendAttributedString:attrPoint];
             [totalCostString appendAttributedString:attrString];
+        }
+        else if (hasMixedPrice)
+        {
+            NSString *stringCash = [self.numberFormatter stringFromNumber:numberCash];
+            if (stringCash)
+            {
+                NSString *string = [NSString stringWithFormat:@"＄%@", stringCash];
+                NSAttributedString *attrString = [[NSAttributedString alloc] initWithString:string attributes:attributeRed];
+                [totalCostString appendAttributedString:attrString];
+                NSAttributedString *slashString = [[NSAttributedString alloc] initWithString:@" + " attributes:attributeRed];
+                [totalCostString appendAttributedString:slashString];
+            }
+            
+            NSString *stringPoint = [self.numberFormatter stringFromNumber:numberPoint];
+            if (stringPoint)
+            {
+                NSMutableAttributedString *attrString = [[NSMutableAttributedString alloc] initWithString:stringPoint attributes:attributeRed];
+                NSAttributedString *attrPoint = [[NSAttributedString alloc] initWithString:[LocalizedString Point] attributes:attributeRedSmall];
+                [attrString appendAttributedString:attrPoint];
+                [totalCostString appendAttributedString:attrString];
+            }
         }
         if ([totalCostString length] == originLength)
         {

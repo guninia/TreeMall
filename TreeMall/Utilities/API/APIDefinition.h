@@ -429,6 +429,7 @@ static NSString *SymphoxAPIParam_tot_dis_other_cash = @"tot_dis_other_cash";
 static NSString *SymphoxAPIParam_tot_dis_cash = @"tot_dis_cash";
 static NSString *SymphoxAPIParam_provision = @"provision";
 static NSString *SymphoxAPIParam_real_cpdt_num = @"real_cpdt_num";
+static NSString *SymphoxAPIParam_tmp_point = @"tmp_point";
 
 typedef enum : NSUInteger {
     TermTypeMemberTerms,

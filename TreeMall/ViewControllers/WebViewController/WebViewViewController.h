@@ -25,6 +25,8 @@ typedef enum : NSUInteger {
 
 @property (nonatomic, strong) NSURL *url;
 
+@property (nonatomic, strong) NSString *htmlString;
+
 @property (nonatomic, strong) UIActivityIndicatorView *activityIndicator;
 
 @property (nonatomic, assign) WebViewType type;

@@ -9,6 +9,12 @@
 #import "MemberPointView.h"
 #import "LocalizedString.h"
 
+@interface MemberPointView ()
+
+- (void)buttonBonusGamePressed:(id)sender;
+
+@end
+
 @implementation MemberPointView
 
 - (instancetype)initWithFrame:(CGRect)frame
@@ -20,6 +26,7 @@
         [self addSubview:self.labelTitle];
         [self addSubview:self.labelPoint];
         [self addSubview:self.labelDividend];
+        [self addSubview:self.buttonBonusGame];
         [self addSubview:self.viewTotalPoint];
         [self addSubview:self.viewExpired];
         self.numberPoint = nil;
@@ -91,6 +98,12 @@
         originY = self.labelDividend.frame.origin.y + self.labelDividend.frame.size.height + intervalV;
     }
     originX = marginL;
+    if (self.buttonBonusGame)
+    {
+        CGRect frame = CGRectMake(originX, originY, self.frame.size.width - (originX + marginR), 50.0);
+        self.buttonBonusGame.frame = frame;
+        originY = CGRectGetMaxY(self.buttonBonusGame.frame) + intervalV;
+    }
     if (self.viewTotalPoint)
     {
         CGRect frame = CGRectMake(0.0, originY, self.frame.size.width, 30.0);
@@ -169,6 +182,23 @@
         [_labelDividend setFont:font];
     }
     return _labelDividend;
+}
+
+- (UIButton *)buttonBonusGame
+{
+    if (_buttonBonusGame == nil)
+    {
+        _buttonBonusGame = [[UIButton alloc] initWithFrame:CGRectZero];
+        [_buttonBonusGame setBackgroundColor:[UIColor clearColor]];
+        [_buttonBonusGame setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
+        [_buttonBonusGame.layer setBorderWidth:2.0];
+        [_buttonBonusGame.layer setBorderColor:[_buttonBonusGame titleColorForState:UIControlStateNormal].CGColor];
+        [_buttonBonusGame.layer setCornerRadius:5.0];
+        UIFont *font = [UIFont systemFontOfSize:16.0];
+        [_buttonBonusGame.titleLabel setFont:font];
+        [_buttonBonusGame addTarget:self action:@selector(buttonBonusGamePressed:) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _buttonBonusGame;
 }
 
 - (BorderedDoubleLabelView *)viewTotalPoint
@@ -273,6 +303,16 @@
         [_formatter setNumberStyle:NSNumberFormatterDecimalStyle];
     }
     return _formatter;
+}
+
+#pragma mark - Actions
+
+- (void)buttonBonusGamePressed:(id)sender
+{
+    if (_delegate && [_delegate respondsToSelector:@selector(memberPointView:didPressBonusGameBySender:)])
+    {
+        [_delegate memberPointView:self didPressBonusGameBySender:sender];
+    }
 }
 
 @end

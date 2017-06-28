@@ -3461,4 +3461,14 @@
     return NoAdditionalPurchase;
 }
 
++ (NSString *)FreepointDescription
+{
+    static NSString *FreepointDescription = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        FreepointDescription = NSLocalizedString(@"FreepointDescription", nil);
+    });
+    return FreepointDescription;
+}
+
 @end

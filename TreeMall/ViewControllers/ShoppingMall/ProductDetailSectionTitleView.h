@@ -23,6 +23,7 @@
 @property (nonatomic, weak) id <ProductDetailSectionTitleViewDelegate> delegate;
 @property (nonatomic, strong) UIView *viewBackground;
 @property (nonatomic, strong) ImageTextView *viewTitle;
+@property (nonatomic, strong) UILabel *labelR;
 @property (nonatomic, strong) UIView *bottomLine;
 @property (nonatomic, strong) UIButton *buttonTransparent;
 @property (nonatomic, strong) UIButton *buttonRight;

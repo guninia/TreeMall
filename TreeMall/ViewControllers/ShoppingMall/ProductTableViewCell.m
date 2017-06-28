@@ -704,6 +704,7 @@ static NSInteger MaxTagsNumber = 5;
                 NSMutableAttributedString *finalString = [[NSMutableAttributedString alloc] initWithString:formattedString attributes:attributes1];
                 [finalString appendAttributedString:[[NSAttributedString alloc] initWithString:[LocalizedString Point] attributes:attributes2]];
                 [self.labelPoint setAttributedText:finalString];
+                [self.labelPoint setTextColor:[UIColor redColor]];
             }
             [self.labelSeparator setText:@"＋"];
             [self.labelSeparator setTextColor:[UIColor redColor]];
