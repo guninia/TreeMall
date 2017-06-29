@@ -466,16 +466,35 @@
         NSNumber *point1 = [dictionary objectForKey:SymphoxAPIParam_mix_point];
         BOOL hasPurePrice = (price && [price isEqual:[NSNull null]] == NO && [price unsignedIntegerValue] > 0);
         BOOL hasPurePoint = (point && [point isEqual:[NSNull null]] == NO && [point unsignedIntegerValue] > 0);
-        if (hasPurePrice && hasPurePoint)
+        BOOL hasMixedPrice = (price1 && [price1 isEqual:[NSNull null]] == NO && [price1 unsignedIntegerValue] > 0) && (point1 && [point1 isEqual:[NSNull null]] == NO && [point1 unsignedIntegerValue] > 0);
+        if (hasPurePrice)
         {
             cell.price = price;
-            cell.point = point;
-            cell.priceType = PriceTypeBothPure;
-        }
-        else if (hasPurePrice)
-        {
-            cell.price = price;
+            
+            if (hasPurePoint)
+            {
+                cell.point = point;
+            }
+            
             cell.priceType = PriceTypePurePrice;
+        }
+        else if (hasMixedPrice)
+        {
+            if (price1 && [price1 isEqual:[NSNull null]] == NO)
+            {
+                cell.mixPrice = price1;
+            }
+            if (point1 && [point1 isEqual:[NSNull null]] == NO)
+            {
+                cell.mixPoint = point1;
+            }
+            
+            
+            if (hasPurePoint)
+            {
+                cell.point = point;
+            }
+            cell.priceType = PriceTypeMixed;
         }
         else if (hasPurePoint)
         {
@@ -484,16 +503,11 @@
         }
         else
         {
-            if (price1 && [price1 isEqual:[NSNull null]] == NO)
-            {
-                cell.price = price1;
-            }
-            if (point1 && [point1 isEqual:[NSNull null]] == NO)
-            {
-                cell.point = point1;
-            }
-            cell.priceType = PriceTypeMixed;
+            cell.price = price;
+            cell.priceType = PriceTypePurePrice;
         }
+        
+        
         NSNumber *cpdt_num = [dictionary objectForKey:SymphoxAPIParam_cpdt_num];
         if (cpdt_num && [cpdt_num isEqual:[NSNull null]] == NO)
         {
@@ -528,7 +542,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    CGFloat heightForRow = 170.0;
+    CGFloat heightForRow = 166.0;
     return heightForRow;
 }
 

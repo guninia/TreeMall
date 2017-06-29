@@ -15,8 +15,11 @@ static NSInteger MaxTagsNumber = 5;
 @interface HotSaleTableViewCell ()
 
 @property (nonatomic, strong) NSMutableArray *arrayViewTags;
-@property (nonatomic, strong) UIFont *fontPriceLarge;
-@property (nonatomic, strong) UIFont *fontPriceSmall;
+@property (nonatomic, strong) NSDictionary *attributesRedLarge;
+@property (nonatomic, strong) NSDictionary *attributesRedSmall;
+@property (nonatomic, strong) NSDictionary *attributesGrayLarge;
+@property (nonatomic, strong) NSDictionary *attributesGraySmall;
+@property (nonatomic, strong) NSNumberFormatter *formatter;
 
 - (void)checkPriceAndPointSeparatorState;
 
@@ -179,46 +182,9 @@ static NSInteger MaxTagsNumber = 5;
         originY = self.separator.frame.origin.y + self.separator.frame.size.height + intervalV;
     }
     
-    
-    
-//    if (self.labelTitle)
-//    {
-//        CGFloat height = self.separator.frame.origin.y - intervalV - marginV;
-//        CGFloat width = self.viewContainer.frame.size.width - marginH - originX;
-//        CGRect frame = CGRectMake(originX, marginV, width, height);
-//        self.labelTitle.frame = frame;
-//    }
-    
     CGFloat priceBottom = originY;
     CGFloat labelOriginX = marginH;
-    if (self.labelPrice && [self.labelPrice isHidden] == NO)
-    {
-        NSDictionary *attributes = [NSDictionary dictionaryWithObjectsAndKeys:self.labelPrice.font, NSFontAttributeName, nil];
-        CGSize textSize = [self.labelPrice.text sizeWithAttributes:attributes];
-        CGSize labelSize = CGSizeMake(ceil(textSize.width), ceil(textSize.height));
-        CGRect frame = CGRectMake(labelOriginX, originY, labelSize.width, labelSize.height);
-        self.labelPrice.frame = frame;
-        labelOriginX = self.labelPrice.frame.origin.x + self.labelPrice.frame.size.width + intervalH;
-        priceBottom = self.labelPrice.frame.origin.y + self.labelPrice.frame.size.height;
-    }
-    if (self.labelSeparator && [self.labelSeparator isHidden] == NO)
-    {
-        NSDictionary *attributes = [NSDictionary dictionaryWithObjectsAndKeys:self.labelSeparator.font, NSFontAttributeName, nil];
-        CGSize textSize = [self.labelSeparator.text sizeWithAttributes:attributes];
-        CGSize labelSize = CGSizeMake(ceil(textSize.width), ceil(textSize.height));
-        CGRect frame = CGRectMake(labelOriginX, ((priceBottom > originY)?(priceBottom - labelSize.height - 4.0):originY), labelSize.width, labelSize.height);
-        self.labelSeparator.frame = frame;
-        labelOriginX = self.labelSeparator.frame.origin.x + self.labelSeparator.frame.size.width + intervalH;
-    }
-    if (self.labelPoint && [self.labelPoint isHidden] == NO)
-    {
-        NSDictionary *attributes = [NSDictionary dictionaryWithObjectsAndKeys:self.labelPoint.font, NSFontAttributeName, nil];
-        CGSize textSize = [self.labelPoint.text sizeWithAttributes:attributes];
-        CGSize labelSize = CGSizeMake(ceil(textSize.width), ceil(textSize.height));
-        CGRect frame = CGRectMake(labelOriginX, ((priceBottom > originY)?(priceBottom - labelSize.height - 4.0):originY), labelSize.width, labelSize.height);
-        self.labelPoint.frame = frame;
-        labelOriginX = self.labelPoint.frame.origin.x + self.labelPoint.frame.size.width + intervalH;
-    }
+    
     
     if (self.buttonAddToCart && [self.buttonAddToCart isHidden] == NO)
     {
@@ -241,6 +207,16 @@ static NSInteger MaxTagsNumber = 5;
         }
         CGRect frame = CGRectMake((CGRectGetMinX(self.buttonAddToCart.frame) - intervalH * 2 - size.width), originY, size.width, size.height);
         self.buttonFavorite.frame = frame;
+    }
+    if (self.labelPrice && [self.labelPrice isHidden] == NO)
+    {
+        NSDictionary *attributes = [NSDictionary dictionaryWithObjectsAndKeys:self.labelPrice.font, NSFontAttributeName, nil];
+        CGSize textSize = [self.labelPrice.text sizeWithAttributes:attributes];
+        CGSize labelSize = CGSizeMake(ceil(textSize.width), ceil(textSize.height));
+        CGRect frame = CGRectMake(labelOriginX, originY, CGRectGetMinX(self.buttonFavorite.frame) - intervalH - labelOriginX, labelSize.height);
+        self.labelPrice.frame = frame;
+        labelOriginX = self.labelPrice.frame.origin.x + self.labelPrice.frame.size.width + intervalH;
+        priceBottom = self.labelPrice.frame.origin.y + self.labelPrice.frame.size.height;
     }
 }
 
@@ -356,34 +332,8 @@ static NSInteger MaxTagsNumber = 5;
         _labelPrice = [[UILabel alloc] initWithFrame:CGRectZero];
         [_labelPrice setBackgroundColor:[UIColor clearColor]];
         [_labelPrice setTextColor:[UIColor redColor]];
-        [_labelPrice setFont:self.fontPriceLarge];
     }
     return _labelPrice;
-}
-
-- (UILabel *)labelSeparator
-{
-    if (_labelSeparator == nil)
-    {
-        _labelSeparator = [[UILabel alloc] initWithFrame:CGRectZero];
-        [_labelSeparator setFont:self.fontPriceSmall];
-        [_labelSeparator setTextColor:[UIColor redColor]];
-        [_labelSeparator setBackgroundColor:[UIColor clearColor]];
-        [_labelSeparator setText:@"＋"];
-    }
-    return _labelSeparator;
-}
-
-- (UILabel *)labelPoint
-{
-    if (_labelPoint == nil)
-    {
-        _labelPoint = [[UILabel alloc] initWithFrame:CGRectZero];
-        [_labelPoint setFont:self.fontPriceSmall];
-        [_labelPoint setTextColor:[UIColor redColor]];
-        [_labelPoint setBackgroundColor:[UIColor clearColor]];
-    }
-    return _labelPoint;
 }
 
 - (UIButton *)buttonAddToCart
@@ -459,6 +409,24 @@ static NSInteger MaxTagsNumber = 5;
     _point = point;
 }
 
+- (void)setMixPrice:(NSNumber *)mixPrice
+{
+    if ([mixPrice isEqual:[NSNull null]])
+    {
+        mixPrice = nil;
+    }
+    _mixPrice = mixPrice;
+}
+
+- (void)setMixPoint:(NSNumber *)mixPoint
+{
+    if ([mixPoint isEqual:[NSNull null]])
+    {
+        mixPoint = nil;
+    }
+    _mixPoint = mixPoint;
+}
+
 - (void)setFavorite:(BOOL)favorite
 {
     _favorite = favorite;
@@ -500,24 +468,6 @@ static NSInteger MaxTagsNumber = 5;
         }
     }
     return _arrayViewTags;
-}
-
-- (UIFont *)fontPriceLarge
-{
-    if (_fontPriceLarge == nil)
-    {
-        _fontPriceLarge = [UIFont systemFontOfSize:24.0];
-    }
-    return _fontPriceLarge;
-}
-
-- (UIFont *)fontPriceSmall
-{
-    if (_fontPriceSmall == nil)
-    {
-        _fontPriceSmall = [UIFont systemFontOfSize:18.0];
-    }
-    return _fontPriceSmall;
 }
 
 - (void)setMarketingText:(NSString *)marketingText
@@ -594,116 +544,140 @@ static NSInteger MaxTagsNumber = 5;
     return _attributesProductName;
 }
 
+- (NSDictionary *)attributesRedLarge
+{
+    if (_attributesRedLarge == nil)
+    {
+        _attributesRedLarge = [[NSDictionary alloc] initWithObjectsAndKeys:[UIFont systemFontOfSize:22.0], NSFontAttributeName, [UIColor redColor], NSForegroundColorAttributeName, nil];
+    }
+    return _attributesRedLarge;
+}
+
+- (NSDictionary *)attributesRedSmall
+{
+    if (_attributesRedSmall == nil)
+    {
+        _attributesRedSmall = [[NSDictionary alloc] initWithObjectsAndKeys:[UIFont systemFontOfSize:20.0], NSFontAttributeName, [UIColor redColor], NSForegroundColorAttributeName, nil];
+    }
+    return _attributesRedSmall;
+}
+
+- (NSDictionary *)attributesGrayLarge
+{
+    if (_attributesGrayLarge == nil)
+    {
+        _attributesGrayLarge = [[NSDictionary alloc] initWithObjectsAndKeys:[UIFont systemFontOfSize:16.0], NSFontAttributeName, [UIColor lightGrayColor], NSForegroundColorAttributeName, nil];
+    }
+    return _attributesGrayLarge;
+}
+
+- (NSDictionary *)attributesGraySmall
+{
+    if (_attributesGraySmall == nil)
+    {
+        _attributesGraySmall = [[NSDictionary alloc] initWithObjectsAndKeys:[UIFont systemFontOfSize:14.0], NSFontAttributeName, [UIColor lightGrayColor], NSForegroundColorAttributeName, nil];
+    }
+    return _attributesGraySmall;
+}
+
+- (NSNumberFormatter *)formatter
+{
+    if (_formatter == nil)
+    {
+        _formatter = [[NSNumberFormatter alloc] init];
+        [_formatter setNumberStyle:NSNumberFormatterDecimalStyle];
+    }
+    return _formatter;
+}
+
 #pragma mark - Private Methods
 
 - (void)checkPriceAndPointSeparatorState
 {
-    if (self.price == nil || [self.price doubleValue] == 0)
-    {
-        [self.labelPrice setHidden:YES];
-    }
-    else
-    {
-        [self.labelPrice setHidden:NO];
-    }
-    if (self.point == nil || [self.point doubleValue] == 0)
-    {
-        [self.labelPoint setHidden:YES];
-    }
-    else
-    {
-        [self.labelPoint setHidden:NO];
-    }
-    
-    NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
+    NSMutableAttributedString *totalString = [[NSMutableAttributedString alloc] init];
     switch (self.priceType) {
-        case PriceTypeBothPure:
-        {
-            if (self.price)
-            {
-                [formatter setNumberStyle:NSNumberFormatterDecimalStyle];
-                NSString *formattedString = [formatter stringFromNumber:self.price];
-                NSString *priceString = [NSString stringWithFormat:@"$%@", formattedString];
-                [self.labelPrice setText:priceString];
-                [self.labelPrice setFont:self.fontPriceLarge];
-            }
-            if (self.point)
-            {
-                [formatter setNumberStyle:NSNumberFormatterDecimalStyle];
-                NSString *formattedString = [formatter stringFromNumber:self.point];
-                NSString *pointString = [[NSString stringWithFormat:@"%@", formattedString] stringByAppendingString:[LocalizedString Point]];
-                [self.labelPoint setText:pointString];
-                [self.labelPoint setFont:self.fontPriceSmall];
-                [self.labelPoint setTextColor:[UIColor lightGrayColor]];
-            }
-            [self.labelSeparator setText:@"／"];
-            [self.labelSeparator setTextColor:[UIColor lightGrayColor]];
-            [self.labelSeparator setFont:self.fontPriceSmall];
-        }
-            break;
         case PriceTypePurePrice:
         {
             if (self.price)
             {
-                [formatter setNumberStyle:NSNumberFormatterDecimalStyle];
-                NSString *formattedString = [formatter stringFromNumber:self.price];
-                NSString *priceString = [NSString stringWithFormat:@"$%@", formattedString];
-                [self.labelPrice setText:priceString];
-                [self.labelPrice setFont:self.fontPriceLarge];
+                NSString *formattedString = [self.formatter stringFromNumber:self.price];
+                NSString *priceString = [NSString stringWithFormat:@"＄%@", formattedString];
+                NSAttributedString *attrString = [[NSAttributedString alloc] initWithString:priceString attributes:self.attributesRedLarge];
+                [totalString appendAttributedString:attrString];
             }
-            [self.labelPoint setText:@""];
+            if (self.point)
+            {
+                NSAttributedString *slashString = [[NSAttributedString alloc] initWithString:@"/" attributes:self.attributesGrayLarge];
+                [totalString appendAttributedString:slashString];
+                
+                NSString *formattedString = [self.formatter stringFromNumber:self.point];
+                NSAttributedString *pointString = [[NSAttributedString alloc] initWithString:formattedString attributes:self.attributesGrayLarge];
+                [totalString appendAttributedString:pointString];
+                
+                NSAttributedString *unitString = [[NSAttributedString alloc] initWithString:[LocalizedString Point] attributes:self.attributesGraySmall];
+                [totalString appendAttributedString:unitString];
+            }
         }
             break;
         case PriceTypePurePoint:
         {
             if (self.point)
             {
-                [formatter setNumberStyle:NSNumberFormatterDecimalStyle];
-                NSString *formattedString = [formatter stringFromNumber:self.point];
-                NSString *pointString = [[NSString stringWithFormat:@"%@", formattedString] stringByAppendingString:[LocalizedString Point]];
-                [self.labelPoint setText:pointString];
-                [self.labelPoint setFont:self.fontPriceLarge];
-                [self.labelPoint setTextColor:[UIColor redColor]];
+                NSString *formattedString = [self.formatter stringFromNumber:self.point];
+                NSAttributedString *pointString = [[NSAttributedString alloc] initWithString:formattedString attributes:self.attributesRedLarge];
+                [totalString appendAttributedString:pointString];
+                
+                NSAttributedString *unitString = [[NSAttributedString alloc] initWithString:[LocalizedString Point] attributes:self.attributesRedSmall];
+                [totalString appendAttributedString:unitString];
             }
         }
             break;
         case PriceTypeMixed:
         {
-            if (self.price)
+            if (self.mixPrice)
             {
-                [formatter setNumberStyle:NSNumberFormatterDecimalStyle];
-                NSString *formattedString = [formatter stringFromNumber:self.price];
-                NSString *priceString = [NSString stringWithFormat:@"$%@", formattedString];
-                [self.labelPrice setText:priceString];
-                [self.labelPrice setFont:self.fontPriceLarge];
+                NSString *formattedString = [self.formatter stringFromNumber:self.mixPrice];
+                NSString *priceString = [NSString stringWithFormat:@"＄%@", formattedString];
+                NSAttributedString *attrString = [[NSAttributedString alloc] initWithString:priceString attributes:self.attributesRedLarge];
+                [totalString appendAttributedString:attrString];
+            }
+            if (self.mixPoint)
+            {
+                NSAttributedString *plusString = [[NSAttributedString alloc] initWithString:@"+" attributes:self.attributesRedLarge];
+                [totalString appendAttributedString:plusString];
+                
+                NSString *formattedString = [self.formatter stringFromNumber:self.mixPoint];
+                NSAttributedString *pointString = [[NSMutableAttributedString alloc] initWithString:formattedString attributes:self.attributesRedLarge];
+                [totalString appendAttributedString:pointString];
+                
+                NSAttributedString *unitString = [[NSAttributedString alloc] initWithString:[LocalizedString Point] attributes:self.attributesRedSmall];
+                [totalString appendAttributedString:unitString];
             }
             if (self.point)
             {
-                NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
-                [formatter setNumberStyle:NSNumberFormatterDecimalStyle];
-                NSString *formattedString = [formatter stringFromNumber:self.point];
-                NSDictionary *attributes1 = [NSDictionary dictionaryWithObjectsAndKeys:self.fontPriceLarge, NSFontAttributeName, nil];
-                NSDictionary *attributes2 = [NSDictionary dictionaryWithObjectsAndKeys:self.fontPriceSmall, NSFontAttributeName, nil];
-                NSMutableAttributedString *finalString = [[NSMutableAttributedString alloc] initWithString:formattedString attributes:attributes1];
-                [finalString appendAttributedString:[[NSAttributedString alloc] initWithString:[LocalizedString Point] attributes:attributes2]];
-                [self.labelPoint setAttributedText:finalString];
+                NSAttributedString *slashString = [[NSAttributedString alloc] initWithString:@"/" attributes:self.attributesGrayLarge];
+                [totalString appendAttributedString:slashString];
+                
+                NSString *formattedString = [self.formatter stringFromNumber:self.point];
+                NSAttributedString *pointString = [[NSAttributedString alloc] initWithString:formattedString attributes:self.attributesGrayLarge];
+                [totalString appendAttributedString:pointString];
+                
+                NSAttributedString *unitString = [[NSAttributedString alloc] initWithString:[LocalizedString Point] attributes:self.attributesGraySmall];
+                [totalString appendAttributedString:unitString];
             }
-            [self.labelSeparator setText:@"＋"];
-            [self.labelSeparator setTextColor:[UIColor redColor]];
-            [self.labelSeparator setFont:self.fontPriceLarge];
         }
             break;
         default:
             break;
     }
-    if ([self.labelPrice isHidden] == NO && [self.labelPoint isHidden] == NO)
+    if ([totalString length] == 0)
     {
-        [self.labelSeparator setHidden:NO];
+        NSString *formattedString = [self.formatter stringFromNumber:[NSNumber numberWithInteger:0]];
+        NSString *priceString = [NSString stringWithFormat:@"＄%@", formattedString];
+        NSAttributedString *attrString = [[NSAttributedString alloc] initWithString:priceString attributes:self.attributesRedLarge];
+        [totalString appendAttributedString:attrString];
     }
-    else
-    {
-        [self.labelSeparator setHidden:YES];
-    }
+    [self.labelPrice setAttributedText:totalString];
     [self setNeedsLayout];
 }
 

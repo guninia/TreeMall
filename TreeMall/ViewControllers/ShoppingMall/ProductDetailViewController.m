@@ -1172,7 +1172,7 @@
     }
     
     NSNumber *numberFeedbackPoint = [self.dictionaryDetail objectForKey:SymphoxAPIParam_free_point];
-    if (numberFeedbackPoint && [numberFeedbackPoint isEqual:[NSNull null]] == NO)
+    if (numberFeedbackPoint && [numberFeedbackPoint isEqual:[NSNull null]] == NO && [numberFeedbackPoint unsignedIntegerValue] > 0)
     {
         NSString *stringPoint = [formatter stringFromNumber:numberFeedbackPoint];
         NSString *totalString = [NSString stringWithFormat:[LocalizedString FeedbackPointUpTo_S], stringPoint];

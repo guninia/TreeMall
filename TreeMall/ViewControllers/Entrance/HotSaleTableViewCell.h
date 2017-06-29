@@ -33,8 +33,6 @@ static NSString *HotSaleTableViewCellIdentifier = @"HotSaleTableViewCell";
 //@property (nonatomic, strong) UILabel *labelTitle;
 @property (nonatomic, strong) UIView *separator;
 @property (nonatomic, strong) UILabel *labelPrice;
-@property (nonatomic, strong) UILabel *labelSeparator;
-@property (nonatomic, strong) UILabel *labelPoint;
 @property (nonatomic, strong) UIButton *buttonAddToCart;
 @property (nonatomic, strong) UIButton *buttonFavorite;
 
@@ -43,6 +41,8 @@ static NSString *HotSaleTableViewCellIdentifier = @"HotSaleTableViewCell";
 @property (nonatomic, strong) NSString *productName;
 @property (nonatomic, strong) NSNumber *price;
 @property (nonatomic, strong) NSNumber *point;
+@property (nonatomic, strong) NSNumber *mixPrice;
+@property (nonatomic, strong) NSNumber *mixPoint;
 @property (nonatomic, assign) BOOL favorite;
 @property (nonatomic, assign) PriceType priceType;
 @property (nonatomic, strong) NSArray *arrayTagsData;

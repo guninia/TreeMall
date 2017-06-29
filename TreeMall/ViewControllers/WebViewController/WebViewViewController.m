@@ -258,6 +258,10 @@
                     {
                         [weakSelf.navigationController.presentingViewController dismissViewControllerAnimated:YES completion:nil];
                     }
+                    else if (weakSelf.navigationController)
+                    {
+                        [weakSelf.navigationController popViewControllerAnimated:YES];
+                    }
                     else if (weakSelf.presentingViewController)
                     {
                         [weakSelf.presentingViewController dismissViewControllerAnimated:YES completion:nil];
@@ -266,10 +270,32 @@
             }
             else
             {
-                alertTitle = [LocalizedString ModifyFailed];
-                confirmAction = [UIAlertAction actionWithTitle:[LocalizedString Confirm] style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
+                if ([alertMessage compare:@"cancel" options:NSCaseInsensitiveSearch] == NSOrderedSame)
+                {
                     completionHandler();
-                }];
+                    __weak WebViewViewController *weakSelf = self;
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        if (weakSelf.navigationController.presentingViewController)
+                        {
+                            [weakSelf.navigationController.presentingViewController dismissViewControllerAnimated:YES completion:nil];
+                        }
+                        else if (weakSelf.navigationController)
+                        {
+                            [weakSelf.navigationController popViewControllerAnimated:YES];
+                        }
+                        else if (weakSelf.presentingViewController)
+                        {
+                            [weakSelf.presentingViewController dismissViewControllerAnimated:YES completion:nil];
+                        }
+                    });
+                }
+                else
+                {
+                    alertTitle = [LocalizedString ModifyFailed];
+                    confirmAction = [UIAlertAction actionWithTitle:[LocalizedString Confirm] style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
+                        completionHandler();
+                    }];
+                }
             }
         }
             break;

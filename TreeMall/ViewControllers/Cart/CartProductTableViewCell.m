@@ -265,7 +265,7 @@
     {
         _labelPayment = [[UILabel alloc] initWithFrame:CGRectZero];
         [_labelPayment setTextColor:[UIColor darkGrayColor]];
-        UIFont *font = [UIFont systemFontOfSize:14.0];
+        UIFont *font = [UIFont systemFontOfSize:16.0];
         [_labelPayment setFont:font];
     }
     return _labelPayment;
@@ -277,7 +277,7 @@
     {
         _labelQuantity = [[UILabel alloc] initWithFrame:CGRectZero];
         [_labelQuantity setTextColor:[UIColor orangeColor]];
-        UIFont *font = [UIFont systemFontOfSize:14.0];
+        UIFont *font = [UIFont systemFontOfSize:16.0];
         [_labelQuantity setFont:font];
     }
     return _labelQuantity;

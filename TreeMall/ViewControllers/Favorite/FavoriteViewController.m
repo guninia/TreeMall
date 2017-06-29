@@ -16,6 +16,7 @@
 @interface FavoriteViewController ()
 
 - (void)refreshData;
+- (BOOL)canDirectlyPurchaseProduct:(NSDictionary *)product;
 - (void)buttonEditPressed:(id)sender;
 
 @end
@@ -233,6 +234,17 @@
     [self presentViewController:alertController animated:YES completion:nil];
 }
 
+- (BOOL)canDirectlyPurchaseProduct:(NSDictionary *)product
+{
+    BOOL canPurchaseDirectly = NO;
+    NSNumber *single_shopping_cart = [product objectForKey:SymphoxAPIParam_single_shopping_cart];
+    if (single_shopping_cart && [single_shopping_cart isEqual:[NSNull null]] == NO)
+    {
+        canPurchaseDirectly = [single_shopping_cart boolValue];
+    }
+    return canPurchaseDirectly;
+}
+
 #pragma mark - Actions
 
 - (void)buttonEditPressed:(id)sender
@@ -343,16 +355,35 @@
         NSNumber *point1 = [dictionary objectForKey:SymphoxAPIParam_point02];
         BOOL hasPurePrice = (price && [price isEqual:[NSNull null]] == NO && [price unsignedIntegerValue] > 0);
         BOOL hasPurePoint = (point && [point isEqual:[NSNull null]] == NO && [point unsignedIntegerValue] > 0);
-        if (hasPurePrice && hasPurePoint)
+        BOOL hasMixedPrice = (price1 && [price1 isEqual:[NSNull null]] == NO && [price1 unsignedIntegerValue] > 0) && (point1 && [point1 isEqual:[NSNull null]] == NO && [point1 unsignedIntegerValue] > 0);
+        if (hasPurePrice)
         {
             cell.price = price;
-            cell.point = point;
-            cell.priceType = PriceTypeBothPure;
-        }
-        else if (hasPurePrice)
-        {
-            cell.price = price;
+            
+            if (hasPurePoint)
+            {
+                cell.point = point;
+            }
+            
             cell.priceType = PriceTypePurePrice;
+        }
+        else if (hasMixedPrice)
+        {
+            if (price1 && [price1 isEqual:[NSNull null]] == NO)
+            {
+                cell.mixPrice = price1;
+            }
+            if (point1 && [point1 isEqual:[NSNull null]] == NO)
+            {
+                cell.mixPoint = point1;
+            }
+            
+            
+            if (hasPurePoint)
+            {
+                cell.point = point;
+            }
+            cell.priceType = PriceTypeMixed;
         }
         else if (hasPurePoint)
         {
@@ -361,15 +392,8 @@
         }
         else
         {
-            if (price1 && [price1 isEqual:[NSNull null]] == NO)
-            {
-                cell.price = price1;
-            }
-            if (point1 && [point1 isEqual:[NSNull null]] == NO)
-            {
-                cell.point = point1;
-            }
-            cell.priceType = PriceTypeMixed;
+            cell.price = price;
+            cell.priceType = PriceTypePurePrice;
         }
         
         NSNumber *discount = [dictionary objectForKey:SymphoxAPIParam_discount_hall_percentage];
@@ -382,6 +406,18 @@
             cell.favorite = isFavorite;
         }
         cell.buttonFavorite.hidden = YES;
+        
+        BOOL canPurchaseDirectly = [self canDirectlyPurchaseProduct:dictionary];
+        
+        NSArray *arrayCarts = [self cartArrayForProduct:dictionary];
+        if (([arrayCarts count] > 0) || canPurchaseDirectly)
+        {
+            cell.buttonCart.hidden = NO;
+        }
+        else
+        {
+            cell.buttonCart.hidden = YES;
+        }
     }
     return cell;
 }
