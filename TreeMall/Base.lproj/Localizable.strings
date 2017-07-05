@@ -351,3 +351,5 @@
 "NoAdditionalPurchaseForTargetAmount"="No additional purchase for target amount";
 "NoAdditionalPurchase"="No additional purchase";
 "FreepointDescription"="Free point description";
+"DiscountTips"="DiscountTips";
+"NotEnoughPoints"="Not enough points";

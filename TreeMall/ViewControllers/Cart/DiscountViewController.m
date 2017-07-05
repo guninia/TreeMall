@@ -15,6 +15,7 @@
 
 @interface DiscountViewController ()
 
+@property (nonatomic, strong) UILabel *labelTip;
 @property (nonatomic, assign) NSInteger currentSelectedIndex;
 @property (nonatomic, strong) UIButton *closeButton;
 
@@ -45,6 +46,7 @@
     [self.navigationItem setLeftBarButtonItem:buttonItemClose];
     
     [self.view addSubview:self.tableViewDiscount];
+    [self.view addSubview:self.labelTip];
     [self.view addSubview:self.buttonConfirm];
 }
 
@@ -79,9 +81,21 @@
         CGRect frame = CGRectMake((self.view.frame.size.width - size.width)/2, self.view.frame.size.height - marginV - size.height, size.width, size.height);
         self.buttonConfirm.frame = frame;
     }
+    if (self.labelTip)
+    {
+//        CGSize sizeText = [self.labelTip.text sizeWithAttributes:[NSDictionary dictionaryWithObjectsAndKeys:self.labelTip.font, NSFontAttributeName, nil]];
+        NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
+        style.lineBreakMode = self.labelTip.lineBreakMode;
+        style.alignment = self.labelTip.textAlignment;
+        NSDictionary *attributes = [NSDictionary dictionaryWithObjectsAndKeys:self.labelTip.font, NSFontAttributeName, style, NSParagraphStyleAttributeName, nil];
+        CGSize sizeText = [self.labelTip.text boundingRectWithSize:CGSizeMake(self.view.frame.size.width - marginH * 2, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin attributes:attributes context:nil].size;
+        CGSize sizeLabel = CGSizeMake(ceil(sizeText.width), ceil(sizeText.height) + 4);
+        CGRect frame = CGRectMake((self.view.frame.size.width - sizeLabel.width)/2, CGRectGetMinY(self.buttonConfirm.frame) - intervalV - sizeLabel.height, sizeLabel.width, sizeLabel.height);
+        self.labelTip.frame = frame;
+    }
     if (self.tableViewDiscount)
     {
-        CGRect frame = CGRectMake(0.0, 0.0, self.view.frame.size.width, CGRectGetMinY(self.buttonConfirm.frame) - intervalV);
+        CGRect frame = CGRectMake(0.0, 0.0, self.view.frame.size.width, CGRectGetMinY(self.labelTip.frame) - intervalV);
         self.tableViewDiscount.frame = frame;
     }
 }
@@ -130,6 +144,23 @@
         [_closeButton addTarget:self action:@selector(buttonClosePresesd:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _closeButton;
+}
+
+- (UILabel *)labelTip
+{
+    if (_labelTip == nil)
+    {
+        _labelTip = [[UILabel alloc] initWithFrame:CGRectZero];
+        [_labelTip setBackgroundColor:[UIColor clearColor]];
+        [_labelTip setTextColor:[UIColor grayColor]];
+        [_labelTip setNumberOfLines:0];
+        [_labelTip setLineBreakMode:NSLineBreakByWordWrapping];
+        [_labelTip setTextAlignment:NSTextAlignmentLeft];
+        UIFont *font = [UIFont systemFontOfSize:10.0];
+        [_labelTip setFont:font];
+        [_labelTip setText:[LocalizedString DiscountTips]];
+    }
+    return _labelTip;
 }
 
 #pragma mark - Actions

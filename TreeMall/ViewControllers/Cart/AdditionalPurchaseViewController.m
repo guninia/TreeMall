@@ -1162,7 +1162,7 @@
         NSString *stringFastByPoint = [NSString stringWithFormat:[LocalizedString PurchaseFastDeliveryFor_I_Points], 800];
         UIAlertAction *actionFastByPoint = [UIAlertAction actionWithTitle:stringFastByPoint style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
             // TO DO: add a product for fast delivery by point then call final check again.
-            [TMInfoManager sharedManager].productFastDelivery = [[TMInfoManager sharedManager] productFastDeliveryWithType:FastDeliveryProductTypeCash];
+            [TMInfoManager sharedManager].productFastDelivery = [[TMInfoManager sharedManager] productFastDeliveryWithType:FastDeliveryProductTypePoint];
             
             [weakSelf finalCheckCartContentForCartType:weakSelf.currentType canPurchaseFastDelivery:NO];
         }];

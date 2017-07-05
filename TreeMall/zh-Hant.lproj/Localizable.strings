@@ -352,3 +352,5 @@
 "NoAdditionalPurchaseForTargetAmount"="您的消費金額未達滿額加購門檻，請重新確認";
 "NoAdditionalPurchase"="您的消費金額未達加購門檻，請重新確認購物車品項";
 "FreepointDescription"="貨到贈點詳情";
+"DiscountTips"="注意事項：部分折抵金額之誤差值為四捨五入後的計算結果";
+"NotEnoughPoints"="點數不足";

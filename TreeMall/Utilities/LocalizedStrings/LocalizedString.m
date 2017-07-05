@@ -3471,4 +3471,24 @@
     return FreepointDescription;
 }
 
++ (NSString *)DiscountTips
+{
+    static NSString *DiscountTips = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        DiscountTips = NSLocalizedString(@"DiscountTips", nil);
+    });
+    return DiscountTips;
+}
+
++ (NSString *)NotEnoughPoints
+{
+    static NSString *NotEnoughPoints = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        NotEnoughPoints = NSLocalizedString(@"NotEnoughPoints", nil);
+    });
+    return NotEnoughPoints;
+}
+
 @end

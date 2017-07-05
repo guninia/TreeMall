@@ -20,6 +20,8 @@
 @property (nonatomic, strong) UIButton *buttonConfirm;
 @property (nonatomic, strong) UIButton *buttonClose;
 @property (nonatomic, strong) UILabel *labelTitle;
+@property (nonatomic, strong) UIView *viewDescriptionBackground;
+@property (nonatomic, strong) UILabel *labelDescription;
 
 - (void)updateText;
 - (void)reset;
@@ -38,9 +40,10 @@
     self = [super initWithFrame:frame];
     if (self)
     {
-        [self reset];
         [self addSubview:self.viewContainer];
         [self.viewContainer addSubview:self.toolBar];
+        [self.viewContainer addSubview:self.viewDescriptionBackground];
+        [self.viewContainer addSubview:self.labelDescription];
         [self.viewContainer addSubview:self.labelText];
         [self.viewContainer addSubview:self.buttonMinus];
         [self.viewContainer addSubview:self.buttonPlus];
@@ -57,6 +60,7 @@
         
         [self.layer setCornerRadius:10.0];
         [self.layer setMasksToBounds:YES];
+        [self reset];
     }
     return self;
 }
@@ -99,6 +103,27 @@
         }
         [self.toolBar setNeedsLayout];
     }
+    if (self.labelDescription && [self.labelDescription isHidden] == NO)
+    {
+        originY = CGRectGetMaxY(self.toolBar.frame);
+        CGFloat marginH = 10.0;
+        NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
+        style.lineBreakMode = self.labelDescription.lineBreakMode;
+        style.alignment = self.labelDescription.textAlignment;
+        
+        NSDictionary *attributes = [NSDictionary dictionaryWithObjectsAndKeys:self.labelDescription.font, NSFontAttributeName, style, NSParagraphStyleAttributeName, nil];
+        CGSize sizeText = [self.labelDescription.text boundingRectWithSize:CGSizeMake(containerFrame.size.width - marginH * 2, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin attributes:attributes context:nil].size;
+        CGSize sizeLabel = CGSizeMake(ceil(sizeText.width), ceil(sizeText.height + 4));
+        CGRect frame = CGRectMake((containerFrame.size.width - sizeLabel.width)/2, originY, sizeLabel.width, sizeLabel.height);
+        self.labelDescription.frame = frame;
+        
+        if (self.viewDescriptionBackground && [self.viewDescriptionBackground isHidden] == NO)
+        {
+            CGRect viewFrame = CGRectMake(0.0, originY, containerFrame.size.width, sizeLabel.height);
+            self.viewDescriptionBackground.frame = viewFrame;
+        }
+    }
+    
     CGFloat actionButtonWidth = 40.0;
     CGFloat labelWidth = 120.0;
     CGFloat totalWidth = actionButtonWidth * 2 + labelWidth;
@@ -243,6 +268,57 @@
     return _labelTitle;
 }
 
+- (UIView *)viewDescriptionBackground
+{
+    if (_viewDescriptionBackground == nil)
+    {
+        _viewDescriptionBackground = [[UIView alloc] initWithFrame:CGRectZero];
+        [_viewDescriptionBackground setBackgroundColor:[UIColor colorWithWhite:0.9 alpha:1.0]];
+    }
+    return _viewDescriptionBackground;
+}
+
+- (UILabel *)labelDescription
+{
+    if (_labelDescription == nil)
+    {
+        _labelDescription = [[UILabel alloc] initWithFrame:CGRectZero];
+        UIFont *font = [UIFont systemFontOfSize:10.0];
+        [_labelDescription setFont:font];
+        [_labelDescription setBackgroundColor:[UIColor clearColor]];
+        [_labelDescription setTextColor:[UIColor blackColor]];
+        [_labelDescription setNumberOfLines:0];
+        [_labelDescription setLineBreakMode:NSLineBreakByWordWrapping];
+        [_labelDescription setTextAlignment:NSTextAlignmentLeft];
+    }
+    return _labelDescription;
+}
+
+- (void)setTips:(NSString *)tips
+{
+    _tips = tips;
+    __weak FullScreenSelectNumberView *weakSelf = self;
+    if (_tips == nil)
+    {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            weakSelf.labelDescription.text = @"";
+            [weakSelf.labelDescription setHidden:YES];
+            [weakSelf.viewDescriptionBackground setHidden:YES];
+        });
+    }
+    else
+    {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            weakSelf.labelDescription.text = _tips;
+            [weakSelf.labelDescription setHidden:NO];
+            [weakSelf.viewDescriptionBackground setHidden:NO];
+        });
+    }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [weakSelf setNeedsLayout];
+    });
+}
+
 #pragma mark - Private Methods
 
 - (void)updateText
@@ -256,6 +332,12 @@
     self.maxValue = 1;
     self.minValue = 1;
     self.currentValue = 1;
+    __weak FullScreenSelectNumberView *weakSelf = self;
+    self.tips = nil;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [weakSelf updateText];
+        [weakSelf setNeedsLayout];
+    });
 }
 
 #pragma mark - Public Methods
@@ -277,9 +359,11 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         [UIView animateWithDuration:0.3 delay:0.0 options:(UIViewAnimationOptionCurveEaseInOut|UIViewAnimationOptionBeginFromCurrentState) animations:^{
             weakSelf.alpha = 0.0;
-        } completion:nil];
+        } completion:^(BOOL finished){
+            [weakSelf reset];
+        }];
     });
-    [self reset];
+    
 }
 
 #pragma mark - Actions
@@ -290,8 +374,9 @@
     {
         self.currentValue -= 1;
     }
+    __weak FullScreenSelectNumberView *weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
-        [self updateText];
+        [weakSelf updateText];
     });
 }
 
@@ -301,8 +386,9 @@
     {
         self.currentValue += 1;
     }
+    __weak FullScreenSelectNumberView *weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
-        [self updateText];
+        [weakSelf updateText];
     });
 }
 

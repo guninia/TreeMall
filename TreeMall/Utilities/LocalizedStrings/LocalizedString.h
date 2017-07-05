@@ -356,5 +356,7 @@
 + (NSString *)NoAdditionalPurchaseForTargetAmount;
 + (NSString *)NoAdditionalPurchase;
 + (NSString *)FreepointDescription;
++ (NSString *)DiscountTips;
++ (NSString *)NotEnoughPoints;
 
 @end

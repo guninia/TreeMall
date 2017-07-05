@@ -77,14 +77,22 @@
     UIImage *placeholder = [UIImage imageNamed:@"ico_default"];
     __weak ProductDetailImageCollectionViewCell *weakSelf = self;
     [self.imageView sd_setImageWithURL:url placeholderImage:placeholder options:(SDWebImageAvoidAutoSetImage|SDWebImageAllowInvalidSSLCertificates) completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL){
-        if ([[imageURL absoluteString] isEqualToString:imagePath])
+        if (error == nil)
         {
-            if (error == nil && image)
+            NSLog(@"load image success from [%@]", [imageURL absoluteString]);
+            if ([[imageURL absoluteString] isEqualToString:imagePath])
             {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [weakSelf.imageView setImage:image];
-                });
+                if (error == nil && image)
+                {
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [weakSelf.imageView setImage:image];
+                    });
+                }
             }
+        }
+        else
+        {
+            NSLog(@"load image error:\n%@", [error description]);
         }
         dispatch_async(dispatch_get_main_queue(), ^{
             [weakSelf.activityIndicator stopAnimating];

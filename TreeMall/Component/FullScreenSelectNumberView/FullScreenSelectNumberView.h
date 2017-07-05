@@ -22,6 +22,7 @@
 @property (nonatomic, assign) NSUInteger currentValue;
 @property (nonatomic, assign) NSUInteger maxValue;
 @property (nonatomic, assign) NSUInteger minValue;
+@property (nonatomic, strong) NSString *tips;
 
 - (void)show;
 - (void)close;

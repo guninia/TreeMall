@@ -1018,7 +1018,7 @@
 //    [self.navigationController pushViewController:viewController animated:YES];
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"" message:[LocalizedString OrderDetailAlert] preferredStyle:UIAlertControllerStyleAlert];
     UIAlertAction *actionCancel = [UIAlertAction actionWithTitle:[LocalizedString Cancel] style:UIAlertActionStyleCancel handler:nil];
-    UIAlertAction *actionOpen = [UIAlertAction actionWithTitle:[LocalizedString OpenInSafari] style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
+    UIAlertAction *actionOpen = [UIAlertAction actionWithTitle:[LocalizedString Confirm] style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
         NSString *urlString = SymphoxAPI_OrderDetailWebpage;
         NSURL *url = [NSURL URLWithString:urlString];
         if (url == nil)

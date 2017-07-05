@@ -1017,13 +1017,20 @@
     
     // Images and pageControl
     NSArray *imagePaths = [self.dictionaryDetail objectForKey:SymphoxAPIParam_img_url];
-    if (imagePaths && [imagePaths isEqual:[NSNull null]] == NO && [imagePaths count] > 0)
+    if (imagePaths && [imagePaths isEqual:[NSNull null]] == NO)
     {
         self.arrayImagePath = imagePaths;
         [self.collectionViewImage reloadData];
-        [self.pageControlImage setNumberOfPages:[self.arrayImagePath count]];
+        if ([self.arrayImagePath count] > 1)
+        {
+            [self.pageControlImage setNumberOfPages:[self.arrayImagePath count]];
+            [self.pageControlImage setHidden:NO];
+        }
+        else if ([self.arrayImagePath count] > 0)
+        {
+            [self.pageControlImage setHidden:YES];
+        }
         [self.collectionViewImage setHidden:NO];
-        [self.pageControlImage setHidden:NO];
     }
     else
     {
@@ -2070,17 +2077,6 @@
         cell.imagePath = imagePath;
     }
     return cell;
-}
-
-#pragma mark - UICollectionViewDelegate
-
-- (void)collectionView:(UICollectionView *)collectionView didEndDisplayingCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath
-{
-    if ([cell isKindOfClass:[ProductDetailImageCollectionViewCell class]])
-    {
-        ProductDetailImageCollectionViewCell *imageCell = (ProductDetailImageCollectionViewCell *)cell;
-        imageCell.imageView.image = nil;
-    }
 }
 
 #pragma mark - UIScrollViewDelegate
