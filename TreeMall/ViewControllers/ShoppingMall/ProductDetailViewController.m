@@ -582,7 +582,7 @@
     [[SHAPIAdapter sharedAdapter] sendRequestFromObject:weakSelf ToUrl:url withHeaderFields:headerFields andPostObject:parameters inPostFormat:SHPostFormatJson encrypted:YES decryptedReturnData:YES completion:^(id resultObject, NSError *error){
         if (error == nil)
         {
-            //            NSLog(@"resultObject[%@]:\n%@", [[resultObject class] description], [resultObject description]);
+//            NSLog(@"resultObject[%@]:\n%@", [[resultObject class] description], [resultObject description]);
             if ([resultObject isKindOfClass:[NSData class]])
             {
                 NSData *data = (NSData *)resultObject;
@@ -1178,15 +1178,40 @@
         }
     }
     
-    NSNumber *numberFeedbackPoint = [self.dictionaryDetail objectForKey:SymphoxAPIParam_free_point];
-    if (numberFeedbackPoint && [numberFeedbackPoint isEqual:[NSNull null]] == NO && [numberFeedbackPoint unsignedIntegerValue] > 0)
+    BOOL shouldShowFreePoint = NO;
+    NSDictionary *dictionaryFreePoint = [self.dictionaryDetail objectForKey:SymphoxAPIParam_free_point];
+    if (dictionaryFreePoint && [dictionaryFreePoint isEqual:[NSNull null]] == NO)
     {
-        NSString *stringPoint = [formatter stringFromNumber:numberFeedbackPoint];
-        NSString *totalString = [NSString stringWithFormat:[LocalizedString FeedbackPointUpTo_S], stringPoint];
-        NSRange range = [totalString rangeOfString:stringPoint];
-        NSMutableAttributedString *attrString = [[NSMutableAttributedString alloc] initWithString:totalString];
-        [attrString addAttribute:NSForegroundColorAttributeName value:[UIColor orangeColor] range:range];
-        [self.viewPointFeedback.labelL setAttributedText:attrString];
+        NSNumber *numberFeedbackPoint = [dictionaryFreePoint objectForKey:SymphoxAPIParam_point];
+        if (numberFeedbackPoint && [numberFeedbackPoint isEqual:[NSNull null]] == NO && [numberFeedbackPoint unsignedIntegerValue] > 0)
+        {
+            
+            NSString *stringPoint = [formatter stringFromNumber:numberFeedbackPoint];
+            NSString *stringDesc = [NSString stringWithFormat:[LocalizedString FeedbackPointUpTo_S], stringPoint];
+            NSRange range = [stringDesc rangeOfString:stringPoint];
+            NSMutableAttributedString *attrString = [[NSMutableAttributedString alloc] initWithString:stringDesc];
+            [attrString addAttribute:NSForegroundColorAttributeName value:[UIColor orangeColor] range:range];
+            NSMutableAttributedString *totalString = [[NSMutableAttributedString alloc] initWithAttributedString:attrString];
+            
+            NSNumber *raise = [dictionaryFreePoint objectForKey:SymphoxAPIParam_raise];
+            if (raise && [raise isEqual:[NSNull null]] == NO && [raise boolValue])
+            {
+                NSString *string = [NSString stringWithFormat:@" %@", [LocalizedString RaiseFreePoint]];
+                [totalString appendAttributedString:[[NSAttributedString alloc] initWithString:string]];
+            }
+            
+            NSNumber *multiple = [dictionaryFreePoint objectForKey:SymphoxAPIParam_multiple];
+            if (multiple && [multiple isEqual:[NSNull null]] == NO && [multiple integerValue] > 0)
+            {
+                NSString *string = [NSString stringWithFormat:@" %@", [NSString stringWithFormat:[LocalizedString _I_TimesFreePoint], (long)[multiple integerValue]]];
+                [totalString appendAttributedString:[[NSAttributedString alloc] initWithString:string]];
+            }
+            [self.viewPointFeedback.labelL setAttributedText:totalString];
+            shouldShowFreePoint = YES;
+        }
+    }
+    if (shouldShowFreePoint)
+    {
         [self.viewPointFeedback setHidden:NO];
     }
     else
@@ -1763,10 +1788,11 @@
     [dictionaryCommon setObject:fast_delivery_cart forKey:SymphoxAPIParam_fast_delivery_cart];
     [dictionaryCommon setObject:single_shopping_cart forKey:SymphoxAPIParam_single_shopping_cart];
     
-    NSNumber *freepoint = [dictionary objectForKey:SymphoxAPIParam_free_point];
-    if (freepoint)
+    NSDictionary *freepoint = [dictionary objectForKey:SymphoxAPIParam_free_point];
+    if (freepoint && [freepoint isEqual:[NSNull null]] == NO)
     {
-        [dictionaryCommon setObject:freepoint forKey:SymphoxAPIParam_freepoint];
+        NSNumber *number = [freepoint objectForKey:SymphoxAPIParam_point];
+        [dictionaryCommon setObject:number forKey:SymphoxAPIParam_freepoint];
     }
     
     NSMutableArray *seekInstallmentList = [NSMutableArray array];

@@ -38,17 +38,19 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     [self.view setBackgroundColor:[UIColor whiteColor]];
-    [self.view.layer setMasksToBounds:YES];
-    [self.view addSubview:self.toolBar];
-    
-    UIBarButtonItem *itemTitle = [[UIBarButtonItem alloc] initWithCustomView:self.labelTitle];
-    UIBarButtonItem *itemClose = [[UIBarButtonItem alloc] initWithCustomView:self.buttonClose];
-    UIBarButtonItem *fixedSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
-    fixedSpace.width = 0.0;
-    UIBarButtonItem *flexSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
-    NSArray *items = [NSArray arrayWithObjects:fixedSpace, itemTitle, flexSpace, itemClose, fixedSpace, nil];
-    [self.toolBar setItems:items];
-    
+    if (self.navigationController != nil)
+    {
+        [self.view.layer setMasksToBounds:YES];
+        [self.view addSubview:self.toolBar];
+        
+        UIBarButtonItem *itemTitle = [[UIBarButtonItem alloc] initWithCustomView:self.labelTitle];
+        UIBarButtonItem *itemClose = [[UIBarButtonItem alloc] initWithCustomView:self.buttonClose];
+        UIBarButtonItem *fixedSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
+        fixedSpace.width = 0.0;
+        UIBarButtonItem *flexSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
+        NSArray *items = [NSArray arrayWithObjects:fixedSpace, itemTitle, flexSpace, itemClose, fixedSpace, nil];
+        [self.toolBar setItems:items];
+    }
     [self.view addSubview:self.scrollView];
     [self.scrollView addSubview:self.label];
     if (self.navigationController == nil)
@@ -83,24 +85,27 @@
     CGFloat marginV = 20.0;
     CGFloat originY = 0.0;
     
-    if (self.toolBar)
+    if (self.navigationController == nil)
     {
-        CGRect frame = CGRectMake(0.0, originY, self.view.frame.size.width, 44.0);
-        self.toolBar.frame = frame;
-        originY = self.toolBar.frame.origin.y + self.toolBar.frame.size.height;
-        if (self.labelTitle)
+        if (self.toolBar)
         {
-            CGSize size = CGSizeMake(200.0, 40.0);
-            CGRect frame = CGRectMake(0.0, 0.0, size.width, size.height);
-            self.labelTitle.frame = frame;
+            CGRect frame = CGRectMake(0.0, originY, self.view.frame.size.width, 44.0);
+            self.toolBar.frame = frame;
+            originY = self.toolBar.frame.origin.y + self.toolBar.frame.size.height;
+            if (self.labelTitle)
+            {
+                CGSize size = CGSizeMake(200.0, 40.0);
+                CGRect frame = CGRectMake(0.0, 0.0, size.width, size.height);
+                self.labelTitle.frame = frame;
+            }
+            if (self.buttonClose)
+            {
+                CGSize size = CGSizeMake(40.0, 40.0);
+                CGRect frame = CGRectMake(0.0, 0.0, size.width, size.height);
+                self.buttonClose.frame = frame;
+            }
+            [self.toolBar setNeedsLayout];
         }
-        if (self.buttonClose)
-        {
-            CGSize size = CGSizeMake(40.0, 40.0);
-            CGRect frame = CGRectMake(0.0, 0.0, size.width, size.height);
-            self.buttonClose.frame = frame;
-        }
-        [self.toolBar setNeedsLayout];
     }
     
     

@@ -353,3 +353,6 @@
 "FreepointDescription"="Free point description";
 "DiscountTips"="DiscountTips";
 "NotEnoughPoints"="Not enough points";
+"Contact"="Contact";
+"RaiseFreePoint"="Raise point";
+"_I_TimesFreePoint"="× %li";

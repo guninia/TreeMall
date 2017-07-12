@@ -358,5 +358,8 @@
 + (NSString *)FreepointDescription;
 + (NSString *)DiscountTips;
 + (NSString *)NotEnoughPoints;
++ (NSString *)Contact;
++ (NSString *)RaiseFreePoint;
++ (NSString *)_I_TimesFreePoint;
 
 @end

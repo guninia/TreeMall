@@ -725,6 +725,7 @@
             [self.dictionaryTotal setDictionary:summary];
         }
         NSMutableArray *array = [[resultDictionary objectForKey:SymphoxAPIParam_cart_item] mutableCopy];
+        NSString *errorTitle = nil;
         NSMutableString *notifyString = [NSMutableString string];
         if (array)
         {
@@ -752,21 +753,30 @@
                 NSArray *paymentModes = [product objectForKey:SymphoxAPIParam_payment_mode_list];
                 if (paymentModes == nil || [paymentModes isEqual:[NSNull null]] || [paymentModes count] == 0)
                 {
+                    if ([notifyString length] == 0)
+                    {
+                        [notifyString appendString:[LocalizedString ProductsRemovedFromCart]];
+                    }
                     NSNumber *cpdt_num = [product objectForKey:SymphoxAPIParam_cpdt_num];
                     NSString *name = [[TMInfoManager sharedManager] nameOfRemovedProductId:cpdt_num inCart:type];
                     if (name)
                     {
-                        NSString *totalString = [NSString stringWithFormat:@"%@：%@\n", name, [LocalizedString NotEnoughPoints]];
+                        NSString *totalString = [NSString stringWithFormat:@"\n%@", name];
                         [notifyString appendString:totalString];
                     }
                     [array removeObject:product];
+                    errorTitle = [LocalizedString NotEnoughPoints];
                 }
             }
             [self.arrayProducts setArray:array];
             if ([notifyString length] > 0)
             {
                 __weak CartViewController *weakSelf = self;
-                UIAlertController *alertController = [UIAlertController alertControllerWithTitle:[LocalizedString ProductsRemovedFromCart] message:notifyString preferredStyle:UIAlertControllerStyleAlert];
+                if (errorTitle == nil)
+                {
+                    errorTitle = [LocalizedString ProductsRemovedFromCart];
+                }
+                UIAlertController *alertController = [UIAlertController alertControllerWithTitle:errorTitle message:notifyString preferredStyle:UIAlertControllerStyleAlert];
                 UIAlertAction *actionConfirm = [UIAlertAction actionWithTitle:[LocalizedString Confirm] style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
                     [weakSelf renewConditionsForCartType:type shouldShowPaymentForProductId:nil];
                 }];
@@ -872,9 +882,15 @@
             BOOL shouldBuyFastDelivery = NO;
             if (type == CartTypeFastDelivery)
             {
-                if (total_cash == nil || [total_cash isEqual:[NSNull null]] || [total_cash integerValue] < TMFastDeliveryThreshold)
+                shouldBuyFastDelivery = (total_cash == nil || [total_cash isEqual:[NSNull null]] || [total_cash integerValue] < TMFastDeliveryThreshold);
+                NSDictionary *delivery_limit = [weakSelf.dictionaryTotal objectForKey:SymphoxAPIParam_delivery_limit];
+                if (delivery_limit && [delivery_limit isEqual:[NSNull null]] == NO)
                 {
-                    shouldBuyFastDelivery = YES;
+                    NSString *reach_limit = [delivery_limit objectForKey:SymphoxAPIParam_reach_limit];
+                    if (reach_limit && [reach_limit isEqual:[NSNull null]] == NO)
+                    {
+                        shouldBuyFastDelivery = ![reach_limit boolValue];
+                    }
                 }
             }
             if (shouldBuyFastDelivery)
@@ -1247,6 +1263,22 @@
     return paymentDiscription;
 }
 
+- (NSNumber *)paymentTypeForIdentifier:(NSNumber *)productIdentifier
+{
+    NSNumber *paymentType = nil;
+    if (productIdentifier != nil && ([productIdentifier isEqual:[NSNull null]] == NO))
+    {
+        NSDictionary *purchaseInfos = [[TMInfoManager sharedManager] purchaseInfoForCartType:self.currentType];
+        NSDictionary *purchaseInfo = [purchaseInfos objectForKey:productIdentifier];
+        paymentType = [purchaseInfo objectForKey:SymphoxAPIParam_payment_type];
+    }
+    if ([paymentType isEqual:[NSNull null]])
+    {
+        paymentType = nil;
+    }
+    return paymentType;
+}
+
 - (NSString *)textForCartType:(CartType)cartType
 {
     NSArray *array = [[TMInfoManager sharedManager] productArrayForCartType:cartType];
@@ -1560,8 +1592,23 @@
         
         NSNumber *productIdentifier = [dictionary objectForKey:SymphoxAPIParam_cpdt_num];
         NSString *paymentDiscription = [self paymentDetailForIdentifier:productIdentifier];
+        NSNumber *paymentType = [self paymentTypeForIdentifier:productIdentifier];
+        NSDictionary *used_payment_mode = [dictionary objectForKey:SymphoxAPIParam_used_payment_mode];
+        if (used_payment_mode && [used_payment_mode isEqual:[NSNull null]] == NO)
+        {
+            NSNumber *payment_type = [used_payment_mode objectForKey:SymphoxAPIParam_payment_type];
+            if (payment_type && [payment_type isEqual:[NSNull null]] == NO)
+            {
+                paymentType = payment_type;
+                NSString *discount_detail_desc = [used_payment_mode objectForKey:SymphoxAPIParam_discount_detail_desc];
+                if (discount_detail_desc && [discount_detail_desc isEqual:[NSNull null]] == NO)
+                {
+                    paymentDiscription = discount_detail_desc;
+                }
+            }
+        }
         BOOL isGift = [self isGiftProduct:dictionary];
-        if ((paymentDiscription != nil && ([paymentDiscription isEqual:[NSNull null]] == NO)) || isGift)
+        if (([paymentType integerValue] != 99) || isGift)
         {
             cell.labelPayment.text = paymentDiscription;
             cell.alreadySelectQuantityAndPayment = YES;

@@ -712,6 +712,7 @@ typedef enum : NSUInteger {
     {
         [self.navigationController.presentingViewController dismissViewControllerAnimated:YES completion:nil];
     }
+    [[NSNotificationCenter defaultCenter] postNotificationName:PostNotificationName_CompleteOrderProcess object:self];
 }
 
 - (void)buttonLinkPressed:(id)sender

@@ -1528,8 +1528,9 @@ typedef enum : NSUInteger {
     __weak StorePickupInfoViewController *weakSelf = self;
     for (NSInteger index = 0; index < [arrayTarget count]; index++)
     {
-        NSDictionary *dictionary = [arrayTarget objectAtIndex:index];
-        NSString *name = [dictionary objectForKey:SymphoxAPIParam_name];
+//        NSDictionary *dictionary = [arrayTarget objectAtIndex:index];
+//        NSString *name = [dictionary objectForKey:SymphoxAPIParam_name];
+        NSString *name = [NSString stringWithFormat:@"%@%li", [LocalizedString Contact], (long)index];
         UIAlertAction *action = [UIAlertAction actionWithTitle:name style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
             [weakSelf setCurrentDeliveryTargetForIndex:index];
         }];
@@ -3066,7 +3067,7 @@ typedef enum : NSUInteger {
                 {
                     message = [LocalizedString CellphoneBarcode];
                 }
-                [self presentAlertMessage:message forIndexPath:indexPath withTextFieldDefaultText:nil andKeyboardType:UIKeyboardTypeASCIICapableNumberPad fromTableView:tableView];
+                [self presentAlertMessage:message forIndexPath:indexPath withTextFieldDefaultText:nil andKeyboardType:UIKeyboardTypeASCIICapable fromTableView:tableView];
             }
                 break;
             case InvoiceCellTagChooseDonateTarget:

@@ -3491,4 +3491,34 @@
     return NotEnoughPoints;
 }
 
++ (NSString *)Contact
+{
+    static NSString *Contact = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        Contact = NSLocalizedString(@"Contact", nil);
+    });
+    return Contact;
+}
+
++ (NSString *)RaiseFreePoint
+{
+    static NSString *RaiseFreePoint = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        RaiseFreePoint = NSLocalizedString(@"RaiseFreePoint", nil);
+    });
+    return RaiseFreePoint;
+}
+
++ (NSString *)_I_TimesFreePoint
+{
+    static NSString *_I_TimesFreePoint = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        _I_TimesFreePoint = NSLocalizedString(@"_I_TimesFreePoint", nil);
+    });
+    return _I_TimesFreePoint;
+}
+
 @end

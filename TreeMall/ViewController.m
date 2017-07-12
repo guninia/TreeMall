@@ -41,6 +41,7 @@
 - (void)handlerOfApplicationDidBecomeActiveNotification:(NSNotification *)notification;
 - (void)handlerOfJumpToShoppingMallAndPresentHallNotification:(NSNotification *)notification;
 - (void)handlerOfFavoriteContentChangedNotification:(NSNotification *)notification;
+- (void)handlerOfCompleteOrderProcessNotification:(NSNotification *)notification;
 
 @end
 
@@ -194,6 +195,7 @@
 //    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handlerOfApplicationDidBecomeActiveNotification:) name:UIApplicationDidFinishLaunchingNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handlerOfJumpToShoppingMallAndPresentHallNotification:) name:PostNotificationName_JumpToShoppingMallAndPresentHall object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handlerOfFavoriteContentChangedNotification:) name:PostNotificationName_FavoriteContentChanged object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handlerOfCompleteOrderProcessNotification:) name:PostNotificationName_CompleteOrderProcess object:nil];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -225,6 +227,8 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self name:PostNotificationName_JumpToMemberTabAndPresentCoupon object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:PostNotificationName_CartContentChanged object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:PostNotificationName_JumpToShoppingMallAndPresentHall object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:PostNotificationName_FavoriteContentChanged object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:PostNotificationName_CompleteOrderProcess object:nil];
 }
 
 #pragma mark - Override
@@ -463,6 +467,11 @@
 - (void)handlerOfFavoriteContentChangedNotification:(NSNotification *)notification
 {
     [self updateFavoriteBadge];
+}
+
+- (void)handlerOfCompleteOrderProcessNotification:(NSNotification *)notification
+{
+    [self JumpToTab:0];
 }
 
 #pragma mark - UITabBarControllerDelegate

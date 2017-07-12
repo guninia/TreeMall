@@ -1144,6 +1144,10 @@
 //        NSLog(@"content:\n%@", [content description]);
         weakSelf.arrayCategory = siblings;
         newName = [content objectForKey:SymphoxAPIParam_name];
+        if (newName == nil)
+        {
+            newName = weakSelf.name;
+        }
         newLayer = layer;
         newHallId = selectedHallId;
         [weakSelf.dictionaryConditions addEntriesFromDictionary:conditions];

@@ -1143,9 +1143,15 @@
     BOOL shouldBuyFastDelivery = NO;
     if (self.currentType == CartTypeFastDelivery)
     {
-        if (total_cash == nil || [total_cash isEqual:[NSNull null]] || [total_cash integerValue] < TMFastDeliveryThreshold)
+        shouldBuyFastDelivery = (total_cash == nil || [total_cash isEqual:[NSNull null]] || [total_cash integerValue] < TMFastDeliveryThreshold);
+        NSDictionary *delivery_limit = [self.dictionaryTotal objectForKey:SymphoxAPIParam_delivery_limit];
+        if (delivery_limit && [delivery_limit isEqual:[NSNull null]] == NO)
         {
-            shouldBuyFastDelivery = YES;
+            NSString *reach_limit = [delivery_limit objectForKey:SymphoxAPIParam_reach_limit];
+            if (reach_limit && [reach_limit isEqual:[NSNull null]] == NO)
+            {
+                shouldBuyFastDelivery = ![reach_limit boolValue];
+            }
         }
     }
     if (shouldBuyFastDelivery)

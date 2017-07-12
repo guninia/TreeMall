@@ -354,3 +354,6 @@
 "FreepointDescription"="貨到贈點詳情";
 "DiscountTips"="注意事項：部分折抵金額之誤差值為四捨五入後的計算結果";
 "NotEnoughPoints"="點數不足";
+"Contact"="通訊錄";
+"RaiseFreePoint"="加碼送";
+"_I_TimesFreePoint"="× %li倍送";
