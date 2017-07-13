@@ -149,6 +149,11 @@ typedef enum : NSUInteger {
 //        [self prepareData];
 //        [self retrieveDistrictInfo];
 //    }
+    if ([self.tradeId isEqualToString:@"OP"])
+    {
+        self.tableViewInvoice.hidden = YES;
+        self.labelInvoiceTitle.hidden = YES;
+    }
     [self startToGetCarrierInfo];
 }
 
@@ -201,14 +206,14 @@ typedef enum : NSUInteger {
         self.separator.frame = frame;
         originY = self.separator.frame.origin.y + self.separator.frame.size.height + intervalV;
     }
-    if (self.labelInvoiceTitle)
+    if (self.labelInvoiceTitle && [self.labelInvoiceTitle isHidden] == NO)
     {
         CGRect frame = self.labelInvoiceTitle.frame;
         frame.origin.y = originY;
         self.labelInvoiceTitle.frame = frame;
         originY = self.labelInvoiceTitle.frame.origin.y + self.labelInvoiceTitle.frame.size.height + intervalV;
     }
-    if (self.tableViewInvoice)
+    if (self.tableViewInvoice && [self.tableViewInvoice isHidden] == NO)
     {
         NSInteger totalSections = [self numberOfSectionsInTableView:self.tableViewInvoice];
         CGFloat totalHeight = 0.0;
@@ -682,7 +687,6 @@ typedef enum : NSUInteger {
             [self.arrayDeliverTime addObject:string];
         }
     }
-    
     for (NSInteger typeIndex = 0; typeIndex < InvoiceLayoutTypeTotal; typeIndex++)
     {
         NSMutableArray *arraySection = [NSMutableArray array];
@@ -2080,7 +2084,8 @@ typedef enum : NSUInteger {
     NSLog(@"prepareOrderData - self.dictionaryInvoiceTemp:\n%@", [self.dictionaryInvoiceTemp description]);
     BOOL shouldContinue = YES;
     NSNumber *total_cash = [self.dictionaryTotalCost objectForKey:SymphoxAPIParam_total_cash];
-    if ([total_cash integerValue] > 0)
+//    if ([total_cash integerValue] > 0)
+    if ([self.tradeId isEqualToString:@"OP"] == NO)
     {
         NSNumber *inv_type = [self.dictionaryInvoiceTemp objectForKey:SymphoxAPIParam_inv_type];
         if (inv_type == nil)
@@ -2315,6 +2320,10 @@ typedef enum : NSUInteger {
             default:
                 break;
         }
+    }
+    else
+    {
+        [shopping_delivery setObject:name forKey:SymphoxAPIParam_inv_name];
     }
     if (shouldContinue == NO)
     {
