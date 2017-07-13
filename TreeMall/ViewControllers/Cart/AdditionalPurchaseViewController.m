@@ -252,6 +252,11 @@
         {
             quantity = [purchaseInfo objectForKey:SymphoxAPIParam_qty];
         }
+        NSNumber *realProductId = [purchaseInfo objectForKey:SymphoxAPIParam_real_cpdt_num];
+        if (realProductId)
+        {
+            productId = realProductId;
+        }
         NSMutableDictionary *dictionaryCheck = [NSMutableDictionary dictionary];
         [dictionaryCheck setObject:productId forKey:SymphoxAPIParam_cpdt_num];
         [dictionaryCheck setObject:quantity forKey:SymphoxAPIParam_qty];
@@ -276,6 +281,11 @@
         else
         {
             quantity = [purchaseInfo objectForKey:SymphoxAPIParam_qty];
+        }
+        NSNumber *realProductId = [purchaseInfo objectForKey:SymphoxAPIParam_real_cpdt_num];
+        if (realProductId)
+        {
+            productId = realProductId;
         }
         NSMutableDictionary *dictionaryCheck = [NSMutableDictionary dictionary];
         [dictionaryCheck setObject:productId forKey:SymphoxAPIParam_cpdt_num];
@@ -484,6 +494,11 @@
         {
             dictionaryMode = [NSDictionary dictionaryWithObjectsAndKeys:@"0", SymphoxAPIParam_payment_type, [NSNumber numberWithInteger:0], SymphoxAPIParam_price, nil];
         }
+        NSNumber *realProductId = [purchaseInfo objectForKey:SymphoxAPIParam_real_cpdt_num];
+        if (realProductId)
+        {
+            productId = realProductId;
+        }
         
         NSMutableDictionary *dictionaryCheck = [NSMutableDictionary dictionary];
         [dictionaryCheck setObject:productId forKey:SymphoxAPIParam_cpdt_num];
@@ -518,6 +533,11 @@
         if (dictionaryMode == nil)
         {
             dictionaryMode = [NSDictionary dictionaryWithObjectsAndKeys:@"0", SymphoxAPIParam_payment_type, [NSNumber numberWithInteger:0], SymphoxAPIParam_price, nil];
+        }
+        NSNumber *realProductId = [purchaseInfo objectForKey:SymphoxAPIParam_real_cpdt_num];
+        if (realProductId)
+        {
+            productId = realProductId;
         }
         
         NSMutableDictionary *dictionaryCheck = [NSMutableDictionary dictionary];
@@ -623,42 +643,37 @@
             [self.arrayAllProducts setArray:array];
             for (NSDictionary *product in array)
             {
-                NSString *cpdt_owner_num = [product objectForKey:SymphoxAPIParam_cpdt_owner_num];
-                BOOL isGift = (cpdt_owner_num && [cpdt_owner_num isEqual:[NSNull null]] == NO && [cpdt_owner_num integerValue] == 4);
-                if (isGift)
+                NSNumber *cpdt_num = [product objectForKey:SymphoxAPIParam_cpdt_num];
+                if (cpdt_num == nil || [cpdt_num isEqual:[NSNull null]])
+                    continue;
+                NSNumber *qty = [product objectForKey:SymphoxAPIParam_qty];
+                if (qty && [qty isEqual:[NSNull null]] == NO)
                 {
-                    NSNumber *cpdt_num = [product objectForKey:SymphoxAPIParam_cpdt_num];
-                    if (cpdt_num == nil || [cpdt_num isEqual:[NSNull null]])
-                        continue;
-                    NSNumber *qty = [product objectForKey:SymphoxAPIParam_qty];
-                    if (qty && [qty isEqual:[NSNull null]] == NO)
+                    [[TMInfoManager sharedManager] setPurchaseQuantity:qty forProduct:cpdt_num inCart:type];
+                }
+                NSDictionary *used_payemnt_mode = [product objectForKey:SymphoxAPIParam_used_payment_mode];
+                if (used_payemnt_mode && [used_payemnt_mode isEqual:[NSNull null]] == NO)
+                {
+                    NSNumber *real_cpdt_num = [used_payemnt_mode objectForKey:SymphoxAPIParam_cpdt_num];
+                    if (real_cpdt_num == nil || [real_cpdt_num isEqual:[NSNull null]])
                     {
-                        [[TMInfoManager sharedManager] setPurchaseQuantity:qty forProduct:cpdt_num inCart:type];
+                        real_cpdt_num = cpdt_num;
                     }
-                    NSDictionary *used_payemnt_mode = [product objectForKey:SymphoxAPIParam_used_payment_mode];
-                    if (used_payemnt_mode && [used_payemnt_mode isEqual:[NSNull null]] == NO)
+                    [[TMInfoManager sharedManager] setPurchaseInfoFromSelectedPaymentMode:used_payemnt_mode forProductId:cpdt_num withRealProductId:real_cpdt_num inCart:type asAdditional:NO];
+                }
+                BOOL shouldAddProduct = YES;
+                for (NSDictionary *productFromCart in self.arrayProductsFromCart)
+                {
+                    NSNumber *cpdt_num_fromCart = [productFromCart objectForKey:SymphoxAPIParam_cpdt_num];
+                    if ([cpdt_num_fromCart isEqualToNumber:cpdt_num])
                     {
-                        NSNumber *real_cpdt_num = [used_payemnt_mode objectForKey:SymphoxAPIParam_real_cpdt_num];
-                        if (real_cpdt_num == nil || [real_cpdt_num isEqual:[NSNull null]])
-                        {
-                            real_cpdt_num = cpdt_num;
-                        }
-                        [[TMInfoManager sharedManager] setPurchaseInfoFromSelectedPaymentMode:used_payemnt_mode forProductId:cpdt_num withRealProductId:real_cpdt_num inCart:type asAdditional:NO];
+                        shouldAddProduct = NO;
+                        break;
                     }
-                    BOOL shouldAddProduct = YES;
-                    for (NSDictionary *productFromCart in self.arrayProductsFromCart)
-                    {
-                        NSNumber *cpdt_num_fromCart = [productFromCart objectForKey:SymphoxAPIParam_cpdt_num];
-                        if ([cpdt_num_fromCart isEqualToNumber:cpdt_num])
-                        {
-                            shouldAddProduct = NO;
-                            break;
-                        }
-                    }
-                    if (shouldAddProduct)
-                    {
-                        [self.arrayProductsFromCart addObject:product];
-                    }
+                }
+                if (shouldAddProduct)
+                {
+                    [self.arrayProductsFromCart addObject:product];
                 }
             }
         }
@@ -797,6 +812,11 @@
         {
             dictionaryMode = [NSDictionary dictionaryWithObjectsAndKeys:@"0", SymphoxAPIParam_payment_type, [NSNumber numberWithInteger:0], SymphoxAPIParam_price, nil];
         }
+        NSNumber *realProductId = [purchaseInfo objectForKey:SymphoxAPIParam_real_cpdt_num];
+        if (realProductId)
+        {
+            productId = realProductId;
+        }
         NSNumber *groupId = [purchaseInfo objectForKey:SymphoxAPIParam_group_id];
         
         
@@ -837,6 +857,11 @@
         if (dictionaryMode == nil)
         {
             dictionaryMode = [NSDictionary dictionaryWithObjectsAndKeys:@"0", SymphoxAPIParam_payment_type, [NSNumber numberWithInteger:0], SymphoxAPIParam_price, nil];
+        }
+        NSNumber *realProductId = [purchaseInfo objectForKey:SymphoxAPIParam_real_cpdt_num];
+        if (realProductId)
+        {
+            productId = realProductId;
         }
         
         NSMutableDictionary *dictionaryCheck = [NSMutableDictionary dictionary];
@@ -885,11 +910,12 @@
                 NSString *string = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
                 NSLog(@"requestFinalCheckProducts:\n%@", string);
                 NSDictionary *resultDictionary = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
+                NSArray *cart_items = [resultDictionary objectForKey:SymphoxAPIParam_cart_item];
                 if (error == nil)
                 {
                     if (weakSelf.currentType == CartTypeFastDelivery)
                     {
-                        NSArray *cart_items = [resultDictionary objectForKey:SymphoxAPIParam_cart_item];
+//                        NSArray *cart_items = [resultDictionary objectForKey:SymphoxAPIParam_cart_item];
                         if (cart_items && [cart_items isEqual:[NSNull null]] == NO)
                         {
                             [[TMInfoManager sharedManager] updateProductInfoForFastDeliveryFromInfos:cart_items];
@@ -1144,13 +1170,17 @@
     if (self.currentType == CartTypeFastDelivery)
     {
         shouldBuyFastDelivery = (total_cash == nil || [total_cash isEqual:[NSNull null]] || [total_cash integerValue] < TMFastDeliveryThreshold);
-        NSDictionary *delivery_limit = [self.dictionaryTotal objectForKey:SymphoxAPIParam_delivery_limit];
-        if (delivery_limit && [delivery_limit isEqual:[NSNull null]] == NO)
+        NSArray *array_delivery_limit = [self.dictionaryTotal objectForKey:SymphoxAPIParam_delivery_limit];
+        if (array_delivery_limit && [array_delivery_limit isEqual:[NSNull null]] == NO && [array_delivery_limit count] > 0)
         {
-            NSString *reach_limit = [delivery_limit objectForKey:SymphoxAPIParam_reach_limit];
-            if (reach_limit && [reach_limit isEqual:[NSNull null]] == NO)
+            NSDictionary *delivery_limit = [array_delivery_limit objectAtIndex:0];
+            if (delivery_limit && [delivery_limit isEqual:[NSNull null]] == NO)
             {
-                shouldBuyFastDelivery = ![reach_limit boolValue];
+                NSString *reach_limit = [delivery_limit objectForKey:SymphoxAPIParam_reach_limit];
+                if (reach_limit && [reach_limit isEqual:[NSNull null]] == NO)
+                {
+                    shouldBuyFastDelivery = ![reach_limit boolValue];
+                }
             }
         }
     }

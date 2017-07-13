@@ -483,7 +483,6 @@
 		6882AF001EB8870200A29E57 /* ReceiverInfoCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ReceiverInfoCell.h; path = ViewControllers/Cart/ReceiverInfoCell.h; sourceTree = "<group>"; };
 		6882AF011EB8870200A29E57 /* ReceiverInfoCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ReceiverInfoCell.m; path = ViewControllers/Cart/ReceiverInfoCell.m; sourceTree = "<group>"; };
 		688494341EBC779A0087BC2B /* TreeMallEnt.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TreeMallEnt.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		688494351EBC779B0087BC2B /* TreeMall copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "TreeMall copy-Info.plist"; path = "/Users/stevenhuang/Documents/iOS_Projects/TreeMall/TreeMall copy-Info.plist"; sourceTree = "<absolute>"; };
 		6884DD7D1E6D00B200DAF859 /* CouponDetailDescriptionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CouponDetailDescriptionView.h; path = ViewControllers/Member/CouponDetailDescriptionView.h; sourceTree = "<group>"; };
 		6884DD7E1E6D00B200DAF859 /* CouponDetailDescriptionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CouponDetailDescriptionView.m; path = ViewControllers/Member/CouponDetailDescriptionView.m; sourceTree = "<group>"; };
 		6884DD801E6D191000DAF859 /* TopSeparatedTitleCollectionReusableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TopSeparatedTitleCollectionReusableView.h; path = ViewControllers/Member/TopSeparatedTitleCollectionReusableView.h; sourceTree = "<group>"; };
@@ -843,7 +842,6 @@
 				685939A81E1F49DF00351FFB /* Products */,
 				6811BC611E275F6F00626A4A /* Frameworks */,
 				AE7D976A9D99372CC6477754 /* Pods */,
-				688494351EBC779B0087BC2B /* TreeMall copy-Info.plist */,
 			);
 			sourceTree = "<group>";
 		};

@@ -1029,6 +1029,11 @@ static NSString *InstallmentBankListDescription = @"分期0利率（接受14家�
         {
             [dictionaryMode setObject:[((NSNumber *)paymentType) stringValue] forKey:SymphoxAPIParam_payment_type];
         }
+        NSNumber *realProductId = [purchaseInfo objectForKey:SymphoxAPIParam_real_cpdt_num];
+        if (realProductId)
+        {
+            productId = realProductId;
+        }
         [dictionaryMode setObject:productId forKey:SymphoxAPIParam_cpdt_num];
         
         NSNumber *groupId = [purchaseInfo objectForKey:SymphoxAPIParam_group_id];
@@ -1079,6 +1084,11 @@ static NSString *InstallmentBankListDescription = @"分期0利率（接受14家�
         else if ([paymentType isKindOfClass:[NSNumber class]])
         {
             [dictionaryMode setObject:[((NSNumber *)paymentType) stringValue] forKey:SymphoxAPIParam_payment_type];
+        }
+        NSNumber *realProductId = [purchaseInfo objectForKey:SymphoxAPIParam_real_cpdt_num];
+        if (realProductId)
+        {
+            productId = realProductId;
         }
         [dictionaryMode setObject:productId forKey:SymphoxAPIParam_cpdt_num];
         

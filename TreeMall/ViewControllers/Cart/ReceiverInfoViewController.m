@@ -490,6 +490,8 @@ typedef enum : NSUInteger {
     if (array == nil)
         return;
     
+    NSDictionary *dictionary = [[TMInfoManager sharedManager] purchaseInfoForCartType:self.type];
+    
     NSMutableArray *arrayCheck = [NSMutableArray array];
     
     for (NSDictionary *product in array)
@@ -499,16 +501,30 @@ typedef enum : NSUInteger {
         {
             continue;
         }
+        NSDictionary *purchaseInfo = [dictionary objectForKey:productId];
+        NSNumber *realProductId = [purchaseInfo objectForKey:SymphoxAPIParam_real_cpdt_num];
+        if (realProductId)
+        {
+            productId = realProductId;
+        }
         [arrayCheck addObject:productId];
     }
     
     NSArray *arrayAddition = [[TMInfoManager sharedManager] productArrayForAdditionalCartType:self.type];
+    
+    NSDictionary *dictionaryAddition = [[TMInfoManager sharedManager] purchaseInfoForAdditionalCartType:self.type];
     for (NSDictionary *product in arrayAddition)
     {
         NSNumber *productId = [product objectForKey:SymphoxAPIParam_cpdt_num];
         if (productId == nil)
         {
             continue;
+        }
+        NSDictionary *purchaseInfo = [dictionaryAddition objectForKey:productId];
+        NSNumber *realProductId = [purchaseInfo objectForKey:SymphoxAPIParam_real_cpdt_num];
+        if (realProductId)
+        {
+            productId = realProductId;
         }
         [arrayCheck addObject:productId];
     }
@@ -2358,9 +2374,15 @@ typedef enum : NSUInteger {
             continue;
         }
         NSMutableDictionary *dictionaryCheck = [NSMutableDictionary dictionary];
+        NSDictionary *purchaseInfo = [dictionary objectForKey:productId];
+        NSNumber *realProductId = [purchaseInfo objectForKey:SymphoxAPIParam_real_cpdt_num];
+        if (realProductId)
+        {
+            productId = realProductId;
+        }
         [dictionaryCheck setObject:productId forKey:SymphoxAPIParam_cpdt_num];
         
-        NSDictionary *purchaseInfo = [dictionary objectForKey:productId];
+        
         NSNumber *quantity = nil;
         if (purchaseInfo == nil)
         {
@@ -2433,9 +2455,15 @@ typedef enum : NSUInteger {
             continue;
         }
         NSMutableDictionary *dictionaryCheck = [NSMutableDictionary dictionary];
+        NSDictionary *purchaseInfo = [dictionaryAddition objectForKey:productId];
+        NSNumber *realProductId = [purchaseInfo objectForKey:SymphoxAPIParam_real_cpdt_num];
+        if (realProductId)
+        {
+            productId = realProductId;
+        }
         [dictionaryCheck setObject:productId forKey:SymphoxAPIParam_cpdt_num];
         
-        NSDictionary *purchaseInfo = [dictionaryAddition objectForKey:productId];
+        
         NSNumber *quantity = nil;
         if (purchaseInfo == nil)
         {
