@@ -23,6 +23,7 @@
 @property (nonatomic, assign) CartType currentType;
 @property (nonatomic, strong) FullScreenLoadingView *viewLoading;
 @property (nonatomic, strong) NSMutableDictionary *dictionaryTotal;
+@property (nonatomic, strong) NSMutableDictionary *dictionaryAll;
 @property (nonatomic, strong) NSMutableArray *arrayAllProducts;
 @property (nonatomic, strong) NSNumberFormatter *numberFormatter;
 @property (nonatomic, strong) FullScreenSelectNumberView *viewQuantityInput;

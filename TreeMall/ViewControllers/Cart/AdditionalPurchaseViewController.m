@@ -158,6 +158,15 @@
     return _dictionaryTotal;
 }
 
+- (NSMutableDictionary *)dictionaryAll
+{
+    if (_dictionaryAll == nil)
+    {
+        _dictionaryAll = [[NSMutableDictionary alloc] initWithCapacity:0];
+    }
+    return _dictionaryAll;
+}
+
 - (NSMutableArray *)arrayAllProducts
 {
     if (_arrayAllProducts == nil)
@@ -632,6 +641,9 @@
         NSDictionary *resultDictionary = (NSDictionary *)jsonObject;
         [self.dictionaryTotal removeAllObjects];
         [self.arrayAllProducts removeAllObjects];
+        [self.dictionaryAll removeAllObjects];
+        
+        [self.dictionaryAll setDictionary:resultDictionary];
         NSDictionary *summary = [resultDictionary objectForKey:SymphoxAPIParam_account_result];
         if (summary)
         {
@@ -1170,7 +1182,7 @@
     if (self.currentType == CartTypeFastDelivery)
     {
         shouldBuyFastDelivery = (total_cash == nil || [total_cash isEqual:[NSNull null]] || [total_cash integerValue] < TMFastDeliveryThreshold);
-        NSArray *array_delivery_limit = [self.dictionaryTotal objectForKey:SymphoxAPIParam_delivery_limit];
+        NSArray *array_delivery_limit = [self.dictionaryAll objectForKey:SymphoxAPIParam_delivery_limit];
         if (array_delivery_limit && [array_delivery_limit isEqual:[NSNull null]] == NO && [array_delivery_limit count] > 0)
         {
             NSDictionary *delivery_limit = [array_delivery_limit objectAtIndex:0];

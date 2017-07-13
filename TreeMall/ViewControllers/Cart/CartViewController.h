@@ -23,6 +23,7 @@
 @property (nonatomic, assign) CartType currentType;
 @property (nonatomic, strong) NSMutableArray *arrayProducts;
 @property (nonatomic, strong) NSMutableDictionary *dictionaryTotal;
+@property (nonatomic, strong) NSMutableDictionary *dictionaryAll;
 @property (nonatomic, strong) NSNumberFormatter *numberFormatter;
 @property (nonatomic, strong) UIImageView *tableBackgroundView;
 @property (nonatomic, strong) UILabel *labelNoContent;

@@ -277,6 +277,15 @@
     return _dictionaryTotal;
 }
 
+- (NSMutableDictionary *)dictionaryAll
+{
+    if (_dictionaryAll == nil)
+    {
+        _dictionaryAll = [[NSMutableDictionary alloc] initWithCapacity:0];
+    }
+    return _dictionaryAll;
+}
+
 - (NSNumberFormatter *)numberFormatter
 {
     if (_numberFormatter == nil)
@@ -729,11 +738,15 @@
         NSDictionary *resultDictionary = (NSDictionary *)jsonObject;
         [self.dictionaryTotal removeAllObjects];
         [self.arrayProducts removeAllObjects];
+        [self.dictionaryAll removeAllObjects];
+        
+        [self.dictionaryAll setDictionary:resultDictionary];
         NSDictionary *summary = [resultDictionary objectForKey:SymphoxAPIParam_account_result];
         if (summary)
         {
             [self.dictionaryTotal setDictionary:summary];
         }
+        
         NSMutableArray *array = [[resultDictionary objectForKey:SymphoxAPIParam_cart_item] mutableCopy];
         NSString *errorTitle = nil;
         NSMutableString *notifyString = [NSMutableString string];
@@ -884,6 +897,7 @@
             // Should show additional purchase page
             AdditionalPurchaseViewController *viewController = [[AdditionalPurchaseViewController alloc] initWithNibName:@"AdditionalPurchaseViewController" bundle:[NSBundle mainBundle]];
             [viewController.dictionaryTotal setDictionary:weakSelf.dictionaryTotal];
+            [viewController.dictionaryAll setDictionary:weakSelf.dictionaryAll];
             viewController.arrayProducts = array;
             viewController.arrayProductsFromCart = weakSelf.arrayProducts;
             viewController.bottomBar.label.attributedText = weakSelf.bottomBar.label.attributedText;
@@ -899,7 +913,7 @@
             if (type == CartTypeFastDelivery)
             {
                 shouldBuyFastDelivery = (total_cash == nil || [total_cash isEqual:[NSNull null]] || [total_cash integerValue] < TMFastDeliveryThreshold);
-                NSArray *array_delivery_limit = [weakSelf.dictionaryTotal objectForKey:SymphoxAPIParam_delivery_limit];
+                NSArray *array_delivery_limit = [weakSelf.dictionaryAll objectForKey:SymphoxAPIParam_delivery_limit];
                 if (array_delivery_limit && [array_delivery_limit isEqual:[NSNull null]] == NO && [array_delivery_limit count] > 0)
                 {
                     NSDictionary *delivery_limit = [array_delivery_limit objectAtIndex:0];
@@ -1503,14 +1517,14 @@
         
         NSMutableAttributedString *totalCostString = [[NSMutableAttributedString alloc] init];
         NSInteger originLength = [totalCostString length];
-        NSDictionary *attributeGray = [NSDictionary dictionaryWithObjectsAndKeys:[UIFont systemFontOfSize:16.0], NSFontAttributeName, [UIColor grayColor], NSForegroundColorAttributeName, nil];
-        NSDictionary *attributeGraySmall = [NSDictionary dictionaryWithObjectsAndKeys:[UIFont systemFontOfSize:14.0], NSFontAttributeName, [UIColor grayColor], NSForegroundColorAttributeName, nil];
+//        NSDictionary *attributeGray = [NSDictionary dictionaryWithObjectsAndKeys:[UIFont systemFontOfSize:16.0], NSFontAttributeName, [UIColor grayColor], NSForegroundColorAttributeName, nil];
+//        NSDictionary *attributeGraySmall = [NSDictionary dictionaryWithObjectsAndKeys:[UIFont systemFontOfSize:14.0], NSFontAttributeName, [UIColor grayColor], NSForegroundColorAttributeName, nil];
         NSDictionary *attributeRed = [NSDictionary dictionaryWithObjectsAndKeys:[UIFont systemFontOfSize:18.0], NSFontAttributeName, [UIColor redColor], NSForegroundColorAttributeName, nil];
         NSDictionary *attributeRedSmall = [NSDictionary dictionaryWithObjectsAndKeys:[UIFont systemFontOfSize:16.0], NSFontAttributeName, [UIColor redColor], NSForegroundColorAttributeName, nil];
 //        NSAttributedString *plusString = [[NSAttributedString alloc] initWithString:@"＋" attributes:attributeRed];
-        BOOL hasPureCash = (mixCash != nil) && ([mixCash unsignedIntegerValue] > 0) && cpdt_owner_num && ([cpdt_owner_num integerValue] == 3);
-        BOOL hasPurePoint = (mixPoint != nil) && ([mixPoint unsignedIntegerValue] > 0) && cpdt_owner_num && ([cpdt_owner_num integerValue] == 1);
-        BOOL hasMixedPrice = (mixCash != nil) && ([mixCash unsignedIntegerValue] > 0) && (numberPoint != nil) && ([numberPoint unsignedIntegerValue] > 0) && cpdt_owner_num && ([cpdt_owner_num integerValue] == 2);
+        BOOL hasPureCash = (numberCash != nil) && ([numberCash unsignedIntegerValue] > 0) && cpdt_owner_num && ([cpdt_owner_num integerValue] == 3);
+        BOOL hasPurePoint = (numberPoint != nil) && ([numberPoint unsignedIntegerValue] > 0) && cpdt_owner_num && ([cpdt_owner_num integerValue] == 1);
+        BOOL hasMixedPrice = (numberCash != nil) && ([numberCash unsignedIntegerValue] > 0) && (numberPoint != nil) && ([numberPoint unsignedIntegerValue] > 0) && cpdt_owner_num && ([cpdt_owner_num integerValue] == 2);
 //        if (hasPureCash && hasPurePoint)
 //        {
 //            NSString *stringCash = [self.numberFormatter stringFromNumber:numberCash];
@@ -1535,14 +1549,14 @@
 //        else
             if (hasPureCash)
         {
-            NSString *stringTotal = [self.numberFormatter stringFromNumber:mixCash];
+            NSString *stringTotal = [self.numberFormatter stringFromNumber:numberCash];
             NSString *string = [NSString stringWithFormat:@"＄%@", stringTotal];
             NSAttributedString *attrString = [[NSAttributedString alloc] initWithString:string attributes:attributeRed];
             [totalCostString appendAttributedString:attrString];
         }
         else if (hasPurePoint)
         {
-            NSString *stringTotal = [self.numberFormatter stringFromNumber:mixPoint];
+            NSString *stringTotal = [self.numberFormatter stringFromNumber:numberPoint];
             NSMutableAttributedString *attrString = [[NSMutableAttributedString alloc] initWithString:stringTotal attributes:attributeRed];
             NSAttributedString *attrPoint = [[NSAttributedString alloc] initWithString:[LocalizedString Point] attributes:attributeRedSmall];
             [attrString appendAttributedString:attrPoint];
@@ -1550,7 +1564,7 @@
         }
         else if (hasMixedPrice)
         {
-            NSString *stringCash = [self.numberFormatter stringFromNumber:mixCash];
+            NSString *stringCash = [self.numberFormatter stringFromNumber:numberCash];
             if (stringCash)
             {
                 NSString *string = [NSString stringWithFormat:@"＄%@", stringCash];
@@ -1560,7 +1574,7 @@
                 [totalCostString appendAttributedString:slashString];
             }
             
-            NSString *stringPoint = [self.numberFormatter stringFromNumber:mixPoint];
+            NSString *stringPoint = [self.numberFormatter stringFromNumber:numberPoint];
             if (stringPoint)
             {
                 NSMutableAttributedString *attrString = [[NSMutableAttributedString alloc] initWithString:stringPoint attributes:attributeRed];

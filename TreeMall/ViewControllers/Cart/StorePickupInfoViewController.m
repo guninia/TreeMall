@@ -1530,7 +1530,7 @@ typedef enum : NSUInteger {
     {
 //        NSDictionary *dictionary = [arrayTarget objectAtIndex:index];
 //        NSString *name = [dictionary objectForKey:SymphoxAPIParam_name];
-        NSString *name = [NSString stringWithFormat:@"%@%li", [LocalizedString Contact], (long)index];
+        NSString *name = [NSString stringWithFormat:@"%@%li", [LocalizedString Contact], (long)(index + 1)];
         UIAlertAction *action = [UIAlertAction actionWithTitle:name style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
             [weakSelf setCurrentDeliveryTargetForIndex:index];
         }];
