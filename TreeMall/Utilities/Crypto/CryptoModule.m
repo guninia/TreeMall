@@ -84,24 +84,29 @@ static CryptoModule *gCryptoModule = nil;
         if ([jsonObject isKindOfClass:[NSDictionary class]])
         {
             NSDictionary *dictionary = (NSDictionary *)jsonObject;
+            
             NSString *statusId = [dictionary objectForKey:SymphoxAPIParam_status_id];
             if (statusId)
             {
                 [userInfo setObject:statusId forKey:SymphoxAPIParam_id];
             }
+            NSString *result = [dictionary objectForKey:SymphoxAPIParam_result];
+            NSString *statusCat = [statusId stringByTrimmingCharactersInSet:[NSCharacterSet decimalDigitCharacterSet]];
+            NSString *statusCode = [statusId stringByTrimmingCharactersInSet:[NSCharacterSet letterCharacterSet]];
             NSString *statusDescription = [dictionary objectForKey:SymphoxAPIParam_status_desc];
+            
             if (statusDescription)
             {
                 [userInfo setObject:statusDescription forKey:SymphoxAPIParam_server_desc];
             }
 //            NSLog(@"API status[%@][%@]", statusId, statusDescription);
-            
-            NSString *result = [dictionary objectForKey:SymphoxAPIParam_result];
-            NSString *statusCat = [statusId stringByTrimmingCharactersInSet:[NSCharacterSet decimalDigitCharacterSet]];
-            NSString *statusCode = [statusId stringByTrimmingCharactersInSet:[NSCharacterSet letterCharacterSet]];
-            NSLog(@"statusCat[%@] statusCode[%@]", statusCat, statusCode);
+//            NSLog(@"statusCat[%@] statusCode[%@]", statusCat, statusCode);
+            NSMutableString *errorMessage = [NSMutableString string];
+            NSErrorDomain errorDomain = NSCocoaErrorDomain;
+            NSInteger errorCode = NSNotFound;
             if ([statusCat compare:@"E" options:NSCaseInsensitiveSearch] == NSOrderedSame)
             {
+                
                 switch ([statusCode integerValue]) {
                     case 0:
                     {
@@ -115,104 +120,91 @@ static CryptoModule *gCryptoModule = nil;
                                 data = [CryptoTool decryptData:sourceData withKey:self.key andIV:nil forAlgorithm:CryptoAlgorithmAES128ECBPKCS7];
                                 if (data == nil)
                                 {
-                                    error = [NSError errorWithDomain:NSCocoaErrorDomain code:CryptoErrorCodeDecryptAesError userInfo:userInfo];
+                                    errorCode = CryptoErrorCodeDecryptAesError;
                                 }
                             }
                             else
                             {
-                                error = [NSError errorWithDomain:NSCocoaErrorDomain code:CryptoErrorCodeDecodeBase64Error userInfo:userInfo];
+                                errorCode = CryptoErrorCodeDecodeBase64Error;
                             }
                         }
                     }
                         break;
                     case 107:
                     {
-                        [userInfo setObject:[LocalizedString NoSuchDonationCode] forKey:SymphoxAPIParam_status_desc];
-                        error = [NSError errorWithDomain:NSCocoaErrorDomain code:CryptoErrorCodeServerResponseError userInfo:userInfo];
+                        [errorMessage appendString:[LocalizedString NoSuchDonationCode]];
+                        errorCode = CryptoErrorCodeServerResponseError;
+                        
                     }
                         break;
                     case 202:
                     {
-                        [userInfo setObject:[LocalizedString NotMemberYet] forKey:SymphoxAPIParam_status_desc];
-                        error = [NSError errorWithDomain:NSCocoaErrorDomain code:CryptoErrorCodeServerResponseError userInfo:userInfo];
+                        [errorMessage appendString:[LocalizedString NotMemberYet]];
+                        errorCode = CryptoErrorCodeServerResponseError;
                     }
                         break;
                     case 209:
                     {
-                        [userInfo setObject:[LocalizedString CreditCardFormatError] forKey:SymphoxAPIParam_status_desc];
-                        error = [NSError errorWithDomain:NSCocoaErrorDomain code:CryptoErrorCodeServerResponseError userInfo:userInfo];
+                        [errorMessage appendString:[LocalizedString CreditCardFormatError]];
+                        errorCode = CryptoErrorCodeServerResponseError;
                     }
                         break;
                     case 210:
                     {
-                        [userInfo setObject:[LocalizedString BonusPointUsageLimitation] forKey:SymphoxAPIParam_status_desc];
-                        error = [NSError errorWithDomain:NSCocoaErrorDomain code:CryptoErrorCodeServerResponseError userInfo:userInfo];
+                        [errorMessage appendString:[LocalizedString BonusPointUsageLimitation]];
+                        errorCode = CryptoErrorCodeServerResponseError;
                     }
                         break;
                     case 301:
                     {
-                        [userInfo setObject:[LocalizedString NoMatchedProduct] forKey:SymphoxAPIParam_status_desc];
-                        error = [NSError errorWithDomain:NSCocoaErrorDomain code:CryptoErrorCodeServerResponseError userInfo:userInfo];
+                        [errorMessage appendString:[LocalizedString NoMatchedProduct]];
+                        errorCode = CryptoErrorCodeServerResponseError;
                     }
                         break;
                     case 403:
                     {
-                        [userInfo setObject:[LocalizedString NotEnoughProductInStock] forKey:SymphoxAPIParam_status_desc];
-                        error = [NSError errorWithDomain:NSCocoaErrorDomain code:CryptoErrorCodeServerResponseError userInfo:userInfo];
+                        [errorMessage appendString:[LocalizedString NotEnoughProductInStock]];
+                        errorCode = CryptoErrorCodeServerResponseError;
                     }
                         break;
                     case 404:
                     {
-                        [userInfo setObject:[LocalizedString ProductNoLongerAvailable] forKey:SymphoxAPIParam_status_desc];
-                        error = [NSError errorWithDomain:NSCocoaErrorDomain code:CryptoErrorCodeServerResponseError userInfo:userInfo];
+                        [errorMessage appendString:[LocalizedString ProductNoLongerAvailable]];
+                        errorCode = CryptoErrorCodeServerResponseError;
                     }
                         break;
                     case 407:
                     {
-                        [userInfo setObject:[LocalizedString NoAdditionalPurchaseForTargetAmount] forKey:SymphoxAPIParam_status_desc];
-                        error = [NSError errorWithDomain:NSCocoaErrorDomain code:CryptoErrorCodeServerResponseError userInfo:userInfo];
+                        [errorMessage appendString:[LocalizedString NoAdditionalPurchaseForTargetAmount]];
+                        errorCode = CryptoErrorCodeServerResponseError;
                     }
                         break;
                     case 408:
                     case 411:
                     {
-                        [userInfo setObject:[LocalizedString NoAdditionalPurchase] forKey:SymphoxAPIParam_status_desc];
-                        error = [NSError errorWithDomain:NSCocoaErrorDomain code:CryptoErrorCodeServerResponseError userInfo:userInfo];
+                        [errorMessage appendString:[LocalizedString NoAdditionalPurchase]];
+                        errorCode = CryptoErrorCodeServerResponseError;
                     }
                         break;
                     
                     default:
                     {
-                        [userInfo setObject:[LocalizedString SystemErrorTryLater] forKey:SymphoxAPIParam_status_desc];
-                        error = [NSError errorWithDomain:NSCocoaErrorDomain code:CryptoErrorCodeServerResponseError userInfo:userInfo];
+                        [errorMessage appendString:[LocalizedString SystemErrorTryLater]];
+                        errorCode = CryptoErrorCodeServerResponseError;
                     }
                         break;
                 }
             }
-//            if ([statusId compare:@"E000" options:NSCaseInsensitiveSearch] == NSOrderedSame)
-//            {
-//                if (result)
-//                {
-//                    NSData *resultData = [result dataUsingEncoding:NSUTF8StringEncoding];
-//                    NSData *sourceData = [CryptoTool dataFromBase64EncodedData:resultData];
-//                    if (sourceData)
-//                    {
-//                        data = [CryptoTool decryptData:sourceData withKey:self.key andIV:nil forAlgorithm:CryptoAlgorithmAES128ECBPKCS7];
-//                        if (data == nil)
-//                        {
-//                            error = [NSError errorWithDomain:NSCocoaErrorDomain code:CryptoErrorCodeDecryptAesError userInfo:userInfo];
-//                        }
-//                    }
-//                    else
-//                    {
-//                        error = [NSError errorWithDomain:NSCocoaErrorDomain code:CryptoErrorCodeDecodeBase64Error userInfo:userInfo];
-//                    }
-//                }
-//            }
-//            else
-//            {
-//                error = [NSError errorWithDomain:NSCocoaErrorDomain code:CryptoErrorCodeServerResponseError userInfo:userInfo];
-//            }
+            if (errorCode != NSNotFound)
+            {
+                if ([errorMessage length] == 0)
+                {
+                    [errorMessage appendString:[LocalizedString SystemErrorTryLater]];
+                }
+                [errorMessage appendFormat:@"\n(%@)", statusId];
+                [userInfo setObject:errorMessage forKey:SymphoxAPIParam_status_desc];
+                error = [NSError errorWithDomain:errorDomain code:errorCode userInfo:userInfo];
+            }
         }
         else
         {
