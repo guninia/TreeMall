@@ -259,8 +259,8 @@
     }
     if (self.labelCondition && [self.labelCondition isHidden] == NO)
     {
-        NSString *defaultString = self.labelCondition.text;
-        CGSize sizeText = [defaultString sizeWithAttributes:self.attributesCondition];
+        NSAttributedString *defaultString = self.labelCondition.attributedText;
+        CGSize sizeText = [defaultString boundingRectWithSize:CGSizeMake(positionRightEnd - originX - intervalH, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin context:nil].size;
         CGSize sizeLabel = CGSizeMake(ceil(sizeText.width), ceil(sizeText.height));
         CGRect frame = CGRectMake(originX, originY, positionRightEnd - originX, sizeLabel.height);
         self.labelCondition.frame = frame;
