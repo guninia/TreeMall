@@ -26,6 +26,10 @@
     // Do any additional setup after loading the view from its nib.
     UIBarButtonItem *buttonItemIndicator = [[UIBarButtonItem alloc] initWithCustomView:self.activityIndicator];
     [self.navigationItem setRightBarButtonItem:buttonItemIndicator];
+    UIImage *image = [[UIImage imageNamed:@"car_popup_close"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:image style:UIBarButtonItemStylePlain target:self action:@selector(buttonItemClosePressed:)];
+    
+    
     [self.webView setHidden:YES];
     [self.view addSubview:self.wkWebView];
     
@@ -115,6 +119,13 @@
             [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
         }
     });
+}
+
+#pragma mark - Actions
+
+- (void)buttonItemClosePressed:(id)sender
+{
+    [self dismiss];
 }
 
 #pragma mark - UIWebViewDelegate

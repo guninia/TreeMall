@@ -25,6 +25,7 @@
 @property (nonatomic, strong) UIButton *buttonAddToCart;
 @property (nonatomic, strong) UIView *separator;
 @property (nonatomic, strong) UIButton *buttonPurchase;
+@property (nonatomic, strong) UIButton *buttonPurchaseOnly;
 @property (nonatomic, strong) UILabel *labelInvalid;
 @property (nonatomic, strong) NSArray *arrayButtonSettings;
 @property (nonatomic, strong) UIColor *backgorundColorValid;

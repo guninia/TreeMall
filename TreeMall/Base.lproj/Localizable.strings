@@ -356,3 +356,5 @@
 "Contact"="Contact";
 "RaiseFreePoint"="Raise point";
 "_I_TimesFreePoint"="× %li";
+"UnexpectedFormat"="Unexpected Format";
+"ProductSizeExceedLimit"="ProductSizeExceedLimit";

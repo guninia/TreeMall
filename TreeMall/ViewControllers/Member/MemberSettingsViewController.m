@@ -80,6 +80,9 @@ typedef enum : NSUInteger {
     [self.tableView registerClass:[MemberSettingsTableViewCell class] forCellReuseIdentifier:MemberSettingsTableViewCellIdentifier];
     [self.tableView setSeparatorInset:UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0)];
     
+    // To remove unnecessary separator on lower part of tableview.
+    self.tableView.tableFooterView = [UIView new];
+    
     [self.navigationController.tabBarController.view addSubview:self.viewLoading];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handlerOfUserInformationUpdatedNotification:) name:PostNotificationName_UserInformationUpdated object:nil];

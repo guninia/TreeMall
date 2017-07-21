@@ -357,3 +357,5 @@
 "Contact"="通訊錄";
 "RaiseFreePoint"="加碼送";
 "_I_TimesFreePoint"="× %li倍送";
+"UnexpectedFormat"="資料格式錯誤";
+"ProductSizeExceedLimit"="商品尺寸超過超商取貨限制";

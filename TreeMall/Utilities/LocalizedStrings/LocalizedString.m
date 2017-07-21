@@ -3521,4 +3521,24 @@
     return _I_TimesFreePoint;
 }
 
++ (NSString *)UnexpectedFormat
+{
+    static NSString *UnexpectedFormat = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        UnexpectedFormat = NSLocalizedString(@"UnexpectedFormat", nil);
+    });
+    return UnexpectedFormat;
+}
+
++ (NSString *)ProductSizeExceedLimit
+{
+    static NSString *ProductSizeExceedLimit = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        ProductSizeExceedLimit = NSLocalizedString(@"ProductSizeExceedLimit", nil);
+    });
+    return ProductSizeExceedLimit;
+}
+
 @end

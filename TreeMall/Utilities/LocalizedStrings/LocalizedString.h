@@ -361,5 +361,7 @@
 + (NSString *)Contact;
 + (NSString *)RaiseFreePoint;
 + (NSString *)_I_TimesFreePoint;
++ (NSString *)UnexpectedFormat;
++ (NSString *)ProductSizeExceedLimit;
 
 @end

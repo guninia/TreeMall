@@ -31,6 +31,7 @@
         [self addSubview:self.buttonAddToCart];
         [self addSubview:self.buttonPurchase];
         [self addSubview:self.separator];
+        [self addSubview:self.buttonPurchaseOnly];
         [self addSubview:self.labelInvalid];
     }
     return self;
@@ -84,6 +85,12 @@
     if (self.separator && [self.separator isHidden] == NO)
     {
         
+    }
+    if (self.buttonPurchaseOnly && [self.buttonPurchaseOnly isHidden] == NO)
+    {
+        CGFloat buttonOriginX = CGRectGetMaxX(self.buttonFavorite.frame);
+        CGRect frame = CGRectMake(buttonOriginX, 0.0, self.frame.size.width - buttonOriginX, self.frame.size.height);
+        self.buttonPurchaseOnly.frame = frame;
     }
     if (self.labelInvalid && [self.labelInvalid isHidden] == NO)
     {
@@ -165,6 +172,26 @@
         [_buttonPurchase addTarget:self action:@selector(buttonPurchasePressed:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _buttonPurchase;
+}
+
+- (UIButton *)buttonPurchaseOnly
+{
+    if (_buttonPurchaseOnly == nil)
+    {
+        _buttonPurchaseOnly = [[UIButton alloc] initWithFrame:CGRectZero];
+        [_buttonPurchaseOnly setBackgroundColor:self.backgorundColorValid];
+        UIImage *image = [UIImage imageNamed:@"sho_info_bnt_pay"];
+        if (image)
+        {
+            [_buttonPurchaseOnly setImage:image forState:UIControlStateNormal];
+        }
+        [_buttonPurchaseOnly setTitle:[LocalizedString Purchase] forState:UIControlStateNormal];
+        UIFont *font = [UIFont systemFontOfSize:16.0];
+        [_buttonPurchaseOnly.titleLabel setFont:font];
+        [_buttonPurchaseOnly addTarget:self action:@selector(buttonPurchasePressed:) forControlEvents:UIControlEventTouchUpInside];
+        _buttonPurchaseOnly.hidden = YES;
+    }
+    return _buttonPurchaseOnly;
 }
 
 - (UILabel *)labelInvalid

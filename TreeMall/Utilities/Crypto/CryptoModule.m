@@ -130,6 +130,13 @@ static CryptoModule *gCryptoModule = nil;
                         }
                     }
                         break;
+                    case 101:
+                    case 102:
+                    {
+                        [errorMessage appendString:[LocalizedString UnexpectedFormat]];
+                        errorCode = CryptoErrorCodeServerResponseError;
+                    }
+                        break;
                     case 107:
                     {
                         [errorMessage appendString:[LocalizedString NoSuchDonationCode]];
@@ -158,6 +165,12 @@ static CryptoModule *gCryptoModule = nil;
                     case 301:
                     {
                         [errorMessage appendString:[LocalizedString NoMatchedProduct]];
+                        errorCode = CryptoErrorCodeServerResponseError;
+                    }
+                        break;
+                    case 400:
+                    {
+                        [errorMessage appendString:[LocalizedString ProductSizeExceedLimit]];
                         errorCode = CryptoErrorCodeServerResponseError;
                     }
                         break;

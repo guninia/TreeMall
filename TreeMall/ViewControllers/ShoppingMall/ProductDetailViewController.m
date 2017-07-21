@@ -572,6 +572,7 @@
     {
         return;
     }
+    self.bottomBar.hidden = YES;
     __weak ProductDetailViewController *weakSelf = self;
     NSString *apiKey = [CryptoModule sharedModule].apiKey;
     NSString *token = [SHAPIAdapter sharedAdapter].token;
@@ -624,6 +625,7 @@
                     // Also layout subviews.
                     dispatch_async(dispatch_get_main_queue(), ^{
                         [weakSelf layoutCustomSubviews];
+                        weakSelf.bottomBar.hidden = NO;
                     });
                     
                 }
@@ -1423,6 +1425,7 @@
 //            [self.bottomBar.buttonAddToCart setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
             [self.bottomBar.buttonAddToCart setEnabled:NO];
             self.bottomBar.separator.hidden = YES;
+            self.bottomBar.buttonPurchaseOnly.hidden = NO;
         }
         else
         {
@@ -1430,6 +1433,7 @@
 //            [self.bottomBar.buttonAddToCart setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
             [self.bottomBar.buttonAddToCart setEnabled:YES];
             self.bottomBar.separator.hidden = NO;
+            self.bottomBar.buttonPurchaseOnly.hidden = YES;
         }
         [self.bottomBar setIsProductInvalid:isInvalid];
         [self.bottomBar.buttonPurchase setTitle:textPurchase forState:UIControlStateNormal];

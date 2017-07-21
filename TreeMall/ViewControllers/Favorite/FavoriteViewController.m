@@ -304,18 +304,21 @@
         NSString *imagePath = [dictionary objectForKey:SymphoxAPIParam_prod_pic_url];
         cell.imagePath = imagePath;
         NSMutableArray *arrayTags = [NSMutableArray array];
-        NSNumber *to_store_cart = [dictionary objectForKey:SymphoxAPIParam_to_store_cart];
-        if (to_store_cart && [to_store_cart isEqual:[NSNull null]] == NO && [to_store_cart boolValue])
-        {
-            NSDictionary *dictionary = [NSDictionary dictionaryWithObjectsAndKeys:@"超取", ProductTableViewCellTagText, [UIColor colorWithRed:(152.0/255.0) green:(194.0/255.0) blue:(67.0/255.0) alpha:1.0], NSForegroundColorAttributeName, nil];
-            [arrayTags addObject:dictionary];
-        }
+        
         NSNumber *quick = [dictionary objectForKey:SymphoxAPIParam_quick];
         if (quick && ([quick isEqual:[NSNull null]] == NO) && [quick boolValue])
         {
             NSDictionary *dictionary = [NSDictionary dictionaryWithObjectsAndKeys:@"8H", ProductTableViewCellTagText, [UIColor colorWithRed:(152.0/255.0) green:(194.0/255.0) blue:(67.0/255.0) alpha:1.0], NSForegroundColorAttributeName, nil];
             [arrayTags addObject:dictionary];
         }
+        
+        NSNumber *to_store_cart = [dictionary objectForKey:SymphoxAPIParam_to_store_cart];
+        if (to_store_cart && [to_store_cart isEqual:[NSNull null]] == NO && [to_store_cart boolValue])
+        {
+            NSDictionary *dictionary = [NSDictionary dictionaryWithObjectsAndKeys:@"超取", ProductTableViewCellTagText, [UIColor colorWithRed:(152.0/255.0) green:(194.0/255.0) blue:(67.0/255.0) alpha:1.0], NSForegroundColorAttributeName, nil];
+            [arrayTags addObject:dictionary];
+        }
+        
         NSNumber *discountNow = [dictionary objectForKey:SymphoxAPIParam_chk_tactic_click];
         if (discountNow && ([discountNow isEqual:[NSNull null]] == NO) && [discountNow boolValue])
         {
@@ -480,6 +483,7 @@
     NSDictionary *dictionary = [self.arrayFavorites objectAtIndex:indexPath.row];
     viewController.dictionaryCommon = dictionary;
     viewController.title = [LocalizedString ProductInfo];
+    viewController.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:viewController animated:YES];
 }
 

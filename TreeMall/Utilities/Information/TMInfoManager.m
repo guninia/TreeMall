@@ -885,9 +885,9 @@ static NSUInteger SearchKeywordNumberMax = 8;
         [dictionaryArchive setObject:_dictionaryUserInfo forKey:TMInfoArchiveKey_UserInformation];
         [dictionaryArchive setObject:_dictionaryCachedCategories forKey:TMInfoArchiveKey_CachedCategories];
         [dictionaryArchive setObject:[weakSelf.orderedSetKeyword array] forKey:TMInfoArchiveKey_OrderSetKeyword];
-        [dictionaryArchive setObject:[weakSelf.orderedSetFavoriteId array] forKey:TMInfoArchiveKey_OrderSetFavoriteId];
-        [dictionaryArchive setObject:weakSelf.arrayFavorite forKey:TMInfoArchiveKey_Favorites];
-        [dictionaryArchive setObject:weakSelf.dictionaryFavoriteDetail forKey:TMInfoArchiveKey_FavoritesDetail];
+//        [dictionaryArchive setObject:[weakSelf.orderedSetFavoriteId array] forKey:TMInfoArchiveKey_OrderSetFavoriteId];
+//        [dictionaryArchive setObject:weakSelf.arrayFavorite forKey:TMInfoArchiveKey_Favorites];
+//        [dictionaryArchive setObject:weakSelf.dictionaryFavoriteDetail forKey:TMInfoArchiveKey_FavoritesDetail];
         if (_numberArchiveTimestamp)
         {
             [dictionaryArchive setObject:_numberArchiveTimestamp forKey:TMInfoArchiveKey_ArchiveTimestamp];
@@ -925,6 +925,14 @@ static NSUInteger SearchKeywordNumberMax = 8;
             NSLog(@"TMInfoManager - archve failed.\n%@", [error description]);
         }
     });
+}
+
+- (void)saveToLocal
+{
+    [[NSUserDefaults standardUserDefaults] setObject:[self.orderedSetFavoriteId array] forKey:TMInfoArchiveKey_OrderSetFavoriteId];
+    [[NSUserDefaults standardUserDefaults] setObject:self.arrayFavorite forKey:TMInfoArchiveKey_Favorites];
+    [[NSUserDefaults standardUserDefaults] setObject:self.dictionaryFavoriteDetail forKey:TMInfoArchiveKey_FavoritesDetail];
+    [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
 - (NSDictionary *)loadFromArchive
@@ -1395,7 +1403,8 @@ static NSUInteger SearchKeywordNumberMax = 8;
     }
     [self.orderedSetFavoriteId addObject:productId];
     [self.arrayFavorite addObject:product];
-    [self saveToArchive];
+//    [self saveToArchive];
+    [self saveToLocal];
     NSLog(@"orderedSetFavoriteId[%li] arrayFavorite[%li]", (long)self.orderedSetFavoriteId.count, (long)self.arrayFavorite.count);
     resultString = [LocalizedString AddToFavoriteSuccess];
     
@@ -2327,17 +2336,20 @@ static NSUInteger SearchKeywordNumberMax = 8;
     {
         [_orderedSetKeyword addObjectsFromArray:arrayKeyword];
     }
-    NSArray *arrayFavorites = [dictionaryArchive objectForKey:TMInfoArchiveKey_Favorites];
+//    NSArray *arrayFavorites = [dictionaryArchive objectForKey:TMInfoArchiveKey_Favorites];
+    NSArray *arrayFavorites = [[NSUserDefaults standardUserDefaults] objectForKey:TMInfoArchiveKey_Favorites];
     if (arrayFavorites)
     {
         [_arrayFavorite addObjectsFromArray:arrayFavorites];
     }
-    NSDictionary *dictionaryFavoriteDetail = [dictionaryArchive objectForKey:TMInfoArchiveKey_FavoritesDetail];
+//    NSDictionary *dictionaryFavoriteDetail = [dictionaryArchive objectForKey:TMInfoArchiveKey_FavoritesDetail];
+    NSDictionary *dictionaryFavoriteDetail = [[NSUserDefaults standardUserDefaults] objectForKey:TMInfoArchiveKey_FavoritesDetail];
     if (dictionaryFavoriteDetail)
     {
         [_dictionaryFavoriteDetail setDictionary:dictionaryFavoriteDetail];
     }
-    NSArray *arrayFavoriteId = [dictionaryArchive objectForKey:TMInfoArchiveKey_OrderSetFavoriteId];
+//    NSArray *arrayFavoriteId = [dictionaryArchive objectForKey:TMInfoArchiveKey_OrderSetFavoriteId];
+    NSArray *arrayFavoriteId = [[NSUserDefaults standardUserDefaults] objectForKey:TMInfoArchiveKey_OrderSetFavoriteId];
     if (arrayFavoriteId)
     {
         [_orderedSetFavoriteId addObjectsFromArray:arrayFavoriteId];

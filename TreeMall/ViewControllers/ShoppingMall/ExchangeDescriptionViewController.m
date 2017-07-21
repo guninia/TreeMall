@@ -38,7 +38,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     [self.view setBackgroundColor:[UIColor whiteColor]];
-    if (self.navigationController != nil)
+    if (self.navigationController == nil)
     {
         [self.view.layer setMasksToBounds:YES];
         [self.view addSubview:self.toolBar];

@@ -390,17 +390,18 @@
         NSDictionary *dictionary = [self.arrayProducts objectAtIndex:indexPath.row];
         
         NSMutableArray *arrayTags = [NSMutableArray array];
-        NSNumber *is_delivery_store = [dictionary objectForKey:SymphoxAPIParam_is_delivery_store];
-        if (is_delivery_store && [is_delivery_store isEqual:[NSNull null]] == NO && [is_delivery_store boolValue])
-        {
-            NSDictionary *dictionary = [NSDictionary dictionaryWithObjectsAndKeys:@"超取", ProductTableViewCellTagText, [UIColor colorWithRed:(152.0/255.0) green:(194.0/255.0) blue:(67.0/255.0) alpha:1.0], NSForegroundColorAttributeName, nil];
-            [arrayTags addObject:dictionary];
-        }
         
         NSNumber *quick = [dictionary objectForKey:SymphoxAPIParam_quick];
         if (quick && ([quick isEqual:[NSNull null]] == NO) && [quick boolValue])
         {
             NSDictionary *dictionary = [NSDictionary dictionaryWithObjectsAndKeys:@"8H", ProductTableViewCellTagText, [UIColor colorWithRed:(152.0/255.0) green:(194.0/255.0) blue:(67.0/255.0) alpha:1.0], NSForegroundColorAttributeName, nil];
+            [arrayTags addObject:dictionary];
+        }
+        
+        NSNumber *is_delivery_store = [dictionary objectForKey:SymphoxAPIParam_is_delivery_store];
+        if (is_delivery_store && [is_delivery_store isEqual:[NSNull null]] == NO && [is_delivery_store boolValue])
+        {
+            NSDictionary *dictionary = [NSDictionary dictionaryWithObjectsAndKeys:@"超取", ProductTableViewCellTagText, [UIColor colorWithRed:(152.0/255.0) green:(194.0/255.0) blue:(67.0/255.0) alpha:1.0], NSForegroundColorAttributeName, nil];
             [arrayTags addObject:dictionary];
         }
         
