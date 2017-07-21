@@ -745,11 +745,11 @@
 
 - (void)actButtonLoginPressed:(id)sender
 {
-    if (self.switchAgreement.isOn == NO)
-    {
-        [self presentSimpleAlertViewForMessage:[LocalizedString PleaseAgreeMemberTermsFirst]];
-        return;
-    }
+//    if (self.switchAgreement.isOn == NO)
+//    {
+//        [self presentSimpleAlertViewForMessage:[LocalizedString PleaseAgreeMemberTermsFirst]];
+//        return;
+//    }
     [self startPreloginProcess];
 }
 

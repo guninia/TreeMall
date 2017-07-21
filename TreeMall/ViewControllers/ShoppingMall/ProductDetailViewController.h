@@ -16,7 +16,7 @@
 #import "ProductDetailSectionTitleView.h"
 #import <DTCoreText.h>
 
-@interface ProductDetailViewController : UIViewController <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, ProductDetailBottomBarDelegate, BorderedDoubleViewDelegate, DTAttributedTextContentViewDelegate, UIPopoverPresentationControllerDelegate>
+@interface ProductDetailViewController : UIViewController <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, ProductDetailBottomBarDelegate, BorderedDoubleViewDelegate, DTAttributedTextContentViewDelegate, UIPopoverPresentationControllerDelegate, UIWebViewDelegate>
 
 @property (nonatomic, strong) NSDictionary *dictionaryCommon;
 @property (nonatomic, strong) NSDictionary *dictionaryDetail;
@@ -42,12 +42,16 @@
 @property (nonatomic, strong) ImageTitleButton *buttonInstallmentCal;
 @property (nonatomic, strong) BorderedDoubleLabelView *viewChooseSpec;
 @property (nonatomic, strong) DTAttributedLabel *labelAdText;
+@property (nonatomic, strong) UIWebView *webViewAdText;
 @property (nonatomic, strong) ProductDetailSectionTitleView *viewIntroTitle;
 @property (nonatomic, strong) DTAttributedLabel *labelIntro;
+@property (nonatomic, strong) UIWebView *webViewIntro;
 @property (nonatomic, strong) ProductDetailSectionTitleView *viewSpecTitle;
 @property (nonatomic, strong) DTAttributedLabel *labelSpec;
+@property (nonatomic, strong) UIWebView *webViewSpec;
 @property (nonatomic, strong) ProductDetailSectionTitleView *viewRemarkTitle;
 @property (nonatomic, strong) DTAttributedLabel *labelRemark;
+@property (nonatomic, strong) UIWebView *webViewRemark;
 @property (nonatomic, strong) ProductDetailSectionTitleView *viewShippingAndWarrentyTitle;
 @property (nonatomic, strong) DTAttributedLabel *labelShippingAndWarrenty;
 @property (nonatomic, assign) CGSize sizeTextViewSpec;

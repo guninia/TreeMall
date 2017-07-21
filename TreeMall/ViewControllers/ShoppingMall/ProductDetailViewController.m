@@ -87,12 +87,16 @@
     [self.scrollView addSubview:self.buttonInstallmentCal];
     [self.scrollView addSubview:self.viewChooseSpec];
     [self.scrollView addSubview:self.labelAdText];
+    [self.scrollView addSubview:self.webViewAdText];
     [self.scrollView addSubview:self.viewIntroTitle];
     [self.scrollView addSubview:self.labelIntro];
+    [self.scrollView addSubview:self.webViewIntro];
     [self.scrollView addSubview:self.viewSpecTitle];
     [self.scrollView addSubview:self.labelSpec];
+    [self.scrollView addSubview:self.webViewSpec];
     [self.scrollView addSubview:self.viewRemarkTitle];
     [self.scrollView addSubview:self.labelRemark];
+    [self.scrollView addSubview:self.webViewRemark];
     [self.scrollView addSubview:self.viewShippingAndWarrentyTitle];
     [self.scrollView addSubview:self.labelShippingAndWarrenty];
     [self.scrollView addSubview:self.labelFastDelivery];
@@ -421,8 +425,23 @@
         _labelAdText.shouldDrawLinks = YES;
         _labelAdText.shouldDrawImages = YES;
         _labelAdText.delegate = self;
+        _labelAdText.hidden = YES;
     }
     return _labelAdText;
+}
+
+- (UIWebView *)webViewAdText
+{
+    if (_webViewAdText == nil)
+    {
+        _webViewAdText = [[UIWebView alloc] initWithFrame:CGRectMake(0.0, 0.0, self.view.frame.size.width, 1.0)];
+        _webViewAdText.tag = 2;
+        [_webViewAdText.scrollView setScrollEnabled:NO];
+//        [_webViewAdText setScalesPageToFit:YES];
+//        [_webViewAdText setContentMode:UIViewContentModeScaleAspectFit];
+        [_webViewAdText setDelegate:self];
+    }
+    return _webViewAdText;
 }
 
 - (ProductDetailSectionTitleView *)viewIntroTitle
@@ -449,8 +468,23 @@
         _labelIntro.shouldDrawLinks = YES;
         _labelIntro.shouldDrawImages = YES;
         _labelIntro.delegate = self;
+        _labelIntro.hidden = YES;
     }
     return _labelIntro;
+}
+
+- (UIWebView *)webViewIntro
+{
+    if (_webViewIntro == nil)
+    {
+        _webViewIntro = [[UIWebView alloc] initWithFrame:CGRectMake(0.0, 0.0, self.view.frame.size.width, 1.0)];
+        _webViewIntro.tag = 3;
+        [_webViewIntro.scrollView setScrollEnabled:NO];
+//        [_webViewIntro setScalesPageToFit:YES];
+//        [_webViewIntro setContentMode:UIViewContentModeScaleAspectFit];
+        [_webViewIntro setDelegate:self];
+    }
+    return _webViewIntro;
 }
 
 - (ProductDetailSectionTitleView *)viewSpecTitle
@@ -477,8 +511,23 @@
         _labelSpec.shouldDrawLinks = YES;
         _labelSpec.shouldDrawImages = YES;
         _labelSpec.delegate = self;
+        _labelSpec.hidden = YES;
     }
     return _labelSpec;
+}
+
+- (UIWebView *)webViewSpec
+{
+    if (_webViewSpec == nil)
+    {
+        _webViewSpec = [[UIWebView alloc] initWithFrame:CGRectMake(0.0, 0.0, self.view.frame.size.width, 1.0)];
+        _webViewSpec.tag = 4;
+        [_webViewSpec.scrollView setScrollEnabled:NO];
+//        [_webViewSpec setScalesPageToFit:YES];
+//        [_webViewSpec setContentMode:UIViewContentModeScaleAspectFit];
+        [_webViewSpec setDelegate:self];
+    }
+    return _webViewSpec;
 }
 
 - (ProductDetailSectionTitleView *)viewRemarkTitle
@@ -505,8 +554,23 @@
         _labelRemark.shouldDrawLinks = YES;
         _labelRemark.shouldDrawImages = YES;
         _labelRemark.delegate = self;
+        _labelRemark.hidden = YES;
     }
     return _labelRemark;
+}
+
+- (UIWebView *)webViewRemark
+{
+    if (_webViewRemark == nil)
+    {
+        _webViewRemark = [[UIWebView alloc] initWithFrame:CGRectMake(0.0, 0.0, self.view.frame.size.width, 1.0)];
+        _webViewRemark.tag = 5;
+        [_webViewRemark.scrollView setScrollEnabled:NO];
+//        [_webViewRemark setScalesPageToFit:YES];
+//        [_webViewRemark setContentMode:UIViewContentModeScaleAspectFit];
+        [_webViewRemark setDelegate:self];
+    }
+    return _webViewRemark;
 }
 
 - (ProductDetailSectionTitleView *)viewShippingAndWarrentyTitle
@@ -888,6 +952,17 @@
         self.labelAdText.frame = frame;
         originY = self.labelAdText.frame.origin.y + self.labelAdText.frame.size.height + 5.0;
     }
+    if (self.webViewAdText)
+    {
+        CGFloat maxWidth = self.scrollView.frame.size.width - marginL - marginR;
+        CGRect frame = self.webViewAdText.frame;
+        frame.origin.y = originY;
+        frame.origin.x = originX;
+        frame.size.width = maxWidth;
+        self.webViewAdText.frame = frame;
+//        NSLog(@"layoutCustomSubviews - webViewAdText[%4.2f,%4.2f]", frame.size.width, frame.size.height);
+        originY = self.webViewAdText.frame.origin.y + self.webViewAdText.frame.size.height + 5.0;
+    }
     
     if (self.viewIntroTitle && [self.viewIntroTitle isHidden] == NO)
     {
@@ -903,6 +978,17 @@
         CGRect frame = CGRectMake(originX, originY, maxWidth, ceil(size.height));
         self.labelIntro.frame = frame;
         originY = self.labelIntro.frame.origin.y + self.labelIntro.frame.size.height;
+    }
+    if (self.webViewIntro)
+    {
+        CGFloat maxWidth = self.scrollView.frame.size.width - marginL - marginR;
+        CGRect frame = self.webViewIntro.frame;
+        frame.origin.y = originY;
+        frame.origin.x = originX;
+        frame.size.width = maxWidth;
+        self.webViewIntro.frame = frame;
+        originY = self.webViewIntro.frame.origin.y + self.webViewIntro.frame.size.height;
+//        NSLog(@"layoutCustomSubviews - webViewIntro[%4.2f,%4.2f]", frame.size.width, frame.size.height);
     }
     
     if ([self.arrayIntroImageView count] > 0)
@@ -935,6 +1021,17 @@
         self.labelSpec.frame = frame;
         originY = self.labelSpec.frame.origin.y + self.labelSpec.frame.size.height + 5.0;
     }
+    if (self.webViewSpec)
+    {
+        CGFloat maxWidth = self.scrollView.frame.size.width - marginL - marginR;
+        CGRect frame = self.webViewSpec.frame;
+        frame.origin.y = originY;
+        frame.origin.x = originX;
+        frame.size.width = maxWidth;
+        self.webViewSpec.frame = frame;
+        originY = self.webViewSpec.frame.origin.y + self.webViewSpec.frame.size.height;
+//        NSLog(@"layoutCustomSubviews - webViewSpec[%4.2f,%4.2f]", frame.size.width, frame.size.height);
+    }
     
     if ([self.arraySpecImageView count] > 0)
     {
@@ -965,6 +1062,18 @@
         self.labelRemark.frame = frame;
         originY = self.labelRemark.frame.origin.y + self.labelRemark.frame.size.height + 5.0;
     }
+    if (self.webViewRemark)
+    {
+        CGFloat maxWidth = self.scrollView.frame.size.width - marginL - marginR;
+        CGRect frame = self.webViewRemark.frame;
+        frame.origin.y = originY;
+        frame.origin.x = originX;
+        frame.size.width = maxWidth;
+        self.webViewRemark.frame = frame;
+        originY = self.webViewRemark.frame.origin.y + self.webViewRemark.frame.size.height;
+//        NSLog(@"layoutCustomSubviews - webViewRemark[%4.2f,%4.2f]", frame.size.width, frame.size.height);
+    }
+    
     if (self.viewShippingAndWarrentyTitle && [self.viewShippingAndWarrentyTitle isHidden] == NO)
     {
         CGRect frame = CGRectMake(0.0, originY, self.scrollView.frame.size.width, 50.0);
@@ -1277,8 +1386,10 @@
                 self.labelAdText.attributedString = attrString;
                 shouldShow = YES;
             }
+            [self.webViewAdText loadHTMLString:stringAdTest baseURL:nil];
         }
-        [self.labelAdText setHidden:!shouldShow];
+//        [self.labelAdText setHidden:!shouldShow];
+        [self.labelAdText setHidden:YES];
     }
     
     if (self.viewIntroTitle && self.labelIntro)
@@ -1297,26 +1408,29 @@
                     self.labelIntro.attributedString = attrString;
                     shouldShow = YES;
                 }
+                [self.webViewIntro loadHTMLString:text baseURL:nil];
             }
-            NSArray *arrayImage = [dictionary objectForKey:SymphoxAPIParam_img_url];
-            if (arrayImage && [arrayImage isEqual:[NSNull null]] == NO && [arrayImage count] > 0)
-            {
-                UIImage *transparent = [UIImage imageNamed:@"transparent"];
-                for (NSInteger index = 0; index < [arrayImage count]; index++)
-                {
-                    NSString *imagePath = [arrayImage objectAtIndex:index];
-                    UIButton *button = [[UIButton alloc] initWithFrame:CGRectZero];
-                    button.tag = index;
-                    [button.imageView setContentMode:UIViewContentModeScaleAspectFit];
-                    [button sd_setImageWithURL:[NSURL URLWithString:imagePath] forState:UIControlStateNormal placeholderImage:transparent options:SDWebImageAllowInvalidSSLCertificates];
-                    [button addTarget:self action:@selector(buttonIntroImagePressed:) forControlEvents:UIControlEventTouchUpInside];
-                    [self.scrollView addSubview:button];
-                    [self.arrayIntroImageView addObject:button];
-                }
-            }
+//            NSArray *arrayImage = [dictionary objectForKey:SymphoxAPIParam_img_url];
+//            if (arrayImage && [arrayImage isEqual:[NSNull null]] == NO && [arrayImage count] > 0)
+//            {
+//                UIImage *transparent = [UIImage imageNamed:@"transparent"];
+//                for (NSInteger index = 0; index < [arrayImage count]; index++)
+//                {
+//                    NSString *imagePath = [arrayImage objectAtIndex:index];
+//                    UIButton *button = [[UIButton alloc] initWithFrame:CGRectZero];
+//                    button.tag = index;
+//                    [button.imageView setContentMode:UIViewContentModeScaleAspectFit];
+//                    [button sd_setImageWithURL:[NSURL URLWithString:imagePath] forState:UIControlStateNormal placeholderImage:transparent options:SDWebImageAllowInvalidSSLCertificates];
+//                    [button addTarget:self action:@selector(buttonIntroImagePressed:) forControlEvents:UIControlEventTouchUpInside];
+//                    [self.scrollView addSubview:button];
+//                    [self.arrayIntroImageView addObject:button];
+//                }
+//            }
         }
+//        [self.viewIntroTitle setHidden:!shouldShow];
+//        [self.labelIntro setHidden:!shouldShow];
         [self.viewIntroTitle setHidden:!shouldShow];
-        [self.labelIntro setHidden:!shouldShow];
+        [self.labelIntro setHidden:YES];
     }
     
     if (self.viewSpecTitle && self.labelSpec)
@@ -1335,26 +1449,28 @@
                     self.labelSpec.attributedString = attrString;
                     shouldShow = YES;
                 }
+                [self.webViewSpec loadHTMLString:text baseURL:nil];
             }
-            NSArray *arrayImage = [dictionary objectForKey:SymphoxAPIParam_img_url];
-            if (arrayImage && [arrayImage isEqual:[NSNull null]] == NO && [arrayImage count] > 0)
-            {
-                UIImage *transparent = [UIImage imageNamed:@"transparent"];
-                for (NSInteger index = 0; index < [arrayImage count]; index++)
-                {
-                    NSString *imagePath = [arrayImage objectAtIndex:index];
-                    UIButton *button = [[UIButton alloc] initWithFrame:CGRectZero];
-                    button.tag = index;
-                    [button.imageView setContentMode:UIViewContentModeScaleAspectFit];
-                    [button sd_setImageWithURL:[NSURL URLWithString:imagePath] forState:UIControlStateNormal placeholderImage:transparent options:SDWebImageAllowInvalidSSLCertificates];
-                    [button addTarget:self action:@selector(buttonSpecImagePressed:) forControlEvents:UIControlEventTouchUpInside];
-                    [self.scrollView addSubview:button];
-                    [self.arraySpecImageView addObject:button];
-                }
-            }
+//            NSArray *arrayImage = [dictionary objectForKey:SymphoxAPIParam_img_url];
+//            if (arrayImage && [arrayImage isEqual:[NSNull null]] == NO && [arrayImage count] > 0)
+//            {
+//                UIImage *transparent = [UIImage imageNamed:@"transparent"];
+//                for (NSInteger index = 0; index < [arrayImage count]; index++)
+//                {
+//                    NSString *imagePath = [arrayImage objectAtIndex:index];
+//                    UIButton *button = [[UIButton alloc] initWithFrame:CGRectZero];
+//                    button.tag = index;
+//                    [button.imageView setContentMode:UIViewContentModeScaleAspectFit];
+//                    [button sd_setImageWithURL:[NSURL URLWithString:imagePath] forState:UIControlStateNormal placeholderImage:transparent options:SDWebImageAllowInvalidSSLCertificates];
+//                    [button addTarget:self action:@selector(buttonSpecImagePressed:) forControlEvents:UIControlEventTouchUpInside];
+//                    [self.scrollView addSubview:button];
+//                    [self.arraySpecImageView addObject:button];
+//                }
+//            }
         }
         [self.viewSpecTitle setHidden:!shouldShow];
-        [self.labelSpec setHidden:!shouldShow];
+//        [self.labelSpec setHidden:!shouldShow];
+        [self.labelSpec setHidden:YES];
     }
     
     if (self.viewRemarkTitle && self.labelRemark)
@@ -1370,9 +1486,11 @@
                 self.labelRemark.attributedString = attrString;
                 shouldShow = YES;
             }
+            [self.webViewRemark loadHTMLString:text baseURL:nil];
         }
         [self.viewRemarkTitle setHidden:!shouldShow];
-        [self.labelRemark setHidden:!shouldShow];
+//        [self.labelRemark setHidden:!shouldShow];
+        [self.labelRemark setHidden:YES];
     }
     
     if (self.bottomBar)
@@ -2215,6 +2333,21 @@
 - (UIModalPresentationStyle)adaptivePresentationStyleForPresentationController:(UIPresentationController *)controller
 {
     return UIModalPresentationNone;
+}
+
+#pragma mark - UIWebViewDelegate
+
+- (void)webViewDidFinishLoad:(UIWebView *)webView
+{
+    NSString *result = [webView stringByEvaluatingJavaScriptFromString:@"document.body.scrollHeight;"];
+    
+    CGFloat height = [result integerValue];
+    CGRect frame = webView.frame;
+    NSLog(@"webViewDidFinishLoad - webView[%li][%4.2f,%4.2f][%@]", (long)webView.tag, webView.frame.size.width, webView.frame.size.height, result);
+    frame.size.height = height;
+    webView.frame = frame;
+    
+    [self.view setNeedsLayout];
 }
 
 @end
