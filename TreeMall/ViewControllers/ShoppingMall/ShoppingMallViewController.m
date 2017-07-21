@@ -479,6 +479,10 @@ typedef enum : NSUInteger {
     {
         [self retrieveMainCategoryData];
     }
+    else
+    {
+        
+    }
 }
 
 #pragma mark - UICollectionViewDataSource

@@ -363,5 +363,8 @@
 + (NSString *)_I_TimesFreePoint;
 + (NSString *)UnexpectedFormat;
 + (NSString *)ProductSizeExceedLimit;
++ (NSString *)BackToMain;
++ (NSString *)Share;
++ (NSString *)PointUsed;
 
 @end

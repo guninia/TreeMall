@@ -28,6 +28,7 @@ static NSString *OrderListCollectionViewCellIdentifier = @"OrderListCollectionVi
 @property (nonatomic, strong) UIImageView *imageView;
 @property (nonatomic, strong) TTTAttributedLabel *labelTitle;
 @property (nonatomic, strong) UILabel *labelOrderState;
+@property (nonatomic, strong) UILabel *labelPrice;
 @property (nonatomic, strong) UIView *viewOrderStateBackground;
 @property (nonatomic, strong) UIView *separator;
 @property (nonatomic, strong) OrderDeliverProgressView *progressView;

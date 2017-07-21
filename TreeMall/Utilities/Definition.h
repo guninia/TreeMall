@@ -27,6 +27,7 @@ static NSString *PostNotificationName_CartContentChanged = @"CartContentChanged"
 static NSString *PostNotificationName_JumpToShoppingMallAndPresentHall = @"JumpToShoppingMallAndPresentHall";
 static NSString *PostNotificationName_FavoriteContentChanged = @"FavoriteContentChanged";
 static NSString *PostNotificationName_CompleteOrderProcess = @"CompleteOrderProcess";
+static NSString *PostNotificationName_ResetRootViewController = @"ResetRootViewController";
 
 static NSString *UserDefault_IntroduceShown = @"IntroduceShown";
 

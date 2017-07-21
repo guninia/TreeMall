@@ -54,6 +54,7 @@
 @property (nonatomic, strong) UIWebView *webViewRemark;
 @property (nonatomic, strong) ProductDetailSectionTitleView *viewShippingAndWarrentyTitle;
 @property (nonatomic, strong) DTAttributedLabel *labelShippingAndWarrenty;
+@property (nonatomic, strong) UIWebView *webViewShippingAndWarrenty;
 @property (nonatomic, assign) CGSize sizeTextViewSpec;
 @property (nonatomic, strong) ProductDetailBottomBar *bottomBar;
 @property (nonatomic, strong) NSMutableArray *arrayViewNotice;

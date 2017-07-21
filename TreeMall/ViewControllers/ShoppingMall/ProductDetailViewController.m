@@ -21,6 +21,8 @@
 #import "CartViewController.h"
 #import "LoginViewController.h"
 #import "WebViewViewController.h"
+#import "Definition.h"
+#import <Social/Social.h>
 
 @interface ProductDetailViewController ()
 
@@ -37,6 +39,8 @@
 - (NSMutableDictionary *)dictionaryCommonFromDetail:(NSDictionary *)dictionary;
 - (NSArray *)cartsAvailableToAdd;
 - (void)presentCartViewForType:(CartType)type;
+- (void)requestBackToMain;
+- (void)presentShareView;
 
 
 - (void)buttonExchangeDescPressed:(id)sender;
@@ -44,6 +48,8 @@
 - (void)buttonLinkPressed:(id)sender;
 - (void)buttonIntroImagePressed:(id)sender;
 - (void)buttonSpecImagePressed:(id)sender;
+- (void)buttonFunctionPressed:(id)sender;
+- (void)buttonItemCartPressed:(id)sender;
 - (void)linkLongPressed:(UILongPressGestureRecognizer *)gestureRecognizer;
 
 @end
@@ -70,6 +76,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
+    
     [self.view setBackgroundColor:[UIColor whiteColor]];
     [self.view addSubview:self.scrollView];
     [self.scrollView addSubview:self.collectionViewImage];
@@ -99,6 +106,7 @@
     [self.scrollView addSubview:self.webViewRemark];
     [self.scrollView addSubview:self.viewShippingAndWarrentyTitle];
     [self.scrollView addSubview:self.labelShippingAndWarrenty];
+    [self.scrollView addSubview:self.webViewShippingAndWarrenty];
     [self.scrollView addSubview:self.labelFastDelivery];
     [self.scrollView addSubview:self.labelDiscount];
     [self.view addSubview:self.bottomBar];
@@ -597,8 +605,23 @@
         _labelShippingAndWarrenty.shouldDrawLinks = YES;
         _labelShippingAndWarrenty.shouldDrawImages = YES;
         _labelShippingAndWarrenty.delegate = self;
+        _labelShippingAndWarrenty.hidden = YES;
     }
     return _labelShippingAndWarrenty;
+}
+
+- (UIWebView *)webViewShippingAndWarrenty
+{
+    if (_webViewShippingAndWarrenty == nil)
+    {
+        _webViewShippingAndWarrenty = [[UIWebView alloc] initWithFrame:CGRectMake(0.0, 0.0, self.view.frame.size.width, 1.0)];
+        _webViewShippingAndWarrenty.tag = 5;
+        [_webViewShippingAndWarrenty.scrollView setScrollEnabled:NO];
+//        [_webViewShippingAndWarrenty setScalesPageToFit:YES];
+//        [_webViewShippingAndWarrenty setContentMode:UIViewContentModeScaleAspectFit];
+        [_webViewShippingAndWarrenty setDelegate:self];
+    }
+    return _webViewShippingAndWarrenty;
 }
 
 - (NSMutableArray *)arrayCartType
@@ -1088,6 +1111,17 @@
         self.labelShippingAndWarrenty.frame = frame;
         originY = self.labelShippingAndWarrenty.frame.origin.y + self.labelShippingAndWarrenty.frame.size.height + 5.0;
     }
+    if (self.webViewShippingAndWarrenty)
+    {
+        CGFloat maxWidth = self.scrollView.frame.size.width - marginL - marginR;
+        CGRect frame = self.webViewShippingAndWarrenty.frame;
+        frame.origin.y = originY;
+        frame.origin.x = originX;
+        frame.size.width = maxWidth;
+        self.webViewShippingAndWarrenty.frame = frame;
+        originY = self.webViewShippingAndWarrenty.frame.origin.y + self.webViewShippingAndWarrenty.frame.size.height;
+//        NSLog(@"layoutCustomSubviews - webViewShippingAndWarrenty[%4.2f,%4.2f]", frame.size.width, frame.size.height);
+    }
     
     scrollBottom = originY + marginB;
     [self.scrollView setContentSize:CGSizeMake(self.scrollView.frame.size.width, scrollBottom)];
@@ -1410,22 +1444,22 @@
                 }
                 [self.webViewIntro loadHTMLString:text baseURL:nil];
             }
-//            NSArray *arrayImage = [dictionary objectForKey:SymphoxAPIParam_img_url];
-//            if (arrayImage && [arrayImage isEqual:[NSNull null]] == NO && [arrayImage count] > 0)
-//            {
-//                UIImage *transparent = [UIImage imageNamed:@"transparent"];
-//                for (NSInteger index = 0; index < [arrayImage count]; index++)
-//                {
-//                    NSString *imagePath = [arrayImage objectAtIndex:index];
-//                    UIButton *button = [[UIButton alloc] initWithFrame:CGRectZero];
-//                    button.tag = index;
-//                    [button.imageView setContentMode:UIViewContentModeScaleAspectFit];
-//                    [button sd_setImageWithURL:[NSURL URLWithString:imagePath] forState:UIControlStateNormal placeholderImage:transparent options:SDWebImageAllowInvalidSSLCertificates];
-//                    [button addTarget:self action:@selector(buttonIntroImagePressed:) forControlEvents:UIControlEventTouchUpInside];
-//                    [self.scrollView addSubview:button];
-//                    [self.arrayIntroImageView addObject:button];
-//                }
-//            }
+            NSArray *arrayImage = [dictionary objectForKey:SymphoxAPIParam_img_url];
+            if (arrayImage && [arrayImage isEqual:[NSNull null]] == NO && [arrayImage count] > 0)
+            {
+                UIImage *transparent = [UIImage imageNamed:@"transparent"];
+                for (NSInteger index = 0; index < [arrayImage count]; index++)
+                {
+                    NSString *imagePath = [arrayImage objectAtIndex:index];
+                    UIButton *button = [[UIButton alloc] initWithFrame:CGRectZero];
+                    button.tag = index;
+                    [button.imageView setContentMode:UIViewContentModeScaleAspectFit];
+                    [button sd_setImageWithURL:[NSURL URLWithString:imagePath] forState:UIControlStateNormal placeholderImage:transparent options:SDWebImageAllowInvalidSSLCertificates];
+                    [button addTarget:self action:@selector(buttonIntroImagePressed:) forControlEvents:UIControlEventTouchUpInside];
+                    [self.scrollView addSubview:button];
+                    [self.arrayIntroImageView addObject:button];
+                }
+            }
         }
 //        [self.viewIntroTitle setHidden:!shouldShow];
 //        [self.labelIntro setHidden:!shouldShow];
@@ -1451,22 +1485,22 @@
                 }
                 [self.webViewSpec loadHTMLString:text baseURL:nil];
             }
-//            NSArray *arrayImage = [dictionary objectForKey:SymphoxAPIParam_img_url];
-//            if (arrayImage && [arrayImage isEqual:[NSNull null]] == NO && [arrayImage count] > 0)
-//            {
-//                UIImage *transparent = [UIImage imageNamed:@"transparent"];
-//                for (NSInteger index = 0; index < [arrayImage count]; index++)
-//                {
-//                    NSString *imagePath = [arrayImage objectAtIndex:index];
-//                    UIButton *button = [[UIButton alloc] initWithFrame:CGRectZero];
-//                    button.tag = index;
-//                    [button.imageView setContentMode:UIViewContentModeScaleAspectFit];
-//                    [button sd_setImageWithURL:[NSURL URLWithString:imagePath] forState:UIControlStateNormal placeholderImage:transparent options:SDWebImageAllowInvalidSSLCertificates];
-//                    [button addTarget:self action:@selector(buttonSpecImagePressed:) forControlEvents:UIControlEventTouchUpInside];
-//                    [self.scrollView addSubview:button];
-//                    [self.arraySpecImageView addObject:button];
-//                }
-//            }
+            NSArray *arrayImage = [dictionary objectForKey:SymphoxAPIParam_img_url];
+            if (arrayImage && [arrayImage isEqual:[NSNull null]] == NO && [arrayImage count] > 0)
+            {
+                UIImage *transparent = [UIImage imageNamed:@"transparent"];
+                for (NSInteger index = 0; index < [arrayImage count]; index++)
+                {
+                    NSString *imagePath = [arrayImage objectAtIndex:index];
+                    UIButton *button = [[UIButton alloc] initWithFrame:CGRectZero];
+                    button.tag = index;
+                    [button.imageView setContentMode:UIViewContentModeScaleAspectFit];
+                    [button sd_setImageWithURL:[NSURL URLWithString:imagePath] forState:UIControlStateNormal placeholderImage:transparent options:SDWebImageAllowInvalidSSLCertificates];
+                    [button addTarget:self action:@selector(buttonSpecImagePressed:) forControlEvents:UIControlEventTouchUpInside];
+                    [self.scrollView addSubview:button];
+                    [self.arraySpecImageView addObject:button];
+                }
+            }
         }
         [self.viewSpecTitle setHidden:!shouldShow];
 //        [self.labelSpec setHidden:!shouldShow];
@@ -1647,13 +1681,15 @@
                             self.labelShippingAndWarrenty.attributedString = attrString;
                             success = YES;
                         }
+                        [self.webViewShippingAndWarrenty loadHTMLString:content baseURL:nil];
                     }
                 }
             }
         }
     }
     [self.viewShippingAndWarrentyTitle setHidden:!success];
-    [self.labelShippingAndWarrenty setHidden:!success];
+//    [self.labelShippingAndWarrenty setHidden:!success];
+    [self.labelShippingAndWarrenty setHidden:YES];
     return success;
 }
 
@@ -2003,6 +2039,19 @@
     [self presentViewController:navigationController animated:YES completion:nil];
 }
 
+- (void)requestBackToMain
+{
+    [[NSNotificationCenter defaultCenter] postNotificationName:PostNotificationName_ResetRootViewController object:self];
+}
+
+- (void)presentShareView
+{
+    NSString *urlString = [NSString stringWithFormat:@"https://m.treemall.com.tw/goods/product?cpdtnum=%@", [self.productIdentifier stringValue]];
+    NSURL *url = [NSURL URLWithString:urlString];
+    UIActivityViewController *viewController = [[UIActivityViewController alloc] initWithActivityItems:[NSArray arrayWithObject:url] applicationActivities:nil];
+    [self presentViewController:viewController animated:YES completion:nil];
+}
+
 #pragma mark - Actions
 
 - (void)buttonExchangeDescPressed:(id)sender
@@ -2101,6 +2150,41 @@
             [self presentViewController:viewController animated:YES completion:nil];
         }
     }
+}
+
+- (void)buttonFunctionPressed:(id)sender
+{
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+    __weak ProductDetailViewController *weakSelf = self;
+    UIAlertAction *actionBackToMain = [UIAlertAction actionWithTitle:[LocalizedString BackToMain] style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
+        [weakSelf requestBackToMain];
+    }];
+    UIAlertAction *actionShare = [UIAlertAction actionWithTitle:[LocalizedString Share] style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
+        [weakSelf presentShareView];
+    }];
+    UIAlertAction *actionCancel = [UIAlertAction actionWithTitle:[LocalizedString Cancel] style:UIAlertActionStyleCancel handler:nil];
+    [alertController addAction:actionBackToMain];
+    [alertController addAction:actionShare];
+    [alertController addAction:actionCancel];
+    
+    [self presentViewController:alertController animated:YES completion:nil];
+}
+
+- (void)buttonItemCartPressed:(id)sender
+{
+    // Should check user state here.
+    if ([TMInfoManager sharedManager].userIdentifier == nil)
+    {
+        LoginViewController *viewControllerLogin = [[LoginViewController alloc] initWithNibName:@"LoginViewController" bundle:[NSBundle mainBundle]];
+        UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:viewControllerLogin];
+        [self presentViewController:navigationController animated:YES completion:nil];
+        return;
+    }
+    CartViewController *viewController = [[CartViewController alloc] initWithNibName:@"CartViewController" bundle:[NSBundle mainBundle]];
+    viewController.title = [LocalizedString ShoppingCart];
+    viewController.currentType = CartTypeCommonDelivery;
+    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:viewController];
+    [self presentViewController:navigationController animated:YES completion:nil];
 }
 
 - (void)linkLongPressed:(UILongPressGestureRecognizer *)gestureRecognizer
@@ -2336,6 +2420,19 @@
 }
 
 #pragma mark - UIWebViewDelegate
+
+- (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
+{
+    if (navigationType == UIWebViewNavigationTypeLinkClicked)
+    {
+        if ([[UIApplication sharedApplication] canOpenURL:request.URL])
+        {
+            [[UIApplication sharedApplication] openURL:request.URL];
+        }
+        return NO;
+    }
+    return YES;
+}
 
 - (void)webViewDidFinishLoad:(UIWebView *)webView
 {

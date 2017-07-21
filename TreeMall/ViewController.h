@@ -17,6 +17,8 @@
 @property (nonatomic, assign) BOOL initialized;
 
 - (void)checkToShowIntroduce;
+- (void)showLaunchScreenLoadingViewAnimated:(BOOL)animated;
+- (void)hideLaunchScreenLoadingViewAnimated:(BOOL)animated;
 
 @end
 

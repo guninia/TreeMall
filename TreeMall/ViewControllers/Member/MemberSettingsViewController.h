@@ -14,6 +14,7 @@
 @property (nonatomic, strong) IBOutlet UITableView *tableView;
 @property (nonatomic, strong) FullScreenLoadingView *viewLoading;
 @property (nonatomic, strong) NSMutableArray *arrayOptions;
+@property (nonatomic, strong) NSMutableArray *arrayOptionIds;
 @property (nonatomic, strong) NSMutableDictionary *dictionaryAddition;
 @property (nonatomic, strong) NSMutableDictionary *dictionaryIconImage;
 

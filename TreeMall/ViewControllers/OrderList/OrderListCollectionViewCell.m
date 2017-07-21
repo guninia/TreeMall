@@ -42,6 +42,7 @@ static CGFloat buttonTotalProductsHeight = 20.0;
         [self.contentView addSubview:self.labelTitle];
         [self.contentView addSubview:self.viewOrderStateBackground];
         [self.contentView addSubview:self.labelOrderState];
+        [self.contentView addSubview:self.labelPrice];
         [self.contentView addSubview:self.separator];
         [self.contentView addSubview:self.progressView];
         [self.contentView addSubview:self.buttonDeliverId];
@@ -112,11 +113,19 @@ static CGFloat buttonTotalProductsHeight = 20.0;
         self.labelOrderState.frame = frame;
     }
     
+    if (self.labelPrice)
+    {
+        CGSize sizeText = [self.labelPrice.text sizeWithAttributes:[NSDictionary dictionaryWithObjectsAndKeys:self.labelPrice.font, NSFontAttributeName, nil]];
+        CGSize sizeLabel = CGSizeMake(ceil(sizeText.width), ceil(sizeText.height));
+        CGRect frame = CGRectMake(originX, originY + kImageSize.height - sizeLabel.height, self.contentView.frame.size.width - marginR - originX, sizeLabel.height);
+        self.labelPrice.frame = frame;
+        originY = self.labelPrice.frame.origin.y + self.labelPrice.frame.size.height + intervalV;
+    }
+    
     if (self.labelTitle)
     {
-        CGRect frame = CGRectMake(originX, originY, (rightEnd - originX), kImageSize.height);
+        CGRect frame = CGRectMake(originX, marginT, (rightEnd - originX), kImageSize.height - self.labelPrice.frame.size.height - 2.0);
         self.labelTitle.frame = frame;
-        originY = self.labelTitle.frame.origin.y + self.labelTitle.frame.size.height + intervalV;
     }
     
     CGFloat columnWidth = self.contentView.frame.size.width - (marginL + marginR);
@@ -215,6 +224,19 @@ static CGFloat buttonTotalProductsHeight = 20.0;
         [_labelOrderState setTextAlignment:NSTextAlignmentCenter];
     }
     return _labelOrderState;
+}
+
+- (UILabel *)labelPrice
+{
+    if (_labelPrice == nil)
+    {
+        _labelPrice = [[UILabel alloc] initWithFrame:CGRectZero];
+        UIFont *font = [UIFont systemFontOfSize:16.0];
+        [_labelPrice setFont:font];
+        [_labelPrice setTextColor:[UIColor grayColor]];
+        [_labelPrice setBackgroundColor:[UIColor clearColor]];
+    }
+    return _labelPrice;
 }
 
 - (UIView *)separator

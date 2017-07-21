@@ -3541,4 +3541,34 @@
     return ProductSizeExceedLimit;
 }
 
++ (NSString *)BackToMain
+{
+    static NSString *BackToMain = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        BackToMain = NSLocalizedString(@"BackToMain", nil);
+    });
+    return BackToMain;
+}
+
++ (NSString *)Share
+{
+    static NSString *Share = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        Share = NSLocalizedString(@"Share", nil);
+    });
+    return Share;
+}
+
++ (NSString *)PointUsed
+{
+    static NSString *PointUsed = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        PointUsed = NSLocalizedString(@"PointUsed", nil);
+    });
+    return PointUsed;
+}
+
 @end

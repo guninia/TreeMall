@@ -143,6 +143,15 @@ typedef enum : NSUInteger {
     return _arrayOptions;
 }
 
+- (NSMutableArray *)arrayOptionIds
+{
+    if (_arrayOptionIds == nil)
+    {
+        _arrayOptionIds = [[NSMutableArray alloc] initWithCapacity:0];
+    }
+    return _arrayOptionIds;
+}
+
 - (NSMutableDictionary *)dictionaryAddition
 {
     if (_dictionaryAddition == nil)
@@ -206,6 +215,7 @@ typedef enum : NSUInteger {
             {
                 NSString *optionText = [LocalizedString EmailAuthentication];
                 [self.arrayOptions addObject:optionText];
+                [self.arrayOptionIds addObject:[NSNumber numberWithInteger:index]];
                 UIImage *image = [UIImage imageNamed:@"men_my_info_icon2"];
                 if (image)
                 {
@@ -217,6 +227,7 @@ typedef enum : NSUInteger {
             {
                 NSString *optionText = [LocalizedString IdentityAuthentication];
                 [self.arrayOptions addObject:optionText];
+                [self.arrayOptionIds addObject:[NSNumber numberWithInteger:index]];
                 UIImage *image = [UIImage imageNamed:@"men_my_info_icon1"];
                 if (image)
                 {
@@ -228,6 +239,7 @@ typedef enum : NSUInteger {
             {
                 NSString *optionText = [LocalizedString BasicInformationModification];
                 [self.arrayOptions addObject:optionText];
+                [self.arrayOptionIds addObject:[NSNumber numberWithInteger:index]];
                 UIImage *image = [UIImage imageNamed:@"men_my_info_icon3"];
                 if (image)
                 {
@@ -239,6 +251,7 @@ typedef enum : NSUInteger {
             {
                 NSString *optionText = [LocalizedString ContactsSettings];
                 [self.arrayOptions addObject:optionText];
+                [self.arrayOptionIds addObject:[NSNumber numberWithInteger:index]];
                 UIImage *image = [UIImage imageNamed:@"men_my_info_icon4"];
                 if (image)
                 {
@@ -252,6 +265,7 @@ typedef enum : NSUInteger {
                     break;
                 NSString *optionText = [LocalizedString ChangePassword];
                 [self.arrayOptions addObject:optionText];
+                [self.arrayOptionIds addObject:[NSNumber numberWithInteger:index]];
                 UIImage *image = [UIImage imageNamed:@"men_my_info_icon5"];
                 if (image)
                 {
@@ -263,6 +277,7 @@ typedef enum : NSUInteger {
             {
                 NSString *optionText = [LocalizedString NewsletterSubscribe];
                 [self.arrayOptions addObject:optionText];
+                [self.arrayOptionIds addObject:[NSNumber numberWithInteger:index]];
                 UIImage *image = [UIImage imageNamed:@"men_my_info_icon6"];
                 if (image)
                 {
@@ -585,7 +600,10 @@ typedef enum : NSUInteger {
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    switch (indexPath.row) {
+    if (indexPath.row >= [self.arrayOptionIds count])
+        return;
+    NSInteger optionId = [[self.arrayOptionIds objectAtIndex:indexPath.row] integerValue];
+    switch (optionId) {
         case MemberSettingOptionEmailAuth:
         {
             if ([TMInfoManager sharedManager].userEmailAuth == NO)

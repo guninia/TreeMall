@@ -25,8 +25,6 @@
 
 @interface ViewController ()
 
-- (void)showLaunchScreenLoadingViewAnimated:(BOOL)animated;
-- (void)hideLaunchScreenLoadingViewAnimated:(BOOL)animated;
 - (void)postUserLogoutProcedure;
 - (void)JumpToTab:(NSInteger)tabIndex;
 - (void)updateCartBadge;
@@ -274,6 +272,7 @@
     if (_viewLoading == nil)
     {
         _viewLoading = [[FullScreenLoadingView alloc] initWithFrame:CGRectZero withActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+        _viewLoading.alpha = 0.0;
     }
     return _viewLoading;
 }

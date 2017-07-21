@@ -15,6 +15,8 @@
 
 @interface AppDelegate ()
 
+- (void)handlerOfResetRootViewControllerNotification:(NSNotification *)notification;
+
 @end
 
 @implementation AppDelegate
@@ -55,6 +57,8 @@
     
     // Prepare API connection
     [[TMInfoManager sharedManager] retrieveToken];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handlerOfResetRootViewControllerNotification:) name:PostNotificationName_ResetRootViewController object:nil];
     return YES;
 }
 
@@ -90,6 +94,21 @@
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     // Saves changes in the application's managed object context before the application terminates.
     [self saveContext];
+}
+
+#pragma mark - Notification Handler
+
+- (void)handlerOfResetRootViewControllerNotification:(NSNotification *)notification
+{
+    __weak AppDelegate *weakSelf = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]];
+        ViewController *viewController = [storyboard instantiateViewControllerWithIdentifier:@"ViewController"];
+        viewController.initialized = YES;
+        [viewController hideLaunchScreenLoadingViewAnimated:NO];
+        [[TMInfoManager sharedManager] retrieveToken];
+        weakSelf.window.rootViewController = viewController;
+    });
 }
 
 #pragma mark - Push Notification

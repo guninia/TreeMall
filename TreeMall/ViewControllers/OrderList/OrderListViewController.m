@@ -27,7 +27,8 @@
 - (BOOL)processOrderData:(id)data;
 - (NSDictionary *)ordersOfCartIndex:(NSInteger)index;
 - (NSInteger)numberOfOrdersOfCartIndex:(NSInteger)index;
-- (NSDictionary *)orderForIndex:(NSInteger)orderIndex inCartIndex:(NSInteger)cartIndex;
+- (NSDictionary *)firstOrderForIndex:(NSInteger)orderIndex inCartIndex:(NSInteger)cartIndex;
+- (NSArray *)orderGroupForIndex:(NSInteger)orderIndex inCartIndex:(NSInteger)cartIndex;
 - (void)startSearchFromTextField:(UITextField *)textField;
 - (void)updateTitle;
 
@@ -558,8 +559,8 @@
             if ([resultObject isKindOfClass:[NSData class]])
             {
                 NSData *data = (NSData *)resultObject;
-//                NSString *string = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-//                NSLog(@"requestOrder:\n%@", string);
+                NSString *string = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+                NSLog(@"requestOrder:\n%@", string);
                 if ([self processOrderData:data])
                 {
                     weakSelf.currentPage = page;
@@ -672,28 +673,35 @@
     return numberOfOrders;
 }
 
-- (NSDictionary *)orderForIndex:(NSInteger)orderIndex inCartIndex:(NSInteger)cartIndex
+- (NSDictionary *)firstOrderForIndex:(NSInteger)orderIndex inCartIndex:(NSInteger)cartIndex
 {
     NSDictionary *order = nil;
-    NSDictionary *orders = [self ordersOfCartIndex:cartIndex];
-    if (orders == nil)
-    {
-        return order;
-    }
-    if (orderIndex >= [orders count])
-    {
-        return order;
-    }
-    // Server index start from 1.
-    NSInteger orderIndexForServer = orderIndex + 1;
-    NSString *stringIndex = [NSString stringWithFormat:@"%li", (long)orderIndexForServer];
-//    NSLog(@"stringIndex[%@]", stringIndex);
-    NSArray *array = [orders objectForKey:stringIndex];
+    NSArray *array = [self orderGroupForIndex:orderIndex inCartIndex:cartIndex];
     if ([array count] > 0)
     {
         order = [array objectAtIndex:0];
     }
     return order;
+}
+
+- (NSArray *)orderGroupForIndex:(NSInteger)orderIndex inCartIndex:(NSInteger)cartIndex
+{
+    NSArray *orderGroup = nil;
+    NSDictionary *orders = [self ordersOfCartIndex:cartIndex];
+    if (orders == nil)
+    {
+        return orderGroup;
+    }
+    if (orderIndex >= [orders count])
+    {
+        return orderGroup;
+    }
+    // Server index start from 1.
+    NSInteger orderIndexForServer = orderIndex + 1;
+    NSString *stringIndex = [NSString stringWithFormat:@"%li", (long)orderIndexForServer];
+    //    NSLog(@"stringIndex[%@]", stringIndex);
+    orderGroup = [orders objectForKey:stringIndex];
+    return orderGroup;
 }
 
 - (void)startSearchFromTextField:(UITextField *)textField
@@ -850,7 +858,7 @@
     }
     [cell prepareForReuse];
     cell.indexPath = indexPath;
-    NSDictionary *dictionaryOrder  =[self orderForIndex:indexPath.row inCartIndex:indexPath.section];
+    NSDictionary *dictionaryOrder  =[self firstOrderForIndex:indexPath.row inCartIndex:indexPath.section];
     if (dictionaryOrder)
     {
 //        NSLog(@"cellForItemAtIndexPath:\n%@", [dictionaryOrder description]);
@@ -875,7 +883,7 @@
             }
 //            NSLog(@"cellForItemAtIndexPath[%li][%li] - cell.buttonDeliverId [%@]", (long)indexPath.section, (long)indexPath.row, [cell.buttonDeliverId isHidden]?@"hidden":@"shown");
         }
-        NSUInteger itemCount = 0;
+        
         NSArray *arrayItem = [dictionaryOrder objectForKey:SymphoxAPIParam_item];
         if (arrayItem && [arrayItem isEqual:[NSNull null]] == NO && [arrayItem count] > 0)
         {
@@ -892,7 +900,41 @@
                 NSAttributedString *attrString = [[NSAttributedString alloc] initWithString:name attributes:cell.attributesTitle];
                 [cell.labelTitle setAttributedText:attrString];
             }
-            itemCount = [arrayItem count];
+            NSNumber *numberCash = [dictionary objectForKey:SymphoxAPIParam_cash];
+            NSNumber *numberPoint = [dictionary objectForKey:SymphoxAPIParam_point];
+            NSNumber *numberEpoint = [dictionary objectForKey:SymphoxAPIParam_epoint];
+            NSInteger cash = [numberCash integerValue];
+            NSInteger totalPoint = [numberPoint integerValue] + [numberEpoint integerValue];
+            NSString *priceString = nil;
+            NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
+            [formatter setNumberStyle:NSNumberFormatterDecimalStyle];
+            NSString *cashString = [formatter stringFromNumber:numberCash];
+            NSString *pointString = [formatter stringFromNumber:[NSNumber numberWithInteger:totalPoint]];
+            if (cash > 0 && totalPoint > 0)
+            {
+                priceString = [NSString stringWithFormat:@"＄%@ | %@%@", cashString, [LocalizedString PointUsed], pointString];
+            }
+            else if (cash > 0)
+            {
+                priceString = [NSString stringWithFormat:@"＄%@", cashString];
+            }
+            else if (totalPoint > 0)
+            {
+                priceString = [NSString stringWithFormat:@"%@%@", [LocalizedString PointUsed], pointString];
+            }
+            else
+            {
+                priceString = @"";
+            }
+            cell.labelPrice.text = priceString;
+//            itemCount = [arrayItem count];
+        }
+        NSUInteger itemCount = 0;
+        NSArray *orderGroup = [self orderGroupForIndex:indexPath.row inCartIndex:indexPath.section];
+        for (NSDictionary *singleOrder in orderGroup)
+        {
+            NSArray *items = [singleOrder objectForKey:SymphoxAPIParam_item];
+            itemCount += [items count];
         }
         NSString *stringTotalProduct = [NSString stringWithFormat:[LocalizedString Total_N_Product], (unsigned long)itemCount];
         [cell.buttonTotalProducts setTitle:stringTotalProduct forState:UIControlStateNormal];
@@ -948,7 +990,7 @@
     UIEdgeInsets edgeInsets = [self collectionView:collectionView layout:collectionViewLayout insetForSectionAtIndex:indexPath.section];
     CGFloat itemWidth = collectionView.frame.size.width - edgeInsets.left - edgeInsets.right;
     NSDictionary *dictionaryDelivery = nil;
-    NSDictionary *dictionaryOrder = [self orderForIndex:indexPath.row inCartIndex:indexPath.section];
+    NSDictionary *dictionaryOrder = [self firstOrderForIndex:indexPath.row inCartIndex:indexPath.section];
     if (dictionaryOrder && [dictionaryOrder isEqual:[NSNull null]] == NO && [dictionaryOrder count] > 0)
     {
         dictionaryDelivery = [dictionaryOrder objectForKey:SymphoxAPIParam_delivery];
@@ -1039,7 +1081,7 @@
     NSIndexPath *indexPath = cell.indexPath;
     if (indexPath == nil)
         return;
-    NSDictionary *dictionaryOrder = [self orderForIndex:indexPath.row inCartIndex:indexPath.section];
+    NSDictionary *dictionaryOrder = [self firstOrderForIndex:indexPath.row inCartIndex:indexPath.section];
     if (dictionaryOrder == nil)
         return;
     NSLog(@"dictionaryOrder:\n%@", [dictionaryOrder description]);

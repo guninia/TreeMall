@@ -105,7 +105,7 @@
     if (_labelStatus == nil)
     {
         _labelStatus = [[UILabel alloc] initWithFrame:CGRectZero];
-        UIFont *font = [UIFont systemFontOfSize:18.0];
+        UIFont *font = [UIFont systemFontOfSize:14.0];
         [_labelStatus setFont:font];
         [_labelStatus setBackgroundColor:[UIColor clearColor]];
         [_labelStatus setTextColor:[UIColor blackColor]];
