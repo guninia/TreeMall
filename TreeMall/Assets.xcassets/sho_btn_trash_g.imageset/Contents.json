@@ -2,10 +2,12 @@
   "images" : [
     {
       "idiom" : "universal",
+      "filename" : "sho_btn_trash_g-1.png",
       "scale" : "1x"
     },
     {
       "idiom" : "universal",
+      "filename" : "sho_btn_trash_g@2x.png",
       "scale" : "2x"
     },
     {

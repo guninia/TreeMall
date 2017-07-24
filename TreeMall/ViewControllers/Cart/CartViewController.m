@@ -1627,7 +1627,7 @@
         {
             quantity = [NSNumber numberWithInteger:0];
         }
-        NSString *quantityString = [NSString stringWithFormat:@"%@%li", [LocalizedString Quantity], (long)[quantity integerValue]];
+        NSString *quantityString = [NSString stringWithFormat:@"Ｘ%li", (long)[quantity integerValue]];
         cell.labelQuantity.text = quantityString;
         
         NSNumber *productIdentifier = [dictionary objectForKey:SymphoxAPIParam_cpdt_num];
@@ -1682,7 +1682,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    CGFloat heightForRow = 146.0;
+    CGFloat heightForRow = 150.0;
     return heightForRow;
 }
 

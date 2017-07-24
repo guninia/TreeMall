@@ -207,20 +207,45 @@
     DeliverProgressTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:DeliverProgressTableViewCellIdentifier forIndexPath:indexPath];
     NSString *stringTime = @"";
     NSString *stringStatus = @"";
+    BOOL isLatest = NO;
     if (indexPath.row < [self.arrayProgress count])
     {
         NSDictionary *dictionary = [self.arrayProgress objectAtIndex:indexPath.row];
         NSString *time = [dictionary objectForKey:SymphoxAPIParam_time];
         if (time && [time isEqual:[NSNull null]] == NO)
         {
-            stringTime = time;
+            NSArray *components = [time componentsSeparatedByString:@" "];
+            for (NSString *component in components)
+            {
+                if ([component length] > 0)
+                {
+                    if ([stringTime length] > 0)
+                    {
+                        stringTime = [stringTime stringByAppendingString:@"\n"];
+                    }
+                    stringTime = [stringTime stringByAppendingString:component];
+                }
+            }
         }
         NSString *status = [dictionary objectForKey:SymphoxAPIParam_status];
         if (status && [status isEqual:[NSNull null]] == NO)
         {
             stringStatus = status;
         }
+        if (indexPath.row == 0)
+        {
+            isLatest = YES;
+            if (self.shouldShowOperator)
+            {
+                NSString *location = [dictionary objectForKey:SymphoxAPIParam_location];
+                if (location && [location isEqual:[NSNull null]] == NO)
+                {
+                    stringStatus = location;
+                }
+            }
+        }
     }
+    cell.latest = isLatest;
     cell.timeString = stringTime;
     cell.statusString = stringStatus;
     return cell;
@@ -246,7 +271,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    CGFloat heightForRow = 50.0;
+    CGFloat heightForRow = 70.0;
     return heightForRow;
 }
 

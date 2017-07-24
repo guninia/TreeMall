@@ -14,5 +14,6 @@ static NSString *DeliverProgressTableViewCellIdentifier = @"DeliverProgressTable
 
 @property (nonatomic, strong) NSString *timeString;
 @property (nonatomic, strong) NSString *statusString;
+@property (nonatomic, assign) BOOL latest;
 
 @end

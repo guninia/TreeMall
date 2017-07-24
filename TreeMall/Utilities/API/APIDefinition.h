@@ -434,6 +434,7 @@ static NSString *SymphoxAPIParam_delivery_limit = @"delivery_limit";
 static NSString *SymphoxAPIParam_reach_limit = @"reach_limit";
 static NSString *SymphoxAPIParam_raise = @"raise";
 static NSString *SymphoxAPIParam_multiple = @"multiple";
+static NSString *SymphoxAPIParam_location = @"location";
 
 typedef enum : NSUInteger {
     TermTypeMemberTerms,

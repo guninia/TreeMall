@@ -186,7 +186,7 @@
 "NotEnoughInStock"="庫存量不足";
 "MultipleProductsUnacceptable"="不可有多項商品";
 "ProductsRemovedFromCart"="下列商品將從購物車移除";
-"ChooseQuantityAndDiscount"="選擇數量/折扣";
+"ChooseQuantityAndDiscount"="使用折抵 ▼";
 "Total_C"="小計：";
 "Quantity"="數量";
 "GoingToDeleteProduct_S_"="將從購物車移除「%@」";

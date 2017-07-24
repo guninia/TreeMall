@@ -7,6 +7,7 @@
 //
 
 #import "DeliverProgressTableViewCell.h"
+#import "Definition.h"
 
 @interface DeliverProgressTableViewCell ()
 
@@ -105,11 +106,12 @@
     if (_labelStatus == nil)
     {
         _labelStatus = [[UILabel alloc] initWithFrame:CGRectZero];
-        UIFont *font = [UIFont systemFontOfSize:14.0];
+        UIFont *font = [UIFont systemFontOfSize:16.0];
         [_labelStatus setFont:font];
         [_labelStatus setBackgroundColor:[UIColor clearColor]];
-        [_labelStatus setTextColor:[UIColor blackColor]];
+        [_labelStatus setTextColor:[UIColor lightGrayColor]];
         [_labelStatus setTextAlignment:NSTextAlignmentRight];
+        [_labelStatus setAdjustsFontSizeToFitWidth:YES];
     }
     return _labelStatus;
 }
@@ -137,6 +139,12 @@
     }
     [self.labelStatus setText:_statusString];
     [self setNeedsLayout];
+}
+
+- (void)setLatest:(BOOL)latest
+{
+    _latest = latest;
+    [self.labelStatus setTextColor:(_latest)?TMMainColor:[UIColor lightGrayColor]];
 }
 
 @end

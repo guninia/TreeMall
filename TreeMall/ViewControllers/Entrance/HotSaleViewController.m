@@ -30,6 +30,7 @@
 - (void)presentCartViewForType:(CartType)type;
 
 - (void)buttonItemPressed:(id)sender;
+- (void)buttonItemCartPressed:(id)sender;
 
 @end
 
@@ -43,6 +44,13 @@
     UIImage *image = [[UIImage imageNamed:@"car_popup_close"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     UIBarButtonItem *buttonItem = [[UIBarButtonItem alloc] initWithImage:image style:UIBarButtonItemStylePlain target:self action:@selector(buttonItemPressed:)];
     [self.navigationItem setLeftBarButtonItem:buttonItem];
+    
+    UIImage *imageCart = [[UIImage imageNamed:@"ind_ico_f_menu_1"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    if (imageCart)
+    {
+        UIBarButtonItem *item = [[UIBarButtonItem alloc] initWithImage:imageCart style:UIBarButtonItemStylePlain target:self action:@selector(buttonItemCartPressed:)];
+        [self.navigationItem setRightBarButtonItem:item];
+    }
     
     [self.view addSubview:self.tableView];
     [self.tableView reloadData];
@@ -358,6 +366,23 @@
     {
         [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
     }
+}
+
+- (void)buttonItemCartPressed:(id)sender
+{
+    // Should check user state here.
+    if ([TMInfoManager sharedManager].userIdentifier == nil)
+    {
+        LoginViewController *viewControllerLogin = [[LoginViewController alloc] initWithNibName:@"LoginViewController" bundle:[NSBundle mainBundle]];
+        UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:viewControllerLogin];
+        [self presentViewController:navigationController animated:YES completion:nil];
+        return;
+    }
+    CartViewController *viewController = [[CartViewController alloc] initWithNibName:@"CartViewController" bundle:[NSBundle mainBundle]];
+    viewController.title = [LocalizedString ShoppingCart];
+    viewController.currentType = CartTypeCommonDelivery;
+    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:viewController];
+    [self presentViewController:navigationController animated:YES completion:nil];
 }
 
 #pragma mark - UITableViewDataSource

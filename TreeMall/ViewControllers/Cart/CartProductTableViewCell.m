@@ -86,19 +86,21 @@
     {
         self.separator.frame = CGRectMake(0.0, originY, self.viewContent.frame.size.width, 1.0);
     }
-    if (self.buttonDelete)
+    CGFloat columnHeight = 32.0;
+    if (self.labelQuantity)
     {
-        CGSize size = [self.buttonDelete imageForState:UIControlStateNormal].size;
-        originY = originY - intervalV - size.height;
-        CGFloat buttonOriginX = self.viewContent.frame.size.width - marginH - size.width;
-        CGRect frame = CGRectMake(buttonOriginX, originY, size.width, size.height);
-        self.buttonDelete.frame = frame;
+        originY = CGRectGetMinY(self.separator.frame) - intervalV - columnHeight;
+        CGSize sizeText = [self.labelQuantity.text sizeWithAttributes:[NSDictionary dictionaryWithObjectsAndKeys:self.labelQuantity.font, NSFontAttributeName, nil]];
+        CGSize sizeLabel = CGSizeMake(ceil(sizeText.width), ceil(sizeText.height));
+        CGFloat labelOriginX = self.viewContent.frame.size.width - marginH - sizeLabel.width;;
+        CGRect frame = CGRectMake(labelOriginX, originY, sizeLabel.width, columnHeight);
+        self.labelQuantity.frame = frame;
     }
     if (self.buttonCondition)
     {
-        CGFloat buttonWidth = self.buttonDelete.frame.origin.x - intervalH - originX;
-        CGSize size = CGSizeMake(buttonWidth, self.buttonDelete.frame.size.height);
-        CGRect frame = CGRectMake(originX, self.buttonDelete.frame.origin.y, size.width, size.height);
+        CGFloat buttonWidth = self.labelQuantity.frame.origin.x - intervalH - originX;
+        CGSize size = CGSizeMake(buttonWidth, self.labelQuantity.frame.size.height);
+        CGRect frame = CGRectMake(originX, self.labelQuantity.frame.origin.y, size.width, columnHeight);
         self.buttonCondition.frame = frame;
     }
     if (self.labelPrice && [self.labelPrice isHidden] == NO)
@@ -123,21 +125,25 @@
         CGRect frame = CGRectMake(originX, marginV, labelMaxWidth, originY - marginV);
         self.labelName.frame = frame;
     }
-    originY = self.separator.frame.origin.y + self.separator.frame.size.height + intervalV;
-    if (self.labelQuantity)
+    originY = self.separator.frame.origin.y + self.separator.frame.size.height;
+    CGFloat maxHeight = self.viewContent.frame.size.height - CGRectGetMaxY(self.separator.frame);
+    if (self.buttonDelete)
     {
-        CGSize sizeText = [self.labelQuantity.text sizeWithAttributes:[NSDictionary dictionaryWithObjectsAndKeys:self.labelQuantity.font, NSFontAttributeName, nil]];
-        CGSize sizeLabel = CGSizeMake(ceil(sizeText.width), ceil(sizeText.height));
-        CGFloat labelOriginX = self.viewContent.frame.size.width - marginH - sizeLabel.width;
-        CGRect frame = CGRectMake(labelOriginX, originY, sizeLabel.width, sizeLabel.height);
-        self.labelQuantity.frame = frame;
+        CGSize size = [self.buttonDelete imageForState:UIControlStateNormal].size;
+        
+        if (size.height < maxHeight)
+        {
+            size = CGSizeMake(maxHeight, maxHeight);
+        }
+        CGFloat buttonOriginX = self.viewContent.frame.size.width - marginH - size.width;
+        CGRect frame = CGRectMake(buttonOriginX, originY, size.width, size.height);
+        self.buttonDelete.frame = frame;
     }
+    
     if (self.labelPayment && [self.labelPayment isHidden] == NO)
     {
-        CGFloat labelWidth = CGRectGetMinX(self.labelQuantity.frame) - intervalH - marginH;
-        CGSize sizeText = [self.labelPayment.text sizeWithAttributes:[NSDictionary dictionaryWithObjectsAndKeys:self.labelPayment.font, NSFontAttributeName, nil]];
-        CGSize sizeLabel = CGSizeMake(ceil(sizeText.width), ceil(sizeText.height));
-        CGRect frame = CGRectMake(marginH, originY, labelWidth, sizeLabel.height);
+        CGFloat labelWidth = CGRectGetMinX(self.buttonDelete.frame) - intervalH - marginH;
+        CGRect frame = CGRectMake(marginH, originY, labelWidth, maxHeight);
         self.labelPayment.frame = frame;
     }
 }
@@ -233,17 +239,17 @@
     if (_buttonDelete == nil)
     {
         _buttonDelete = [[UIButton alloc] initWithFrame:CGRectZero];
-        UIImage *image = [UIImage imageNamed:@"car_btn_trash_on"];
+        UIImage *image = [UIImage imageNamed:@"sho_btn_trash_g"];
         if (image)
         {
             [_buttonDelete setImage:image forState:UIControlStateNormal];
         }
-        UIImage *selectedImage = [UIImage imageNamed:@"car_btn_trash_out"];
-        if (selectedImage)
-        {
-            [_buttonDelete setImage:selectedImage forState:UIControlStateSelected];
-            [_buttonDelete setImage:selectedImage forState:UIControlStateDisabled];
-        }
+//        UIImage *selectedImage = [UIImage imageNamed:@"car_btn_trash_out"];
+//        if (selectedImage)
+//        {
+//            [_buttonDelete setImage:selectedImage forState:UIControlStateSelected];
+//            [_buttonDelete setImage:selectedImage forState:UIControlStateDisabled];
+//        }
         [_buttonDelete addTarget:self action:@selector(buttonDeletePressed:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _buttonDelete;
@@ -276,8 +282,8 @@
     if (_labelQuantity == nil)
     {
         _labelQuantity = [[UILabel alloc] initWithFrame:CGRectZero];
-        [_labelQuantity setTextColor:[UIColor orangeColor]];
-        UIFont *font = [UIFont systemFontOfSize:16.0];
+        [_labelQuantity setTextColor:[UIColor grayColor]];
+        UIFont *font = [UIFont systemFontOfSize:18.0];
         [_labelQuantity setFont:font];
     }
     return _labelQuantity;
@@ -328,7 +334,7 @@
     _alreadySelectQuantityAndPayment = alreadySelectQuantityAndPayment;
     
     [self.buttonCondition setSelected:_alreadySelectQuantityAndPayment];
-    [self.buttonDelete setSelected:_alreadySelectQuantityAndPayment];
+//    [self.buttonDelete setSelected:_alreadySelectQuantityAndPayment];
     
     UIControlState state = _alreadySelectQuantityAndPayment? UIControlStateSelected:UIControlStateNormal;
     UIColor *color = [self.buttonCondition titleColorForState:state];
