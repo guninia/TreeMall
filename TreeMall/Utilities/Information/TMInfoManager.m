@@ -76,7 +76,9 @@ static NSUInteger SearchKeywordNumberMax = 8;
 
 - (NSURL *)urlForInfoDirectory;
 - (NSURL *)urlForInfoArchiveWithIdentifier:(NSString *)identifier;
+- (NSURL *)urlForFavoriteArchive;
 - (void)applyDataFromArchivedDictionary:(NSDictionary *)dictionaryArchive;
+- (void)applyFavoriteFromArchivedDictionary:(NSDictionary *)dictionaryArchive;
 - (void)deleteArchiveForIdentifier:(NSNumber *)identifier;
 - (void)resetData;
 - (NSString *)keyForCategoryIdentifier:(NSString *)identifier withLayer:(NSNumber *)layer;
@@ -136,6 +138,7 @@ static NSUInteger SearchKeywordNumberMax = 8;
         archiveQueue = dispatch_queue_create("ArchiveQueue", DISPATCH_QUEUE_SERIAL);
         
         [self applyDataFromArchivedDictionary:[self loadFromArchive]];
+        [self applyFavoriteFromArchivedDictionary:[self loadFromFavoriteArchive]];
         
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handlerOfUserLoggedInNotification:) name:PostNotificationName_UserLoggedIn object:nil];
     }
@@ -694,15 +697,6 @@ static NSUInteger SearchKeywordNumberMax = 8;
     return _arrayFavorite;
 }
 
-- (NSMutableDictionary *)dictionaryFavoriteDetail
-{
-    if (_dictionaryFavoriteDetail == nil)
-    {
-        _dictionaryFavoriteDetail = [[NSMutableDictionary alloc] initWithCapacity:0];
-    }
-    return _dictionaryFavoriteDetail;
-}
-
 - (NSMutableArray *)arrayCartCommon
 {
     if (_arrayCartCommon == nil)
@@ -885,9 +879,6 @@ static NSUInteger SearchKeywordNumberMax = 8;
         [dictionaryArchive setObject:_dictionaryUserInfo forKey:TMInfoArchiveKey_UserInformation];
         [dictionaryArchive setObject:_dictionaryCachedCategories forKey:TMInfoArchiveKey_CachedCategories];
         [dictionaryArchive setObject:[weakSelf.orderedSetKeyword array] forKey:TMInfoArchiveKey_OrderSetKeyword];
-//        [dictionaryArchive setObject:[weakSelf.orderedSetFavoriteId array] forKey:TMInfoArchiveKey_OrderSetFavoriteId];
-//        [dictionaryArchive setObject:weakSelf.arrayFavorite forKey:TMInfoArchiveKey_Favorites];
-//        [dictionaryArchive setObject:weakSelf.dictionaryFavoriteDetail forKey:TMInfoArchiveKey_FavoritesDetail];
         if (_numberArchiveTimestamp)
         {
             [dictionaryArchive setObject:_numberArchiveTimestamp forKey:TMInfoArchiveKey_ArchiveTimestamp];
@@ -927,11 +918,33 @@ static NSUInteger SearchKeywordNumberMax = 8;
     });
 }
 
+- (void)saveToFavoriteArchive
+{
+    __weak TMInfoManager *weakSelf = self;
+    dispatch_async(archiveQueue, ^{
+        NSMutableDictionary *dictionaryArchive = [NSMutableDictionary dictionary];
+        [dictionaryArchive setObject:[weakSelf.orderedSetFavoriteId array] forKey:TMInfoArchiveKey_OrderSetFavoriteId];
+        [dictionaryArchive setObject:weakSelf.arrayFavorite forKey:TMInfoArchiveKey_Favorites];
+        
+        NSMutableData *archiveData = [[NSMutableData alloc] initWithCapacity:0];
+        NSKeyedArchiver *archiver = [[NSKeyedArchiver alloc] initForWritingWithMutableData:archiveData];
+        [archiver encodeObject:dictionaryArchive forKey:[CryptoModule sharedModule].apiKey];
+        [archiver finishEncoding];
+        
+        NSURL *url = [weakSelf urlForFavoriteArchive];
+//        NSLog(@"urlString[%@]", [url path]);
+        NSError *error = nil;
+        if ([archiveData writeToURL:url options:0 error:&error] == NO)
+        {
+            NSLog(@"TMInfoManager - archve failed.\n%@", [error description]);
+        }
+    });
+}
+
 - (void)saveToLocal
 {
     [[NSUserDefaults standardUserDefaults] setObject:[self.orderedSetFavoriteId array] forKey:TMInfoArchiveKey_OrderSetFavoriteId];
     [[NSUserDefaults standardUserDefaults] setObject:self.arrayFavorite forKey:TMInfoArchiveKey_Favorites];
-    [[NSUserDefaults standardUserDefaults] setObject:self.dictionaryFavoriteDetail forKey:TMInfoArchiveKey_FavoritesDetail];
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
@@ -955,6 +968,39 @@ static NSUInteger SearchKeywordNumberMax = 8;
     
     NSDictionary *dictionary = nil;
     NSURL *url = [self urlForInfoArchiveWithIdentifier:identifier];
+    NSError *error = nil;
+    if ([[NSFileManager defaultManager] fileExistsAtPath:[url path]])
+    {
+        NSData *data = [NSData dataWithContentsOfFile:[url path] options:0 error:&error];
+        if (error == nil)
+        {
+            if (data)
+            {
+                NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingWithData:data];
+                dictionary = [unarchiver decodeObjectForKey:[CryptoModule sharedModule].apiKey];
+                [unarchiver finishDecoding];
+            }
+            else
+            {
+                NSLog(@"TMInfoManager - No data in archive");
+            }
+        }
+        else
+        {
+            NSLog(@"TMInfoManager - load from archive error:\n%@", [error description]);
+        }
+    }
+    else
+    {
+        NSLog(@"TMInfoManager - No archive.");
+    }
+    return dictionary;
+}
+
+- (NSDictionary *)loadFromFavoriteArchive
+{
+    NSDictionary *dictionary = nil;
+    NSURL *url = [self urlForFavoriteArchive];
     NSError *error = nil;
     if ([[NSFileManager defaultManager] fileExistsAtPath:[url path]])
     {
@@ -1403,8 +1449,7 @@ static NSUInteger SearchKeywordNumberMax = 8;
     }
     [self.orderedSetFavoriteId addObject:productId];
     [self.arrayFavorite addObject:product];
-//    [self saveToArchive];
-    [self saveToLocal];
+    [self saveToFavoriteArchive];
     NSLog(@"orderedSetFavoriteId[%li] arrayFavorite[%li]", (long)self.orderedSetFavoriteId.count, (long)self.arrayFavorite.count);
     resultString = [LocalizedString AddToFavoriteSuccess];
     
@@ -2297,7 +2342,7 @@ static NSUInteger SearchKeywordNumberMax = 8;
         {
             NSLog(@"applicationDocumentsDirectory - url setResourceValue Failed:\n%@", [error description]);
         }
-        //        NSLog(@"_storagePathUrl.path[%@]", [_storagePathUrl path]);
+//        NSLog(@"_storagePathUrl.path[%@]", [_storagePathUrl path]);
     }
     else
     {
@@ -2313,6 +2358,13 @@ static NSUInteger SearchKeywordNumberMax = 8;
     {
         name = identifier;
     }
+    NSURL *url = [[[self urlForInfoDirectory] URLByAppendingPathComponent:name] URLByAppendingPathExtension:@"dat"];
+    return url;
+}
+
+- (NSURL *)urlForFavoriteArchive
+{
+    NSString *name = @"f";
     NSURL *url = [[[self urlForInfoDirectory] URLByAppendingPathComponent:name] URLByAppendingPathExtension:@"dat"];
     return url;
 }
@@ -2335,24 +2387,6 @@ static NSUInteger SearchKeywordNumberMax = 8;
     if (arrayKeyword)
     {
         [_orderedSetKeyword addObjectsFromArray:arrayKeyword];
-    }
-//    NSArray *arrayFavorites = [dictionaryArchive objectForKey:TMInfoArchiveKey_Favorites];
-    NSArray *arrayFavorites = [[NSUserDefaults standardUserDefaults] objectForKey:TMInfoArchiveKey_Favorites];
-    if (arrayFavorites)
-    {
-        [_arrayFavorite addObjectsFromArray:arrayFavorites];
-    }
-//    NSDictionary *dictionaryFavoriteDetail = [dictionaryArchive objectForKey:TMInfoArchiveKey_FavoritesDetail];
-    NSDictionary *dictionaryFavoriteDetail = [[NSUserDefaults standardUserDefaults] objectForKey:TMInfoArchiveKey_FavoritesDetail];
-    if (dictionaryFavoriteDetail)
-    {
-        [_dictionaryFavoriteDetail setDictionary:dictionaryFavoriteDetail];
-    }
-//    NSArray *arrayFavoriteId = [dictionaryArchive objectForKey:TMInfoArchiveKey_OrderSetFavoriteId];
-    NSArray *arrayFavoriteId = [[NSUserDefaults standardUserDefaults] objectForKey:TMInfoArchiveKey_OrderSetFavoriteId];
-    if (arrayFavoriteId)
-    {
-        [_orderedSetFavoriteId addObjectsFromArray:arrayFavoriteId];
     }
     BOOL shouldUpdateCachedData = YES;
     NSNumber *numberTimestamp = [dictionaryArchive objectForKey:TMInfoArchiveKey_ArchiveTimestamp];
@@ -2416,6 +2450,22 @@ static NSUInteger SearchKeywordNumberMax = 8;
         self.userLoginDate = loginDate;
     }
     [[NSNotificationCenter defaultCenter] postNotificationName:PostNotificationName_CartContentChanged object:self];
+}
+
+- (void)applyFavoriteFromArchivedDictionary:(NSDictionary *)dictionaryArchive
+{
+    if (dictionaryArchive == nil)
+        return;
+    NSArray *arrayFavorites = [dictionaryArchive objectForKey:TMInfoArchiveKey_Favorites];
+    if (arrayFavorites)
+    {
+        [_arrayFavorite addObjectsFromArray:arrayFavorites];
+    }
+    NSArray *arrayFavoriteId = [dictionaryArchive objectForKey:TMInfoArchiveKey_OrderSetFavoriteId];
+    if (arrayFavoriteId)
+    {
+        [_orderedSetFavoriteId addObjectsFromArray:arrayFavoriteId];
+    }
     [[NSNotificationCenter defaultCenter] postNotificationName:PostNotificationName_FavoriteContentChanged object:self];
 }
 
@@ -2465,9 +2515,6 @@ static NSUInteger SearchKeywordNumberMax = 8;
     [self.orderedSetPromotionRead removeAllObjects];
     [self.dictionaryInitialFilter removeAllObjects];
     [self.orderedSetKeyword removeAllObjects];
-//    [self.arrayFavorite removeAllObjects];
-//    [self.dictionaryFavoriteDetail removeAllObjects];
-//    [self.orderedSetFavoriteId removeAllObjects];
     [self.arrayCartCommon removeAllObjects];
     [self.dictionaryProductPurchaseInfoInCartCommon removeAllObjects];
     [self.arrayCartStorePickUp removeAllObjects];

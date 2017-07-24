@@ -131,7 +131,6 @@ typedef enum : NSUInteger {
 @property (nonatomic, strong) NSMutableOrderedSet *orderedSetPromotionRead;
 @property (nonatomic, strong) NSMutableArray *arrayKeywords;
 @property (nonatomic, strong) NSMutableArray *arrayFavorite;
-@property (nonatomic, strong) NSMutableDictionary *dictionaryFavoriteDetail;
 @property (nonatomic, strong) NSMutableArray *arrayCartCommon;
 @property (nonatomic, strong) NSMutableDictionary *dictionaryProductPurchaseInfoInCartCommon;
 @property (nonatomic, strong) NSMutableArray *arrayCartStorePickUp;
@@ -155,7 +154,9 @@ typedef enum : NSUInteger {
 + (instancetype)sharedManager;
 
 - (void)saveToArchive;
+- (void)saveToFavoriteArchive;
 - (NSDictionary *)loadFromArchive;
+- (NSDictionary *)loadFromFavoriteArchive;
 
 - (void)readPromotionForIdentifier:(NSString *)identifier;
 - (BOOL)alreadyReadPromotionForIdentifier:(NSString *)identifier;
