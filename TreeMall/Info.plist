@@ -63,6 +63,10 @@
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
 	</dict>
+	<key>NSLocationUsageDescription</key>
+	<string>TreeMall需要使用您的GPS資料</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>TreeMall需要使用您的GPS資料</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>TreeMall需要使用您的相簿</string>
 	<key>UIMainStoryboardFile</key>

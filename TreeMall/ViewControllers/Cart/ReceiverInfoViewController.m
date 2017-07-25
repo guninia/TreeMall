@@ -2097,7 +2097,7 @@ typedef enum : NSUInteger {
     
     NSLog(@"prepareOrderData - self.dictionaryInvoiceTemp:\n%@", [self.dictionaryInvoiceTemp description]);
     BOOL shouldContinue = YES;
-    NSNumber *total_cash = [self.dictionaryTotalCost objectForKey:SymphoxAPIParam_total_cash];
+//    NSNumber *total_cash = [self.dictionaryTotalCost objectForKey:SymphoxAPIParam_total_cash];
 //    if ([total_cash integerValue] > 0)
     if ([self.tradeId isEqualToString:@"OP"] == NO)
     {

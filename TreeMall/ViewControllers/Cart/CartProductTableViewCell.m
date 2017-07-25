@@ -92,7 +92,7 @@
         originY = CGRectGetMinY(self.separator.frame) - intervalV - columnHeight;
         CGSize sizeText = [self.labelQuantity.text sizeWithAttributes:[NSDictionary dictionaryWithObjectsAndKeys:self.labelQuantity.font, NSFontAttributeName, nil]];
         CGSize sizeLabel = CGSizeMake(ceil(sizeText.width), ceil(sizeText.height));
-        CGFloat labelOriginX = self.viewContent.frame.size.width - marginH - sizeLabel.width;;
+        CGFloat labelOriginX = self.viewContent.frame.size.width - marginH * 2 - sizeLabel.width;;
         CGRect frame = CGRectMake(labelOriginX, originY, sizeLabel.width, columnHeight);
         self.labelQuantity.frame = frame;
     }
@@ -224,7 +224,7 @@
         _buttonCondition = [[UIButton alloc] initWithFrame:CGRectZero];
         [_buttonCondition setTitle:[LocalizedString ChooseQuantityAndDiscount] forState:UIControlStateNormal];
         [_buttonCondition setTitleColor:[UIColor orangeColor] forState:UIControlStateNormal];
-        [_buttonCondition setTitleColor:[UIColor lightGrayColor] forState:UIControlStateSelected];
+        [_buttonCondition setTitleColor:[UIColor orangeColor] forState:UIControlStateSelected];
         [_buttonCondition setTitleColor:[UIColor lightGrayColor] forState:UIControlStateDisabled];
         [_buttonCondition.layer setBorderWidth:1.0];
         [_buttonCondition.layer setCornerRadius:3.0];

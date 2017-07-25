@@ -8,6 +8,7 @@
 
 #import "StorePickupWebViewController.h"
 #import "APIDefinition.h"
+#import "LocalizedString.h"
 #import <Google/Analytics.h>
 #import "EventLog.h"
 @import FirebaseCrash;
@@ -45,7 +46,8 @@
     }
     else
     {
-        urlString = [NSString stringWithFormat:@"http://mcvs.map.com.tw/default.asp?cvsname=%@store/store.do", SymphoxAPIDomain];
+        urlString = [NSString stringWithFormat:@"https://mcvs.map.com.tw/default.asp?cvsname=%@store/store.do", SymphoxAPIDomain];
+//        urlString = [NSString stringWithFormat:@"https://www.google.com.tw/maps"];
     }
     if (urlString)
     {
@@ -231,8 +233,15 @@
         {
             [_delegate storePickupWebViewController:self didSelectStoreWithDictionary:jsonObject];
         }
+        [self dismiss];
     }
-    [self dismiss];
+    else
+    {
+        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:message preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction *action = [UIAlertAction actionWithTitle:[LocalizedString Confirm] style:UIAlertActionStyleDefault handler:nil];
+        [alertController addAction:action];
+        [self presentViewController:alertController animated:YES completion:nil];
+    }
     completionHandler();
 }
 

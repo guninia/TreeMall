@@ -82,6 +82,21 @@
     // Do any additional setup after loading the view from its nib.
     self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
     
+    UIImage *imageCart = [[UIImage imageNamed:@"ind_ico_f_menu_1"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    NSMutableArray *items = [NSMutableArray array];
+    UIImage *imageMore = [[UIImage imageNamed:@"icon_more"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    if (imageMore)
+    {
+        UIBarButtonItem *item = [[UIBarButtonItem alloc] initWithImage:imageMore style:UIBarButtonItemStylePlain target:self action:@selector(buttonFunctionPressed:)];
+        [items addObject:item];
+    }
+    if (imageCart)
+    {
+        UIBarButtonItem *item = [[UIBarButtonItem alloc] initWithImage:imageCart style:UIBarButtonItemStylePlain target:self action:@selector(buttonItemCartPressed:)];
+        [items addObject:item];
+    }
+    self.navigationItem.rightBarButtonItems = items;
+    
     [self.view setBackgroundColor:[UIColor whiteColor]];
     [self.view addSubview:self.scrollView];
     [self.scrollView addSubview:self.collectionViewImage];
