@@ -16,8 +16,13 @@
 #import "CartViewController.h"
 #import "LoginViewController.h"
 #import "LoadingFooterView.h"
+#import <Google/Analytics.h>
+#import "EventLog.h"
+@import FirebaseCrash;
 
-@interface HotSaleViewController ()
+@interface HotSaleViewController () {
+    id<GAITracker> gaTracker;
+}
 
 @property (nonatomic, assign) BOOL shouldShowLoadingView;
 
@@ -45,17 +50,12 @@
     UIBarButtonItem *buttonItem = [[UIBarButtonItem alloc] initWithImage:image style:UIBarButtonItemStylePlain target:self action:@selector(buttonItemPressed:)];
     [self.navigationItem setLeftBarButtonItem:buttonItem];
     
-    UIImage *imageCart = [[UIImage imageNamed:@"ind_ico_f_menu_1"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-    if (imageCart)
-    {
-        UIBarButtonItem *item = [[UIBarButtonItem alloc] initWithImage:imageCart style:UIBarButtonItemStylePlain target:self action:@selector(buttonItemCartPressed:)];
-        [self.navigationItem setRightBarButtonItem:item];
-    }
-    
     [self.view addSubview:self.tableView];
     [self.tableView reloadData];
     
     [self retrieveDataForType:self.type];
+
+    gaTracker = [GAI sharedInstance].defaultTracker;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -83,6 +83,14 @@
     {
         self.tableView.frame = self.view.bounds;
     }
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
+    // GA screen log
+    [gaTracker set:kGAIScreenName value:self.title];
+    [gaTracker send:[[GAIDictionaryBuilder createScreenView] build]];
 }
 
 - (UITableView *)tableView
@@ -583,6 +591,14 @@
             ProductDetailViewController *viewController = [[ProductDetailViewController alloc] initWithNibName:@"ProductDetailViewController" bundle:[NSBundle mainBundle]];
             viewController.productIdentifier = productId;
             viewController.title = [LocalizedString ProductInfo];
+            
+            NSString * productName = [dictionary objectForKey:SymphoxAPIParam_cpdt_name];
+            [gaTracker send:[[GAIDictionaryBuilder
+                              createEventWithCategory:[EventLog twoString:self.title _:logPara_列表一]
+                              action:[EventLog index:indexPath.row _to_:viewController.title]
+                              label:[EventLog twoString:[productId stringValue] _:productName]
+                              value:nil] build]];
+            
             [self.navigationController pushViewController:viewController animated:YES];
         }
     }
@@ -634,6 +650,13 @@
         // Should login first.
         LoginViewController *viewControllerLogin = [[LoginViewController alloc] initWithNibName:@"LoginViewController" bundle:[NSBundle mainBundle]];
         UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:viewControllerLogin];
+        
+        [gaTracker send:[[GAIDictionaryBuilder
+                          createEventWithCategory:[EventLog twoString:self.title _:logPara_列表一]
+                          action:[EventLog index:cell.tag _:logPara_加入購物車]
+                          label:[EventLog to_:logPara_登入]
+                          value:nil] build]];
+        
         [self presentViewController:navigationController animated:YES completion:nil];
         return;
     }
@@ -641,6 +664,8 @@
         return;
     NSDictionary *dictionary = [self.arrayProducts objectAtIndex:cell.tag];
     NSArray *carts = [dictionary objectForKey:SymphoxAPIParam_can_used_cart];
+    NSNumber * productId = [dictionary objectForKey:SymphoxAPIParam_cpdt_num];
+    NSString * productName = [dictionary objectForKey:SymphoxAPIParam_cpdt_name];
     if (carts == nil || [carts isEqual:[NSNull null]])
         return;
     
@@ -664,6 +689,13 @@
             __weak HotSaleViewController *weakSelf = self;
             UIAlertAction *action = [UIAlertAction actionWithTitle:title style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
                 [weakSelf addProduct:dictionary toCart:type named:title shouldShowAlert:YES];
+                
+                [gaTracker send:[[GAIDictionaryBuilder
+                                  createEventWithCategory:[EventLog twoString:self.title _:logPara_列表一]
+                                  action:[EventLog index:cell.tag _:logPara_加入購物車]
+                                  label:[EventLog threeString:[EventLog cartTypeInString:type] _:[productId stringValue] _:productName]
+                                  value:nil] build]];
+                
             }];
             [alertController addAction:action];
         }
@@ -677,11 +709,24 @@
         NSInteger type = [numberCartType integerValue];
         NSString *title = [self titleForCartType:type];
         [self addProduct:dictionary toCart:type named:title shouldShowAlert:YES];
+        
+        [gaTracker send:[[GAIDictionaryBuilder
+                          createEventWithCategory:[EventLog twoString:self.title _:logPara_列表一]
+                          action:[EventLog index:cell.tag _:logPara_加入購物車]
+                          label:[EventLog threeString:[EventLog cartTypeInString:type] _:[productId stringValue] _:productName]
+                          value:nil] build]];
     }
     else if (canDirectlyPurchase)
     {
         [[TMInfoManager sharedManager] resetCartForType:CartTypeDirectlyPurchase];
         [self addProduct:dictionary toCart:CartTypeDirectlyPurchase named:@"" shouldShowAlert:NO];
+        
+        [gaTracker send:[[GAIDictionaryBuilder
+                          createEventWithCategory:[EventLog twoString:self.title _:logPara_列表一]
+                          action:[EventLog index:cell.tag _:logPara_加入購物車]
+                          label:[EventLog threeString:[EventLog cartTypeInString:4] _:[productId stringValue] _:productName]
+                          value:nil] build]];
+        
         [self presentCartViewForType:CartTypeDirectlyPurchase];
     }
 }
@@ -700,6 +745,13 @@
         isFavorite = [[TMInfoManager sharedManager] favoriteContainsProductWithIdentifier:cpdt_num];
     }
     cell.favorite = isFavorite;
+    
+    NSString * productName = [dictionary objectForKey:SymphoxAPIParam_cpdt_name];
+    [gaTracker send:[[GAIDictionaryBuilder
+                      createEventWithCategory:[EventLog twoString:self.title _:logPara_列表一]
+                      action:[EventLog index:cell.tag _:logPara_加入我的最愛]
+                      label:[EventLog twoString:[cpdt_num stringValue] _:productName]
+                      value:nil] build]];
 }
 
 @end

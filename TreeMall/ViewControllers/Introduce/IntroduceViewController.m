@@ -7,8 +7,13 @@
 //
 
 #import "IntroduceViewController.h"
+#import <Google/Analytics.h>
+#import "EventLog.h"
+@import FirebaseCrash;
 
-@interface IntroduceViewController ()
+@interface IntroduceViewController () {
+    id<GAITracker> gaTracker;
+}
 
 @property (nonatomic, strong) NSMutableArray *arrayImages;
 
@@ -38,11 +43,21 @@
     [self.pageControl setNumberOfPages:[self.arrayImages count]];
     [self.pageControl setPageIndicatorTintColor:[UIColor lightGrayColor]];
     [self.pageControl setCurrentPageIndicatorTintColor:[UIColor grayColor]];
+
+    gaTracker = [GAI sharedInstance].defaultTracker;
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+
+    // GA screen log
+    [gaTracker set:kGAIScreenName value:logPara_介紹];
+    [gaTracker send:[[GAIDictionaryBuilder createScreenView] build]];
 }
 
 /*

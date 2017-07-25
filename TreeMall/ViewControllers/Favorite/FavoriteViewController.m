@@ -12,8 +12,13 @@
 #import "LocalizedString.h"
 #import "ProductDetailViewController.h"
 #import "LoginViewController.h"
+#import <Google/Analytics.h>
+#import "EventLog.h"
+@import FirebaseCrash;
 
-@interface FavoriteViewController ()
+@interface FavoriteViewController () {
+    id<GAITracker> gaTracker;
+}
 
 - (void)refreshData;
 - (BOOL)canDirectlyPurchaseProduct:(NSDictionary *)product;
@@ -40,6 +45,8 @@
     [self.navigationItem setRightBarButtonItem:rightItem];
     
     [self.view addSubview:self.tableViewFavorites];
+
+    gaTracker = [GAI sharedInstance].defaultTracker;
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -50,6 +57,10 @@
         _shouldShowLoadingFooter = NO;
     }
     [self.tableViewFavorites reloadData];
+
+    // GA screen log
+    [gaTracker set:kGAIScreenName value:self.title];
+    [gaTracker send:[[GAIDictionaryBuilder createScreenView] build]];
 }
 
 - (void)didReceiveMemoryWarning {

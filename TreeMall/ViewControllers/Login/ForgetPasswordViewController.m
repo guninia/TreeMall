@@ -13,8 +13,13 @@
 #import "APIDefinition.h"
 #import "CryptoModule.h"
 #import "SHAPIAdapter.h"
+#import <Google/Analytics.h>
+#import "EventLog.h"
+@import FirebaseCrash;
 
-@interface ForgetPasswordViewController ()
+@interface ForgetPasswordViewController () {
+    id<GAITracker> gaTracker;
+}
 
 - (void)startForgetPasswordProcess;
 - (void)requestPasswordWithOptions:(NSDictionary *)options;
@@ -45,6 +50,7 @@
     
     [_buttonConfirm.layer setCornerRadius:5.0];
     
+    gaTracker = [GAI sharedInstance].defaultTracker;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -52,6 +58,13 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
+    // GA screen log
+    [gaTracker set:kGAIScreenName value:self.title];
+    [gaTracker send:[[GAIDictionaryBuilder createScreenView] build]];
+}
 /*
 #pragma mark - Navigation
 

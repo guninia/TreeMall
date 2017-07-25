@@ -14,8 +14,13 @@
 #import "LoadingFooterView.h"
 #import "UIViewController+FTPopMenu.h"
 #import "CouponDetailViewController.h"
+#import <Google/Analytics.h>
+#import "EventLog.h"
+@import FirebaseCrash;
 
-@interface CouponListViewController ()
+@interface CouponListViewController () {
+    id<GAITracker> gaTracker;
+}
 
 @property (nonatomic, strong) UIImageView *tableBackgroundView;
 @property (nonatomic, strong) UILabel *labelNoContent;
@@ -70,11 +75,21 @@
         NSInteger nextPage = _currentPage + 1;
         [self retrieveCouponDataForState:self.stateIndex sortByType:self.sortType atPage:nextPage];
     }
+
+    gaTracker = [GAI sharedInstance].defaultTracker;
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
+    // GA screen log
+    [gaTracker set:kGAIScreenName value:[LocalizedString MyCoupon]];
+    [gaTracker send:[[GAIDictionaryBuilder createScreenView] build]];
 }
 
 /*

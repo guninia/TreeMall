@@ -8,8 +8,13 @@
 
 #import "StorePickupWebViewController.h"
 #import "APIDefinition.h"
+#import <Google/Analytics.h>
+#import "EventLog.h"
+@import FirebaseCrash;
 
-@interface StorePickupWebViewController ()
+@interface StorePickupWebViewController () {
+    id<GAITracker> gaTracker;
+}
 
 @property (nonatomic, weak) IBOutlet UIWebView *webView;
 @property (nonatomic, strong) WKWebView *wkWebView;
@@ -50,11 +55,21 @@
         [self.wkWebView loadRequest:request];
         [self.activityIndicator startAnimating];
     }
+    
+    gaTracker = [GAI sharedInstance].defaultTracker;
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
+    // GA screen log
+    [gaTracker set:kGAIScreenName value:self.title];
+    [gaTracker send:[[GAIDictionaryBuilder createScreenView] build]];
 }
 
 /*

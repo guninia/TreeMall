@@ -15,6 +15,9 @@
 #import "CryptoModule.h"
 #import "SHAPIAdapter.h"
 #import "ColorFooterView.h"
+#import <Google/Analytics.h>
+#import "EventLog.h"
+@import FirebaseCrash;
 
 #define kSectionContentTitle @"SectionContentTitle"
 #define kSectionContentText @"SectionContentText"
@@ -29,7 +32,9 @@ typedef enum : NSUInteger {
     SectionIndexTotal
 } SectionIndex;
 
-@interface CompleteOrderViewController ()
+@interface CompleteOrderViewController () {
+    id<GAITracker> gaTracker;
+}
 
 @property (nonatomic, strong) NSNumberFormatter *numberFormatter;
 @property (nonatomic, strong) NSMutableArray *arrayATM;
@@ -83,11 +88,21 @@ typedef enum : NSUInteger {
     }
     [self prepareData];
     [self retrieveOrderDescription];
+    
+    gaTracker = [GAI sharedInstance].defaultTracker;
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
+    // GA screen log
+    [gaTracker set:kGAIScreenName value:self.title];
+    [gaTracker send:[[GAIDictionaryBuilder createScreenView] build]];
 }
 
 /*

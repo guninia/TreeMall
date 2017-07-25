@@ -20,8 +20,13 @@
 #import "TermsViewController.h"
 #import "ForgetPasswordViewController.h"
 #import "RegisterViewController.h"
+#import <Google/Analytics.h>
+#import "EventLog.h"
+@import FirebaseCrash;
 
-@interface LoginViewController ()
+@interface LoginViewController () {
+    id<GAITracker> gaTracker;
+}
 
 - (void)loginFacebook;
 - (void)retrieveFacebookData;
@@ -190,6 +195,8 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(facebookTokenDidChangeNotification:) name:FBSDKAccessTokenDidChangeNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(facebookProfileDidChangeNotification:) name:FBSDKProfileDidChangeNotification object:nil];
+    
+    gaTracker = [GAI sharedInstance].defaultTracker;
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -199,6 +206,10 @@
         [self.navigationController setNavigationBarHidden:YES animated:animated];
     }
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userDidLoggedInNotification:) name:PostNotificationName_UserLoggedIn object:nil];
+    
+    // GA screen log
+    [gaTracker set:kGAIScreenName value:logPara_登入];
+    [gaTracker send:[[GAIDictionaryBuilder createScreenView] build]];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -557,6 +568,20 @@
                     // Should go next step.
                     [[TMInfoManager sharedManager] retrieveUserInformation];
                     [[NSNotificationCenter defaultCenter] postNotificationName:PostNotificationName_UserLoggedIn object:nil];
+
+                    if ([type isEqualToString:@"facebook"]) {
+                        [gaTracker send:[[GAIDictionaryBuilder
+                                          createEventWithCategory:[EventLog twoString:logPara_登入 _:logPara_Facebook帳號]
+                                          action:logPara_成功
+                                          label:nil
+                                          value:nil] build]];
+                    } else if ([type isEqualToString:@"google"]) {
+                        [gaTracker send:[[GAIDictionaryBuilder
+                                          createEventWithCategory:[EventLog twoString:logPara_登入 _:logPara_Google帳號]
+                                          action:logPara_成功
+                                          label:nil
+                                          value:nil] build]];
+                    }
                 }
                 else
                 {
@@ -676,6 +701,13 @@
                 // Should continue to process data.
                 [weakSelf processLoginData:data];
                 [[NSNotificationCenter defaultCenter] postNotificationName:PostNotificationName_UserLoggedIn object:nil];
+                
+                [gaTracker send:[[GAIDictionaryBuilder
+                                  createEventWithCategory:[EventLog twoString:logPara_登入 _:logPara_登入]
+                                  action:logPara_成功
+                                  label:nil
+                                  value:nil] build]];
+                
             }
             else
             {
@@ -758,6 +790,13 @@
     if (self.switchAgreement.isOn == NO)
     {
         [self presentSimpleAlertViewForMessage:[LocalizedString PleaseAgreeMemberTermsFirst]];
+        
+        [gaTracker send:[[GAIDictionaryBuilder
+                          createEventWithCategory:[EventLog twoString:logPara_登入 _:logPara_警告]
+                          action:logPara_請先同意會員條款
+                          label:nil
+                          value:nil] build]];
+        
         return;
     }
     [self loginFacebook];
@@ -768,6 +807,13 @@
     if (self.switchAgreement.isOn == NO)
     {
         [self presentSimpleAlertViewForMessage:[LocalizedString PleaseAgreeMemberTermsFirst]];
+        
+        [gaTracker send:[[GAIDictionaryBuilder
+                          createEventWithCategory:[EventLog twoString:logPara_登入 _:logPara_警告]
+                          action:logPara_請先同意會員條款
+                          label:nil
+                          value:nil] build]];
+        
         return;
     }
     [self signInGoogle];
@@ -776,11 +822,24 @@
 - (void)actCheckButtonAgreementPressed:(id)sender
 {
     [self.switchAgreement setOn:!self.switchAgreement.isOn animated:YES];
+    
+    [gaTracker send:[[GAIDictionaryBuilder
+                      createEventWithCategory:[EventLog twoString:logPara_登入 _:logPara_同意會員條款]
+                      action:logPara_點擊
+                      label:nil
+                      value:nil] build]];
 }
 
 - (void)actButtonAgreementContentPressed:(id)sender
 {
     TermsViewController *viewController = [[TermsViewController alloc] initWithNibName:@"TermsViewController" bundle:[NSBundle mainBundle]];
+    
+    [gaTracker send:[[GAIDictionaryBuilder
+                      createEventWithCategory:[EventLog twoString:logPara_登入 _:logPara_詳細內容]
+                      action:[EventLog to_:logPara_會員條款]
+                      label:nil
+                      value:nil] build]];
+    
     if (self.navigationController)
     {
         [self.navigationController pushViewController:viewController animated:YES];
@@ -794,6 +853,13 @@
 - (void)actButtonJoinMemberPressed:(id)sender
 {
     RegisterViewController *viewController = [[RegisterViewController alloc] initWithNibName:@"RegisterViewController" bundle:[NSBundle mainBundle]];
+    
+    [gaTracker send:[[GAIDictionaryBuilder
+                      createEventWithCategory:[EventLog twoString:logPara_登入 _:logPara_加入會員]
+                      action:viewController.title
+                      label:nil
+                      value:nil] build]];
+    
     if (self.navigationController)
     {
         [self.navigationController pushViewController:viewController animated:YES];
@@ -807,6 +873,13 @@
 - (void)actButtonForgetPasswordPressed:(id)sender
 {
     ForgetPasswordViewController *viewController = [[ForgetPasswordViewController alloc] initWithNibName:@"ForgetPasswordViewController" bundle:[NSBundle mainBundle]];
+    
+    [gaTracker send:[[GAIDictionaryBuilder
+                      createEventWithCategory:[EventLog twoString:logPara_登入 _:logPara_忘記密碼]
+                      action:viewController.title
+                      label:nil
+                      value:nil] build]];
+    
     if (self.navigationController)
     {
         [self.navigationController pushViewController:viewController animated:YES];

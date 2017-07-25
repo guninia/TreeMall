@@ -14,8 +14,13 @@
 #import "SHAPIAdapter.h"
 #import "PaymentTypeViewController.h"
 #import "Definition.h"
+#import <Google/Analytics.h>
+#import "EventLog.h"
+@import FirebaseCrash;
 
-@interface AdditionalPurchaseViewController ()
+@interface AdditionalPurchaseViewController () {
+    id<GAITracker> gaTracker;
+}
 
 - (void)showLoadingViewAnimated:(BOOL)animated;
 - (void)hideLoadingViewAnimated:(BOOL)animated;
@@ -44,11 +49,21 @@
         [self.navigationController.view addSubview:self.viewLoading];
         [self.navigationController.view addSubview:self.viewQuantityInput];
     }
+    
+    gaTracker = [GAI sharedInstance].defaultTracker;
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+
+    // GA screen log
+    [gaTracker set:kGAIScreenName value:self.title];
+    [gaTracker send:[[GAIDictionaryBuilder createScreenView] build]];
 }
 
 /*
@@ -938,6 +953,13 @@
                     viewController.dictionaryData = resultDictionary;
                     viewController.arrayProductsFromCart = weakSelf.arrayProductsFromCart;
                     viewController.type = self.currentType;
+
+                    [gaTracker send:[[GAIDictionaryBuilder
+                                      createEventWithCategory:[EventLog twoString:self.title _:logPara_下一步]
+                                      action:[EventLog to_:viewController.title]
+                                      label:nil
+                                      value:nil] build]];
+                    
                     [self.navigationController pushViewController:viewController animated:YES];
                 }
                 else
@@ -998,6 +1020,14 @@
     {
         self.viewQuantityInput.maxValue = [maxSellQty unsignedIntegerValue];
     }
+    
+    NSString * name = [product objectForKey:SymphoxAPIParam_cpdt_name];
+    [gaTracker send:[[GAIDictionaryBuilder
+                      createEventWithCategory:[EventLog twoString:self.title _:logPara_直接購買]
+                      action:logPara_點擊
+                      label:[EventLog twoString:[productId stringValue] _:name]
+                      value:nil] build]];
+    
     self.viewQuantityInput.tag = index;
     [self.viewQuantityInput show];
 }

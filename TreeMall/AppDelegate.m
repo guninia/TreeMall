@@ -9,9 +9,11 @@
 #import "AppDelegate.h"
 #import "Definition.h"
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
-#import <GoogleSignIn/GoogleSignIn.h>
+#import <Google/SignIn.h>
 #import "TMInfoManager.h"
 #import "ViewController.h"
+#import <Google/Analytics.h>
+@import Firebase;
 
 @interface AppDelegate ()
 
@@ -25,6 +27,22 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
     
+    // configure tracker from GoogleService-Info.plist.
+    NSError *configureError;
+    [[GGLContext sharedInstance] configureWithError:&configureError];
+    NSAssert(!configureError, @"Error configure Google services: %@", configureError);
+    
+    // optional: configure GAI options.
+    GAI *gai = [GAI sharedInstance];
+    gai.trackUncaughtExceptions = YES;  // reportuncaught exceptions
+    gai.logger.logLevel = kGAILogLevelVerbose;  // remove before app release
+    
+    // Uncaught Exception for GA at here        // For Firebase, there's a script needed to be setup
+    [[GAI sharedInstance] setTrackUncaughtExceptions:YES];
+    
+    // adopt Firebase
+    [FIRApp configure];
+
     [[FBSDKApplicationDelegate sharedInstance] application:application didFinishLaunchingWithOptions:launchOptions];
     
     [[UINavigationBar appearance] setTitleTextAttributes:

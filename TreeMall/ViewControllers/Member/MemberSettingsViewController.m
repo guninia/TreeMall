@@ -19,6 +19,9 @@
 #import "WebViewViewController.h"
 #import "EmailAuthViewController.h"
 #import "ChangePasswordViewController.h"
+#import <Google/Analytics.h>
+#import "EventLog.h"
+@import FirebaseCrash;
 
 typedef enum : NSUInteger {
     MemberSettingOptionStart,
@@ -40,7 +43,9 @@ typedef enum : NSUInteger {
     TextFieldTagTotal
 } TextFieldTag;
 
-@interface MemberSettingsViewController ()
+@interface MemberSettingsViewController () {
+    id<GAITracker> gaTracker;
+}
 
 - (void)showLoadingViewAnimated:(BOOL)animated;
 - (void)hideLoadingViewAnimated:(BOOL)animated;
@@ -86,11 +91,21 @@ typedef enum : NSUInteger {
     [self.navigationController.tabBarController.view addSubview:self.viewLoading];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handlerOfUserInformationUpdatedNotification:) name:PostNotificationName_UserInformationUpdated object:nil];
+
+    gaTracker = [GAI sharedInstance].defaultTracker;
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
+    // GA screen log
+    [gaTracker set:kGAIScreenName value:self.title];
+    [gaTracker send:[[GAIDictionaryBuilder createScreenView] build]];
 }
 
 - (void)dealloc

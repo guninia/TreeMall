@@ -11,8 +11,13 @@
 #import "SHAPIAdapter.h"
 #import "Definition.h"
 #import "LocalizedString.h"
+#import <Google/Analytics.h>
+#import "EventLog.h"
+@import FirebaseCrash;
 
-@interface TermsViewController ()
+@interface TermsViewController () {
+    id<GAITracker> gaTracker;
+}
 
 - (void)retrieveData;
 - (BOOL)processData:(id)data;
@@ -42,11 +47,22 @@
 //    [_textViewTerms setScrollEnabled:YES];
     
     [self retrieveData];
+
+    gaTracker = [GAI sharedInstance].defaultTracker;
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+
+    
+    // GA screen log
+    [gaTracker set:kGAIScreenName value:self.title];
+    [gaTracker send:[[GAIDictionaryBuilder createScreenView] build]];
 }
 
 /*

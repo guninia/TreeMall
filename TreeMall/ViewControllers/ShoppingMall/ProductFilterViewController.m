@@ -13,6 +13,9 @@
 #import "CryptoModule.h"
 #import "SHAPIAdapter.h"
 #import "ProductFilterTextCollectionViewCell.h"
+#import <Google/Analytics.h>
+#import "EventLog.h"
+@import FirebaseCrash;
 
 static CGFloat kMarginTop = 10.0;
 static CGFloat kMarginBot = 10.0;
@@ -32,7 +35,9 @@ typedef enum : NSUInteger {
     CollectionViewTagTotal
 } CollectionViewTag;
 
-@interface ProductFilterViewController ()
+@interface ProductFilterViewController () {
+    id<GAITracker> gaTracker;
+}
 
 - (void)prepareOptionsDefaultFromDictionary:(NSDictionary *)defaultDictionary;
 - (void)retrieveMainCategoryNameMapping;
@@ -213,11 +218,21 @@ typedef enum : NSUInteger {
             [self.labelPointRange setHidden:YES];
         }
     }
+
+    gaTracker = [GAI sharedInstance].defaultTracker;
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+
+    // GA screen log
+    [gaTracker set:kGAIScreenName value:self.title];
+    [gaTracker send:[[GAIDictionaryBuilder createScreenView] build]];
 }
 
 /*

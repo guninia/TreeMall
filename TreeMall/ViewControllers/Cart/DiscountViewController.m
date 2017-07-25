@@ -12,8 +12,13 @@
 #import "LocalizedString.h"
 #import "APIDefinition.h"
 #import "TMInfoManager.h"
+#import <Google/Analytics.h>
+#import "EventLog.h"
+@import FirebaseCrash;
 
-@interface DiscountViewController ()
+@interface DiscountViewController () {
+    id<GAITracker> gaTracker;
+}
 
 @property (nonatomic, strong) UILabel *labelTip;
 @property (nonatomic, assign) NSInteger currentSelectedIndex;
@@ -48,11 +53,21 @@
     [self.view addSubview:self.tableViewDiscount];
     [self.view addSubview:self.labelTip];
     [self.view addSubview:self.buttonConfirm];
+
+    gaTracker = [GAI sharedInstance].defaultTracker;
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
+    // GA screen log
+    [gaTracker set:kGAIScreenName value:self.title];
+    [gaTracker send:[[GAIDictionaryBuilder createScreenView] build]];
 }
 
 /*
@@ -188,6 +203,12 @@
 
 - (void)buttonClosePresesd:(id)sender
 {
+    [gaTracker send:[[GAIDictionaryBuilder
+                      createEventWithCategory:[EventLog twoString:self.title _:logPara_關閉]
+                      action:logPara_點擊
+                      label:nil
+                      value:nil] build]];
+    
     if (self.navigationController.presentingViewController)
     {
         [self.navigationController.presentingViewController dismissViewControllerAnimated:YES completion:nil];

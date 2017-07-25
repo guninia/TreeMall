@@ -13,6 +13,9 @@
 #import "CryptoModule.h"
 #import "SHAPIAdapter.h"
 #import "APIDefinition.h"
+#import <Google/Analytics.h>
+#import "EventLog.h"
+@import FirebaseCrash;
 
 typedef enum : NSUInteger {
     CollectionViewSectionSearchLatest,
@@ -20,7 +23,9 @@ typedef enum : NSUInteger {
     CollectionViewSectionTotal,
 } CollectionViewSection;
 
-@interface SearchViewController ()
+@interface SearchViewController () {
+    id<GAITracker> gaTracker;
+}
 
 - (void)dismiss;
 - (void)retrieveLatestSearchData;
@@ -58,6 +63,8 @@ typedef enum : NSUInteger {
     {
         [self retrieveHotSearchData];
     }
+
+    gaTracker = [GAI sharedInstance].defaultTracker;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -66,6 +73,13 @@ typedef enum : NSUInteger {
     
 }
 
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
+    // GA screen log
+    [gaTracker set:kGAIScreenName value:self.title];
+    [gaTracker send:[[GAIDictionaryBuilder createScreenView] build]];
+}
 /*
 #pragma mark - Navigation
 
@@ -404,15 +418,18 @@ typedef enum : NSUInteger {
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
     NSArray *array = nil;
+    NSString * listName = nil;
     switch (indexPath.section) {
         case CollectionViewSectionSearchLatest:
         {
             array = self.arraySearchLatest;
+            listName = logPara_最近搜尋列表;
         }
             break;
         case CollectionViewSectionSearchHot:
         {
             array = self.arraySearchHot;
+            listName = logPara_熱門搜尋列表;
         }
             break;
         default:
@@ -422,6 +439,12 @@ typedef enum : NSUInteger {
     {
         NSString *text = [array objectAtIndex:indexPath.row];
         [self confirmAndSearchKeyword:text];
+        
+        [gaTracker send:[[GAIDictionaryBuilder
+                          createEventWithCategory:[EventLog twoString:self.title _:listName]
+                          action:[EventLog index:indexPath.row _to_:logPara_商品列表]
+                          label:nil
+                          value:nil] build]];
     }
 }
 
@@ -513,6 +536,12 @@ typedef enum : NSUInteger {
             UIAlertAction *actionConfirm = [UIAlertAction actionWithTitle:[LocalizedString Confirm] style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
                 [[TMInfoManager sharedManager] removeAllKeywords];
                 [weakSelf retrieveLatestSearchData];
+                
+                [gaTracker send:[[GAIDictionaryBuilder
+                                  createEventWithCategory:[EventLog twoString:self.title _:logPara_刪除]
+                                  action:logPara_點擊
+                                                 label:nil
+                                                 value:nil] build]];
             }];
             [alertController addAction:actionCancel];
             [alertController addAction:actionConfirm];

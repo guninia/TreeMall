@@ -16,8 +16,13 @@
 #import "LocalizedString.h"
 #import "TMInfoManager.h"
 #import "PromotionDetailViewController.h"
+#import <Google/Analytics.h>
+#import "EventLog.h"
+@import FirebaseCrash;
 
-@interface PromotionViewController ()
+@interface PromotionViewController () {
+    id<GAITracker> gaTracker;
+}
 
 - (BOOL)retrieveData;
 - (BOOL)processData:(id)data;
@@ -50,11 +55,21 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notificationHandlerTokenUpdated:) name:PostNotificationName_TokenUpdated object:nil];
     [self retrieveData];
+    
+    gaTracker = [GAI sharedInstance].defaultTracker;
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
+    // GA screen log
+    [gaTracker set:kGAIScreenName value:self.title];
+    [gaTracker send:[[GAIDictionaryBuilder createScreenView] build]];
 }
 
 /*
@@ -218,6 +233,14 @@
         PromotionDetailViewController *viewController = [[PromotionDetailViewController alloc] initWithNibName:@"PromotionDetailViewController" bundle:[NSBundle mainBundle]];
         viewController.dictionaryData = dictionary;
         viewController.title = [LocalizedString PromotionNotification];
+        
+        NSString *title = [dictionary objectForKey:SymphoxAPIParam_name];
+        [gaTracker send:[[GAIDictionaryBuilder
+                          createEventWithCategory:[EventLog twoString:self.title _:logPara_列表一]
+                          action:[EventLog index:indexPath.row _to_:viewController.title]
+                          label:[EventLog twoString:identifier _:title]
+                          value:nil] build]];
+        
         [self.navigationController pushViewController:viewController animated:YES];
     }
 }

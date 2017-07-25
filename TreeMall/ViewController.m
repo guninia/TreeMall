@@ -22,8 +22,13 @@
 #import "IntroduceViewController.h"
 #import "APIDefinition.h"
 #import "StorePickupWebViewController.h"
+#import <Google/Analytics.h>
+#import "EventLog.h"
+@import FirebaseCrash;
 
-@interface ViewController ()
+@interface ViewController () {
+    id<GAITracker> gaTracker;
+}
 
 - (void)postUserLogoutProcedure;
 - (void)JumpToTab:(NSInteger)tabIndex;
@@ -68,6 +73,9 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
+    
+    gaTracker = [GAI sharedInstance].defaultTracker;
+    
     NSMutableArray *vControllerArray = [NSMutableArray array];
     NSMutableDictionary *itemImageDictionary = [NSMutableDictionary dictionary];
     NSMutableDictionary *itemSelectedImageDictionary = [NSMutableDictionary dictionary];
@@ -494,6 +502,13 @@
                 [self presentViewController:navigationController animated:YES completion:nil];
             }
         }
+        
+        [gaTracker send:[[GAIDictionaryBuilder
+                          createEventWithCategory:[EventLog twoString:logPara_主選單 _:rootViewController.title]
+                          action:logPara_點擊
+                          label:nil
+                          value:nil] build]];
+        
     }
     return shouldSelect;
 }

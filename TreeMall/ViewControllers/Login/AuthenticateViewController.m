@@ -14,8 +14,13 @@
 #import "Utility.h"
 #import "APIDefinition.h"
 #import "CryptoModule.h"
+#import <Google/Analytics.h>
+#import "EventLog.h"
+@import FirebaseCrash;
 
-@interface AuthenticateViewController ()
+@interface AuthenticateViewController () {
+    id<GAITracker> gaTracker;
+}
 
 - (void)presentActionSheetForAuthenticateType;
 - (void)startAuthenticateWithUrlString:(NSString *)urlString;
@@ -42,11 +47,21 @@
     
     [_buttonAuthenticate.layer setCornerRadius:5.0];
     [_buttonClose.layer setCornerRadius:5.0];
+
+    gaTracker = [GAI sharedInstance].defaultTracker;
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+
+    // GA screen log
+    [gaTracker set:kGAIScreenName value:logPara_註冊成功];
+    [gaTracker send:[[GAIDictionaryBuilder createScreenView] build]];
 }
 
 /*
@@ -86,12 +101,30 @@
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle:[LocalizedString Authentication] message:[LocalizedString SelectAuthenticationType] preferredStyle:UIAlertControllerStyleActionSheet];
     UIAlertAction *creditCardAction = [UIAlertAction actionWithTitle:[LocalizedString CreditCardMemberAuth] style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
         [weakSelf startAuthenticateWithUrlString:SymphoxAPI_authenticationCreditCard];
+        
+        [gaTracker send:[[GAIDictionaryBuilder
+                          createEventWithCategory:[EventLog twoString:logPara_註冊成功 _:logPara_立即認證]
+                          action:[EventLog to_:logPara_網頁]
+                          label:logPara_國泰世華卡友認證
+                          value:nil] build]];        
     }];
     UIAlertAction *employeeAction = [UIAlertAction actionWithTitle:[LocalizedString ConglomerateEmployeeAuth] style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
         [weakSelf startAuthenticateWithUrlString:SymphoxAPI_authenticationEmployee];
+        
+        [gaTracker send:[[GAIDictionaryBuilder
+                          createEventWithCategory:[EventLog twoString:logPara_註冊成功 _:logPara_立即認證]
+                          action:[EventLog to_:logPara_網頁]
+                          label:logPara_集團員工認證
+                          value:nil] build]];
     }];
     UIAlertAction *otherAction = [UIAlertAction actionWithTitle:[LocalizedString OtherCustomerOfCathay] style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
         [weakSelf startAuthenticateWithUrlString:SymphoxAPI_authenticationCathayCustomer];
+        
+        [gaTracker send:[[GAIDictionaryBuilder
+                          createEventWithCategory:[EventLog twoString:logPara_註冊成功 _:logPara_立即認證]
+                          action:[EventLog to_:logPara_網頁]
+                          label:logPara_國泰金控其他客戶
+                          value:nil] build]];
     }];
     UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:[LocalizedString Cancel] style:UIAlertActionStyleDestructive handler:nil];
     [alertController addAction:creditCardAction];
@@ -192,6 +225,13 @@
         [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
     }
     [[NSNotificationCenter defaultCenter] postNotificationName:PostNotificationName_UserRegisterred object:self];
+    
+    [gaTracker send:[[GAIDictionaryBuilder
+                      createEventWithCategory:[EventLog twoString:logPara_註冊成功 _:logPara_下次再認證]
+                      action:logPara_點擊
+                      label:nil
+                      value:nil] build]];
+    
 }
 
 @end

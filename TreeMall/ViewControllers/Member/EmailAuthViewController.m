@@ -15,8 +15,13 @@
 #import "Utility.h"
 #import "FullScreenLoadingView.h"
 #import "LocalizedString.h"
+#import <Google/Analytics.h>
+#import "EventLog.h"
+@import FirebaseCrash;
 
-@interface EmailAuthViewController ()
+@interface EmailAuthViewController () {
+    id<GAITracker> gaTracker;
+}
 
 @property (nonatomic, weak) IBOutlet UILabel *labelTitle;
 @property (nonatomic, weak) IBOutlet UITextField *textFieldEmail;
@@ -48,11 +53,21 @@
     [self.navigationController.tabBarController.view addSubview:self.viewLoading];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshContent) name:PostNotificationName_UserInformationUpdated object:nil];
+
+    gaTracker = [GAI sharedInstance].defaultTracker;
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
+    // GA screen log
+    [gaTracker set:kGAIScreenName value:self.title];
+    [gaTracker send:[[GAIDictionaryBuilder createScreenView] build]];
 }
 
 - (void)dealloc

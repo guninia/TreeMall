@@ -22,6 +22,9 @@
 #import "WebViewViewController.h"
 #import "ProductDetailViewController.h"
 #import "HotSaleViewController.h"
+#import <Google/Analytics.h>
+#import "EventLog.h"
+@import FirebaseCrash;
 
 typedef enum : NSUInteger {
     TableViewSectionMemberPromotion,
@@ -29,7 +32,9 @@ typedef enum : NSUInteger {
     TableViewSectionTotal,
 } TableViewSection;
 
-@interface EntranceViewController ()
+@interface EntranceViewController () {
+    id<GAITracker> gaTracker;
+}
 
 - (BOOL)retrieveData;
 - (BOOL)processData:(id)data;
@@ -61,7 +66,7 @@ typedef enum : NSUInteger {
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
-    
+
     if (self.navigationItem)
     {
         UIImage *image = [[UIImage imageNamed:@"ind_logo"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
@@ -93,6 +98,8 @@ typedef enum : NSUInteger {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handlerOfUserPointUpdatedNotification:) name:PostNotificationName_UserPointUpdated object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handlerOfUserCouponUpdatedNotification:) name:PostNotificationName_UserCouponUpdated object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handlerOfUserLogoutNotification:) name:PostNotificationName_UserLogout object:nil];
+
+    gaTracker = [GAI sharedInstance].defaultTracker;
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -103,6 +110,10 @@ typedef enum : NSUInteger {
     [self.navigationController.navigationBar setBackgroundImage:[[UIImage alloc] init] forBarMetrics:UIBarMetricsDefault];
     [self.navigationController.navigationBar setShadowImage:[[UIImage alloc] init]];
     [self.tableViewEntrance reloadData];
+    
+    // GA screen log
+    [gaTracker set:kGAIScreenName value:self.title];
+    [gaTracker send:[[GAIDictionaryBuilder createScreenView] build]];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -552,6 +563,13 @@ typedef enum : NSUInteger {
                     viewController.type = HotSaleTypeHall;
                     viewController.title = [LocalizedString HotSaleRanking];
                     UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:viewController];
+                    
+                    [gaTracker send:[[GAIDictionaryBuilder
+                                      createEventWithCategory:[EventLog twoString:self.title _:logPara_列表一]
+                                      action:[EventLog index:indexPath.row _to_:viewController.title]
+                                      label:[EventLog typeInString:viewController.type]
+                                      value:nil] build]];
+                    
                     [self presentViewController:navigationController animated:YES completion:nil];
                 }
                     break;
@@ -564,6 +582,13 @@ typedef enum : NSUInteger {
                         NSNumber *productId = [NSNumber numberWithInteger:[link integerValue]];
                         viewController.productIdentifier = productId;
                         viewController.title = [LocalizedString ProductInfo];
+                        
+                        [gaTracker send:[[GAIDictionaryBuilder
+                                          createEventWithCategory:[EventLog twoString:self.title _:logPara_列表一]
+                                          action:[EventLog index:indexPath.row _to_:viewController.title]
+                                          label:[productId stringValue]
+                                          value:nil] build]];
+                        
                         [self.navigationController pushViewController:viewController animated:YES];
                     }
                 }
@@ -574,6 +599,13 @@ typedef enum : NSUInteger {
                     NSString *hallId = [dictionary objectForKey:SymphoxAPIParam_hallId];
                     NSNumber *layer = [dictionary objectForKey:SymphoxAPIParam_layer];
                     NSString *hallName = [dictionary objectForKey:SymphoxAPIParam_hallName];
+                    
+                    [gaTracker send:[[GAIDictionaryBuilder
+                                      createEventWithCategory:[EventLog twoString:self.title _:logPara_列表一]
+                                      action:[EventLog index:indexPath.row _to_:logPara_商品列表]
+                                      label:[EventLog threeString:hallId _:[layer stringValue] _:hallName]
+                                      value:nil] build]];
+                    
                     [self presentProductListViewForIdentifier:hallId named:hallName andLayer:layer withCategories:nil andSubcategories:nil];
                 }
                     break;
@@ -585,6 +617,13 @@ typedef enum : NSUInteger {
                         WebViewViewController *viewController = [[WebViewViewController alloc] initWithNibName:@"WebViewViewController" bundle:[NSBundle mainBundle]];
                         viewController.title = (name == nil)?[LocalizedString TodayFocus]:name;
                         viewController.urlString = link;
+                        
+                        [gaTracker send:[[GAIDictionaryBuilder
+                                          createEventWithCategory:[EventLog twoString:self.title _:logPara_列表一]
+                                          action:[EventLog index:indexPath.row _to_:[EventLog webViewWithName:viewController.title]]
+                                          label:link
+                                          value:nil] build]];
+                        
                         [self.navigationController pushViewController:viewController animated:YES];
                     }
                 }
@@ -592,6 +631,13 @@ typedef enum : NSUInteger {
                 case 4:
                 {
                     PromotionViewController *promotionViewController = [[PromotionViewController alloc] initWithNibName:@"PromotionViewController" bundle:[NSBundle mainBundle]];
+                    
+                    [gaTracker send:[[GAIDictionaryBuilder
+                                      createEventWithCategory:[EventLog twoString:self.title _:logPara_列表一]
+                                      action:[EventLog index:indexPath.row _to_:promotionViewController.title]
+                                      label:nil
+                                      value:nil] build]];
+                    
                     [self.navigationController pushViewController:promotionViewController animated:YES];
                 }
                     break;
@@ -627,6 +673,13 @@ typedef enum : NSUInteger {
                     viewController.type = type;
                     viewController.title = [LocalizedString HotSaleRanking];
                     UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:viewController];
+                    
+                    [gaTracker send:[[GAIDictionaryBuilder
+                                      createEventWithCategory:[EventLog twoString:self.title _:logPara_今日焦點]
+                                      action:[EventLog to_:viewController.title]
+                                      label:[EventLog typeInString:type]
+                                      value:nil] build]];
+                    
                     [self presentViewController:navigationController animated:YES completion:nil];
                 }
                     break;
@@ -639,6 +692,13 @@ typedef enum : NSUInteger {
                         NSNumber *productId = [NSNumber numberWithInteger:[stringLink integerValue]];
                         viewController.productIdentifier = productId;
                         viewController.title = [LocalizedString ProductInfo];
+
+                        [gaTracker send:[[GAIDictionaryBuilder
+                                          createEventWithCategory:[EventLog twoString:self.title _:logPara_今日焦點]
+                                          action:[EventLog to_:viewController.title]
+                                          label:[productId stringValue]
+                                          value:nil] build]];
+                        
                         [self.navigationController pushViewController:viewController animated:YES];
                     }
                 }
@@ -649,6 +709,13 @@ typedef enum : NSUInteger {
                     NSString *hallId = [dictionaryFocus objectForKey:SymphoxAPIParam_hallId];
                     NSNumber *layer = [dictionaryFocus objectForKey:SymphoxAPIParam_layer];
                     NSString *hallName = [dictionaryFocus objectForKey:SymphoxAPIParam_hallName];
+                    
+                    [gaTracker send:[[GAIDictionaryBuilder
+                                      createEventWithCategory:[EventLog twoString:self.title _:logPara_今日焦點]
+                                      action:[EventLog to_:logPara_商品列表]
+                                      label:[EventLog threeString:hallId _:[layer stringValue] _:hallName]
+                                      value:nil] build]];
+                    
                     [self presentProductListViewForIdentifier:hallId named:hallName andLayer:layer withCategories:nil andSubcategories:nil];
                 }
                     break;
@@ -661,6 +728,13 @@ typedef enum : NSUInteger {
                         NSString *title = (name == nil)?[LocalizedString TodayFocus]:name;
                         viewController.title = title;
                         viewController.urlString = stringLink;
+                        
+                        [gaTracker send:[[GAIDictionaryBuilder
+                                          createEventWithCategory:[EventLog twoString:self.title _:logPara_今日焦點]
+                                          action:[EventLog to_:[EventLog webViewWithName:viewController.title]]
+                                          label:stringLink
+                                          value:nil] build]];
+                        
                         [self.navigationController pushViewController:viewController animated:YES];
                     }
                 }
@@ -668,6 +742,13 @@ typedef enum : NSUInteger {
                 case 4:
                 {
                     PromotionViewController *promotionViewController = [[PromotionViewController alloc] initWithNibName:@"PromotionViewController" bundle:[NSBundle mainBundle]];
+                    
+                    [gaTracker send:[[GAIDictionaryBuilder
+                                      createEventWithCategory:[EventLog twoString:self.title _:logPara_今日焦點]
+                                      action:[EventLog to_:promotionViewController.title]
+                                      label:nil
+                                      value:nil] build]];
+                    
                     [self.navigationController pushViewController:promotionViewController animated:YES];
                 }
                     break;
@@ -696,6 +777,13 @@ typedef enum : NSUInteger {
                     viewController.type = type;
                     viewController.title = [LocalizedString Promotions];
                     UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:viewController];
+                    
+                    [gaTracker send:[[GAIDictionaryBuilder
+                                      createEventWithCategory:[EventLog twoString:self.title _:logPara_優惠文字訊息]
+                                      action:[EventLog to_:viewController.title]
+                                      label:[EventLog typeInString:type]
+                                      value:nil] build]];
+                    
                     [self presentViewController:navigationController animated:YES completion:nil];
                 }
                     break;
@@ -708,6 +796,13 @@ typedef enum : NSUInteger {
                         NSNumber *productId = [NSNumber numberWithInteger:[stringLink integerValue]];
                         viewController.productIdentifier = productId;
                         viewController.title = [LocalizedString ProductInfo];
+                        
+                        [gaTracker send:[[GAIDictionaryBuilder
+                                          createEventWithCategory:[EventLog twoString:self.title _:logPara_優惠文字訊息]
+                                          action:[EventLog to_:viewController.title]
+                                          label:[productId stringValue]
+                                          value:nil] build]];
+                        
                         [self.navigationController pushViewController:viewController animated:YES];
                     }
                 }
@@ -718,6 +813,13 @@ typedef enum : NSUInteger {
                     NSString *hallId = [dictionaryMarketing objectForKey:SymphoxAPIParam_hallId];
                     NSNumber *layer = [dictionaryMarketing objectForKey:SymphoxAPIParam_layer];
                     NSString *hallName = [dictionaryMarketing objectForKey:SymphoxAPIParam_hallName];
+                    
+                    [gaTracker send:[[GAIDictionaryBuilder
+                                      createEventWithCategory:[EventLog twoString:self.title _:logPara_優惠文字訊息]
+                                      action:[EventLog to_:logPara_商品列表]
+                                      label:[EventLog threeString:hallId _:[layer stringValue] _:hallName]
+                                      value:nil] build]];
+                    
                     [self presentProductListViewForIdentifier:hallId named:hallName andLayer:layer withCategories:nil andSubcategories:nil];
                 }
                     break;
@@ -730,6 +832,13 @@ typedef enum : NSUInteger {
                         viewController.title = [LocalizedString SpecialService];
                         viewController.urlString = stringLink;
                         viewController.title = [LocalizedString Promotions];
+                        
+                        [gaTracker send:[[GAIDictionaryBuilder
+                                          createEventWithCategory:[EventLog twoString:self.title _:logPara_優惠文字訊息]
+                                          action:[EventLog to_:[EventLog webViewWithName:viewController.title]]
+                                          label:stringLink
+                                          value:nil] build]];
+                        
                         [self.navigationController pushViewController:viewController animated:YES];
                     }
                 }
@@ -737,6 +846,13 @@ typedef enum : NSUInteger {
                 case 4:
                 {
                     PromotionViewController *promotionViewController = [[PromotionViewController alloc] initWithNibName:@"PromotionViewController" bundle:[NSBundle mainBundle]];
+                    
+                    [gaTracker send:[[GAIDictionaryBuilder
+                                      createEventWithCategory:[EventLog twoString:self.title _:logPara_優惠文字訊息]
+                                      action:[EventLog to_:promotionViewController.title]
+                                      label:nil
+                                      value:nil] build]];
+                    
                     [self.navigationController pushViewController:promotionViewController animated:YES];
                 }
                     break;
@@ -755,10 +871,23 @@ typedef enum : NSUInteger {
         // Should pop up login view
         LoginViewController *viewControllerLogin = [[LoginViewController alloc] initWithNibName:@"LoginViewController" bundle:[NSBundle mainBundle]];
         UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:viewControllerLogin];
+        
+        [gaTracker send:[[GAIDictionaryBuilder
+                          createEventWithCategory:[EventLog twoString:self.title _:logPara_我的點數]
+                          action:[EventLog to_:viewControllerLogin.title]
+                          label:nil
+                          value:nil] build]];
+        
         [self presentViewController:navigationController animated:YES completion:nil];
     }
     else
     {
+        [gaTracker send:[[GAIDictionaryBuilder
+                          createEventWithCategory:[EventLog twoString:self.title _:logPara_我的點數]
+                          action:[EventLog to_:logPara_首頁]
+                          label:nil
+                          value:nil] build]];
+        
         [[NSNotificationCenter defaultCenter] postNotificationName:PostNotificationName_JumpToMemberTab object:self];
     }
 }
@@ -771,10 +900,23 @@ typedef enum : NSUInteger {
         // Should pop up login view
         LoginViewController *viewControllerLogin = [[LoginViewController alloc] initWithNibName:@"LoginViewController" bundle:[NSBundle mainBundle]];
         UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:viewControllerLogin];
+        
+        [gaTracker send:[[GAIDictionaryBuilder
+                          createEventWithCategory:[EventLog twoString:self.title _:logPara_我的折價券]
+                          action:[EventLog to_:viewControllerLogin.title]
+                          label:nil
+                          value:nil] build]];
+        
         [self presentViewController:navigationController animated:YES completion:nil];
     }
     else
     {
+        [gaTracker send:[[GAIDictionaryBuilder
+                          createEventWithCategory:[EventLog twoString:self.title _:logPara_我的折價券]
+                          action:[EventLog to_:logPara_首頁]
+                          label:nil
+                          value:nil] build]];
+        
         [[NSNotificationCenter defaultCenter] postNotificationName:PostNotificationName_JumpToMemberTabAndPresentCoupon object:self];
     }
 }
@@ -790,6 +932,13 @@ typedef enum : NSUInteger {
             viewController.type = HotSaleTypePoint;
             viewController.title = [LocalizedString ExchangeRecommended];
             UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:viewController];
+            
+            [gaTracker send:[[GAIDictionaryBuilder
+                              createEventWithCategory:[EventLog twoString:self.title _:logPara_兌點推薦]
+                              action:[EventLog to_:viewController.title]
+                              label:[EventLog typeInString:viewController.type]
+                              value:nil] build]];
+            
             [self presentViewController:navigationController animated:YES completion:nil];
         }
             break;
@@ -799,12 +948,26 @@ typedef enum : NSUInteger {
             viewController.type = HotSaleTypeCoupon;
             viewController.title = [LocalizedString CouponRecommended];
             UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:viewController];
+            
+            [gaTracker send:[[GAIDictionaryBuilder
+                              createEventWithCategory:[EventLog twoString:self.title _:logPara_折價券推薦]
+                              action:[EventLog to_:viewController.title]
+                              label:[EventLog typeInString:viewController.type]
+                              value:nil] build]];
+            
             [self presentViewController:navigationController animated:YES completion:nil];
         }
             break;
         case EntranceFunctionPromotion:
         {
             PromotionViewController *promotionViewController = [[PromotionViewController alloc] initWithNibName:@"PromotionViewController" bundle:[NSBundle mainBundle]];
+            
+            [gaTracker send:[[GAIDictionaryBuilder
+                              createEventWithCategory:[EventLog twoString:self.title _:logPara_優惠通知]
+                              action:[EventLog to_:promotionViewController.title]
+                              label:nil
+                              value:nil] build]];
+            
             [self.navigationController pushViewController:promotionViewController animated:YES];
         }
             break;
@@ -824,6 +987,13 @@ typedef enum : NSUInteger {
     listViewController.hallId = nil;
     listViewController.layer = nil;
     listViewController.name = nil;
+    
+    [gaTracker send:[[GAIDictionaryBuilder
+                      createEventWithCategory:[EventLog twoString:self.title _:logPara_搜尋]
+                      action:[EventLog to_:logPara_商品列表]
+                      label:nil
+                      value:nil] build]];
+    
     [self.navigationController pushViewController:listViewController animated:YES];
 }
 

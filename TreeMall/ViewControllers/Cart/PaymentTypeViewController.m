@@ -19,6 +19,9 @@
 #import "StorePickupInfoViewController.h"
 #import "DiscountHeaderView.h"
 #import "DiscountFooterView.h"
+#import <Google/Analytics.h>
+#import "EventLog.h"
+@import FirebaseCrash;
 
 #define kDiscountSectionTitle @"DiscountSectionTitle"
 #define kDiscountSectionContent @"DiscountSectionContent"
@@ -34,7 +37,9 @@
 
 static NSString *InstallmentBankListDescription = @"分期0利率（接受14家銀行）\n\n\n國泰世華、玉山、台北富邦、台新(需消費滿3000元)、新光、花旗、遠東商銀、大眾、第一商銀、華南、萬泰、匯豐、澳盛銀行、聯邦銀行";
 
-@interface PaymentTypeViewController ()
+@interface PaymentTypeViewController () {
+    id<GAITracker> gaTracker;
+}
 
 - (void)prepareData;
 - (void)requestBuyNowDeliveryInfo;
@@ -87,11 +92,21 @@ static NSString *InstallmentBankListDescription = @"分期0利率（接受14家�
     }
     [self prepareData];
     [self retrieveInstallmentBanksData];
+    
+    gaTracker = [GAI sharedInstance].defaultTracker;
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
+    // GA screen log
+    [gaTracker set:kGAIScreenName value:self.title];
+    [gaTracker send:[[GAIDictionaryBuilder createScreenView] build]];
 }
 
 /*
@@ -1176,6 +1191,13 @@ static NSString *InstallmentBankListDescription = @"分期0利率（接受14家�
                 }
                 viewController.selectedPaymentDescription = weakSelf.selectedPaymentDescription;
                 viewController.arrayProductsFromCart = weakSelf.arrayProductsFromCart;
+
+                [gaTracker send:[[GAIDictionaryBuilder
+                                  createEventWithCategory:[EventLog twoString:self.title _:logPara_下一步]
+                                  action:[EventLog to_:viewController.title]
+                                  label:nil
+                                  value:nil] build]];
+                
                 [weakSelf.navigationController pushViewController:viewController animated:YES];
             }
             else
@@ -1211,6 +1233,13 @@ static NSString *InstallmentBankListDescription = @"分期0利率（接受14家�
                 }
                 viewController.selectedPaymentDescription = weakSelf.selectedPaymentDescription;
                 viewController.arrayProductsFromCart = weakSelf.arrayProductsFromCart;
+                
+                [gaTracker send:[[GAIDictionaryBuilder
+                                  createEventWithCategory:[EventLog twoString:self.title _:logPara_下一步]
+                                  action:[EventLog to_:viewController.title]
+                                  label:nil
+                                  value:nil] build]];
+                
                 [weakSelf.navigationController pushViewController:viewController animated:YES];
             }
         }
@@ -1320,6 +1349,13 @@ static NSString *InstallmentBankListDescription = @"分期0利率（接受14家�
     ExchangeDescriptionViewController *viewController = [[ExchangeDescriptionViewController alloc] initWithNibName:nil bundle:nil];
     viewController.type = DescriptionViewTypeEcommercial;
     viewController.title = [LocalizedString TermsDetail];
+
+    [gaTracker send:[[GAIDictionaryBuilder
+                      createEventWithCategory:[EventLog twoString:self.title _:logPara_詳細條款]
+                      action:logPara_點擊
+                      label:nil
+                      value:nil] build]];
+    
     [self.navigationController pushViewController:viewController animated:YES];
 }
 
@@ -1331,6 +1367,12 @@ static NSString *InstallmentBankListDescription = @"分期0利率（接受14家�
         UIAlertAction *action = [UIAlertAction actionWithTitle:[LocalizedString Confirm] style:UIAlertActionStyleDefault handler:nil];
         [alertController addAction:action];
         [self presentViewController:alertController animated:YES completion:nil];
+
+        [gaTracker send:[[GAIDictionaryBuilder
+                          createEventWithCategory:[EventLog twoString:self.title _:logPara_警告]
+                          action:logPara_請點選同意條款
+                          label:nil
+                          value:nil] build]];
         return;
     }
     NSString *stringDate = [[TMInfoManager sharedManager] formattedStringFromDate:[NSDate date]];

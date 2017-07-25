@@ -18,8 +18,14 @@
 #import "Utility.h"
 #import "CartViewController.h"
 #import "LoginViewController.h"
+#import <Google/Analytics.h>
+#import "EventLog.h"
+@import FirebaseCrash;
 
-@interface ProductListViewController ()
+@interface ProductListViewController () {
+    id<GAITracker> gaTracker;
+    NSInteger selectedIndexForLog;
+}
 
 - (void)retrieveSubcategoryDataForIdentifier:(NSString *)identifier andLayer:(NSNumber *)layer;
 - (BOOL)processSubcategoryData:(id)data forLayerIndex:(NSInteger)layerIndex;
@@ -77,8 +83,19 @@
     [self.view addSubview:self.tableViewProduct];
     self.viewTool.delegate = self;
     self.viewTitle.delegate = self;
+
+    gaTracker = [GAI sharedInstance].defaultTracker;
     
     [self refreshAllContentForHallId:self.hallId andLayer:self.layer withName:self.name];
+}
+
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+
+    // GA screen log
+    [gaTracker set:kGAIScreenName value:logPara_商品列表];
+    [gaTracker send:[[GAIDictionaryBuilder createScreenView] build]];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -635,7 +652,9 @@
 {
     BOOL canDirectlyPurchase = [self canDirectlyPurchaseProduct:product];
     NSArray *arrayCartType = [self cartArrayForProduct:product];
-    
+    NSNumber * productId = [product objectForKey:SymphoxAPIParam_cpdt_num];
+    NSString * productName = [product objectForKey:SymphoxAPIParam_cpdt_name];
+
     __weak ProductListViewController *weakSelf = self;
     if ([arrayCartType count] > 1)
     {
@@ -644,8 +663,15 @@
         {
             NSString *name = [dictionary objectForKey:SymphoxAPIParam_name];
             NSNumber *cartType = [dictionary objectForKey:SymphoxAPIParam_cart_type];
+            NSInteger type = [cartType integerValue];
             UIAlertAction *action = [UIAlertAction actionWithTitle:name style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
                 [weakSelf addProduct:product toCart:[cartType integerValue] shouldShowAlert:YES];
+                
+                [gaTracker send:[[GAIDictionaryBuilder
+                                  createEventWithCategory:[EventLog twoString:logPara_商品列表 _:logPara_列表一]
+                                  action:[EventLog index:selectedIndexForLog _:logPara_加入購物車]
+                                  label:[EventLog threeString:[EventLog cartTypeInString:type] _:[productId stringValue] _:productName]
+                                  value:nil] build]];
             }];
             [alertController addAction:action];
         }
@@ -657,12 +683,26 @@
     {
         NSDictionary *dictionary = [arrayCartType objectAtIndex:0];
         NSNumber *numberCartType = [dictionary objectForKey:SymphoxAPIParam_cart_type];
+        NSInteger cartType = [numberCartType integerValue];
         [self addProduct:product toCart:[numberCartType integerValue] shouldShowAlert:YES];
+        
+        [gaTracker send:[[GAIDictionaryBuilder
+                          createEventWithCategory:[EventLog twoString:logPara_商品列表 _:logPara_列表一]
+                          action:[EventLog index:selectedIndexForLog _:logPara_加入購物車]
+                          label:[EventLog threeString:[EventLog cartTypeInString:cartType] _:[productId stringValue] _:productName]
+                          value:nil] build]];
     }
     else if (canDirectlyPurchase)
     {
         [[TMInfoManager sharedManager] resetCartForType:CartTypeDirectlyPurchase];
         [self addProduct:product toCart:CartTypeDirectlyPurchase shouldShowAlert:NO];
+        
+        [gaTracker send:[[GAIDictionaryBuilder
+                          createEventWithCategory:[EventLog twoString:logPara_商品列表 _:logPara_列表一]
+                          action:[EventLog index:selectedIndexForLog _:logPara_加入購物車]
+                          label:[EventLog threeString:[EventLog cartTypeInString:4] _:[productId stringValue] _:productName]
+                          value:nil] build]];
+
         [self presentCartViewForType:CartTypeDirectlyPurchase];
     }
 }
@@ -981,6 +1021,15 @@
     NSDictionary *dictionary = [self.arrayProducts objectAtIndex:indexPath.row];
     viewController.dictionaryCommon = dictionary;
     viewController.title = [LocalizedString ProductInfo];
+    
+    NSString * name = [dictionary objectForKey:SymphoxAPIParam_cpdt_name];
+    NSNumber * productId = [dictionary objectForKey:SymphoxAPIParam_cpdt_num];
+    [gaTracker send:[[GAIDictionaryBuilder
+                      createEventWithCategory:[EventLog twoString:logPara_商品列表 _:logPara_列表一]
+                      action:[EventLog index:indexPath.row _to_:viewController.title]
+                      label:[EventLog twoString:[productId stringValue] _:name]
+                      value:nil] build]];
+
     [self.navigationController pushViewController:viewController animated:YES];
 }
 
@@ -1015,6 +1064,12 @@
         [weakSelf.dictionaryConditions setObject:[NSNumber numberWithInteger:weakSelf.currentProductPage] forKey:SymphoxAPIParam_page];
         [weakSelf retrieveProductsForConditions:weakSelf.dictionaryConditions byRefreshing:YES];
         
+        [gaTracker send:[[GAIDictionaryBuilder
+                          createEventWithCategory:[EventLog twoString:logPara_商品列表 _:logPara_排序]
+                          action:sortType
+                          label:nil
+                          value:nil] build]];
+        
     } cancelBlock:nil];
 }
 
@@ -1038,6 +1093,13 @@
     ProductFilterViewController *viewController = [[ProductFilterViewController alloc] initWithNibName:@"ProductFilterViewController" bundle:[NSBundle mainBundle]];
     viewController.delegate = self;
     UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:viewController];
+    
+    [gaTracker send:[[GAIDictionaryBuilder
+                      createEventWithCategory:[EventLog twoString:logPara_商品列表 _:logPara_篩選]
+                      action:[EventLog to_:logPara_篩選]
+                      label:nil
+                      value:nil] build]];
+
     [self presentViewController:navigationController animated:YES completion:nil];
 }
 
@@ -1065,6 +1127,13 @@
         viewController.layer = layer;
         viewController.name = name;
         viewController.arrayCategory = weakSelf.arraySubcategory;
+        
+        [gaTracker send:[[GAIDictionaryBuilder
+                          createEventWithCategory:[EventLog twoString:logPara_商品列表 _:logPara_類別清單]
+                          action:[EventLog index:selectedIndexForLog _:logPara_點擊]
+                          label:[EventLog threeString:hallId _:[layer stringValue] _:name]
+                          value:nil] build]];
+
         [weakSelf.navigationController pushViewController:viewController animated:YES];
     } cancelBlock:nil];
 }
@@ -1081,6 +1150,13 @@
     viewController.layer = layer;
     viewController.name = name;
     viewController.arrayCategory = self.arraySubcategory;
+    
+    [gaTracker send:[[GAIDictionaryBuilder
+                      createEventWithCategory:[EventLog twoString:logPara_商品列表 _:logPara_類別列表]
+                      action:[EventLog index:selectedIndexForLog _:logPara_點擊]
+                      label:[EventLog threeString:hallId _:[layer stringValue] _:name]
+                      value:nil] build]];
+
     [self.navigationController pushViewController:viewController animated:YES];
 }
 
@@ -1109,6 +1185,12 @@
         NSString *name = [dictionary objectForKey:SymphoxAPIParam_name];
         
         [weakSelf refreshAllContentForHallId:hallId andLayer:layer withName:name];
+        
+        [gaTracker send:[[GAIDictionaryBuilder
+                          createEventWithCategory:[EventLog twoString:logPara_商品列表 _:logPara_標題類別]
+                          action:[EventLog index:selectedIndexForLog _:logPara_點擊]
+                          label:[EventLog threeString:hallId _:[layer stringValue] _:name]
+                          value:nil] build]];
     } cancelBlock:nil];
 }
 
@@ -1166,6 +1248,12 @@
     listViewController.hallId = nil;
     listViewController.layer = nil;
     listViewController.name = nil;
+    
+    [gaTracker send:[[GAIDictionaryBuilder
+                      createEventWithCategory:[EventLog twoString:logPara_商品列表 _:logPara_搜尋]
+                      action:logPara_點擊
+                      label:nil
+                      value:nil] build]];
     [self.navigationController pushViewController:listViewController animated:YES];
 }
 
@@ -1178,12 +1266,20 @@
         // Should login first.
         LoginViewController *viewControllerLogin = [[LoginViewController alloc] initWithNibName:@"LoginViewController" bundle:[NSBundle mainBundle]];
         UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:viewControllerLogin];
+        
+        [gaTracker send:[[GAIDictionaryBuilder
+                          createEventWithCategory:[EventLog twoString:logPara_商品列表 _:logPara_列表一]
+                          action:[EventLog index:cell.tag _to_:logPara_加入購物車]
+                          label:[EventLog to_:logPara_登入]
+                          value:nil] build]];
+        
         [self presentViewController:navigationController animated:YES completion:nil];
         return;
     }
     if (cell.tag >= [self.arrayProducts count])
         return;
     NSDictionary *product = [self.arrayProducts objectAtIndex:cell.tag];
+    selectedIndexForLog = cell.tag;
     [self showCartTypeSheetForProduct:product];
 }
 
@@ -1201,6 +1297,13 @@
     }
     [[TMInfoManager sharedManager] addProductToFavorite:product];
     cell.favorite = YES;
+    
+    NSString * name = [product objectForKey:SymphoxAPIParam_cpdt_name];
+    [gaTracker send:[[GAIDictionaryBuilder
+                      createEventWithCategory:[EventLog twoString:logPara_商品列表 _:logPara_列表一]
+                      action:[EventLog index:cell.tag _to_:logPara_加入我的最愛]
+                      label:[EventLog twoString:[cpdt_num stringValue] _:name]
+                      value:nil] build]];
 }
 
 @end

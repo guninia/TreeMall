@@ -13,8 +13,13 @@
 #import "SHAPIAdapter.h"
 #import "FullScreenLoadingView.h"
 #import "CompleteOrderViewController.h"
+#import <Google/Analytics.h>
+#import "EventLog.h"
+@import FirebaseCrash;
 
-@interface CreditCardViewController ()
+@interface CreditCardViewController () {
+    id<GAITracker> gaTracker;
+}
 
 @property (nonatomic, weak) IBOutlet UIScrollView *scrollView;
 @property (nonatomic, weak) IBOutlet UITextField *textField1;
@@ -74,11 +79,21 @@
     
     UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapRecognized:)];
     [self.scrollView addGestureRecognizer:tapRecognizer];
+
+    gaTracker = [GAI sharedInstance].defaultTracker;
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
+    // GA screen log
+    [gaTracker set:kGAIScreenName value:self.title];
+    [gaTracker send:[[GAIDictionaryBuilder createScreenView] build]];
 }
 
 - (void)dealloc
@@ -384,6 +399,13 @@
     viewController.dictionaryInstallment = self.dictionaryInstallment;
     viewController.selectedPaymentDescription = self.selectedPaymentDescription;
     viewController.dictionaryDelivery = delivery;
+    
+    [gaTracker send:[[GAIDictionaryBuilder
+                      createEventWithCategory:[EventLog twoString:self.title _:logPara_確認付款]
+                      action:[EventLog to_:viewController.title]
+                      label:nil
+                      value:nil] build]];
+    
     [self.navigationController pushViewController:viewController animated:YES];
 }
 

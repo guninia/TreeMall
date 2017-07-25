@@ -20,6 +20,9 @@
 #import "ExtraSubcategorySeeAllTableViewCell.h"
 #import "TMInfoManager.h"
 #import "LoadingFooterView.h"
+#import <Google/Analytics.h>
+#import "EventLog.h"
+@import FirebaseCrash;
 
 typedef enum : NSUInteger {
     ViewTagCollectionViewMainCategory,
@@ -28,7 +31,9 @@ typedef enum : NSUInteger {
     ViewTagTotal
 } ViewTag;
 
-@interface ShoppingMallViewController ()
+@interface ShoppingMallViewController () {
+    id<GAITracker> gaTracker;
+}
 
 - (void)retrieveMainCategoryData;
 - (BOOL)processMainCategoryData:(id)data;
@@ -104,6 +109,8 @@ typedef enum : NSUInteger {
     [self.view addSubview:self.imageViewRightArrow];
     self.imageViewLeftArrow.hidden = YES;
     self.imageViewRightArrow.hidden = YES;
+
+    gaTracker = [GAI sharedInstance].defaultTracker;
     
     [self retrieveMainCategoryData];
 }
@@ -117,6 +124,10 @@ typedef enum : NSUInteger {
     {
         [[TMInfoManager sharedManager].dictionaryInitialFilter removeAllObjects];
     }
+
+    // GA screen log
+    [gaTracker set:kGAIScreenName value:self.title];
+    [gaTracker send:[[GAIDictionaryBuilder createScreenView] build]];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -533,6 +544,12 @@ typedef enum : NSUInteger {
     if (identifier == nil)
         return;
     [self retrieveSubcategoryDataForIdentifier:identifier andLayer:[NSNumber numberWithInteger:1]];
+    
+    [gaTracker send:[[GAIDictionaryBuilder
+                      createEventWithCategory:[EventLog twoString:self.title _:logPara_列表一]
+                      action:[EventLog index:indexPath.row _:logPara_點擊]
+                      label:identifier
+                      value:nil] build]];
 }
 
 #pragma mark - UICollectionViewDelegateFlowLayout
@@ -750,6 +767,12 @@ typedef enum : NSUInteger {
             if (identifier && layer)
             {
                 [self retrieveSubcategoryDataForIdentifier:identifier andLayer:layer];
+                
+                [gaTracker send:[[GAIDictionaryBuilder
+                                  createEventWithCategory:[EventLog twoString:self.title _:logPara_列表二]
+                                  action:[EventLog index:indexPath.row _:logPara_點擊]
+                                  label:[EventLog threeString:identifier _:[layer stringValue] _:name]
+                                  value:nil] build]];
             }
         }
             break;
@@ -784,6 +807,12 @@ typedef enum : NSUInteger {
                 categories = _arrayExtraSubcategory;
             }
             [self presentProductListViewForIdentifier:hallId named:showName andLayer:layer withCategories:categories andSubcategories:subcategories];
+            
+            [gaTracker send:[[GAIDictionaryBuilder
+                              createEventWithCategory:[EventLog twoString:self.title _:logPara_列表三]
+                              action:[EventLog index:indexPath.row _to_:logPara_商品列表]
+                              label:[EventLog threeString:hallId _:[layer stringValue] _:showName]
+                              value:nil] build]];
         }
             break;
         default:
@@ -802,6 +831,13 @@ typedef enum : NSUInteger {
     listViewController.hallId = nil;
     listViewController.layer = nil;
     listViewController.name = nil;
+    
+    [gaTracker send:[[GAIDictionaryBuilder
+                      createEventWithCategory:[EventLog twoString:self.title _:logPara_搜尋]
+                      action:[EventLog to_:logPara_搜尋]
+                      label:nil
+                      value:nil] build]];
+
     [self.navigationController pushViewController:listViewController animated:YES];
 }
 

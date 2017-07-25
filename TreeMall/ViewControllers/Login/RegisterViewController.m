@@ -15,8 +15,13 @@
 #import "APIDefinition.h"
 #import "TMInfoManager.h"
 #import "AuthenticateViewController.h"
+#import <Google/Analytics.h>
+#import "EventLog.h"
+@import FirebaseCrash;
 
-@interface RegisterViewController ()
+@interface RegisterViewController () {
+    id<GAITracker> gaTracker;
+}
 
 @property (nonatomic, assign) CGRect defaultViewFrame;
 
@@ -86,11 +91,21 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardFrameWillChangeNotificationHandler:) name:UIKeyboardWillChangeFrameNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHideNotificationHandler:) name:UIKeyboardWillHideNotification object:nil];
+
+    gaTracker = [GAI sharedInstance].defaultTracker;
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
+    // GA screen log
+    [gaTracker set:kGAIScreenName value:self.title];
+    [gaTracker send:[[GAIDictionaryBuilder createScreenView] build]];
 }
 
 - (void)dealloc
@@ -375,6 +390,13 @@
                     [[NSNotificationCenter defaultCenter] postNotificationName:PostNotificationName_UserLoggedIn object:nil];
                     AuthenticateViewController *viewController = [[AuthenticateViewController alloc] initWithNibName:@"AuthenticateViewController" bundle:[NSBundle mainBundle]];
                     viewController.textDescription = @"恭喜新年\n大發財";
+                    
+                    [gaTracker send:[[GAIDictionaryBuilder
+                                      createEventWithCategory:[EventLog twoString:self.title _:logPara_下一步]
+                                      action:[EventLog to_:logPara_註冊成功]
+                                      label:nil
+                                      value:nil] build]];
+                    
                     [self.navigationController pushViewController:viewController animated:YES];
                 }
                 else
@@ -441,6 +463,13 @@
 
 - (IBAction)buttonNextPressed:(id)sender
 {
+    
+    [gaTracker send:[[GAIDictionaryBuilder
+                      createEventWithCategory:[EventLog twoString:self.title _:logPara_下一步]
+                      action:logPara_點擊
+                      label:nil
+                      value:nil] build]];
+    
     [self startPreregisterProcedure];
 }
 

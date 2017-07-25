@@ -15,8 +15,13 @@
 #import "FullScreenLoadingView.h"
 #import "Definition.h"
 #import "Utility.h"
+#import <Google/Analytics.h>
+#import "EventLog.h"
+@import FirebaseCrash;
 
-@interface ChangePasswordViewController ()
+@interface ChangePasswordViewController () {
+    id<GAITracker> gaTracker;
+}
 
 @property (nonatomic, weak) IBOutlet UILabel *labelTitle;
 @property (nonatomic, weak) IBOutlet UITextField *textFieldOldP;
@@ -44,11 +49,21 @@
     [self.buttonConfirm.layer setCornerRadius:5.0];
     
     [self.navigationController.tabBarController.view addSubview:self.viewLoading];
+
+    gaTracker = [GAI sharedInstance].defaultTracker;
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
+    // GA screen log
+    [gaTracker set:kGAIScreenName value:self.title];
+    [gaTracker send:[[GAIDictionaryBuilder createScreenView] build]];
 }
 
 /*

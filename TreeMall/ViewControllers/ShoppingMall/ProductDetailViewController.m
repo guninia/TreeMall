@@ -23,8 +23,13 @@
 #import "WebViewViewController.h"
 #import "Definition.h"
 #import <Social/Social.h>
+#import <Google/Analytics.h>
+#import "EventLog.h"
+@import FirebaseCrash;
 
-@interface ProductDetailViewController ()
+@interface ProductDetailViewController () {
+    id<GAITracker> gaTracker;
+}
 
 - (void)retrieveDataForIdentifer:(NSNumber *)identifier;
 - (BOOL)processProductData:(id)data;
@@ -77,21 +82,6 @@
     // Do any additional setup after loading the view from its nib.
     self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
     
-    UIImage *imageCart = [[UIImage imageNamed:@"ind_ico_f_menu_1"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-    NSMutableArray *items = [NSMutableArray array];
-    UIImage *imageMore = [[UIImage imageNamed:@"icon_more"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-    if (imageMore)
-    {
-        UIBarButtonItem *item = [[UIBarButtonItem alloc] initWithImage:imageMore style:UIBarButtonItemStylePlain target:self action:@selector(buttonFunctionPressed:)];
-        [items addObject:item];
-    }
-    if (imageCart)
-    {
-        UIBarButtonItem *item = [[UIBarButtonItem alloc] initWithImage:imageCart style:UIBarButtonItemStylePlain target:self action:@selector(buttonItemCartPressed:)];
-        [items addObject:item];
-    }
-    self.navigationItem.rightBarButtonItems = items;
-    
     [self.view setBackgroundColor:[UIColor whiteColor]];
     [self.view addSubview:self.scrollView];
     [self.scrollView addSubview:self.collectionViewImage];
@@ -142,6 +132,8 @@
         [self retrieveDataForIdentifer:self.productIdentifier];
     }
     [self retrieveTermsForType:TermTypeShippingAndWarrenty];
+    
+    gaTracker = [GAI sharedInstance].defaultTracker;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -149,6 +141,13 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+
+    // GA screen log
+    [gaTracker set:kGAIScreenName value:self.title];
+    [gaTracker send:[[GAIDictionaryBuilder createScreenView] build]];
+}
 /*
 #pragma mark - Navigation
 
@@ -1765,6 +1764,14 @@
             if (directlyPurchase)
             {
                 [weakSelf presentCartViewForType:type];
+                
+                NSString * name = [self.dictionaryDetail objectForKey:SymphoxAPIParam_cpdt_name];
+                NSNumber * productId = [self.dictionaryDetail objectForKey:SymphoxAPIParam_cpdt_num];
+                [gaTracker send:[[GAIDictionaryBuilder
+                                  createEventWithCategory:[EventLog twoString:self.title _:logPara_加入購物車]
+                                  action:[EventLog threeString:[EventLog cartTypeInString:type] _:[productId stringValue] _:name]
+                                  label:nil
+                                  value:nil] build]];
             }
         }];
         [alertController addAction:action];
@@ -1819,6 +1826,15 @@
             [product setObject:specificSpecId forKey:SymphoxAPIParam_cpdt_num];
         }
         [self addProduct:product toCartForType:type];
+        
+        NSString * name = [self.dictionaryDetail objectForKey:SymphoxAPIParam_cpdt_name];
+        NSNumber * productId = [self.dictionaryDetail objectForKey:SymphoxAPIParam_cpdt_num];
+        [gaTracker send:[[GAIDictionaryBuilder
+                          createEventWithCategory:[EventLog twoString:self.title _:logPara_加入購物車]
+                          action:[EventLog threeString:[EventLog cartTypeInString:type] _:[productId stringValue] _:name]
+                          label:nil
+                          value:nil] build]];
+        
         if (shouldShowAlert)
         {
             NSString *message = [NSString stringWithFormat:[LocalizedString AddedTo_S_], title];
@@ -2079,6 +2095,13 @@
     presentationController.sourceRect = CGRectMake((self.view.frame.size.width - viewController.preferredContentSize.width - 20)/2, (self.view.frame.size.height)/2, 1.0, 1.0);
     presentationController.permittedArrowDirections = UIPopoverArrowDirectionLeft;
     presentationController.delegate = self;
+    
+    [gaTracker send:[[GAIDictionaryBuilder
+                      createEventWithCategory:[EventLog twoString:self.title _:logPara_兌換說明]
+                      action:logPara_點擊
+                      label:nil
+                      value:nil] build]];
+    
     [self presentViewController:viewController animated:YES completion:nil];
 }
 
@@ -2102,6 +2125,13 @@
     presentationController.sourceRect = CGRectMake((self.view.frame.size.width - viewController.preferredContentSize.width - 20)/2, (self.view.frame.size.height)/2, 1.0, 1.0);
     presentationController.permittedArrowDirections = UIPopoverArrowDirectionLeft;
     presentationController.delegate = self;
+    
+    [gaTracker send:[[GAIDictionaryBuilder
+                      createEventWithCategory:[EventLog twoString:self.title _:logPara_分期試算]
+                      action:logPara_點擊
+                      label:nil
+                      value:nil] build]];
+    
     [self presentViewController:viewController animated:YES completion:nil];
 }
 
@@ -2251,6 +2281,14 @@
         UIAlertAction *action = [UIAlertAction actionWithTitle:[LocalizedString Confirm] style:UIAlertActionStyleDefault handler:nil];
         [alertController addAction:action];
         [self presentViewController:alertController animated:YES completion:nil];
+        
+        NSString * name = [product objectForKey:SymphoxAPIParam_cpdt_name];
+        NSNumber * productId = [product objectForKey:SymphoxAPIParam_cpdt_num];
+        [gaTracker send:[[GAIDictionaryBuilder
+                          createEventWithCategory:[EventLog twoString:self.title _:logPara_加入我的最愛]
+                          action:[EventLog twoString:[productId stringValue] _:name]
+                          label:nil
+                          value:nil] build]];
     }
 }
 
@@ -2261,6 +2299,13 @@
         // Should login first.
         LoginViewController *viewControllerLogin = [[LoginViewController alloc] initWithNibName:@"LoginViewController" bundle:[NSBundle mainBundle]];
         UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:viewControllerLogin];
+        
+        [gaTracker send:[[GAIDictionaryBuilder
+                          createEventWithCategory:[EventLog twoString:self.title _:logPara_加入購物車]
+                          action:[EventLog to_:logPara_登入]
+                          label:nil
+                          value:nil] build]];
+        
         [self presentViewController:navigationController animated:YES completion:nil];
         return;
     }
@@ -2284,6 +2329,13 @@
         // Should login first.
         LoginViewController *viewControllerLogin = [[LoginViewController alloc] initWithNibName:@"LoginViewController" bundle:[NSBundle mainBundle]];
         UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:viewControllerLogin];
+        
+        [gaTracker send:[[GAIDictionaryBuilder
+                          createEventWithCategory:[EventLog twoString:self.title _:logPara_直接購買]
+                          action:[EventLog to_:logPara_登入]
+                          label:nil
+                          value:nil] build]];
+        
         [self presentViewController:navigationController animated:YES completion:nil];
         return;
     }

@@ -18,6 +18,9 @@
 #import "SHAPIAdapter.h"
 #import "APIDefinition.h"
 #import "WebViewViewController.h"
+#import <Google/Analytics.h>
+#import "EventLog.h"
+@import FirebaseCrash;
 
 typedef enum : NSUInteger {
     SectionTitleTagCoupon = 1000,
@@ -25,7 +28,9 @@ typedef enum : NSUInteger {
     SectionTitleTagTotal,
 } SectionTitleTag;
 
-@interface MemberViewController ()
+@interface MemberViewController () {
+    id<GAITracker> gaTracker;
+}
 
 - (void)refreshContent;
 - (void)reconfirmAndLogout;
@@ -85,6 +90,8 @@ typedef enum : NSUInteger {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshContent) name:PostNotificationName_UserPointUpdated object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshContent) name:PostNotificationName_UserCouponUpdated object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resetAllContent) name:PostNotificationName_UserLogout object:nil];
+
+    gaTracker = [GAI sharedInstance].defaultTracker;
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -93,6 +100,10 @@ typedef enum : NSUInteger {
 //    NSLog(@"MemberViewController - viewWillAppear");
     [self refreshContent];
     [self retrieveOrderNumberOfStatus];
+
+    // GA screen log
+    [gaTracker set:kGAIScreenName value:self.title];
+    [gaTracker send:[[GAIDictionaryBuilder createScreenView] build]];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -521,6 +532,12 @@ typedef enum : NSUInteger {
     
     UIAlertAction *actionConfirm = [UIAlertAction actionWithTitle:[LocalizedString Logout] style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
         [[TMInfoManager sharedManager] logoutUser];
+        
+        [gaTracker send:[[GAIDictionaryBuilder
+                          createEventWithCategory:[EventLog twoString:self.title _:logPara_登出]
+                          action:logPara_點擊
+                          label:nil
+                          value:nil] build]];
     }];
     [alertController addAction:actionCancel];
     [alertController addAction:actionConfirm];
@@ -672,6 +689,12 @@ typedef enum : NSUInteger {
     if ([[UIApplication sharedApplication] canOpenURL:url])
     {
         [[UIApplication sharedApplication] openURL:url];
+        
+        [gaTracker send:[[GAIDictionaryBuilder
+                          createEventWithCategory:[EventLog twoString:self.title _:logPara_資訊]
+                          action:[EventLog to_:logPara_外開網頁]
+                          label:url.absoluteString
+                          value:nil] build]];
     }
 }
 
@@ -713,6 +736,13 @@ typedef enum : NSUInteger {
         {
             NSLog(@"didPressButtonBySender - SectionTitleTagCoupon");
             CouponListViewController *viewController = [[CouponListViewController alloc] initWithNibName:@"CouponListViewController" bundle:[NSBundle mainBundle]];
+            
+            [gaTracker send:[[GAIDictionaryBuilder
+                              createEventWithCategory:[EventLog twoString:self.title _:logPara_我的折價券]
+                              action:[EventLog to_:logPara_我的折價券]
+                              label:nil
+                              value:nil] build]];
+            
             [self.navigationController pushViewController:viewController animated:YES];
         }
             break;
@@ -720,6 +750,13 @@ typedef enum : NSUInteger {
         {
             NSLog(@"didPressButtonBySender - SectionTitleTagOrder");
             OrderListViewController *viewController = [[OrderListViewController alloc] initWithNibName:@"OrderListViewController" bundle:[NSBundle mainBundle]];
+            
+            [gaTracker send:[[GAIDictionaryBuilder
+                              createEventWithCategory:[EventLog twoString:self.title _:viewController.title]
+                              action:[EventLog to_:viewController.title]
+                              label:nil
+                              value:nil] build]];
+            
             [self.navigationController pushViewController:viewController animated:YES];
         }
             break;
@@ -733,6 +770,13 @@ typedef enum : NSUInteger {
 - (void)memberTitleView:(MemberTitleView *)view didSelectToModifyPersonalInformationBySender:(id)sender
 {
     MemberSettingsViewController *viewController = [[MemberSettingsViewController alloc] initWithNibName:@"MemberSettingsViewController" bundle:[NSBundle mainBundle]];
+    
+    [gaTracker send:[[GAIDictionaryBuilder
+                      createEventWithCategory:[EventLog twoString:self.title _:logPara_修改]
+                      action:[EventLog to_:viewController.title]
+                      label:nil
+                      value:nil] build]];
+    
     [self.navigationController pushViewController:viewController animated:YES];
 }
 
@@ -742,6 +786,21 @@ typedef enum : NSUInteger {
 {
     OrderListViewController *viewController = [[OrderListViewController alloc] initWithNibName:@"OrderListViewController" bundle:[NSBundle mainBundle]];
     viewController.orderState = view.tag;
+    
+    NSString * iconName = nil;
+    if (view.tag == OrderStateProcessing)
+        iconName = logPara_訂單處理中;
+    else if (view.tag == OrderStateShipping)
+        iconName = logPara_訂單已出貨;
+    else if (view.tag == OrderStateReturnOrReplace)
+        iconName = logPara_訂單退換貨;
+    
+    [gaTracker send:[[GAIDictionaryBuilder
+                      createEventWithCategory:[EventLog twoString:self.title _:iconName]
+                      action:[EventLog to_:viewController.title]
+                      label:nil
+                      value:nil] build]];
+    
     [self.navigationController pushViewController:viewController animated:YES];
 }
 
@@ -752,6 +811,13 @@ typedef enum : NSUInteger {
     WebViewViewController *viewController = [[WebViewViewController alloc] initWithNibName:@"WebViewViewController" bundle:[NSBundle mainBundle]];
     viewController.title = [self.viewPoint.buttonBonusGame titleForState:UIControlStateNormal];
     viewController.urlString = @"http://www.treemall.com.tw/event/RWD/1706member/index.shtml?source=treemall&medium=AD_LOCATION&campaign=77-78-1";
+    
+    [gaTracker send:[[GAIDictionaryBuilder
+                      createEventWithCategory:[EventLog twoString:self.title _:logPara_玩遊戲賺點數]
+                      action:[EventLog to_:logPara_網頁]
+                      label:viewController.urlString
+                      value:nil] build]];
+    
     [self.navigationController pushViewController:viewController animated:YES];
 }
 

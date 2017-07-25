@@ -14,6 +14,9 @@
 #import "WebViewViewController.h"
 #import "ProductListViewController.h"
 #import "ProductDetailViewController.h"
+#import <Google/Analytics.h>
+#import "EventLog.h"
+@import FirebaseCrash;
 
 typedef enum : NSUInteger {
     SectionTypeCategory,
@@ -21,7 +24,9 @@ typedef enum : NSUInteger {
     SectionTypeTotal,
 } SectionType;
 
-@interface CouponDetailViewController ()
+@interface CouponDetailViewController () {
+    id<GAITracker> gaTracker;
+}
 
 - (void)presentHallNamed:(NSString *)name forIdentifier:(NSString *)hallId atLayer:(NSNumber *)layer;
 - (void)presentProductNamed:(NSString *)name forIdentifier:(NSNumber *)productId;
@@ -68,11 +73,21 @@ typedef enum : NSUInteger {
     [self.view addSubview:self.collectionView];
     
     [self.collectionView reloadData];
+
+    gaTracker = [GAI sharedInstance].defaultTracker;
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
+    // GA screen log
+    [gaTracker set:kGAIScreenName value:[LocalizedString CouponDetail]];
+    [gaTracker send:[[GAIDictionaryBuilder createScreenView] build]];
 }
 
 /*

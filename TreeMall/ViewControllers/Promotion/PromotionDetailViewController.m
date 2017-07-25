@@ -11,8 +11,13 @@
 #import "APIDefinition.h"
 #import <UIImageView+WebCache.h>
 #import "WebViewViewController.h"
+#import <Google/Analytics.h>
+#import "EventLog.h"
+@import FirebaseCrash;
 
-@interface PromotionDetailViewController ()
+@interface PromotionDetailViewController () {
+    id<GAITracker> gaTracker;
+}
 
 - (void)buttonActionPressed:(id)sender;
 
@@ -30,11 +35,21 @@
     [self.scrollView addSubview:self.buttonAction];
     [self.scrollView addSubview:self.separator];
     [self.scrollView addSubview:self.labelContent];
+
+    gaTracker = [GAI sharedInstance].defaultTracker;
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
+    // GA screen log
+    [gaTracker set:kGAIScreenName value:logPara_優惠通知明細];
+    [gaTracker send:[[GAIDictionaryBuilder createScreenView] build]];
 }
 
 /*
@@ -234,6 +249,12 @@
         if ([[UIApplication sharedApplication] canOpenURL:url])
         {
             [[UIApplication sharedApplication] openURL:url];
+            
+            [gaTracker send:[[GAIDictionaryBuilder
+                              createEventWithCategory:[EventLog twoString:logPara_優惠通知明細 _:logPara_活動連結]
+                              action:[EventLog to_:logPara_外開網頁]
+                              label:link
+                              value:nil] build]];
         }
     }
 }

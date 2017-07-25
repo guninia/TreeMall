@@ -17,8 +17,13 @@
 #import "PaymentTypeViewController.h"
 #import "AdditionalPurchaseViewController.h"
 #import "LocalizedString.h"
+#import <Google/Analytics.h>
+#import "EventLog.h"
+@import FirebaseCrash;
 
-@interface CartViewController ()
+@interface CartViewController () {
+    id<GAITracker> gaTracker;
+}
 
 - (void)showLoadingViewAnimated:(BOOL)animated;
 - (void)hideLoadingViewAnimated:(BOOL)animated;
@@ -98,6 +103,8 @@
     }
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handlerOfCartContentChangedNotification:) name:PostNotificationName_CartContentChanged object:nil];
+
+    gaTracker = [GAI sharedInstance].defaultTracker;
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -116,6 +123,10 @@
     [self.arrayProducts removeAllObjects];
     
     [self checkCartForType:self.currentType shouldShowPaymentForProductId:nil];
+
+    // GA screen log
+    [gaTracker set:kGAIScreenName value:self.title];
+    [gaTracker send:[[GAIDictionaryBuilder createScreenView] build]];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -902,6 +913,13 @@
             viewController.arrayProductsFromCart = weakSelf.arrayProducts;
             viewController.bottomBar.label.attributedText = weakSelf.bottomBar.label.attributedText;
             viewController.currentType = weakSelf.currentType;
+            
+            [gaTracker send:[[GAIDictionaryBuilder
+                              createEventWithCategory:[EventLog twoString:self.title _:logPara_下一步]
+                              action:[EventLog to_:logPara_加購商品]
+                              label:nil
+                              value:nil] build]];
+
             [weakSelf.navigationController pushViewController:viewController animated:YES];
         }
         else
@@ -1089,6 +1107,13 @@
                     viewController.dictionaryData = resultDictionary;
                     viewController.arrayProductsFromCart = weakSelf.arrayProducts;
                     viewController.type = self.currentType;
+                    
+                    [gaTracker send:[[GAIDictionaryBuilder
+                                      createEventWithCategory:[EventLog twoString:self.title _:logPara_下一步]
+                                      action:[EventLog to_:logPara_付款方式]
+                                      label:nil
+                                      value:nil] build]];
+                    
                     [self.navigationController pushViewController:viewController animated:YES];
                 }
                 else
@@ -1736,6 +1761,12 @@
         {
             [self checkCartForType:weakSelf.currentType shouldShowPaymentForProductId:nil];
         }
+        
+        [gaTracker send:[[GAIDictionaryBuilder
+                          createEventWithCategory:[EventLog twoString:self.title _:logPara_列表一]
+                          action:[EventLog index:cell.tag _:logPara_刪除]
+                          label:[EventLog threeString:[EventLog cartTypeInString:_currentType] _:[productId stringValue] _:name]
+                          value:nil] build]];
     }];
     [alertController addAction:actionCancel];
     [alertController addAction:actionConfirm];

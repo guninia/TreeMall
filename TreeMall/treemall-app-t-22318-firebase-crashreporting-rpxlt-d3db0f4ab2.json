@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "treemall-app-t-22318",
+  "private_key_id": "d3db0f4ab2359c7a2f18380054d033cd16d87347",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDb3NdDr9LV3OUv\nYRmnmMEXLf469vZXnZY5qSCUzlUdcalDf1EYAzXV9/BKNKzKAIgg+WE07vm8Z047\nyc/hwl/GFynrlyjvAqqxoiZrdY3IZaxpEtnJqzgGD2Vcot7SruMmZhWi2Z6HIAxe\nNE5qHrUWmQc493yJr2tBa2VnditNwjrp3hPRfmrY+uoz+ktoOvSSLAbu1H06NVIB\nd3koaCakPmsu2zXhai01SzzhqrwyiYVtH0sT9UuqOHK6qZVV/Syxl3jtM8t3ikQO\n6k1nDHoYkfFztO2XqQFRj4JP/RtEfkiuZsb9Z06pov7EYbngYz1odyn/1URG/WN8\ntryiU/6vAgMBAAECggEAI258DG7t0cRG9PM3gLBX0cX6NgNtoKIHPySX2RNFWTjj\nd7qxVWbTCrfps/O4MteSGIpH1ZF7kpatX2o/A5lg+Nnrygkysg3idzzz5xZrMnPc\nLJS6n0rl/OgHRD4FHbvMZHhIHVXnu8v44keYqXZoZYtkxBPyMHgiF0lY7qr3AJEz\nlr2Ye+ZOKbLAqzwZYl73mPzbmM6ObDnb4Og3Y3wHA6gMvBf5+Y/PZyP23O6Hq/z5\njDbTTzkKKuzK5VtDraQXD4tLU4XXUhq59KwpeKLw8kG2BqMLkbef11g5R+zvgu0Y\nK/Isx4G/cHNOLvzDaCO65ZHcbOJbyWzgw22zAIgAxQKBgQDwymTj6PR21HKqdcZ+\nqH8VimpQwsmz88b/3/VhRW7GwRBi8VSbawqS3d7JpEjQqNmPy6ek6n1fKpnVXENq\nb8S93BmUQmaYg+/ihjpSMCDGfA/moHEnbDAhkbderhFGwb+mRkViUxIyXKRdK1x5\nT0haVyBRcPFUm4GgjIusBZ2dXQKBgQDpwApAgx2wMmstdHkVg94AHhsp3Fc0x8BO\ngC7vLztjs1rQ++4T8n6Okx2HJ5UGg/BsFQFsQP78b754FeiVpmq8bopLa7D5/cUp\nTUyPx7biAxh8nmwKy87u4BGFnW6HOmOEh/8NoYJByBMDUnyCtIoCfH5X7ZXPUOkW\nOl1Zr+W/ewKBgQDBupUhqTPGx3baHpftH7PfqNWQ1Kdj2Saqh43tDOfrkTmV4YSo\n5p5DO68bnMnY14DzaG8hCGiGQMg0GV9EK1inSIZr+mCBJOXD4yrZJU+5YeeJLlzb\n0veGiq51xqavvwJqzO7WBPAHBPJY46IrF9ammKKv46bG47aPbYSSipIdIQKBgQDe\nQ/I7p7FaMocBQOhGEg7Nk9MGefMeR/ZPbsmyO/o/8nKfl36pzwKSNcd1Fak5+clq\nLIse0arkhKjbbRGtAwIpTP8JekxdWfXZMRxk92WqAYGONeHMXkHVmJBwueM4iMfK\nZLqczn+aZ1HU7eFhM6Sreo90soCqEmig7zyGpKBU8wKBgG9pH1aF+H+MzyXb+JTU\nsh1BGnNZcb/Vav+RrxhtUqG6CVPS6H2MleNFyVLHjS7jcFZK7Je5iK97PCpbRSQN\nW+zDQCJ2jpFaB6eakRhZM0FjDaoXvI3zrVIq5nc3Q5FFqB/kkf8wvmnwk3nv4OZI\nZCavD5bMaKDX5SFt7o+s8bhO\n-----END PRIVATE KEY-----\n",
+  "client_email": "firebase-crashreporting-rpxlt@treemall-app-t-22318.iam.gserviceaccount.com",
+  "client_id": "108028537409247042536",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://accounts.google.com/o/oauth2/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-crashreporting-rpxlt%40treemall-app-t-22318.iam.gserviceaccount.com"
+}

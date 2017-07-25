@@ -18,6 +18,9 @@
 #import "CreditCardViewController.h"
 #import "SeparatorLineHeaderView.h"
 #import "SampleImageViewController.h"
+#import <Google/Analytics.h>
+#import "EventLog.h"
+@import FirebaseCrash;
 
 static NSString *DTAttributedTextCellIdentifier = @"DTAttributedTextCell";
 
@@ -41,7 +44,9 @@ typedef enum : NSUInteger {
     DeliveryCellTagTotal
 } DeliveryCellTag;
 
-@interface StorePickupInfoViewController ()
+@interface StorePickupInfoViewController () {
+    id<GAITracker> gaTracker;
+}
 
 @property (nonatomic, weak) IBOutlet UIScrollView *scrollView;
 @property (nonatomic, weak) IBOutlet UIButton *buttonDescription;
@@ -163,11 +168,21 @@ typedef enum : NSUInteger {
         self.labelInvoiceTitle.hidden = YES;
     }
     [self startToGetCarrierInfo];
+    
+    gaTracker = [GAI sharedInstance].defaultTracker;
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
+    // GA screen log
+    [gaTracker set:kGAIScreenName value:self.title];
+    [gaTracker send:[[GAIDictionaryBuilder createScreenView] build]];
 }
 
 /*
@@ -2399,6 +2414,13 @@ typedef enum : NSUInteger {
     viewController.dictionaryInstallment = self.dictionaryInstallment;
     viewController.selectedPaymentDescription = self.selectedPaymentDescription;
     viewController.dictionaryDelivery = delivery;
+    
+    [gaTracker send:[[GAIDictionaryBuilder
+                      createEventWithCategory:[EventLog twoString:self.title _:logPara_下一步]
+                      action:[EventLog to_:viewController.title]
+                      label:nil
+                      value:nil] build]];
+    
     [self.navigationController pushViewController:viewController animated:YES];
 }
 
@@ -2412,6 +2434,13 @@ typedef enum : NSUInteger {
     viewController.selectedPaymentDescription = self.selectedPaymentDescription;
     viewController.dictionaryDelivery = delivery;
     viewController.params = params;
+    
+    [gaTracker send:[[GAIDictionaryBuilder
+                      createEventWithCategory:[EventLog twoString:self.title _:logPara_下一步]
+                      action:[EventLog to_:viewController.title]
+                      label:nil
+                      value:nil] build]];
+    
     [self.navigationController pushViewController:viewController animated:YES];
 }
 
@@ -2502,6 +2531,12 @@ typedef enum : NSUInteger {
     if ([[UIApplication sharedApplication] canOpenURL:url])
     {
         [[UIApplication sharedApplication] openURL:url];
+        
+        [gaTracker send:[[GAIDictionaryBuilder
+                          createEventWithCategory:[EventLog twoString:self.title _:logPara_服務說明]
+                          action:logPara_點擊
+                          label:nil
+                          value:nil] build]];
     }
 }
 
