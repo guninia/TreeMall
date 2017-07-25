@@ -668,6 +668,7 @@
         if (array)
         {
             [self.arrayAllProducts setArray:array];
+            NSArray *arrayAddition = [[TMInfoManager sharedManager] productArrayForAdditionalCartType:type];
             for (NSDictionary *product in array)
             {
                 NSNumber *cpdt_num = [product objectForKey:SymphoxAPIParam_cpdt_num];
@@ -696,6 +697,18 @@
                     {
                         shouldAddProduct = NO;
                         break;
+                    }
+                }
+                if (shouldAddProduct)
+                {
+                    for (NSDictionary *additionProduct in arrayAddition)
+                    {
+                        NSNumber *additionId = [additionProduct objectForKey:SymphoxAPIParam_cpdt_num];
+                        if (additionId && [additionId isEqual:[NSNull null]] == NO && [additionId isEqualToNumber:cpdt_num])
+                        {
+                            shouldAddProduct = NO;
+                            break;
+                        }
                     }
                 }
                 if (shouldAddProduct)

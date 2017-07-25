@@ -42,6 +42,12 @@
 
 #pragma mark - Override
 
+- (void)layoutSubviews
+{
+    [super layoutSubviews];
+    self.textLabel.frame = CGRectMake(8.0, 0.0, self.contentView.frame.size.width - 8.0, self.contentView.frame.size.height);
+}
+
 - (UIButton *)buttonCheck
 {
     if (_buttonCheck == nil)

@@ -267,7 +267,8 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     DiscountTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:DiscountTableViewCellIdentifier forIndexPath:indexPath];
-    cell.textLabel.textColor = [UIColor colorWithRed:(154.0/255.0) green:(192.0/255.0) blue:(68.0/255.0) alpha:1.0];
+//    cell.textLabel.textColor = [UIColor colorWithRed:(154.0/255.0) green:(192.0/255.0) blue:(68.0/255.0) alpha:1.0];
+    cell.textLabel.textColor = [UIColor blackColor];
     cell.tintColor = [UIColor colorWithRed:(154.0/255.0) green:(192.0/255.0) blue:(68.0/255.0) alpha:1.0];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     if (indexPath.section < [self.arrayPaymentMode count])
