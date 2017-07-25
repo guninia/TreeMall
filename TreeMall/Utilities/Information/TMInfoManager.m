@@ -2376,7 +2376,7 @@ static NSUInteger SearchKeywordNumberMax = 8;
     NSArray *arrayPromotionRead = [dictionaryArchive objectForKey:TMInfoArchiveKey_PromotionRead];
     if (arrayPromotionRead)
     {
-        [_orderedSetPromotionRead addObjectsFromArray:arrayPromotionRead];
+        [self.orderedSetPromotionRead addObjectsFromArray:arrayPromotionRead];
     }
     NSDictionary *dictionaryUserInfo = [dictionaryArchive objectForKey:TMInfoArchiveKey_UserInformation];
     if (dictionaryUserInfo)
@@ -2386,7 +2386,7 @@ static NSUInteger SearchKeywordNumberMax = 8;
     NSArray *arrayKeyword = [dictionaryArchive objectForKey:TMInfoArchiveKey_OrderSetKeyword];
     if (arrayKeyword)
     {
-        [_orderedSetKeyword addObjectsFromArray:arrayKeyword];
+        [self.orderedSetKeyword addObjectsFromArray:arrayKeyword];
     }
     BOOL shouldUpdateCachedData = YES;
     NSNumber *numberTimestamp = [dictionaryArchive objectForKey:TMInfoArchiveKey_ArchiveTimestamp];
@@ -2459,12 +2459,12 @@ static NSUInteger SearchKeywordNumberMax = 8;
     NSArray *arrayFavorites = [dictionaryArchive objectForKey:TMInfoArchiveKey_Favorites];
     if (arrayFavorites)
     {
-        [_arrayFavorite addObjectsFromArray:arrayFavorites];
+        [self.arrayFavorite addObjectsFromArray:arrayFavorites];
     }
     NSArray *arrayFavoriteId = [dictionaryArchive objectForKey:TMInfoArchiveKey_OrderSetFavoriteId];
     if (arrayFavoriteId)
     {
-        [_orderedSetFavoriteId addObjectsFromArray:arrayFavoriteId];
+        [self.orderedSetFavoriteId addObjectsFromArray:arrayFavoriteId];
     }
     [[NSNotificationCenter defaultCenter] postNotificationName:PostNotificationName_FavoriteContentChanged object:self];
 }

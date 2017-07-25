@@ -251,9 +251,9 @@
     if (self.labelTitle && [self.labelTitle isHidden] == NO)
     {
         NSString *defaultString = self.labelTitle.text;
-        CGSize sizeText = [defaultString sizeWithAttributes:self.attributesTitle];
+        CGSize sizeText = [defaultString boundingRectWithSize:CGSizeMake(positionRightEnd - originX, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin attributes:self.attributesTitle context:nil].size;
         CGSize sizeLabel = CGSizeMake(ceil(sizeText.width), ceil(sizeText.height));
-        CGRect frame = CGRectMake(originX, originY, positionRightEnd - originX, sizeLabel.height);
+        CGRect frame = CGRectMake(originX, originY, sizeLabel.width, sizeLabel.height);
         self.labelTitle.frame = frame;
         originY = self.labelTitle.frame.origin.y + self.labelTitle.frame.size.height + intervalV;
     }
