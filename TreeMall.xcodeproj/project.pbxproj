@@ -1748,7 +1748,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Replace this with the GOOGLE_APP_ID from your GoogleService-Info.plist file\nGOOGLE_APP_ID=1:874500909896:ios:8dda93ffe80ecb33\n\n# Replace the /Path/To/ServiceAccount.json with the path to the key you just downloaded\n\"${PODS_ROOT}\"/FirebaseCrash/upload-sym \"/Users/stevenhuang/Documents/iOS_Projects/TreeMall/TreeMall/treemall-app-t-22318-firebase-crashreporting-rpxlt-d3db0f4ab2.json\"\n";
+			shellScript = "# Replace this with the GOOGLE_APP_ID from your GoogleService-Info.plist file\nGOOGLE_APP_ID=1:874500909896:ios:8dda93ffe80ecb33\n\n# Replace the /Path/To/ServiceAccount.json with the path to the key you just downloaded\n\"${PODS_ROOT}\"/FirebaseCrash/upload-sym \"${SRCROOT}/TreeMall/treemall-app-t-22318-firebase-crashreporting-rpxlt-d3db0f4ab2.json\"\n";
 		};
 		8E217DB8D6719703BB4E78C1 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
