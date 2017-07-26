@@ -501,7 +501,8 @@ static NSInteger MaxTagsNumber = 5;
         [self.viewDiscount setHidden:NO];
         if ([discount isKindOfClass:[NSNumber class]])
         {
-            NSString *discountString = [[NSString stringWithFormat:[LocalizedString F_PercentOff], [discount doubleValue] * 10] stringByReplacingOccurrencesOfString:@"." withString:@""];
+            NSString *discountNumberString = [[NSString stringWithFormat:@"%.0f", [discount doubleValue] * 100] stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"0"]];
+            NSString *discountString = [NSString stringWithFormat:[LocalizedString F_PercentOff], discountNumberString];
             self.viewDiscount.text = discountString;
         }
     }

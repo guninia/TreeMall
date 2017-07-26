@@ -55,7 +55,7 @@
 "ClickToDiscount"="點我現折";
 "S_InstallmentNumber"="%li期";
 "Free_S_Point"="贈送%li點";
-"F_PercentOff"="%.0f折";
+"F_PercentOff"="%@折";
 "CannotLoadData"="無法取得相關內容";
 "GoBack"="回上頁";
 "Reload"="重新讀取";

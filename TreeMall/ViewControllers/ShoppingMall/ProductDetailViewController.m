@@ -82,17 +82,23 @@
     // Do any additional setup after loading the view from its nib.
     self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
     
-    UIImage *imageCart = [[UIImage imageNamed:@"ind_ico_f_menu_1"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    UIImage *imageCart = [[UIImage imageNamed:@"sho_info_bnt_cat"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     NSMutableArray *items = [NSMutableArray array];
     UIImage *imageMore = [[UIImage imageNamed:@"icon_more"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     if (imageMore)
     {
-        UIBarButtonItem *item = [[UIBarButtonItem alloc] initWithImage:imageMore style:UIBarButtonItemStylePlain target:self action:@selector(buttonFunctionPressed:)];
+        UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(0.0, 0.0, 30.0, 30.0)];
+        [button setImage:imageMore forState:UIControlStateNormal];
+        [button addTarget:self action:@selector(buttonFunctionPressed:) forControlEvents:UIControlEventTouchUpInside];
+        UIBarButtonItem *item = [[UIBarButtonItem alloc] initWithCustomView:button];
         [items addObject:item];
     }
     if (imageCart)
     {
-        UIBarButtonItem *item = [[UIBarButtonItem alloc] initWithImage:imageCart style:UIBarButtonItemStylePlain target:self action:@selector(buttonItemCartPressed:)];
+        UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(0.0, 0.0, 30.0, 30.0)];
+        [button setImage:imageCart forState:UIControlStateNormal];
+        [button addTarget:self action:@selector(buttonItemCartPressed:) forControlEvents:UIControlEventTouchUpInside];
+        UIBarButtonItem *item = [[UIBarButtonItem alloc] initWithCustomView:button];
         [items addObject:item];
     }
     self.navigationItem.rightBarButtonItems = items;

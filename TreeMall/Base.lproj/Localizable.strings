@@ -56,7 +56,7 @@
 "ClickToDiscount"="Discount";
 "S_InstallmentNumber"="%li Installments";
 "Free_S_Point"="Free %li Points";
-"F_PercentOff"="%.2f％ off";
+"F_PercentOff"="%@％ off";
 "CannotLoadData"="Cannot load data";
 "GoBack"="Back";
 "Reload"="Reload";
