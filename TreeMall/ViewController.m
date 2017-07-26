@@ -120,7 +120,7 @@
         vControllerCart.title = [LocalizedString ShoppingCart];
         UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:vControllerCart];
         [vControllerArray addObject:navigationController];
-        UIImage *selectedImage = [[UIImage imageNamed:@"ind_ico_f_menu_1"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+        UIImage *selectedImage = [[UIImage imageNamed:@"sho_info_bnt_cat"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
         if (selectedImage)
         {
             NSNumber *key = [NSNumber numberWithInteger:vControllerIndex];
