@@ -705,19 +705,19 @@
             NSDictionary *userInfo = error.userInfo;
             if (userInfo)
             {
-                NSString *errorCode = [userInfo objectForKey:SymphoxAPIParam_id];
-                if ([errorCode isEqualToString:@"E217"] || [errorCode isEqualToString:@"E403"] || [errorCode isEqualToString:@"E416"] || [errorCode isEqualToString:@"E402"] || [errorCode isEqualToString:@"E400"] || [errorCode isEqualToString:@"E999"])
-                {
-                    for (NSDictionary *product in productConditions)
-                    {
-                        NSNumber *productId = [product objectForKey:SymphoxAPIParam_cpdt_num];
-                        if (productId && [productId isEqual:[NSNull null]] == NO)
-                        {
-                            [[TMInfoManager sharedManager] nameOfRemovedProductId:productId inCart:type];
-                        }
-                    }
-                    [self.arrayProducts removeAllObjects];
-                }
+//                NSString *errorCode = [userInfo objectForKey:SymphoxAPIParam_id];
+//                if ([errorCode isEqualToString:@"E217"] || [errorCode isEqualToString:@"E403"] || [errorCode isEqualToString:@"E416"] || [errorCode isEqualToString:@"E402"] || [errorCode isEqualToString:@"E400"] || [errorCode isEqualToString:@"E999"])
+//                {
+//                    for (NSDictionary *product in productConditions)
+//                    {
+//                        NSNumber *productId = [product objectForKey:SymphoxAPIParam_cpdt_num];
+//                        if (productId && [productId isEqual:[NSNull null]] == NO)
+//                        {
+//                            [[TMInfoManager sharedManager] nameOfRemovedProductId:productId inCart:type];
+//                        }
+//                    }
+//                    [self.arrayProducts removeAllObjects];
+//                }
                 NSString *serverMessage = [userInfo objectForKey:SymphoxAPIParam_status_desc];
                 if (serverMessage)
                 {

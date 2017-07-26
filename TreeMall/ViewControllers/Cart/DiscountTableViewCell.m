@@ -15,7 +15,8 @@
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self)
     {
-        
+        [self.textLabel setLineBreakMode:NSLineBreakByWordWrapping];
+        [self.textLabel setNumberOfLines:0];
     }
     return self;
 }
