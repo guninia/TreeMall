@@ -46,6 +46,7 @@
 - (void)setSegmentedControlIndexForCartType:(CartType)type;
 - (BOOL)isConditionSelectedForIdentifier:(NSNumber *)productIdentifier;
 - (NSString *)paymentDetailForIdentifier:(NSNumber *)productIdentifier;
+- (NSNumber *)quantityForIdentifier:(NSNumber *)productIdentifier;
 - (NSString *)textForCartType:(CartType)cartType;
 - (void)showQuantityInputViewForProduct:(NSDictionary *)product atIndex:(NSInteger)index;
 - (BOOL)isGiftProduct:(NSDictionary *)product;
@@ -724,6 +725,8 @@
                     errorMessage = serverMessage;
                 }
             }
+            NSArray *array = [[TMInfoManager sharedManager] productArrayForCartType:type];
+            [self.arrayProducts setArray:array];
             NSLog(@"requestResultForRenewConditionsOfProducts - error:\n%@", [error description]);
             UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:errorMessage preferredStyle:UIAlertControllerStyleAlert];
             UIAlertAction *actionConfirm = [UIAlertAction actionWithTitle:[LocalizedString Confirm] style:UIAlertActionStyleDefault handler:nil];
@@ -763,6 +766,7 @@
         NSMutableString *notifyString = [NSMutableString string];
         if (array)
         {
+            NSMutableArray *arrayInCart = [[TMInfoManager sharedManager] productArrayForCartType:type];
             for (NSDictionary *product in [array copy])
             {
 //                NSString *cpdt_owner_num = [product objectForKey:SymphoxAPIParam_cpdt_owner_num];
@@ -800,6 +804,15 @@
                     }
                     [array removeObject:product];
                     errorTitle = [LocalizedString NotEnoughPoints];
+                }
+                for (NSInteger index = 0; index < [[arrayInCart copy] count]; index++)
+                {
+                    NSDictionary *productInCart = [arrayInCart objectAtIndex:index];
+                    NSNumber *cpdt_num_inCart = [productInCart objectForKey:SymphoxAPIParam_cpdt_num];
+                    if (cpdt_num_inCart && [cpdt_num_inCart isEqual:[NSNull null]] == NO && [cpdt_num_inCart isEqualToNumber:cpdt_num])
+                    {
+                        [arrayInCart replaceObjectAtIndex:index withObject:product];
+                    }
                 }
             }
             [self.arrayProducts setArray:array];
@@ -1344,6 +1357,22 @@
     return paymentType;
 }
 
+- (NSNumber *)quantityForIdentifier:(NSNumber *)productIdentifier
+{
+    NSNumber *quantity = nil;
+    if (productIdentifier != nil && ([productIdentifier isEqual:[NSNull null]] == NO))
+    {
+        NSDictionary *purchaseInfos = [[TMInfoManager sharedManager] purchaseInfoForCartType:self.currentType];
+        NSDictionary *purchaseInfo = [purchaseInfos objectForKey:productIdentifier];
+        quantity = [purchaseInfo objectForKey:SymphoxAPIParam_qty];
+    }
+    if ([quantity isEqual:[NSNull null]])
+    {
+        quantity = nil;
+    }
+    return quantity;
+}
+
 - (NSString *)textForCartType:(CartType)cartType
 {
     NSArray *array = [[TMInfoManager sharedManager] productArrayForCartType:cartType];
@@ -1516,22 +1545,38 @@
         NSNumber *numberCash = [dictionary objectForKey:SymphoxAPIParam_ori_cash];
         if ([numberCash isEqual:[NSNull null]])
         {
-            numberCash = nil;
+            numberCash = [dictionary objectForKey:SymphoxAPIParam_price03];
+            if (numberCash == nil || [numberCash isEqual:[NSNull null]])
+            {
+                numberCash = nil;
+            }
         }
         NSNumber *numberPoint = [dictionary objectForKey:SymphoxAPIParam_ori_point];
         if ([numberPoint isEqual:[NSNull null]])
         {
-            numberPoint = nil;
+            numberPoint = [dictionary objectForKey:SymphoxAPIParam_point01];
+            if (numberPoint == nil || [numberPoint isEqual:[NSNull null]])
+            {
+                numberPoint = nil;
+            }
         }
         NSNumber *mixCash = [dictionary objectForKey:SymphoxAPIParam_cash];
         if ([mixCash isEqual:[NSNull null]])
         {
-            mixCash = nil;
+            mixCash = [dictionary objectForKey:SymphoxAPIParam_price02];
+            if (mixCash == nil || [mixCash isEqual:[NSNull null]])
+            {
+                mixCash = nil;
+            }
         }
         NSNumber *mixPoint = [dictionary objectForKey:SymphoxAPIParam_tmp_point];
         if ([mixPoint isEqual:[NSNull null]])
         {
-            mixPoint = nil;
+            mixPoint = [dictionary objectForKey:SymphoxAPIParam_point02];
+            if (mixPoint == nil || [mixPoint isEqual:[NSNull null]])
+            {
+                mixPoint = nil;
+            }
         }
         
         NSString *cpdt_owner_num = [dictionary objectForKey:SymphoxAPIParam_cpdt_owner_num];
@@ -1550,29 +1595,8 @@
         BOOL hasPureCash = (numberCash != nil) && ([numberCash unsignedIntegerValue] > 0) && cpdt_owner_num && ([cpdt_owner_num integerValue] == 3);
         BOOL hasPurePoint = (numberPoint != nil) && ([numberPoint unsignedIntegerValue] > 0) && cpdt_owner_num && ([cpdt_owner_num integerValue] == 1);
         BOOL hasMixedPrice = (numberCash != nil) && ([numberCash unsignedIntegerValue] > 0) && (numberPoint != nil) && ([numberPoint unsignedIntegerValue] > 0) && cpdt_owner_num && ([cpdt_owner_num integerValue] == 2);
-//        if (hasPureCash && hasPurePoint)
-//        {
-//            NSString *stringCash = [self.numberFormatter stringFromNumber:numberCash];
-//            if (stringCash)
-//            {
-//                NSString *string = [NSString stringWithFormat:@"＄%@", stringCash];
-//                NSAttributedString *attrString = [[NSAttributedString alloc] initWithString:string attributes:attributeRed];
-//                [totalCostString appendAttributedString:attrString];
-//                NSAttributedString *slashString = [[NSAttributedString alloc] initWithString:@" / " attributes:attributeGray];
-//                [totalCostString appendAttributedString:slashString];
-//            }
-//            
-//            NSString *stringPoint = [self.numberFormatter stringFromNumber:numberPoint];
-//            if (stringPoint)
-//            {
-//                NSMutableAttributedString *attrString = [[NSMutableAttributedString alloc] initWithString:stringPoint attributes:attributeGray];
-//                NSAttributedString *attrPoint = [[NSAttributedString alloc] initWithString:[LocalizedString Point] attributes:attributeGraySmall];
-//                [attrString appendAttributedString:attrPoint];
-//                [totalCostString appendAttributedString:attrString];
-//            }
-//        }
-//        else
-            if (hasPureCash)
+        
+        if (hasPureCash)
         {
             NSString *stringTotal = [self.numberFormatter stringFromNumber:numberCash];
             NSString *string = [NSString stringWithFormat:@"＄%@", stringTotal];
@@ -1626,7 +1650,16 @@
         }
         else
         {
-            cell.labelName.hidden = YES;
+            name = [dictionary objectForKey:SymphoxAPIParam_cpdt_name];
+            if (name != nil && ([name isEqual:[NSNull null]] == NO) && [name length] > 0)
+            {
+                cell.labelName.text = name;
+                cell.labelName.hidden = NO;
+            }
+            else
+            {
+                cell.labelName.hidden = YES;
+            }
         }
         
         NSString *remark = [dictionary objectForKey:SymphoxAPIParam_remark];
@@ -1637,7 +1670,16 @@
         }
         else
         {
-            cell.labelDetail.hidden = YES;
+            remark = [dictionary objectForKey:SymphoxAPIParam_market_name];
+            if (remark != nil && ([remark isEqual:[NSNull null]] == NO) && [remark length] > 0)
+            {
+                cell.labelDetail.text = remark;
+                cell.labelDetail.hidden = NO;
+            }
+            else
+            {
+                cell.labelDetail.hidden = YES;
+            }
         }
         
         NSString *imagePath = [dictionary objectForKey:SymphoxAPIParam_img_url];
@@ -1646,18 +1688,32 @@
             NSURL *url = [NSURL URLWithString:imagePath];
             cell.imageUrl = url;
         }
-        
-        NSNumber *quantity = [dictionary objectForKey:SymphoxAPIParam_qty];
-        if (quantity == nil || [quantity isEqual:[NSNull null]])
+        else
         {
-            quantity = [NSNumber numberWithInteger:0];
+            imagePath = [dictionary objectForKey:SymphoxAPIParam_prod_pic_url];
+            if (imagePath != nil && ([imagePath isEqual:[NSNull null]] == NO) && [imagePath length] > 0)
+            {
+                NSURL *url = [NSURL URLWithString:imagePath];
+                cell.imageUrl = url;
+            }
+        }
+        
+        NSNumber *productIdentifier = [dictionary objectForKey:SymphoxAPIParam_cpdt_num];
+        NSNumber *quantity = [self quantityForIdentifier:productIdentifier];
+        if (quantity == nil)
+        {
+            quantity = [dictionary objectForKey:SymphoxAPIParam_qty];
+            if (quantity == nil || [quantity isEqual:[NSNull null]])
+            {
+                quantity = [NSNumber numberWithInteger:0];
+            }
         }
         NSString *quantityString = [NSString stringWithFormat:@"Ｘ%li", (long)[quantity integerValue]];
         cell.labelQuantity.text = quantityString;
         
-        NSNumber *productIdentifier = [dictionary objectForKey:SymphoxAPIParam_cpdt_num];
         NSString *paymentDiscription = [self paymentDetailForIdentifier:productIdentifier];
         NSNumber *paymentType = [self paymentTypeForIdentifier:productIdentifier];
+        
         NSDictionary *used_payment_mode = [dictionary objectForKey:SymphoxAPIParam_used_payment_mode];
         if (used_payment_mode && [used_payment_mode isEqual:[NSNull null]] == NO)
         {
