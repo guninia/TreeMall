@@ -32,6 +32,10 @@ typedef enum : NSUInteger {
 @property (nonatomic, strong) NSNumber *numberMaxPriceDefault;
 @property (nonatomic, strong) NSNumber *numberMinPointDefault;
 @property (nonatomic, strong) NSNumber *numberMaxPointDefault;
+@property (nonatomic, strong) NSNumber *numberLowPriceSpecify;
+@property (nonatomic, strong) NSNumber *numberHighPriceSpecify;
+@property (nonatomic, strong) NSNumber *numberLowPointSpecify;
+@property (nonatomic, strong) NSNumber *numberHighPointSpecify;
 @property (nonatomic, strong) NSMutableArray *arrayCoupon;
 @property (nonatomic, assign) DeliverType deliverType;
 @property (nonatomic, strong) NSMutableArray *arrayDeliverType;

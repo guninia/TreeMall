@@ -105,118 +105,114 @@ typedef enum : NSUInteger {
     [formatter setNumberStyle:NSNumberFormatterDecimalStyle];
     if (self.sliderViewPrice)
     {
-        NSNumber *numberMaxPrice = nil;
-        if (self.numberMaxPriceDefault)
+        NSNumber *numberMax = nil;
+        if (self.numberHighPriceSpecify && ([self.numberHighPriceSpecify doubleValue] <= [self.numberMaxPriceDefault doubleValue]) && [self.numberHighPriceSpecify doubleValue] >= [self.numberMinPriceDefault doubleValue])
         {
-            if ([self.numberMinPriceDefault integerValue] == [self.numberMaxPriceDefault integerValue])
-            {
-                numberMaxPrice = [NSNumber numberWithInteger:([self.numberMaxPriceDefault integerValue] + 1)];
-            }
-            else
-            {
-                numberMaxPrice = self.numberMaxPriceDefault;
-            }
-            
-            [self.sliderViewPrice setHidden:NO];
-            [self.labelPriceRange setHidden:NO];
+            numberMax = self.numberHighPriceSpecify;
         }
         else
         {
-            numberMaxPrice = [NSNumber numberWithInteger:0];
-            
-            [self.sliderViewPrice setHidden:YES];
-            [self.labelPriceRange setHidden:YES];
+            numberMax = self.numberMaxPriceDefault;
         }
-        if (numberMaxPrice)
+        [self.sliderViewPrice setHidden:NO];
+        [self.labelPriceRange setHidden:NO];
+        
+        NSNumber *numberMin = nil;
+        if (self.numberLowPriceSpecify && ([self.numberLowPriceSpecify doubleValue] >= [self.numberMinPriceDefault doubleValue]) && ([self.numberLowPriceSpecify doubleValue] <= [self.numberMaxPriceDefault doubleValue]))
         {
-            NSString *formattedString = [formatter stringFromNumber:numberMaxPrice];
+            numberMin = self.numberLowPriceSpecify;
+        }
+        else
+        {
+            numberMin = self.numberMinPriceDefault;
+        }
+        NSLog(@"viewDidLoad - numberMinPrice[%f]", [numberMin floatValue]);
+        
+        if ([numberMin isEqualToNumber:numberMax])
+        {
+            numberMax = [NSNumber numberWithInteger:([numberMin integerValue] + 1)];
+        }
+        else
+        {
+            NSInteger min = [numberMin integerValue];
+            NSInteger max = [numberMax integerValue];
+            numberMin = [NSNumber numberWithInteger:MIN(min, max)];
+            numberMax = [NSNumber numberWithInteger:MAX(min, max)];
+        }
+        
+        if (numberMax)
+        {
+            NSString *formattedString = [formatter stringFromNumber:self.numberMaxPriceDefault];
             self.sliderViewPrice.textHigherBoundary = formattedString;
-            self.sliderViewPrice.slider.maximumValue = [numberMaxPrice floatValue];
-            self.sliderViewPrice.slider.upperValue = [numberMaxPrice floatValue];
+            self.sliderViewPrice.slider.maximumValue = [self.numberMaxPriceDefault floatValue];
+            self.sliderViewPrice.slider.upperValue = [numberMax floatValue];
         }
         
-        NSNumber *numberMinPrice = nil;
-        if (self.numberMinPriceDefault)
+        if (numberMin)
         {
-            numberMinPrice = self.numberMinPriceDefault;
-        }
-        else
-        {
-            numberMinPrice = [NSNumber numberWithInteger:0];
-        }
-        NSLog(@"viewDidLoad - numberMinPrice[%f]", [numberMinPrice floatValue]);
-        if (numberMinPrice)
-        {
-            NSString *formattedString = [formatter stringFromNumber:numberMinPrice];
+            NSString *formattedString = [formatter stringFromNumber:self.numberMinPriceDefault];
             self.sliderViewPrice.textLowerBoundary = formattedString;
-            self.sliderViewPrice.slider.minimumValue = [numberMinPrice floatValue];
-            self.sliderViewPrice.slider.lowerValue = [numberMinPrice floatValue];
+            self.sliderViewPrice.slider.minimumValue = [self.numberMinPriceDefault floatValue];
+            self.sliderViewPrice.slider.lowerValue = [numberMin floatValue];
         }
-        NSLog(@"viewDidLoad - numberMinPrice[%f]", [numberMinPrice floatValue]);
+        NSLog(@"viewDidLoad - numberMinPrice[%f]", [numberMin floatValue]);
         NSLog(@"viewDidLoad - self.sliderViewPrice.slider.lowerValue[%f]", self.sliderViewPrice.slider.lowerValue);
-        
-        
-        
-        if ([self.numberMinPriceDefault integerValue] == [self.numberMaxPriceDefault integerValue])
-        {
-            [self.sliderViewPrice setHidden:YES];
-            [self.labelPriceRange setHidden:YES];
-        }
     }
     if (self.sliderViewPoint)
     {
-        NSNumber *numberMaxPoint = nil;
-        if (self.numberMaxPointDefault)
+        NSNumber *numberMax = nil;
+        if (self.numberHighPointSpecify && ([self.numberHighPointSpecify doubleValue] <= [self.numberMaxPointDefault doubleValue]) && [self.numberHighPointSpecify doubleValue] >= [self.numberMinPointDefault doubleValue])
         {
-            if ([self.numberMinPointDefault integerValue] == [self.numberMaxPointDefault integerValue])
-            {
-                numberMaxPoint = [NSNumber numberWithInteger:([self.numberMaxPointDefault integerValue] + 1)];
-            }
-            else
-            {
-                numberMaxPoint = self.numberMaxPointDefault;
-            }
-            
-            [self.sliderViewPoint setHidden:NO];
-            [self.labelPointRange setHidden:NO];
+            numberMax = self.numberHighPointSpecify;
         }
         else
         {
-            numberMaxPoint = [NSNumber numberWithInteger:0];
-            
-            [self.sliderViewPoint setHidden:YES];
-            [self.labelPointRange setHidden:YES];
-        }
-        if (numberMaxPoint)
-        {
-            NSString *formattedString = [formatter stringFromNumber:numberMaxPoint];
-            self.sliderViewPoint.textHigherBoundary = formattedString;
-            self.sliderViewPoint.slider.maximumValue = [numberMaxPoint floatValue];
-            self.sliderViewPoint.slider.upperValue = [numberMaxPoint floatValue];
+            numberMax = self.numberMaxPointDefault;
         }
         
-        NSNumber *numberMinPoint = nil;
-        if (self.numberMinPointDefault)
+        [self.sliderViewPoint setHidden:NO];
+        [self.labelPointRange setHidden:NO];
+        
+        
+        NSNumber *numberMin = nil;
+        if (self.numberLowPointSpecify && ([self.numberLowPointSpecify doubleValue] >= [self.numberMinPointDefault doubleValue]) && [self.numberLowPointSpecify doubleValue] <= [self.numberMaxPointDefault doubleValue])
         {
-            numberMinPoint = self.numberMinPointDefault;
+            numberMin = self.numberLowPointSpecify;;
         }
         else
         {
-            numberMinPoint = [NSNumber numberWithInteger:0];
+            numberMin = self.numberMinPointDefault;
         }
 //        NSLog(@"numberMinPoint[%f]", [numberMinPoint floatValue]);
-        NSString *formattedString = [formatter stringFromNumber:numberMinPoint];
-        self.sliderViewPoint.textLowerBoundary = formattedString;
-        self.sliderViewPoint.slider.minimumValue = [numberMinPoint floatValue];
-        self.sliderViewPoint.slider.lowerValue = [numberMinPoint floatValue];
-//        NSLog(@"self.sliderViewPoint.slider.lowerValue[%f]", self.sliderViewPoint.slider.lowerValue);
         
-        
-        if ([self.numberMinPointDefault integerValue] == [self.numberMaxPointDefault integerValue])
+        if ([numberMin isEqualToNumber:numberMax])
         {
-            [self.sliderViewPoint setHidden:YES];
-            [self.labelPointRange setHidden:YES];
+            numberMax = [NSNumber numberWithInteger:([numberMin integerValue] + 1)];
         }
+        else
+        {
+            NSInteger min = [numberMin integerValue];
+            NSInteger max = [numberMax integerValue];
+            numberMin = [NSNumber numberWithInteger:MIN(min, max)];
+            numberMax = [NSNumber numberWithInteger:MAX(min, max)];
+        }
+        
+        if (numberMax)
+        {
+            NSString *formattedString = [formatter stringFromNumber:self.numberMaxPointDefault];
+            self.sliderViewPoint.textHigherBoundary = formattedString;
+            self.sliderViewPoint.slider.maximumValue = [self.numberMaxPointDefault floatValue];
+            self.sliderViewPoint.slider.upperValue = [numberMax floatValue];
+        }
+        
+        if (numberMin)
+        {
+            NSString *formattedString = [formatter stringFromNumber:self.numberMinPointDefault];
+            self.sliderViewPoint.textLowerBoundary = formattedString;
+            self.sliderViewPoint.slider.minimumValue = [self.numberMinPointDefault floatValue];
+            self.sliderViewPoint.slider.lowerValue = [numberMin floatValue];
+        }
+//        NSLog(@"self.sliderViewPoint.slider.lowerValue[%f]", self.sliderViewPoint.slider.lowerValue);
     }
 
     gaTracker = [GAI sharedInstance].defaultTracker;
@@ -574,28 +570,54 @@ typedef enum : NSUInteger {
     }
     
     NSNumber *numberMinPrice = [defaultDictionary objectForKey:SymphoxAPIParam_min_price];
-    if (numberMinPrice)
+    if (numberMinPrice == nil)
     {
-        self.numberMinPriceDefault = numberMinPrice;
+        numberMinPrice = [NSNumber numberWithInteger:0];
     }
     
     NSNumber *numberMaxPrice = [defaultDictionary objectForKey:SymphoxAPIParam_max_price];
 //    NSLog(@"prepareOptionsDefaultFromDictionary - numberMaxPrice[%li]", [numberMaxPrice integerValue]);
-    if (numberMaxPrice)
+    if (numberMaxPrice == nil)
     {
-        self.numberMaxPriceDefault = numberMaxPrice;
+        numberMaxPrice = [NSNumber numberWithInteger:NSIntegerMax];
     }
+    
+    if ([numberMinPrice isEqualToNumber:numberMaxPrice])
+    {
+        self.numberMinPriceDefault = numberMinPrice;
+        self.numberMaxPriceDefault = [NSNumber numberWithInteger:([numberMinPrice integerValue] + 1)];
+    }
+    else
+    {
+        NSInteger min = [numberMinPrice integerValue];
+        NSInteger max = [numberMaxPrice integerValue];
+        self.numberMinPriceDefault = [NSNumber numberWithInteger:MIN(min, max)];
+        self.numberMaxPriceDefault = [NSNumber numberWithInteger:MAX(min, max)];
+    }
+    
 //    NSLog(@"prepareOptionsDefaultFromDictionary - numberMaxPriceDefault[%li]", [self.numberMaxPriceDefault integerValue]);
     NSNumber *numberMinPoint = [defaultDictionary objectForKey:SymphoxAPIParam_min_point];
-    if (numberMinPoint)
+    if (numberMinPoint == nil)
     {
-        self.numberMinPointDefault = numberMinPoint;
+        self.numberMinPointDefault = [NSNumber numberWithInteger:0];
     }
     
     NSNumber *numberMaxPoint = [defaultDictionary objectForKey:SymphoxAPIParam_max_point];
-    if (numberMaxPoint)
+    if (numberMaxPoint == nil)
     {
-        self.numberMaxPointDefault = numberMaxPoint;
+        self.numberMaxPointDefault = [NSNumber numberWithInteger:NSIntegerMax];
+    }
+    if ([numberMinPoint isEqualToNumber:numberMaxPoint])
+    {
+        self.numberMinPointDefault = numberMinPoint;
+        self.numberMaxPointDefault = [NSNumber numberWithInteger:([numberMinPoint integerValue] + 1)];
+    }
+    else
+    {
+        NSInteger min = [numberMinPoint integerValue];
+        NSInteger max = [numberMaxPoint integerValue];
+        self.numberMinPointDefault = [NSNumber numberWithInteger:MIN(min, max)];
+        self.numberMaxPointDefault = [NSNumber numberWithInteger:MAX(min, max)];
     }
     
     [_arrayCoupon addObject:[NSNumber numberWithInteger:60]];

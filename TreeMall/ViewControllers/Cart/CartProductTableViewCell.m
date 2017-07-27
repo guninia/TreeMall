@@ -86,12 +86,12 @@
     {
         self.separator.frame = CGRectMake(0.0, originY, self.viewContent.frame.size.width, 1.0);
     }
-    CGFloat columnHeight = 32.0;
+    CGFloat columnHeight = 28.0;
     if (self.labelQuantity)
     {
         originY = CGRectGetMinY(self.separator.frame) - intervalV - columnHeight;
         CGSize sizeText = [self.labelQuantity.text sizeWithAttributes:[NSDictionary dictionaryWithObjectsAndKeys:self.labelQuantity.font, NSFontAttributeName, nil]];
-        CGSize sizeLabel = CGSizeMake(ceil(sizeText.width), ceil(sizeText.height));
+        CGSize sizeLabel = CGSizeMake(ceil(60.0), ceil(sizeText.height));
         CGFloat labelOriginX = self.viewContent.frame.size.width - marginH * 2 - sizeLabel.width;;
         CGRect frame = CGRectMake(labelOriginX, originY, sizeLabel.width, columnHeight);
         self.labelQuantity.frame = frame;
@@ -226,8 +226,10 @@
         [_buttonCondition setTitleColor:[UIColor orangeColor] forState:UIControlStateNormal];
         [_buttonCondition setTitleColor:[UIColor orangeColor] forState:UIControlStateSelected];
         [_buttonCondition setTitleColor:[UIColor lightGrayColor] forState:UIControlStateDisabled];
+        UIFont *font = [UIFont systemFontOfSize:14.0];
+        [_buttonCondition.titleLabel setFont:font];
         [_buttonCondition.layer setBorderWidth:1.0];
-        [_buttonCondition.layer setCornerRadius:3.0];
+        [_buttonCondition.layer setCornerRadius:5.0];
         [_buttonCondition.layer setBorderColor:[_buttonCondition titleColorForState:UIControlStateNormal].CGColor];
         [_buttonCondition addTarget:self action:@selector(buttonConditionPressed:) forControlEvents:UIControlEventTouchUpInside];
     }
@@ -284,6 +286,8 @@
         _labelQuantity = [[UILabel alloc] initWithFrame:CGRectZero];
         [_labelQuantity setTextColor:[UIColor grayColor]];
         UIFont *font = [UIFont systemFontOfSize:18.0];
+        [_labelQuantity setTextAlignment:NSTextAlignmentCenter];
+        [_labelQuantity setAdjustsFontSizeToFitWidth:YES];
         [_labelQuantity setFont:font];
     }
     return _labelQuantity;

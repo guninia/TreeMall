@@ -1090,8 +1090,38 @@
         [self presentViewController:alertController animated:YES completion:nil];
         return;
     }
+    
+    NSString *stringLowPrice = [self.dictionaryConditions objectForKey:SymphoxAPIParam_price_from];
+    NSString *stringHighPrice = [self.dictionaryConditions objectForKey:SymphoxAPIParam_price_to];
+    NSString *stringLowPoint = [self.dictionaryConditions objectForKey:SymphoxAPIParam_point_from];
+    NSString *stringHighPoint = [self.dictionaryConditions objectForKey:SymphoxAPIParam_point_to];
+    NSNumber *numberLowPrice = nil;
+    NSNumber *numberHighPrice = nil;
+    NSNumber *numberLowPoint = nil;
+    NSNumber *numberHighPoint = nil;
+    if (stringLowPrice)
+    {
+        numberLowPrice = [NSNumber numberWithInteger:[stringLowPrice integerValue]];
+    }
+    if (stringHighPrice)
+    {
+        numberHighPrice = [NSNumber numberWithInteger:[stringHighPrice integerValue]];
+    }
+    if (stringLowPoint)
+    {
+        numberLowPoint = [NSNumber numberWithInteger:[stringLowPoint integerValue]];
+    }
+    if (stringHighPoint)
+    {
+        numberHighPoint = [NSNumber numberWithInteger:[stringHighPoint integerValue]];
+    }
+    
     ProductFilterViewController *viewController = [[ProductFilterViewController alloc] initWithNibName:@"ProductFilterViewController" bundle:[NSBundle mainBundle]];
     viewController.delegate = self;
+    viewController.numberLowPriceSpecify = numberLowPrice;
+    viewController.numberHighPriceSpecify = numberHighPrice;
+    viewController.numberLowPointSpecify = numberLowPoint;
+    viewController.numberHighPointSpecify = numberHighPoint;
     UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:viewController];
     
     [gaTracker send:[[GAIDictionaryBuilder
