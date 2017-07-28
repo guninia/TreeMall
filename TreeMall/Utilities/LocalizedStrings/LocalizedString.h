@@ -366,5 +366,6 @@
 + (NSString *)BackToMain;
 + (NSString *)Share;
 + (NSString *)PointUsed;
++ (NSString *)ThanksForYourPurchase;
 
 @end

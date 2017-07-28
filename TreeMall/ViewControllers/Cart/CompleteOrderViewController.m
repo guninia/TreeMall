@@ -317,7 +317,7 @@ typedef enum : NSUInteger {
         _buttonConfirm = [[UIButton alloc] initWithFrame:CGRectZero];
         [_buttonConfirm setBackgroundColor:[UIColor orangeColor]];
         [_buttonConfirm.layer setCornerRadius:5.0];
-        [_buttonConfirm setTitle:[LocalizedString Confirm] forState:UIControlStateNormal];
+        [_buttonConfirm setTitle:[LocalizedString ThanksForYourPurchase] forState:UIControlStateNormal];
         [_buttonConfirm addTarget:self action:@selector(buttonConfirmPressed:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _buttonConfirm;

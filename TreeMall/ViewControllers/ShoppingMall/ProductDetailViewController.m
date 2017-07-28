@@ -25,6 +25,8 @@
 #import <Social/Social.h>
 #import <Google/Analytics.h>
 #import "EventLog.h"
+#import "UIBarButtonItem+Badge.h"
+
 @import FirebaseCrash;
 
 @interface ProductDetailViewController () {
@@ -46,6 +48,7 @@
 - (void)presentCartViewForType:(CartType)type;
 - (void)requestBackToMain;
 - (void)presentShareView;
+- (void)updateCartBadge;
 
 
 - (void)buttonExchangeDescPressed:(id)sender;
@@ -56,6 +59,7 @@
 - (void)buttonFunctionPressed:(id)sender;
 - (void)buttonItemCartPressed:(id)sender;
 - (void)linkLongPressed:(UILongPressGestureRecognizer *)gestureRecognizer;
+- (void)handlerOfCartContentChangedNotification:(NSNotification *)notification;
 
 @end
 
@@ -99,6 +103,11 @@
         [button setImage:imageCart forState:UIControlStateNormal];
         [button addTarget:self action:@selector(buttonItemCartPressed:) forControlEvents:UIControlEventTouchUpInside];
         UIBarButtonItem *item = [[UIBarButtonItem alloc] initWithCustomView:button];
+        NSInteger totalCount = [[TMInfoManager sharedManager] numberOfProductsInCart:CartTypeTotal];
+        NSString *stringCount = [NSString stringWithFormat:@"%li", (long)totalCount];
+        item.badgeValue = stringCount;
+        item.badgeBGColor = [UIColor redColor];
+        item.badgeTextColor = [UIColor whiteColor];
         [items addObject:item];
     }
     self.navigationItem.rightBarButtonItems = items;
@@ -155,11 +164,18 @@
     [self retrieveTermsForType:TermTypeShippingAndWarrenty];
     
     gaTracker = [GAI sharedInstance].defaultTracker;
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handlerOfCartContentChangedNotification:) name:PostNotificationName_CartContentChanged object:nil];
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:PostNotificationName_CartContentChanged object:nil];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -2104,6 +2120,25 @@
     [self presentViewController:viewController animated:YES completion:nil];
 }
 
+- (void)updateCartBadge
+{
+    NSArray *items = self.navigationItem.rightBarButtonItems;
+    NSInteger itemCartIndex = 1;
+    if (itemCartIndex >= [items count])
+        return;
+    UIBarButtonItem *item = [items objectAtIndex:itemCartIndex];
+    NSInteger totalCount = [[TMInfoManager sharedManager] numberOfProductsInCart:CartTypeTotal];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (totalCount > 0)
+        {
+            NSString *stringValue = [NSString stringWithFormat:@"%li", (long)totalCount];
+            item.badgeValue = stringValue;
+            return;
+        }
+        item.badgeValue = nil;
+    });
+}
+
 #pragma mark - Actions
 
 - (void)buttonExchangeDescPressed:(id)sender
@@ -2533,6 +2568,13 @@
     webView.frame = frame;
     
     [self.view setNeedsLayout];
+}
+
+#pragma mark - Notification Handler
+
+- (void)handlerOfCartContentChangedNotification:(NSNotification *)notification
+{
+    [self updateCartBadge];
 }
 
 @end

@@ -18,6 +18,8 @@
 #import "LoadingFooterView.h"
 #import <Google/Analytics.h>
 #import "EventLog.h"
+#import "UIBarButtonItem+Badge.h"
+
 @import FirebaseCrash;
 
 @interface HotSaleViewController () {
@@ -33,9 +35,11 @@
 - (void)addFavoriteProduct:(NSDictionary *)product;
 - (NSString *)titleForCartType:(CartType)cartType;
 - (void)presentCartViewForType:(CartType)type;
+- (void)updateCartBadge;
 
 - (void)buttonItemPressed:(id)sender;
 - (void)buttonItemCartPressed:(id)sender;
+- (void)handlerOfCartContentChangedNotification:(NSNotification *)notification;
 
 @end
 
@@ -53,7 +57,15 @@
     UIImage *imageCart = [[UIImage imageNamed:@"sho_info_bnt_cat"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     if (imageCart)
     {
-        UIBarButtonItem *item = [[UIBarButtonItem alloc] initWithImage:imageCart style:UIBarButtonItemStylePlain target:self action:@selector(buttonItemCartPressed:)];
+        UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(0.0, 0.0, 30.0, 30.0)];
+        [button setImage:imageCart forState:UIControlStateNormal];
+        [button addTarget:self action:@selector(buttonItemCartPressed:) forControlEvents:UIControlEventTouchUpInside];
+        UIBarButtonItem *item = [[UIBarButtonItem alloc] initWithCustomView:button];
+        NSInteger totalCount = [[TMInfoManager sharedManager] numberOfProductsInCart:CartTypeTotal];
+        NSString *stringCount = [NSString stringWithFormat:@"%li", (long)totalCount];
+        item.badgeValue = stringCount;
+        item.badgeBGColor = [UIColor redColor];
+        item.badgeTextColor = [UIColor whiteColor];
         [self.navigationItem setRightBarButtonItem:item];
     }
 
@@ -64,11 +76,18 @@
     [self retrieveDataForType:self.type];
 
     gaTracker = [GAI sharedInstance].defaultTracker;
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handlerOfCartContentChangedNotification:) name:PostNotificationName_CartContentChanged object:nil];
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:PostNotificationName_CartContentChanged object:nil];
 }
 
 /*
@@ -366,6 +385,23 @@
     [self presentViewController:navigationController animated:YES completion:nil];
 }
 
+- (void)updateCartBadge
+{
+    UIBarButtonItem *item = self.navigationItem.rightBarButtonItem;
+    if (item == nil)
+        return;
+    NSInteger totalCount = [[TMInfoManager sharedManager] numberOfProductsInCart:CartTypeTotal];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (totalCount > 0)
+        {
+            NSString *stringValue = [NSString stringWithFormat:@"%li", (long)totalCount];
+            item.badgeValue = stringValue;
+            return;
+        }
+        item.badgeValue = nil;
+    });
+}
+
 #pragma mark - Actions
 
 - (void)buttonItemPressed:(id)sender
@@ -399,6 +435,13 @@
     viewController.currentType = CartTypeCommonDelivery;
     UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:viewController];
     [self presentViewController:navigationController animated:YES completion:nil];
+}
+
+#pragma mark - Notification Handler
+
+- (void)handlerOfCartContentChangedNotification:(NSNotification *)notification
+{
+    [self updateCartBadge];
 }
 
 #pragma mark - UITableViewDataSource

@@ -53,7 +53,9 @@
     }
     if (self.button)
     {
-        CGSize buttonSize = CGSizeMake(60.0, 30.0);
+        CGSize size = [[self.button titleForState:UIControlStateNormal] sizeWithAttributes:[NSDictionary dictionaryWithObjectsAndKeys:self.button.titleLabel.font, NSFontAttributeName, nil]];
+        CGSize sizeLabel = CGSizeMake(ceil(size.width), ceil(size.height));
+        CGSize buttonSize = CGSizeMake(sizeLabel.width + 10.0, 30.0);
         CGRect frame = CGRectMake(self.contentView.frame.size.width - marginH - buttonSize.width, (self.contentView.frame.size.height - buttonSize.height)/2, buttonSize.width, buttonSize.height);
         self.button.frame = frame;
     }

@@ -3571,4 +3571,14 @@
     return PointUsed;
 }
 
++ (NSString *)ThanksForYourPurchase
+{
+    static NSString *ThanksForYourPurchase = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        ThanksForYourPurchase = NSLocalizedString(@"ThanksForYourPurchase", nil);
+    });
+    return ThanksForYourPurchase;
+}
+
 @end

@@ -158,7 +158,7 @@ typedef enum : NSUInteger {
     }
     if (self.viewPoint)
     {
-        CGRect frame = CGRectMake(0.0, originY, self.scrollView.frame.size.width, 230.0);
+        CGRect frame = CGRectMake(0.0, originY, self.scrollView.frame.size.width, 180.0);
         self.viewPoint.frame = frame;
         originY = self.viewPoint.frame.origin.y + self.viewPoint.frame.size.height;
     }

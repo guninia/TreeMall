@@ -319,6 +319,7 @@ typedef enum : NSUInteger {
     viewController.name = name;
     viewController.arrayCategory = categories;
     viewController.arraySubcategory = subcategories;
+    viewController.shouldShowSubCategory = NO;
     [self.navigationController pushViewController:viewController animated:YES];
 }
 

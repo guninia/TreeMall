@@ -98,7 +98,7 @@
         originY = self.labelDividend.frame.origin.y + self.labelDividend.frame.size.height + intervalV;
     }
     originX = marginL;
-    if (self.buttonBonusGame)
+    if (self.buttonBonusGame && [self.buttonBonusGame isHidden] == NO)
     {
         CGRect frame = CGRectMake(originX, originY, self.frame.size.width - (originX + marginR), 50.0);
         self.buttonBonusGame.frame = frame;
@@ -197,6 +197,7 @@
         UIFont *font = [UIFont systemFontOfSize:16.0];
         [_buttonBonusGame.titleLabel setFont:font];
         [_buttonBonusGame addTarget:self action:@selector(buttonBonusGamePressed:) forControlEvents:UIControlEventTouchUpInside];
+        [_buttonBonusGame setHidden:YES];
     }
     return _buttonBonusGame;
 }

@@ -399,6 +399,7 @@
     viewController.dictionaryInstallment = self.dictionaryInstallment;
     viewController.selectedPaymentDescription = self.selectedPaymentDescription;
     viewController.dictionaryDelivery = delivery;
+    [viewController setHidesBottomBarWhenPushed:YES];
     
     [gaTracker send:[[GAIDictionaryBuilder
                       createEventWithCategory:[EventLog twoString:self.title _:logPara_確認付款]

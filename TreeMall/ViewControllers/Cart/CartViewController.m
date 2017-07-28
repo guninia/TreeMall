@@ -926,6 +926,7 @@
             viewController.arrayProductsFromCart = weakSelf.arrayProducts;
             viewController.bottomBar.label.attributedText = weakSelf.bottomBar.label.attributedText;
             viewController.currentType = weakSelf.currentType;
+            [viewController setHidesBottomBarWhenPushed:YES];
             
             [gaTracker send:[[GAIDictionaryBuilder
                               createEventWithCategory:[EventLog twoString:self.title _:logPara_下一步]
@@ -1120,6 +1121,7 @@
                     viewController.dictionaryData = resultDictionary;
                     viewController.arrayProductsFromCart = weakSelf.arrayProducts;
                     viewController.type = self.currentType;
+                    [viewController setHidesBottomBarWhenPushed:YES];
                     
                     [gaTracker send:[[GAIDictionaryBuilder
                                       createEventWithCategory:[EventLog twoString:self.title _:logPara_下一步]
