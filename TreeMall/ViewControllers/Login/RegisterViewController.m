@@ -254,10 +254,10 @@
         return;
     }
     // Should request SMS
-    NSString *ipAddress = [Utility ipAddressPreferIPv6:YES];
+    NSString *ipAddress = [Utility ipAddressPreferIPv6:NO];
     if (ipAddress == nil)
     {
-        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:[LocalizedString Notice] message:[LocalizedString NetworkError] preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:[LocalizedString Notice] message:[LocalizedString SystemErrorTryLater] preferredStyle:UIAlertControllerStyleAlert];
         UIAlertAction *actionCancel = [UIAlertAction actionWithTitle:[LocalizedString Confirm] style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
             [_textFieldPassword setText:@""];
             [_textFieldConfirm setText:@""];
@@ -333,6 +333,14 @@
         [textField setAutocorrectionType:UITextAutocorrectionTypeNo];
         [textField setAutocapitalizationType:UITextAutocapitalizationTypeNone];
     }];
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:[LocalizedString Cancel] style:UIAlertActionStyleCancel handler:^(UIAlertAction *action){
+        [_textFieldPassword setText:@""];
+        [_textFieldConfirm setText:@""];
+        if ([_textFieldPassword canBecomeFirstResponder])
+        {
+            [_textFieldPassword becomeFirstResponder];
+        }
+    }];
     UIAlertAction *resendAction = [UIAlertAction actionWithTitle:[LocalizedString ResendCode] style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
         [self startPreregisterProcedure];
     }];
@@ -344,6 +352,7 @@
         NSString *code = [textField text];
         [self startRegisterProcedureWithVerificationCode:code];
     }];
+    [alertController addAction:cancelAction];
     [alertController addAction:resendAction];
     [alertController addAction:nextAction];
     [self presentViewController:alertController animated:YES completion:nil];

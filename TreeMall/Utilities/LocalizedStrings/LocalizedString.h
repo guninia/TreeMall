@@ -367,5 +367,6 @@
 + (NSString *)Share;
 + (NSString *)PointUsed;
 + (NSString *)ThanksForYourPurchase;
++ (NSString *)AccountAlreadyExist;
 
 @end

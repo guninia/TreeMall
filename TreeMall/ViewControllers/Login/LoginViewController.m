@@ -670,7 +670,7 @@
     if (ipAddress == nil)
     {
         NSLog(@"No ip address");
-        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:[LocalizedString Notice] message:[LocalizedString NetworkError] preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:[LocalizedString Notice] message:[LocalizedString SystemErrorTryLater] preferredStyle:UIAlertControllerStyleAlert];
         UIAlertAction *actionCancel = [UIAlertAction actionWithTitle:[LocalizedString Confirm] style:UIAlertActionStyleDefault handler:nil];
         [alertController addAction:actionCancel];
         [self presentViewController:alertController animated:YES completion:nil];

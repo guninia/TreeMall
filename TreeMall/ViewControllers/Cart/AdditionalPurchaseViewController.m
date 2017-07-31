@@ -668,16 +668,24 @@
         if (array)
         {
             [self.arrayAllProducts setArray:array];
-            NSArray *arrayAddition = [[TMInfoManager sharedManager] productArrayForAdditionalCartType:type];
+            NSDictionary *dictionaryAddition = [[TMInfoManager sharedManager] purchaseInfoForAdditionalCartType:type];
             for (NSDictionary *product in array)
             {
                 NSNumber *cpdt_num = [product objectForKey:SymphoxAPIParam_cpdt_num];
                 if (cpdt_num == nil || [cpdt_num isEqual:[NSNull null]])
                     continue;
+                BOOL isAddition = ([dictionaryAddition objectForKey:cpdt_num] != nil);
                 NSNumber *qty = [product objectForKey:SymphoxAPIParam_qty];
                 if (qty && [qty isEqual:[NSNull null]] == NO)
                 {
-                    [[TMInfoManager sharedManager] setPurchaseQuantity:qty forProduct:cpdt_num inCart:type];
+                    if (isAddition)
+                    {
+                        [[TMInfoManager sharedManager] setPurchaseQuantity:qty forProduct:cpdt_num inAdditionalCart:type];
+                    }
+                    else
+                    {
+                        [[TMInfoManager sharedManager] setPurchaseQuantity:qty forProduct:cpdt_num inCart:type];
+                    }
                 }
                 NSDictionary *used_payemnt_mode = [product objectForKey:SymphoxAPIParam_used_payment_mode];
                 if (used_payemnt_mode && [used_payemnt_mode isEqual:[NSNull null]] == NO)
@@ -687,7 +695,7 @@
                     {
                         real_cpdt_num = cpdt_num;
                     }
-                    [[TMInfoManager sharedManager] setPurchaseInfoFromSelectedPaymentMode:used_payemnt_mode forProductId:cpdt_num withRealProductId:real_cpdt_num inCart:type asAdditional:NO];
+                    [[TMInfoManager sharedManager] setPurchaseInfoFromSelectedPaymentMode:used_payemnt_mode forProductId:cpdt_num withRealProductId:real_cpdt_num inCart:type asAdditional:isAddition];
                 }
                 BOOL shouldAddProduct = YES;
                 for (NSDictionary *productFromCart in self.arrayProductsFromCart)
@@ -699,19 +707,7 @@
                         break;
                     }
                 }
-                if (shouldAddProduct)
-                {
-                    for (NSDictionary *additionProduct in arrayAddition)
-                    {
-                        NSNumber *additionId = [additionProduct objectForKey:SymphoxAPIParam_cpdt_num];
-                        if (additionId && [additionId isEqual:[NSNull null]] == NO && [additionId isEqualToNumber:cpdt_num])
-                        {
-                            shouldAddProduct = NO;
-                            break;
-                        }
-                    }
-                }
-                if (shouldAddProduct)
+                if (shouldAddProduct && (isAddition == NO))
                 {
                     [self.arrayProductsFromCart addObject:product];
                 }

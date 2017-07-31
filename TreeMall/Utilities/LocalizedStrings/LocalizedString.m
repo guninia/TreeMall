@@ -176,7 +176,7 @@
     static NSString *RegisterFailed = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        RegisterFailed = NSLocalizedString(@"NetworkError", nil);
+        RegisterFailed = NSLocalizedString(@"RegisterFailed", nil);
     });
     return RegisterFailed;
 }
@@ -3579,6 +3579,16 @@
         ThanksForYourPurchase = NSLocalizedString(@"ThanksForYourPurchase", nil);
     });
     return ThanksForYourPurchase;
+}
+
++ (NSString *)AccountAlreadyExist
+{
+    static NSString *AccountAlreadyExist = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        AccountAlreadyExist = NSLocalizedString(@"AccountAlreadyExist", nil);
+    });
+    return AccountAlreadyExist;
 }
 
 @end

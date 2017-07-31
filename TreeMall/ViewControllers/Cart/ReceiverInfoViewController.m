@@ -111,12 +111,19 @@ typedef enum : NSUInteger {
     if (self)
     {
         _canSelectDeliverTime = NO;
-        _invoiceLayoutIndex = InvoiceLayoutTypeDefault;
         _selectedDeliverTimeIndex = DeliverTimeOptionNoSpecific;
-        _invoiceElectronicSubType = InvoiceElectronicSubTypeMember;
         [self setDataForInvoiceEletronicSubtype:self.invoiceElectronicSubType];
         _invoiceDonateTarget = InvoiceDonateTargetTotal;
-        _currentInvoiceType = InvoiceTypeOptionTotal;
+        _currentInvoiceType = InvoiceTypeOptionElectronic;
+        _invoiceElectronicSubType = InvoiceElectronicSubTypeMember;
+        if ([TMInfoManager sharedManager].userInvoiceBind)
+        {
+            _invoiceLayoutIndex = InvoiceLayoutTypeElectronicMemberInvoiceBind;
+        }
+        else
+        {
+            _invoiceLayoutIndex = InvoiceLayoutTypeElectronicMemberInvoiceNotBind;
+        }
         _currentInvoiceCity = nil;
         _currentInvoiceRegion = nil;
     }
