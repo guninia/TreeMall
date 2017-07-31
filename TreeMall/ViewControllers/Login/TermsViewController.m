@@ -45,8 +45,10 @@
     
     [self.view addSubview:self.textViewTerms];
 //    [_textViewTerms setScrollEnabled:YES];
-    
-    [self retrieveData];
+    if (self.content == nil)
+    {
+        [self retrieveData];
+    }
 
     gaTracker = [GAI sharedInstance].defaultTracker;
 }
@@ -89,6 +91,12 @@
         CGRect frame = CGRectMake(marginH, originY, self.view.frame.size.width - marginH * 2, self.view.frame.size.height - originY);
         self.textViewTerms.frame = frame;
     }
+}
+
+- (void)setContent:(NSString *)content
+{
+    _content = content;
+    [_textViewTerms setAttributedString:[self attributedStringFromHTML:_content forSnippetUsingiOS6Attributes:NO]];
 }
 
 - (DTAttributedTextView *)textViewTerms
@@ -185,7 +193,7 @@
                     NSString *content = [dictionary objectForKey:SymphoxAPIParam_content];
                     if (content)
                     {
-                        [_textViewTerms setAttributedString:[self attributedStringFromHTML:content forSnippetUsingiOS6Attributes:NO]];
+                        self.content = content;
                         success = YES;
                     }
                 }

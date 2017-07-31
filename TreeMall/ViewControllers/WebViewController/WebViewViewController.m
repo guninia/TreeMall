@@ -10,6 +10,8 @@
 #import "LocalizedString.h"
 #import "Definition.h"
 #import "ProductDetailViewController.h"
+#import "TMInfoManager.h"
+#import "TermsViewController.h"
 
 @interface WebViewViewController ()
 
@@ -238,10 +240,35 @@
             }
             else
             {
-                alertTitle = [LocalizedString AuthenticateFailed];
-                confirmAction = [UIAlertAction actionWithTitle:[LocalizedString Confirm] style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
-                    completionHandler();
-                }];
+                if ([message containsString:@"terms"])
+                {
+                    NSArray *components = [message componentsSeparatedByString:@"_"];
+                    NSString *sn = [components lastObject];
+                    NSString *content = [[TMInfoManager sharedManager].dictionaryDocuments objectForKey:sn];
+                    if (content)
+                    {
+                        TermsViewController *viewController = [[TermsViewController alloc] initWithNibName:@"TermsViewController" bundle:[NSBundle mainBundle]];
+                        viewController.content = content;
+                        __weak WebViewViewController *weakSelf = self;
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            if (weakSelf.navigationController)
+                            {
+                                [weakSelf.navigationController pushViewController:viewController animated:YES];
+                            }
+                            else
+                            {
+                                [weakSelf presentViewController:viewController animated:YES completion:nil];
+                            }
+                        });
+                    }
+                }
+                else
+                {
+                    alertTitle = [LocalizedString AuthenticateFailed];
+                    confirmAction = [UIAlertAction actionWithTitle:[LocalizedString Confirm] style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
+                        completionHandler();
+                    }];
+                }
             }
         }
             break;

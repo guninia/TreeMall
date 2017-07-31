@@ -19,7 +19,7 @@
     NSInteger columnForProduct;
 }
 
-@property (nonatomic, strong) NSDictionary *dictionaryData;
+@property (nonatomic, strong) NSMutableDictionary *dictionaryData;
 @property (nonatomic, strong) CouponDetailDescriptionView *viewDescription;
 @property (nonatomic, strong) UICollectionView *collectionView;
 @property (nonatomic, strong) NSMutableArray *arraySectionType;

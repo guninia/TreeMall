@@ -14,6 +14,7 @@
 #import "WebViewViewController.h"
 #import "ProductListViewController.h"
 #import "ProductDetailViewController.h"
+#import "TMInfoManager.h"
 #import <Google/Analytics.h>
 #import "EventLog.h"
 @import FirebaseCrash;
@@ -28,6 +29,9 @@ typedef enum : NSUInteger {
     id<GAITracker> gaTracker;
 }
 
+@property (nonatomic, strong) NSMutableArray *defaultHalls;
+
+- (void)prepareDefaultHalls;
 - (void)presentHallNamed:(NSString *)name forIdentifier:(NSString *)hallId atLayer:(NSNumber *)layer;
 - (void)presentProductNamed:(NSString *)name forIdentifier:(NSNumber *)productId;
 
@@ -47,6 +51,7 @@ typedef enum : NSUInteger {
         intervalH = 10.0;
         columnForCategory = 2;
         columnForProduct = 1;
+        [self prepareDefaultHalls];
     }
     return self;
 }
@@ -60,7 +65,12 @@ typedef enum : NSUInteger {
     // Prepare section
     NSArray *arrayHall = [self.dictionaryData objectForKey:SymphoxAPIParam_hall];
     NSArray *arrayProduct = [self.dictionaryData objectForKey:SymphoxAPIParam_product];
-    if (arrayHall && ([arrayHall isEqual:[NSNull null]] == NO) && [arrayHall count] > 0)
+    if (arrayHall == nil || [arrayHall isEqual:[NSNull null]] || [arrayHall count] == 0)
+    {
+        arrayHall = [self.defaultHalls copy];
+        [self.dictionaryData setObject:arrayHall forKey:SymphoxAPIParam_hall];
+    }
+    if ([arrayHall count] > 0)
     {
         [self.arraySectionType addObject:[NSNumber numberWithUnsignedInteger:SectionTypeCategory]];
     }
@@ -122,9 +132,18 @@ typedef enum : NSUInteger {
     }
 }
 
+- (NSMutableArray *)defaultHalls
+{
+    if (_defaultHalls == nil)
+    {
+        _defaultHalls = [[NSMutableArray alloc] initWithCapacity:0];
+    }
+    return _defaultHalls;
+}
+
 - (void)setDictionaryData:(NSDictionary *)dictionaryData
 {
-    _dictionaryData = dictionaryData;
+    _dictionaryData = [dictionaryData mutableCopy];
     if (_dictionaryData == nil)
     {
         [self.viewDescription setHidden:YES];
@@ -260,6 +279,21 @@ typedef enum : NSUInteger {
 }
 
 #pragma mark - Private Methods
+
+- (void)prepareDefaultHalls
+{
+    NSArray *mainHalls = [[TMInfoManager sharedManager] subcategoriesForIdentifier:nil atLayer:[NSNumber numberWithInteger:0]];
+    for (NSDictionary *dictionary in mainHalls)
+    {
+        NSString *name = [dictionary objectForKey:SymphoxAPIParam_name];
+        NSString *hallId = [dictionary objectForKey:SymphoxAPIParam_hall_id];
+        NSMutableDictionary *hall = [NSMutableDictionary dictionary];
+        [hall setObject:hallId forKey:SymphoxAPIParam_hall_id];
+        [hall setObject:[NSNumber numberWithInteger:1] forKey:SymphoxAPIParam_layer];
+        [hall setObject:name forKey:SymphoxAPIParam_name];
+        [self.defaultHalls addObject:hall];
+    }
+}
 
 - (void)presentHallNamed:(NSString *)name forIdentifier:(NSString *)hallId atLayer:(NSNumber *)layer
 {

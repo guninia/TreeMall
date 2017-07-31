@@ -567,7 +567,7 @@
     {
         NSDictionary *dictionary = [self.arrayCoupon objectAtIndex:indexPath.row];
         CouponDetailViewController *viewController = [[CouponDetailViewController alloc] initWithNibName:@"CouponDetailViewController" bundle:[NSBundle mainBundle]];
-        viewController.dictionaryData = dictionary;
+        viewController.dictionaryData = [dictionary mutableCopy];
         if (cell)
         {
             NSString *stringValue = cell.labelValue.text;
