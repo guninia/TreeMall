@@ -16,4 +16,6 @@ static NSString *DeliverProgressTableViewCellIdentifier = @"DeliverProgressTable
 @property (nonatomic, strong) NSString *statusString;
 @property (nonatomic, assign) BOOL latest;
 
++ (CGFloat)heightForCellWidth:(CGFloat)cellWidth withContent:(NSString *)content;
+
 @end

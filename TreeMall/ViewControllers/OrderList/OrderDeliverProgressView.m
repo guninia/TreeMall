@@ -129,7 +129,7 @@
 {
     if (_fontStatus == nil)
     {
-        _fontStatus = [UIFont systemFontOfSize:12.0];
+        _fontStatus = [UIFont systemFontOfSize:14.0];
     }
     return _fontStatus;
 }
@@ -138,7 +138,7 @@
 {
     if (_fontDateTime == nil)
     {
-        _fontDateTime = [UIFont systemFontOfSize:8.0];
+        _fontDateTime = [UIFont systemFontOfSize:14.0];
     }
     return _fontDateTime;
 }
@@ -179,6 +179,7 @@
         {
             stringTime = @"";
         }
+        stringTime = [stringTime stringByReplacingOccurrencesOfString:@" " withString:@"\n"];
         NSString *stringStatus = [dictionary objectForKey:SymphoxAPIParam_status];
         if (stringStatus == nil || [stringStatus isEqual:[NSNull null]])
         {

@@ -225,6 +225,7 @@
     if (name && [name isEqual:[NSNull null]] == NO)
     {
         [self.viewChooseSpec.labelL setText:name];
+        [self.viewChooseSpec setNeedsLayout];
     }
 }
 

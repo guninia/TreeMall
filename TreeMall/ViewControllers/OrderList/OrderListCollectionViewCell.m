@@ -19,7 +19,7 @@ static CGFloat marginB = 10.0;
 static CGFloat intervalV = 5.0;
 static CGFloat intervalH = 5.0;
 static CGFloat separatorHeight = 1.0;
-static CGFloat progressViewHeight = 60.0;
+static CGFloat progressViewHeight = 70.0;
 static CGFloat buttonDeliverIdHeight = 40.0;
 static CGFloat buttonTotalProductsHeight = 20.0;
 

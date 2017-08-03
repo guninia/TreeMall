@@ -776,7 +776,9 @@ typedef enum : NSUInteger {
     }
     if ([self.sliderViewPrice isHidden] == NO)
     {
-        if (self.sliderViewPrice.slider.lowerValue != self.sliderViewPrice.slider.minimumValue)
+        BOOL lowChanged = (self.sliderViewPrice.slider.lowerValue != self.sliderViewPrice.slider.minimumValue);
+        BOOL highChanged = (self.sliderViewPrice.slider.upperValue != self.sliderViewPrice.slider.maximumValue);
+        if (lowChanged || highChanged)
         {
             NSNumber *number = [NSNumber numberWithFloat:self.sliderViewPrice.slider.lowerValue];
             NSString *string = [number stringValue];
@@ -785,7 +787,7 @@ typedef enum : NSUInteger {
                 [conditions setObject:string forKey:SymphoxAPIParam_price_from];
             }
         }
-        if (self.sliderViewPrice.slider.upperValue != self.sliderViewPrice.slider.maximumValue)
+        if (lowChanged || highChanged)
         {
             NSNumber *number = [NSNumber numberWithFloat:self.sliderViewPrice.slider.upperValue];
             NSString *string = [number stringValue];
@@ -797,7 +799,9 @@ typedef enum : NSUInteger {
     }
     if ([self.sliderViewPoint isHidden] == NO)
     {
-        if (self.sliderViewPoint.slider.lowerValue != self.sliderViewPoint.slider.minimumValue)
+        BOOL lowChanged = (self.sliderViewPoint.slider.lowerValue != self.sliderViewPoint.slider.minimumValue);
+        BOOL highChanged = (self.sliderViewPoint.slider.upperValue != self.sliderViewPoint.slider.maximumValue);
+        if (lowChanged || highChanged)
         {
             NSNumber *number = [NSNumber numberWithFloat:self.sliderViewPoint.slider.lowerValue];
             NSString *string = [number stringValue];
@@ -806,7 +810,7 @@ typedef enum : NSUInteger {
                 [conditions setObject:string forKey:SymphoxAPIParam_point_from];
             }
         }
-        if (self.sliderViewPoint.slider.upperValue != self.sliderViewPoint.slider.maximumValue)
+        if (lowChanged || highChanged)
         {
             NSNumber *number = [NSNumber numberWithFloat:self.sliderViewPoint.slider.upperValue];
             NSString *string = [number stringValue];

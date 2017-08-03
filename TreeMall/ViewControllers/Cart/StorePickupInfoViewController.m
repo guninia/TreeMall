@@ -128,10 +128,19 @@ typedef enum : NSUInteger {
     {
         _invoiceLayoutIndex = InvoiceLayoutTypeDefault;
         _invoiceDonateTarget = InvoiceDonateTargetTotal;
-        _currentInvoiceType = InvoiceTypeOptionTotal;
         _currentInvoiceCity = nil;
         _currentInvoiceRegion = nil;
+        _currentInvoiceType = InvoiceTypeOptionElectronic;
         _invoiceElectronicSubType = InvoiceElectronicSubTypeMember;
+        if ([TMInfoManager sharedManager].userInvoiceBind)
+        {
+            _invoiceLayoutIndex = InvoiceLayoutTypeElectronicMemberInvoiceBind;
+        }
+        else
+        {
+            _invoiceLayoutIndex = InvoiceLayoutTypeElectronicMemberInvoiceNotBind;
+        }
+        [self.dictionaryInvoiceTemp setObject:[NSNumber numberWithInteger:2] forKey:SymphoxAPIParam_inv_type];
         [self setDataForInvoiceEletronicSubtype:self.invoiceElectronicSubType];
     }
     return self;

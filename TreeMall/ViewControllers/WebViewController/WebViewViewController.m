@@ -261,6 +261,7 @@
                             }
                         });
                     }
+                    completionHandler();
                 }
                 else
                 {
@@ -328,7 +329,9 @@
             break;
         default:
         {
-            confirmAction = [UIAlertAction actionWithTitle:[LocalizedString Confirm] style:UIAlertActionStyleDefault handler:nil];
+            confirmAction = [UIAlertAction actionWithTitle:[LocalizedString Confirm] style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
+                completionHandler();
+            }];
         }
             break;
     }

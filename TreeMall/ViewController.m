@@ -330,8 +330,11 @@
 {
     if (tabIndex == self.tbControllerMain.selectedIndex)
         return;
+    __weak ViewController *weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
-        [self.tbControllerMain setSelectedIndex:tabIndex];
+        [weakSelf.tbControllerMain setSelectedIndex:tabIndex];
+        UINavigationController *navigationController = (UINavigationController *)[weakSelf.tbControllerMain.viewControllers objectAtIndex:tabIndex];
+        [navigationController popToRootViewControllerAnimated:NO];
     });
 }
 

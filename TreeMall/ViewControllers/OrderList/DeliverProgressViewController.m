@@ -272,6 +272,32 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     CGFloat heightForRow = 70.0;
+    NSString *stringStatus = @"";
+    if (indexPath.row < [self.arrayProgress count])
+    {
+        NSDictionary *dictionary = [self.arrayProgress objectAtIndex:indexPath.row];
+        NSString *status = [dictionary objectForKey:SymphoxAPIParam_status];
+        if (status && [status isEqual:[NSNull null]] == NO)
+        {
+            stringStatus = status;
+        }
+        if (indexPath.row == 0)
+        {
+            if (self.shouldShowOperator)
+            {
+                NSString *location = [dictionary objectForKey:SymphoxAPIParam_location];
+                if (location && [location isEqual:[NSNull null]] == NO)
+                {
+                    stringStatus = location;
+                }
+            }
+        }
+    }
+    CGFloat calculateHeight = [DeliverProgressTableViewCell heightForCellWidth:tableView.frame.size.width withContent:stringStatus];
+    if (calculateHeight > heightForRow)
+    {
+        heightForRow = calculateHeight;
+    }
     return heightForRow;
 }
 

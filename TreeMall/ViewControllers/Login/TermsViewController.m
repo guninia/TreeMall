@@ -96,7 +96,7 @@
 - (void)setContent:(NSString *)content
 {
     _content = content;
-    [_textViewTerms setAttributedString:[self attributedStringFromHTML:_content forSnippetUsingiOS6Attributes:NO]];
+    [self.textViewTerms setAttributedString:[self attributedStringFromHTML:_content forSnippetUsingiOS6Attributes:NO]];
 }
 
 - (DTAttributedTextView *)textViewTerms

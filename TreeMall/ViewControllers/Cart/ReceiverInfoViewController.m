@@ -114,6 +114,8 @@ typedef enum : NSUInteger {
         _selectedDeliverTimeIndex = DeliverTimeOptionNoSpecific;
         [self setDataForInvoiceEletronicSubtype:self.invoiceElectronicSubType];
         _invoiceDonateTarget = InvoiceDonateTargetTotal;
+        
+        
         _currentInvoiceType = InvoiceTypeOptionElectronic;
         _invoiceElectronicSubType = InvoiceElectronicSubTypeMember;
         if ([TMInfoManager sharedManager].userInvoiceBind)
@@ -124,6 +126,9 @@ typedef enum : NSUInteger {
         {
             _invoiceLayoutIndex = InvoiceLayoutTypeElectronicMemberInvoiceNotBind;
         }
+        [self.dictionaryInvoiceTemp setObject:[NSNumber numberWithInteger:2] forKey:SymphoxAPIParam_inv_type];
+        [self setDataForInvoiceEletronicSubtype:self.invoiceElectronicSubType];
+        
         _currentInvoiceCity = nil;
         _currentInvoiceRegion = nil;
     }

@@ -721,7 +721,7 @@ typedef enum : NSUInteger {
     
     if (self.navigationController.tabBarController != nil)
     {
-        [self.navigationController popToRootViewControllerAnimated:YES];
+        [self.navigationController popToRootViewControllerAnimated:NO];
     }
     else if (self.navigationController.presentingViewController != nil)
     {
