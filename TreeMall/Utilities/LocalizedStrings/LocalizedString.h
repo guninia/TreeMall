@@ -368,5 +368,6 @@
 + (NSString *)PointUsed;
 + (NSString *)ThanksForYourPurchase;
 + (NSString *)AccountAlreadyExist;
++ (NSString *)InstallmentOnlyForCathay;
 
 @end

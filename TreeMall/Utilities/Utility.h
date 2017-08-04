@@ -21,6 +21,8 @@
 + (BOOL)evaluateLocalPhoneNumber:(NSString *)text;
 + (BOOL)evaluateCellPhoneNumber:(NSString *)text;
 + (BOOL)evaluateIdCardNumber:(NSString *)text;
++ (BOOL)evaluateCreditCardNumber:(NSString *)text;
++ (NSString *)reverseStringFromString:(NSString *)text;
 + (UIImage *)colorizeImage:(UIImage *)image withColor:(UIColor *)color;
 + (NSMutableDictionary *)getKeychainQuery:(NSString *)service;
 + (void)save:(NSString *)service data:(id)data;

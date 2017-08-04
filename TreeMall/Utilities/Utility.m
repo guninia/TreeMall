@@ -196,6 +196,52 @@
     return available;
 }
 
++ (BOOL)evaluateCreditCardNumber:(NSString *)text
+{
+    BOOL isValid = NO;
+    
+    if ([text length] != 16)
+    {
+        return isValid;
+    }
+    NSInteger lastIndex = [text length] - 1;
+    NSString *lastCharacter = [text substringFromIndex:lastIndex];
+    NSString *frontString = [text substringToIndex:lastIndex];
+    NSString *reverseString = [Utility reverseStringFromString:frontString];
+    NSInteger total = 0;
+    for (NSInteger index = 0; index < [reverseString length]; index++)
+    {
+        NSInteger digit = [[reverseString substringWithRange:NSMakeRange(index, 1)] integerValue];
+        if ((index % 2) == 0)
+        {
+            digit = digit * 2;
+            if (digit > 9)
+            {
+                digit -= 9;
+            }
+        }
+        total += digit;
+    }
+    total += [lastCharacter integerValue];
+    if ((total % 10) == 0)
+    {
+        isValid = YES;
+    }
+    return isValid;
+}
+
++ (NSString *)reverseStringFromString:(NSString *)text
+{
+    NSMutableString *reversedString = [NSMutableString string];
+    NSInteger charIndex = [text length];
+    while (charIndex > 0) {
+        charIndex--;
+        NSRange subStrRange = NSMakeRange(charIndex, 1);
+        [reversedString appendString:[text substringWithRange:subStrRange]];
+    }
+    return reversedString;
+}
+
 + (UIImage *)colorizeImage:(UIImage *)image withColor:(UIColor *)color
 {
     UIGraphicsBeginImageContextWithOptions(image.size, NO, image.scale);

@@ -3591,4 +3591,14 @@
     return AccountAlreadyExist;
 }
 
++ (NSString *)InstallmentOnlyForCathay
+{
+    static NSString *InstallmentOnlyForCathay = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        InstallmentOnlyForCathay = NSLocalizedString(@"InstallmentOnlyForCathay", nil);
+    });
+    return InstallmentOnlyForCathay;
+}
+
 @end

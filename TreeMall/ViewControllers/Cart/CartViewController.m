@@ -19,6 +19,8 @@
 #import "LocalizedString.h"
 #import <Google/Analytics.h>
 #import "EventLog.h"
+#import "ProductDetailViewController.h"
+
 @import FirebaseCrash;
 
 @interface CartViewController () {
@@ -1767,6 +1769,23 @@
 {
     CGFloat heightForRow = 150.0;
     return heightForRow;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.row < [self.arrayProducts count])
+    {
+        NSDictionary *dictionary = [self.arrayProducts objectAtIndex:indexPath.row];
+        NSNumber *productIdentifier = [dictionary objectForKey:SymphoxAPIParam_cpdt_num];
+        if (productIdentifier && [productIdentifier isEqual:[NSNull null]] == NO)
+        {
+            ProductDetailViewController *viewController = [[ProductDetailViewController alloc] initWithNibName:@"ProductDetailViewController" bundle:[NSBundle mainBundle]];
+            viewController.title = [LocalizedString ProductInfo];
+            viewController.productIdentifier = productIdentifier;
+            [viewController setHidesBottomBarWhenPushed:YES];
+            [self.navigationController pushViewController:viewController animated:YES];
+        }
+    }
 }
 
 #pragma mark - CartProductTableViewCellDelegate

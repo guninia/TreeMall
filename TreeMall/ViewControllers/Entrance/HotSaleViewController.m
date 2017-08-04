@@ -61,11 +61,6 @@
         [button setImage:imageCart forState:UIControlStateNormal];
         [button addTarget:self action:@selector(buttonItemCartPressed:) forControlEvents:UIControlEventTouchUpInside];
         UIBarButtonItem *item = [[UIBarButtonItem alloc] initWithCustomView:button];
-        NSInteger totalCount = [[TMInfoManager sharedManager] numberOfProductsInCart:CartTypeTotal];
-        NSString *stringCount = [NSString stringWithFormat:@"%li", (long)totalCount];
-        item.badgeValue = stringCount;
-        item.badgeBGColor = [UIColor redColor];
-        item.badgeTextColor = [UIColor whiteColor];
         [self.navigationItem setRightBarButtonItem:item];
     }
 
@@ -76,18 +71,11 @@
     [self retrieveDataForType:self.type];
 
     gaTracker = [GAI sharedInstance].defaultTracker;
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handlerOfCartContentChangedNotification:) name:PostNotificationName_CartContentChanged object:nil];
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
-}
-
-- (void)dealloc
-{
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:PostNotificationName_CartContentChanged object:nil];
 }
 
 /*

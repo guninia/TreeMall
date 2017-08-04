@@ -1665,7 +1665,7 @@ static NSString *InstallmentBankListDescription = @"分期0利率（接受14家�
     NSString *paymentId = [dictionarySection objectForKey:kPaymentSectionId];
     if ([paymentId isEqualToString:@"I"])
     {
-        [self showInstallmentBanks];
+//        [self showInstallmentBanks];
     }
     else if ([paymentId isEqualToString:@"O"] || [paymentId isEqualToString:@"O2"])
     {

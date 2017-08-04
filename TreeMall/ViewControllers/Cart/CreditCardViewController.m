@@ -13,8 +13,10 @@
 #import "SHAPIAdapter.h"
 #import "FullScreenLoadingView.h"
 #import "CompleteOrderViewController.h"
+#import "Utility.h"
 #import <Google/Analytics.h>
 #import "EventLog.h"
+
 @import FirebaseCrash;
 
 @interface CreditCardViewController () {
@@ -236,9 +238,32 @@
     
     NSString *sNo = self.textFieldS.text;
     
-    if ([cNo1 length] < 4 || [cNo2 length] < 4 || [cNo3 length] < 4 || [cNo4 length] < 4)
+    NSMutableString *cNo = [NSMutableString string];
+    [cNo appendString:cNo1];
+    [cNo appendString:cNo2];
+    [cNo appendString:cNo3];
+    [cNo appendString:cNo4];
+    if ([cNo1 length] < 4 || [cNo2 length] < 4 || [cNo3 length] < 4 || [cNo4 length] < 4 || ([Utility evaluateCreditCardNumber:cNo] == NO))
     {
         UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:[LocalizedString PleaseInputValidCardNumber] preferredStyle:UIAlertControllerStyleAlert];
+        __weak CreditCardViewController *weakSelf = self;
+        UIAlertAction *action = [UIAlertAction actionWithTitle:[LocalizedString Confirm] style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
+            if ([weakSelf.textField1 canBecomeFirstResponder])
+            {
+                [weakSelf.textField1 becomeFirstResponder];
+                if ([weakSelf.textField1.text length] > 0)
+                {
+                    [weakSelf.textField1 selectAll:nil];
+                }
+            }
+        }];
+        [alertController addAction:action];
+        [self presentViewController:alertController animated:YES completion:nil];
+        return;
+    }
+    if ([self.tradeId isEqualToString:@"I"] && [[cNo substringWithRange:NSMakeRange(0, 6)] isEqualToString:@"406376"] == NO)
+    {
+        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:[LocalizedString InstallmentOnlyForCathay] preferredStyle:UIAlertControllerStyleAlert];
         __weak CreditCardViewController *weakSelf = self;
         UIAlertAction *action = [UIAlertAction actionWithTitle:[LocalizedString Confirm] style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
             if ([weakSelf.textField1 canBecomeFirstResponder])
@@ -295,12 +320,6 @@
     
     if (self.params == nil)
         return;
-    
-    NSMutableString *cNo = [NSMutableString string];
-    [cNo appendString:cNo1];
-    [cNo appendString:cNo2];
-    [cNo appendString:cNo3];
-    [cNo appendString:cNo4];
     
     NSMutableString *vD = [NSMutableString string];
     [vD appendString:MM];

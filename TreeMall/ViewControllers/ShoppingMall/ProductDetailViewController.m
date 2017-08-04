@@ -75,6 +75,7 @@
         _arrayImagePath = nil;
         _productIdentifier = nil;
         _specIndex = NSNotFound;
+        _shouldShowBottomAmountInfoBar = YES;
         _arrayViewNotice = [[NSMutableArray alloc] initWithCapacity:0];
         self.title = [LocalizedString ProductInfo];
     }
@@ -103,11 +104,6 @@
         [button setImage:imageCart forState:UIControlStateNormal];
         [button addTarget:self action:@selector(buttonItemCartPressed:) forControlEvents:UIControlEventTouchUpInside];
         UIBarButtonItem *item = [[UIBarButtonItem alloc] initWithCustomView:button];
-        NSInteger totalCount = [[TMInfoManager sharedManager] numberOfProductsInCart:CartTypeTotal];
-        NSString *stringCount = [NSString stringWithFormat:@"%li", (long)totalCount];
-        item.badgeValue = stringCount;
-        item.badgeBGColor = [UIColor redColor];
-        item.badgeTextColor = [UIColor whiteColor];
         [items addObject:item];
     }
     self.navigationItem.rightBarButtonItems = items;
@@ -164,18 +160,11 @@
     [self retrieveTermsForType:TermTypeShippingAndWarrenty];
     
     gaTracker = [GAI sharedInstance].defaultTracker;
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handlerOfCartContentChangedNotification:) name:PostNotificationName_CartContentChanged object:nil];
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
-}
-
-- (void)dealloc
-{
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:PostNotificationName_CartContentChanged object:nil];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -703,6 +692,15 @@
     return _arraySpecImageView;
 }
 
+- (void)setShouldShowBottomAmountInfoBar:(BOOL)shouldShowBottomAmountInfoBar
+{
+    _shouldShowBottomAmountInfoBar = shouldShowBottomAmountInfoBar;
+//    self.bottomBar.hidden = !_shouldShowBottomAmountInfoBar;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.view setNeedsLayout];
+    });
+}
+
 #pragma mark - Private Methods
 
 - (void)retrieveDataForIdentifer:(NSNumber *)identifier
@@ -763,8 +761,8 @@
                     
                     // Also layout subviews.
                     dispatch_async(dispatch_get_main_queue(), ^{
+                        weakSelf.bottomBar.hidden = !(weakSelf.shouldShowBottomAmountInfoBar);
                         [weakSelf layoutCustomSubviews];
-                        weakSelf.bottomBar.hidden = NO;
                     });
                     
                 }
@@ -849,7 +847,7 @@
 - (void)layoutCustomSubviews
 {
     CGFloat scrollBottom = self.view.frame.size.height;
-    if (self.bottomBar)
+    if (self.bottomBar && [self.bottomBar isHidden] == NO)
     {
         CGFloat bottomBarHeight = 49.0;
         CGRect frame = CGRectMake(0.0, self.view.frame.size.height - bottomBarHeight, self.view.frame.size.width, bottomBarHeight);
@@ -1071,6 +1069,11 @@
         CGSize size = CGSizeMake(self.scrollView.frame.size.width, self.scrollView.frame.size.width);
         for (UIButton *button in self.arrayIntroImageView)
         {
+            UIImage *image = [button imageForState:UIControlStateNormal];
+            if (image != nil)
+            {
+                size.height = ceil(image.size.height * (self.scrollView.frame.size.width / image.size.width));
+            }
             button.frame = CGRectMake(0.0, originY, size.width, size.height);
             originY = button.frame.origin.y + button.frame.size.height;
         }
@@ -1113,6 +1116,11 @@
         CGSize size = CGSizeMake(self.scrollView.frame.size.width, self.scrollView.frame.size.width);
         for (UIButton *button in self.arraySpecImageView)
         {
+            UIImage *image = [button imageForState:UIControlStateNormal];
+            if (image != nil)
+            {
+                size.height = ceil(image.size.height * (self.scrollView.frame.size.width / image.size.width));
+            }
             button.frame = CGRectMake(0.0, originY, size.width, size.height);
             originY = button.frame.origin.y + button.frame.size.height;
         }
@@ -1500,13 +1508,18 @@
             if (arrayImage && [arrayImage isEqual:[NSNull null]] == NO && [arrayImage count] > 0)
             {
                 UIImage *transparent = [UIImage imageNamed:@"transparent"];
+                __weak ProductDetailViewController *weakSelf = self;
                 for (NSInteger index = 0; index < [arrayImage count]; index++)
                 {
                     NSString *imagePath = [arrayImage objectAtIndex:index];
                     UIButton *button = [[UIButton alloc] initWithFrame:CGRectZero];
                     button.tag = index;
                     [button.imageView setContentMode:UIViewContentModeScaleAspectFit];
-                    [button sd_setImageWithURL:[NSURL URLWithString:imagePath] forState:UIControlStateNormal placeholderImage:transparent options:SDWebImageAllowInvalidSSLCertificates];
+                    [button sd_setImageWithURL:[NSURL URLWithString:imagePath] forState:UIControlStateNormal placeholderImage:transparent options:SDWebImageAllowInvalidSSLCertificates completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL){
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            [weakSelf.view setNeedsLayout];
+                        });
+                    }];
                     [button addTarget:self action:@selector(buttonIntroImagePressed:) forControlEvents:UIControlEventTouchUpInside];
                     [self.scrollView addSubview:button];
                     [self.arrayIntroImageView addObject:button];
@@ -1541,13 +1554,18 @@
             if (arrayImage && [arrayImage isEqual:[NSNull null]] == NO && [arrayImage count] > 0)
             {
                 UIImage *transparent = [UIImage imageNamed:@"transparent"];
+                __weak ProductDetailViewController *weakSelf = self;
                 for (NSInteger index = 0; index < [arrayImage count]; index++)
                 {
                     NSString *imagePath = [arrayImage objectAtIndex:index];
                     UIButton *button = [[UIButton alloc] initWithFrame:CGRectZero];
                     button.tag = index;
                     [button.imageView setContentMode:UIViewContentModeScaleAspectFit];
-                    [button sd_setImageWithURL:[NSURL URLWithString:imagePath] forState:UIControlStateNormal placeholderImage:transparent options:SDWebImageAllowInvalidSSLCertificates];
+                    [button sd_setImageWithURL:[NSURL URLWithString:imagePath] forState:UIControlStateNormal placeholderImage:transparent options:SDWebImageAllowInvalidSSLCertificates completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL){
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            [weakSelf.view setNeedsLayout];
+                        });
+                    }];
                     [button addTarget:self action:@selector(buttonSpecImagePressed:) forControlEvents:UIControlEventTouchUpInside];
                     [self.scrollView addSubview:button];
                     [self.arraySpecImageView addObject:button];

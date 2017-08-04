@@ -61,5 +61,6 @@
 @property (nonatomic, strong) NSMutableArray *arrayCartType;
 @property (nonatomic, strong) NSMutableArray *arrayIntroImageView;
 @property (nonatomic, strong) NSMutableArray *arraySpecImageView;
+@property (nonatomic, assign) BOOL shouldShowBottomAmountInfoBar;
 
 @end

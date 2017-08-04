@@ -1488,6 +1488,9 @@ static NSUInteger SearchKeywordNumberMax = 8;
 {
     if (productIndex < [self.arrayFavorite count])
     {
+        NSDictionary *product = [self.arrayFavorite objectAtIndex:productIndex];
+        NSNumber *productId = [product objectForKey:SymphoxAPIParam_cpdt_num];
+        [self.orderedSetFavoriteId removeObject:productId];
         [self.arrayFavorite removeObjectAtIndex:productIndex];
     }
     [self saveToFavoriteArchive];

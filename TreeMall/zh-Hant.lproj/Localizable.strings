@@ -157,7 +157,7 @@
 "ChangePassword"="密碼修改";
 "NewsletterSubscribe"="電子報訂閱";
 "CompleteAuthenticationToGet_N_Points"="完成認證得%li點數";
-"CardMemberAuthenticationNotComplete"="尚未完成卡有認證";
+"CardMemberAuthenticationNotComplete"="尚未完成卡友認證";
 "Authenticated"="已認證";
 "AccountInformationMaintain"="帳號資料維護";
 "PleaseInputYourEmail"="請輸入您的信箱";
@@ -210,7 +210,7 @@
 "Dollars"="元";
 "CathayCardOnly"="限國泰世華信用卡";
 "NoInterestInstallment"="分期０利率";
-"InstallmentAvailableBank"="可分期銀行";
+"InstallmentAvailableBank"="僅限國泰世華";
 "ModifySuccess"="修改成功";
 "ModifyFailed"="修改失敗";
 "PleaseInputEmailOrIdNumber"="請輸入 Email 或身分證字號";
@@ -364,3 +364,5 @@
 "PointUsed"="消費點數";
 "ThanksForYourPurchase"="感謝您的訂購";
 "AccountAlreadyExist"="帳號已存在";
+"InstallmentOnlyForCathay"="信用卡分期僅限國泰世華銀行";
+
