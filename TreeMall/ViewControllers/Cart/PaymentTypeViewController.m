@@ -1571,6 +1571,11 @@ static NSString *InstallmentBankListDescription = @"分期0利率（接受14家�
                         {
                             [paymentCell.buttonCheck setHidden:YES];
                         }
+                        if ([paymentId isEqualToString:@"I"])
+                        {
+                            [paymentCell.buttonAction setBackgroundColor:[UIColor clearColor]];
+                            [paymentCell.buttonAction setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
+                        }
                     }
                 }
             }

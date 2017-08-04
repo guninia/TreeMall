@@ -33,6 +33,7 @@
 @property (nonatomic, weak) IBOutlet UITextField *textFieldS;
 @property (nonatomic, weak) IBOutlet UIButton *buttonConfirm;
 @property (nonatomic, strong) FullScreenLoadingView *viewLoading;
+@property (nonatomic, strong) NSOrderedSet *orderedSetCNo;
 
 - (void)showLoadingViewAnimated:(BOOL)animated;
 - (void)hideLoadingViewAnimated:(BOOL)animated;
@@ -190,6 +191,15 @@
     return _viewLoading;
 }
 
+- (NSOrderedSet *)orderedSetCNo
+{
+    if (_orderedSetCNo == nil)
+    {
+        _orderedSetCNo = [NSOrderedSet orderedSetWithObjects:@"456311", @"456310", @"438582", @"456328", @"456327", @"438581", @"402310", @"402656", @"428430", @"451871", @"402555", @"402556", @"406376", @"543375", @"541510", @"540842", @"542440", @"552197", @"552032", @"524106", @"546696", @"552579", @"515713", @"518826", @"518844", @"514869", @"356080", @"356380", @"356580", @"356085", @"356385", @"428368", @"511846", nil];
+    }
+    return _orderedSetCNo;
+}
+
 #pragma mark - Private Methods
 
 - (void)showLoadingViewAnimated:(BOOL)animated
@@ -261,7 +271,7 @@
         [self presentViewController:alertController animated:YES completion:nil];
         return;
     }
-    if ([self.tradeId isEqualToString:@"I"] && [[cNo substringWithRange:NSMakeRange(0, 6)] isEqualToString:@"406376"] == NO)
+    if ([self.tradeId isEqualToString:@"I"] && [self.orderedSetCNo containsObject:[cNo substringWithRange:NSMakeRange(0, 6)]] == NO)
     {
         UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:[LocalizedString InstallmentOnlyForCathay] preferredStyle:UIAlertControllerStyleAlert];
         __weak CreditCardViewController *weakSelf = self;

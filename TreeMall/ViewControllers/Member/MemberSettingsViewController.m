@@ -47,6 +47,8 @@ typedef enum : NSUInteger {
     id<GAITracker> gaTracker;
 }
 
+@property (nonatomic, weak) IBOutlet UILabel *labelVersion;
+
 - (void)showLoadingViewAnimated:(BOOL)animated;
 - (void)hideLoadingViewAnimated:(BOOL)animated;
 - (void)prepareOptions;
@@ -89,6 +91,11 @@ typedef enum : NSUInteger {
     self.tableView.tableFooterView = [UIView new];
     
     [self.navigationController.tabBarController.view addSubview:self.viewLoading];
+    
+    NSString *vShort = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
+    NSString *v = [[NSBundle mainBundle] objectForInfoDictionaryKey:(NSString *)kCFBundleVersionKey];
+    NSString *vFormat = [NSString stringWithFormat:@"v %@ (%@)", vShort, v];
+    self.labelVersion.text = vFormat;
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handlerOfUserInformationUpdatedNotification:) name:PostNotificationName_UserInformationUpdated object:nil];
 

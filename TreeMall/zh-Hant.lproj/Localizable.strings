@@ -210,7 +210,7 @@
 "Dollars"="元";
 "CathayCardOnly"="限國泰世華信用卡";
 "NoInterestInstallment"="分期０利率";
-"InstallmentAvailableBank"="僅限國泰世華";
+"InstallmentAvailableBank"="限國泰世華卡";
 "ModifySuccess"="修改成功";
 "ModifyFailed"="修改失敗";
 "PleaseInputEmailOrIdNumber"="請輸入 Email 或身分證字號";
