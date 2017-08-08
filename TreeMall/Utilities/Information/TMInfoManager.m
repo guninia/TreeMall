@@ -952,12 +952,11 @@ static NSUInteger SearchKeywordNumberMax = 8;
 {
     if (self.userIdentifier == nil)
     {
-//        NSString *stringId = [SAMKeychain passwordForService:[[NSBundle mainBundle] bundleIdentifier] account:TMIdentifier];
-        NSNumber *numberId = [[NSUserDefaults standardUserDefaults] objectForKey:TMIdentifier];
-        if (numberId)
+        NSString *stringId = [SAMKeychain passwordForService:[[NSBundle mainBundle] bundleIdentifier] account:TMIdentifier];
+        if (stringId)
         {
-//            NSNumber *identifier = [NSNumber numberWithInteger:[stringId integerValue]];
-            self.userIdentifier = numberId;
+            NSNumber *identifier = [NSNumber numberWithInteger:[stringId integerValue]];
+            self.userIdentifier = identifier;
         }
     }
     
@@ -1041,14 +1040,14 @@ static NSUInteger SearchKeywordNumberMax = 8;
     if (identifier && [identifier isEqual:[NSNull null]] == NO)
     {
         self.userIdentifier = identifier;
-//        NSError *error = nil;
-//        [SAMKeychain setPassword:[self.userIdentifier stringValue] forService:[[NSBundle mainBundle] bundleIdentifier] account:TMIdentifier error:&error];
-        [[NSUserDefaults standardUserDefaults] setObject:self.userIdentifier forKey:TMIdentifier];
-        [[NSUserDefaults standardUserDefaults] synchronize];
-//        if (error)
-//        {
-//            NSLog(@"store to keychain error:\n%@", [error description]);
-//        }
+        NSError *error = nil;
+        [SAMKeychain setPassword:[self.userIdentifier stringValue] forService:[[NSBundle mainBundle] bundleIdentifier] account:TMIdentifier error:&error];
+//        [[NSUserDefaults standardUserDefaults] setObject:self.userIdentifier forKey:TMIdentifier];
+//        [[NSUserDefaults standardUserDefaults] synchronize];
+        if (error)
+        {
+            NSLog(@"store to keychain error:\n%@", [error description]);
+        }
     }
     
     if (shouldLoadArchive)
@@ -1567,9 +1566,9 @@ static NSUInteger SearchKeywordNumberMax = 8;
 
 - (void)logoutUser
 {
-//    [SAMKeychain deletePasswordForService:[[NSBundle mainBundle] bundleIdentifier] account:TMIdentifier];
-    [[NSUserDefaults standardUserDefaults] removeObjectForKey:TMIdentifier];
-    [[NSUserDefaults standardUserDefaults] synchronize];
+    [SAMKeychain deletePasswordForService:[[NSBundle mainBundle] bundleIdentifier] account:TMIdentifier];
+//    [[NSUserDefaults standardUserDefaults] removeObjectForKey:TMIdentifier];
+//    [[NSUserDefaults standardUserDefaults] synchronize];
     NSNumber *userId = [self.userIdentifier copy];
     [self resetData];
     [self deleteArchiveForIdentifier:userId];

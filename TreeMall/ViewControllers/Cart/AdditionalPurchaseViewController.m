@@ -14,6 +14,7 @@
 #import "SHAPIAdapter.h"
 #import "PaymentTypeViewController.h"
 #import "Definition.h"
+#import "SingleLabelCollectionReusableView.h"
 #import <Google/Analytics.h>
 #import "EventLog.h"
 @import FirebaseCrash;
@@ -127,6 +128,7 @@
         [_collectionView setShowsHorizontalScrollIndicator:NO];
         [_collectionView setBackgroundColor:[UIColor colorWithWhite:0.9 alpha:1.0]];
         [_collectionView registerClass:[AdditionalProductCollectionViewCell class] forCellWithReuseIdentifier:AdditionalProductCollectionViewCellIdentifier];
+        [_collectionView registerClass:[SingleLabelCollectionReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:SingleLabelCollectionReusableViewIdentifier];
         [_collectionView setDataSource:self];
         [_collectionView setDelegate:self];
     }
@@ -209,8 +211,18 @@
         _viewQuantityInput.delegate = self;
         [_viewQuantityInput setBackgroundColor:[UIColor colorWithWhite:0.0 alpha:0.3]];
         _viewQuantityInput.alpha = 0.0;
+        _viewQuantityInput.minValue = 0;
     }
     return _viewQuantityInput;
+}
+
+- (NSString *)marketingDescription
+{
+    if (_marketingDescription == nil)
+    {
+        _marketingDescription = [[NSString alloc] initWithString:[LocalizedString AdditionalPurchaseProduct]];
+    }
+    return _marketingDescription;
 }
 
 #pragma mark - Private Methods
@@ -1063,6 +1075,21 @@
     return numberOfItems;
 }
 
+- (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath
+{
+    UICollectionReusableView *headerView = nil;
+    if (indexPath.section == 0)
+    {
+        SingleLabelCollectionReusableView *view = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:SingleLabelCollectionReusableViewIdentifier forIndexPath:indexPath];
+        if ([kind isEqualToString:UICollectionElementKindSectionHeader])
+        {
+            view.label.text = self.marketingDescription;
+        }
+        headerView = view;
+    }
+    return headerView;
+}
+
 - (__kindof UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     AdditionalProductCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:AdditionalProductCollectionViewCellIdentifier forIndexPath:indexPath];
@@ -1141,6 +1168,14 @@
     return 0.0;
 }
 
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section
+{
+    CGFloat maxWidth = collectionView.frame.size.width;
+    CGFloat height = [SingleLabelCollectionReusableView heightForText:self.marketingDescription inViewWithWidth:maxWidth];
+    CGSize size = CGSizeMake(maxWidth, height);
+    return size;
+}
+
 - (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section
 {
     UIEdgeInsets edgeInsets = UIEdgeInsetsMake(5.0, 5.0, 5.0, 5.0);
@@ -1156,7 +1191,7 @@
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    CGSize cellSize = CGSizeMake(150.0, 310.0);
+    CGSize cellSize = CGSizeMake(150.0, 310.0 + indexPath.row);
     return cellSize;
 }
 
@@ -1295,8 +1330,16 @@
     NSNumber *productId = [product objectForKey:SymphoxAPIParam_cpdt_num];
     if (productId && quantity)
     {
-        [[TMInfoManager sharedManager] addProduct:product toAdditionalCartForType:self.currentType];
-        [[TMInfoManager sharedManager] setPurchaseQuantity:quantity forProduct:productId inAdditionalCart:self.currentType];
+        if ([quantity integerValue] == 0)
+        {
+            NSString *productName = [[TMInfoManager sharedManager] nameOfRemovedProductId:productId inAdditionalCart:self.currentType];
+            NSLog(@"Product[%@] removed from cart.", productName);
+        }
+        else
+        {
+            [[TMInfoManager sharedManager] addProduct:product toAdditionalCartForType:self.currentType];
+            [[TMInfoManager sharedManager] setPurchaseQuantity:quantity forProduct:productId inAdditionalCart:self.currentType];
+        }
     }
     [self checkCartForType:self.currentType shouldShowPaymentForProductId:productId];
 }

@@ -28,5 +28,6 @@
 @property (nonatomic, strong) NSNumberFormatter *numberFormatter;
 @property (nonatomic, strong) FullScreenSelectNumberView *viewQuantityInput;
 @property (nonatomic, strong) NSMutableArray *arrayProductsFromCart;
+@property (nonatomic, strong) NSString *marketingDescription;
 
 @end

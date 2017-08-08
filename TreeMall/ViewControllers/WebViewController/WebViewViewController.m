@@ -294,6 +294,7 @@
                     {
                         [weakSelf.presentingViewController dismissViewControllerAnimated:YES completion:nil];
                     }
+                    [[TMInfoManager sharedManager] retrieveUserInformation];
                 }];
             }
             else

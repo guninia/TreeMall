@@ -40,6 +40,9 @@
     self = [super initWithFrame:frame];
     if (self)
     {
+        self.maxValue = 1;
+        self.minValue = 1;
+        
         [self addSubview:self.viewContainer];
         [self.viewContainer addSubview:self.toolBar];
         [self.viewContainer addSubview:self.viewDescriptionBackground];
@@ -329,8 +332,6 @@
 - (void)reset
 {
     self.tag = NSIntegerMax;
-    self.maxValue = 1;
-    self.minValue = 1;
     self.currentValue = 1;
     __weak FullScreenSelectNumberView *weakSelf = self;
     self.tips = nil;

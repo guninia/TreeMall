@@ -381,10 +381,18 @@
             NSDictionary *userInfo = error.userInfo;
             if (userInfo)
             {
-                NSString *serverMessage = [userInfo objectForKey:SymphoxAPIParam_status_desc];
-                if (serverMessage)
+                NSString *statusId = [userInfo objectForKey:SymphoxAPIParam_status_id];
+                if ([statusId isEqualToString:@"E238"])
                 {
-                    errorMessage = serverMessage;
+                    errorMessage = [LocalizedString PleaseInputValidCardNumber];
+                }
+                else
+                {
+                    NSString *serverMessage = [userInfo objectForKey:SymphoxAPIParam_status_desc];
+                    if (serverMessage)
+                    {
+                        errorMessage = serverMessage;
+                    }
                 }
             }
             NSLog(@"startToBuildOrderWithParams - error:\n%@", [error description]);

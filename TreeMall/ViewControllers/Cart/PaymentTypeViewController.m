@@ -31,6 +31,7 @@
 #define kDiscountSectionFooterValue @"DiscountSectionFooterValue"
 #define kPaymentSectionId @"PaymentSectionId"
 #define kPaymentSectionTitle @"PaymentSectionTitle"
+#define kPaymentSectionAction @"PaymentSectionAction"
 #define kPaymentSectionContent @"PaymentSectionContent"
 #define kPaymentOptionTitle @"PaymentOptionTitle"
 #define kPaymentOptionActionTitle @"PaymentOptionActionTitle"
@@ -601,15 +602,16 @@ static NSString *InstallmentBankListDescription = @"分期0利率（接受14家�
                             NSString *stringAmount = [self.formatter stringFromNumber:installmentAmount];
                             NSString *totalString = [[[[stringAmount stringByAppendingString:[LocalizedString Dollars]] stringByAppendingString:@"Ｘ"] stringByAppendingString:[installmentTerm stringValue]] stringByAppendingString:[LocalizedString InstallmentTerm]];
                             [option setObject:totalString forKey:kPaymentOptionTitle];
-                            if (index == 0)
-                            {
-                                [option setObject:[LocalizedString InstallmentAvailableBank] forKey:kPaymentOptionActionTitle];
-                            }
+//                            if (index == 0)
+//                            {
+//                                [option setObject:[LocalizedString InstallmentAvailableBank] forKey:kPaymentOptionActionTitle];
+//                            }
                             [content addObject:option];
                         }
                     }
                     [section setObject:paymentId forKey:kPaymentSectionId];
                     [section setObject:sectionTitle forKey:kPaymentSectionTitle];
+                    [section setObject:[LocalizedString InstallmentAvailableBank] forKey:kPaymentSectionAction];
                     [section setObject:content forKey:kPaymentSectionContent];
                 }
                 else if ([paymentId isEqualToString:@"S"])
@@ -1467,6 +1469,16 @@ static NSString *InstallmentBankListDescription = @"分期0利率（接受14家�
             if (title)
             {
                 view.labelTitle.text = title;
+            }
+            NSString *action = [dictionarySection objectForKey:kPaymentSectionAction];
+            if (action)
+            {
+                [view.buttonAction setTitle:action forState:UIControlStateNormal];
+                [view.buttonAction setHidden:NO];
+            }
+            else
+            {
+                [view.buttonAction setHidden:YES];
             }
         }
         headerView = view;

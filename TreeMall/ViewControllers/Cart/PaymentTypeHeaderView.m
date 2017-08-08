@@ -8,6 +8,12 @@
 
 #import "PaymentTypeHeaderView.h"
 
+@interface PaymentTypeHeaderView ()
+
+- (void)buttonActionPressed:(id)sender;
+
+@end
+
 @implementation PaymentTypeHeaderView
 
 - (instancetype)initWithReuseIdentifier:(NSString *)reuseIdentifier
@@ -18,6 +24,7 @@
         [self.contentView setBackgroundColor:[UIColor whiteColor]];
         [self.contentView addSubview:self.viewTitleBackground];
         [self.viewTitleBackground addSubview:self.labelTitle];
+        [self.viewTitleBackground addSubview:self.buttonAction];
     }
     return self;
 }
@@ -56,9 +63,18 @@
         CGFloat viewHeight = textHeight + indentV * 2;
         CGRect frame = CGRectMake(marginH, originY, self.contentView.frame.size.width - marginH * 2, viewHeight);
         self.viewTitleBackground.frame = frame;
+        CGFloat rightEnd = self.viewTitleBackground.frame.size.width;
+        if (self.buttonAction)
+        {
+            CGSize sizeText = [[self.buttonAction titleForState:UIControlStateNormal] sizeWithAttributes:[NSDictionary dictionaryWithObjectsAndKeys:self.buttonAction.titleLabel.font, NSFontAttributeName, nil]];
+            CGSize sizeButton = CGSizeMake(ceil(sizeText.width + indentH * 2), ceil(sizeText.height));
+            CGRect frame = CGRectMake(rightEnd - sizeButton.width, 0.0, sizeButton.width, self.viewTitleBackground.frame.size.height);
+            self.buttonAction.frame = frame;
+            rightEnd = self.buttonAction.frame.origin.x;
+        }
         if (self.labelTitle)
         {
-            CGRect frameLabel = CGRectMake(indentH, indentV, self.viewTitleBackground.frame.size.width - indentH * 2, self.viewTitleBackground.frame.size.height - indentV * 2);
+            CGRect frameLabel = CGRectMake(indentH, indentV, (rightEnd - indentH), self.viewTitleBackground.frame.size.height - indentV * 2);
             self.labelTitle.frame = frameLabel;
         }
         originY = self.viewTitleBackground.frame.origin.y + self.viewTitleBackground.frame.size.height + intervalV;
@@ -86,6 +102,29 @@
         [_labelTitle setFont:font];
     }
     return _labelTitle;
+}
+
+- (UIButton *)buttonAction
+{
+    if (_buttonAction == nil)
+    {
+        _buttonAction = [[UIButton alloc] initWithFrame:CGRectZero];
+        [_buttonAction setBackgroundColor:[UIColor clearColor]];
+        [_buttonAction setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
+        UIFont *font = [UIFont systemFontOfSize:14.0];
+        [_buttonAction.titleLabel setFont:font];
+    }
+    return _buttonAction;
+}
+
+#pragma mark - Actions
+
+- (void)buttonActionPressed:(id)sender
+{
+    if (_delegate && [_delegate respondsToSelector:@selector(paymentTypeHeaderView:didPressActionBySender:)])
+    {
+        [_delegate paymentTypeHeaderView:self didPressActionBySender:sender];
+    }
 }
 
 @end

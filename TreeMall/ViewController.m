@@ -482,6 +482,8 @@
 - (void)handlerOfCompleteOrderProcessNotification:(NSNotification *)notification
 {
     [self JumpToTab:0];
+    [[TMInfoManager sharedManager] retrievePointDataFromObject:self withCompletion:nil];
+    [[TMInfoManager sharedManager] retrieveCouponDataFromObject:self forPageIndex:1 couponState:CouponStateNotUsed sortFactor:SymphoxAPIParamValue_worth withSortOrder:SymphoxAPIParamValue_desc withCompletion:nil];
 }
 
 #pragma mark - UITabBarControllerDelegate

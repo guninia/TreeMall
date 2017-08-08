@@ -73,6 +73,12 @@
     [application registerUserNotificationSettings:settings];
     [application registerForRemoteNotifications];
     
+    if ([[NSUserDefaults standardUserDefaults] objectForKey:UserDefault_HasBeenLaunched] == NO)
+    {
+        [[TMInfoManager sharedManager] logoutUser];
+        [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithBool:YES] forKey:UserDefault_HasBeenLaunched];
+    }
+    
     // Prepare API connection
     [[TMInfoManager sharedManager] retrieveToken];
     

@@ -110,6 +110,8 @@ typedef enum : NSUInteger {
 - (void)presentCompleteOrderViewWithDelivery:(NSDictionary *)delivery;
 - (void)presentCreditCardViewWithDelivery:(NSDictionary *)delivery andParams:(NSMutableDictionary *)params;
 - (void)presentWebViewForConvenienceStoreGroup:(ConvenienceStoreGroup)group;
+- (void)checkDeliveryInfo:(NSDictionary *)deliveryInfo withOrderInfo:(NSMutableDictionary *)orderInfo;
+- (void)applyDefaultTriplicateParams;
 
 - (IBAction)buttonDescriptionPressed:(id)sender;
 - (IBAction)buttonStore1Pressed:(id)sender;
@@ -1465,6 +1467,7 @@ typedef enum : NSUInteger {
                         if (weakSelf.currentInvoiceType == InvoiceTypeOptionTriplicate)
                         {
                             [weakSelf.dictionaryInvoiceTemp setObject:[NSNumber numberWithInteger:3] forKey:SymphoxAPIParam_inv_type];
+                            [self applyDefaultTriplicateParams];
                         }
                         else if (weakSelf.currentInvoiceType == InvoiceTypeOptionElectronic || weakSelf.currentInvoiceType == InvoiceTypeOptionDonate)
                         {
@@ -2531,6 +2534,21 @@ typedef enum : NSUInteger {
             [weakSelf presentViewController:alertController animated:YES completion:nil];
         }
     }];
+}
+
+- (void)applyDefaultTriplicateParams
+{
+    NSString *invoiceTitle = [TMInfoManager sharedManager].userInvoiceTitle;
+    if (invoiceTitle)
+    {
+        [self.dictionaryInvoiceTemp setObject:invoiceTitle forKey:SymphoxAPIParam_inv_title];
+    }
+    
+    NSString *taxId = [TMInfoManager sharedManager].userTaxId;
+    if (taxId)
+    {
+        [self.dictionaryInvoiceTemp setObject:taxId forKey:SymphoxAPIParam_inv_regno];
+    }
 }
 
 #pragma mark - Actions
