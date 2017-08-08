@@ -119,7 +119,7 @@
         [_labelMarketing setBackgroundColor:[UIColor clearColor]];
         [_labelMarketing setTextColor:[UIColor darkGrayColor]];
         [_labelMarketing setNumberOfLines:0];
-        NSAttributedString *truncationToken = [[NSAttributedString alloc] initWithString:@"..." attributes:self.attributesText];
+        NSAttributedString *truncationToken = [[NSAttributedString alloc] initWithString:@"..." attributes:self.attributesMarketName];
         [_labelMarketing setAttributedTruncationToken:truncationToken];
     }
     return _labelMarketing;
@@ -200,12 +200,22 @@
     }];
 }
 
+- (NSDictionary *)attributesMarketName
+{
+    if (_attributesMarketName == nil)
+    {
+        UIFont *font = [UIFont boldSystemFontOfSize:12.0];
+        _attributesMarketName = [[NSDictionary alloc] initWithObjectsAndKeys:font, NSFontAttributeName, [UIColor orangeColor], NSForegroundColorAttributeName, nil];
+    }
+    return _attributesMarketName;
+}
+
 - (NSDictionary *)attributesText
 {
     if (_attributesText == nil)
     {
         UIFont *font = [UIFont boldSystemFontOfSize:12.0];
-        _attributesText = [[NSDictionary alloc] initWithObjectsAndKeys:font, NSFontAttributeName, nil];
+        _attributesText = [[NSDictionary alloc] initWithObjectsAndKeys:font, NSFontAttributeName, [UIColor darkGrayColor], NSForegroundColorAttributeName, nil];
     }
     return _attributesText;
 }

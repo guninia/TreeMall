@@ -1112,7 +1112,7 @@
         {
             textName = name;
         }
-        NSString *marketing = [dictionary objectForKey:SymphoxAPIParam_market_name];
+        NSString *marketing = [dictionary objectForKey:@"martket_name"];
         if (marketing && [marketing isEqual:[NSNull null]] == NO)
         {
             textMarketing = marketing;
@@ -1147,8 +1147,8 @@
         }
     }
     
-    cell.labelMarketing.text = [[NSAttributedString alloc] initWithString:textMarketing attributes:cell.attributesText];
-    cell.labelName.text = [[NSAttributedString alloc] initWithString:textName attributes:cell.attributesText];
+    cell.labelMarketing.attributedText = [[NSAttributedString alloc] initWithString:textMarketing attributes:cell.attributesMarketName];
+    cell.labelName.attributedText = [[NSAttributedString alloc] initWithString:textName attributes:cell.attributesText];
     cell.imageUrl = url;
     cell.labelPrice.text = textPrice;
     [cell.buttonPurchase setTitle:buttonTitle forState:UIControlStateNormal];
@@ -1191,7 +1191,7 @@
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    CGSize cellSize = CGSizeMake(150.0, 310.0 + indexPath.row);
+    CGSize cellSize = CGSizeMake(150.0, 310.0);
     return cellSize;
 }
 
@@ -1321,7 +1321,7 @@
 {
     NSDictionary *product = [self.arrayProducts objectAtIndex:view.tag];
     NSString *text = stringNumber;
-    if (text == nil || [text length] == 0 || [text integerValue] == 0)
+    if (text == nil || [text length] == 0)
     {
         text = @"1";
     }

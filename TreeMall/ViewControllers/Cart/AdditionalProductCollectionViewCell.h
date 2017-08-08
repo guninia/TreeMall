@@ -31,5 +31,6 @@ static NSString *AdditionalProductCollectionViewCellIdentifier = @"AdditionalPro
 
 @property (nonatomic, strong) NSURL *imageUrl;
 @property (nonatomic, strong) NSDictionary *attributesText;
+@property (nonatomic, strong) NSDictionary *attributesMarketName;
 
 @end
