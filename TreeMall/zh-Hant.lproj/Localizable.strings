@@ -365,4 +365,5 @@
 "ThanksForYourPurchase"="感謝您的訂購";
 "AccountAlreadyExist"="帳號已存在";
 "InstallmentOnlyForCathay"="信用卡分期僅限國泰世華銀行";
+"InstallmentOnlyForCathayCard"="非國泰卡不可分期";
 

@@ -1191,6 +1191,35 @@
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
+//    CGFloat cellWidth = 150.0;
+//    NSString *textName = @"";
+//    NSString *textMarketing = @"";
+//    NSString *textPrice = @"";
+//    if (indexPath.row < [self.arrayProducts count])
+//    {
+//        NSDictionary *dictionary = [self.arrayProducts objectAtIndex:indexPath.row];
+//        NSString *name = [dictionary objectForKey:SymphoxAPIParam_name];
+//        if (name && [name isEqual:[NSNull null]] == NO)
+//        {
+//            textName = name;
+//        }
+//        NSString *marketing = [dictionary objectForKey:@"martket_name"];
+//        if (marketing && [marketing isEqual:[NSNull null]] == NO)
+//        {
+//            textMarketing = marketing;
+//        }
+//        NSNumber *price = [dictionary objectForKey:SymphoxAPIParam_price];
+//        if (price && [price isEqual:[NSNull null]] == NO)
+//        {
+//            NSString *stringPrice = [self.formatter stringFromNumber:price];
+//            if (stringPrice)
+//            {
+//                textPrice = [NSString stringWithFormat:@"＄%@", stringPrice];
+//            }
+//        }
+//    }
+//    CGFloat heightForItem = [AdditionalProductCollectionViewCell cellHeightForWidth:cellWidth containsMarketName:textMarketing productName:textName andPrice:textPrice];
+//    NSLog(@"heightForItem[%li][%4.2f]", (long)indexPath.row, heightForItem);
     CGSize cellSize = CGSizeMake(150.0, 310.0);
     return cellSize;
 }

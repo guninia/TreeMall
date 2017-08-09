@@ -14,7 +14,7 @@
 #ifdef DEBUG
 static NSString *SymphoxAPIDomain = @"http://sapi.symphox.com.tw/treeMall/";
 #else
-static NSString *SymphoxAPIDomain = @"http://api.symphox.com.tw/treeMall/";
+static NSString *SymphoxAPIDomain = @"https://api.symphox.com.tw/treeMall/";
 #endif
 
 static NSString *SymphoxAPI__token = @"api/portal/app/token";

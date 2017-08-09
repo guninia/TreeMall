@@ -381,10 +381,14 @@
             NSDictionary *userInfo = error.userInfo;
             if (userInfo)
             {
-                NSString *statusId = [userInfo objectForKey:SymphoxAPIParam_status_id];
+                NSString *statusId = [userInfo objectForKey:SymphoxAPIParam_id];
                 if ([statusId isEqualToString:@"E238"])
                 {
                     errorMessage = [LocalizedString PleaseInputValidCardNumber];
+                }
+                else if ([statusId isEqualToString:@"E239"])
+                {
+                    errorMessage = [LocalizedString InstallmentOnlyForCathayCard];
                 }
                 else
                 {
@@ -458,7 +462,7 @@
 
 - (void)tapRecognized:(UITapGestureRecognizer *)recognizer
 {
-    NSLog(@"tapRecognized");
+//    NSLog(@"tapRecognized");
     if ([_textField1 isFirstResponder])
     {
         [_textField1 resignFirstResponder];

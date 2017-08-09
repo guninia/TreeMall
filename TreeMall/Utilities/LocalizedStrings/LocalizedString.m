@@ -3601,4 +3601,14 @@
     return InstallmentOnlyForCathay;
 }
 
++ (NSString *)InstallmentOnlyForCathayCard
+{
+    static NSString *InstallmentOnlyForCathayCard = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        InstallmentOnlyForCathayCard = NSLocalizedString(@"InstallmentOnlyForCathayCard", nil);
+    });
+    return InstallmentOnlyForCathayCard;
+}
+
 @end

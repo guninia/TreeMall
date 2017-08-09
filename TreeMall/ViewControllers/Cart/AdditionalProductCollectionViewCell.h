@@ -33,4 +33,6 @@ static NSString *AdditionalProductCollectionViewCellIdentifier = @"AdditionalPro
 @property (nonatomic, strong) NSDictionary *attributesText;
 @property (nonatomic, strong) NSDictionary *attributesMarketName;
 
++ (CGFloat)cellHeightForWidth:(CGFloat)cellWidth containsMarketName:(NSString *)marketName productName:(NSString *)productName andPrice:(NSString *)price;
+
 @end

@@ -1908,19 +1908,20 @@ typedef enum : NSUInteger {
 - (NSString *)totalPhoneNumberForRegion:(NSString *)regionNumber phoneNumber:(NSString *)phoneNumber andSpecificNumber:(NSString *)specificNumber
 {
     NSMutableString *totalString = [NSMutableString string];
+    NSCharacterSet *characterSet = [NSCharacterSet characterSetWithCharactersInString:@"- "];
     if (regionNumber && [regionNumber isEqual:[NSNull null]] == NO && [regionNumber length] > 0)
     {
-        [totalString appendString:regionNumber];
+        [totalString appendString:[regionNumber stringByTrimmingCharactersInSet:characterSet]];
     }
     [totalString appendString:@"-"];
     if (phoneNumber && [phoneNumber isEqual:[NSNull null]] == NO && [phoneNumber length] > 0)
     {
-        [totalString appendString:phoneNumber];
+        [totalString appendString:[phoneNumber stringByTrimmingCharactersInSet:characterSet]];
     }
     [totalString appendString:@"-"];
     if (specificNumber && [specificNumber isEqual:[NSNull null]] == NO && [specificNumber length] > 0)
     {
-        [totalString appendString:specificNumber];
+        [totalString appendString:[specificNumber stringByTrimmingCharactersInSet:characterSet]];
     }
     return totalString;
 }

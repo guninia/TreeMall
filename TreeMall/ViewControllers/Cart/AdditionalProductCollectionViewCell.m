@@ -10,6 +10,16 @@
 #import <UIImageView+WebCache.h>
 #import "LocalizedString.h"
 
+#define kMarginV 10.0f
+#define kMarginH 10.0f
+#define kIntervalV 5.0f
+#define kImageSideLength 130.0f
+#define kSeparatorHeight 1.0f
+#define kMarketNameFont [UIFont boldSystemFontOfSize:12.0]
+#define kNameFont [UIFont boldSystemFontOfSize:12.0]
+#define kPriceFont [UIFont systemFontOfSize:18.0]
+#define kPurchaseButtonHeight 40.0f
+
 @interface AdditionalProductCollectionViewCell ()
 
 - (void)buttonPurchasePressed:(id)sender;
@@ -46,16 +56,16 @@
 {
     [super layoutSubviews];
     
-    CGFloat marginH = 10.0;
-    CGFloat marginV = 10.0;
+    CGFloat marginH = kMarginH;
+    CGFloat marginV = kMarginV;
     
-    CGFloat intervalV = 5.0;
+    CGFloat intervalV = kIntervalV;
     
     CGFloat originY = marginV;
     
     if (self.imageView)
     {
-        CGFloat imageSideLength = self.contentView.frame.size.width - marginH * 2;
+        CGFloat imageSideLength = kImageSideLength;
         CGRect frame = CGRectMake(marginH, originY, imageSideLength, imageSideLength);
         self.imageView.frame = frame;
         originY = self.imageView.frame.origin.y + self.imageView.frame.size.height + intervalV;
@@ -80,7 +90,7 @@
     }
     if (self.separator)
     {
-        CGRect frame = CGRectMake(0.0, originY, self.contentView.frame.size.width, 1.0);
+        CGRect frame = CGRectMake(0.0, originY, self.contentView.frame.size.width, kSeparatorHeight);
         self.separator.frame = frame;
         originY = self.separator.frame.origin.y + self.separator.frame.size.height + intervalV;
     }
@@ -94,7 +104,7 @@
     }
     if (self.buttonPurchase)
     {
-        CGRect frame = CGRectMake(marginH, originY, self.imageView.frame.size.width, 40.0);
+        CGRect frame = CGRectMake(marginH, originY, self.imageView.frame.size.width, kPurchaseButtonHeight);
         self.buttonPurchase.frame = frame;
     }
 }
@@ -155,7 +165,7 @@
     if (_labelPrice == nil)
     {
         _labelPrice = [[UILabel alloc] initWithFrame:CGRectZero];
-        UIFont *font = [UIFont systemFontOfSize:18.0];
+        UIFont *font = kPriceFont;
         [_labelPrice setFont:font];
         [_labelPrice setTextColor:[UIColor redColor]];
         [_labelPrice setBackgroundColor:[UIColor clearColor]];
@@ -204,7 +214,7 @@
 {
     if (_attributesMarketName == nil)
     {
-        UIFont *font = [UIFont boldSystemFontOfSize:12.0];
+        UIFont *font = kMarketNameFont;
         _attributesMarketName = [[NSDictionary alloc] initWithObjectsAndKeys:font, NSFontAttributeName, [UIColor orangeColor], NSForegroundColorAttributeName, nil];
     }
     return _attributesMarketName;
@@ -214,7 +224,7 @@
 {
     if (_attributesText == nil)
     {
-        UIFont *font = [UIFont boldSystemFontOfSize:12.0];
+        UIFont *font = kNameFont;
         _attributesText = [[NSDictionary alloc] initWithObjectsAndKeys:font, NSFontAttributeName, [UIColor darkGrayColor], NSForegroundColorAttributeName, nil];
     }
     return _attributesText;
@@ -228,6 +238,38 @@
     {
         [_delegate additionalProductCollectionViewCell:self didSelectPurchaseBySender:sender];
     }
+}
+
+#pragma mark - Class Methods
+
++ (CGFloat)cellHeightForWidth:(CGFloat)cellWidth containsMarketName:(NSString *)marketName productName:(NSString *)productName andPrice:(NSString *)price
+{
+    CGFloat totalHeight = kMarginV + kImageSideLength + kIntervalV;
+    if (marketName)
+    {
+        UIFont *font = kMarketNameFont;
+        NSDictionary *attributes = [[NSDictionary alloc] initWithObjectsAndKeys:font, NSFontAttributeName, [UIColor orangeColor], NSForegroundColorAttributeName, nil];
+        CGSize sizeText = [marketName boundingRectWithSize:CGSizeMake(kImageSideLength, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin attributes:attributes context:nil].size;
+        CGSize sizeLabel = CGSizeMake(ceil(kImageSideLength), ceil(sizeText.height));
+        totalHeight += sizeLabel.height + kIntervalV;
+    }
+    if (productName)
+    {
+        UIFont *font = kNameFont;
+        NSDictionary *attributes = [[NSDictionary alloc] initWithObjectsAndKeys:font, NSFontAttributeName, [UIColor orangeColor], NSForegroundColorAttributeName, nil];
+        CGSize sizeText = [productName boundingRectWithSize:CGSizeMake(kImageSideLength, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin attributes:attributes context:nil].size;
+        CGSize sizeLabel = CGSizeMake(ceil(kImageSideLength), ceil(sizeText.height));
+        totalHeight += sizeLabel.height + kIntervalV;
+    }
+    totalHeight += kSeparatorHeight + kIntervalV;
+    if (price)
+    {
+        CGSize sizeText = [price sizeWithAttributes:[NSDictionary dictionaryWithObjectsAndKeys:kPriceFont, NSFontAttributeName, nil]];
+        CGSize sizeLabel = CGSizeMake(ceil(sizeText.width), ceil(sizeText.height));
+        totalHeight += sizeLabel.height + kIntervalV;
+    }
+    totalHeight += kPurchaseButtonHeight + kMarginV;
+    return totalHeight;
 }
 
 @end

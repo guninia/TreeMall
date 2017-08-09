@@ -369,5 +369,6 @@
 + (NSString *)ThanksForYourPurchase;
 + (NSString *)AccountAlreadyExist;
 + (NSString *)InstallmentOnlyForCathay;
++ (NSString *)InstallmentOnlyForCathayCard;
 
 @end
