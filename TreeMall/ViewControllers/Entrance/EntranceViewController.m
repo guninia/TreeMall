@@ -663,99 +663,96 @@ typedef enum : NSUInteger {
         NSString *type = [dictionaryFocus objectForKey:SymphoxAPIParam_type];
         NSString *stringLink = [dictionaryFocus objectForKey:SymphoxAPIParam_link];
         NSString *name = [dictionaryFocus objectForKey:SymphoxAPIParam_name];
-        if (stringLink && [stringLink isEqual:[NSNull null]] == NO && [stringLink length] > 0)
-        {
-            switch ([type integerValue]) {
-                case 0:
+        switch ([type integerValue]) {
+            case 0:
+            {
+                // Hot sale
+                NSInteger type = [stringLink integerValue];
+                HotSaleViewController *viewController = [[HotSaleViewController alloc] initWithNibName:@"HotSaleViewController" bundle:[NSBundle mainBundle]];
+                viewController.type = type;
+                viewController.title = [LocalizedString HotSaleRanking];
+                UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:viewController];
+                
+                [gaTracker send:[[GAIDictionaryBuilder
+                                  createEventWithCategory:[EventLog twoString:self.title _:logPara_今日焦點]
+                                  action:[EventLog to_:viewController.title]
+                                  label:[EventLog typeInString:type]
+                                  value:nil] build]];
+                
+                [self presentViewController:navigationController animated:YES completion:nil];
+            }
+                break;
+            case 1:
+            {
+                // Product detail
+                if (stringLink != nil && [stringLink length] > 0)
                 {
-                    // Hot sale
-                    NSInteger type = [stringLink integerValue];
-                    HotSaleViewController *viewController = [[HotSaleViewController alloc] initWithNibName:@"HotSaleViewController" bundle:[NSBundle mainBundle]];
-                    viewController.type = type;
-                    viewController.title = [LocalizedString HotSaleRanking];
-                    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:viewController];
-                    
+                    ProductDetailViewController *viewController = [[ProductDetailViewController alloc] initWithNibName:@"ProductDetailViewController" bundle:[NSBundle mainBundle]];
+                    NSNumber *productId = [NSNumber numberWithInteger:[stringLink integerValue]];
+                    viewController.productIdentifier = productId;
+                    viewController.title = [LocalizedString ProductInfo];
+
                     [gaTracker send:[[GAIDictionaryBuilder
                                       createEventWithCategory:[EventLog twoString:self.title _:logPara_今日焦點]
                                       action:[EventLog to_:viewController.title]
-                                      label:[EventLog typeInString:type]
+                                      label:[productId stringValue]
                                       value:nil] build]];
                     
-                    [self presentViewController:navigationController animated:YES completion:nil];
+                    [self.navigationController pushViewController:viewController animated:YES];
                 }
-                    break;
-                case 1:
-                {
-                    // Product detail
-                    if (stringLink != nil && [stringLink length] > 0)
-                    {
-                        ProductDetailViewController *viewController = [[ProductDetailViewController alloc] initWithNibName:@"ProductDetailViewController" bundle:[NSBundle mainBundle]];
-                        NSNumber *productId = [NSNumber numberWithInteger:[stringLink integerValue]];
-                        viewController.productIdentifier = productId;
-                        viewController.title = [LocalizedString ProductInfo];
-
-                        [gaTracker send:[[GAIDictionaryBuilder
-                                          createEventWithCategory:[EventLog twoString:self.title _:logPara_今日焦點]
-                                          action:[EventLog to_:viewController.title]
-                                          label:[productId stringValue]
-                                          value:nil] build]];
-                        
-                        [self.navigationController pushViewController:viewController animated:YES];
-                    }
-                }
-                    break;
-                case 2:
-                {
-                    // Sub category. Currently impossible since there is no layer information.
-                    NSString *hallId = [dictionaryFocus objectForKey:SymphoxAPIParam_hallId];
-                    NSNumber *layer = [dictionaryFocus objectForKey:SymphoxAPIParam_layer];
-                    NSString *hallName = [dictionaryFocus objectForKey:SymphoxAPIParam_hallName];
-                    
-                    [gaTracker send:[[GAIDictionaryBuilder
-                                      createEventWithCategory:[EventLog twoString:self.title _:logPara_今日焦點]
-                                      action:[EventLog to_:logPara_商品列表]
-                                      label:[EventLog threeString:hallId _:[layer stringValue] _:hallName]
-                                      value:nil] build]];
-                    
-                    [self presentProductListViewForIdentifier:hallId named:hallName andLayer:layer withCategories:nil andSubcategories:nil];
-                }
-                    break;
-                case 3:
-                {
-                    // Web page
-                    if (stringLink != nil && [stringLink length] > 0)
-                    {
-                        WebViewViewController *viewController = [[WebViewViewController alloc] initWithNibName:@"WebViewViewController" bundle:[NSBundle mainBundle]];
-                        NSString *title = (name == nil)?[LocalizedString TodayFocus]:name;
-                        viewController.title = title;
-                        viewController.urlString = stringLink;
-                        
-                        [gaTracker send:[[GAIDictionaryBuilder
-                                          createEventWithCategory:[EventLog twoString:self.title _:logPara_今日焦點]
-                                          action:[EventLog to_:[EventLog webViewWithName:viewController.title]]
-                                          label:stringLink
-                                          value:nil] build]];
-                        
-                        [self.navigationController pushViewController:viewController animated:YES];
-                    }
-                }
-                    break;
-                case 4:
-                {
-                    PromotionViewController *promotionViewController = [[PromotionViewController alloc] initWithNibName:@"PromotionViewController" bundle:[NSBundle mainBundle]];
-                    
-                    [gaTracker send:[[GAIDictionaryBuilder
-                                      createEventWithCategory:[EventLog twoString:self.title _:logPara_今日焦點]
-                                      action:[EventLog to_:promotionViewController.title]
-                                      label:nil
-                                      value:nil] build]];
-                    
-                    [self.navigationController pushViewController:promotionViewController animated:YES];
-                }
-                    break;
-                default:
-                    break;
             }
+                break;
+            case 2:
+            {
+                // Sub category. Currently impossible since there is no layer information.
+                NSString *hallId = [dictionaryFocus objectForKey:SymphoxAPIParam_hallId];
+                NSNumber *layer = [dictionaryFocus objectForKey:SymphoxAPIParam_layer];
+                NSString *hallName = [dictionaryFocus objectForKey:SymphoxAPIParam_hallName];
+                
+                [gaTracker send:[[GAIDictionaryBuilder
+                                  createEventWithCategory:[EventLog twoString:self.title _:logPara_今日焦點]
+                                  action:[EventLog to_:logPara_商品列表]
+                                  label:[EventLog threeString:hallId _:[layer stringValue] _:hallName]
+                                  value:nil] build]];
+                
+                [self presentProductListViewForIdentifier:hallId named:hallName andLayer:layer withCategories:nil andSubcategories:nil];
+            }
+                break;
+            case 3:
+            {
+                // Web page
+                if (stringLink != nil && [stringLink length] > 0)
+                {
+                    WebViewViewController *viewController = [[WebViewViewController alloc] initWithNibName:@"WebViewViewController" bundle:[NSBundle mainBundle]];
+                    NSString *title = (name == nil)?[LocalizedString TodayFocus]:name;
+                    viewController.title = title;
+                    viewController.urlString = stringLink;
+                    
+                    [gaTracker send:[[GAIDictionaryBuilder
+                                      createEventWithCategory:[EventLog twoString:self.title _:logPara_今日焦點]
+                                      action:[EventLog to_:[EventLog webViewWithName:viewController.title]]
+                                      label:stringLink
+                                      value:nil] build]];
+                    
+                    [self.navigationController pushViewController:viewController animated:YES];
+                }
+            }
+                break;
+            case 4:
+            {
+                PromotionViewController *promotionViewController = [[PromotionViewController alloc] initWithNibName:@"PromotionViewController" bundle:[NSBundle mainBundle]];
+                
+                [gaTracker send:[[GAIDictionaryBuilder
+                                  createEventWithCategory:[EventLog twoString:self.title _:logPara_今日焦點]
+                                  action:[EventLog to_:promotionViewController.title]
+                                  label:nil
+                                  value:nil] build]];
+                
+                [self.navigationController pushViewController:promotionViewController animated:YES];
+            }
+                break;
+            default:
+                break;
         }
     }
 }

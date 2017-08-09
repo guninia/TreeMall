@@ -1658,6 +1658,7 @@
             self.bottomBar.buttonPurchaseOnly.hidden = YES;
         }
         [self.bottomBar setIsProductInvalid:isInvalid];
+        [self.bottomBar.labelInvalid setText:textSoldOut];
         [self.bottomBar.buttonPurchase setTitle:textPurchase forState:UIControlStateNormal];
     }
 }
