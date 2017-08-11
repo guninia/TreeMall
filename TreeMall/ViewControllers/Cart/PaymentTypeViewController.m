@@ -1120,6 +1120,15 @@ static NSString *InstallmentBankListDescription = @"分期0利率（接受14家�
         [arrayCheck addObject:dictionaryCheck];
     }
     
+    if (self.type == CartTypeFastDelivery)
+    {
+        NSDictionary *productFastDelivery = [TMInfoManager sharedManager].productFastDelivery;
+        if (productFastDelivery != nil)
+        {
+            [arrayCheck addObject:productFastDelivery];
+        }
+    }
+    
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
     NSNumber *userId = [TMInfoManager sharedManager].userIdentifier;
     NSString *cartType = [NSString stringWithFormat:@"%li", (long)(self.type)];

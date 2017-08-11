@@ -115,6 +115,7 @@
     [self.scrollView addSubview:self.labelMarketing];
     [self.scrollView addSubview:self.labelProductName];
     [self.scrollView addSubview:self.viewPromotion];
+    [self.scrollView addSubview:self.viewPromotion1];
     [self.scrollView addSubview:self.labelPrice];
     [self.scrollView addSubview:self.labelOriginPrice];
     [self.scrollView addSubview:self.separator];
@@ -330,6 +331,16 @@
         _viewPromotion.tintColor = [UIColor orangeColor];
     }
     return _viewPromotion;
+}
+
+- (ProductDetailPromotionLabelView *)viewPromotion1
+{
+    if (_viewPromotion1 == nil)
+    {
+        _viewPromotion1 = [[ProductDetailPromotionLabelView alloc] initWithFrame:CGRectZero];
+        _viewPromotion1.tintColor = [UIColor orangeColor];
+    }
+    return _viewPromotion1;
 }
 
 - (ProductDetailBottomBar *)bottomBar
@@ -919,13 +930,24 @@
         self.labelProductName.frame = frame;
         originY = self.labelProductName.frame.origin.y + self.labelProductName.frame.size.height + 2.0;
     }
+    
+    if (self.viewPromotion1 && [self.viewPromotion1 isHidden] == NO)
+    {
+        CGFloat viewWidth = self.scrollView.frame.size.width - (marginL + marginR);
+        CGFloat height = [self.viewPromotion1 referenceHeightForViewWidth:viewWidth];
+        CGRect frame = CGRectMake(marginL, originY, viewWidth, height);
+        self.viewPromotion1.frame = frame;
+        originY = self.viewPromotion1.frame.origin.y + self.viewPromotion1.frame.size.height + 2.0;
+    }
     if (self.viewPromotion && [self.viewPromotion isHidden] == NO)
     {
-        CGFloat height = [self.viewPromotion referenceHeightForViewWidth:self.scrollView.frame.size.width];
-        CGRect frame = CGRectMake(marginL, originY, self.scrollView.frame.size.width - (marginL + marginR), height);
+        CGFloat viewWidth = self.scrollView.frame.size.width - (marginL + marginR);
+        CGFloat height = [self.viewPromotion referenceHeightForViewWidth:viewWidth];
+        CGRect frame = CGRectMake(marginL, originY, viewWidth, height);
         self.viewPromotion.frame = frame;
         originY = self.viewPromotion.frame.origin.y + self.viewPromotion.frame.size.height + 2.0;
     }
+    
     CGFloat priceOriginX = self.scrollView.frame.size.width - marginR;
     CGFloat priceBottomY = originY;
     if (self.labelPrice && [self.labelPrice isHidden] == NO)
@@ -1277,6 +1299,18 @@
     {
         [self.viewPromotion.labelPromotion setText:@""];
         [self.viewPromotion setHidden:YES];
+    }
+    
+    NSString *discount = [self.dictionaryDetail objectForKey:SymphoxAPIParam_discount];
+    if (discount && [discount isEqual:[NSNull null]] == NO && [discount length] > 0)
+    {
+        [self.viewPromotion1 setPromotion:discount];
+        [self.viewPromotion1 setHidden:NO];
+    }
+    else
+    {
+        [self.viewPromotion1.labelPromotion setText:@""];
+        [self.viewPromotion1 setHidden:YES];
     }
     
     NSNumber *originPrice = [self.dictionaryDetail objectForKey:SymphoxAPIParam_market_price];

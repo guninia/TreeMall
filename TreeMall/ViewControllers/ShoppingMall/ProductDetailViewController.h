@@ -32,6 +32,7 @@
 @property (nonatomic, strong) UILabel *labelMarketing;
 @property (nonatomic, strong) UILabel *labelProductName;
 @property (nonatomic, strong) ProductDetailPromotionLabelView *viewPromotion;
+@property (nonatomic, strong) ProductDetailPromotionLabelView *viewPromotion1;
 @property (nonatomic, strong) ProductPriceLabel *labelOriginPrice;
 @property (nonatomic, strong) ProductPriceLabel *labelPrice;
 @property (nonatomic, strong) UIView *separator;
