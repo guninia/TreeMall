@@ -942,54 +942,91 @@
         {
             // If cart type is CartTypeFastDelivery, should check if the condition is matched to use Fast Delivery.
             // Otherwise, present payment type.
-            NSNumber *total_cash = [self.dictionaryTotal objectForKey:SymphoxAPIParam_total_cash];
-            BOOL shouldBuyFastDelivery = NO;
-            if (type == CartTypeFastDelivery)
+            BOOL reachLimit = YES;
+            NSInteger threshold = 290;
+            NSArray *arrayFastService = nil;
+            NSArray *array_delivery_limit = [weakSelf.dictionaryAll objectForKey:SymphoxAPIParam_delivery_limit];
+            if (array_delivery_limit && [array_delivery_limit isEqual:[NSNull null]] == NO && [array_delivery_limit count] > 0)
             {
-                shouldBuyFastDelivery = (total_cash == nil || [total_cash isEqual:[NSNull null]] || [total_cash integerValue] < TMFastDeliveryThreshold);
-                NSArray *array_delivery_limit = [weakSelf.dictionaryAll objectForKey:SymphoxAPIParam_delivery_limit];
-                if (array_delivery_limit && [array_delivery_limit isEqual:[NSNull null]] == NO && [array_delivery_limit count] > 0)
+                for (NSDictionary *delivery_limit in array_delivery_limit)
                 {
-                    NSDictionary *delivery_limit = [array_delivery_limit objectAtIndex:0];
-                    if (delivery_limit && [delivery_limit isEqual:[NSNull null]] == NO)
+                    NSString *limit_Type = [delivery_limit objectForKey:SymphoxAPIParam_limit_Type];
+                    if (limit_Type == nil || [limit_Type isEqual:[NSNull null]])
+                        continue;
+                    if (type == CartTypeStorePickup && [limit_Type integerValue] != 1)
+                        continue;
+                    if (type == CartTypeFastDelivery && [limit_Type integerValue] != 2)
+                        continue;
+                    NSString *reach_limit = [delivery_limit objectForKey:SymphoxAPIParam_reach_limit];
+                    if (reach_limit == nil || [reach_limit isEqual:[NSNull null]])
+                        continue;
+                    reachLimit = [reach_limit boolValue];
+                    NSString *numberThreshold = [delivery_limit objectForKey:SymphoxAPIParam_doorsill];
+                    if (numberThreshold && [numberThreshold isEqual:[NSNull null]] == NO)
                     {
-                        NSString *reach_limit = [delivery_limit objectForKey:SymphoxAPIParam_reach_limit];
-                        if (reach_limit && [reach_limit isEqual:[NSNull null]] == NO)
-                        {
-                            shouldBuyFastDelivery = ![reach_limit boolValue];
-                        }
+                        threshold = [numberThreshold integerValue];
                     }
+                    NSArray *payment_mode_list = [delivery_limit objectForKey:SymphoxAPIParam_payment_mode_list];
+                    if (payment_mode_list && [payment_mode_list isEqual:[NSNull null]] == NO)
+                    {
+                        arrayFastService = payment_mode_list;
+                    }
+                    break;
                 }
             }
-            if (shouldBuyFastDelivery)
+            if (reachLimit == NO)
             {
-                UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
-                NSString *stringFastByCash = [NSString stringWithFormat:[LocalizedString PurchaseFastDeliveryFor_I_Dollars], 48];
-                UIAlertAction *actionFastByCash = [UIAlertAction actionWithTitle:stringFastByCash style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
-                    // TO DO: add a product for fast delivery by cash then call final check again.
-                    [TMInfoManager sharedManager].productFastDelivery = [[TMInfoManager sharedManager] productFastDeliveryWithType:FastDeliveryProductTypeCash];
+                if (type == CartTypeFastDelivery)
+                {
+                    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+                    for (NSDictionary *fastService in arrayFastService)
+                    {
+                        NSMutableString *totalString = [NSMutableString string];
+                        NSNumber *price = [fastService objectForKey:SymphoxAPIParam_price];
+                        if (price && [price isEqual:[NSNull null]] == NO && [price integerValue] > 0)
+                        {
+                            [totalString appendFormat:@"%li%@", (long)[price integerValue], [LocalizedString Dollars]];
+                        }
+                        NSNumber *total_point = [fastService objectForKey:SymphoxAPIParam_total_point];
+                        if (total_point && [total_point isEqual:[NSNull null]] == NO && [total_point integerValue] > 0)
+                        {
+                            if ([totalString length] > 0)
+                            {
+                                [totalString appendString:@"＋"];
+                            }
+                            [totalString appendFormat:@"%li%@", (long)[total_point integerValue], [LocalizedString Point]];
+                        }
+                        [totalString appendString:[LocalizedString PurchaseFastDelivery]];
+                        
+                        UIAlertAction *action = [UIAlertAction actionWithTitle:totalString style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
+                            [TMInfoManager sharedManager].productFastDelivery = [[TMInfoManager sharedManager] productFastDeliveryFromReferenceDictionary:fastService];
+                            [weakSelf finalCheckCartContentForCartType:type canPurchaseFastDelivery:NO];
+                        }];
+                        [alertController addAction:action];
+                    }
                     
-                    [weakSelf finalCheckCartContentForCartType:type canPurchaseFastDelivery:NO];
-                }];
-                NSString *stringFastByPoint = [NSString stringWithFormat:[LocalizedString PurchaseFastDeliveryFor_I_Points], 800];
-                UIAlertAction *actionFastByPoint = [UIAlertAction actionWithTitle:stringFastByPoint style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
-                    // TO DO: add a product for fast delivery by point then call final check again.
-                    [TMInfoManager sharedManager].productFastDelivery = [[TMInfoManager sharedManager] productFastDeliveryWithType:FastDeliveryProductTypePoint];
+                    UIAlertAction *actionShopping = [UIAlertAction actionWithTitle:[LocalizedString ContinueToShopping] style:UIAlertActionStyleDefault handler:nil];
                     
-                    [weakSelf finalCheckCartContentForCartType:type canPurchaseFastDelivery:NO];
-                }];
-                
-                UIAlertAction *actionShopping = [UIAlertAction actionWithTitle:[LocalizedString ContinueToShopping] style:UIAlertActionStyleDefault handler:nil];
-                
-                UIAlertAction *actionCheckout = [UIAlertAction actionWithTitle:[LocalizedString CheckOutDirectly] style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
-                    [weakSelf finalCheckCartContentForCartType:type canPurchaseFastDelivery:NO];
-                }];
-                [alertController addAction:actionFastByCash];
-                [alertController addAction:actionFastByPoint];
-                [alertController addAction:actionShopping];
-                [alertController addAction:actionCheckout];
-                
-                [self presentViewController:alertController animated:YES completion:nil];
+                    UIAlertAction *actionCheckout = [UIAlertAction actionWithTitle:[LocalizedString CheckOutDirectly] style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
+                        [weakSelf finalCheckCartContentForCartType:type canPurchaseFastDelivery:NO];
+                    }];
+                    [alertController addAction:actionShopping];
+                    [alertController addAction:actionCheckout];
+                    
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [weakSelf presentViewController:alertController animated:YES completion:nil];
+                    });
+                }
+                else if (type == CartTypeStorePickup)
+                {
+                    NSString *message = [NSString stringWithFormat:[LocalizedString StorePickupShouldReachLimit], (long)threshold];
+                    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:message preferredStyle:UIAlertControllerStyleAlert];
+                    UIAlertAction *actionConfirm = [UIAlertAction actionWithTitle:[LocalizedString Confirm] style:UIAlertActionStyleDefault handler:nil];
+                    [alertController addAction:actionConfirm];
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [weakSelf presentViewController:alertController animated:YES completion:nil];
+                    });
+                }
             }
             else
             {
@@ -1122,7 +1159,7 @@
                     PaymentTypeViewController *viewController = [[PaymentTypeViewController alloc] initWithNibName:@"PaymentTypeViewController" bundle:[NSBundle mainBundle]];
                     viewController.dictionaryData = resultDictionary;
                     viewController.arrayProductsFromCart = weakSelf.arrayProducts;
-                    viewController.type = self.currentType;
+                    viewController.type = type;
                     [viewController setHidesBottomBarWhenPushed:YES];
                     
                     [gaTracker send:[[GAIDictionaryBuilder

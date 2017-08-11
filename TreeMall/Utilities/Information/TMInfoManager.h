@@ -212,6 +212,7 @@ typedef enum : NSUInteger {
 - (void)sendPushToken:(NSString *)token;
 
 - (NSDictionary *)productFastDeliveryWithType:(FastDeliveryProductType)productType;
+- (NSDictionary *)productFastDeliveryFromReferenceDictionary:(NSDictionary *)dictionary;
 - (NSDictionary *)productInfoForFastDeliveryFromInfo:(NSDictionary *)originInfo;
 - (void)resetProductFastDelivery;
 - (void)updateProductInfoForFastDeliveryFromInfos:(NSArray *)originInfos;

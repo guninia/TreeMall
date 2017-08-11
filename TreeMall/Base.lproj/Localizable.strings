@@ -365,3 +365,5 @@
 "AccountAlreadyExist"="Account already exist";
 "InstallmentOnlyForCathay"="Installment only for Cathat credit card";
 "InstallmentOnlyForCathayCard"="Installment Only For Cathay Card";
+"StorePickupShouldReachLimit"="StorePickup Should Reach $%li";
+"PurchaseFastDelivery"="Purchase Fast Delivery";

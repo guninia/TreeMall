@@ -370,5 +370,7 @@
 + (NSString *)AccountAlreadyExist;
 + (NSString *)InstallmentOnlyForCathay;
 + (NSString *)InstallmentOnlyForCathayCard;
++ (NSString *)StorePickupShouldReachLimit;
++ (NSString *)PurchaseFastDelivery;
 
 @end

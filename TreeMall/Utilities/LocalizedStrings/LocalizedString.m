@@ -3611,4 +3611,24 @@
     return InstallmentOnlyForCathayCard;
 }
 
++ (NSString *)StorePickupShouldReachLimit
+{
+    static NSString *StorePickupShouldReachLimit = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        StorePickupShouldReachLimit = NSLocalizedString(@"StorePickupShouldReachLimit", nil);
+    });
+    return StorePickupShouldReachLimit;
+}
+
++ (NSString *)PurchaseFastDelivery
+{
+    static NSString *PurchaseFastDelivery = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        PurchaseFastDelivery = NSLocalizedString(@"PurchaseFastDelivery", nil);
+    });
+    return PurchaseFastDelivery;
+}
+
 @end

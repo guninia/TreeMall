@@ -2275,6 +2275,19 @@ static NSUInteger SearchKeywordNumberMax = 8;
     return product;
 }
 
+- (NSDictionary *)productFastDeliveryFromReferenceDictionary:(NSDictionary *)dictionary
+{
+    NSDictionary *product = nil;
+    NSNumber *cpdt_num = [dictionary objectForKey:SymphoxAPIParam_cpdt_num];
+    NSNumber *payment_type = [dictionary objectForKey:SymphoxAPIParam_payment_type];
+    if (cpdt_num && payment_type)
+    {
+        NSDictionary *payment_mode = [NSDictionary dictionaryWithObjectsAndKeys:payment_type, SymphoxAPIParam_payment_type, nil];
+        product = [NSDictionary dictionaryWithObjectsAndKeys:cpdt_num, SymphoxAPIParam_cpdt_num, [NSNumber numberWithInteger:1], SymphoxAPIParam_qty, payment_mode, SymphoxAPIParam_payment_mode, nil];
+    }
+    return product;
+}
+
 - (NSDictionary *)productInfoForFastDeliveryFromInfo:(NSDictionary *)originInfo
 {
     NSMutableDictionary *productInfo = [NSMutableDictionary dictionary];

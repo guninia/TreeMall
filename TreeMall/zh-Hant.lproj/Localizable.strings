@@ -366,4 +366,6 @@
 "AccountAlreadyExist"="帳號已存在";
 "InstallmentOnlyForCathay"="信用卡分期僅限國泰世華銀行";
 "InstallmentOnlyForCathayCard"="非國泰卡不可分期";
+"StorePickupShouldReachLimit"="超商取貨金額須滿%li元，請再加購數量或其他品項";
+"PurchaseFastDelivery"="加購快捷服務";
 
