@@ -2282,7 +2282,38 @@ static NSUInteger SearchKeywordNumberMax = 8;
     NSNumber *payment_type = [dictionary objectForKey:SymphoxAPIParam_payment_type];
     if (cpdt_num && payment_type)
     {
-        NSDictionary *payment_mode = [NSDictionary dictionaryWithObjectsAndKeys:payment_type, SymphoxAPIParam_payment_type, nil];
+        NSMutableDictionary *payment_mode = [NSMutableDictionary dictionary];
+        [payment_mode setObject:payment_type forKey:SymphoxAPIParam_payment_type];
+        NSNumber *cpdt_num = [dictionary objectForKey:SymphoxAPIParam_cpdt_num];
+        if (cpdt_num && [cpdt_num isEqual:[NSNull null]] == NO)
+        {
+            [payment_mode setObject:cpdt_num forKey:SymphoxAPIParam_cpdt_num];
+        }
+        NSNumber *cpoint = [dictionary objectForKey:SymphoxAPIParam_cpoint];
+        if (cpoint && [cpoint isEqual:[NSNull null]] == NO)
+        {
+            [payment_mode setObject:cpoint forKey:SymphoxAPIParam_cpoint];
+        }
+        NSNumber *epoint = [dictionary objectForKey:SymphoxAPIParam_epoint];
+        if (epoint && [epoint isEqual:[NSNull null]] == NO)
+        {
+            [payment_mode setObject:epoint forKey:SymphoxAPIParam_epoint];
+        }
+        NSNumber *point = [dictionary objectForKey:SymphoxAPIParam_point];
+        if (point && [point isEqual:[NSNull null]] == NO)
+        {
+            [payment_mode setObject:point forKey:SymphoxAPIParam_point];
+        }
+        NSNumber *price = [dictionary objectForKey:SymphoxAPIParam_price];
+        if (price && [price isEqual:[NSNull null]] == NO)
+        {
+            [payment_mode setObject:price forKey:SymphoxAPIParam_price];
+        }
+        NSNumber *total_point = [dictionary objectForKey:SymphoxAPIParam_total_point];
+        if (total_point && [total_point isEqual:[NSNull null]] == NO)
+        {
+            [payment_mode setObject:total_point forKey:SymphoxAPIParam_total_point];
+        }
         product = [NSDictionary dictionaryWithObjectsAndKeys:cpdt_num, SymphoxAPIParam_cpdt_num, [NSNumber numberWithInteger:1], SymphoxAPIParam_qty, payment_mode, SymphoxAPIParam_payment_mode, nil];
     }
     return product;
