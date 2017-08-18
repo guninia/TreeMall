@@ -14,6 +14,7 @@
 #import <SAMKeychain.h>
 #import "LocalizedString.h"
 #import "Utility.h"
+#import <Google/Analytics.h>
 
 #define TMProductFastDeliveryCash [NSNumber numberWithInteger:11354109]
 #define TMProductFastDeliveryPoint [NSNumber numberWithInteger:11354108]
@@ -1346,7 +1347,7 @@ static NSUInteger SearchKeywordNumberMax = 8;
     }
 }
 
-- (void)retrieveToken
+- (void)retrieveToken:(void (^)(BOOL))completion
 {
     CryptoModule *module = [CryptoModule sharedModule];
     [SHAPIAdapter sharedAdapter].encryptModule = module;
@@ -1374,11 +1375,21 @@ static NSUInteger SearchKeywordNumberMax = 8;
                     [weakSelf retrieveUserInformation];
                 }
             }
+            if (completion != nil)
+                completion(YES);
         }
         else
         {
             [[NSNotificationCenter defaultCenter] postNotificationName:PostNotificationName_NoInitialToken object:self];
+            id<GAITracker> gaTracker = [GAI sharedInstance].defaultTracker;
+            [gaTracker send:[[GAIDictionaryBuilder
+                              createEventWithCategory:@"retrieveToken"
+                              action:[error description]
+                              label:nil
+                              value:nil] build]];
         }
+        if (completion != nil)
+            completion(NO);
     }];
 }
 

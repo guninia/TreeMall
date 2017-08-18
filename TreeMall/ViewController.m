@@ -411,7 +411,7 @@
 {
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle:[LocalizedString CannotLoadData] message:[LocalizedString PleaseTryAgainLater] preferredStyle:UIAlertControllerStyleAlert];
     UIAlertAction *retryAction = [UIAlertAction actionWithTitle:[LocalizedString Reload] style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
-        [[TMInfoManager sharedManager] retrieveToken];
+        [[TMInfoManager sharedManager] retrieveToken:nil];
     }];
     [alertController addAction:retryAction];
     [self presentViewController:alertController animated:YES completion:nil];

@@ -15,7 +15,9 @@
 #import <Google/Analytics.h>
 @import Firebase;
 
-@interface AppDelegate ()
+@interface AppDelegate () {
+    NSNumber * trackId;
+}
 
 - (void)handlerOfResetRootViewControllerNotification:(NSNotification *)notification;
 
@@ -42,6 +44,12 @@
     
     // adopt Firebase
     [FIRApp configure];
+
+    // Check latest version
+    if ([self checkLatestVersion] == NO) {
+        [self updateApp];
+        return YES;
+    }
 
     [[FBSDKApplicationDelegate sharedInstance] application:application didFinishLaunchingWithOptions:launchOptions];
     
@@ -80,7 +88,7 @@
     }
     
     // Prepare API connection
-    [[TMInfoManager sharedManager] retrieveToken];
+    [[TMInfoManager sharedManager] retrieveToken:nil];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handlerOfResetRootViewControllerNotification:) name:PostNotificationName_ResetRootViewController object:nil];
     return YES;
@@ -130,7 +138,7 @@
         ViewController *viewController = [storyboard instantiateViewControllerWithIdentifier:@"ViewController"];
         viewController.initialized = YES;
         [viewController hideLaunchScreenLoadingViewAnimated:NO];
-        [[TMInfoManager sharedManager] retrieveToken];
+        [[TMInfoManager sharedManager] retrieveToken:nil];
         weakSelf.window.rootViewController = viewController;
     });
 }
@@ -228,5 +236,88 @@
         abort();
     }
 }
+
+#pragma mark - Force app update
+
+- (BOOL)checkLatestVersion {
+    
+    BOOL isLatestVersion = YES;
+    BOOL unfunctional = YES;
+    NSString * errorMsg = @"urlUnfunctional";
+    NSString * currentVersion = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
+    NSString * latestVersion = nil;
+    NSString * bundleId = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleIdentifier"];
+    NSString * urlString = [NSString stringWithFormat:@"https://itunes.apple.com/lookup?bundleId=%@", bundleId];
+    NSURL * url = [NSURL URLWithString:urlString];
+    NSData * data = nil;
+    
+    if (url)
+        data = [NSData dataWithContentsOfURL:url options:NSDataReadingUncached error:nil];
+    
+    if (data) {
+        id jsonObject = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
+        
+        if ([jsonObject isKindOfClass:[NSDictionary class]]) {
+            NSDictionary *dictionary = (NSDictionary *)jsonObject;
+            NSArray * results = [dictionary objectForKey:@"results"];
+            
+            if (results && [results count] > 0) {
+                unfunctional = NO;
+                for (id key in results) {
+                    latestVersion = [key valueForKey:@"version"];
+                    trackId = [key valueForKey:@"trackId"];
+                }
+                // Compare versions
+                if (![latestVersion isEqualToString:currentVersion])
+                    isLatestVersion = NO;
+                
+            } else {
+                // Case that cannot find matched app.
+                errorMsg = @"cannotFindMatchedApp";
+            }
+        }
+    }
+    
+    if (unfunctional) {
+        id<GAITracker> gaTracker = [GAI sharedInstance].defaultTracker;
+        [gaTracker send:[[GAIDictionaryBuilder
+                          createEventWithCategory:@"checkLatestVersion"
+                          action:errorMsg
+                          label:nil
+                          value:nil] build]];
+    }
+    
+    return isLatestVersion;
+}
+
+- (void)updateApp {
+    UIAlertController * alertController = [UIAlertController alertControllerWithTitle:@"為提升優質購物體驗，\n請更新至最新版本" message:@"" preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction * confirm = [UIAlertAction actionWithTitle:@"更新" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        SKStoreProductViewController * iTunesVC = [[SKStoreProductViewController alloc] init];
+        iTunesVC.delegate = self;
+        NSDictionary * parameter = @{SKStoreProductParameterITunesItemIdentifier: trackId};
+        [iTunesVC loadProductWithParameters:parameter completionBlock:^(BOOL result, NSError * _Nullable error) {
+            if (result) {
+                UIViewController * vc = self.window.rootViewController;
+                [vc presentViewController:iTunesVC animated:YES completion:nil];
+            }
+        }];
+    }];
+    
+    [alertController addAction:confirm];
+    UIWindow * alertWindow = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
+    alertWindow.rootViewController = [[UIViewController alloc] init];
+    alertWindow.windowLevel = UIWindowLevelAlert + 1;
+    [alertWindow makeKeyAndVisible];
+    [alertWindow.rootViewController presentViewController:alertController animated:YES completion:nil];
+}
+
+#pragma mark - SKStoreProductViewControllerDelegate
+
+- (void)productViewControllerDidFinish:(SKStoreProductViewController *)viewController {
+    [viewController dismissViewControllerAnimated:YES completion:nil];
+    [self updateApp];
+}
+
 
 @end

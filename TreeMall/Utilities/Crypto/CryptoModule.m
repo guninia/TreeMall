@@ -41,8 +41,8 @@ static CryptoModule *gCryptoModule = nil;
 
 - (NSData *)key
 {
-    if (_key == nil)
-    {
+//    if (_key == nil)
+//    {
         // Should produce key
         NSDateFormatter *dateFormmater = [[NSDateFormatter alloc] init];
         [dateFormmater setDateFormat:@"yyyyMMdd"];
@@ -53,7 +53,7 @@ static CryptoModule *gCryptoModule = nil;
         NSData *md5String = [CryptoTool md5DataForString:compositeString];
         
         _key = md5String;
-    }
+//    }
     return _key;
 }
 

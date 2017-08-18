@@ -7,8 +7,18 @@
 //
 
 #import "SHAPIAdapter.h"
+#import "Definition.h"
+#import "TMInfoManager.h"
+#import "CryptoModule.h"
+#import "APIDefinition.h"
 
 static SHAPIAdapter *gAPIAdapter = nil;
+static NSInteger retryMax = 3;
+
+@interface SHAPIAdapter() {
+    NSInteger retryCount;
+}
+@end
 
 @implementation SHAPIAdapter
 
@@ -37,6 +47,7 @@ static SHAPIAdapter *gAPIAdapter = nil;
         configuration.HTTPMaximumConnectionsPerHost = 6.0;
         configuration.requestCachePolicy = NSURLRequestReloadIgnoringLocalCacheData;
         _session = [NSURLSession sessionWithConfiguration:configuration delegate:self delegateQueue:[NSOperationQueue mainQueue]];
+        retryCount = 0;
     }
     return self;
 }
@@ -185,18 +196,47 @@ static SHAPIAdapter *gAPIAdapter = nil;
             __block id resultObject = nil;
             NSString *originalMessageFromServer = nil;
             __block NSError *finalError = error;
+            NSHTTPURLResponse * httpResponse  = (NSHTTPURLResponse *)response;
+            
             if (error == nil)
             {
-                if (shouldDecrypt && _decryptModule != nil && [_decryptModule respondsToSelector:@selector(decryptFromSourceData:completion:)])
-                {
-                    [_decryptModule decryptFromSourceData:data completion:^(id decryptResult, NSError *decryptError){
-                        resultObject = decryptResult;
-                        finalError = decryptError;
+                if (httpResponse.statusCode == 401 && retryCount < retryMax) {
+                    retryCount += 1;
+                    
+                    [[TMInfoManager sharedManager] retrieveToken:^(BOOL retrieved) {
+                        if (retrieved) {
+                            
+                            retryCount = 0;
+                            __weak SHAPIAdapter * weakSelf = self;
+                            NSString *apiKey = [CryptoModule sharedModule].apiKey;
+                            NSString *token = [SHAPIAdapter sharedAdapter].token;
+                            NSDictionary *retryHeaderFields = [NSDictionary dictionaryWithObjectsAndKeys:apiKey, SymphoxAPIParam_key, token, SymphoxAPIParam_token, nil];
+                            [weakSelf sendRequestFromObject:self ToUrl:url withHeaderFields:retryHeaderFields andPostObject:postObject inPostFormat:format encrypted:shouldEncrypt decryptedReturnData:shouldDecrypt completion:^(id resultObject, NSError *error) {
+                                if (object)
+                                {
+                                    // Make sure the block run in main thread, because there may be some UI initialize behavior in the block.
+                                    dispatch_async(dispatch_get_main_queue(), ^{
+                                        block(resultObject, originalMessageFromServer, finalError);
+                                    });
+                                }
+                                return;
+                            }];
+                        }
                     }];
-                }
-                else
-                {
-                    resultObject = data;
+                    
+                } else {
+                    
+                    if (shouldDecrypt && _decryptModule != nil && [_decryptModule respondsToSelector:@selector(decryptFromSourceData:completion:)])
+                    {
+                        [_decryptModule decryptFromSourceData:data completion:^(id decryptResult, NSError *decryptError){
+                            resultObject = decryptResult;
+                            finalError = decryptError;
+                        }];
+                    }
+                    else
+                    {
+                        resultObject = data;
+                    }
                 }
             }
             else

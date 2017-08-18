@@ -166,7 +166,7 @@ typedef enum : NSUInteger {
 - (NSDictionary *)cachedDictionaries;
 - (NSArray *)categoriesContainsCategoryWithIdentifier:(NSString *)identifier;
 - (void)findSiblingsInSameLayerAndContentForCategoryIdentifier:(NSString *)identifier withCompletion:(void (^)(NSArray *sibings, NSDictionary *content, NSNumber *layer))block;
-- (void)retrieveToken;
+- (void)retrieveToken:(void (^)(BOOL completed))completion;
 - (void)addKeyword:(NSString *)keyword;
 - (NSArray *)keywords;
 - (void)removeAllKeywords;
