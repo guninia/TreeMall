@@ -107,10 +107,15 @@
     {
         _buttonFavorite = [[UIButton alloc] initWithFrame:CGRectZero];
         [_buttonFavorite setBackgroundColor:[UIColor colorWithRed:(230.0/255.0) green:(114.0/255.0) blue:(46.0/255.0) alpha:1.0]];
-        UIImage *image = [UIImage imageNamed:@"sho_h_btn_fa"];
+        UIImage *image = [UIImage imageNamed:@"ico_foot_heart_full"];
         if (image)
         {
             [_buttonFavorite setImage:image forState:UIControlStateNormal];
+        }
+        UIImage *selectedImage = [UIImage imageNamed:@"sho_h_btn_fa"];
+        if (selectedImage)
+        {
+            [_buttonFavorite setImage:selectedImage forState:UIControlStateSelected];
         }
         [_buttonFavorite addTarget:self action:@selector(buttonFavoritePressed:) forControlEvents:UIControlEventTouchUpInside];
     }
@@ -234,9 +239,13 @@
 
 - (void)buttonFavoritePressed:(id)sender
 {
-    if (_delegate && [_delegate respondsToSelector:@selector(productDetailBottomBar:didSelectFavoriteBySender:)])
+    if ([sender isKindOfClass:[UIButton class]] == NO)
+        return;
+    UIButton *button = (UIButton *)sender;
+    button.selected = ![button isSelected];
+    if (_delegate && [_delegate respondsToSelector:@selector(productDetailBottomBar:didChangeFavoriteStatus:)])
     {
-        [_delegate productDetailBottomBar:self didSelectFavoriteBySender:sender];
+        [_delegate productDetailBottomBar:self didChangeFavoriteStatus:[button isSelected]];
     }
 }
 

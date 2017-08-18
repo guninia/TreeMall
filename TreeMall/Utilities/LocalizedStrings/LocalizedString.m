@@ -3631,4 +3631,14 @@
     return PurchaseFastDelivery;
 }
 
++ (NSString *)GetCouponByID
+{
+    static NSString *GetCouponByID = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        GetCouponByID = NSLocalizedString(@"GetCouponByID", nil);
+    });
+    return GetCouponByID;
+}
+
 @end

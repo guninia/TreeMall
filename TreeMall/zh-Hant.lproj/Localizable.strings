@@ -368,4 +368,5 @@
 "InstallmentOnlyForCathayCard"="非國泰卡不可分期";
 "StorePickupShouldReachLimit"="超商取貨金額須滿%li元，請再加購數量或其他品項";
 "PurchaseFastDelivery"="加購快捷服務";
+"GetCouponByID"="序號領券";
 

@@ -1496,6 +1496,21 @@ static NSUInteger SearchKeywordNumberMax = 8;
     [[NSNotificationCenter defaultCenter] postNotificationName:PostNotificationName_FavoriteContentChanged object:self];
 }
 
+- (void)removeFavoriteProductWithIdentifier:(NSNumber *)productId
+{
+    for (NSInteger productIndex = ([[self.arrayFavorite copy] count] - 1); productIndex >= 0; productIndex--)
+    {
+        NSDictionary *product = [self.arrayFavorite objectAtIndex:productIndex];
+        NSNumber *currentProductId = [product objectForKey:SymphoxAPIParam_cpdt_num];
+        if ([currentProductId isEqualToNumber:productId])
+        {
+            [self.arrayFavorite removeObjectAtIndex:productIndex];
+            [self.orderedSetFavoriteId removeObject:productId];
+        }
+    }
+    [[NSNotificationCenter defaultCenter] postNotificationName:PostNotificationName_FavoriteContentChanged object:self];
+}
+
 - (NSInteger)numberOfProductsInFavorite
 {
     NSInteger numberOfProducts = [self.arrayFavorite count];
@@ -1741,9 +1756,9 @@ static NSUInteger SearchKeywordNumberMax = 8;
     
     [dictionaryPurchaseInfo setObject:dictionary forKey:productId];
     NSLog(@"dictionaryProductPurchaseInfoInCartCommon:\n%@", [self.dictionaryProductPurchaseInfoInCartCommon description]);
-    NSLog(@"dictionaryProductPurchaseInfoInCartFast:\n%@", [self.dictionaryProductPurchaseInfoInCartFast description]);
-    NSLog(@"dictionaryProductPurchaseInfoInCartStorePickUp:\n%@", [self.dictionaryProductPurchaseInfoInCartStorePickUp description]);
-    NSLog(@"dictionaryProductPurchaseInfoInCartDirect:\n%@", [self.dictionaryProductPurchaseInfoInCartDirect description]);
+//    NSLog(@"dictionaryProductPurchaseInfoInCartFast:\n%@", [self.dictionaryProductPurchaseInfoInCartFast description]);
+//    NSLog(@"dictionaryProductPurchaseInfoInCartStorePickUp:\n%@", [self.dictionaryProductPurchaseInfoInCartStorePickUp description]);
+//    NSLog(@"dictionaryProductPurchaseInfoInCartDirect:\n%@", [self.dictionaryProductPurchaseInfoInCartDirect description]);
     [self saveToArchive];
 }
 

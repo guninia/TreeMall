@@ -12,7 +12,7 @@
 
 @protocol ProductDetailBottomBarDelegate <NSObject>
 
-- (void)productDetailBottomBar:(ProductDetailBottomBar *)bar didSelectFavoriteBySender:(id)sender;
+- (void)productDetailBottomBar:(ProductDetailBottomBar *)bar didChangeFavoriteStatus:(BOOL)favorite;
 - (void)productDetailBottomBar:(ProductDetailBottomBar *)bar didSelectAddToCartBySender:(id)sender;
 - (void)productDetailBottomBar:(ProductDetailBottomBar *)bar didSelectPurchaseBySender:(id)sender;
 

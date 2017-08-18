@@ -372,5 +372,6 @@
 + (NSString *)InstallmentOnlyForCathayCard;
 + (NSString *)StorePickupShouldReachLimit;
 + (NSString *)PurchaseFastDelivery;
++ (NSString *)GetCouponByID;
 
 @end

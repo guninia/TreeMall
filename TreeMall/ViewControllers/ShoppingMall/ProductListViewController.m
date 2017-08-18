@@ -40,6 +40,8 @@
 - (void)presentCartViewForType:(CartType)type;
 - (void)buttonItemSearchPressed:(id)sender;
 
+- (void)handlerOfFavoriteContentChangedNotification:(NSNotification *)notification;
+
 @end
 
 @implementation ProductListViewController
@@ -87,6 +89,7 @@
     gaTracker = [GAI sharedInstance].defaultTracker;
     
     [self refreshAllContentForHallId:self.hallId andLayer:self.layer withName:self.name];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handlerOfFavoriteContentChangedNotification:) name:PostNotificationName_FavoriteContentChanged object:nil];
 }
 
 
@@ -101,6 +104,11 @@
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:PostNotificationName_FavoriteContentChanged object:nil];
 }
 
 /*
@@ -797,6 +805,13 @@
     [self presentViewController:navigationController animated:YES completion:nil];
 }
 
+#pragma mark - Notification Handler
+
+- (void)handlerOfFavoriteContentChangedNotification:(NSNotification *)notification
+{
+    [self.tableViewProduct reloadData];
+}
+
 #pragma mark - UITableViewDataSource
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -1313,7 +1328,7 @@
     [self showCartTypeSheetForProduct:product];
 }
 
-- (void)productTableViewCell:(ProductTableViewCell *)cell didSelectToAddToFavoriteBySender:(id)sender
+- (void)productTableViewCell:(ProductTableViewCell *)cell didSelectToChangeFavoriteStatus:(BOOL)favorite
 {
     if (cell.tag >= [self.arrayProducts count])
         return;
@@ -1321,19 +1336,29 @@
     NSNumber *cpdt_num = [product objectForKey:SymphoxAPIParam_cpdt_num];
     if (cpdt_num == nil || [cpdt_num isEqual:[NSNull null]])
         return;
-    if ([[TMInfoManager sharedManager] favoriteContainsProductWithIdentifier:cpdt_num])
+    if (favorite)
     {
-        return;
+        if ([[TMInfoManager sharedManager] favoriteContainsProductWithIdentifier:cpdt_num])
+        {
+            return;
+        }
+        [[TMInfoManager sharedManager] addProductToFavorite:product];
+        
+        NSString * name = [product objectForKey:SymphoxAPIParam_cpdt_name];
+        [gaTracker send:[[GAIDictionaryBuilder
+                          createEventWithCategory:[EventLog twoString:logPara_商品列表 _:logPara_列表一]
+                          action:[EventLog index:cell.tag _to_:logPara_加入我的最愛]
+                          label:[EventLog twoString:[cpdt_num stringValue] _:name]
+                          value:nil] build]];
     }
-    [[TMInfoManager sharedManager] addProductToFavorite:product];
-    cell.favorite = YES;
-    
-    NSString * name = [product objectForKey:SymphoxAPIParam_cpdt_name];
-    [gaTracker send:[[GAIDictionaryBuilder
-                      createEventWithCategory:[EventLog twoString:logPara_商品列表 _:logPara_列表一]
-                      action:[EventLog index:cell.tag _to_:logPara_加入我的最愛]
-                      label:[EventLog twoString:[cpdt_num stringValue] _:name]
-                      value:nil] build]];
+    else
+    {
+        if ([[TMInfoManager sharedManager] favoriteContainsProductWithIdentifier:cpdt_num] == NO)
+        {
+            return;
+        }
+        [[TMInfoManager sharedManager] removeFavoriteProductWithIdentifier:cpdt_num];
+    }
 }
 
 @end

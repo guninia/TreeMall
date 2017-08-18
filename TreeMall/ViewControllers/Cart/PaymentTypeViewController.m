@@ -925,6 +925,7 @@ static NSString *InstallmentBankListDescription = @"分期0利率（接受14家�
     NSDictionary *installment = nil;
     NSDictionary *account_result = [self.dictionaryData objectForKey:SymphoxAPIParam_account_result];
     NSNumber *total_cash = [account_result objectForKey:SymphoxAPIParam_total_cash];
+    self.selectedInstallment = nil;
     if (self.selectedIndexPathOfPayment && self.selectedIndexPathOfPayment.section < [self.arrayPaymentSections count])
     {
         NSDictionary *section = [self.arrayPaymentSections objectAtIndex:self.selectedIndexPathOfPayment.section];

@@ -31,6 +31,7 @@
 - (void)refreshContent;
 - (void)showSortOptionMenu;
 - (void)buttonSortPressed:(id)sender;
+- (void)getCouponButtonPressed:(id)sender;
 
 @end
 
@@ -57,6 +58,19 @@
     // Do any additional setup after loading the view from its nib.
     self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
     [self.navigationItem setTitle:[LocalizedString MyCoupon]];
+    UIButton *buttonGetCoupon = [[UIButton alloc] initWithFrame:CGRectMake(0.0, 0.0, 60.0, 30.0)];
+    UIFont *font = [UIFont systemFontOfSize:12.0];
+    [buttonGetCoupon.titleLabel setFont:font];
+    [buttonGetCoupon setTitle:[LocalizedString GetCouponByID] forState:UIControlStateNormal];
+    [buttonGetCoupon setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [buttonGetCoupon setBackgroundColor:[UIColor clearColor]];
+    [buttonGetCoupon.layer setBorderWidth:2.0];
+    [buttonGetCoupon.layer setBorderColor:[buttonGetCoupon titleColorForState:UIControlStateNormal].CGColor];
+    [buttonGetCoupon.layer setCornerRadius:5.0];
+    [buttonGetCoupon addTarget:self action:@selector(getCouponButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+    UIBarButtonItem *rightItem = [[UIBarButtonItem alloc] initWithCustomView:buttonGetCoupon];
+    [self.navigationItem setRightBarButtonItem:rightItem];
+    
     [self.view setBackgroundColor:[UIColor colorWithWhite:0.9 alpha:1.0]];
     
     [self.view addSubview:self.segmentedView];
@@ -413,6 +427,16 @@
 - (void)buttonSortPressed:(id)sender
 {
     [self showSortOptionMenu];
+}
+
+- (void)getCouponButtonPressed:(id)sender
+{
+    NSString *urlString = @"http://m.treemall.com.tw/CouponExchange/mcoupon?execution=e1s1";
+    NSURL *url = [NSURL URLWithString:urlString];
+    if ([[UIApplication sharedApplication] canOpenURL:url])
+    {
+        [[UIApplication sharedApplication] openURL:url];
+    }
 }
 
 #pragma mark - UITableViewDataSource

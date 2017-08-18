@@ -648,7 +648,7 @@
         [self presentViewController:alertController animated:YES completion:nil];
         return;
     }
-    NSString *password = [[_textFieldPassword text] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    NSString *password = [_textFieldPassword text];
     if ([Utility evaluatePassword:password] == NO)
     {
         // Should show alert to modify password.

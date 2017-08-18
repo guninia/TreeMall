@@ -367,3 +367,4 @@
 "InstallmentOnlyForCathayCard"="Installment Only For Cathay Card";
 "StorePickupShouldReachLimit"="StorePickup Should Reach $%li";
 "PurchaseFastDelivery"="Purchase Fast Delivery";
+"GetCouponByID"="Get Coupon By";

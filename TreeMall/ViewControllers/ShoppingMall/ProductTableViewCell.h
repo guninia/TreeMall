@@ -18,7 +18,7 @@ static NSString *ProductTableViewCellIdentifier = @"ProductTableViewCell";
 @protocol ProductTableViewCellDelegate <NSObject>
 
 - (void)productTableViewCell:(ProductTableViewCell *)cell didSelectToAddToCartBySender:(id)sender;
-- (void)productTableViewCell:(ProductTableViewCell *)cell didSelectToAddToFavoriteBySender:(id)sender;
+- (void)productTableViewCell:(ProductTableViewCell *)cell didSelectToChangeFavoriteStatus:(BOOL)favorite;
 
 @end
 

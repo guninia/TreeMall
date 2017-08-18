@@ -1350,6 +1350,7 @@
             UIAlertAction *actionShopping = [UIAlertAction actionWithTitle:[LocalizedString ContinueToShopping] style:UIAlertActionStyleDefault handler:nil];
             
             UIAlertAction *actionCheckout = [UIAlertAction actionWithTitle:[LocalizedString CheckOutDirectly] style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
+                [TMInfoManager sharedManager].productFastDelivery = nil;
                 [weakSelf finalCheckCartContentForCartType:weakSelf.currentType canPurchaseFastDelivery:NO];
             }];
             [alertController addAction:actionShopping];

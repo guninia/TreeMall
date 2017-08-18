@@ -400,6 +400,7 @@
         _viewPoint = [[BorderedDoubleLabelView alloc] initWithFrame:CGRectZero];
         [_viewPoint.labelL setText:[LocalizedString PointNumber]];
         [_viewPoint.labelR setTextColor:[UIColor orangeColor]];
+        [_viewPoint.layer setBorderColor:[UIColor orangeColor].CGColor];
     }
     return _viewPoint;
 }
@@ -411,6 +412,7 @@
         _viewPointCash = [[BorderedDoubleLabelView alloc] initWithFrame:CGRectZero];
         [_viewPointCash.labelL setText:[LocalizedString PointAddCash]];
         [_viewPointCash.labelR setTextColor:[UIColor orangeColor]];
+        [_viewPointCash.layer setBorderColor:[UIColor orangeColor].CGColor];
     }
     return _viewPointCash;
 }
@@ -433,7 +435,8 @@
     if (_buttonExchangeDesc == nil)
     {
         _buttonExchangeDesc = [[ImageTitleButton alloc] initWithFrame:CGRectZero];
-        [_buttonExchangeDesc setBackgroundColor:[UIColor colorWithRed:(173.0/255.0) green:(192.0/255.0) blue:(85.0/255.0) alpha:1.0]];
+//        [_buttonExchangeDesc setBackgroundColor:[UIColor colorWithRed:(173.0/255.0) green:(192.0/255.0) blue:(85.0/255.0) alpha:1.0]];
+        [_buttonExchangeDesc setBackgroundColor:[UIColor lightGrayColor]];
         UIImage *image = [UIImage imageNamed:@"sho_btn_sale"];
         if (image)
         {
@@ -450,7 +453,8 @@
     if (_buttonInstallmentCal == nil)
     {
         _buttonInstallmentCal = [[ImageTitleButton alloc] initWithFrame:CGRectZero];
-        [_buttonInstallmentCal setBackgroundColor:[UIColor colorWithRed:(123.0/255.0) green:(108.0/255.0) blue:(92.0/255.0) alpha:1.0]];
+//        [_buttonInstallmentCal setBackgroundColor:[UIColor colorWithRed:(123.0/255.0) green:(108.0/255.0) blue:(92.0/255.0) alpha:1.0]];
+        [_buttonInstallmentCal setBackgroundColor:[UIColor lightGrayColor]];
         UIImage *image = [UIImage imageNamed:@"sho_btn_creit"];
         if (image)
         {
@@ -1633,7 +1637,7 @@
     
     if (self.bottomBar)
     {
-        BOOL isInvalid = NO;
+        BOOL isInvalid = YES;
         NSString *textSoldOut = [LocalizedString SoldOut];
         NSString *textPurchase = [LocalizedString Purchase];
         NSArray *arrayShopping = [self.dictionaryDetail objectForKey:SymphoxAPIParam_shopping];
@@ -1653,7 +1657,6 @@
                             {
                                 textSoldOut = text;
                             }
-                            isInvalid = YES;
                         }
                             break;
                         case 3:
@@ -1664,11 +1667,13 @@
                             {
                                 textPurchase = text;
                             }
+                            isInvalid = NO;
                         }
                             break;
                         default:
                         {
                             [self.arrayCartType addObject:dictionary];
+                            isInvalid = NO;
                         }
                             break;
                     }
@@ -1681,7 +1686,7 @@
 //            [self.bottomBar.buttonAddToCart setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
             [self.bottomBar.buttonAddToCart setEnabled:NO];
             self.bottomBar.separator.hidden = YES;
-            self.bottomBar.buttonPurchaseOnly.hidden = NO;
+            self.bottomBar.buttonPurchaseOnly.hidden = isInvalid;
         }
         else
         {
@@ -1692,8 +1697,16 @@
             self.bottomBar.buttonPurchaseOnly.hidden = YES;
         }
         [self.bottomBar setIsProductInvalid:isInvalid];
-        [self.bottomBar.labelInvalid setText:textSoldOut];
         [self.bottomBar.buttonPurchase setTitle:textPurchase forState:UIControlStateNormal];
+        [self.bottomBar.buttonPurchaseOnly setTitle:textPurchase forState:UIControlStateNormal];
+        [self.bottomBar.labelInvalid setText:textSoldOut];
+        
+        NSNumber *cpdt_num = [self.dictionaryDetail objectForKey:SymphoxAPIParam_cpdt_num];
+        if (cpdt_num)
+        {
+            BOOL isFavorite = [[TMInfoManager sharedManager] favoriteContainsProductWithIdentifier:cpdt_num];
+            [self.bottomBar.buttonFavorite setSelected:isFavorite];
+        }
     }
 }
 
@@ -2373,7 +2386,7 @@
 
 #pragma mark - ProductDetailBottomBarDelegate
 
-- (void)productDetailBottomBar:(ProductDetailBottomBar *)bar didSelectFavoriteBySender:(id)sender
+- (void)productDetailBottomBar:(ProductDetailBottomBar *)bar didChangeFavoriteStatus:(BOOL)favorite
 {
     NSString *message = nil;
     NSDictionary *product = self.dictionaryCommon;
@@ -2381,24 +2394,35 @@
     {
         product = [self dictionaryCommonFromDetail:self.dictionaryDetail];
     }
-    if (product)
+    if (favorite)
     {
-        message = [[TMInfoManager sharedManager] addProductToFavorite:product];
-    }
-    if (message)
-    {
-        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:message preferredStyle:UIAlertControllerStyleAlert];
-        UIAlertAction *action = [UIAlertAction actionWithTitle:[LocalizedString Confirm] style:UIAlertActionStyleDefault handler:nil];
-        [alertController addAction:action];
-        [self presentViewController:alertController animated:YES completion:nil];
+        if (product)
+        {
+            message = [[TMInfoManager sharedManager] addProductToFavorite:product];
+        }
+//        if (message)
+//        {
+//            UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:message preferredStyle:UIAlertControllerStyleAlert];
+//            UIAlertAction *action = [UIAlertAction actionWithTitle:[LocalizedString Confirm] style:UIAlertActionStyleDefault handler:nil];
+//            [alertController addAction:action];
+//            [self presentViewController:alertController animated:YES completion:nil];
         
-        NSString * name = [product objectForKey:SymphoxAPIParam_cpdt_name];
-        NSNumber * productId = [product objectForKey:SymphoxAPIParam_cpdt_num];
-        [gaTracker send:[[GAIDictionaryBuilder
-                          createEventWithCategory:[EventLog twoString:self.title _:logPara_加入我的最愛]
-                          action:[EventLog twoString:[productId stringValue] _:name]
-                          label:nil
-                          value:nil] build]];
+            NSString * name = [product objectForKey:SymphoxAPIParam_cpdt_name];
+            NSNumber * productId = [product objectForKey:SymphoxAPIParam_cpdt_num];
+            [gaTracker send:[[GAIDictionaryBuilder
+                              createEventWithCategory:[EventLog twoString:self.title _:logPara_加入我的最愛]
+                              action:[EventLog twoString:[productId stringValue] _:name]
+                              label:nil
+                              value:nil] build]];
+//        }
+    }
+    else
+    {
+        NSNumber *cpdt_num = [product objectForKey:SymphoxAPIParam_cpdt_num];
+        if (cpdt_num)
+        {
+            [[TMInfoManager sharedManager] removeFavoriteProductWithIdentifier:cpdt_num];
+        }
     }
 }
 

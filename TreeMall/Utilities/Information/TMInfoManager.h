@@ -176,6 +176,7 @@ typedef enum : NSUInteger {
 - (NSArray *)favorites;
 - (BOOL)favoriteContainsProductWithIdentifier:(NSNumber *)productId;
 - (void)removeProductFromFavorite:(NSInteger)productIndex;
+- (void)removeFavoriteProductWithIdentifier:(NSNumber *)productId;
 - (NSInteger)numberOfProductsInFavorite;
 - (void)retrievePointDataFromObject:(id)object withCompletion:(void (^)(id result, NSError *error))block;
 - (void)retrieveCouponDataFromObject:(id)object forPageIndex:(NSInteger)pageIndex couponState:(CouponState)state sortFactor:(NSString *)factor withSortOrder:(NSString *)order withCompletion:(void (^)(id result, NSError *error))block;
