@@ -717,6 +717,42 @@
 
 - (void)addProduct:(NSDictionary *)product toCart:(CartType)cartType shouldShowAlert:(BOOL)shouldShowAlert
 {
+    NSString *message = nil;
+    NSNumber *cpdt_num = [product objectForKey:SymphoxAPIParam_cpdt_num];
+    if (cpdt_num == nil)
+    {
+        message = [LocalizedString CannotFindProductId];
+    }
+    NSArray *carts = [NSArray arrayWithObjects:[NSNumber numberWithUnsignedInteger:CartTypeCommonDelivery], [NSNumber numberWithUnsignedInteger:CartTypeStorePickup], [NSNumber numberWithUnsignedInteger:CartTypeFastDelivery], nil];
+    CartType cartContainsProduct = [[TMInfoManager sharedManager] alreadyContainsProductWithIdentifier:cpdt_num inCarts:carts];
+    
+    switch (cartContainsProduct) {
+        case CartTypeCommonDelivery:
+        {
+            message = [NSString stringWithFormat:[LocalizedString AlreadyInCart_S_], [LocalizedString CommonDelivery]];
+        }
+            break;
+        case CartTypeStorePickup:
+        {
+            message = [NSString stringWithFormat:[LocalizedString AlreadyInCart_S_], [LocalizedString StorePickUp]];
+        }
+            break;
+        case CartTypeFastDelivery:
+        {
+            message = [NSString stringWithFormat:[LocalizedString AlreadyInCart_S_], [LocalizedString FastDelivery]];
+        }
+            break;
+        default:
+            break;
+    }
+    if (message)
+    {
+        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:message preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction *actionConfirm = [UIAlertAction actionWithTitle:[LocalizedString Confirm] style:UIAlertActionStyleDefault handler:nil];
+        [alertController addAction:actionConfirm];
+        [self presentViewController:alertController animated:YES completion:nil];
+        return;
+    }
     [[TMInfoManager sharedManager] addProduct:product toCartForType:cartType];
     if (shouldShowAlert)
     {
@@ -1336,13 +1372,14 @@
     NSNumber *cpdt_num = [product objectForKey:SymphoxAPIParam_cpdt_num];
     if (cpdt_num == nil || [cpdt_num isEqual:[NSNull null]])
         return;
+    NSString *message = nil;
     if (favorite)
     {
         if ([[TMInfoManager sharedManager] favoriteContainsProductWithIdentifier:cpdt_num])
         {
             return;
         }
-        [[TMInfoManager sharedManager] addProductToFavorite:product];
+        message = [[TMInfoManager sharedManager] addProductToFavorite:product];
         
         NSString * name = [product objectForKey:SymphoxAPIParam_cpdt_name];
         [gaTracker send:[[GAIDictionaryBuilder
@@ -1358,7 +1395,13 @@
             return;
         }
         [[TMInfoManager sharedManager] removeFavoriteProductWithIdentifier:cpdt_num];
+        message = [LocalizedString ProductRemovedFromFavorite];
     }
+    
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:message preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *action = [UIAlertAction actionWithTitle:[LocalizedString Confirm] style:UIAlertActionStyleDefault handler:nil];
+    [alertController addAction:action];
+    [self presentViewController:alertController animated:YES completion:nil];
 }
 
 @end

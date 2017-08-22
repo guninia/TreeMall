@@ -3641,4 +3641,34 @@
     return GetCouponByID;
 }
 
++ (NSString *)VisitGift
+{
+    static NSString *VisitGift = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        VisitGift = NSLocalizedString(@"VisitGift", nil);
+    });
+    return VisitGift;
+}
+
++ (NSString *)AlreadyInCart_S_
+{
+    static NSString *AlreadyInCart_S_ = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        AlreadyInCart_S_ = NSLocalizedString(@"AlreadyInCart_S_", nil);
+    });
+    return AlreadyInCart_S_;
+}
+
++ (NSString *)ProductRemovedFromFavorite
+{
+    static NSString *ProductRemovedFromFavorite = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        ProductRemovedFromFavorite = NSLocalizedString(@"ProductRemovedFromFavorite", nil);
+    });
+    return ProductRemovedFromFavorite;
+}
+
 @end

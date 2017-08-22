@@ -33,6 +33,8 @@
     id<GAITracker> gaTracker;
 }
 
+@property (nonatomic, strong) NSMutableOrderedSet *orderedSetSingleCart;
+
 - (void)retrieveDataForIdentifer:(NSNumber *)identifier;
 - (BOOL)processProductData:(id)data;
 - (void)layoutCustomSubviews;
@@ -104,6 +106,11 @@
         [button setImage:imageCart forState:UIControlStateNormal];
         [button addTarget:self action:@selector(buttonItemCartPressed:) forControlEvents:UIControlEventTouchUpInside];
         UIBarButtonItem *item = [[UIBarButtonItem alloc] initWithCustomView:button];
+        NSInteger totalCount = [[TMInfoManager sharedManager] numberOfProductsInCart:CartTypeTotal];
+        NSString *stringCount = [NSString stringWithFormat:@"%li", (long)totalCount];
+        item.badgeValue = stringCount;
+        item.badgeBGColor = [UIColor redColor];
+        item.badgeTextColor = [UIColor whiteColor];
         [items addObject:item];
     }
     self.navigationItem.rightBarButtonItems = items;
@@ -159,6 +166,8 @@
         [self retrieveDataForIdentifer:self.productIdentifier];
     }
     [self retrieveTermsForType:TermTypeShippingAndWarrenty];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handlerOfCartContentChangedNotification:) name:PostNotificationName_CartContentChanged object:nil];
     
     gaTracker = [GAI sharedInstance].defaultTracker;
 }
@@ -714,6 +723,15 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.view setNeedsLayout];
     });
+}
+
+- (NSMutableOrderedSet *)orderedSetSingleCart
+{
+    if (_orderedSetSingleCart == nil)
+    {
+        _orderedSetSingleCart = [[NSMutableOrderedSet alloc] initWithCapacity:0];
+    }
+    return _orderedSetSingleCart;
 }
 
 #pragma mark - Private Methods
@@ -1659,7 +1677,8 @@
                             }
                         }
                             break;
-                        case 3:
+                        case CartTypeDirectlyPurchase:
+                        case CartTypeVisitGift:
                         {
                             // Directly purchase
                             NSString *text = [dictionary objectForKey:SymphoxAPIParam_text];
@@ -1667,6 +1686,7 @@
                             {
                                 textPurchase = text;
                             }
+                            [self.orderedSetSingleCart addObject:numberType];
                             isInvalid = NO;
                         }
                             break;
@@ -1929,6 +1949,7 @@
         {
             [product setObject:specificSpecId forKey:SymphoxAPIParam_cpdt_num];
         }
+        
         [self addProduct:product toCartForType:type];
         
         NSString * name = [self.dictionaryDetail objectForKey:SymphoxAPIParam_cpdt_name];
@@ -1952,6 +1973,42 @@
 
 - (void)addProduct:(NSDictionary *)dictionaryProduct toCartForType:(CartType)type
 {
+    NSString *message = nil;
+    NSNumber *cpdt_num = [dictionaryProduct objectForKey:SymphoxAPIParam_cpdt_num];
+    if (cpdt_num == nil)
+    {
+        message = [LocalizedString CannotFindProductId];
+    }
+    NSArray *carts = [NSArray arrayWithObjects:[NSNumber numberWithUnsignedInteger:CartTypeCommonDelivery], [NSNumber numberWithUnsignedInteger:CartTypeStorePickup], [NSNumber numberWithUnsignedInteger:CartTypeFastDelivery], nil];
+    CartType cartContainsProduct = [[TMInfoManager sharedManager] alreadyContainsProductWithIdentifier:cpdt_num inCarts:carts];
+    
+    switch (cartContainsProduct) {
+        case CartTypeCommonDelivery:
+        {
+            message = [NSString stringWithFormat:[LocalizedString AlreadyInCart_S_], [LocalizedString CommonDelivery]];
+        }
+            break;
+        case CartTypeStorePickup:
+        {
+            message = [NSString stringWithFormat:[LocalizedString AlreadyInCart_S_], [LocalizedString StorePickUp]];
+        }
+            break;
+        case CartTypeFastDelivery:
+        {
+            message = [NSString stringWithFormat:[LocalizedString AlreadyInCart_S_], [LocalizedString FastDelivery]];
+        }
+            break;
+        default:
+            break;
+    }
+    if (message)
+    {
+        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:message preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction *actionConfirm = [UIAlertAction actionWithTitle:[LocalizedString Confirm] style:UIAlertActionStyleDefault handler:nil];
+        [alertController addAction:actionConfirm];
+        [self presentViewController:alertController animated:YES completion:nil];
+        return;
+    }
     [[TMInfoManager sharedManager] addProduct:dictionaryProduct toCartForType:type];
 }
 
@@ -2164,6 +2221,10 @@
     if (type == CartTypeDirectlyPurchase)
     {
         viewController.title = [LocalizedString Purchase];
+    }
+    else if (type == CartTypeVisitGift)
+    {
+        viewController.title = [LocalizedString VisitGift];
     }
     else
     {
@@ -2400,21 +2461,13 @@
         {
             message = [[TMInfoManager sharedManager] addProductToFavorite:product];
         }
-//        if (message)
-//        {
-//            UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:message preferredStyle:UIAlertControllerStyleAlert];
-//            UIAlertAction *action = [UIAlertAction actionWithTitle:[LocalizedString Confirm] style:UIAlertActionStyleDefault handler:nil];
-//            [alertController addAction:action];
-//            [self presentViewController:alertController animated:YES completion:nil];
-        
-            NSString * name = [product objectForKey:SymphoxAPIParam_cpdt_name];
-            NSNumber * productId = [product objectForKey:SymphoxAPIParam_cpdt_num];
-            [gaTracker send:[[GAIDictionaryBuilder
-                              createEventWithCategory:[EventLog twoString:self.title _:logPara_加入我的最愛]
-                              action:[EventLog twoString:[productId stringValue] _:name]
-                              label:nil
-                              value:nil] build]];
-//        }
+        NSString * name = [product objectForKey:SymphoxAPIParam_cpdt_name];
+        NSNumber * productId = [product objectForKey:SymphoxAPIParam_cpdt_num];
+        [gaTracker send:[[GAIDictionaryBuilder
+                          createEventWithCategory:[EventLog twoString:self.title _:logPara_加入我的最愛]
+                          action:[EventLog twoString:[productId stringValue] _:name]
+                          label:nil
+                          value:nil] build]];
     }
     else
     {
@@ -2423,7 +2476,12 @@
         {
             [[TMInfoManager sharedManager] removeFavoriteProductWithIdentifier:cpdt_num];
         }
+        message = [LocalizedString ProductRemovedFromFavorite];
     }
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:message preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *action = [UIAlertAction actionWithTitle:[LocalizedString Confirm] style:UIAlertActionStyleDefault handler:nil];
+    [alertController addAction:action];
+    [self presentViewController:alertController animated:YES completion:nil];
 }
 
 - (void)productDetailBottomBar:(ProductDetailBottomBar *)bar didSelectAddToCartBySender:(id)sender
@@ -2476,6 +2534,13 @@
     NSArray *arrayCarts = [self cartsAvailableToAdd];
     if ([arrayCarts count] == 0)
     {
+        if ([self.orderedSetSingleCart containsObject:[NSNumber numberWithUnsignedInteger:CartTypeVisitGift]])
+        {
+            [[TMInfoManager sharedManager] resetCartForType:CartTypeVisitGift];
+            [self addToCart:CartTypeVisitGift shouldShowAlert:NO];
+            [self presentCartViewForType:CartTypeVisitGift];
+        }
+        else if ([self.orderedSetSingleCart containsObject:[NSNumber numberWithUnsignedInteger:CartTypeDirectlyPurchase]])
         [[TMInfoManager sharedManager] resetCartForType:CartTypeDirectlyPurchase];
         [self addToCart:CartTypeDirectlyPurchase shouldShowAlert:NO];
         [self presentCartViewForType:CartTypeDirectlyPurchase];

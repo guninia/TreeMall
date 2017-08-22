@@ -56,6 +56,7 @@ typedef enum : NSUInteger {
     CartTypeStorePickup,
     CartTypeFastDelivery,
     CartTypeDirectlyPurchase,
+    CartTypeVisitGift,
     CartTypeTotal
 } CartType;
 
@@ -139,6 +140,8 @@ typedef enum : NSUInteger {
 @property (nonatomic, strong) NSMutableDictionary *dictionaryProductPurchaseInfoInCartFast;
 @property (nonatomic, strong) NSMutableArray *arrayCartDirect;
 @property (nonatomic, strong) NSMutableDictionary *dictionaryProductPurchaseInfoInCartDirect;
+@property (nonatomic, strong) NSMutableArray *arrayCartVisitGift;
+@property (nonatomic, strong) NSMutableDictionary *dictionaryProductPurchaseInfoInCartVisitGift;
 @property (nonatomic, strong) NSMutableArray *arrayCartCommonAddition;
 @property (nonatomic, strong) NSMutableDictionary *dictionaryProductPurchaseInfoInCartCommonAddition;
 @property (nonatomic, strong) NSMutableArray *arrayCartStorePickUpAddition;
@@ -147,6 +150,8 @@ typedef enum : NSUInteger {
 @property (nonatomic, strong) NSMutableDictionary *dictionaryProductPurchaseInfoInCartFastAddition;
 @property (nonatomic, strong) NSMutableArray *arrayCartDirectAddition;
 @property (nonatomic, strong) NSMutableDictionary *dictionaryProductPurchaseInfoInCartDirectAddition;
+@property (nonatomic, strong) NSMutableArray *arrayCartVisitGiftAddition;
+@property (nonatomic, strong) NSMutableDictionary *dictionaryProductPurchaseInfoInCartVisitGiftAddition;
 @property (nonatomic, strong) NSDictionary *productFastDelivery;
 @property (nonatomic, strong) NSDictionary *productInfoForFastDelivery;
 @property (nonatomic, strong) NSDictionary *dictionaryDocuments;
@@ -217,5 +222,7 @@ typedef enum : NSUInteger {
 - (NSDictionary *)productInfoForFastDeliveryFromInfo:(NSDictionary *)originInfo;
 - (void)resetProductFastDelivery;
 - (void)updateProductInfoForFastDeliveryFromInfos:(NSArray *)originInfos;
+
+- (CartType)alreadyContainsProductWithIdentifier:(NSNumber *)productId inCarts:(NSArray *)carts;
 
 @end

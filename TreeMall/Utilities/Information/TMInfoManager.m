@@ -770,6 +770,24 @@ static NSUInteger SearchKeywordNumberMax = 8;
     return _dictionaryProductPurchaseInfoInCartDirect;
 }
 
+- (NSMutableArray *)arrayCartVisitGift
+{
+    if (_arrayCartVisitGift == nil)
+    {
+        _arrayCartVisitGift = [[NSMutableArray alloc] initWithCapacity:0];
+    }
+    return _arrayCartVisitGift;
+}
+
+- (NSMutableDictionary *)dictionaryProductPurchaseInfoInCartVisitGift
+{
+    if (_dictionaryProductPurchaseInfoInCartVisitGift == nil)
+    {
+        _dictionaryProductPurchaseInfoInCartVisitGift = [[NSMutableDictionary alloc] initWithCapacity:0];
+    }
+    return _dictionaryProductPurchaseInfoInCartVisitGift;
+}
+
 - (NSMutableArray *)arrayCartCommonAddition
 {
     if (_arrayCartCommonAddition == nil)
@@ -840,6 +858,24 @@ static NSUInteger SearchKeywordNumberMax = 8;
         _dictionaryProductPurchaseInfoInCartDirectAddition = [[NSMutableDictionary alloc] initWithCapacity:0];
     }
     return _dictionaryProductPurchaseInfoInCartDirectAddition;
+}
+
+- (NSMutableArray *)arrayCartVisitGiftAddition
+{
+    if (_arrayCartVisitGiftAddition == nil)
+    {
+        _arrayCartVisitGiftAddition = [[NSMutableArray alloc] initWithCapacity:0];
+    }
+    return _arrayCartVisitGiftAddition;
+}
+
+- (NSMutableDictionary *)dictionaryProductPurchaseInfoInCartVisitGiftAddition
+{
+    if (_dictionaryProductPurchaseInfoInCartVisitGiftAddition == nil)
+    {
+        _dictionaryProductPurchaseInfoInCartVisitGiftAddition = [[NSMutableDictionary alloc] initWithCapacity:0];
+    }
+    return _dictionaryProductPurchaseInfoInCartVisitGiftAddition;
 }
 
 #pragma mark - Public Methods
@@ -1653,6 +1689,11 @@ static NSUInteger SearchKeywordNumberMax = 8;
             array = self.arrayCartDirect;
         }
             break;
+        case CartTypeVisitGift:
+        {
+            array = self.arrayCartVisitGift;
+        }
+            break;
         default:
             break;
     }
@@ -1681,6 +1722,11 @@ static NSUInteger SearchKeywordNumberMax = 8;
         case CartTypeDirectlyPurchase:
         {
             dictionaryPurchaseInfo = self.dictionaryProductPurchaseInfoInCartDirect;
+        }
+            break;
+        case CartTypeVisitGift:
+        {
+            dictionaryPurchaseInfo = self.dictionaryProductPurchaseInfoInCartVisitGiftAddition;
         }
             break;
         default:
@@ -1891,6 +1937,11 @@ static NSUInteger SearchKeywordNumberMax = 8;
             array = self.arrayCartDirectAddition;
         }
             break;
+        case CartTypeVisitGift:
+        {
+            array = self.arrayCartVisitGiftAddition;
+        }
+            break;
         default:
             break;
     }
@@ -1919,6 +1970,11 @@ static NSUInteger SearchKeywordNumberMax = 8;
         case CartTypeDirectlyPurchase:
         {
             dictionaryPurchaseInfo = self.dictionaryProductPurchaseInfoInCartDirectAddition;
+        }
+            break;
+        case CartTypeVisitGift:
+        {
+            dictionaryPurchaseInfo = self.dictionaryProductPurchaseInfoInCartVisitGiftAddition;
         }
             break;
         default:
@@ -2407,6 +2463,32 @@ static NSUInteger SearchKeywordNumberMax = 8;
             break;
         }
     }
+}
+
+- (CartType)alreadyContainsProductWithIdentifier:(NSNumber *)productId inCarts:(NSArray *)carts
+{
+    CartType alreadyContains = CartTypeTotal;
+    
+    for (NSNumber *numberCart in carts)
+    {
+        CartType type = [numberCart unsignedIntegerValue];
+        NSArray *products = [self productArrayForCartType:type];
+        for (NSDictionary *product in products)
+        {
+            NSNumber *cpdt_num = [product objectForKey:SymphoxAPIParam_cpdt_num];
+            if ([cpdt_num isEqualToNumber:productId])
+            {
+                alreadyContains = type;
+                break;
+            }
+        }
+        if (alreadyContains != CartTypeTotal)
+        {
+            break;
+        }
+    }
+    
+    return alreadyContains;
 }
 
 #pragma mark - Private Methods

@@ -12,8 +12,9 @@
 #define marginT 3.0f
 #define marginB 7.0f
 #define marginH 10.0f
-#define marginV 5.0f
+#define marginV 10.0f
 #define intervalH 10.0f
+#define intervalV 5.0f
 #define kLabelDateWidth 120.0f
 #define kFontDate [UIFont systemFontOfSize:18.0]
 #define kFontStatus [UIFont systemFontOfSize:16.0]
@@ -23,6 +24,7 @@
 @property (nonatomic, strong) UIView *viewContainer;
 @property (nonatomic, strong) UILabel *labelDate;
 @property (nonatomic, strong) UILabel *labelStatus;
+@property (nonatomic, strong) UILabel *labelLocation;
 
 @end
 
@@ -36,6 +38,7 @@
         [self.contentView addSubview:self.viewContainer];
         [self.viewContainer addSubview:self.labelDate];
         [self.viewContainer addSubview:self.labelStatus];
+        [self.viewContainer addSubview:self.labelLocation];
     }
     return self;
 }
@@ -67,11 +70,37 @@
         self.labelDate.frame = frame;
     }
     
+    CGFloat originX = CGRectGetMaxX(self.labelDate.frame) + intervalH;
+    CGFloat labelWidth = self.viewContainer.frame.size.width - originX - marginH;
+    CGFloat originY = marginV;
+    NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
+    style.lineBreakMode = NSLineBreakByCharWrapping;
+    style.alignment = NSTextAlignmentLeft;
+    NSDictionary *attributes = [NSDictionary dictionaryWithObjectsAndKeys:kFontStatus, NSFontAttributeName, style, NSParagraphStyleAttributeName, nil];
+    if (self.labelLocation && [self.labelLocation isHidden] == NO)
+    {
+        
+        CGSize sizeText = [self.labelLocation.text boundingRectWithSize:CGSizeMake(labelWidth, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin attributes:attributes context:nil].size;
+        CGSize sizeLabel = CGSizeMake(ceil(sizeText.width), ceil(sizeText.height));
+        CGFloat currentOriginX = originX;
+        if (sizeLabel.width < labelWidth)
+        {
+            currentOriginX = self.viewContainer.frame.size.width - sizeLabel.width - marginH;
+        }
+        CGRect frame = CGRectMake(currentOriginX, originY, labelWidth, sizeLabel.height);
+        self.labelLocation.frame = frame;
+        originY = CGRectGetMaxY(self.labelLocation.frame) + intervalV;
+    }
     if (self.labelStatus)
     {
-        CGFloat originX = CGRectGetMaxX(self.labelDate.frame) + intervalH;
-        CGFloat labelWidth = self.viewContainer.frame.size.width - originX - marginH;
-        CGRect frame = CGRectMake(originX, marginV, labelWidth, self.viewContainer.frame.size.height - marginV * 2);
+        CGSize sizeText = [self.labelStatus.text boundingRectWithSize:CGSizeMake(labelWidth, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin attributes:attributes context:nil].size;
+        CGSize sizeLabel = CGSizeMake(ceil(sizeText.width), ceil(sizeText.height));
+        CGFloat currentOriginX = originX;
+        if (sizeLabel.width < labelWidth)
+        {
+            currentOriginX = self.viewContainer.frame.size.width - sizeLabel.width - marginH;
+        }
+        CGRect frame = CGRectMake(currentOriginX, originY, labelWidth, self.viewContainer.frame.size.height - marginV - originY);
         self.labelStatus.frame = frame;
     }
 }
@@ -111,11 +140,25 @@
         [_labelStatus setBackgroundColor:[UIColor clearColor]];
         [_labelStatus setTextColor:[UIColor lightGrayColor]];
         [_labelStatus setTextAlignment:NSTextAlignmentLeft];
-//        [_labelStatus setAdjustsFontSizeToFitWidth:YES];
         [_labelStatus setNumberOfLines:0];
         [_labelStatus setLineBreakMode:NSLineBreakByCharWrapping];
     }
     return _labelStatus;
+}
+
+- (UILabel *)labelLocation
+{
+    if (_labelLocation == nil)
+    {
+        _labelLocation = [[UILabel alloc] initWithFrame:CGRectZero];
+        [_labelLocation setFont:kFontStatus];
+        [_labelLocation setBackgroundColor:[UIColor clearColor]];
+        [_labelLocation setTextColor:[UIColor lightGrayColor]];
+        [_labelLocation setTextAlignment:NSTextAlignmentLeft];
+        [_labelLocation setNumberOfLines:0];
+        [_labelLocation setLineBreakMode:NSLineBreakByCharWrapping];
+    }
+    return _labelLocation;
 }
 
 - (void)setTimeString:(NSString *)timeString
@@ -143,15 +186,29 @@
     [self setNeedsLayout];
 }
 
+- (void)setLocationString:(NSString *)locationString
+{
+    _locationString = locationString;
+    if (_locationString == nil)
+    {
+        [self.labelLocation setText:@""];
+        [self.labelLocation setHidden:YES];
+        return;
+    }
+    [self.labelLocation setText:_locationString];
+    [self setNeedsLayout];
+}
+
 - (void)setLatest:(BOOL)latest
 {
     _latest = latest;
     [self.labelStatus setTextColor:(_latest)?TMMainColor:[UIColor lightGrayColor]];
+    [self.labelLocation setTextColor:(_latest)?TMMainColor:[UIColor lightGrayColor]];
 }
 
 #pragma mark - Class Methods
 
-+ (CGFloat)heightForCellWidth:(CGFloat)cellWidth withContent:(NSString *)content
++ (CGFloat)heightForCellWidth:(CGFloat)cellWidth withContent:(NSString *)content andLocation:(NSString *)location
 {
     CGFloat originX = marginH + marginH + kLabelDateWidth + intervalH;
     CGFloat labelWidth = cellWidth - originX - marginH - marginH;
@@ -159,9 +216,24 @@
     style.lineBreakMode = NSLineBreakByCharWrapping;
     style.alignment = NSTextAlignmentLeft;
     NSDictionary *attributes = [NSDictionary dictionaryWithObjectsAndKeys:kFontStatus, NSFontAttributeName, style, NSParagraphStyleAttributeName, nil];
-    CGSize sizeText = [content boundingRectWithSize:CGSizeMake(labelWidth, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin attributes:attributes context:nil].size;
-    CGSize sizeLabel = CGSizeMake(ceil(sizeText.width), ceil(sizeText.height));
-    CGFloat totalHeight = sizeLabel.height + marginV * 2 + marginT + marginB;
+    CGFloat totalHeight = marginV * 2 + marginT + marginB;
+    if (location)
+    {
+        CGSize sizeText = [location boundingRectWithSize:CGSizeMake(labelWidth, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin attributes:attributes context:nil].size;
+        CGSize sizeLabel = CGSizeMake(ceil(sizeText.width), ceil(sizeText.height));
+        totalHeight += sizeLabel.height;
+    }
+    if (content)
+    {
+        CGSize sizeText = [content boundingRectWithSize:CGSizeMake(labelWidth, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin attributes:attributes context:nil].size;
+        CGSize sizeLabel = CGSizeMake(ceil(sizeText.width), ceil(sizeText.height));
+        totalHeight += sizeLabel.height;
+    }
+    if (location && content)
+    {
+        totalHeight += intervalV;
+    }
+    
     return totalHeight;
 }
 

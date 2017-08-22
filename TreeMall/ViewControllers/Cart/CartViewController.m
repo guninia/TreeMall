@@ -81,7 +81,7 @@
     [self.view addSubview:self.tableView];
     [self.view addSubview:self.bottomBar];
     
-    if (self.currentType == CartTypeDirectlyPurchase)
+    if (self.currentType == CartTypeDirectlyPurchase || self.currentType == CartTypeVisitGift)
     {
         self.segmentedView.hidden = YES;
     }
@@ -118,7 +118,7 @@
     {
         self.currentType = CartTypeCommonDelivery;
     }
-    if (self.currentType != CartTypeDirectlyPurchase)
+    if (self.currentType != CartTypeDirectlyPurchase && self.currentType != CartTypeVisitGift)
     {
         [self setSegmentedControlIndexForCartType:self.currentType];
     }
@@ -178,7 +178,7 @@
         self.bottomBar.frame = frame;
     }
     
-    if (self.currentType == CartTypeDirectlyPurchase)
+    if (self.currentType == CartTypeDirectlyPurchase || self.currentType == CartTypeVisitGift)
     {
         originY = 0.0;
     }

@@ -207,6 +207,7 @@
     DeliverProgressTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:DeliverProgressTableViewCellIdentifier forIndexPath:indexPath];
     NSString *stringTime = @"";
     NSString *stringStatus = @"";
+    NSString *stringLocation = nil;
     BOOL isLatest = NO;
     if (indexPath.row < [self.arrayProgress count])
     {
@@ -235,19 +236,20 @@
         if (indexPath.row == 0)
         {
             isLatest = YES;
-            if (self.shouldShowOperator)
+        }
+        if (self.shouldShowOperator)
+        {
+            NSString *location = [dictionary objectForKey:SymphoxAPIParam_location];
+            if (location && [location isEqual:[NSNull null]] == NO)
             {
-                NSString *location = [dictionary objectForKey:SymphoxAPIParam_location];
-                if (location && [location isEqual:[NSNull null]] == NO)
-                {
-                    stringStatus = location;
-                }
+                stringLocation = location;
             }
         }
     }
     cell.latest = isLatest;
     cell.timeString = stringTime;
     cell.statusString = stringStatus;
+    cell.locationString = stringLocation;
     return cell;
 }
 
@@ -273,6 +275,7 @@
 {
     CGFloat heightForRow = 70.0;
     NSString *stringStatus = @"";
+    NSString *location = nil;
     if (indexPath.row < [self.arrayProgress count])
     {
         NSDictionary *dictionary = [self.arrayProgress objectAtIndex:indexPath.row];
@@ -281,19 +284,12 @@
         {
             stringStatus = status;
         }
-        if (indexPath.row == 0)
+        if (self.shouldShowOperator)
         {
-            if (self.shouldShowOperator)
-            {
-                NSString *location = [dictionary objectForKey:SymphoxAPIParam_location];
-                if (location && [location isEqual:[NSNull null]] == NO)
-                {
-                    stringStatus = location;
-                }
-            }
+            location = [dictionary objectForKey:SymphoxAPIParam_location];
         }
     }
-    CGFloat calculateHeight = [DeliverProgressTableViewCell heightForCellWidth:tableView.frame.size.width withContent:stringStatus];
+    CGFloat calculateHeight = [DeliverProgressTableViewCell heightForCellWidth:tableView.frame.size.width withContent:stringStatus andLocation:location];
     if (calculateHeight > heightForRow)
     {
         heightForRow = calculateHeight;

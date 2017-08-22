@@ -368,3 +368,6 @@
 "StorePickupShouldReachLimit"="StorePickup Should Reach $%li";
 "PurchaseFastDelivery"="Purchase Fast Delivery";
 "GetCouponByID"="Get Coupon By";
+"VisitGift"="Visit Gift";
+"AlreadyInCart_S_"="Already in cart \"%@\"";
+"ProductRemovedFromFavorite"="Removed from favorite";

@@ -373,5 +373,8 @@
 + (NSString *)StorePickupShouldReachLimit;
 + (NSString *)PurchaseFastDelivery;
 + (NSString *)GetCouponByID;
++ (NSString *)VisitGift;
++ (NSString *)AlreadyInCart_S_;
++ (NSString *)ProductRemovedFromFavorite;
 
 @end
