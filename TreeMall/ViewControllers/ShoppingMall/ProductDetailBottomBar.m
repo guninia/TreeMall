@@ -107,12 +107,12 @@
     {
         _buttonFavorite = [[UIButton alloc] initWithFrame:CGRectZero];
         [_buttonFavorite setBackgroundColor:[UIColor colorWithRed:(230.0/255.0) green:(114.0/255.0) blue:(46.0/255.0) alpha:1.0]];
-        UIImage *image = [UIImage imageNamed:@"btn_heart_on_w"];
+        UIImage *image = [UIImage imageNamed:@"sho_h_btn_fa_full"];
         if (image)
         {
             [_buttonFavorite setImage:image forState:UIControlStateNormal];
         }
-        UIImage *selectedImage = [UIImage imageNamed:@"ico_menu_heart"];
+        UIImage *selectedImage = [UIImage imageNamed:@"sho_h_btn_fa"];
         if (selectedImage)
         {
             [_buttonFavorite setImage:selectedImage forState:UIControlStateSelected];

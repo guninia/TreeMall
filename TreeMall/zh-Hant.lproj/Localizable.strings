@@ -370,6 +370,5 @@
 "PurchaseFastDelivery"="加購快捷服務";
 "GetCouponByID"="序號領券";
 "VisitGift"="來店禮";
-"AlreadyInCart_S_"="商品已存在%@購物車中";
-"AlreadyInCart_S_"="已加入%@購物車";
+"AlreadyInCart_S_"="商品已存在%@購物車";
 "ProductRemovedFromFavorite"="已從我的最愛移除";

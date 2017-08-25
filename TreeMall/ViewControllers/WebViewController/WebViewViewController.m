@@ -266,7 +266,6 @@
                 }
                 else
                 {
-                    alertTitle = [LocalizedString AuthenticateFailed];
                     confirmAction = [UIAlertAction actionWithTitle:[LocalizedString Confirm] style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
                         completionHandler();
                     }];

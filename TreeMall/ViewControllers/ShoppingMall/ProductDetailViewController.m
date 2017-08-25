@@ -1973,42 +1973,6 @@
 
 - (void)addProduct:(NSDictionary *)dictionaryProduct toCartForType:(CartType)type
 {
-    NSString *message = nil;
-    NSNumber *cpdt_num = [dictionaryProduct objectForKey:SymphoxAPIParam_cpdt_num];
-    if (cpdt_num == nil)
-    {
-        message = [LocalizedString CannotFindProductId];
-    }
-    NSArray *carts = [NSArray arrayWithObjects:[NSNumber numberWithUnsignedInteger:CartTypeCommonDelivery], [NSNumber numberWithUnsignedInteger:CartTypeStorePickup], [NSNumber numberWithUnsignedInteger:CartTypeFastDelivery], nil];
-    CartType cartContainsProduct = [[TMInfoManager sharedManager] alreadyContainsProductWithIdentifier:cpdt_num inCarts:carts];
-    
-    switch (cartContainsProduct) {
-        case CartTypeCommonDelivery:
-        {
-            message = [NSString stringWithFormat:[LocalizedString AlreadyInCart_S_], [LocalizedString CommonDelivery]];
-        }
-            break;
-        case CartTypeStorePickup:
-        {
-            message = [NSString stringWithFormat:[LocalizedString AlreadyInCart_S_], [LocalizedString StorePickUp]];
-        }
-            break;
-        case CartTypeFastDelivery:
-        {
-            message = [NSString stringWithFormat:[LocalizedString AlreadyInCart_S_], [LocalizedString FastDelivery]];
-        }
-            break;
-        default:
-            break;
-    }
-    if (message)
-    {
-        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:message preferredStyle:UIAlertControllerStyleAlert];
-        UIAlertAction *actionConfirm = [UIAlertAction actionWithTitle:[LocalizedString Confirm] style:UIAlertActionStyleDefault handler:nil];
-        [alertController addAction:actionConfirm];
-        [self presentViewController:alertController animated:YES completion:nil];
-        return;
-    }
     [[TMInfoManager sharedManager] addProduct:dictionaryProduct toCartForType:type];
 }
 
@@ -2501,6 +2465,43 @@
         [self presentViewController:navigationController animated:YES completion:nil];
         return;
     }
+    NSString *message = nil;
+    NSNumber *cpdt_num = [self.dictionaryDetail objectForKey:SymphoxAPIParam_cpdt_num];
+    if (cpdt_num == nil)
+    {
+        message = [LocalizedString CannotFindProductId];
+    }
+    NSArray *carts = [NSArray arrayWithObjects:[NSNumber numberWithUnsignedInteger:CartTypeCommonDelivery], [NSNumber numberWithUnsignedInteger:CartTypeStorePickup], [NSNumber numberWithUnsignedInteger:CartTypeFastDelivery], nil];
+    CartType cartContainsProduct = [[TMInfoManager sharedManager] alreadyContainsProductWithIdentifier:cpdt_num inCarts:carts];
+    
+    switch (cartContainsProduct) {
+        case CartTypeCommonDelivery:
+        {
+            message = [NSString stringWithFormat:[LocalizedString AlreadyInCart_S_], [LocalizedString CommonDelivery]];
+        }
+            break;
+        case CartTypeStorePickup:
+        {
+            message = [NSString stringWithFormat:[LocalizedString AlreadyInCart_S_], [LocalizedString StorePickUp]];
+        }
+            break;
+        case CartTypeFastDelivery:
+        {
+            message = [NSString stringWithFormat:[LocalizedString AlreadyInCart_S_], [LocalizedString FastDelivery]];
+        }
+            break;
+        default:
+            break;
+    }
+    if (message)
+    {
+        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:message preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction *actionConfirm = [UIAlertAction actionWithTitle:[LocalizedString Confirm] style:UIAlertActionStyleDefault handler:nil];
+        [alertController addAction:actionConfirm];
+        [self presentViewController:alertController animated:YES completion:nil];
+        return;
+    }
+    
     NSArray *arrayCarts = [self cartsAvailableToAdd];
     if ([arrayCarts count] == 1)
     {
