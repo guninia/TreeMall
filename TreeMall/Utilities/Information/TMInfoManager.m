@@ -912,20 +912,20 @@ static NSUInteger SearchKeywordNumberMax = 8;
     __weak TMInfoManager *weakSelf = self;
     dispatch_async(archiveQueue, ^{
         NSMutableDictionary *dictionaryArchive = [NSMutableDictionary dictionary];
-        [dictionaryArchive setObject:[weakSelf.orderedSetPromotionRead array] forKey:TMInfoArchiveKey_PromotionRead];
-        [dictionaryArchive setObject:_dictionaryUserInfo forKey:TMInfoArchiveKey_UserInformation];
-        [dictionaryArchive setObject:_dictionaryCachedCategories forKey:TMInfoArchiveKey_CachedCategories];
-        [dictionaryArchive setObject:[weakSelf.orderedSetKeyword array] forKey:TMInfoArchiveKey_OrderSetKeyword];
+        [dictionaryArchive setObject:[[weakSelf.orderedSetPromotionRead array] copy] forKey:TMInfoArchiveKey_PromotionRead];
+        [dictionaryArchive setObject:[_dictionaryUserInfo copy] forKey:TMInfoArchiveKey_UserInformation];
+        [dictionaryArchive setObject:[_dictionaryCachedCategories copy] forKey:TMInfoArchiveKey_CachedCategories];
+        [dictionaryArchive setObject:[[weakSelf.orderedSetKeyword array] copy] forKey:TMInfoArchiveKey_OrderSetKeyword];
         if (_numberArchiveTimestamp)
         {
             [dictionaryArchive setObject:_numberArchiveTimestamp forKey:TMInfoArchiveKey_ArchiveTimestamp];
         }
-        [dictionaryArchive setObject:weakSelf.arrayCartCommon forKey:TMInfoArchiveKey_CartCommon];
-        [dictionaryArchive setObject:weakSelf.dictionaryProductPurchaseInfoInCartCommon forKey:TMInfoArchiveKey_PurchaseInfoInCartCommon];
-        [dictionaryArchive setObject:weakSelf.arrayCartStorePickUp forKey:TMInfoArchiveKey_CartStorePickUp];
-        [dictionaryArchive setObject:weakSelf.dictionaryProductPurchaseInfoInCartStorePickUp forKey:TMInfoArchiveKey_PurchaseInfoInCartStorePickUp];
-        [dictionaryArchive setObject:weakSelf.arrayCartFast forKey:TMInfoArchiveKey_CartFast];
-        [dictionaryArchive setObject:weakSelf.dictionaryProductPurchaseInfoInCartFast forKey:TMInfoArchiveKey_PurchaseInfoInCartFast];
+        [dictionaryArchive setObject:[weakSelf.arrayCartCommon copy] forKey:TMInfoArchiveKey_CartCommon];
+        [dictionaryArchive setObject:[weakSelf.dictionaryProductPurchaseInfoInCartCommon copy] forKey:TMInfoArchiveKey_PurchaseInfoInCartCommon];
+        [dictionaryArchive setObject:[weakSelf.arrayCartStorePickUp copy] forKey:TMInfoArchiveKey_CartStorePickUp];
+        [dictionaryArchive setObject:[weakSelf.dictionaryProductPurchaseInfoInCartStorePickUp copy] forKey:TMInfoArchiveKey_PurchaseInfoInCartStorePickUp];
+        [dictionaryArchive setObject:[weakSelf.arrayCartFast copy] forKey:TMInfoArchiveKey_CartFast];
+        [dictionaryArchive setObject:[weakSelf.dictionaryProductPurchaseInfoInCartFast copy] forKey:TMInfoArchiveKey_PurchaseInfoInCartFast];
         if (weakSelf.userLoginDate)
         {
             [dictionaryArchive setObject:weakSelf.userLoginDate forKey:TMInfoArchiveKey_UserLoginTime];

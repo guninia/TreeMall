@@ -15,7 +15,7 @@
 @protocol HotSaleTableViewCellDelegate <NSObject>
 
 - (void)hotSaleTableViewCell:(HotSaleTableViewCell *)cell didPressAddToCartBySender:(id)sender;
-- (void)hotSaleTableViewCell:(HotSaleTableViewCell *)cell didPressFavoriteBySender:(id)sender;
+- (void)hotSaleTableViewCell:(HotSaleTableViewCell *)cell didPressToChangeFavoriteStatus:(BOOL)favorite;
 
 @end
 

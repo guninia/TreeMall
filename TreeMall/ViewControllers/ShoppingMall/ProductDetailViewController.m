@@ -27,6 +27,8 @@
 #import "EventLog.h"
 #import "UIBarButtonItem+Badge.h"
 
+#define kObservingContentSizeChangesContext 999
+
 @import FirebaseCrash;
 
 @interface ProductDetailViewController () {
@@ -184,6 +186,13 @@
     [gaTracker set:kGAIScreenName value:self.title];
     [gaTracker send:[[GAIDictionaryBuilder createScreenView] build]];
 }
+
+- (void)dealloc
+{
+    [self.webViewIntro.scrollView removeObserver:self forKeyPath:@"contentSize"];
+    [self.webViewSpec.scrollView removeObserver:self forKeyPath:@"contentSize"];
+}
+
 /*
 #pragma mark - Navigation
 
@@ -556,6 +565,8 @@
 //        [_webViewIntro setScalesPageToFit:YES];
 //        [_webViewIntro setContentMode:UIViewContentModeScaleAspectFit];
         [_webViewIntro setDelegate:self];
+        [_webViewIntro.scrollView setTag:3];
+        [_webViewIntro.scrollView addObserver:self forKeyPath:@"contentSize" options:0 context:nil];
     }
     return _webViewIntro;
 }
@@ -595,10 +606,12 @@
     {
         _webViewSpec = [[UIWebView alloc] initWithFrame:CGRectMake(0.0, 0.0, self.view.frame.size.width, 1.0)];
         _webViewSpec.tag = 4;
+        _webViewSpec.scrollView.tag = 4;
         [_webViewSpec.scrollView setScrollEnabled:NO];
 //        [_webViewSpec setScalesPageToFit:YES];
 //        [_webViewSpec setContentMode:UIViewContentModeScaleAspectFit];
         [_webViewSpec setDelegate:self];
+        [_webViewSpec.scrollView addObserver:self forKeyPath:@"contentSize" options:0 context:nil];
     }
     return _webViewSpec;
 }
@@ -680,7 +693,7 @@
     if (_webViewShippingAndWarrenty == nil)
     {
         _webViewShippingAndWarrenty = [[UIWebView alloc] initWithFrame:CGRectMake(0.0, 0.0, self.view.frame.size.width, 1.0)];
-        _webViewShippingAndWarrenty.tag = 5;
+        _webViewShippingAndWarrenty.tag = 6;
         [_webViewShippingAndWarrenty.scrollView setScrollEnabled:NO];
 //        [_webViewShippingAndWarrenty setScalesPageToFit:YES];
 //        [_webViewShippingAndWarrenty setContentMode:UIViewContentModeScaleAspectFit];
@@ -1110,9 +1123,11 @@
     
     if ([self.arrayIntroImageView count] > 0)
     {
-        CGSize size = CGSizeMake(self.scrollView.frame.size.width, self.scrollView.frame.size.width);
+        CGSize size = CGSizeMake(self.scrollView.frame.size.width, 0.0);
         for (UIButton *button in self.arrayIntroImageView)
         {
+            if ([button isHidden])
+                continue;
             UIImage *image = [button imageForState:UIControlStateNormal];
             if (image != nil)
             {
@@ -1160,6 +1175,8 @@
         CGSize size = CGSizeMake(self.scrollView.frame.size.width, self.scrollView.frame.size.width);
         for (UIButton *button in self.arraySpecImageView)
         {
+            if ([button isHidden])
+                continue;
             UIImage *image = [button imageForState:UIControlStateNormal];
             if (image != nil)
             {
@@ -1571,8 +1588,13 @@
                     UIButton *button = [[UIButton alloc] initWithFrame:CGRectZero];
                     button.tag = index;
                     [button.imageView setContentMode:UIViewContentModeScaleAspectFit];
+                    [button setHidden:YES];
                     [button sd_setImageWithURL:[NSURL URLWithString:imagePath] forState:UIControlStateNormal placeholderImage:transparent options:SDWebImageAllowInvalidSSLCertificates completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL){
                         dispatch_async(dispatch_get_main_queue(), ^{
+                            if (error == nil && image)
+                            {
+                                [button setHidden:NO];
+                            }
                             [weakSelf.view setNeedsLayout];
                         });
                     }];
@@ -1617,8 +1639,13 @@
                     UIButton *button = [[UIButton alloc] initWithFrame:CGRectZero];
                     button.tag = index;
                     [button.imageView setContentMode:UIViewContentModeScaleAspectFit];
+                    [button setHidden:YES];
                     [button sd_setImageWithURL:[NSURL URLWithString:imagePath] forState:UIControlStateNormal placeholderImage:transparent options:SDWebImageAllowInvalidSSLCertificates completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL){
                         dispatch_async(dispatch_get_main_queue(), ^{
+                            if (error == nil && image)
+                            {
+                                [button setHidden:NO];
+                            }
                             [weakSelf.view setNeedsLayout];
                         });
                     }];
@@ -1659,7 +1686,11 @@
         NSString *textSoldOut = [LocalizedString SoldOut];
         NSString *textPurchase = [LocalizedString Purchase];
         NSArray *arrayShopping = [self.dictionaryDetail objectForKey:SymphoxAPIParam_shopping];
-        if (arrayShopping && [arrayShopping isEqual:[NSNull null]] == NO)
+        if (arrayShopping == nil || [arrayShopping isEqual:[NSNull null]] || [arrayShopping count] == 0)
+        {
+            self.bottomBar.hidden = YES;
+        }
+        else
         {
             for (NSDictionary *dictionary in arrayShopping)
             {
@@ -1699,33 +1730,33 @@
                     }
                 }
             }
-        }
-        if ([self.arrayCartType count] == 0)
-        {
-            [self.bottomBar.buttonAddToCart setBackgroundColor:[UIColor colorWithWhite:0.8 alpha:1.0]];
-//            [self.bottomBar.buttonAddToCart setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
-            [self.bottomBar.buttonAddToCart setEnabled:NO];
-            self.bottomBar.separator.hidden = YES;
-            self.bottomBar.buttonPurchaseOnly.hidden = isInvalid;
-        }
-        else
-        {
-            [self.bottomBar.buttonAddToCart setBackgroundColor:[UIColor clearColor]];
-//            [self.bottomBar.buttonAddToCart setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-            [self.bottomBar.buttonAddToCart setEnabled:YES];
-            self.bottomBar.separator.hidden = NO;
-            self.bottomBar.buttonPurchaseOnly.hidden = YES;
-        }
-        [self.bottomBar setIsProductInvalid:isInvalid];
-        [self.bottomBar.buttonPurchase setTitle:textPurchase forState:UIControlStateNormal];
-        [self.bottomBar.buttonPurchaseOnly setTitle:textPurchase forState:UIControlStateNormal];
-        [self.bottomBar.labelInvalid setText:textSoldOut];
-        
-        NSNumber *cpdt_num = [self.dictionaryDetail objectForKey:SymphoxAPIParam_cpdt_num];
-        if (cpdt_num)
-        {
-            BOOL isFavorite = [[TMInfoManager sharedManager] favoriteContainsProductWithIdentifier:cpdt_num];
-            [self.bottomBar.buttonFavorite setSelected:isFavorite];
+            if ([self.arrayCartType count] == 0)
+            {
+                [self.bottomBar.buttonAddToCart setBackgroundColor:[UIColor colorWithWhite:0.8 alpha:1.0]];
+    //            [self.bottomBar.buttonAddToCart setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
+                [self.bottomBar.buttonAddToCart setEnabled:NO];
+                self.bottomBar.separator.hidden = YES;
+                self.bottomBar.buttonPurchaseOnly.hidden = isInvalid;
+            }
+            else
+            {
+                [self.bottomBar.buttonAddToCart setBackgroundColor:[UIColor clearColor]];
+    //            [self.bottomBar.buttonAddToCart setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+                [self.bottomBar.buttonAddToCart setEnabled:YES];
+                self.bottomBar.separator.hidden = NO;
+                self.bottomBar.buttonPurchaseOnly.hidden = YES;
+            }
+            [self.bottomBar setIsProductInvalid:isInvalid];
+            [self.bottomBar.buttonPurchase setTitle:textPurchase forState:UIControlStateNormal];
+            [self.bottomBar.buttonPurchaseOnly setTitle:textPurchase forState:UIControlStateNormal];
+            [self.bottomBar.labelInvalid setText:textSoldOut];
+            
+            NSNumber *cpdt_num = [self.dictionaryDetail objectForKey:SymphoxAPIParam_cpdt_num];
+            if (cpdt_num)
+            {
+                BOOL isFavorite = [[TMInfoManager sharedManager] favoriteContainsProductWithIdentifier:cpdt_num];
+                [self.bottomBar.buttonFavorite setSelected:isFavorite];
+            }
         }
     }
 }
@@ -2532,30 +2563,42 @@
         [self presentViewController:navigationController animated:YES completion:nil];
         return;
     }
-    NSArray *arrayCarts = [self cartsAvailableToAdd];
-    if ([arrayCarts count] == 0)
+    NSNumber *cpdt_num = [self.dictionaryDetail objectForKey:SymphoxAPIParam_cpdt_num];
+    NSArray *carts = [NSArray arrayWithObjects:[NSNumber numberWithUnsignedInteger:CartTypeCommonDelivery], [NSNumber numberWithUnsignedInteger:CartTypeStorePickup], [NSNumber numberWithUnsignedInteger:CartTypeFastDelivery], nil];
+    CartType cartContainsProduct = [[TMInfoManager sharedManager] alreadyContainsProductWithIdentifier:cpdt_num inCarts:carts];
+    if (cartContainsProduct != CartTypeTotal)
     {
-        if ([self.orderedSetSingleCart containsObject:[NSNumber numberWithUnsignedInteger:CartTypeVisitGift]])
-        {
-            [[TMInfoManager sharedManager] resetCartForType:CartTypeVisitGift];
-            [self addToCart:CartTypeVisitGift shouldShowAlert:NO];
-            [self presentCartViewForType:CartTypeVisitGift];
-        }
-        else if ([self.orderedSetSingleCart containsObject:[NSNumber numberWithUnsignedInteger:CartTypeDirectlyPurchase]])
-        [[TMInfoManager sharedManager] resetCartForType:CartTypeDirectlyPurchase];
-        [self addToCart:CartTypeDirectlyPurchase shouldShowAlert:NO];
-        [self presentCartViewForType:CartTypeDirectlyPurchase];
-    }
-    else if ([arrayCarts count] == 1)
-    {
-        NSNumber *numberType = [arrayCarts objectAtIndex:0];
-        NSInteger type = [numberType integerValue];
-        [self addToCart:type shouldShowAlert:NO];
-        [self presentCartViewForType:type];
+        [self presentCartViewForType:cartContainsProduct];
     }
     else
     {
-        [self showCartTypeSheetForDirectlyPurchase:YES];
+        NSArray *arrayCarts = [self cartsAvailableToAdd];
+        if ([arrayCarts count] == 0)
+        {
+            if ([self.orderedSetSingleCart containsObject:[NSNumber numberWithUnsignedInteger:CartTypeVisitGift]])
+            {
+                [[TMInfoManager sharedManager] resetCartForType:CartTypeVisitGift];
+                [self addToCart:CartTypeVisitGift shouldShowAlert:NO];
+                [self presentCartViewForType:CartTypeVisitGift];
+            }
+            else if ([self.orderedSetSingleCart containsObject:[NSNumber numberWithUnsignedInteger:CartTypeDirectlyPurchase]])
+            {
+                [[TMInfoManager sharedManager] resetCartForType:CartTypeDirectlyPurchase];
+                [self addToCart:CartTypeDirectlyPurchase shouldShowAlert:NO];
+                [self presentCartViewForType:CartTypeDirectlyPurchase];
+            }
+        }
+        else if ([arrayCarts count] == 1)
+        {
+            NSNumber *numberType = [arrayCarts objectAtIndex:0];
+            NSInteger type = [numberType integerValue];
+            [self addToCart:type shouldShowAlert:NO];
+            [self presentCartViewForType:type];
+        }
+        else
+        {
+            [self showCartTypeSheetForDirectlyPurchase:YES];
+        }
     }
 }
 
@@ -2690,6 +2733,7 @@
 
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
 {
+    NSLog(@"shouldStartLoadWithRequest - webView[%i]", webView.tag);
     if (navigationType == UIWebViewNavigationTypeLinkClicked)
     {
         if ([[UIApplication sharedApplication] canOpenURL:request.URL])
@@ -2714,11 +2758,58 @@
     [self.view setNeedsLayout];
 }
 
+- (void)webViewDidStartLoad:(UIWebView *)webView
+{
+    NSLog(@"webViewDidStartLoad - webView[%i]", webView.tag);
+}
+
+- (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error
+{
+    NSLog(@"didFailLoadWithError - webView[%i]:\n%@", webView.tag, [error description]);
+}
+
 #pragma mark - Notification Handler
 
 - (void)handlerOfCartContentChangedNotification:(NSNotification *)notification
 {
     [self updateCartBadge];
+}
+
+#pragma mark - KVO
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
+    UIScrollView *scrollView = object;
+    NSLog(@"scrollView[%i] contentSize changed to %@", scrollView.tag, NSStringFromCGSize(scrollView.contentSize));
+    UIWebView *webView = nil;
+    switch (scrollView.tag) {
+        case 2:
+        {
+            webView = self.webViewAdText;
+        }
+            break;
+        case 3:
+        {
+            webView = self.webViewIntro;
+        }
+            break;
+        case 4:
+        {
+            webView = self.webViewSpec;
+        }
+            break;
+        case 5:
+        {
+            webView = self.webViewRemark;
+        }
+            break;
+        default:
+            break;
+    }
+    
+    CGRect frame = webView.frame;
+    frame.size.height = scrollView.contentSize.height;
+    webView.frame = frame;
+    [self.view setNeedsLayout];
 }
 
 @end

@@ -155,6 +155,7 @@ typedef enum : NSUInteger {
 @property (nonatomic, strong) NSDictionary *productFastDelivery;
 @property (nonatomic, strong) NSDictionary *productInfoForFastDelivery;
 @property (nonatomic, strong) NSDictionary *dictionaryDocuments;
+@property (nonatomic, strong) NSDictionary *dictionaryGame;
 
 + (instancetype)sharedManager;
 

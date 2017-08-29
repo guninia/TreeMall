@@ -216,14 +216,14 @@
     return _viewQuantityInput;
 }
 
-- (NSString *)marketingDescription
-{
-    if (_marketingDescription == nil)
-    {
-        _marketingDescription = [[NSString alloc] initWithString:[LocalizedString AdditionalPurchaseProduct]];
-    }
-    return _marketingDescription;
-}
+//- (NSString *)marketingDescription
+//{
+//    if (_marketingDescription == nil)
+//    {
+//        _marketingDescription = [[NSString alloc] initWithString:[LocalizedString AdditionalPurchaseProduct]];
+//    }
+//    return _marketingDescription;
+//}
 
 #pragma mark - Private Methods
 
@@ -725,6 +725,28 @@
                 }
             }
         }
+        self.marketingDescription = nil;
+        NSArray *gift_info = [resultDictionary objectForKey:SymphoxAPIParam_gift_info];
+        if (gift_info && [gift_info isEqual:[NSNull null]] == NO)
+        {
+            NSMutableString *totalString = [NSMutableString string];
+            for (NSDictionary *dictionary in gift_info)
+            {
+                NSString *remark = [dictionary objectForKey:SymphoxAPIParam_remark];
+                if (remark && [remark isEqual:[NSNull null]] == NO)
+                {
+//                    if ([totalString length] > 0)
+//                    {
+//                        [totalString appendString:@"\n"];
+//                    }
+                    [totalString appendString:remark];
+                }
+            }
+            if ([totalString length] > 0)
+            {
+                self.marketingDescription = totalString;
+            }
+        }
         success = YES;
     }
     
@@ -1042,7 +1064,15 @@
     {
         self.viewQuantityInput.maxValue = [maxSellQty unsignedIntegerValue];
     }
-    
+    NSString *remarks = [product objectForKey:SymphoxAPIParam_remark];
+    if (remarks && [remarks isEqual:[NSNull null]] == NO && [remarks length] > 0)
+    {
+        self.viewQuantityInput.tips = remarks;
+    }
+    else
+    {
+        self.viewQuantityInput.tips = nil;
+    }
     NSString * name = [product objectForKey:SymphoxAPIParam_cpdt_name];
     [gaTracker send:[[GAIDictionaryBuilder
                       createEventWithCategory:[EventLog twoString:self.title _:logPara_直接購買]
@@ -1170,9 +1200,13 @@
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section
 {
-    CGFloat maxWidth = collectionView.frame.size.width;
-    CGFloat height = [SingleLabelCollectionReusableView heightForText:self.marketingDescription inViewWithWidth:maxWidth];
-    CGSize size = CGSizeMake(maxWidth, height);
+    CGSize size = CGSizeZero;
+    if (self.marketingDescription)
+    {
+        CGFloat maxWidth = collectionView.frame.size.width;
+        CGFloat height = [SingleLabelCollectionReusableView heightForText:self.marketingDescription inViewWithWidth:maxWidth];
+        size = CGSizeMake(maxWidth, height);
+    }
     return size;
 }
 

@@ -36,6 +36,7 @@
 - (NSString *)titleForCartType:(CartType)cartType;
 - (void)presentCartViewForType:(CartType)type;
 - (void)updateCartBadge;
+//- (NSDictionary *)commonDictionaryFromHotSaleProduct:(NSDictionary *)product;s
 
 - (void)buttonItemPressed:(id)sender;
 - (void)buttonItemCartPressed:(id)sender;
@@ -108,7 +109,7 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    
+    [self.tableView reloadData];
     // GA screen log
     [gaTracker set:kGAIScreenName value:self.title];
     [gaTracker send:[[GAIDictionaryBuilder createScreenView] build]];
@@ -231,47 +232,87 @@
 {
     if (dictionary == nil)
         return nil;
-    NSMutableDictionary *dictionaryCommon = [NSMutableDictionary dictionary];
+    NSMutableDictionary *commonDictionary = [NSMutableDictionary dictionary];
     
-    NSNumber *cpdt_num = [dictionary objectForKey:SymphoxAPIParam_cpdt_num];
+    NSArray *installments = [dictionary objectForKey:SymphoxAPIParam_installments];
+    if (installments)
+    {
+        [commonDictionary setObject:installments forKey:SymphoxAPIParam_seekInstallmentList];
+    }
+    id cpdt_num = [dictionary objectForKey:SymphoxAPIParam_cpdt_num];
     if (cpdt_num)
     {
-        [dictionaryCommon setObject:cpdt_num forKey:SymphoxAPIParam_cpdt_num];
+        [commonDictionary setObject:cpdt_num forKey:SymphoxAPIParam_cpdt_num];
     }
-    NSString *cpdt_name = [dictionary objectForKey:SymphoxAPIParam_cpdt_name];
-    if (cpdt_name)
-    {
-        [dictionaryCommon setObject:cpdt_name forKey:SymphoxAPIParam_cpdt_name];
-    }
-    NSString *pic_link = [dictionary objectForKey:SymphoxAPIParam_pic_link];
-    if (pic_link)
-    {
-        [dictionaryCommon setObject:pic_link forKey:SymphoxAPIParam_prod_pic_url];
-    }
-    NSString *cpro_price = [dictionary objectForKey:SymphoxAPIParam_cpro_price];
+    id cpro_price = [dictionary objectForKey:SymphoxAPIParam_cpro_price];
     if (cpro_price)
     {
-        [dictionaryCommon setObject:cpro_price forKey:SymphoxAPIParam_cpro_price];
+        [commonDictionary setObject:cpro_price forKey:SymphoxAPIParam_cpro_price];
     }
-    NSNumber *pure_price = [dictionary objectForKey:SymphoxAPIParam_pure_price];
-    if (pure_price)
+    id cpdt_name = [dictionary objectForKey:SymphoxAPIParam_cpdt_name];
+    if (cpdt_name)
     {
-        [dictionaryCommon setObject:pure_price forKey:SymphoxAPIParam_price03];
+        [commonDictionary setObject:cpdt_name forKey:SymphoxAPIParam_cpdt_name];
     }
-    NSNumber *pure_point = [dictionary objectForKey:SymphoxAPIParam_pure_point];
+    id quick = [dictionary objectForKey:SymphoxAPIParam_quick];
+    if (quick)
+    {
+        [commonDictionary setObject:quick forKey:SymphoxAPIParam_quick];
+    }
+    id pure_point = [dictionary objectForKey:SymphoxAPIParam_pure_point];
     if (pure_point)
     {
-        [dictionaryCommon setObject:pure_point forKey:SymphoxAPIParam_point01];
+        [commonDictionary setObject:pure_point forKey:SymphoxAPIParam_point01];
     }
-    NSNumber *mix_price = [dictionary objectForKey:SymphoxAPIParam_mix_price];
+    id mix_price = [dictionary objectForKey:SymphoxAPIParam_mix_price];
     if (mix_price)
     {
-        [dictionaryCommon setObject:mix_price forKey:SymphoxAPIParam_price02];
+        [commonDictionary setObject:mix_price forKey:SymphoxAPIParam_price02];
     }
-    NSNumber *mix_point = [dictionary objectForKey:SymphoxAPIParam_mix_point];
+    id mix_point = [dictionary objectForKey:SymphoxAPIParam_mix_point];
     if (mix_point)
     {
-        [dictionaryCommon setObject:mix_point forKey:SymphoxAPIParam_point02];
+        [commonDictionary setObject:mix_point forKey:SymphoxAPIParam_point02];
+    }
+    id pure_price = [dictionary objectForKey:SymphoxAPIParam_pure_price];
+    if (pure_price)
+    {
+        [commonDictionary setObject:pure_price forKey:SymphoxAPIParam_price03];
+    }
+    id pic_link = [dictionary objectForKey:SymphoxAPIParam_pic_link];
+    if (pic_link)
+    {
+        [commonDictionary setObject:pic_link forKey:SymphoxAPIParam_prod_pic_url];
+    }
+    id is_delivery_store = [dictionary objectForKey:SymphoxAPIParam_is_delivery_store];
+    if (is_delivery_store)
+    {
+        [commonDictionary setObject:is_delivery_store forKey:SymphoxAPIParam_is_delivery_store];
+    }
+    id freepoint = [dictionary objectForKey:SymphoxAPIParam_freepoint];
+    if (freepoint)
+    {
+        [commonDictionary setObject:freepoint forKey:SymphoxAPIParam_freepoint];
+    }
+    id chk_tactic_click = [dictionary objectForKey:SymphoxAPIParam_chk_tactic_click];
+    if (chk_tactic_click)
+    {
+        [commonDictionary setObject:chk_tactic_click forKey:SymphoxAPIParam_chk_tactic_click];
+    }
+    id tactic_click_category = [dictionary objectForKey:SymphoxAPIParam_tactic_click_category];
+    if (tactic_click_category)
+    {
+        [commonDictionary setObject:tactic_click_category forKey:SymphoxAPIParam_tactic_click_category];
+    }
+    id tactic_click_discount = [dictionary objectForKey:SymphoxAPIParam_tactic_click_discount];
+    if (tactic_click_discount)
+    {
+        [commonDictionary setObject:tactic_click_discount forKey:SymphoxAPIParam_tactic_click_discount];
+    }
+    id discount_hall_percentage = [dictionary objectForKey:SymphoxAPIParam_discount_hall_percentage];
+    if (discount_hall_percentage)
+    {
+        [commonDictionary setObject:discount_hall_percentage forKey:SymphoxAPIParam_discount_hall_percentage];
     }
     
     BOOL common = NO;
@@ -281,6 +322,7 @@
     NSArray *can_used_cart = [dictionary objectForKey:SymphoxAPIParam_can_used_cart];
     if (can_used_cart && [can_used_cart isEqual:[NSNull null]] == NO)
     {
+        [commonDictionary setObject:can_used_cart forKey:SymphoxAPIParam_can_used_cart];
         for (NSString *type in can_used_cart)
         {
             switch ([type integerValue]) {
@@ -314,11 +356,11 @@
     NSNumber *numberFast = [NSNumber numberWithBool:fast];
     NSNumber *numberDirect = [NSNumber numberWithBool:direct];
     
-    [dictionaryCommon setObject:numberCommon forKey:SymphoxAPIParam_normal_cart];
-    [dictionaryCommon setObject:numberStore forKey:SymphoxAPIParam_to_store_cart];
-    [dictionaryCommon setObject:numberFast forKey:SymphoxAPIParam_fast_delivery_cart];
-    [dictionaryCommon setObject:numberDirect forKey:SymphoxAPIParam_single_shopping_cart];
-    return dictionaryCommon;
+    [commonDictionary setObject:numberCommon forKey:SymphoxAPIParam_normal_cart];
+    [commonDictionary setObject:numberStore forKey:SymphoxAPIParam_to_store_cart];
+    [commonDictionary setObject:numberFast forKey:SymphoxAPIParam_fast_delivery_cart];
+    [commonDictionary setObject:numberDirect forKey:SymphoxAPIParam_single_shopping_cart];
+    return commonDictionary;
 }
 
 - (void)addProduct:(NSDictionary *)product toCart:(CartType)cartType named:(NSString *)cartName shouldShowAlert:(BOOL)shouldShowAlert
@@ -433,6 +475,99 @@
     });
 }
 
+- (NSDictionary *)commonDictionaryFromHotSaleProduct:(NSDictionary *)product
+{
+    NSMutableDictionary *commonDictionary = [NSMutableDictionary dictionary];
+    
+    NSArray *installments = [product objectForKey:SymphoxAPIParam_installments];
+    if (installments)
+    {
+        [commonDictionary setObject:installments forKey:SymphoxAPIParam_seekInstallmentList];
+    }
+    id cpdt_num = [product objectForKey:SymphoxAPIParam_cpdt_num];
+    if (cpdt_num)
+    {
+        [commonDictionary setObject:cpdt_num forKey:SymphoxAPIParam_cpdt_num];
+    }
+    id cpro_price = [product objectForKey:SymphoxAPIParam_cpro_price];
+    if (cpro_price)
+    {
+        [commonDictionary setObject:cpro_price forKey:SymphoxAPIParam_cpro_price];
+    }
+    id cpdt_name = [product objectForKey:SymphoxAPIParam_cpdt_name];
+    if (cpdt_name)
+    {
+        [commonDictionary setObject:cpdt_name forKey:SymphoxAPIParam_cpdt_name];
+    }
+    id quick = [product objectForKey:SymphoxAPIParam_quick];
+    if (quick)
+    {
+        [commonDictionary setObject:quick forKey:SymphoxAPIParam_quick];
+    }
+    id pure_point = [product objectForKey:SymphoxAPIParam_pure_point];
+    if (pure_point)
+    {
+        [commonDictionary setObject:pure_point forKey:SymphoxAPIParam_point01];
+    }
+    id mix_price = [product objectForKey:SymphoxAPIParam_mix_price];
+    if (mix_price)
+    {
+        [commonDictionary setObject:mix_price forKey:SymphoxAPIParam_price02];
+    }
+    id mix_point = [product objectForKey:SymphoxAPIParam_mix_point];
+    if (mix_point)
+    {
+        [commonDictionary setObject:mix_point forKey:SymphoxAPIParam_point02];
+    }
+    id pure_price = [product objectForKey:SymphoxAPIParam_pure_price];
+    if (pure_price)
+    {
+        [commonDictionary setObject:pure_price forKey:SymphoxAPIParam_price03];
+    }
+    id pic_link = [product objectForKey:SymphoxAPIParam_pic_link];
+    if (pic_link)
+    {
+        [commonDictionary setObject:pic_link forKey:SymphoxAPIParam_prod_pic_url];
+    }
+    id is_delivery_store = [product objectForKey:SymphoxAPIParam_is_delivery_store];
+    if (is_delivery_store)
+    {
+        [commonDictionary setObject:is_delivery_store forKey:SymphoxAPIParam_is_delivery_store];
+    }
+    id freepoint = [product objectForKey:SymphoxAPIParam_freepoint];
+    if (freepoint)
+    {
+        [commonDictionary setObject:freepoint forKey:SymphoxAPIParam_freepoint];
+    }
+    id chk_tactic_click = [product objectForKey:SymphoxAPIParam_chk_tactic_click];
+    if (chk_tactic_click)
+    {
+        [commonDictionary setObject:chk_tactic_click forKey:SymphoxAPIParam_chk_tactic_click];
+    }
+    id tactic_click_category = [product objectForKey:SymphoxAPIParam_tactic_click_category];
+    if (tactic_click_category)
+    {
+        [commonDictionary setObject:tactic_click_category forKey:SymphoxAPIParam_tactic_click_category];
+    }
+    id tactic_click_discount = [product objectForKey:SymphoxAPIParam_tactic_click_discount];
+    if (tactic_click_discount)
+    {
+        [commonDictionary setObject:tactic_click_discount forKey:SymphoxAPIParam_tactic_click_discount];
+    }
+    id discount_hall_percentage = [product objectForKey:SymphoxAPIParam_discount_hall_percentage];
+    if (discount_hall_percentage)
+    {
+        [commonDictionary setObject:discount_hall_percentage forKey:SymphoxAPIParam_discount_hall_percentage];
+    }
+    id can_used_cart = [product objectForKey:SymphoxAPIParam_can_used_cart];
+    if (can_used_cart)
+    {
+        [commonDictionary setObject:can_used_cart forKey:SymphoxAPIParam_can_used_cart];
+    }
+    
+    return commonDictionary;
+}
+
 #pragma mark - Actions
 
 - (void)buttonItemPressed:(id)sender
@@ -526,7 +661,7 @@
             NSDictionary *dictionary = [NSDictionary dictionaryWithObjectsAndKeys:[LocalizedString ClickToDiscount], ProductTableViewCellTagText, [UIColor colorWithRed:(134.0/255.0) green:(209.0/255.0) blue:(188.0/255.0) alpha:1.0], NSForegroundColorAttributeName, nil];
             [arrayTags addObject:dictionary];
         }
-        NSArray *installments = [dictionary objectForKey:SymphoxAPIParam_seekInstallmentList];
+        NSArray *installments = [dictionary objectForKey:SymphoxAPIParam_installments];
         if (installments && ([installments isEqual:[NSNull null]] == NO) && [installments count] > 0)
         {
             NSDictionary *longestPeriodInstallment = [installments lastObject];
@@ -630,14 +765,21 @@
             isFavorite = [[TMInfoManager sharedManager] favoriteContainsProductWithIdentifier:cpdt_num];
         }
         NSArray *carts = [dictionary objectForKey:SymphoxAPIParam_can_used_cart];
-        if ([carts containsObject:@"0"] || [carts containsObject:@"1"] || [carts containsObject:@"2"] || [carts containsObject:@"3"])
+//        if ([carts containsObject:@"0"] || [carts containsObject:@"1"] || [carts containsObject:@"2"] || [carts containsObject:@"3"])
+        BOOL shouldHideCartAndFavorite = NO;
+        if ([carts count] > 0)
         {
-            cell.buttonAddToCart.hidden = NO;
+            if ([carts count] == 1 && [carts containsObject:@"-1"])
+            {
+                shouldHideCartAndFavorite = YES;
+            }
         }
         else
         {
-            cell.buttonAddToCart.hidden = YES;
+            shouldHideCartAndFavorite = YES;
         }
+        cell.buttonAddToCart.hidden = shouldHideCartAndFavorite;
+        cell.buttonFavorite.hidden = shouldHideCartAndFavorite;
     }
     
 //    cell.labelTitle.text = title;
@@ -744,7 +886,7 @@
     }
     if (cell.tag >= [self.arrayProducts count])
         return;
-    NSDictionary *dictionary = [self.arrayProducts objectAtIndex:cell.tag];
+    NSDictionary *dictionary = [self dictionaryCommonFromHotSale:[self.arrayProducts objectAtIndex:cell.tag]];
     NSArray *carts = [dictionary objectForKey:SymphoxAPIParam_can_used_cart];
     NSNumber * productId = [dictionary objectForKey:SymphoxAPIParam_cpdt_num];
     NSString * productName = [dictionary objectForKey:SymphoxAPIParam_cpdt_name];
@@ -752,7 +894,8 @@
         return;
     
     NSMutableArray *arrayAvailableCarts = [NSMutableArray array];
-    BOOL canDirectlyPurchase = [carts containsObject:@"3"];
+    BOOL canDirectlyPurchase = [carts containsObject:[NSString stringWithFormat:@"%i", CartTypeDirectlyPurchase]];
+    BOOL isVisitGift = [carts containsObject:[NSString stringWithFormat:@"%i", CartTypeVisitGift]];
     for (NSString *stringType in carts)
     {
         CartType type = [stringType integerValue];
@@ -798,6 +941,12 @@
                           label:[EventLog threeString:[EventLog cartTypeInString:type] _:[productId stringValue] _:productName]
                           value:nil] build]];
     }
+    else if (isVisitGift)
+    {
+        [[TMInfoManager sharedManager] resetCartForType:CartTypeVisitGift];
+        [self addProduct:dictionary toCart:CartTypeVisitGift named:@"" shouldShowAlert:NO];
+        [self presentCartViewForType:CartTypeVisitGift];
+    }
     else if (canDirectlyPurchase)
     {
         [[TMInfoManager sharedManager] resetCartForType:CartTypeDirectlyPurchase];
@@ -813,27 +962,58 @@
     }
 }
 
-- (void)hotSaleTableViewCell:(HotSaleTableViewCell *)cell didPressFavoriteBySender:(id)sender
+- (void)hotSaleTableViewCell:(HotSaleTableViewCell *)cell didPressToChangeFavoriteStatus:(BOOL)favorite
 {
     if (cell.tag >= [self.arrayProducts count])
         return;
-    NSDictionary *dictionary = [self.arrayProducts objectAtIndex:cell.tag];
-    [self addFavoriteProduct:dictionary];
-    
-    BOOL isFavorite = NO;
+    NSDictionary *product = [self.arrayProducts objectAtIndex:cell.tag];
+    NSDictionary *dictionary = [self dictionaryCommonFromHotSale:product];
     NSNumber *cpdt_num = [dictionary objectForKey:SymphoxAPIParam_cpdt_num];
-    if (cpdt_num && [cpdt_num isEqual:[NSNull null]] == NO)
+//    [self addFavoriteProduct:dictionary];
+//    
+//    BOOL isFavorite = NO;
+//    if (cpdt_num && [cpdt_num isEqual:[NSNull null]] == NO)
+//    {
+//        isFavorite = [[TMInfoManager sharedManager] favoriteContainsProductWithIdentifier:cpdt_num];
+//    }
+//    cell.favorite = isFavorite;
+//    
+//    NSString * productName = [dictionary objectForKey:SymphoxAPIParam_cpdt_name];
+//    [gaTracker send:[[GAIDictionaryBuilder
+//                      createEventWithCategory:[EventLog twoString:self.title _:logPara_列表一]
+//                      action:[EventLog index:cell.tag _:logPara_加入我的最愛]
+//                      label:[EventLog twoString:[cpdt_num stringValue] _:productName]
+//                      value:nil] build]];
+    NSString *message = nil;
+    if (favorite)
     {
-        isFavorite = [[TMInfoManager sharedManager] favoriteContainsProductWithIdentifier:cpdt_num];
+        if ([[TMInfoManager sharedManager] favoriteContainsProductWithIdentifier:cpdt_num])
+        {
+            return;
+        }
+        message = [[TMInfoManager sharedManager] addProductToFavorite:dictionary];
+        
+        NSString * name = [dictionary objectForKey:SymphoxAPIParam_cpdt_name];
+        [gaTracker send:[[GAIDictionaryBuilder
+                          createEventWithCategory:[EventLog twoString:self.title _:logPara_列表一]
+                          action:[EventLog index:cell.tag _:logPara_加入我的最愛]
+                          label:[EventLog twoString:[cpdt_num stringValue] _:name]
+                          value:nil] build]];
     }
-    cell.favorite = isFavorite;
+    else
+    {
+        if ([[TMInfoManager sharedManager] favoriteContainsProductWithIdentifier:cpdt_num] == NO)
+        {
+            return;
+        }
+        [[TMInfoManager sharedManager] removeFavoriteProductWithIdentifier:cpdt_num];
+        message = [LocalizedString ProductRemovedFromFavorite];
+    }
     
-    NSString * productName = [dictionary objectForKey:SymphoxAPIParam_cpdt_name];
-    [gaTracker send:[[GAIDictionaryBuilder
-                      createEventWithCategory:[EventLog twoString:self.title _:logPara_列表一]
-                      action:[EventLog index:cell.tag _:logPara_加入我的最愛]
-                      label:[EventLog twoString:[cpdt_num stringValue] _:productName]
-                      value:nil] build]];
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:message preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *action = [UIAlertAction actionWithTitle:[LocalizedString Confirm] style:UIAlertActionStyleDefault handler:nil];
+    [alertController addAction:action];
+    [self presentViewController:alertController animated:YES completion:nil];
 }
 
 @end

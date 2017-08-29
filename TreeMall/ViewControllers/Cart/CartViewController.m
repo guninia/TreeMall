@@ -1470,11 +1470,15 @@
     {
         self.viewQuantityInput.maxValue = [maxSellQty unsignedIntegerValue];
     }
-//    NSString *remarks = [product objectForKey:SymphoxAPIParam_remark];
-//    if (remarks && [remarks isEqual:[NSNull null]] == NO && [remarks length] > 0)
-//    {
-//        self.viewQuantityInput.tips = remarks;
-//    }
+    NSString *remarks = [product objectForKey:SymphoxAPIParam_remark];
+    if (remarks && [remarks isEqual:[NSNull null]] == NO && [remarks length] > 0)
+    {
+        self.viewQuantityInput.tips = remarks;
+    }
+    else
+    {
+        self.viewQuantityInput.tips = nil;
+    }
     self.viewQuantityInput.tag = index;
     [self.viewQuantityInput show];
 }
@@ -1703,24 +1707,15 @@
             }
         }
         
-        NSString *remark = [dictionary objectForKey:SymphoxAPIParam_remark];
-        if (remark != nil && ([remark isEqual:[NSNull null]] == NO) && [remark length] > 0)
+        NSString *market_name = [dictionary objectForKey:SymphoxAPIParam_market_name];
+        if (market_name != nil && ([market_name isEqual:[NSNull null]] == NO) && [market_name length] > 0)
         {
-            cell.labelDetail.text = remark;
+            cell.labelDetail.text = market_name;
             cell.labelDetail.hidden = NO;
         }
         else
         {
-            remark = [dictionary objectForKey:SymphoxAPIParam_market_name];
-            if (remark != nil && ([remark isEqual:[NSNull null]] == NO) && [remark length] > 0)
-            {
-                cell.labelDetail.text = remark;
-                cell.labelDetail.hidden = NO;
-            }
-            else
-            {
-                cell.labelDetail.hidden = YES;
-            }
+            cell.labelDetail.hidden = YES;
         }
         
         NSString *imagePath = [dictionary objectForKey:SymphoxAPIParam_img_url];

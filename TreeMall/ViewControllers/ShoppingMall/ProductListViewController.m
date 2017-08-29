@@ -37,6 +37,7 @@
 - (void)addProduct:(NSDictionary *)product toCart:(CartType)cartType shouldShowAlert:(BOOL)shouldShowAlert;
 - (NSArray *)cartArrayForProduct:(NSDictionary *)product;
 - (BOOL)canDirectlyPurchaseProduct:(NSDictionary *)product;
+- (BOOL)isVisitGiftForProduct:(NSDictionary *)product;
 - (void)presentCartViewForType:(CartType)type;
 - (void)buttonItemSearchPressed:(id)sender;
 
@@ -659,6 +660,7 @@
 - (void)showCartTypeSheetForProduct:(NSDictionary *)product
 {
     BOOL canDirectlyPurchase = [self canDirectlyPurchaseProduct:product];
+    BOOL isVisitGift = [self isVisitGiftForProduct:product];
     NSArray *arrayCartType = [self cartArrayForProduct:product];
     NSNumber * productId = [product objectForKey:SymphoxAPIParam_cpdt_num];
     NSString * productName = [product objectForKey:SymphoxAPIParam_cpdt_name];
@@ -700,6 +702,12 @@
                           label:[EventLog threeString:[EventLog cartTypeInString:cartType] _:[productId stringValue] _:productName]
                           value:nil] build]];
     }
+    else if (isVisitGift)
+    {
+        [[TMInfoManager sharedManager] resetCartForType:CartTypeVisitGift];
+        [self addProduct:product toCart:CartTypeVisitGift shouldShowAlert:NO];
+        [self presentCartViewForType:CartTypeVisitGift];
+    }
     else if (canDirectlyPurchase)
     {
         [[TMInfoManager sharedManager] resetCartForType:CartTypeDirectlyPurchase];
@@ -732,29 +740,62 @@
 {
     NSMutableArray *arrayCartType = [NSMutableArray array];
     
-    NSNumber *normal_cart = [product objectForKey:SymphoxAPIParam_normal_cart];
-    if (normal_cart && [normal_cart isEqual:[NSNull null]] == NO && [normal_cart boolValue] == YES)
+//    NSNumber *normal_cart = [product objectForKey:SymphoxAPIParam_normal_cart];
+//    if (normal_cart && [normal_cart isEqual:[NSNull null]] == NO && [normal_cart boolValue] == YES)
+//    {
+//        NSMutableDictionary *dictionary = [NSMutableDictionary dictionary];
+//        [dictionary setObject:[NSNumber numberWithInteger:CartTypeCommonDelivery] forKey:SymphoxAPIParam_cart_type];
+//        [dictionary setObject:[LocalizedString CommonDelivery] forKey:SymphoxAPIParam_name];
+//        [arrayCartType addObject:dictionary];
+//    }
+//    NSNumber *to_store_cart = [product objectForKey:SymphoxAPIParam_to_store_cart];
+//    if (to_store_cart && [to_store_cart isEqual:[NSNull null]] == NO && [to_store_cart boolValue] == YES)
+//    {
+//        NSMutableDictionary *dictionary = [NSMutableDictionary dictionary];
+//        [dictionary setObject:[NSNumber numberWithInteger:CartTypeStorePickup] forKey:SymphoxAPIParam_cart_type];
+//        [dictionary setObject:[LocalizedString StorePickUp] forKey:SymphoxAPIParam_name];
+//        [arrayCartType addObject:dictionary];
+//    }
+//    NSNumber *fast_delivery_cart = [product objectForKey:SymphoxAPIParam_fast_delivery_cart];
+//    if (fast_delivery_cart && [fast_delivery_cart isEqual:[NSNull null]] == NO && [fast_delivery_cart boolValue] == YES)
+//    {
+//        NSMutableDictionary *dictionary = [NSMutableDictionary dictionary];
+//        [dictionary setObject:[NSNumber numberWithInteger:CartTypeFastDelivery] forKey:SymphoxAPIParam_cart_type];
+//        [dictionary setObject:[LocalizedString FastDelivery] forKey:SymphoxAPIParam_name];
+//        [arrayCartType addObject:dictionary];
+//    }
+    
+    NSArray *can_used_cart = [product objectForKey:SymphoxAPIParam_can_used_cart];
+    if (can_used_cart && [can_used_cart isEqual:[NSNull null]] == NO)
     {
-        NSMutableDictionary *dictionary = [NSMutableDictionary dictionary];
-        [dictionary setObject:[NSNumber numberWithInteger:CartTypeCommonDelivery] forKey:SymphoxAPIParam_cart_type];
-        [dictionary setObject:[LocalizedString CommonDelivery] forKey:SymphoxAPIParam_name];
-        [arrayCartType addObject:dictionary];
-    }
-    NSNumber *to_store_cart = [product objectForKey:SymphoxAPIParam_to_store_cart];
-    if (to_store_cart && [to_store_cart isEqual:[NSNull null]] == NO && [to_store_cart boolValue] == YES)
-    {
-        NSMutableDictionary *dictionary = [NSMutableDictionary dictionary];
-        [dictionary setObject:[NSNumber numberWithInteger:CartTypeStorePickup] forKey:SymphoxAPIParam_cart_type];
-        [dictionary setObject:[LocalizedString StorePickUp] forKey:SymphoxAPIParam_name];
-        [arrayCartType addObject:dictionary];
-    }
-    NSNumber *fast_delivery_cart = [product objectForKey:SymphoxAPIParam_fast_delivery_cart];
-    if (fast_delivery_cart && [fast_delivery_cart isEqual:[NSNull null]] == NO && [fast_delivery_cart boolValue] == YES)
-    {
-        NSMutableDictionary *dictionary = [NSMutableDictionary dictionary];
-        [dictionary setObject:[NSNumber numberWithInteger:CartTypeFastDelivery] forKey:SymphoxAPIParam_cart_type];
-        [dictionary setObject:[LocalizedString FastDelivery] forKey:SymphoxAPIParam_name];
-        [arrayCartType addObject:dictionary];
+        for (NSString *textCart in can_used_cart)
+        {
+            NSInteger cartType = [textCart integerValue];
+            NSMutableDictionary *dictionary = [NSMutableDictionary dictionary];
+            [dictionary setObject:[NSNumber numberWithInteger:cartType] forKey:SymphoxAPIParam_cart_type];
+            switch ([textCart integerValue]) {
+                case CartTypeCommonDelivery:
+                {
+                    [dictionary setObject:[LocalizedString CommonDelivery] forKey:SymphoxAPIParam_name];
+                    [arrayCartType addObject:dictionary];
+                }
+                    break;
+                case CartTypeStorePickup:
+                {
+                    [dictionary setObject:[LocalizedString StorePickUp] forKey:SymphoxAPIParam_name];
+                    [arrayCartType addObject:dictionary];
+                }
+                    break;
+                case CartTypeFastDelivery:
+                {
+                    [dictionary setObject:[LocalizedString FastDelivery] forKey:SymphoxAPIParam_name];
+                    [arrayCartType addObject:dictionary];
+                }
+                    break;
+                default:
+                    break;
+            }
+        }
     }
     return arrayCartType;
 }
@@ -762,12 +803,32 @@
 - (BOOL)canDirectlyPurchaseProduct:(NSDictionary *)product
 {
     BOOL canPurchaseDirectly = NO;
-    NSNumber *single_shopping_cart = [product objectForKey:SymphoxAPIParam_single_shopping_cart];
-    if (single_shopping_cart && [single_shopping_cart isEqual:[NSNull null]] == NO)
+//    NSNumber *single_shopping_cart = [product objectForKey:SymphoxAPIParam_single_shopping_cart];
+//    if (single_shopping_cart && [single_shopping_cart isEqual:[NSNull null]] == NO)
+//    {
+//        canPurchaseDirectly = [single_shopping_cart boolValue];
+//    }
+    
+    NSArray *can_used_cart = [product objectForKey:SymphoxAPIParam_can_used_cart];
+    if (can_used_cart && [can_used_cart isEqual:[NSNull null]] == NO && [can_used_cart containsObject:[NSString stringWithFormat:@"%i", CartTypeDirectlyPurchase]])
     {
-        canPurchaseDirectly = [single_shopping_cart boolValue];
+        canPurchaseDirectly = YES;
     }
+    
     return canPurchaseDirectly;
+}
+
+- (BOOL)isVisitGiftForProduct:(NSDictionary *)product
+{
+    BOOL isVisitGift = NO;
+    
+    NSArray *can_used_cart = [product objectForKey:SymphoxAPIParam_can_used_cart];
+    if (can_used_cart && [can_used_cart isEqual:[NSNull null]] == NO && [can_used_cart containsObject:[NSString stringWithFormat:@"%i", CartTypeVisitGift]])
+    {
+        isVisitGift = YES;
+    }
+    
+    return isVisitGift;
 }
 
 - (void)presentCartViewForType:(CartType)type
@@ -961,16 +1022,21 @@
         }
         
         BOOL canPurchaseDirectly = [self canDirectlyPurchaseProduct:dictionary];
-        
+        BOOL isVisitGift = [self isVisitGiftForProduct:dictionary];
         NSArray *arrayCarts = [self cartArrayForProduct:dictionary];
-        if (([arrayCarts count] > 0) || canPurchaseDirectly)
+        BOOL shouldHideCartAndFavorite = NO;
+        
+        if (([arrayCarts count] > 0) || canPurchaseDirectly || isVisitGift)
         {
-            cell.buttonCart.hidden = NO;
+            shouldHideCartAndFavorite = NO;
         }
         else
         {
-            cell.buttonCart.hidden = YES;
+            shouldHideCartAndFavorite = YES;
         }
+        
+        cell.buttonCart.hidden = shouldHideCartAndFavorite;
+        cell.buttonFavorite.hidden = shouldHideCartAndFavorite;
     }
     return cell;
 }

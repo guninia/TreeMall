@@ -227,7 +227,7 @@ static CryptoModule *gCryptoModule = nil;
                 {
                     [errorMessage appendString:[LocalizedString SystemErrorTryLater]];
                 }
-                [errorMessage appendFormat:@"\n(%@)", statusId];
+//                [errorMessage appendFormat:@"\n(%@)", statusId];
                 [userInfo setObject:errorMessage forKey:SymphoxAPIParam_status_desc];
                 error = [NSError errorWithDomain:errorDomain code:errorCode userInfo:userInfo];
             }

@@ -17,6 +17,8 @@
 
 - (void)loadRequestFromUrl:(NSURL *)url;
 
+- (void)buttonItemClosePressed:(id)sender;
+
 @end
 
 @implementation WebViewViewController
@@ -35,10 +37,18 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
+    if ([self.navigationController.viewControllers objectAtIndex:0] == self)
+    {
+        UIImage *image = [UIImage imageNamed:@"car_popup_close"];
+        if (image)
+        {
+            UIBarButtonItem *buttonItem = [[UIBarButtonItem alloc] initWithImage:image landscapeImagePhone:image style:UIBarButtonItemStylePlain target:self action:@selector(buttonItemClosePressed:)];
+            self.navigationItem.leftBarButtonItem = buttonItem;
+        }
+    }
     UIBarButtonItem *rightItem = [[UIBarButtonItem alloc] initWithCustomView:self.activityIndicator];
     [self.navigationItem setRightBarButtonItem:rightItem];
     [self.view addSubview:self.webView];
-    
     if (self.url)
     {
         [self loadRequestFromUrl:self.url];
@@ -143,6 +153,29 @@
     [self.webView loadRequest:request];
 }
 
+- (void)dismiss
+{
+    if (self.navigationController.presentingViewController)
+    {
+        [self.navigationController.presentingViewController dismissViewControllerAnimated:YES completion:nil];
+    }
+    else if (self.navigationController)
+    {
+        [self.navigationController popViewControllerAnimated:YES];
+    }
+    else if (self.presentingViewController)
+    {
+        [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
+    }
+}
+
+#pragma mark - Actions
+
+- (void)buttonItemClosePressed:(id)sender
+{
+    [self dismiss];
+}
+
 #pragma mark - WKNavigationDelegate
 
 - (void)webView:(WKWebView *)webView didFailNavigation:(WKNavigation *)navigation withError:(NSError *)error
@@ -228,15 +261,9 @@
                 __weak WebViewViewController *weakSelf = self;
                 confirmAction = [UIAlertAction actionWithTitle:[LocalizedString Confirm] style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
                     completionHandler();
-                    if (weakSelf.navigationController.presentingViewController)
-                    {
-                        [weakSelf.navigationController.presentingViewController dismissViewControllerAnimated:YES completion:nil];
-                    }
-                    else if (weakSelf.presentingViewController)
-                    {
-                        [weakSelf.presentingViewController dismissViewControllerAnimated:YES completion:nil];
-                    }
-                    [[NSNotificationCenter defaultCenter] postNotificationName:PostNotificationName_UserAuthenticated object:self];
+                    [weakSelf dismiss];
+//                    [[NSNotificationCenter defaultCenter] postNotificationName:PostNotificationName_UserAuthenticated object:self];
+                    [[TMInfoManager sharedManager] retrieveUserInformation];
                 }];
             }
             else
@@ -252,14 +279,7 @@
                         viewController.content = content;
                         __weak WebViewViewController *weakSelf = self;
                         dispatch_async(dispatch_get_main_queue(), ^{
-                            if (weakSelf.navigationController)
-                            {
-                                [weakSelf.navigationController pushViewController:viewController animated:YES];
-                            }
-                            else
-                            {
-                                [weakSelf presentViewController:viewController animated:YES completion:nil];
-                            }
+                            [weakSelf dismiss];
                         });
                     }
                     completionHandler();
@@ -282,18 +302,7 @@
                 __weak WebViewViewController *weakSelf = self;
                 confirmAction = [UIAlertAction actionWithTitle:[LocalizedString Confirm] style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
                     completionHandler();
-                    if (weakSelf.navigationController.presentingViewController)
-                    {
-                        [weakSelf.navigationController.presentingViewController dismissViewControllerAnimated:YES completion:nil];
-                    }
-                    else if (weakSelf.navigationController)
-                    {
-                        [weakSelf.navigationController popViewControllerAnimated:YES];
-                    }
-                    else if (weakSelf.presentingViewController)
-                    {
-                        [weakSelf.presentingViewController dismissViewControllerAnimated:YES completion:nil];
-                    }
+                    [weakSelf dismiss];
                     [[TMInfoManager sharedManager] retrieveUserInformation];
                 }];
             }
@@ -304,18 +313,7 @@
                     completionHandler();
                     __weak WebViewViewController *weakSelf = self;
                     dispatch_async(dispatch_get_main_queue(), ^{
-                        if (weakSelf.navigationController.presentingViewController)
-                        {
-                            [weakSelf.navigationController.presentingViewController dismissViewControllerAnimated:YES completion:nil];
-                        }
-                        else if (weakSelf.navigationController)
-                        {
-                            [weakSelf.navigationController popViewControllerAnimated:YES];
-                        }
-                        else if (weakSelf.presentingViewController)
-                        {
-                            [weakSelf.presentingViewController dismissViewControllerAnimated:YES completion:nil];
-                        }
+                        [weakSelf dismiss];
                     });
                 }
                 else
@@ -325,6 +323,28 @@
                         completionHandler();
                     }];
                 }
+            }
+        }
+            break;
+        case WebViewTypeGame:
+        {
+            if (success)
+            {
+                completionHandler();
+                __weak WebViewViewController *weakSelf = self;
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [weakSelf dismiss];
+                });
+            }
+            else
+            {
+                confirmAction = [UIAlertAction actionWithTitle:[LocalizedString Confirm] style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
+                    completionHandler();
+                    __weak WebViewViewController *weakSelf = self;
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [weakSelf dismiss];
+                    });
+                }];
             }
         }
             break;

@@ -492,7 +492,7 @@ static NSInteger MaxTagsNumber = 5;
     {
         discount = nil;
     }
-    if (discount == nil || [discount doubleValue] == 0)
+    if (discount == nil || [discount doubleValue] == 0 || [discount doubleValue] == 1.0)
     {
         [self.viewDiscount setHidden:YES];
     }

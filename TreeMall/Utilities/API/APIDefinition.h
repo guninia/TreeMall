@@ -12,7 +12,9 @@
 #import <Foundation/Foundation.h>
 
 #ifdef DEBUG
-static NSString *SymphoxAPIDomain = @"http://sapi.symphox.com.tw/treeMall/";
+//static NSString *SymphoxAPIDomain = @"http://sapi.symphox.com.tw/treeMall/";
+static NSString *SymphoxAPIDomain = @"https://api.symphox.com.tw/treeMall/";
+//static NSString *SymphoxAPIDomain = @"http://tomcat8.mdevelop.com/";
 #else
 static NSString *SymphoxAPIDomain = @"https://api.symphox.com.tw/treeMall/";
 #endif
@@ -65,6 +67,7 @@ static NSString *SymphoxAPI__sendPushInfo = @"api/onlineService.do";
 static NSString *SymphoxAPI__feedbackPointDetailPage = @"http://www.treemall.com.tw/event/140310howpoint/index_2.shtml#a01";
 static NSString *SymphoxAPI__storePickupDescription = @"http://www.treemall.com.tw/event/24H_160101/160101_con_list.shtml";
 static NSString *SymphoxAPI__OrderDetailWebpage = @"https://www.treemall.com.tw/member/index";
+static NSString *SymphoxAPI__game = @"game/game.do";
 
 #define SymphoxAPI_token [NSString stringWithFormat:@"%@%@", SymphoxAPIDomain, SymphoxAPI__token]
 #define SymphoxAPI_homepage [NSString stringWithFormat:@"%@%@", SymphoxAPIDomain, SymphoxAPI__homepage]
@@ -114,6 +117,7 @@ static NSString *SymphoxAPI__OrderDetailWebpage = @"https://www.treemall.com.tw/
 #define SymphoxAPI_feedbackPointDetailPage SymphoxAPI__feedbackPointDetailPage
 #define SymphoxAPI_storePickupDescription SymphoxAPI__storePickupDescription
 #define SymphoxAPI_OrderDetailWebpage SymphoxAPI__OrderDetailWebpage
+#define SymphoxAPI_game [NSString stringWithFormat:@"%@%@", SymphoxAPIDomain, SymphoxAPI__game]
 
 
 static NSString *SymphoxAPIParam_key = @"sym-api-key";
@@ -279,6 +283,7 @@ static NSString *SymphoxAPIParam_specification = @"specification";
 static NSString *SymphoxAPIParam_attention = @"attention";
 static NSString *SymphoxAPIParam_standard = @"standard";
 static NSString *SymphoxAPIParam_installment = @"installment";
+static NSString *SymphoxAPIParam_installments = @"installments";
 static NSString *SymphoxAPIParam_term = @"term";
 static NSString *SymphoxAPIParam_cathay_only = @"cathay_only";
 static NSString *SymphoxAPIParam_shopping = @"shopping";
@@ -435,6 +440,9 @@ static NSString *SymphoxAPIParam_multiple = @"multiple";
 static NSString *SymphoxAPIParam_location = @"location";
 static NSString *SymphoxAPIParam_limit_Type = @"limit_Type";
 static NSString *SymphoxAPIParam_doorsill = @"doorsill";
+static NSString *SymphoxAPIParam_gift_info = @"gift_info";
+static NSString *SymphoxAPIParam_game = @"game";
+static NSString *SymphoxAPIParam_game_id = @"game_id";
 
 typedef enum : NSUInteger {
     TermTypeMemberTerms,

@@ -220,6 +220,12 @@ typedef enum : NSUInteger {
             {
                 [TMInfoManager sharedManager].dictionaryDocuments = provision;
             }
+            NSDictionary *game = [dictionary objectForKey:SymphoxAPIParam_game];
+            if (game)
+            {
+                [TMInfoManager sharedManager].dictionaryGame = game;
+            }
+            
         }
     }
     else
@@ -642,6 +648,18 @@ typedef enum : NSUInteger {
                     [self.navigationController pushViewController:promotionViewController animated:YES];
                 }
                     break;
+                case 5:
+                {
+                    SearchViewController *viewController = [[SearchViewController alloc] initWithNibName:@"SearchViewController" bundle:[NSBundle mainBundle]];
+                    viewController.delegate = self;
+                    if (link != nil && [link length] > 0)
+                    {
+                        viewController.textFieldSearch.text = link;
+                    }
+                    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:viewController];
+                    [self presentViewController:navigationController animated:YES completion:nil];
+                }
+                    break;
                 default:
                     break;
             }
@@ -751,6 +769,18 @@ typedef enum : NSUInteger {
                 [self.navigationController pushViewController:promotionViewController animated:YES];
             }
                 break;
+            case 5:
+            {
+                SearchViewController *viewController = [[SearchViewController alloc] initWithNibName:@"SearchViewController" bundle:[NSBundle mainBundle]];
+                viewController.delegate = self;
+                if (stringLink != nil && [stringLink length] > 0)
+                {
+                    viewController.textFieldSearch.text = stringLink;
+                }
+                UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:viewController];
+                [self presentViewController:navigationController animated:YES completion:nil];
+            }
+                break;
             default:
                 break;
         }
@@ -852,6 +882,19 @@ typedef enum : NSUInteger {
                                       value:nil] build]];
                     
                     [self.navigationController pushViewController:promotionViewController animated:YES];
+                }
+                    break;
+                case 5:
+                {
+
+                    SearchViewController *viewController = [[SearchViewController alloc] initWithNibName:@"SearchViewController" bundle:[NSBundle mainBundle]];
+                    viewController.delegate = self;
+                    if (stringLink != nil && [stringLink length] > 0)
+                    {
+                        viewController.textFieldSearch.text = stringLink;
+                    }
+                    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:viewController];
+                    [self presentViewController:navigationController animated:YES completion:nil];
                 }
                     break;
                 default:

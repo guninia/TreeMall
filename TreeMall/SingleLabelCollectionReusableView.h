@@ -12,6 +12,7 @@ static NSString *SingleLabelCollectionReusableViewIdentifier = @"SingleLabelColl
 
 @interface SingleLabelCollectionReusableView : UICollectionReusableView
 
+@property (nonatomic, strong) UILabel *labelTitle;
 @property (nonatomic, strong) UILabel *label;
 
 + (CGFloat)heightForText:(NSString *)text inViewWithWidth:(CGFloat)width;

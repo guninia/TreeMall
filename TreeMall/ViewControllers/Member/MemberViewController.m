@@ -38,6 +38,7 @@ typedef enum : NSUInteger {
 - (void)retrieveOrderNumberOfStatus;
 - (BOOL)processOrderNumberOfStatusData:(id)data;
 - (NSString *)greetingsMessage;
+- (NSString *)encodedUrlStringForUrlString:(NSString *)urlString withParameters:(NSDictionary *)parameters;
 
 - (void)buttonItemLogoutPressed:(id)sender;
 - (void)buttonItemQAPressed:(id)sender;
@@ -158,9 +159,16 @@ typedef enum : NSUInteger {
     }
     if (self.viewPoint)
     {
-        CGRect frame = CGRectMake(0.0, originY, self.scrollView.frame.size.width, 180.0);
+        CGFloat height = 180.0;
+        NSString *type = [[TMInfoManager sharedManager].dictionaryGame objectForKey:SymphoxAPIParam_type];
+        if (type && [type integerValue] != -1)
+        {
+            height = 180.0 + 55.0;
+        }
+        CGRect frame = CGRectMake(0.0, originY, self.scrollView.frame.size.width, height);
         self.viewPoint.frame = frame;
         originY = self.viewPoint.frame.origin.y + self.viewPoint.frame.size.height;
+        [self.viewPoint setNeedsLayout];
     }
     if (self.viewCouponTitle)
     {
@@ -245,6 +253,11 @@ typedef enum : NSUInteger {
     {
         _viewPoint = [[MemberPointView alloc] initWithFrame:CGRectZero];
         _viewPoint.delegate = self;
+        NSString *type = [[TMInfoManager sharedManager].dictionaryGame objectForKey:SymphoxAPIParam_type];
+        if (type && [type integerValue] != -1)
+        {
+            _viewPoint.buttonBonusGame.hidden = NO;
+        }
     }
     return _viewPoint;
 }
@@ -673,6 +686,38 @@ typedef enum : NSUInteger {
     return stringGreetingsTime;
 }
 
+- (NSString *)encodedUrlStringForUrlString:(NSString *)urlString withParameters:(NSDictionary *)parameters
+{
+    if (parameters == nil)
+    {
+        return urlString;
+    }
+    NSError *error = nil;
+    NSData *paramData = [NSJSONSerialization dataWithJSONObject:parameters options:0 error:&error];
+    if (error != nil || paramData == nil)
+    {
+        NSLog(@"encodedUrlStringForUrlString[%@] error:\n%@", urlString, [error description]);
+        return nil;
+    }
+    NSData *encryptedData = [[CryptoModule sharedModule] encryptFromSourceData:paramData];
+    if (encryptedData == nil)
+    {
+        NSLog(@"encodedUrlStringForUrlString - encrypt error");
+        return nil;
+    }
+    NSString *encryptedString = [[NSString alloc] initWithData:encryptedData encoding:NSUTF8StringEncoding];
+    if (encryptedString == nil)
+    {
+        NSLog(@"encodedUrlStringForUrlString - Cannot produce encryptedString.");
+        return nil;
+    }
+    //    NSString *encodedString = [encryptedString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    NSString *encodedString = [encryptedString stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet alphanumericCharacterSet]];
+    //    NSLog(@"encodedUrlStringForUrlString - encodedString[%@]", encodedString);
+    NSString *encodedUrlString = [urlString stringByAppendingFormat:@"?body=%@", encodedString];
+    return encodedUrlString;
+}
+
 #pragma mark - Actions
 
 - (void)buttonItemLogoutPressed:(id)sender
@@ -808,17 +853,37 @@ typedef enum : NSUInteger {
 
 - (void)memberPointView:(MemberPointView *)view didPressBonusGameBySender:(id)sender
 {
+    NSString *type = [[TMInfoManager sharedManager].dictionaryGame objectForKey:SymphoxAPIParam_type];
+    if (type == nil || [type integerValue] == -1)
+        return;
     WebViewViewController *viewController = [[WebViewViewController alloc] initWithNibName:@"WebViewViewController" bundle:[NSBundle mainBundle]];
     viewController.title = [self.viewPoint.buttonBonusGame titleForState:UIControlStateNormal];
-    viewController.urlString = @"http://www.treemall.com.tw/event/RWD/1706member/index.shtml?source=treemall&medium=AD_LOCATION&campaign=77-78-1";
+    viewController.type = WebViewTypeGame;
+    NSString *url = nil;
+    if ([type integerValue] == 0)
+    {
+        url = [[TMInfoManager sharedManager].dictionaryGame objectForKey:SymphoxAPIParam_link];
+    }
+    else if ([type integerValue] == 1)
+    {
+        NSMutableDictionary *params = [NSMutableDictionary dictionary];
+        NSString *game_id = [[TMInfoManager sharedManager].dictionaryGame objectForKey:SymphoxAPIParam_game_id];
+        if (game_id)
+        {
+            [params setObject:game_id forKey:SymphoxAPIParam_game_id];
+        }
+        [params setObject:[TMInfoManager sharedManager].userIdentifier forKey:SymphoxAPIParam_user_num];
+        url = [self encodedUrlStringForUrlString:SymphoxAPI_game withParameters:params];
+    }
+    viewController.urlString = url;
     
     [gaTracker send:[[GAIDictionaryBuilder
                       createEventWithCategory:[EventLog twoString:self.title _:logPara_玩遊戲賺點數]
                       action:[EventLog to_:logPara_網頁]
                       label:viewController.urlString
                       value:nil] build]];
-    
-    [self.navigationController pushViewController:viewController animated:YES];
+    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:viewController];
+    [self presentViewController:navigationController animated:YES completion:nil];
 }
 
 @end

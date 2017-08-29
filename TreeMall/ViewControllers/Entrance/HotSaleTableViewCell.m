@@ -726,9 +726,14 @@ static NSInteger MaxTagsNumber = 5;
 
 - (void)buttonFavoritePressed:(id)sender
 {
-    if (_delegate && [_delegate respondsToSelector:@selector(hotSaleTableViewCell:didPressFavoriteBySender:)])
+    if ([sender isKindOfClass:[UIButton class]] == NO)
+        return;
+    UIButton *button = (UIButton *)sender;
+    button.selected = ![button isSelected];
+    _favorite = [button isSelected];
+    if (_delegate && [_delegate respondsToSelector:@selector(hotSaleTableViewCell:didPressToChangeFavoriteStatus:)])
     {
-        [_delegate hotSaleTableViewCell:self didPressFavoriteBySender:sender];
+        [_delegate hotSaleTableViewCell:self didPressToChangeFavoriteStatus:_favorite];
     }
 }
 

@@ -84,8 +84,6 @@
     
     CGSize containerSize = CGSizeMake(280.0, 160.0);
     CGRect containerFrame = CGRectMake((self.frame.size.width - containerSize.width)/2, (self.frame.size.height - containerSize.height)/2, containerSize.width, containerSize.height);
-    self.viewContainer.frame = containerFrame;
-    
     CGFloat intervalV = 10.0;
     CGFloat originY = 0.0;
     if (self.toolBar)
@@ -108,7 +106,6 @@
     }
     if (self.labelDescription && [self.labelDescription isHidden] == NO)
     {
-        originY = CGRectGetMaxY(self.toolBar.frame);
         CGFloat marginH = 10.0;
         NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
         style.lineBreakMode = self.labelDescription.lineBreakMode;
@@ -124,6 +121,11 @@
         {
             CGRect viewFrame = CGRectMake(0.0, originY, containerFrame.size.width, sizeLabel.height);
             self.viewDescriptionBackground.frame = viewFrame;
+            originY = CGRectGetMaxY(self.viewDescriptionBackground.frame) + intervalV;
+        }
+        else
+        {
+            originY = CGRectGetMaxY(self.labelDescription.frame) + intervalV;
         }
     }
     
@@ -154,7 +156,11 @@
     {
         CGRect frame = CGRectMake(marginH, originY, totalWidth, 40.0);
         self.buttonConfirm.frame = frame;
+        originY = CGRectGetMaxY(self.buttonConfirm.frame) + intervalV;
     }
+    
+    containerFrame.size.height = originY;
+    self.viewContainer.frame = containerFrame;
 }
 
 - (UIView *)viewContainer;
@@ -276,7 +282,7 @@
     if (_viewDescriptionBackground == nil)
     {
         _viewDescriptionBackground = [[UIView alloc] initWithFrame:CGRectZero];
-        [_viewDescriptionBackground setBackgroundColor:[UIColor colorWithWhite:0.9 alpha:1.0]];
+        [_viewDescriptionBackground setBackgroundColor:[UIColor clearColor]];
     }
     return _viewDescriptionBackground;
 }
@@ -286,10 +292,10 @@
     if (_labelDescription == nil)
     {
         _labelDescription = [[UILabel alloc] initWithFrame:CGRectZero];
-        UIFont *font = [UIFont systemFontOfSize:10.0];
+        UIFont *font = [UIFont systemFontOfSize:12.0];
         [_labelDescription setFont:font];
         [_labelDescription setBackgroundColor:[UIColor clearColor]];
-        [_labelDescription setTextColor:[UIColor blackColor]];
+        [_labelDescription setTextColor:[UIColor redColor]];
         [_labelDescription setNumberOfLines:0];
         [_labelDescription setLineBreakMode:NSLineBreakByWordWrapping];
         [_labelDescription setTextAlignment:NSTextAlignmentLeft];
