@@ -184,7 +184,7 @@ static NSInteger MaxTagsNumber = 5;
     
     CGFloat priceBottom = originY;
     CGFloat labelOriginX = marginH;
-    
+    CGFloat priceRightEnd = self.viewContainer.frame.size.width - marginH;
     
     if (self.buttonAddToCart && [self.buttonAddToCart isHidden] == NO)
     {
@@ -196,6 +196,7 @@ static NSInteger MaxTagsNumber = 5;
         }
         CGRect frame = CGRectMake((self.viewContainer.frame.size.width - marginH - size.width), originY, size.width, size.height);
         self.buttonAddToCart.frame = frame;
+        priceRightEnd = CGRectGetMinX(self.buttonAddToCart.frame) - intervalH;
     }
     if (self.buttonFavorite && [self.buttonFavorite isHidden] == NO)
     {
@@ -205,15 +206,17 @@ static NSInteger MaxTagsNumber = 5;
         {
             size = image.size;
         }
-        CGRect frame = CGRectMake((CGRectGetMinX(self.buttonAddToCart.frame) - intervalH * 2 - size.width), originY, size.width, size.height);
+        CGRect frame = CGRectMake((priceRightEnd - intervalH - size.width), originY, size.width, size.height);
         self.buttonFavorite.frame = frame;
+        priceRightEnd = CGRectGetMinX(self.buttonFavorite.frame) - intervalH;
     }
     if (self.labelPrice && [self.labelPrice isHidden] == NO)
     {
-        NSDictionary *attributes = [NSDictionary dictionaryWithObjectsAndKeys:self.labelPrice.font, NSFontAttributeName, nil];
-        CGSize textSize = [self.labelPrice.text sizeWithAttributes:attributes];
+        CGFloat maxWidth = priceRightEnd - labelOriginX;
+//        NSDictionary *attributes = [NSDictionary dictionaryWithObjectsAndKeys:self.labelPrice.font, NSFontAttributeName, nil];
+        CGSize textSize = [self.labelPrice.attributedText boundingRectWithSize:CGSizeMake(maxWidth, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin context:nil].size;
         CGSize labelSize = CGSizeMake(ceil(textSize.width), ceil(textSize.height));
-        CGRect frame = CGRectMake(labelOriginX, originY, CGRectGetMinX(self.buttonFavorite.frame) - intervalH - labelOriginX, labelSize.height);
+        CGRect frame = CGRectMake(labelOriginX, originY, maxWidth, labelSize.height);
         self.labelPrice.frame = frame;
         labelOriginX = self.labelPrice.frame.origin.x + self.labelPrice.frame.size.width + intervalH;
         priceBottom = self.labelPrice.frame.origin.y + self.labelPrice.frame.size.height;
@@ -676,6 +679,11 @@ static NSInteger MaxTagsNumber = 5;
         NSString *priceString = [NSString stringWithFormat:@"＄%@", formattedString];
         NSAttributedString *attrString = [[NSAttributedString alloc] initWithString:priceString attributes:self.attributesRedLarge];
         [totalString appendAttributedString:attrString];
+        [self.labelPrice setHidden:YES];
+    }
+    else
+    {
+        [self.labelPrice setHidden:NO];
     }
     [self.labelPrice setAttributedText:totalString];
     [self setNeedsLayout];

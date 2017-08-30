@@ -12,8 +12,8 @@
 #import <Foundation/Foundation.h>
 
 #ifdef DEBUG
-//static NSString *SymphoxAPIDomain = @"http://sapi.symphox.com.tw/treeMall/";
-static NSString *SymphoxAPIDomain = @"https://api.symphox.com.tw/treeMall/";
+static NSString *SymphoxAPIDomain = @"http://sapi.symphox.com.tw/treeMall/";
+//static NSString *SymphoxAPIDomain = @"https://api.symphox.com.tw/treeMall/";
 //static NSString *SymphoxAPIDomain = @"http://tomcat8.mdevelop.com/";
 #else
 static NSString *SymphoxAPIDomain = @"https://api.symphox.com.tw/treeMall/";
