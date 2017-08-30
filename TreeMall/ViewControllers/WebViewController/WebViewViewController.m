@@ -279,7 +279,14 @@
                         viewController.content = content;
                         __weak WebViewViewController *weakSelf = self;
                         dispatch_async(dispatch_get_main_queue(), ^{
-                            [weakSelf dismiss];
+                            if (weakSelf.navigationController)
+                            {
+                                [weakSelf.navigationController pushViewController:viewController animated:YES];
+                            }
+                            else
+                            {
+                                [weakSelf presentViewController:viewController animated:YES completion:nil];
+                            }
                         });
                     }
                     completionHandler();

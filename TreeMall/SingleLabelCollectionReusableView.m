@@ -76,6 +76,7 @@
         [_label setTextColor:[UIColor darkGrayColor]];
         [_label setFont:kLabelFont];
         [_label setLineBreakMode:NSLineBreakByWordWrapping];
+        [_label setNumberOfLines:0];
     }
     return _label;
 }

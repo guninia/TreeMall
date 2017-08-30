@@ -733,9 +733,9 @@
 {
     _shouldShowBottomAmountInfoBar = shouldShowBottomAmountInfoBar;
 //    self.bottomBar.hidden = !_shouldShowBottomAmountInfoBar;
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self.view setNeedsLayout];
-    });
+//    dispatch_async(dispatch_get_main_queue(), ^{
+//        [self.view setNeedsLayout];
+//    });
 }
 
 - (NSMutableOrderedSet *)orderedSetSingleCart
@@ -1688,7 +1688,7 @@
         NSArray *arrayShopping = [self.dictionaryDetail objectForKey:SymphoxAPIParam_shopping];
         if (arrayShopping == nil || [arrayShopping isEqual:[NSNull null]] || [arrayShopping count] == 0)
         {
-            self.bottomBar.hidden = YES;
+            self.shouldShowBottomAmountInfoBar = NO;
         }
         else
         {

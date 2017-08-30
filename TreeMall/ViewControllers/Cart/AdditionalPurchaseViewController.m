@@ -735,10 +735,6 @@
                 NSString *remark = [dictionary objectForKey:SymphoxAPIParam_remark];
                 if (remark && [remark isEqual:[NSNull null]] == NO)
                 {
-//                    if ([totalString length] > 0)
-//                    {
-//                        [totalString appendString:@"\n"];
-//                    }
                     [totalString appendString:remark];
                 }
             }

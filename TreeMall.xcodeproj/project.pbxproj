@@ -1687,13 +1687,16 @@
 			files = (
 			);
 			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
 			);
 			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-TreeMall-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 		331A1593542567D78DD1CCC2 /* [CP] Check Pods Manifest.lock */ = {
@@ -1702,13 +1705,16 @@
 			files = (
 			);
 			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
 			);
 			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-TreeMallTests-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 		473A1B080B62664CF297272C /* [CP] Embed Pods Frameworks */ = {
@@ -1747,13 +1753,16 @@
 			files = (
 			);
 			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
 			);
 			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-TreeMallUITests-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 		77805A701F2496F500CF67F0 /* ShellScript */ = {
@@ -1775,9 +1784,41 @@
 			files = (
 			);
 			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-TreeMall/Pods-TreeMall-resources.sh",
+				"${PODS_ROOT}/FBSDKCoreKit/FacebookSDKStrings.bundle",
+				"${PODS_ROOT}/GTMOAuth2/Source/Touch/GTMOAuth2ViewTouch.xib",
+				"${PODS_ROOT}/GoogleSignIn/Resources/GoogleSignIn.bundle",
+				"${PODS_ROOT}/NMRangeSlider/NMRangeSlider/DefaultTheme/slider-default-handle-highlighted.png",
+				"${PODS_ROOT}/NMRangeSlider/NMRangeSlider/DefaultTheme/slider-default-handle-highlighted@2x.png",
+				"${PODS_ROOT}/NMRangeSlider/NMRangeSlider/DefaultTheme/slider-default-handle.png",
+				"${PODS_ROOT}/NMRangeSlider/NMRangeSlider/DefaultTheme/slider-default-handle@2x.png",
+				"${PODS_ROOT}/NMRangeSlider/NMRangeSlider/DefaultTheme/slider-default-track.png",
+				"${PODS_ROOT}/NMRangeSlider/NMRangeSlider/DefaultTheme/slider-default-track@2x.png",
+				"${PODS_ROOT}/NMRangeSlider/NMRangeSlider/DefaultTheme/slider-default-trackBackground.png",
+				"${PODS_ROOT}/NMRangeSlider/NMRangeSlider/DefaultTheme/slider-default-trackCrossedOver.png",
+				"${PODS_ROOT}/NMRangeSlider/NMRangeSlider/DefaultTheme/slider-default-trackCrossedOver@2x.png",
+				"${PODS_ROOT}/NMRangeSlider/NMRangeSlider/DefaultTheme/slider-default_trackBackground@2x.png",
+				"${PODS_ROOT}/NMRangeSlider/NMRangeSlider/DefaultTheme7/slider-default7-handle.png",
+				"${PODS_ROOT}/NMRangeSlider/NMRangeSlider/DefaultTheme7/slider-default7-handle@2x.png",
+				"${PODS_ROOT}/NMRangeSlider/NMRangeSlider/DefaultTheme7/slider-default7-track.png",
+				"${PODS_ROOT}/NMRangeSlider/NMRangeSlider/DefaultTheme7/slider-default7-track@2x.png",
+				"${PODS_ROOT}/NMRangeSlider/NMRangeSlider/DefaultTheme7/slider-default7-trackBackground.png",
+				"${PODS_ROOT}/NMRangeSlider/NMRangeSlider/DefaultTheme7/slider-default7-trackBackground@2x.png",
+				"${PODS_ROOT}/NMRangeSlider/NMRangeSlider/DefaultTheme7/slider-default7-trackCrossedOver.png",
+				"${PODS_ROOT}/NMRangeSlider/NMRangeSlider/DefaultTheme7/slider-default7-trackCrossedOver@2x.png",
+				"${PODS_ROOT}/NMRangeSlider/NMRangeSlider/MetalTheme/slider-metal-handle-highlighted.png",
+				"${PODS_ROOT}/NMRangeSlider/NMRangeSlider/MetalTheme/slider-metal-handle-highlighted@2x.png",
+				"${PODS_ROOT}/NMRangeSlider/NMRangeSlider/MetalTheme/slider-metal-handle.png",
+				"${PODS_ROOT}/NMRangeSlider/NMRangeSlider/MetalTheme/slider-metal-handle@2x.png",
+				"${PODS_ROOT}/NMRangeSlider/NMRangeSlider/MetalTheme/slider-metal-track.png",
+				"${PODS_ROOT}/NMRangeSlider/NMRangeSlider/MetalTheme/slider-metal-track@2x.png",
+				"${PODS_ROOT}/NMRangeSlider/NMRangeSlider/MetalTheme/slider-metal-trackBackground.png",
+				"${PODS_ROOT}/NMRangeSlider/NMRangeSlider/MetalTheme/slider-metal-trackBackground@2x.png",
+				"${PODS_ROOT}/SAMKeychain/Support/SAMKeychain.bundle",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;

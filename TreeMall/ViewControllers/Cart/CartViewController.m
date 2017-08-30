@@ -27,6 +27,8 @@
     id<GAITracker> gaTracker;
 }
 
+@property (nonatomic, strong) NSString *marketingDescription;
+
 - (void)showLoadingViewAnimated:(BOOL)animated;
 - (void)hideLoadingViewAnimated:(BOOL)animated;
 - (void)checkCartForType:(CartType)type shouldShowPaymentForProductId:(NSNumber *)productId;
@@ -835,6 +837,24 @@
                 });
             }
         }
+        self.marketingDescription = nil;
+        NSArray *gift_info = [resultDictionary objectForKey:SymphoxAPIParam_gift_info];
+        if (gift_info && [gift_info isEqual:[NSNull null]] == NO)
+        {
+            NSMutableString *totalString = [NSMutableString string];
+            for (NSDictionary *dictionary in gift_info)
+            {
+                NSString *remark = [dictionary objectForKey:SymphoxAPIParam_remark];
+                if (remark && [remark isEqual:[NSNull null]] == NO)
+                {
+                    [totalString appendString:remark];
+                }
+            }
+            if ([totalString length] > 0)
+            {
+                self.marketingDescription = totalString;
+            }
+        }
         success = YES;
     }
     
@@ -928,6 +948,7 @@
             viewController.arrayProductsFromCart = weakSelf.arrayProducts;
             viewController.bottomBar.label.attributedText = weakSelf.bottomBar.label.attributedText;
             viewController.currentType = weakSelf.currentType;
+            viewController.marketingDescription = weakSelf.marketingDescription;
             [viewController setHidesBottomBarWhenPushed:YES];
             
             [gaTracker send:[[GAIDictionaryBuilder
