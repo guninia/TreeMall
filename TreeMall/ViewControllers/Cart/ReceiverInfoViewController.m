@@ -155,7 +155,8 @@ typedef enum : NSUInteger {
     {
         [self.navigationController.view addSubview:self.viewLoading];
     }
-    
+    [self.buttonContactList setBackgroundColor:TMMainColor];
+    [self.buttonContactList.layer setCornerRadius:5.0];
     [self.buttonContactList setHidden:YES];
     
 //    if (self.type == CartTypeFastDelivery)
@@ -2891,6 +2892,7 @@ typedef enum : NSUInteger {
             default:
                 break;
         }
+        view.label.textColor = [UIColor colorWithRed:0.710 green:0.818 blue:0.443 alpha:1.0];
         headerView = view;
     }
     else if (tableView == self.tableViewInvoice)
@@ -2903,6 +2905,7 @@ typedef enum : NSUInteger {
             view.label.text = [LocalizedString InvoiceDeliverAddress];
             view.buttonTitle = [LocalizedString SameAsReceiver];
         }
+        view.label.textColor = [UIColor colorWithRed:0.710 green:0.818 blue:0.443 alpha:1.0];
         headerView = view;
     }
     return headerView;

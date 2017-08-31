@@ -129,7 +129,7 @@ static NSString *InstallmentBankListDescription = @"分期0利率（接受14家�
     CGFloat marginH = 10.0;
     CGFloat marginV = 10.0;
     CGFloat intervalV = 10.0;
-    CGFloat originY = 0.0;
+    CGFloat originY = 10.0;
     if (self.labelDiscountTitle && [self.labelDiscountTitle isHidden] == NO)
     {
         CGRect frame = self.labelDiscountTitle.frame;
@@ -447,7 +447,7 @@ static NSString *InstallmentBankListDescription = @"分期0利率（接受14家�
                 NSString *couponValue = [self.formatter stringFromNumber:totalCouponValue];
                 if (couponValue)
                 {
-                    NSString *stringValue = [NSString stringWithFormat:@"(-$%@)", couponValue];
+                    NSString *stringValue = [NSString stringWithFormat:@"-$%@", couponValue];
                     [dictionary setObject:stringValue forKey:kDiscountSectionContentValue];
                 }
             }
@@ -470,7 +470,7 @@ static NSString *InstallmentBankListDescription = @"分期0利率（接受14家�
             NSString *otherDiscount = [self.formatter stringFromNumber:totalOtherDiscount];
             if (otherDiscount)
             {
-                NSString *stringValue = [NSString stringWithFormat:@"(-$%@)", otherDiscount];
+                NSString *stringValue = [NSString stringWithFormat:@"-$%@", otherDiscount];
                 [dictionary setObject:stringValue forKey:kDiscountSectionContentValue];
             }
             
@@ -491,7 +491,7 @@ static NSString *InstallmentBankListDescription = @"分期0利率（接受14家�
                 NSString *discount = [self.formatter stringFromNumber:totalDiscount];
                 if (discount)
                 {
-                    NSString *stringValue = [NSString stringWithFormat:@"-$%@%@", discount, [LocalizedString Dollars]];
+                    NSString *stringValue = [NSString stringWithFormat:@"-$%@", discount];
                     [dictionarySection setObject:stringValue forKey:kDiscountSectionFooterValue];
                 }
             }
@@ -1447,10 +1447,10 @@ static NSString *InstallmentBankListDescription = @"分期0利率（接受14家�
     UIView *headerView = nil;
     if (tableView == self.tableViewDiscount)
     {
-        DiscountHeaderView *view = [tableView dequeueReusableHeaderFooterViewWithIdentifier:DiscountHeaderViewIdentifier];
+        PaymentTypeHeaderView *view = [tableView dequeueReusableHeaderFooterViewWithIdentifier:PaymentTypeHeaderViewIdentifier];
         if (view == nil)
         {
-            view = [[DiscountHeaderView alloc] initWithReuseIdentifier:DiscountHeaderViewIdentifier];
+            view = [[PaymentTypeHeaderView alloc] initWithReuseIdentifier:PaymentTypeHeaderViewIdentifier];
         }
         [view.contentView setBackgroundColor:[UIColor whiteColor]];
         if (section < [self.arrayDiscount count])
@@ -1461,6 +1461,7 @@ static NSString *InstallmentBankListDescription = @"分期0利率（接受14家�
             {
                 view.labelTitle.text = title;
             }
+            [view.buttonAction setHidden:YES];
         }
         headerView = view;
     }
@@ -1634,7 +1635,7 @@ static NSString *InstallmentBankListDescription = @"分期0利率（接受14家�
     CGFloat heightForRow = 0.0;
     if (tableView == self.tableViewDiscount)
     {
-        heightForRow = 30.0;
+        heightForRow = 40.0;
     }
     else if (tableView == self.tableViewPayment)
     {

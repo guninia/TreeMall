@@ -218,7 +218,7 @@ typedef enum : NSUInteger {
         [_viewOrderId.layer setBorderWidth:0.0];
         [_viewOrderId.labelL setText:[LocalizedString OrderId]];
         [_viewOrderId.labelL setFont:[UIFont systemFontOfSize:18.0]];
-        [_viewOrderId.labelL setTextColor:[UIColor darkGrayColor]];
+        [_viewOrderId.labelL setTextColor:[UIColor blackColor]];
         [_viewOrderId.labelR setFont:[UIFont systemFontOfSize:18.0]];
         [_viewOrderId.labelR setTextColor:[UIColor orangeColor]];
     }
@@ -233,7 +233,7 @@ typedef enum : NSUInteger {
         [_viewCash.layer setBorderWidth:0.0];
         [_viewCash.labelL setText:[LocalizedString CashToPay]];
         [_viewCash.labelL setFont:[UIFont systemFontOfSize:18.0]];
-        [_viewCash.labelL setTextColor:[UIColor darkGrayColor]];
+        [_viewCash.labelL setTextColor:[UIColor blackColor]];
         [_viewCash.labelR setFont:[UIFont systemFontOfSize:18.0]];
         [_viewCash.labelR setTextColor:[UIColor darkGrayColor]];
     }
@@ -248,7 +248,7 @@ typedef enum : NSUInteger {
         [_viewEPoint.layer setBorderWidth:0.0];
         [_viewEPoint.labelL setText:[LocalizedString DiscountByEPoint]];
         [_viewEPoint.labelL setFont:[UIFont systemFontOfSize:18.0]];
-        [_viewEPoint.labelL setTextColor:[UIColor darkGrayColor]];
+        [_viewEPoint.labelL setTextColor:[UIColor blackColor]];
         [_viewEPoint.labelR setFont:[UIFont systemFontOfSize:18.0]];
         [_viewEPoint.labelR setTextColor:[UIColor darkGrayColor]];
     }
@@ -263,7 +263,7 @@ typedef enum : NSUInteger {
         [_viewPoint.layer setBorderWidth:0.0];
         [_viewPoint.labelL setText:[LocalizedString DiscountByPoint]];
         [_viewPoint.labelL setFont:[UIFont systemFontOfSize:18.0]];
-        [_viewPoint.labelL setTextColor:[UIColor darkGrayColor]];
+        [_viewPoint.labelL setTextColor:[UIColor blackColor]];
         [_viewPoint.labelR setFont:[UIFont systemFontOfSize:18.0]];
         [_viewPoint.labelR setTextColor:[UIColor darkGrayColor]];
     }

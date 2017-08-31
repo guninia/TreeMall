@@ -27,5 +27,6 @@ typedef enum : NSUInteger {
 + (instancetype)sharedModule;
 - (NSData *)encryptFromSourceData:(NSData *)sourceData;
 - (NSData *)decryptFromSourceData:(NSData *)sourceData completion:(void (^)(id, NSError *))block;
+- (NSString *)encodedUrlStringForUrlString:(NSString *)urlString withParameters:(NSDictionary *)parameters;
 
 @end

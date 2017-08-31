@@ -399,7 +399,7 @@ typedef enum : NSUInteger {
         return;
     }
     NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:[userIndentifier stringValue], SymphoxAPIParam_user_num, ipAddress, SymphoxAPIParam_ip, nil];
-    NSString *encodedUrlString = [self encodedUrlStringForUrlString:urlString withParameters:parameters];
+    NSString *encodedUrlString = [[CryptoModule sharedModule] encodedUrlStringForUrlString:urlString withParameters:parameters];
     if (encodedUrlString == nil)
     {
         NSLog(@"presentActionSheetForAuthenticateType - Cannot encode url string");
@@ -423,7 +423,7 @@ typedef enum : NSUInteger {
         return;
     }
     NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:[userIndentifier stringValue], SymphoxAPIParam_user_num, ipAddress, SymphoxAPIParam_ip, nil];
-    NSString *encodedUrlString = [self encodedUrlStringForUrlString:SymphoxAPI_editContacts withParameters:parameters];
+    NSString *encodedUrlString = [[CryptoModule sharedModule] encodedUrlStringForUrlString:SymphoxAPI_editContacts withParameters:parameters];
     if (encodedUrlString == nil)
     {
         NSLog(@"presentActionSheetForAuthenticateType - Cannot encode url string");
@@ -447,7 +447,7 @@ typedef enum : NSUInteger {
         return;
     }
     NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:[userIndentifier stringValue], SymphoxAPIParam_user_num, ipAddress, SymphoxAPIParam_ip, nil];
-    NSString *encodedUrlString = [self encodedUrlStringForUrlString:SymphoxAPI_editBasicInfo withParameters:parameters];
+    NSString *encodedUrlString = [[CryptoModule sharedModule] encodedUrlStringForUrlString:SymphoxAPI_editBasicInfo withParameters:parameters];
     if (encodedUrlString == nil)
     {
         NSLog(@"presentActionSheetForAuthenticateType - Cannot encode url string");
@@ -459,38 +459,6 @@ typedef enum : NSUInteger {
         NSLog(@"presentActionSheetForAuthenticateType - Invalid url from string");
     }
     [self presentWebViewForUrl:url forType:WebViewTypeInfoEdit andTitle:[LocalizedString BasicInformationModification]];
-}
-
-- (NSString *)encodedUrlStringForUrlString:(NSString *)urlString withParameters:(NSDictionary *)parameters
-{
-    if (parameters == nil)
-    {
-        return urlString;
-    }
-    NSError *error = nil;
-    NSData *paramData = [NSJSONSerialization dataWithJSONObject:parameters options:0 error:&error];
-    if (error != nil || paramData == nil)
-    {
-        NSLog(@"encodedUrlStringForUrlString[%@] error:\n%@", urlString, [error description]);
-        return nil;
-    }
-    NSData *encryptedData = [[CryptoModule sharedModule] encryptFromSourceData:paramData];
-    if (encryptedData == nil)
-    {
-        NSLog(@"encodedUrlStringForUrlString - encrypt error");
-        return nil;
-    }
-    NSString *encryptedString = [[NSString alloc] initWithData:encryptedData encoding:NSUTF8StringEncoding];
-    if (encryptedString == nil)
-    {
-        NSLog(@"encodedUrlStringForUrlString - Cannot produce encryptedString.");
-        return nil;
-    }
-    //    NSString *encodedString = [encryptedString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-    NSString *encodedString = [encryptedString stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet alphanumericCharacterSet]];
-    //    NSLog(@"encodedUrlStringForUrlString - encodedString[%@]", encodedString);
-    NSString *encodedUrlString = [urlString stringByAppendingFormat:@"?body=%@", encodedString];
-    return encodedUrlString;
 }
 
 - (void)presentWebViewForUrl:(NSURL *)url forType:(WebViewType)type andTitle:(NSString *)title

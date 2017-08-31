@@ -48,6 +48,7 @@
     }
     UIBarButtonItem *rightItem = [[UIBarButtonItem alloc] initWithCustomView:self.activityIndicator];
     [self.navigationItem setRightBarButtonItem:rightItem];
+    
     [self.view addSubview:self.webView];
     if (self.url)
     {
@@ -82,7 +83,15 @@
 {
     if (_webView == nil)
     {
+        NSString *jScript = @"var meta = document.createElement('meta'); meta.setAttribute('name', 'viewport'); meta.setAttribute('content', 'width=device-width'); document.getElementsByTagName('head')[0].appendChild(meta);";
+        
+        WKUserScript *wkUScript = [[WKUserScript alloc] initWithSource:jScript injectionTime:WKUserScriptInjectionTimeAtDocumentEnd forMainFrameOnly:YES];
+        WKUserContentController *wkUController = [[WKUserContentController alloc] init];
+        [wkUController addUserScript:wkUScript];
+        
         WKWebViewConfiguration *configuration = [[WKWebViewConfiguration alloc] init];
+        configuration.userContentController = wkUController;
+        
         _webView = [[WKWebView alloc] initWithFrame:CGRectZero configuration:configuration];
         _webView.UIDelegate = self;
         _webView.navigationDelegate = self;

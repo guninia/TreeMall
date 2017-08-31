@@ -25,7 +25,6 @@
 - (void)presentActionSheetForAuthenticateType;
 - (void)startAuthenticateWithUrlString:(NSString *)urlString;
 - (void)presentWebViewForUrl:(NSURL *)url;
-- (NSString *)encodedUrlStringForUrlString:(NSString *)urlString withParameters:(NSDictionary *)parameters;
 
 - (IBAction)buttonAuthenticatePressed:(id)sender;
 - (IBAction)buttonClosePressed:(id)sender;
@@ -144,7 +143,7 @@
         return;
     }
     NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:[userIndentifier stringValue], SymphoxAPIParam_user_num, ipAddress, SymphoxAPIParam_ip, nil];
-    NSString *encodedUrlString = [self encodedUrlStringForUrlString:urlString withParameters:parameters];
+    NSString *encodedUrlString = [[CryptoModule sharedModule] encodedUrlStringForUrlString:urlString withParameters:parameters];
     if (encodedUrlString == nil)
     {
         NSLog(@"presentActionSheetForAuthenticateType - Cannot encode url string");
@@ -173,38 +172,6 @@
     {
         [self presentViewController:viewController animated:YES completion:nil];
     }
-}
-
-- (NSString *)encodedUrlStringForUrlString:(NSString *)urlString withParameters:(NSDictionary *)parameters
-{
-    if (parameters == nil)
-    {
-        return urlString;
-    }
-    NSError *error = nil;
-    NSData *paramData = [NSJSONSerialization dataWithJSONObject:parameters options:0 error:&error];
-    if (error != nil || paramData == nil)
-    {
-        NSLog(@"encodedUrlStringForUrlString[%@] error:\n%@", urlString, [error description]);
-        return nil;
-    }
-    NSData *encryptedData = [[CryptoModule sharedModule] encryptFromSourceData:paramData];
-    if (encryptedData == nil)
-    {
-        NSLog(@"encodedUrlStringForUrlString - encrypt error");
-        return nil;
-    }
-    NSString *encryptedString = [[NSString alloc] initWithData:encryptedData encoding:NSUTF8StringEncoding];
-    if (encryptedString == nil)
-    {
-        NSLog(@"encodedUrlStringForUrlString - Cannot produce encryptedString.");
-        return nil;
-    }
-//    NSString *encodedString = [encryptedString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-    NSString *encodedString = [encryptedString stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet alphanumericCharacterSet]];
-//    NSLog(@"encodedUrlStringForUrlString - encodedString[%@]", encodedString);
-    NSString *encodedUrlString = [urlString stringByAppendingFormat:@"?body=%@", encodedString];
-    return encodedUrlString;
 }
 
 #pragma mark - Actions

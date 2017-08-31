@@ -60,7 +60,7 @@
     {
         _labelTitle = [[UILabel alloc] initWithFrame:CGRectZero];
         [_labelTitle setBackgroundColor:[UIColor clearColor]];
-        [_labelTitle setTextColor:[UIColor darkGrayColor]];
+        [_labelTitle setTextColor:[UIColor redColor]];
         [_labelTitle setFont:kTitleFont];
         [_labelTitle setText:kTitleText];
     }

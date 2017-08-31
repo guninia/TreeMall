@@ -660,6 +660,40 @@ typedef enum : NSUInteger {
                     [self presentViewController:navigationController animated:YES completion:nil];
                 }
                     break;
+                case 6:
+                {
+                    NSString *type = [[TMInfoManager sharedManager].dictionaryGame objectForKey:SymphoxAPIParam_type];
+                    if (type == nil || [type integerValue] == -1)
+                        return;
+                    WebViewViewController *viewController = [[WebViewViewController alloc] initWithNibName:@"WebViewViewController" bundle:[NSBundle mainBundle]];
+                    viewController.title = name;
+                    viewController.type = WebViewTypeGame;
+                    NSString *url = nil;
+                    if ([type integerValue] == 0)
+                    {
+                        url = [[TMInfoManager sharedManager].dictionaryGame objectForKey:SymphoxAPIParam_link];
+                    }
+                    else if ([type integerValue] == 1)
+                    {
+                        NSMutableDictionary *params = [NSMutableDictionary dictionary];
+                        NSString *game_id = [[TMInfoManager sharedManager].dictionaryGame objectForKey:SymphoxAPIParam_game_id];
+                        if (game_id)
+                        {
+                            [params setObject:game_id forKey:SymphoxAPIParam_game_id];
+                        }
+                        [params setObject:[TMInfoManager sharedManager].userIdentifier forKey:SymphoxAPIParam_user_num];
+                        url = [[CryptoModule sharedModule] encodedUrlStringForUrlString:SymphoxAPI_game withParameters:params];
+                    }
+                    viewController.urlString = url;
+                    
+                    [gaTracker send:[[GAIDictionaryBuilder
+                                      createEventWithCategory:[EventLog twoString:self.title _:logPara_玩遊戲賺點數]
+                                      action:[EventLog to_:logPara_網頁]
+                                      label:viewController.urlString
+                                      value:nil] build]];
+                    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:viewController];
+                    [self presentViewController:navigationController animated:YES completion:nil];
+                }
                 default:
                     break;
             }
@@ -781,6 +815,41 @@ typedef enum : NSUInteger {
                 [self presentViewController:navigationController animated:YES completion:nil];
             }
                 break;
+            case 6:
+            {
+                NSString *type = [[TMInfoManager sharedManager].dictionaryGame objectForKey:SymphoxAPIParam_type];
+                if (type == nil || [type integerValue] == -1)
+                    return;
+                WebViewViewController *viewController = [[WebViewViewController alloc] initWithNibName:@"WebViewViewController" bundle:[NSBundle mainBundle]];
+                viewController.title = name;
+                viewController.type = WebViewTypeGame;
+                NSString *url = nil;
+                if ([type integerValue] == 0)
+                {
+                    url = [[TMInfoManager sharedManager].dictionaryGame objectForKey:SymphoxAPIParam_link];
+                }
+                else if ([type integerValue] == 1)
+                {
+                    NSMutableDictionary *params = [NSMutableDictionary dictionary];
+                    NSString *game_id = [[TMInfoManager sharedManager].dictionaryGame objectForKey:SymphoxAPIParam_game_id];
+                    if (game_id)
+                    {
+                        [params setObject:game_id forKey:SymphoxAPIParam_game_id];
+                    }
+                    [params setObject:[TMInfoManager sharedManager].userIdentifier forKey:SymphoxAPIParam_user_num];
+                    url = [[CryptoModule sharedModule] encodedUrlStringForUrlString:SymphoxAPI_game withParameters:params];
+                }
+                viewController.urlString = url;
+                
+                [gaTracker send:[[GAIDictionaryBuilder
+                                  createEventWithCategory:[EventLog twoString:self.title _:logPara_玩遊戲賺點數]
+                                  action:[EventLog to_:logPara_網頁]
+                                  label:viewController.urlString
+                                  value:nil] build]];
+                UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:viewController];
+                [self presentViewController:navigationController animated:YES completion:nil];
+            }
+                break;
             default:
                 break;
         }
@@ -893,6 +962,41 @@ typedef enum : NSUInteger {
                     {
                         viewController.textFieldSearch.text = stringLink;
                     }
+                    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:viewController];
+                    [self presentViewController:navigationController animated:YES completion:nil];
+                }
+                    break;
+                case 6:
+                {
+                    NSString *type = [[TMInfoManager sharedManager].dictionaryGame objectForKey:SymphoxAPIParam_type];
+                    if (type == nil || [type integerValue] == -1)
+                        return;
+                    WebViewViewController *viewController = [[WebViewViewController alloc] initWithNibName:@"WebViewViewController" bundle:[NSBundle mainBundle]];
+                    viewController.title = @"遊戲";
+                    viewController.type = WebViewTypeGame;
+                    NSString *url = nil;
+                    if ([type integerValue] == 0)
+                    {
+                        url = [[TMInfoManager sharedManager].dictionaryGame objectForKey:SymphoxAPIParam_link];
+                    }
+                    else if ([type integerValue] == 1)
+                    {
+                        NSMutableDictionary *params = [NSMutableDictionary dictionary];
+                        NSString *game_id = [[TMInfoManager sharedManager].dictionaryGame objectForKey:SymphoxAPIParam_game_id];
+                        if (game_id)
+                        {
+                            [params setObject:game_id forKey:SymphoxAPIParam_game_id];
+                        }
+                        [params setObject:[TMInfoManager sharedManager].userIdentifier forKey:SymphoxAPIParam_user_num];
+                        url = [[CryptoModule sharedModule] encodedUrlStringForUrlString:SymphoxAPI_game withParameters:params];
+                    }
+                    viewController.urlString = url;
+                    
+                    [gaTracker send:[[GAIDictionaryBuilder
+                                      createEventWithCategory:[EventLog twoString:self.title _:logPara_玩遊戲賺點數]
+                                      action:[EventLog to_:logPara_網頁]
+                                      label:viewController.urlString
+                                      value:nil] build]];
                     UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:viewController];
                     [self presentViewController:navigationController animated:YES completion:nil];
                 }

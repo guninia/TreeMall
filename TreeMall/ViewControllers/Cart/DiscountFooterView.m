@@ -40,6 +40,7 @@
     CGFloat marginH = 10.0;
     CGFloat originX = marginH;
     CGFloat intervalH = 10.0;
+    CGFloat indentH = 5.0;
     
     if (self.viewContainer)
     {
@@ -51,12 +52,12 @@
     {
         CGSize sizeText = [self.labelDiscountValue.text sizeWithAttributes:[NSDictionary dictionaryWithObjectsAndKeys:self.labelDiscountValue.font, NSFontAttributeName, nil]];
         CGSize sizeLabel = CGSizeMake(ceil(sizeText.width), ceil(sizeText.height));
-        CGRect frame = CGRectMake(self.viewContainer.frame.size.width - marginH - sizeLabel.width, 0.0, sizeLabel.width, self.viewContainer.frame.size.height);
+        CGRect frame = CGRectMake(self.viewContainer.frame.size.width - indentH - sizeLabel.width, 0.0, sizeLabel.width, self.viewContainer.frame.size.height);
         self.labelDiscountValue.frame = frame;
     }
     if (self.labelTitle)
     {
-        CGRect frame = CGRectMake(originX, 0.0, CGRectGetMinX(self.labelDiscountValue.frame) - intervalH - originX, self.viewContainer.frame.size.height);
+        CGRect frame = CGRectMake(indentH, 0.0, CGRectGetMinX(self.labelDiscountValue.frame) - intervalH - originX, self.viewContainer.frame.size.height);
         self.labelTitle.frame = frame;
     }
 }
@@ -66,7 +67,8 @@
     if (_viewContainer == nil)
     {
         _viewContainer = [[UIView alloc] initWithFrame:CGRectZero];
-        [_viewContainer setBackgroundColor:[UIColor colorWithWhite:0.9 alpha:1.0]];
+//        [_viewContainer setBackgroundColor:[UIColor colorWithWhite:0.9 alpha:1.0]];
+        [_viewContainer setBackgroundColor:[UIColor clearColor]];
     }
     return _viewContainer;
 }
@@ -80,7 +82,7 @@
         [_labelTitle setFont:font];
         [_labelTitle setBackgroundColor:[UIColor clearColor]];
         [_labelTitle setTextColor:[UIColor blackColor]];
-        [_labelTitle setTextAlignment:NSTextAlignmentRight];
+        [_labelTitle setTextAlignment:NSTextAlignmentLeft];
     }
     return _labelTitle;
 }

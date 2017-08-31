@@ -69,7 +69,7 @@
         [_label setTextColor:[UIColor blackColor]];
         [_label setBackgroundColor:[UIColor clearColor]];
         [_label adjustsFontSizeToFitWidth];
-        UIFont *font = [UIFont systemFontOfSize:16.0];
+        UIFont *font = [UIFont systemFontOfSize:18.0];
         [_label setFont:font];
     }
     return _label;

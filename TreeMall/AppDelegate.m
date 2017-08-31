@@ -247,7 +247,7 @@
     NSString * currentVersion = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
     NSString * latestVersion = nil;
     NSString * bundleId = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleIdentifier"];
-    NSString * urlString = [NSString stringWithFormat:@"https://itunes.apple.com/lookup?bundleId=%@", bundleId];
+    NSString * urlString = [NSString stringWithFormat:@"https://itunes.apple.com/tw/lookup?bundleId=%@", bundleId];
     NSURL * url = [NSURL URLWithString:urlString];
     NSData * data = nil;
     

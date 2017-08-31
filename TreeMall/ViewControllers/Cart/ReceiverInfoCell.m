@@ -80,7 +80,7 @@
         _labelTitle = [[UILabel alloc] initWithFrame:CGRectZero];
         [_labelTitle setTextColor:[UIColor darkGrayColor]];
         [_labelTitle setBackgroundColor:[UIColor clearColor]];
-        UIFont *font = [UIFont systemFontOfSize:14.0];
+        UIFont *font = [UIFont systemFontOfSize:16.0];
         [_labelTitle setFont:font];
         [_labelTitle setTextAlignment:NSTextAlignmentLeft];
     }
@@ -94,7 +94,7 @@
         _labelContent = [[UILabel alloc] initWithFrame:CGRectZero];
         [_labelContent setTextColor:[UIColor grayColor]];
         [_labelContent setBackgroundColor:[UIColor clearColor]];
-        UIFont *font = [UIFont systemFontOfSize:12.0];
+        UIFont *font = [UIFont systemFontOfSize:14.0];
         [_labelContent setFont:font];
         [_labelContent setTextAlignment:NSTextAlignmentRight];
         [_labelContent setLineBreakMode:NSLineBreakByTruncatingMiddle];
@@ -110,7 +110,7 @@
         [_button setBackgroundColor:TMMainColor];
         [_button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         [_button addTarget:self action:@selector(buttonPressed:) forControlEvents:UIControlEventTouchUpInside];
-        UIFont *font = [UIFont systemFontOfSize:12.0];
+        UIFont *font = [UIFont systemFontOfSize:14.0];
         [_button.titleLabel setFont:font];
         [_button.layer setCornerRadius:5.0];
     }

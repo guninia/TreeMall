@@ -245,4 +245,36 @@ static CryptoModule *gCryptoModule = nil;
     return data;
 }
 
+- (NSString *)encodedUrlStringForUrlString:(NSString *)urlString withParameters:(NSDictionary *)parameters
+{
+    if (parameters == nil)
+    {
+        return urlString;
+    }
+    NSError *error = nil;
+    NSData *paramData = [NSJSONSerialization dataWithJSONObject:parameters options:0 error:&error];
+    if (error != nil || paramData == nil)
+    {
+        NSLog(@"encodedUrlStringForUrlString[%@] error:\n%@", urlString, [error description]);
+        return nil;
+    }
+    NSData *encryptedData = [self encryptFromSourceData:paramData];
+    if (encryptedData == nil)
+    {
+        NSLog(@"encodedUrlStringForUrlString - encrypt error");
+        return nil;
+    }
+    NSString *encryptedString = [[NSString alloc] initWithData:encryptedData encoding:NSUTF8StringEncoding];
+    if (encryptedString == nil)
+    {
+        NSLog(@"encodedUrlStringForUrlString - Cannot produce encryptedString.");
+        return nil;
+    }
+    //    NSString *encodedString = [encryptedString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    NSString *encodedString = [encryptedString stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet alphanumericCharacterSet]];
+    //    NSLog(@"encodedUrlStringForUrlString - encodedString[%@]", encodedString);
+    NSString *encodedUrlString = [urlString stringByAppendingFormat:@"?body=%@", encodedString];
+    return encodedUrlString;
+}
+
 @end

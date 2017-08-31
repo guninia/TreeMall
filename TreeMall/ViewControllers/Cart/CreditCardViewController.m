@@ -57,6 +57,7 @@
     self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
     [self.scrollView setShowsVerticalScrollIndicator:NO];
     [self.scrollView setShowsHorizontalScrollIndicator:NO];
+    [self.buttonConfirm setBackgroundColor:[UIColor orangeColor]];
     [self.buttonConfirm.layer setCornerRadius:5.0];
     
     if (self.navigationController.tabBarController)

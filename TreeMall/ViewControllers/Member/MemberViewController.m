@@ -38,7 +38,6 @@ typedef enum : NSUInteger {
 - (void)retrieveOrderNumberOfStatus;
 - (BOOL)processOrderNumberOfStatusData:(id)data;
 - (NSString *)greetingsMessage;
-- (NSString *)encodedUrlStringForUrlString:(NSString *)urlString withParameters:(NSDictionary *)parameters;
 
 - (void)buttonItemLogoutPressed:(id)sender;
 - (void)buttonItemQAPressed:(id)sender;
@@ -686,38 +685,6 @@ typedef enum : NSUInteger {
     return stringGreetingsTime;
 }
 
-- (NSString *)encodedUrlStringForUrlString:(NSString *)urlString withParameters:(NSDictionary *)parameters
-{
-    if (parameters == nil)
-    {
-        return urlString;
-    }
-    NSError *error = nil;
-    NSData *paramData = [NSJSONSerialization dataWithJSONObject:parameters options:0 error:&error];
-    if (error != nil || paramData == nil)
-    {
-        NSLog(@"encodedUrlStringForUrlString[%@] error:\n%@", urlString, [error description]);
-        return nil;
-    }
-    NSData *encryptedData = [[CryptoModule sharedModule] encryptFromSourceData:paramData];
-    if (encryptedData == nil)
-    {
-        NSLog(@"encodedUrlStringForUrlString - encrypt error");
-        return nil;
-    }
-    NSString *encryptedString = [[NSString alloc] initWithData:encryptedData encoding:NSUTF8StringEncoding];
-    if (encryptedString == nil)
-    {
-        NSLog(@"encodedUrlStringForUrlString - Cannot produce encryptedString.");
-        return nil;
-    }
-    //    NSString *encodedString = [encryptedString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-    NSString *encodedString = [encryptedString stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet alphanumericCharacterSet]];
-    //    NSLog(@"encodedUrlStringForUrlString - encodedString[%@]", encodedString);
-    NSString *encodedUrlString = [urlString stringByAppendingFormat:@"?body=%@", encodedString];
-    return encodedUrlString;
-}
-
 #pragma mark - Actions
 
 - (void)buttonItemLogoutPressed:(id)sender
@@ -873,7 +840,7 @@ typedef enum : NSUInteger {
             [params setObject:game_id forKey:SymphoxAPIParam_game_id];
         }
         [params setObject:[TMInfoManager sharedManager].userIdentifier forKey:SymphoxAPIParam_user_num];
-        url = [self encodedUrlStringForUrlString:SymphoxAPI_game withParameters:params];
+        url = [[CryptoModule sharedModule] encodedUrlStringForUrlString:SymphoxAPI_game withParameters:params];
     }
     viewController.urlString = url;
     

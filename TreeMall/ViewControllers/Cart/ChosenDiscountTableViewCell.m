@@ -38,7 +38,7 @@
 {
     [super layoutSubviews];
     
-    CGFloat marginH = 20.0;
+    CGFloat marginH = 15.0;
     CGFloat intervalH = 5.0;
     CGFloat originX = marginH;
     if (self.labelTitle)
@@ -51,7 +51,7 @@
     }
     if (self.labelDetail)
     {
-        CGRect frame = CGRectMake(originX, 0.0, self.contentView.frame.size.width - originX, self.contentView.frame.size.height);
+        CGRect frame = CGRectMake(originX, 0.0, self.contentView.frame.size.width - marginH - originX, self.contentView.frame.size.height);
         self.labelDetail.frame = frame;
     }
 }
@@ -63,7 +63,7 @@
         _labelTitle = [[UILabel alloc] initWithFrame:CGRectZero];
         [_labelTitle setTextColor:[UIColor blackColor]];
         [_labelTitle setBackgroundColor:[UIColor clearColor]];
-        UIFont *font = [UIFont systemFontOfSize:16.0];
+        UIFont *font = [UIFont systemFontOfSize:14.0];
         [_labelTitle setFont:font];
     }
     return _labelTitle;
@@ -76,8 +76,9 @@
         _labelDetail = [[UILabel alloc] initWithFrame:CGRectZero];
         [_labelDetail setTextColor:[UIColor redColor]];
         [_labelDetail setBackgroundColor:[UIColor clearColor]];
-        UIFont *font = [UIFont systemFontOfSize:16.0];
+        UIFont *font = [UIFont systemFontOfSize:14.0];
         [_labelDetail setFont:font];
+        [_labelDetail setTextAlignment:NSTextAlignmentRight];
     }
     return _labelDetail;
 }
