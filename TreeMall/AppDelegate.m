@@ -44,12 +44,13 @@
     
     // adopt Firebase
     [FIRApp configure];
-
+#ifndef DEBUG
     // Check latest version
     if ([self checkLatestVersion] == NO) {
         [self updateApp];
         return YES;
     }
+#endif
 
     [[FBSDKApplicationDelegate sharedInstance] application:application didFinishLaunchingWithOptions:launchOptions];
     

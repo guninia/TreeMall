@@ -481,7 +481,12 @@ typedef enum : NSUInteger {
     {
         [[TMInfoManager sharedManager] retrievePointDataFromObject:nil withCompletion:nil];
     }
-    [self.viewPoint.buttonBonusGame setTitle:@"玩遊戲賺點數，Go！" forState:UIControlStateNormal];
+    NSString *gameName = [[TMInfoManager sharedManager].dictionaryGame objectForKey:SymphoxAPIParam_name];
+    if (gameName == nil)
+    {
+        gameName = @"玩遊戲賺點數，Go！";
+    }
+    [self.viewPoint.buttonBonusGame setTitle:gameName forState:UIControlStateNormal];
     NSNumber *pointDividend = [TMInfoManager sharedManager].userPointDividend;
     if (pointDividend)
     {
@@ -823,8 +828,9 @@ typedef enum : NSUInteger {
     NSString *type = [[TMInfoManager sharedManager].dictionaryGame objectForKey:SymphoxAPIParam_type];
     if (type == nil || [type integerValue] == -1)
         return;
+    NSString *gameName = [[TMInfoManager sharedManager].dictionaryGame objectForKey:SymphoxAPIParam_name];
     WebViewViewController *viewController = [[WebViewViewController alloc] initWithNibName:@"WebViewViewController" bundle:[NSBundle mainBundle]];
-    viewController.title = [self.viewPoint.buttonBonusGame titleForState:UIControlStateNormal];
+    viewController.title = gameName;
     viewController.type = WebViewTypeGame;
     NSString *url = nil;
     if ([type integerValue] == 0)

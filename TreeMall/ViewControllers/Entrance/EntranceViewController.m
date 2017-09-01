@@ -650,23 +650,48 @@ typedef enum : NSUInteger {
                     break;
                 case 5:
                 {
-                    SearchViewController *viewController = [[SearchViewController alloc] initWithNibName:@"SearchViewController" bundle:[NSBundle mainBundle]];
-                    viewController.delegate = self;
-                    if (link != nil && [link length] > 0)
-                    {
-                        viewController.textFieldSearch.text = link;
-                    }
-                    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:viewController];
-                    [self presentViewController:navigationController animated:YES completion:nil];
+//                    SearchViewController *viewController = [[SearchViewController alloc] initWithNibName:@"SearchViewController" bundle:[NSBundle mainBundle]];
+//                    viewController.delegate = self;
+//                    if (link != nil && [link length] > 0)
+//                    {
+//                        viewController.textFieldSearch.text = link;
+//                    }
+//                    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:viewController];
+//                    [self presentViewController:navigationController animated:YES completion:nil];
+                    
+                    ProductListViewController *listViewController = [[ProductListViewController alloc] initWithNibName:@"ProductListViewController" bundle:[NSBundle mainBundle]];
+                    listViewController.isSearchResult = YES;
+                    [listViewController addKeywordToConditions:link];
+                    listViewController.hallId = nil;
+                    listViewController.layer = nil;
+                    listViewController.name = nil;
+                    
+                    [gaTracker send:[[GAIDictionaryBuilder
+                                      createEventWithCategory:[EventLog twoString:self.title _:logPara_搜尋]
+                                      action:[EventLog to_:logPara_商品列表]
+                                      label:nil
+                                      value:nil] build]];
+                    
+                    [self.navigationController pushViewController:listViewController animated:YES];
                 }
                     break;
                 case 6:
                 {
+                    if ([TMInfoManager sharedManager].userIdentifier == nil)
+                    {
+                        // Should pop up login view
+                        LoginViewController *viewControllerLogin = [[LoginViewController alloc] initWithNibName:@"LoginViewController" bundle:[NSBundle mainBundle]];
+                        UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:viewControllerLogin];
+                        
+                        [self presentViewController:navigationController animated:YES completion:nil];
+                        break;
+                    }
                     NSString *type = [[TMInfoManager sharedManager].dictionaryGame objectForKey:SymphoxAPIParam_type];
                     if (type == nil || [type integerValue] == -1)
                         return;
+                    NSString *gameName = [[TMInfoManager sharedManager].dictionaryGame objectForKey:SymphoxAPIParam_name];
                     WebViewViewController *viewController = [[WebViewViewController alloc] initWithNibName:@"WebViewViewController" bundle:[NSBundle mainBundle]];
-                    viewController.title = name;
+                    viewController.title = gameName;
                     viewController.type = WebViewTypeGame;
                     NSString *url = nil;
                     if ([type integerValue] == 0)
@@ -805,23 +830,48 @@ typedef enum : NSUInteger {
                 break;
             case 5:
             {
-                SearchViewController *viewController = [[SearchViewController alloc] initWithNibName:@"SearchViewController" bundle:[NSBundle mainBundle]];
-                viewController.delegate = self;
-                if (stringLink != nil && [stringLink length] > 0)
-                {
-                    viewController.textFieldSearch.text = stringLink;
-                }
-                UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:viewController];
-                [self presentViewController:navigationController animated:YES completion:nil];
+//                SearchViewController *viewController = [[SearchViewController alloc] initWithNibName:@"SearchViewController" bundle:[NSBundle mainBundle]];
+//                viewController.delegate = self;
+//                if (stringLink != nil && [stringLink length] > 0)
+//                {
+//                    viewController.textFieldSearch.text = stringLink;
+//                }
+//                UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:viewController];
+//                [self presentViewController:navigationController animated:YES completion:nil];
+                
+                ProductListViewController *listViewController = [[ProductListViewController alloc] initWithNibName:@"ProductListViewController" bundle:[NSBundle mainBundle]];
+                listViewController.isSearchResult = YES;
+                [listViewController addKeywordToConditions:stringLink];
+                listViewController.hallId = nil;
+                listViewController.layer = nil;
+                listViewController.name = nil;
+                
+                [gaTracker send:[[GAIDictionaryBuilder
+                                  createEventWithCategory:[EventLog twoString:self.title _:logPara_搜尋]
+                                  action:[EventLog to_:logPara_商品列表]
+                                  label:nil
+                                  value:nil] build]];
+                
+                [self.navigationController pushViewController:listViewController animated:YES];
             }
                 break;
             case 6:
             {
+                if ([TMInfoManager sharedManager].userIdentifier == nil)
+                {
+                    // Should pop up login view
+                    LoginViewController *viewControllerLogin = [[LoginViewController alloc] initWithNibName:@"LoginViewController" bundle:[NSBundle mainBundle]];
+                    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:viewControllerLogin];
+                    
+                    [self presentViewController:navigationController animated:YES completion:nil];
+                    break;
+                }
                 NSString *type = [[TMInfoManager sharedManager].dictionaryGame objectForKey:SymphoxAPIParam_type];
                 if (type == nil || [type integerValue] == -1)
                     return;
+                NSString *gameName = [[TMInfoManager sharedManager].dictionaryGame objectForKey:SymphoxAPIParam_name];
                 WebViewViewController *viewController = [[WebViewViewController alloc] initWithNibName:@"WebViewViewController" bundle:[NSBundle mainBundle]];
-                viewController.title = name;
+                viewController.title = gameName;
                 viewController.type = WebViewTypeGame;
                 NSString *url = nil;
                 if ([type integerValue] == 0)
@@ -956,23 +1006,47 @@ typedef enum : NSUInteger {
                 case 5:
                 {
 
-                    SearchViewController *viewController = [[SearchViewController alloc] initWithNibName:@"SearchViewController" bundle:[NSBundle mainBundle]];
-                    viewController.delegate = self;
-                    if (stringLink != nil && [stringLink length] > 0)
-                    {
-                        viewController.textFieldSearch.text = stringLink;
-                    }
-                    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:viewController];
-                    [self presentViewController:navigationController animated:YES completion:nil];
+//                    SearchViewController *viewController = [[SearchViewController alloc] initWithNibName:@"SearchViewController" bundle:[NSBundle mainBundle]];
+//                    viewController.delegate = self;
+//                    if (stringLink != nil && [stringLink length] > 0)
+//                    {
+//                        viewController.textFieldSearch.text = stringLink;
+//                    }
+//                    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:viewController];
+//                    [self presentViewController:navigationController animated:YES completion:nil];
+                    ProductListViewController *listViewController = [[ProductListViewController alloc] initWithNibName:@"ProductListViewController" bundle:[NSBundle mainBundle]];
+                    listViewController.isSearchResult = YES;
+                    [listViewController addKeywordToConditions:stringLink];
+                    listViewController.hallId = nil;
+                    listViewController.layer = nil;
+                    listViewController.name = nil;
+                    
+                    [gaTracker send:[[GAIDictionaryBuilder
+                                      createEventWithCategory:[EventLog twoString:self.title _:logPara_搜尋]
+                                      action:[EventLog to_:logPara_商品列表]
+                                      label:nil
+                                      value:nil] build]];
+                    
+                    [self.navigationController pushViewController:listViewController animated:YES];
                 }
                     break;
                 case 6:
                 {
+                    if ([TMInfoManager sharedManager].userIdentifier == nil)
+                    {
+                        // Should pop up login view
+                        LoginViewController *viewControllerLogin = [[LoginViewController alloc] initWithNibName:@"LoginViewController" bundle:[NSBundle mainBundle]];
+                        UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:viewControllerLogin];
+                        
+                        [self presentViewController:navigationController animated:YES completion:nil];
+                        break;
+                    }
                     NSString *type = [[TMInfoManager sharedManager].dictionaryGame objectForKey:SymphoxAPIParam_type];
                     if (type == nil || [type integerValue] == -1)
                         return;
+                    NSString *gameName = [[TMInfoManager sharedManager].dictionaryGame objectForKey:SymphoxAPIParam_name];
                     WebViewViewController *viewController = [[WebViewViewController alloc] initWithNibName:@"WebViewViewController" bundle:[NSBundle mainBundle]];
-                    viewController.title = @"遊戲";
+                    viewController.title = gameName;
                     viewController.type = WebViewTypeGame;
                     NSString *url = nil;
                     if ([type integerValue] == 0)
