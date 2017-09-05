@@ -202,7 +202,7 @@
             return;
         }
     }
-    NSString *password = [[_textFieldPassword text] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    NSString *password = [_textFieldPassword text];
     if ([Utility evaluatePassword:password] == NO)
     {
         // Should show alert to modify password.
@@ -220,7 +220,7 @@
         [self presentViewController:alertController animated:YES completion:nil];
         return;
     }
-    NSString *confirm = [[_textFieldConfirm text] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    NSString *confirm = [_textFieldPassword text];
     if ([Utility evaluatePassword:confirm] == NO)
     {
         // Should show alert to modify password.

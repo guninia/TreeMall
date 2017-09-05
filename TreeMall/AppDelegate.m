@@ -44,10 +44,11 @@
     
     // adopt Firebase
     [FIRApp configure];
+
 #ifndef DEBUG
     // Check latest version
     BOOL isTestFlight = [[[[NSBundle mainBundle] appStoreReceiptURL] lastPathComponent] isEqualToString:@"sandboxReceipt"];
-    if (isTestFlight == NO){
+    if (isTestFlight == NO) {
         if ([self checkLatestVersion] == NO) {
             [self updateApp];
             return YES;
@@ -272,8 +273,15 @@
                     trackId = [key valueForKey:@"trackId"];
                 }
                 // Compare versions
-                if (![latestVersion isEqualToString:currentVersion])
-                    isLatestVersion = NO;
+                NSArray * arrayCurrent = [currentVersion componentsSeparatedByString:@"."];
+                NSArray * arrayAppstore = [latestVersion componentsSeparatedByString:@"."];
+                if ([arrayCurrent[0] intValue] <= [arrayAppstore[0] intValue]) {
+                    if ([arrayCurrent[1] intValue] <= [arrayAppstore[1] intValue]) {
+                        if ([arrayCurrent[2] intValue] < [arrayAppstore[2] intValue]) {
+                            isLatestVersion = NO;
+                        }
+                    }
+                }
                 
             } else {
                 // Case that cannot find matched app.
