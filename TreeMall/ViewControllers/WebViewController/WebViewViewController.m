@@ -12,6 +12,7 @@
 #import "ProductDetailViewController.h"
 #import "TMInfoManager.h"
 #import "TermsViewController.h"
+#import "APIDefinition.h"
 
 @interface WebViewViewController ()
 
@@ -362,6 +363,8 @@
                     });
                 }];
             }
+            [[TMInfoManager sharedManager] retrieveCouponDataFromObject:nil forPageIndex:1 couponState:CouponStateNotUsed sortFactor:SymphoxAPIParamValue_worth withSortOrder:SymphoxAPIParamValue_desc withCompletion:nil];
+            [[TMInfoManager sharedManager] retrievePointDataFromObject:nil withCompletion:nil];
         }
             break;
         default:

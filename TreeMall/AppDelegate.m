@@ -46,9 +46,12 @@
     [FIRApp configure];
 #ifndef DEBUG
     // Check latest version
-    if ([self checkLatestVersion] == NO) {
-        [self updateApp];
-        return YES;
+    BOOL isTestFlight = [[[[NSBundle mainBundle] appStoreReceiptURL] lastPathComponent] isEqualToString:@"sandboxReceipt"];
+    if (isTestFlight == NO){
+        if ([self checkLatestVersion] == NO) {
+            [self updateApp];
+            return YES;
+        }
     }
 #endif
 

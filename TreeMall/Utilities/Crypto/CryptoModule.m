@@ -143,6 +143,19 @@ static CryptoModule *gCryptoModule = nil;
                         errorCode = CryptoErrorCodeServerResponseError;
                     }
                         break;
+                    case 3:
+                    {
+                        if (statusDescription)
+                        {
+                            [errorMessage appendString:statusDescription];
+                        }
+                        else
+                        {
+                            [errorMessage appendString:[LocalizedString SystemErrorTryLater]];
+                        }
+                        errorCode = CryptoErrorCodeServerResponseError;
+                    }
+                        break;
                     case 101:
                     case 102:
                     {

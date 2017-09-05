@@ -174,6 +174,7 @@ typedef enum : NSUInteger {
         CGRect frame = CGRectMake(0.0, originY, self.scrollView.frame.size.width, 50.0);
         self.viewCouponTitle.frame = frame;
         originY = self.viewCouponTitle.frame.origin.y + self.viewCouponTitle.frame.size.height;
+        [self.viewCouponTitle setNeedsLayout];
     }
 //    if (self.viewTotalCoupon)
 //    {
@@ -186,6 +187,7 @@ typedef enum : NSUInteger {
         CGRect frame = CGRectMake(0.0, originY, self.scrollView.frame.size.width, 50.0);
         self.viewOrderTitle.frame = frame;
         originY = self.viewOrderTitle.frame.origin.y + self.viewOrderTitle.frame.size.height + 10.0;;
+        [self.viewOrderTitle setNeedsLayout];
     }
     NSArray *array = [NSArray arrayWithObjects:self.viewProcessing, self.viewShipped, self.viewReturnReplace, nil];
     NSInteger totalCount = [array count];
@@ -382,6 +384,7 @@ typedef enum : NSUInteger {
     NSMutableAttributedString *attrString = [[NSMutableAttributedString alloc] initWithString:totalString];
     [attrString addAttribute:NSForegroundColorAttributeName value:[UIColor redColor] range:NSMakeRange(0, [string length])];
     [self.viewCouponTitle.labelR setAttributedText:attrString];
+    [self.viewCouponTitle setNeedsLayout];
 }
 
 - (void)setNumberOrderProcessing:(NSNumber *)numberOrderProcessing
