@@ -115,6 +115,15 @@
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {
     // Called as part of the transition from the background to the active state; here you can undo many of the changes made on entering the background.
+#ifndef DEBUG
+    // Check latest version
+    BOOL isTestFlight = [[[[NSBundle mainBundle] appStoreReceiptURL] lastPathComponent] isEqualToString:@"sandboxReceipt"];
+    if (isTestFlight == NO) {
+        if ([self checkLatestVersion] == NO) {
+            [self updateApp];
+        }
+    }
+#endif
 }
 
 
@@ -305,15 +314,17 @@
 - (void)updateApp {
     UIAlertController * alertController = [UIAlertController alertControllerWithTitle:@"為提升優質購物體驗，\n請更新至最新版本" message:@"" preferredStyle:UIAlertControllerStyleAlert];
     UIAlertAction * confirm = [UIAlertAction actionWithTitle:@"更新" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        SKStoreProductViewController * iTunesVC = [[SKStoreProductViewController alloc] init];
-        iTunesVC.delegate = self;
-        NSDictionary * parameter = @{SKStoreProductParameterITunesItemIdentifier: trackId};
-        [iTunesVC loadProductWithParameters:parameter completionBlock:^(BOOL result, NSError * _Nullable error) {
-            if (result) {
-                UIViewController * vc = self.window.rootViewController;
-                [vc presentViewController:iTunesVC animated:YES completion:nil];
-            }
-        }];
+        NSString * iTunesLink = @"itms://itunes.apple.com/tw/app/apple-store/id1258548547?mt-8";
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString: iTunesLink]];
+//        SKStoreProductViewController * iTunesVC = [[SKStoreProductViewController alloc] init];
+//        iTunesVC.delegate = self;
+//        NSDictionary * parameter = @{SKStoreProductParameterITunesItemIdentifier: trackId};
+//        [iTunesVC loadProductWithParameters:parameter completionBlock:^(BOOL result, NSError * _Nullable error) {
+//            if (result) {
+//                UIViewController * vc = self.window.rootViewController;
+//                [vc presentViewController:iTunesVC animated:YES completion:nil];
+//            }
+//        }];
     }];
     
     [alertController addAction:confirm];
