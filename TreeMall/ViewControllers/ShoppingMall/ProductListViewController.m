@@ -298,9 +298,9 @@
     }
     else
     {
-        NSLog(@"processData - error:\n%@", error);
+        NSLog(@"ProductListViewController: processData - error:\n%@", error);
         NSString *resultString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-        NSLog(@"processData - result:\n%@", resultString);
+        NSLog(@"ProductListViewController: processData - result:\n%@", resultString);
     }
     
     return success;

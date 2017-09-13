@@ -126,7 +126,7 @@
     
     if (error == nil)
     {
-        NSLog(@"jsonObject[%@]:\n%@", [[jsonObject class] description], [jsonObject description]);
+        NSLog(@"PromotionViewController: jsonObject[%@]:\n%@", [[jsonObject class] description], [jsonObject description]);
         if ([jsonObject isKindOfClass:[NSDictionary class]])
         {
             NSDictionary *dictionary = (NSDictionary *)jsonObject;
@@ -145,9 +145,9 @@
     }
     else
     {
-        NSLog(@"processData - error:\n%@", error);
+        NSLog(@"PromotionViewController: processData - error:\n%@", error);
         NSString *resultString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-        NSLog(@"processData - result:\n%@", resultString);
+        NSLog(@"PromotionViewController: processData - result:\n%@", resultString);
     }
     return canProcess;
 }

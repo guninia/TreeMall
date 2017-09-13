@@ -262,9 +262,9 @@ typedef enum : NSUInteger {
     }
     else
     {
-        NSLog(@"processData - error:\n%@", error);
+        NSLog(@"ShoppingMallViewController: processData - error:\n%@", error);
         NSString *resultString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-        NSLog(@"processData - result:\n%@", resultString);
+        NSLog(@"ShoppingMallViewController: processData - result:\n%@", resultString);
     }
     return canProcess;
 }
@@ -359,9 +359,9 @@ typedef enum : NSUInteger {
     }
     else
     {
-        NSLog(@"processData - error:\n%@", error);
+        NSLog(@"ShoppingMallViewController: processSubcategoryData - error:\n%@", error);
         NSString *resultString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-        NSLog(@"processData - result:\n%@", resultString);
+        NSLog(@"ShoppingMallViewController: processSubcategoryData - result:\n%@", resultString);
     }
     return canProcess;
 }

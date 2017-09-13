@@ -230,9 +230,9 @@ typedef enum : NSUInteger {
     }
     else
     {
-        NSLog(@"processData - error:\n%@", error);
+        NSLog(@"EntranceViewController: processData - error:\n%@", error);
         NSString *resultString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-        NSLog(@"processData - result:\n%@", resultString);
+        NSLog(@"EntranceViewController: processData - result:\n%@", resultString);
     }
     return canProcess;
 }

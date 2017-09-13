@@ -261,7 +261,8 @@
     NSString * currentVersion = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
     NSString * latestVersion = nil;
     NSString * bundleId = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleIdentifier"];
-    NSString * urlString = [NSString stringWithFormat:@"https://itunes.apple.com/tw/lookup?bundleId=%@", bundleId];
+    NSString * timestamp = [NSString stringWithFormat:@"%f", [[NSDate date] timeIntervalSince1970]];
+    NSString * urlString = [NSString stringWithFormat:@"https://itunes.apple.com/tw/lookup?bundleId=%@&timestamp=%@", bundleId, timestamp];
     NSURL * url = [NSURL URLWithString:urlString];
     NSData * data = nil;
     
@@ -284,11 +285,10 @@
                 // Compare versions
                 NSArray * arrayCurrent = [currentVersion componentsSeparatedByString:@"."];
                 NSArray * arrayAppstore = [latestVersion componentsSeparatedByString:@"."];
-                if ([arrayCurrent[0] intValue] <= [arrayAppstore[0] intValue]) {
-                    if ([arrayCurrent[1] intValue] <= [arrayAppstore[1] intValue]) {
-                        if ([arrayCurrent[2] intValue] < [arrayAppstore[2] intValue]) {
-                            isLatestVersion = NO;
-                        }
+                for (int i = 0; i < [arrayAppstore count]; i++) {
+                    if ([arrayAppstore[i] intValue] > [arrayCurrent[i] intValue]) {
+                        isLatestVersion = NO;
+                        break;
                     }
                 }
                 
@@ -314,7 +314,8 @@
 - (void)updateApp {
     UIAlertController * alertController = [UIAlertController alertControllerWithTitle:@"為提升優質購物體驗，\n請更新至最新版本" message:@"" preferredStyle:UIAlertControllerStyleAlert];
     UIAlertAction * confirm = [UIAlertAction actionWithTitle:@"更新" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        NSString * iTunesLink = @"itms://itunes.apple.com/tw/app/apple-store/id1258548547?mt-8";
+        double date = [[NSDate date] timeIntervalSince1970];
+        NSString * iTunesLink = [NSString stringWithFormat:@"itms-apps://itunes.apple.com/tw/app/apple-store/id1258548547?mt-8&timestamp=%f", date];
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString: iTunesLink]];
 //        SKStoreProductViewController * iTunesVC = [[SKStoreProductViewController alloc] init];
 //        iTunesVC.delegate = self;
