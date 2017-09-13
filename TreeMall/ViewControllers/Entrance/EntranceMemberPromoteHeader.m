@@ -10,6 +10,7 @@
 #import "LocalizedString.h"
 #import <math.h>
 #import <UIImageView+WebCache.h>
+#import "TMInfoManager.h"
 
 @interface EntranceMemberPromoteHeader ()
 
@@ -341,7 +342,14 @@
     _numberTotalPoint = numberTotalPoint;
     if (_numberTotalPoint == nil)
     {
-        self.labelPointValue.text = [LocalizedString PleaseLogin];
+        if ([TMInfoManager sharedManager].userIdentifier == nil)
+        {
+            self.labelPointValue.text = [LocalizedString PleaseLogin];
+        }
+        else
+        {
+            self.labelPointValue.text = @"--";
+        }
         self.labelPointTitle.hidden = NO;
         self.labelPointValue.hidden = NO;
     }
@@ -359,7 +367,14 @@
     _numberCouponValue = numberCouponValue;
     if (_numberCouponValue == nil)
     {
-        self.labelCouponValue.text = [LocalizedString PleaseLogin];
+        if ([TMInfoManager sharedManager].userIdentifier == nil)
+        {
+            self.labelCouponValue.text = [LocalizedString PleaseLogin];
+        }
+        else
+        {
+            self.labelCouponValue.text = @"--";
+        }
         self.labelCouponTitle.hidden = NO;
         self.labelCouponValue.hidden = NO;
     }

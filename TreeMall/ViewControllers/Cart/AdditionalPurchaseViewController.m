@@ -790,13 +790,15 @@
         NSAttributedString *attrString = [[NSAttributedString alloc] initWithString:string attributes:attributeOrange];
         [totalString appendAttributedString:attrString];
     }
-    if (totalEpoint != nil && [totalEpoint integerValue] > 0)
+    if ((totalEpoint != nil && [totalEpoint integerValue] > 0) || (totalPoint != nil && [totalPoint integerValue] > 0))
     {
         if ([totalString length] > originLength)
         {
             [totalString appendAttributedString:plusString];
         }
-        NSString *stringTotal = [self.numberFormatter stringFromNumber:totalEpoint];
+        NSUInteger pointValue = [totalEpoint unsignedIntegerValue] + [totalPoint unsignedIntegerValue];
+        NSNumber *points = [NSNumber numberWithUnsignedInteger:pointValue];
+        NSString *stringTotal = [self.numberFormatter stringFromNumber:points];
         NSString *string = [NSString stringWithFormat:@"%@%@", stringTotal, [LocalizedString Point]];
         NSAttributedString *attrString = [[NSAttributedString alloc] initWithString:string attributes:attributeOrange];
         [totalString appendAttributedString:attrString];
