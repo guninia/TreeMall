@@ -3671,4 +3671,14 @@
     return ProductRemovedFromFavorite;
 }
 
++ (NSString *)PurchaseDirectly
+{
+    static NSString *PurchaseDirectly = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        PurchaseDirectly = NSLocalizedString(@"PurchaseDirectly", nil);
+    });
+    return PurchaseDirectly;
+}
+
 @end

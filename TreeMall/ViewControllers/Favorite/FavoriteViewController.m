@@ -359,7 +359,7 @@
     CartViewController *viewController = [[CartViewController alloc] initWithNibName:@"CartViewController" bundle:[NSBundle mainBundle]];
     if (type == CartTypeDirectlyPurchase)
     {
-        viewController.title = [LocalizedString Purchase];
+        viewController.title = [LocalizedString PurchaseDirectly];
     }
     else
     {

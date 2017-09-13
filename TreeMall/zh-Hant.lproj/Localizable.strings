@@ -87,7 +87,7 @@
 "SearchResult"="搜尋結果";
 "Promotions"="優惠活動";
 "AddToCart"="加入購物車";
-"Purchase"="直接購買";
+"Purchase"="購買";
 "OriginPrice_C_$"="原價：＄";
 "PointNumber"="點數";
 "PointAddCash"="點＋現";
@@ -372,3 +372,4 @@
 "VisitGift"="來店禮";
 "AlreadyInCart_S_"="商品已存在%@購物車";
 "ProductRemovedFromFavorite"="已移除我的最愛";
+"PurchaseDirectly"="直接購買";

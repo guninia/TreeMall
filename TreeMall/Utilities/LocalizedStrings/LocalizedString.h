@@ -376,5 +376,6 @@
 + (NSString *)VisitGift;
 + (NSString *)AlreadyInCart_S_;
 + (NSString *)ProductRemovedFromFavorite;
++ (NSString *)PurchaseDirectly;
 
 @end

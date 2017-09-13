@@ -171,7 +171,7 @@
         {
             [_buttonPurchase setImage:image forState:UIControlStateNormal];
         }
-        [_buttonPurchase setTitle:[LocalizedString Purchase] forState:UIControlStateNormal];
+        [_buttonPurchase setTitle:[LocalizedString PurchaseDirectly] forState:UIControlStateNormal];
         UIFont *font = [UIFont systemFontOfSize:16.0];
         [_buttonPurchase.titleLabel setFont:font];
         [_buttonPurchase addTarget:self action:@selector(buttonPurchasePressed:) forControlEvents:UIControlEventTouchUpInside];
@@ -190,7 +190,7 @@
         {
             [_buttonPurchaseOnly setImage:image forState:UIControlStateNormal];
         }
-        [_buttonPurchaseOnly setTitle:[LocalizedString Purchase] forState:UIControlStateNormal];
+        [_buttonPurchaseOnly setTitle:[LocalizedString PurchaseDirectly] forState:UIControlStateNormal];
         UIFont *font = [UIFont systemFontOfSize:16.0];
         [_buttonPurchaseOnly.titleLabel setFont:font];
         [_buttonPurchaseOnly addTarget:self action:@selector(buttonPurchasePressed:) forControlEvents:UIControlEventTouchUpInside];

@@ -1684,7 +1684,7 @@
     {
         BOOL isInvalid = YES;
         NSString *textSoldOut = [LocalizedString SoldOut];
-        NSString *textPurchase = [LocalizedString Purchase];
+        NSString *textPurchase = [LocalizedString PurchaseDirectly];
         NSArray *arrayShopping = [self.dictionaryDetail objectForKey:SymphoxAPIParam_shopping];
         if (arrayShopping == nil || [arrayShopping isEqual:[NSNull null]] || [arrayShopping count] == 0)
         {
@@ -2215,7 +2215,7 @@
     CartViewController *viewController = [[CartViewController alloc] initWithNibName:@"CartViewController" bundle:[NSBundle mainBundle]];
     if (type == CartTypeDirectlyPurchase)
     {
-        viewController.title = [LocalizedString Purchase];
+        viewController.title = [LocalizedString PurchaseDirectly];
     }
     else if (type == CartTypeVisitGift)
     {
