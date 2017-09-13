@@ -215,7 +215,7 @@
     [params setObject:userId forKey:SymphoxAPIParam_user_num];
     
     [self showLoadingViewAnimated:YES];
-    [[SHAPIAdapter sharedAdapter] sendRequestFromObject:weakSelf ToUrl:url withHeaderFields:headerFields andPostObject:params inPostFormat:SHPostFormatJson encrypted:YES decryptedReturnData:YES completion:^(id resultObject, NSError *error){
+    [[SHAPIAdapter sharedAdapter] sendRequestFromObject:weakSelf ToUrl:url withHeaderFields:headerFields andPostObject:params inPostFormat:SHPostFormatJson encrypted:NO decryptedReturnData:NO completion:^(id resultObject, NSError *error){
         if (error == nil)
         {
             // Success
@@ -283,7 +283,7 @@
     [params setObject:userId forKey:SymphoxAPIParam_user_num];
     [params setObject:newsletters forKey:SymphoxAPIParam_list];
     
-    [[SHAPIAdapter sharedAdapter] sendRequestFromObject:weakSelf ToUrl:url withHeaderFields:headerFields andPostObject:params inPostFormat:SHPostFormatJson encrypted:YES decryptedReturnData:YES completion:^(id resultObject, NSError *error){
+    [[SHAPIAdapter sharedAdapter] sendRequestFromObject:weakSelf ToUrl:url withHeaderFields:headerFields andPostObject:params inPostFormat:SHPostFormatJson encrypted:NO decryptedReturnData:NO completion:^(id resultObject, NSError *error){
         NSString *message = nil;
         if (error == nil)
         {

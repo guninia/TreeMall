@@ -287,7 +287,7 @@
     NSURL *url = [NSURL URLWithString:SymphoxAPI_mobileVerification];
     NSLog(@"login url [%@]", [url absoluteString]);
     NSDictionary *headerFields = [NSDictionary dictionaryWithObjectsAndKeys:apiKey, SymphoxAPIParam_key, token, SymphoxAPIParam_token, nil];
-    [[SHAPIAdapter sharedAdapter] sendRequestFromObject:weakSelf ToUrl:url withHeaderFields:headerFields andPostObject:options inPostFormat:SHPostFormatJson encrypted:YES decryptedReturnData:YES completion:^(id resultObject, NSError *error){
+    [[SHAPIAdapter sharedAdapter] sendRequestFromObject:weakSelf ToUrl:url withHeaderFields:headerFields andPostObject:options inPostFormat:SHPostFormatJson encrypted:NO decryptedReturnData:NO completion:^(id resultObject, NSError *error){
         NSString *errorDescription = nil;
         if (error == nil)
         {
@@ -383,7 +383,7 @@
     NSURL *url = [[NSURL URLWithString:SymphoxAPI_register] URLByAppendingPathComponent:type];
     NSLog(@"registerWithOptions - register url [%@]", [url absoluteString]);
     NSDictionary *headerFields = [NSDictionary dictionaryWithObjectsAndKeys:apiKey, SymphoxAPIParam_key, token, SymphoxAPIParam_token, nil];
-    [[SHAPIAdapter sharedAdapter] sendRequestFromObject:weakSelf ToUrl:url withHeaderFields:headerFields andPostObject:options inPostFormat:SHPostFormatJson encrypted:YES decryptedReturnData:YES completion:^(id resultObject, NSError *error){
+    [[SHAPIAdapter sharedAdapter] sendRequestFromObject:weakSelf ToUrl:url withHeaderFields:headerFields andPostObject:options inPostFormat:SHPostFormatJson encrypted:NO decryptedReturnData:NO completion:^(id resultObject, NSError *error){
         NSString *errorDescription = nil;
         if (error == nil)
         {

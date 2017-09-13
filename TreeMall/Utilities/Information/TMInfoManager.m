@@ -1393,7 +1393,7 @@ static NSUInteger SearchKeywordNumberMax = 8;
     NSString *apiKey = [CryptoModule sharedModule].apiKey;
     NSDictionary *headerFields = [NSDictionary dictionaryWithObjectsAndKeys:apiKey, @"sym-api-key", nil];
     NSURL *url = [NSURL URLWithString:SymphoxAPI_token];
-    [[SHAPIAdapter sharedAdapter] sendRequestFromObject:weakSelf ToUrl:url withHeaderFields:headerFields andPostObject:[NSMutableData dataWithLength:0] inPostFormat:SHPostFormatNSData encrypted:YES decryptedReturnData:NO completion:^(id resultObject, NSError *error){
+    [[SHAPIAdapter sharedAdapter] sendRequestFromObject:weakSelf ToUrl:url withHeaderFields:headerFields andPostObject:[NSMutableData dataWithLength:0] inPostFormat:SHPostFormatNSData encrypted:NO decryptedReturnData:NO completion:^(id resultObject, NSError *error){
         if (error == nil)
         {
 //            NSLog(@"resultObject[%@]:\n%@", [[resultObject class] description], [resultObject description]);
@@ -1573,7 +1573,7 @@ static NSUInteger SearchKeywordNumberMax = 8;
 //    NSLog(@"retrieveUserInformation - [%@]", [url absoluteString]);
     NSDictionary *headerFields = [NSDictionary dictionaryWithObjectsAndKeys:apiKey, SymphoxAPIParam_key, token, SymphoxAPIParam_token, nil];
     NSDictionary *options = [NSDictionary dictionaryWithObjectsAndKeys:self.userIdentifier, SymphoxAPIParam_user_num, nil];
-    [[SHAPIAdapter sharedAdapter] sendRequestFromObject:weakSelf ToUrl:url withHeaderFields:headerFields andPostObject:options inPostFormat:SHPostFormatJson encrypted:YES decryptedReturnData:YES completion:^(id resultObject, NSError *error){
+    [[SHAPIAdapter sharedAdapter] sendRequestFromObject:weakSelf ToUrl:url withHeaderFields:headerFields andPostObject:options inPostFormat:SHPostFormatJson encrypted:NO decryptedReturnData:NO completion:^(id resultObject, NSError *error){
         if (error == nil)
         {
 //            NSLog(@"retrievePointDataFromObject - resultObject[%@]:\n%@", [[resultObject class] description], [resultObject description]);
@@ -1604,7 +1604,7 @@ static NSUInteger SearchKeywordNumberMax = 8;
     NSNumber *numberPageCount = [NSNumber numberWithInteger:25];
     NSDictionary *headerFields = [NSDictionary dictionaryWithObjectsAndKeys:apiKey, SymphoxAPIParam_key, token, SymphoxAPIParam_token, nil];
     NSDictionary *options = [NSDictionary dictionaryWithObjectsAndKeys:self.userIdentifier, SymphoxAPIParam_user_num, numberState, SymphoxAPIParam_status, factor, SymphoxAPIParam_sort_column, order, SymphoxAPIParam_sort_order, numberPage, SymphoxAPIParam_page, numberPageCount, SymphoxAPIParam_page_count, nil];
-    [[SHAPIAdapter sharedAdapter] sendRequestFromObject:weakSelf ToUrl:url withHeaderFields:headerFields andPostObject:options inPostFormat:SHPostFormatJson encrypted:YES decryptedReturnData:YES completion:^(id resultObject, NSError *error){
+    [[SHAPIAdapter sharedAdapter] sendRequestFromObject:weakSelf ToUrl:url withHeaderFields:headerFields andPostObject:options inPostFormat:SHPostFormatJson encrypted:NO decryptedReturnData:NO completion:^(id resultObject, NSError *error){
         id result = nil;
         if (error == nil)
         {
@@ -1648,7 +1648,7 @@ static NSUInteger SearchKeywordNumberMax = 8;
 //    NSLog(@"retrieveUserInformation - [%@]", [url absoluteString]);
     NSDictionary *headerFields = [NSDictionary dictionaryWithObjectsAndKeys:apiKey, SymphoxAPIParam_key, token, SymphoxAPIParam_token, nil];
     NSDictionary *options = [NSDictionary dictionaryWithObjectsAndKeys:self.userIdentifier, SymphoxAPIParam_user_num, nil];
-    [[SHAPIAdapter sharedAdapter] sendRequestFromObject:weakSelf ToUrl:url withHeaderFields:headerFields andPostObject:options inPostFormat:SHPostFormatJson encrypted:YES decryptedReturnData:YES completion:^(id resultObject, NSError *error){
+    [[SHAPIAdapter sharedAdapter] sendRequestFromObject:weakSelf ToUrl:url withHeaderFields:headerFields andPostObject:options inPostFormat:SHPostFormatJson encrypted:NO decryptedReturnData:NO completion:^(id resultObject, NSError *error){
         if (error == nil)
         {
 //            NSLog(@"retrieveUserInformation - resultObject[%@]:\n%@", [[resultObject class] description], [resultObject description]);

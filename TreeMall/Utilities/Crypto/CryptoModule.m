@@ -31,7 +31,7 @@ static CryptoModule *gCryptoModule = nil;
     self = [super init];
     if (self)
     {
-        _apiKey = @"c0a96525284b0c676fe6a7f0aa6a1fee";
+        _apiKey = @"b2095ee75608b603825613ef0192c20dcf213cfec8e725532884abb2b0549627";
         _key = nil;
     }
     return self;
