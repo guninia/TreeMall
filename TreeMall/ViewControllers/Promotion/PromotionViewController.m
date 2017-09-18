@@ -92,10 +92,10 @@
     {
         return NO;
     }
-    
+    NSString *user_sn = [[TMInfoManager sharedManager].userIdentifier stringValue];
     __weak PromotionViewController *weakSelf = self;
     NSURL *url = [NSURL URLWithString:SymphoxAPI_promotion];
-    NSDictionary *postDictionary = [NSDictionary dictionaryWithObjectsAndKeys:@"TM_O_02", SymphoxAPIParam_txid, nil];
+    NSDictionary *postDictionary = [NSDictionary dictionaryWithObjectsAndKeys:@"TM_O_02", SymphoxAPIParam_txid, user_sn, SymphoxAPIParam_user_sn, nil];
     [[SHAPIAdapter sharedAdapter] sendRequestFromObject:weakSelf ToUrl:url withHeaderFields:nil andPostObject:postDictionary inPostFormat:SHPostFormatUrlEncoded encrypted:NO decryptedReturnData:NO completion:^(id resultObject, NSError *error){
         
         if (error == nil)
